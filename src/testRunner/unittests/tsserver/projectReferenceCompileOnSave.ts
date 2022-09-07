@@ -39,14 +39,6 @@ fn2();
 exports.fn3 = fn3;`;
         const changeDts = "export declare function fn3(): void;";
 
-        function expectedAffectedFiles(config: File, fileNames: readonly File[]): protocol.CompileOnSaveAffectedFileListSingleProject {
-            return {
-                projectFileName: config.path,
-                fileNames: fileNames.map(f => f.path),
-                projectUsesOutFile: false
-            };
-        }
-
         function expectedUsageEmitFiles(appendJsText?: string): readonly File[] {
             const appendJs = appendJsText ? `${appendJsText}
 ` : "";
@@ -59,26 +51,6 @@ var fns_1 = require("../decls/fns");
 (0, fns_1.fn2)();
 ${appendJs}`
             }];
-        }
-
-        function expectedEmitOutput(expectedFiles: readonly File[]): EmitOutput {
-            return {
-                outputFiles: expectedFiles.map(({ path, content }) => ({
-                    name: path,
-                    text: content,
-                    writeByteOrderMark: false
-                })),
-                emitSkipped: false,
-                diagnostics: emptyArray
-            };
-        }
-
-        function noEmitOutput(): EmitOutput {
-            return {
-                emitSkipped: true,
-                outputFiles: [],
-                diagnostics: emptyArray
-            };
         }
 
         function expectedDependencyEmitFiles(appendJsText?: string, appendDtsText?: string): readonly File[] {
@@ -113,24 +85,21 @@ ${appendDts}`
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
+
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -139,34 +108,30 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage", session);
                 });
                 it("with initial file open, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -175,17 +140,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project", session);
                 });
                 it("with local change to dependency, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -196,20 +161,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -218,17 +179,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and local change to dependency", session);
                 });
                 it("with local change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -239,20 +200,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -261,17 +218,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and local change to dependency", session);
                 });
                 it("with local change to usage, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -293,20 +250,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles(localChange);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -315,17 +268,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and local change to usage", session);
                 });
                 it("with local change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -347,20 +300,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles(localChange);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -369,17 +318,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and local change to usage", session);
                 });
                 it("with change to dependency, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -390,20 +339,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -412,17 +357,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to depenedency", session);
                 });
                 it("with change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -433,20 +378,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -455,17 +396,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and change to depenedency", session);
                 });
                 it("with change to usage, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -487,20 +428,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles(changeJs);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -509,17 +446,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to usage", session);
                 });
                 it("with change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -541,20 +478,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles(changeJs);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -563,11 +496,11 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and change to usage", session);
                 });
             });
 
@@ -576,69 +509,61 @@ ${appendDts}`
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency", session);
                 });
                 it("with initial file open, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project", session);
                 });
                 it("with local change to dependency, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -649,34 +574,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and local change to dependency", session);
                 });
                 it("with local change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -687,34 +608,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to dependency", session);
                 });
                 it("with local change to usage, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -736,34 +653,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and local change to usage", session);
                 });
                 it("with local change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -785,34 +698,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to usage", session);
                 });
                 it("with change to dependency, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -823,34 +732,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and change to dependency", session);
                 });
                 it("with change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -861,34 +766,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and change to dependency", session);
                 });
                 it("with change to usage, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -910,34 +811,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and change to usage", session);
                 });
                 it("with change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -959,28 +856,24 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and change to usage", session);
                 });
             });
         });
@@ -991,24 +884,20 @@ ${appendDts}`
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1017,34 +906,30 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage", session);
                 });
                 it("with initial file open, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1053,17 +938,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project", session);
                 });
                 it("with local change to dependency, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1085,20 +970,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1107,17 +988,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to dependency", session);
                 });
                 it("with local change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1139,20 +1020,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1161,17 +1038,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to dependency with file", session);
                 });
                 it("with local change to usage, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1193,20 +1070,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles(localChange);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1215,17 +1088,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to usage", session);
                 });
                 it("with local change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1247,20 +1120,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles(localChange);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1269,17 +1138,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to usage with project", session);
                 });
                 it("with change to dependency, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1301,20 +1170,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1323,17 +1188,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and change to dependency", session);
                 });
                 it("with change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1355,20 +1220,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1377,17 +1238,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project and change to dependency", session);
                 });
                 it("with change to usage, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1409,20 +1270,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles(changeJs);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1431,17 +1288,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and change to usage", session);
                 });
                 it("with change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1463,20 +1320,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedUsageEmitFiles(changeJs);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1485,11 +1338,11 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project and change to usage", session);
                 });
             });
 
@@ -1498,38 +1351,34 @@ ${appendDts}`
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project", session);
                 });
                 it("with local change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1551,34 +1400,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to dependency", session);
                 });
                 it("with local change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1600,34 +1445,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to usage", session);
                 });
                 it("with change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1649,34 +1490,30 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and change to dependency", session);
                 });
                 it("with change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1698,28 +1535,24 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response;
-                    assert.isFalse(actualEmit, "Emit files");
+                    });
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and change to usage", session);
                 });
             });
 
@@ -1728,25 +1561,20 @@ ${appendDts}`
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs]),
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1755,34 +1583,30 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency", session);
                 });
                 it("with initial file open, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1791,17 +1615,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project", session);
                 });
                 it("with local change to dependency, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1823,21 +1647,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray),
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles(localChange);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1846,17 +1665,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and local change to dependency", session);
                 });
                 it("with local change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1878,20 +1697,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles(localChange);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1900,17 +1715,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and local change to dependency", session);
                 });
                 it("with local change to usage, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1932,21 +1747,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray),
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -1955,17 +1765,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and local change to usage", session);
                 });
                 it("with local change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -1987,20 +1797,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -2009,17 +1815,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and local change to usage", session);
                 });
                 it("with change to dependency, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -2041,21 +1847,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, [usageTs]),
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles(changeJs, changeDts);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -2064,17 +1865,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and change to dependency", session);
                 });
                 it("with change to dependency, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -2096,20 +1897,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles(changeJs, changeDts);
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -2118,17 +1915,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and change to dependency", session);
                 });
                 it("with change to usage, without specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -2150,21 +1947,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray),
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -2173,17 +1965,17 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and change to usage", session);
                 });
                 it("with change to usage, with specifying project file", () => {
                     const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
-                    const session = createSession(host);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([usageTs, dependencyTs], session);
 
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
@@ -2205,20 +1997,16 @@ ${appendDts}`
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
-                    const actualAffectedFiles = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
-                    assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(dependencyConfig, [dependencyTs])
-                    ], "Affected files");
+                    });
 
                     // Verify CompileOnSaveEmit
-                    const actualEmit = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
                         command: protocol.CommandTypes.CompileOnSaveEmitFile,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response;
-                    assert.isTrue(actualEmit, "Emit files");
+                    });
                     const expectedFiles = expectedDependencyEmitFiles();
                     assert.equal(host.writtenFiles.size, expectedFiles.length);
                     for (const file of expectedFiles) {
@@ -2227,11 +2015,11 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
-                    }).response as EmitOutput;
-                    assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
+                    });
+                    baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and change to usage", session);
                 });
             });
         });
@@ -2300,7 +2088,7 @@ ${appendDts}`
             const sourceJs = changeExtension(siblingSource.path, ".js");
             const expectedSiblingJs = host.readFile(sourceJs);
 
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([siblingSource], session);
 
             session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
@@ -2311,6 +2099,7 @@ ${appendDts}`
                 }
             });
             assert.equal(host.readFile(sourceJs), expectedSiblingJs);
+            baselineTsserverLogs("projectReferenceCompileOnSave", "compile on save emits same output as project build with external project", session);
         });
     });
 }
