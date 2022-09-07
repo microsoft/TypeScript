@@ -1,5 +1,31 @@
 Info 0    [16:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:16.000] request:{"command":"open","arguments":{"file":"/a/b/app.ts"},"seq":1,"type":"request"}
+//// [/a/b/app.ts]
+let x = 1;
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/b/tsconfig.json]
+{"compilerOptions":{}}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:17.000] Search path: /a/b
 Info 3    [16:00:18.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [16:00:19.000] Creating configuration project /a/b/tsconfig.json
@@ -39,14 +65,95 @@ Info 18   [16:00:35.000] -----------------------------------------------
 Info 18   [16:00:36.000] Open files: 
 Info 18   [16:00:37.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 18   [16:00:38.000] 		Projects: /a/b/tsconfig.json
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 18   [16:00:39.000] response:{"responseRequired":false}
 Info 19   [16:00:40.000] request:{"command":"close","arguments":{"file":"/a/b/app.ts"},"seq":2,"type":"request"}
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 20   [16:00:41.000] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info 21   [16:00:42.000] Project '/a/b/tsconfig.json' (Configured)
 Info 21   [16:00:43.000] 	Files (2)
 
 Info 21   [16:00:44.000] -----------------------------------------------
 Info 21   [16:00:45.000] Open files: 
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/app.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 21   [16:00:46.000] response:{"responseRequired":false}
 Info 22   [16:00:47.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a/b/app.ts"]},"seq":3,"type":"request"}
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/app.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/app.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 23   [16:00:48.000] response:{"responseRequired":false}

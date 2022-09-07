@@ -1,5 +1,21 @@
 Info 0    [16:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:22.000] request:{"command":"open","arguments":{"file":"/a/b/projects/myproject/bar/app.ts"},"seq":1,"type":"request"}
+//// [/a/b/projects/myproject/bar/app.ts]
+class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }
+
+//// [/a/b/projects/myproject/foo/foo.ts]
+declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
+
+//// [/a/b/projects/myproject/tsconfig.json]
+{"compilerOptions":{"module":"none","targer":"es5"},"exclude":["node_modules"]}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:23.000] Search path: /a/b/projects/myproject/bar
 Info 3    [16:00:24.000] For info: /a/b/projects/myproject/bar/app.ts :: Config file name: /a/b/projects/myproject/tsconfig.json
 Info 4    [16:00:25.000] Creating configuration project /a/b/projects/myproject/tsconfig.json
@@ -50,8 +66,59 @@ Info 23   [16:00:46.000] -----------------------------------------------
 Info 23   [16:00:47.000] Open files: 
 Info 23   [16:00:48.000] 	FileName: /a/b/projects/myproject/bar/app.ts ProjectRootPath: undefined
 Info 23   [16:00:49.000] 		Projects: /a/b/projects/myproject/tsconfig.json
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/myproject/tsconfig.json:
+  {}
+/a/b/projects/myproject/foo/foo.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/myproject:
+  {}
+
 Info 23   [16:00:50.000] response:{"responseRequired":false}
 Info 24   [16:00:51.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a/b/projects/myproject/bar/app.ts"]},"seq":2,"type":"request"}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/myproject/tsconfig.json:
+  {}
+/a/b/projects/myproject/foo/foo.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/myproject:
+  {}
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/myproject/tsconfig.json:
+  {}
+/a/b/projects/myproject/foo/foo.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/myproject:
+  {}
+
 Info 25   [16:00:52.000] response:{"responseRequired":false}
 Info 26   [16:00:53.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
@@ -121,6 +188,44 @@ Info 62   [16:01:44.000] event:
 Info 63   [16:01:45.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
 Info 64   [16:01:46.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a/b/projects/myproject/bar/app.ts"]},"seq":3,"type":"request"}
+//// [/a/b/projects/myproject/foo2/foo.ts]
+declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
+
+//// [/a/b/projects/myproject/foo/foo.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/myproject/tsconfig.json:
+  {}
+/a/b/projects/myproject/foo2/foo.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/myproject:
+  {}
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/myproject/tsconfig.json:
+  {}
+/a/b/projects/myproject/foo2/foo.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/myproject:
+  {}
+
 Info 65   [16:01:47.000] response:{"responseRequired":false}
 Info 66   [16:01:48.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}

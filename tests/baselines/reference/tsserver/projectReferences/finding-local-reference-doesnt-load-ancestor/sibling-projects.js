@@ -1,5 +1,57 @@
 Info 0    [16:00:34.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:35.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/solution/compiler/program.ts"}}
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/solution/tsconfig.json]
+{"files":[],"include":[],"references":[{"path":"./compiler"},{"path":"./services"}]}
+
+//// [/user/username/projects/solution/compiler/tsconfig.json]
+{"compilerOptions":{"composite":true,"module":"none"},"files":["./types.ts","./program.ts"]}
+
+//// [/user/username/projects/solution/compiler/types.ts]
+
+                namespace ts {
+                    export interface Program {
+                        getSourceFiles(): string[];
+                    }
+                }
+
+//// [/user/username/projects/solution/compiler/program.ts]
+
+                namespace ts {
+                    export const program: Program = {
+                        getSourceFiles: () => [getSourceFile()]
+                    };
+                    function getSourceFile() { return "something"; }
+                }
+
+//// [/user/username/projects/solution/services/tsconfig.json]
+{"compilerOptions":{"composite":true},"files":["./services.ts"],"references":[{"path":"../compiler"}]}
+
+//// [/user/username/projects/solution/services/services.ts]
+
+                namespace ts {
+                    const result = program.getSourceFiles();
+                }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:36.000] Search path: /user/username/projects/solution/compiler
 Info 3    [16:00:37.000] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 Info 4    [16:00:38.000] Creating configuration project /user/username/projects/solution/compiler/tsconfig.json
@@ -56,11 +108,87 @@ Info 25   [16:01:04.000] -----------------------------------------------
 Info 25   [16:01:05.000] Open files: 
 Info 25   [16:01:06.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
 Info 25   [16:01:07.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
+
+PolledWatches::
+/user/username/projects/solution/compiler/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/compiler/tsconfig.json:
+  {}
+/user/username/projects/solution/compiler/types.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 25   [16:01:08.000] response:{"responseRequired":false}
 Info 26   [16:01:09.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/compiler/program.ts","line":4,"offset":48},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/solution/compiler/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/compiler/tsconfig.json:
+  {}
+/user/username/projects/solution/compiler/types.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 27   [16:01:10.000] Finding references to /user/username/projects/solution/compiler/program.ts position 133 in project /user/username/projects/solution/compiler/tsconfig.json
+
+PolledWatches::
+/user/username/projects/solution/compiler/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/compiler/tsconfig.json:
+  {}
+/user/username/projects/solution/compiler/types.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 28   [16:01:11.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":4,"offset":48},"end":{"line":4,"offset":61},"lineText":"                        getSourceFiles: () => [getSourceFile()]","isWriteAccess":false},{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":6,"offset":30},"end":{"line":6,"offset":43},"contextStart":{"line":6,"offset":21},"contextEnd":{"line":6,"offset":69},"lineText":"                    function getSourceFile() { return \"something\"; }","isWriteAccess":true}],"symbolName":"getSourceFile","symbolStartOffset":48,"symbolDisplayString":"function getSourceFile(): string"},"responseRequired":true}
 Info 29   [16:01:12.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/compiler/program.ts","line":4,"offset":25},"seq":2,"type":"request"}
+
+PolledWatches::
+/user/username/projects/solution/compiler/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/compiler/tsconfig.json:
+  {}
+/user/username/projects/solution/compiler/types.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 30   [16:01:13.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
 Info 31   [16:01:14.000] Loading configured project /user/username/projects/solution/tsconfig.json
 Info 32   [16:01:15.000] Config: /user/username/projects/solution/tsconfig.json : {
@@ -136,4 +264,31 @@ Info 57   [16:01:40.000] Search path: /user/username/projects/solution/compiler
 Info 58   [16:01:41.000] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 Info 59   [16:01:42.000] Search path: /user/username/projects/solution/compiler
 Info 60   [16:01:43.000] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
+
+PolledWatches::
+/user/username/projects/solution/compiler/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/services/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/compiler/types.d.ts:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/solution/compiler/tsconfig.json:
+  {}
+/user/username/projects/solution/compiler/types.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+/user/username/projects/solution/services/tsconfig.json:
+  {}
+/user/username/projects/solution/services/services.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 61   [16:01:44.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/compiler/types.ts","start":{"line":4,"offset":25},"end":{"line":4,"offset":39},"contextStart":{"line":4,"offset":25},"contextEnd":{"line":4,"offset":52},"lineText":"                        getSourceFiles(): string[];","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":4,"offset":25},"end":{"line":4,"offset":39},"contextStart":{"line":4,"offset":25},"contextEnd":{"line":4,"offset":64},"lineText":"                        getSourceFiles: () => [getSourceFile()]","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/solution/services/services.ts","start":{"line":3,"offset":44},"end":{"line":3,"offset":58},"lineText":"                    const result = program.getSourceFiles();","isWriteAccess":false,"isDefinition":false}],"symbolName":"getSourceFiles","symbolStartOffset":25,"symbolDisplayString":"(method) ts.Program.getSourceFiles(): string[]"},"responseRequired":true}

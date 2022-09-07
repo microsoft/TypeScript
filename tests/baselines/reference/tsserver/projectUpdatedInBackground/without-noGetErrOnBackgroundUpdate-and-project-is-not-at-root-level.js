@@ -1,5 +1,34 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:30.000] request:{"command":"open","arguments":{"file":"/user/username/rootfolder/otherfolder/a/b/project/file1.ts"},"seq":1,"type":"request"}
+//// [/user/username/rootfolder/otherfolder/a/b/project/file1.ts]
+import a from "file2"
+
+//// [/user/username/rootfolder/otherfolder/a/b/project/file3.ts]
+export class c { }
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json]
+{"compilerOptions":{"typeRoots":[]}}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:31.000] Search path: /user/username/rootfolder/otherfolder/a/b/project
 Info 3    [16:00:32.000] For info: /user/username/rootfolder/otherfolder/a/b/project/file1.ts :: Config file name: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 4    [16:00:33.000] Creating configuration project /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -59,6 +88,29 @@ Info 29   [16:01:00.000] -----------------------------------------------
 Info 29   [16:01:01.000] Open files: 
 Info 29   [16:01:02.000] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info 29   [16:01:03.000] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+
+PolledWatches::
+/user/username/rootfolder/otherfolder/a/b/project/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
+  {}
+/user/username/rootfolder/otherfolder/a/b/project/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/rootfolder/otherfolder/a/b/project:
+  {}
+
 Info 29   [16:01:04.000] response:{"responseRequired":false}
 Info 30   [16:01:08.000] FileWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/project/file3.ts 1:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/file3.ts 500 undefined WatchType: Closed Script info
 Info 31   [16:01:09.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json

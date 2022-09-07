@@ -1,5 +1,188 @@
 Info 0    [16:01:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:01:12.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/app/src/program/index.ts"}}
+//// [/user/username/projects/myproject/tsconfig.json]
+{"files":[],"references":[{"path":"shared/src/library"},{"path":"app/src/program"}]}
+
+//// [/user/username/projects/myproject/shared/src/library/tsconfig.json]
+{"compilerOptions":{"composite":true,"outDir":"../../bld/library"}}
+
+//// [/user/username/projects/myproject/shared/src/library/index.ts]
+export function foo() {}
+
+//// [/user/username/projects/myproject/shared/package.json]
+{"name":"shared","version":"1.0.0","main":"bld/library/index.js","types":"bld/library/index.d.ts"}
+
+//// [/user/username/projects/myproject/app/src/program/tsconfig.json]
+{"compilerOptions":{"composite":true,"outDir":"../../bld/program"},"references":[{"path":"../../../shared/src/library"}]}
+
+//// [/user/username/projects/myproject/app/src/program/bar.ts]
+import {foo} from "shared";
+
+//// [/user/username/projects/myproject/app/src/program/index.ts]
+foo
+
+//// [/user/username/projects/myproject/node_modules/shared] symlink(/user/username/projects/myproject/shared)
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/shared/bld/library/index.js]
+"use strict";
+exports.__esModule = true;
+exports.foo = void 0;
+function foo() { }
+exports.foo = foo;
+
+
+//// [/user/username/projects/myproject/shared/bld/library/index.d.ts]
+export declare function foo(): void;
+
+
+//// [/user/username/projects/myproject/shared/bld/library/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../src/library/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"3524703962-export function foo() {}","signature":"-5677608893-export declare function foo(): void;\n"}],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/shared/bld/library/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../../../a/lib/lib.d.ts",
+      "../../src/library/index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../../src/library/index.ts": {
+        "version": "3524703962-export function foo() {}",
+        "signature": "-5677608893-export declare function foo(): void;\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "outDir": "./"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../../a/lib/lib.d.ts",
+      "../../src/library/index.ts"
+    ],
+    "latestChangedDtsFile": "./index.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 807
+}
+
+//// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-9677035610-import {foo} from \"shared\";",{"version":"193491849-foo","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,[4,[{"file":"../../src/program/index.ts","start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]],2],"affectedFilesPendingEmit":[[3,1],[4,1],[2,1]],"emitSignatures":[3,4]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../../../a/lib/lib.d.ts",
+      "../../../shared/bld/library/index.d.ts",
+      "../../src/program/bar.ts",
+      "../../src/program/index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../../shared/bld/library/index.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../../../shared/bld/library/index.d.ts": {
+        "version": "-5677608893-export declare function foo(): void;\n",
+        "signature": "-5677608893-export declare function foo(): void;\n"
+      },
+      "../../src/program/bar.ts": {
+        "version": "-9677035610-import {foo} from \"shared\";",
+        "signature": "-9677035610-import {foo} from \"shared\";"
+      },
+      "../../src/program/index.ts": {
+        "version": "193491849-foo",
+        "signature": "193491849-foo",
+        "affectsGlobalScope": true
+      }
+    },
+    "options": {
+      "composite": true,
+      "outDir": "./"
+    },
+    "referencedMap": {
+      "../../src/program/bar.ts": [
+        "../../../shared/bld/library/index.d.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "../../src/program/bar.ts": [
+        "../../../shared/bld/library/index.d.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../../a/lib/lib.d.ts",
+      "../../src/program/bar.ts",
+      [
+        "../../src/program/index.ts",
+        [
+          {
+            "file": "../../src/program/index.ts",
+            "start": 0,
+            "length": 3,
+            "messageText": "Cannot find name 'foo'.",
+            "category": 1,
+            "code": 2304
+          }
+        ]
+      ],
+      "../../../shared/bld/library/index.d.ts"
+    ],
+    "affectedFilesPendingEmit": [
+      [
+        "../../src/program/bar.ts",
+        "Full"
+      ],
+      [
+        "../../src/program/index.ts",
+        "Full"
+      ],
+      [
+        "../../../shared/bld/library/index.d.ts",
+        "Full"
+      ]
+    ],
+    "emitSignatures": [
+      "../../src/program/bar.ts",
+      "../../src/program/index.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1105
+}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:01:13.000] Search path: /user/username/projects/myproject/app/src/program
 Info 3    [16:01:14.000] For info: /user/username/projects/myproject/app/src/program/index.ts :: Config file name: /user/username/projects/myproject/app/src/program/tsconfig.json
 Info 4    [16:01:15.000] Creating configuration project /user/username/projects/myproject/app/src/program/tsconfig.json
@@ -94,8 +277,131 @@ Info 45   [16:02:01.000] -----------------------------------------------
 Info 45   [16:02:02.000] Open files: 
 Info 45   [16:02:03.000] 	FileName: /user/username/projects/myproject/app/src/program/index.ts ProjectRootPath: undefined
 Info 45   [16:02:04.000] 		Projects: /user/username/projects/myproject/app/src/program/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/app/src/program/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/app/src/program/tsconfig.json:
+  {}
+/user/username/projects/myproject/app/src/program/bar.ts:
+  {}
+/user/username/projects/myproject/shared/src/library/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/src/library/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/shared/package.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/app/src/program:
+  {}
+/user/username/projects/myproject/shared/src/library:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
 Info 45   [16:02:05.000] response:{"responseRequired":false}
 Info 46   [16:02:06.000] request:{"command":"getCodeFixes","arguments":{"file":"/user/username/projects/myproject/app/src/program/index.ts","startLine":1,"startOffset":1,"endLine":1,"endOffset":4,"errorCodes":[2304]},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/app/src/program/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/app/src/program/tsconfig.json:
+  {}
+/user/username/projects/myproject/app/src/program/bar.ts:
+  {}
+/user/username/projects/myproject/shared/src/library/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/src/library/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/shared/package.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/app/src/program:
+  {}
+/user/username/projects/myproject/shared/src/library:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
 Info 47   [16:02:07.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 48   [16:02:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+
+PolledWatches::
+/user/username/projects/myproject/app/src/program/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/app/src/program/tsconfig.json:
+  {}
+/user/username/projects/myproject/app/src/program/bar.ts:
+  {}
+/user/username/projects/myproject/shared/src/library/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/src/library/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/shared/package.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/app/src/program:
+  {}
+/user/username/projects/myproject/shared/src/library:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
 Info 49   [16:02:09.000] response:{"response":[{"fixName":"import","description":"Add import from \"shared\"","changes":[{"fileName":"/user/username/projects/myproject/app/src/program/index.ts","textChanges":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":1},"newText":"import { foo } from \"shared\";\n\n"}]}]}],"responseRequired":true}

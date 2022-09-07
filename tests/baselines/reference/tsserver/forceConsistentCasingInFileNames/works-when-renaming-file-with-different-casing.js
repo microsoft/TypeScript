@@ -1,5 +1,34 @@
 Info 0    [16:00:24.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:25.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/Logger.ts","projectRootPath":"/user/username/projects/myproject"}}
+//// [/user/username/projects/myproject/Logger.ts]
+export class logger { }
+
+//// [/user/username/projects/myproject/another.ts]
+import { logger } from "./Logger"; new logger();
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:26.000] Search path: /user/username/projects/myproject
 Info 3    [16:00:27.000] For info: /user/username/projects/myproject/Logger.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [16:00:28.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -54,8 +83,59 @@ Info 23   [16:00:49.000] -----------------------------------------------
 Info 23   [16:00:50.000] Open files: 
 Info 23   [16:00:51.000] 	FileName: /user/username/projects/myproject/Logger.ts ProjectRootPath: /user/username/projects/myproject
 Info 23   [16:00:52.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/another.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 23   [16:00:53.000] response:{"responseRequired":false}
 Info 24   [16:00:54.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/Logger.ts"]},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/another.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/another.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 25   [16:00:55.000] response:{"responseRequired":false}
 Info 26   [16:00:56.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/Logger.ts","diagnostics":[]}}
@@ -70,14 +150,70 @@ Info 31   [16:01:02.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 32   [16:01:05.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 33   [16:01:06.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 34   [16:01:07.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/Logger.ts"}}
+//// [/user/username/projects/myproject/logger.ts] file was renamed from file /user/username/projects/myproject/Logger.ts
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/another.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 35   [16:01:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/Logger.ts 500 undefined WatchType: Closed Script info
 Info 36   [16:01:09.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 36   [16:01:10.000] 	Files (3)
 
 Info 36   [16:01:11.000] -----------------------------------------------
 Info 36   [16:01:12.000] Open files: 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/another.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/logger.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 36   [16:01:13.000] response:{"responseRequired":false}
 Info 37   [16:01:14.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/logger.ts","projectRootPath":"/user/username/projects/myproject"}}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/another.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/logger.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 38   [16:01:15.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/Logger.ts 500 undefined WatchType: Closed Script info
 Info 39   [16:01:16.000] Search path: /user/username/projects/myproject
 Info 40   [16:01:17.000] For info: /user/username/projects/myproject/Logger.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -91,8 +227,42 @@ Info 44   [16:01:23.000] -----------------------------------------------
 Info 44   [16:01:24.000] Open files: 
 Info 44   [16:01:25.000] 	FileName: /user/username/projects/myproject/Logger.ts ProjectRootPath: /user/username/projects/myproject
 Info 44   [16:01:26.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/another.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 44   [16:01:27.000] response:{"responseRequired":false}
 Info 45   [16:01:28.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/another.ts","projectRootPath":"/user/username/projects/myproject"}}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/another.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 46   [16:01:29.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/another.ts 500 undefined WatchType: Closed Script info
 Info 47   [16:01:30.000] Search path: /user/username/projects/myproject
 Info 48   [16:01:31.000] For info: /user/username/projects/myproject/another.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
@@ -105,10 +275,85 @@ Info 49   [16:01:36.000] 	FileName: /user/username/projects/myproject/Logger.ts 
 Info 49   [16:01:37.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 49   [16:01:38.000] 	FileName: /user/username/projects/myproject/another.ts ProjectRootPath: /user/username/projects/myproject
 Info 49   [16:01:39.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 49   [16:01:40.000] response:{"responseRequired":false}
 Info 50   [16:01:41.000] request:{"command":"updateOpen","arguments":{"changedFiles":[{"fileName":"/user/username/projects/myproject/another.ts","textChanges":[{"newText":"./logger","start":{"line":1,"offset":25},"end":{"line":1,"offset":33}}]}]},"seq":2,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 51   [16:01:42.000] response:{"response":true,"responseRequired":true}
 Info 52   [16:01:43.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/logger.ts","/user/username/projects/myproject/another.ts"]},"seq":3,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 53   [16:01:44.000] response:{"responseRequired":false}
 Info 54   [16:01:45.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 55   [16:01:46.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms

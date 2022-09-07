@@ -1,5 +1,47 @@
 Info 0    [16:00:47.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:48.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/app/src/program/index.ts"}}
+//// [/user/username/projects/myproject/tsconfig.json]
+{"files":[],"references":[{"path":"shared/src/library"},{"path":"app/src/program"}]}
+
+//// [/user/username/projects/myproject/shared/src/library/tsconfig.json]
+{"compilerOptions":{"composite":true,"outDir":"../../bld/library"}}
+
+//// [/user/username/projects/myproject/shared/src/library/index.ts]
+export function foo() {}
+
+//// [/user/username/projects/myproject/shared/package.json]
+{"name":"shared","version":"1.0.0","main":"bld/library/index.js","types":"bld/library/index.d.ts"}
+
+//// [/user/username/projects/myproject/app/src/program/tsconfig.json]
+{"compilerOptions":{"composite":true,"outDir":"../../bld/program"},"references":[{"path":"../../../shared/src/library"}]}
+
+//// [/user/username/projects/myproject/app/src/program/bar.ts]
+import {foo} from "shared";
+
+//// [/user/username/projects/myproject/app/src/program/index.ts]
+foo
+
+//// [/user/username/projects/myproject/node_modules/shared] symlink(/user/username/projects/myproject/shared)
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:49.000] Search path: /user/username/projects/myproject/app/src/program
 Info 3    [16:00:50.000] For info: /user/username/projects/myproject/app/src/program/index.ts :: Config file name: /user/username/projects/myproject/app/src/program/tsconfig.json
 Info 4    [16:00:51.000] Creating configuration project /user/username/projects/myproject/app/src/program/tsconfig.json
@@ -94,8 +136,131 @@ Info 45   [16:01:37.000] -----------------------------------------------
 Info 45   [16:01:38.000] Open files: 
 Info 45   [16:01:39.000] 	FileName: /user/username/projects/myproject/app/src/program/index.ts ProjectRootPath: undefined
 Info 45   [16:01:40.000] 		Projects: /user/username/projects/myproject/app/src/program/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/app/src/program/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/app/src/program/tsconfig.json:
+  {}
+/user/username/projects/myproject/app/src/program/bar.ts:
+  {}
+/user/username/projects/myproject/shared/src/library/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/src/library/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/shared/package.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/app/src/program:
+  {}
+/user/username/projects/myproject/shared/src/library:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
 Info 45   [16:01:41.000] response:{"responseRequired":false}
 Info 46   [16:01:42.000] request:{"command":"getCodeFixes","arguments":{"file":"/user/username/projects/myproject/app/src/program/index.ts","startLine":1,"startOffset":1,"endLine":1,"endOffset":4,"errorCodes":[2304]},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/app/src/program/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/app/src/program/tsconfig.json:
+  {}
+/user/username/projects/myproject/app/src/program/bar.ts:
+  {}
+/user/username/projects/myproject/shared/src/library/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/src/library/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/shared/package.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/app/src/program:
+  {}
+/user/username/projects/myproject/shared/src/library:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
 Info 47   [16:01:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 48   [16:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+
+PolledWatches::
+/user/username/projects/myproject/app/src/program/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/app/src/program/tsconfig.json:
+  {}
+/user/username/projects/myproject/app/src/program/bar.ts:
+  {}
+/user/username/projects/myproject/shared/src/library/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/src/library/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/shared/package.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/app/src/program:
+  {}
+/user/username/projects/myproject/shared/src/library:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
 Info 49   [16:01:45.000] response:{"response":[{"fixName":"import","description":"Add import from \"shared\"","changes":[{"fileName":"/user/username/projects/myproject/app/src/program/index.ts","textChanges":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":1},"newText":"import { foo } from \"shared\";\n\n"}]}]}],"responseRequired":true}

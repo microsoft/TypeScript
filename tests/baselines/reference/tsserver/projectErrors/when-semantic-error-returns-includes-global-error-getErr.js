@@ -1,5 +1,32 @@
 Info 0    [16:00:22.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:23.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/ui.ts"}}
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/ui.ts]
+const x = async (_action: string) => {
+};
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:24.000] Search path: /user/username/projects/myproject
 Info 3    [16:00:25.000] For info: /user/username/projects/myproject/ui.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [16:00:26.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -47,8 +74,53 @@ Info 22   [16:00:46.000] -----------------------------------------------
 Info 22   [16:00:47.000] Open files: 
 Info 22   [16:00:48.000] 	FileName: /user/username/projects/myproject/ui.ts ProjectRootPath: undefined
 Info 22   [16:00:49.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 22   [16:00:50.000] response:{"responseRequired":false}
 Info 23   [16:00:51.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/ui.ts"]},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 24   [16:00:52.000] response:{"responseRequired":false}
 Info 25   [16:00:53.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/ui.ts","diagnostics":[]}}

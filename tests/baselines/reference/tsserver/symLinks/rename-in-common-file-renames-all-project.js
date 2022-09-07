@@ -1,5 +1,42 @@
 Info 0    [16:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:36.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/a/a.ts","projectRootPath":"/users/username/projects/a"}}
+//// [/users/username/projects/c/fc.ts]
+export const C = 8
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/users/username/projects/a/a.ts]
+import {C} from "./c/fc"; console.log(C)
+
+//// [/users/username/projects/a/tsconfig.json]
+{"compilerOptions":{"module":"commonjs"}}
+
+//// [/users/username/projects/a/c] symlink(/users/username/projects/c)
+//// [/users/username/projects/b/b.ts]
+import {C} from "./c/fc"; console.log(C)
+
+//// [/users/username/projects/b/tsconfig.json]
+{"compilerOptions":{"module":"commonjs"}}
+
+//// [/users/username/projects/b/c] symlink(/users/username/projects/c)
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:37.000] Search path: /users/username/projects/a
 Info 3    [16:00:38.000] For info: /users/username/projects/a/a.ts :: Config file name: /users/username/projects/a/tsconfig.json
 Info 4    [16:00:39.000] Creating configuration project /users/username/projects/a/tsconfig.json
@@ -46,8 +83,42 @@ Info 19   [16:00:56.000] -----------------------------------------------
 Info 19   [16:00:57.000] Open files: 
 Info 19   [16:00:58.000] 	FileName: /users/username/projects/a/a.ts ProjectRootPath: /users/username/projects/a
 Info 19   [16:00:59.000] 		Projects: /users/username/projects/a/tsconfig.json
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/users/username/projects/a/c/fc.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+
 Info 19   [16:01:00.000] response:{"responseRequired":false}
 Info 20   [16:01:01.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/b/b.ts","projectRootPath":"/users/username/projects/b"}}
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/users/username/projects/a/c/fc.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+
 Info 21   [16:01:02.000] Search path: /users/username/projects/b
 Info 22   [16:01:03.000] For info: /users/username/projects/b/b.ts :: Config file name: /users/username/projects/b/tsconfig.json
 Info 23   [16:01:04.000] Creating configuration project /users/username/projects/b/tsconfig.json
@@ -99,8 +170,58 @@ Info 37   [16:01:25.000] 	FileName: /users/username/projects/a/a.ts ProjectRootP
 Info 37   [16:01:26.000] 		Projects: /users/username/projects/a/tsconfig.json
 Info 37   [16:01:27.000] 	FileName: /users/username/projects/b/b.ts ProjectRootPath: /users/username/projects/b
 Info 37   [16:01:28.000] 		Projects: /users/username/projects/b/tsconfig.json
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/users/username/projects/a/c/fc.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/b/tsconfig.json:
+  {}
+/users/username/projects/b/c/fc.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+/users/username/projects/b:
+  {}
+
 Info 37   [16:01:29.000] response:{"responseRequired":false}
 Info 38   [16:01:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/a/c/fc.ts","projectRootPath":"/users/username/projects/a"}}
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/users/username/projects/a/c/fc.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/b/tsconfig.json:
+  {}
+/users/username/projects/b/c/fc.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+/users/username/projects/b:
+  {}
+
 Info 39   [16:01:31.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/a/c/fc.ts 500 undefined WatchType: Closed Script info
 Info 40   [16:01:32.000] Search path: /users/username/projects/a/c
 Info 41   [16:01:33.000] For info: /users/username/projects/a/c/fc.ts :: Config file name: /users/username/projects/a/tsconfig.json
@@ -119,8 +240,54 @@ Info 42   [16:01:43.000] 	FileName: /users/username/projects/b/b.ts ProjectRootP
 Info 42   [16:01:44.000] 		Projects: /users/username/projects/b/tsconfig.json
 Info 42   [16:01:45.000] 	FileName: /users/username/projects/a/c/fc.ts ProjectRootPath: /users/username/projects/a
 Info 42   [16:01:46.000] 		Projects: /users/username/projects/a/tsconfig.json
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/b/tsconfig.json:
+  {}
+/users/username/projects/b/c/fc.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+/users/username/projects/b:
+  {}
+
 Info 42   [16:01:47.000] response:{"responseRequired":false}
 Info 43   [16:01:48.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/b/c/fc.ts","projectRootPath":"/users/username/projects/b"}}
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/b/tsconfig.json:
+  {}
+/users/username/projects/b/c/fc.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+/users/username/projects/b:
+  {}
+
 Info 44   [16:01:49.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/b/c/fc.ts 500 undefined WatchType: Closed Script info
 Info 45   [16:01:50.000] Search path: /users/username/projects/b/c
 Info 46   [16:01:51.000] For info: /users/username/projects/b/c/fc.ts :: Config file name: /users/username/projects/b/tsconfig.json
@@ -141,6 +308,69 @@ Info 47   [16:02:03.000] 	FileName: /users/username/projects/a/c/fc.ts ProjectRo
 Info 47   [16:02:04.000] 		Projects: /users/username/projects/a/tsconfig.json
 Info 47   [16:02:05.000] 	FileName: /users/username/projects/b/c/fc.ts ProjectRootPath: /users/username/projects/b
 Info 47   [16:02:06.000] 		Projects: /users/username/projects/b/tsconfig.json
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/b/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+/users/username/projects/b:
+  {}
+
 Info 47   [16:02:07.000] response:{"responseRequired":false}
 Info 48   [16:02:08.000] request:{"seq":0,"type":"request","command":"rename","arguments":{"file":"/users/username/projects/a/c/fc.ts","line":1,"offset":14}}
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/b/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+/users/username/projects/b:
+  {}
+
+
+PolledWatches::
+/users/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/a/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/b/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/a:
+  {}
+/users/username/projects/b:
+  {}
+
 Info 49   [16:02:09.000] response:{"response":{"info":{"canRename":true,"displayName":"C","fullDisplayName":"\"/users/username/projects/a/c/fc\".C","kind":"const","kindModifiers":"export","triggerSpan":{"start":{"line":1,"offset":14},"end":{"line":1,"offset":15}}},"locs":[{"file":"/users/username/projects/a/c/fc.ts","locs":[{"start":{"line":1,"offset":14},"end":{"line":1,"offset":15},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":19}}]},{"file":"/users/username/projects/a/a.ts","locs":[{"start":{"line":1,"offset":9},"end":{"line":1,"offset":10},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}},{"start":{"line":1,"offset":39},"end":{"line":1,"offset":40}}]},{"file":"/users/username/projects/b/c/fc.ts","locs":[{"start":{"line":1,"offset":14},"end":{"line":1,"offset":15},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":19}}]},{"file":"/users/username/projects/b/b.ts","locs":[{"start":{"line":1,"offset":9},"end":{"line":1,"offset":10},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}},{"start":{"line":1,"offset":39},"end":{"line":1,"offset":40}}]}]},"responseRequired":true}

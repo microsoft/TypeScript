@@ -1,5 +1,56 @@
 Info 0    [16:00:43.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:44.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts"}}
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/packages/emit-composite/tsconfig.json]
+{"compilerOptions":{"composite":true,"allowJs":true,"emitDeclarationOnly":true,"outDir":"lib","rootDir":"src"},"include":["src"]}
+
+//// [/user/username/projects/myproject/packages/emit-composite/package.json]
+{"name":"emit-composite","version":"1.0.0","main":"src/index.js","typings":"lib/index.d.ts"}
+
+//// [/user/username/projects/myproject/packages/emit-composite/src/index.js]
+const testModule = require('./testModule');
+module.exports = {
+    ...testModule
+}
+
+//// [/user/username/projects/myproject/packages/emit-composite/src/testModule.js]
+/**
+ * @param {string} arg
+ */
+ const testCompositeFunction = (arg) => {
+}
+module.exports = {
+    testCompositeFunction
+}
+
+//// [/user/username/projects/myproject/packages/consumer/tsconfig.json]
+{"include":["src"],"references":[{"path":"../emit-composite"}]}
+
+//// [/user/username/projects/myproject/packages/consumer/src/index.ts]
+import { testCompositeFunction } from 'emit-composite';
+testCompositeFunction('why hello there');
+testCompositeFunction('why hello there', 42);
+
+//// [/user/username/projects/myproject/node_modules/emit-composite] symlink(/user/username/projects/myproject/packages/emit-composite)
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:45.000] Search path: /user/username/projects/myproject/packages/consumer/src
 Info 3    [16:00:46.000] For info: /user/username/projects/myproject/packages/consumer/src/index.ts :: Config file name: /user/username/projects/myproject/packages/consumer/tsconfig.json
 Info 4    [16:00:47.000] Creating configuration project /user/username/projects/myproject/packages/consumer/tsconfig.json
@@ -93,8 +144,119 @@ Info 43   [16:01:28.000] -----------------------------------------------
 Info 43   [16:01:29.000] Open files: 
 Info 43   [16:01:30.000] 	FileName: /user/username/projects/myproject/packages/consumer/src/index.ts ProjectRootPath: undefined
 Info 43   [16:01:31.000] 		Projects: /user/username/projects/myproject/packages/consumer/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/packages/consumer/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/consumer/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/packages/consumer/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src/index.js:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/emit-composite/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/packages/consumer/src:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src:
+  {}
+/user/username/projects/myproject/packages/emit-composite:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
 Info 43   [16:01:32.000] response:{"responseRequired":false}
 Info 44   [16:01:33.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/packages/consumer/src/index.ts"]},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/packages/consumer/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/consumer/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/packages/consumer/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src/index.js:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/emit-composite/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/packages/consumer/src:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src:
+  {}
+/user/username/projects/myproject/packages/emit-composite:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/packages/consumer/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/consumer/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/packages/consumer/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/emit-composite/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src/index.js:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src/testModule.js:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/emit-composite/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/packages/consumer/src:
+  {}
+/user/username/projects/myproject/packages/emit-composite/src:
+  {}
+/user/username/projects/myproject/packages/emit-composite:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
 Info 45   [16:01:34.000] response:{"responseRequired":false}
 Info 46   [16:01:35.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts","diagnostics":[]}}

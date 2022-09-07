@@ -349,12 +349,14 @@ namespace ts.projectSystem {
     export class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public testhost: TestServerHost = this.host as TestServerHost;
+        public testhost: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
         public logger: Logger;
+        private hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
 
         constructor(opts: TestSessionOptions) {
             super(opts);
             this.logger = opts.logger;
+            this.testhost = TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost);
         }
 
         getProjectService() {
@@ -370,11 +372,7 @@ namespace ts.projectSystem {
         }
 
         public executeCommand(request: protocol.Request) {
-            const verboseLogging = this.logger.hasLevel(server.LogLevel.verbose);
-            if (verboseLogging) this.logger.info(`request:${JSON.stringify(request)}`);
-            const result = super.executeCommand(request);
-            if (verboseLogging) this.logger.info(`response:${JSON.stringify(result)}`);
-            return result;
+            return this.baseline("response", super.executeCommand(this.baseline("request", request)));
         }
 
         public executeCommandSeq<T extends server.protocol.Request>(request: Partial<T>) {
@@ -392,6 +390,20 @@ namespace ts.projectSystem {
         public clearMessages() {
             clear(this.events);
             this.testhost.clearOutput();
+        }
+
+        private baseline<T extends protocol.Request | server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
+            if (!this.logger.hasLevel(server.LogLevel.verbose)) return requestOrResult;
+            if (type === "request") this.logger.info(`request:${JSON.stringify(requestOrResult)}`);
+            this.baselineHost();
+            if (type === "response") this.logger.info(`response:${JSON.stringify(requestOrResult)}`);
+            return requestOrResult;
+        }
+
+        baselineHost() {
+            this.testhost.diff(this.logger.logs, this.hostDiff);
+            this.testhost.serializeWatches(this.logger.logs);
+            this.hostDiff = this.testhost.snap();
         }
     }
 

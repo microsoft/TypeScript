@@ -1,5 +1,196 @@
 Info 0    [16:01:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:01:04.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/main/main.ts"}}
+//// [/user/username/projects/myproject/dependency/FnS.ts]
+export function fn1() { }
+export function fn2() { }
+export function fn3() { }
+export function fn4() { }
+export function fn5() { }
+
+
+//// [/user/username/projects/myproject/dependency/tsconfig.json]
+{"compilerOptions":{"composite":true,"declarationMap":true,"declarationDir":"../decls"}}
+
+//// [/user/username/projects/myproject/main/main.ts]
+import {
+    fn1,
+    fn2,
+    fn3,
+    fn4,
+    fn5
+} from '../decls/fns'
+
+fn1();
+fn2();
+fn3();
+fn4();
+fn5();
+
+
+//// [/user/username/projects/myproject/main/tsconfig.json]
+{"compilerOptions":{"composite":true,"declarationMap":true}}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/random/random.ts]
+let a = 10;
+
+//// [/user/username/projects/myproject/random/tsconfig.json]
+{}
+
+//// [/user/username/projects/myproject/dependency/FnS.js]
+"use strict";
+exports.__esModule = true;
+exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.fn1 = void 0;
+function fn1() { }
+exports.fn1 = fn1;
+function fn2() { }
+exports.fn2 = fn2;
+function fn3() { }
+exports.fn3 = fn3;
+function fn4() { }
+exports.fn4 = fn4;
+function fn5() { }
+exports.fn5 = fn5;
+
+
+//// [/user/username/projects/myproject/decls/FnS.d.ts.map]
+{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM"}
+
+//// [/user/username/projects/myproject/decls/FnS.d.ts]
+export declare function fn1(): void;
+export declare function fn2(): void;
+export declare function fn3(): void;
+export declare function fn4(): void;
+export declare function fn5(): void;
+//# sourceMappingURL=FnS.d.ts.map
+
+//// [/user/username/projects/myproject/dependency/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./fns.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n","signature":"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"}],"options":{"composite":true,"declarationDir":"../decls","declarationMap":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"../decls/FnS.d.ts"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/dependency/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./fns.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./fns.ts": {
+        "version": "-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n",
+        "signature": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "declarationDir": "../decls",
+      "declarationMap": true
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "./fns.ts"
+    ],
+    "latestChangedDtsFile": "../decls/FnS.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1090
+}
+
+//// [/user/username/projects/myproject/main/main.js]
+"use strict";
+exports.__esModule = true;
+var fns_1 = require("../decls/fns");
+(0, fns_1.fn1)();
+(0, fns_1.fn2)();
+(0, fns_1.fn3)();
+(0, fns_1.fn4)();
+(0, fns_1.fn5)();
+
+
+//// [/user/username/projects/myproject/main/main.d.ts.map]
+{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["main.ts"],"names":[],"mappings":""}
+
+//// [/user/username/projects/myproject/main/main.d.ts]
+export {};
+//# sourceMappingURL=main.d.ts.map
+
+//// [/user/username/projects/myproject/main/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../decls/fns.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18326212334-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n//# sourceMappingURL=FnS.d.ts.map",{"version":"-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"declarationMap":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./main.d.ts"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/main/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "../decls/fns.d.ts",
+      "./main.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../decls/fns.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../decls/fns.d.ts": {
+        "version": "-18326212334-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n//# sourceMappingURL=FnS.d.ts.map",
+        "signature": "-18326212334-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n//# sourceMappingURL=FnS.d.ts.map"
+      },
+      "./main.ts": {
+        "version": "-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n",
+        "signature": "-3531856636-export {};\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "declarationMap": true
+    },
+    "referencedMap": {
+      "./main.ts": [
+        "../decls/fns.d.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "../decls/fns.d.ts",
+      "./main.ts"
+    ],
+    "latestChangedDtsFile": "./main.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1151
+}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:01:05.000] Search path: /user/username/projects/myproject/main
 Info 3    [16:01:06.000] For info: /user/username/projects/myproject/main/main.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
 Info 4    [16:01:07.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
@@ -51,8 +242,50 @@ Info 25   [16:01:30.000] -----------------------------------------------
 Info 25   [16:01:31.000] Open files: 
 Info 25   [16:01:32.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
 Info 25   [16:01:33.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+
 Info 25   [16:01:34.000] response:{"responseRequired":false}
 Info 26   [16:01:35.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+
 Info 27   [16:01:36.000] Search path: /user/username/projects/myproject/dependency
 Info 28   [16:01:37.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info 29   [16:01:38.000] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
@@ -104,8 +337,62 @@ Info 46   [16:02:02.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 46   [16:02:03.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 46   [16:02:04.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
 Info 46   [16:02:05.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+
 Info 46   [16:02:06.000] response:{"responseRequired":false}
 Info 47   [16:02:07.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+
 Info 48   [16:02:08.000] Search path: /user/username/projects/myproject/random
 Info 49   [16:02:09.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
 Info 50   [16:02:10.000] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
@@ -158,13 +445,184 @@ Info 65   [16:02:37.000] 	FileName: /user/username/projects/myproject/dependency
 Info 65   [16:02:38.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info 65   [16:02:39.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 65   [16:02:40.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 65   [16:02:41.000] response:{"responseRequired":false}
 Info 66   [16:02:42.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":9,"offset":1},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 67   [16:02:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 68   [16:02:44.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","start":{"line":1,"offset":17},"end":{"line":1,"offset":20},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}}],"textSpan":{"start":{"line":9,"offset":1},"end":{"line":9,"offset":4}}},"responseRequired":true}
 Info 69   [16:02:45.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":1,"offset":17},"seq":2,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 70   [16:02:46.000] Search path: /user/username/projects/myproject/dependency
 Info 71   [16:02:47.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 72   [16:02:48.000] response:{"response":{"info":{"canRename":true,"displayName":"fn1","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn1","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}}]},{"file":"/user/username/projects/myproject/main/main.ts","locs":[{"start":{"line":2,"offset":5},"end":{"line":2,"offset":8},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":7,"offset":22}},{"start":{"line":9,"offset":1},"end":{"line":9,"offset":4}}]}]},"responseRequired":true}
 Info 73   [16:02:50.000] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 2:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info 74   [16:02:51.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
@@ -176,31 +634,765 @@ Info 79   [16:02:56.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info 80   [16:02:57.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info 81   [16:02:58.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info 82   [16:02:59.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":9,"offset":1},"seq":3,"type":"request"}
+//// [/user/username/projects/myproject/decls/FnS.d.ts.map] deleted
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 83   [16:03:00.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
 Info 84   [16:03:01.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info 85   [16:03:02.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 86   [16:03:03.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":1,"offset":25},"end":{"line":1,"offset":28},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":37}}],"textSpan":{"start":{"line":9,"offset":1},"end":{"line":9,"offset":4}}},"responseRequired":true}
 Info 87   [16:03:04.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":10,"offset":1},"seq":4,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 88   [16:03:05.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":2,"offset":25},"end":{"line":2,"offset":28},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":37}}],"textSpan":{"start":{"line":10,"offset":1},"end":{"line":10,"offset":4}}},"responseRequired":true}
 Info 89   [16:03:06.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":11,"offset":1},"seq":5,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 90   [16:03:07.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":3,"offset":25},"end":{"line":3,"offset":28},"contextStart":{"line":3,"offset":1},"contextEnd":{"line":3,"offset":37}}],"textSpan":{"start":{"line":11,"offset":1},"end":{"line":11,"offset":4}}},"responseRequired":true}
 Info 91   [16:03:08.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":12,"offset":1},"seq":6,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 92   [16:03:09.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":4,"offset":25},"end":{"line":4,"offset":28},"contextStart":{"line":4,"offset":1},"contextEnd":{"line":4,"offset":37}}],"textSpan":{"start":{"line":12,"offset":1},"end":{"line":12,"offset":4}}},"responseRequired":true}
 Info 93   [16:03:10.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":13,"offset":1},"seq":7,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 94   [16:03:11.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":5,"offset":25},"end":{"line":5,"offset":28},"contextStart":{"line":5,"offset":1},"contextEnd":{"line":5,"offset":37}}],"textSpan":{"start":{"line":13,"offset":1},"end":{"line":13,"offset":4}}},"responseRequired":true}
 Info 95   [16:03:12.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":1,"offset":17},"seq":8,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 96   [16:03:13.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
 Info 97   [16:03:14.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 98   [16:03:15.000] response:{"response":{"info":{"canRename":true,"displayName":"fn1","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn1","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}}]}]},"responseRequired":true}
 Info 99   [16:03:16.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":2,"offset":17},"seq":9,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 100  [16:03:17.000] response:{"response":{"info":{"canRename":true,"displayName":"fn2","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn2","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":2,"offset":17},"end":{"line":2,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":2,"offset":17},"end":{"line":2,"offset":20},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":26}}]}]},"responseRequired":true}
 Info 101  [16:03:18.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":3,"offset":17},"seq":10,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 102  [16:03:19.000] response:{"response":{"info":{"canRename":true,"displayName":"fn3","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn3","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":3,"offset":17},"end":{"line":3,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":3,"offset":17},"end":{"line":3,"offset":20},"contextStart":{"line":3,"offset":1},"contextEnd":{"line":3,"offset":26}}]}]},"responseRequired":true}
 Info 103  [16:03:20.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":4,"offset":17},"seq":11,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 104  [16:03:21.000] response:{"response":{"info":{"canRename":true,"displayName":"fn4","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn4","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":4,"offset":17},"end":{"line":4,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":4,"offset":17},"end":{"line":4,"offset":20},"contextStart":{"line":4,"offset":1},"contextEnd":{"line":4,"offset":26}}]}]},"responseRequired":true}
 Info 105  [16:03:22.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":5,"offset":17},"seq":12,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 106  [16:03:23.000] response:{"response":{"info":{"canRename":true,"displayName":"fn5","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn5","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":5,"offset":17},"end":{"line":5,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":5,"offset":17},"end":{"line":5,"offset":20},"contextStart":{"line":5,"offset":1},"contextEnd":{"line":5,"offset":26}}]}]},"responseRequired":true}
 Info 107  [16:03:24.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 108  [16:03:25.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info 109  [16:03:26.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 109  [16:03:27.000] 	Files (3)
@@ -219,8 +1411,82 @@ Info 109  [16:03:36.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 109  [16:03:37.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 109  [16:03:38.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
 Info 109  [16:03:39.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/random.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 109  [16:03:40.000] response:{"responseRequired":false}
 Info 110  [16:03:41.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/random.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 111  [16:03:42.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info 112  [16:03:43.000] Search path: /user/username/projects/myproject/random
 Info 113  [16:03:44.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
@@ -243,8 +1509,78 @@ Info 114  [16:03:57.000] 	FileName: /user/username/projects/myproject/dependency
 Info 114  [16:03:58.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info 114  [16:03:59.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 114  [16:04:00.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 114  [16:04:01.000] response:{"responseRequired":false}
 Info 115  [16:04:02.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/main/main.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 116  [16:04:03.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/main.ts 500 undefined WatchType: Closed Script info
 Info 117  [16:04:04.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 117  [16:04:05.000] 	Files (3)
@@ -263,8 +1599,82 @@ Info 117  [16:04:14.000] 	FileName: /user/username/projects/myproject/dependency
 Info 117  [16:04:15.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info 117  [16:04:16.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 117  [16:04:17.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/main/main.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 117  [16:04:18.000] response:{"responseRequired":false}
 Info 118  [16:04:19.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/main/main.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 119  [16:04:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
 Info 120  [16:04:21.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 120  [16:04:22.000] 	Files (3)
@@ -281,8 +1691,86 @@ Info 120  [16:04:29.000] -----------------------------------------------
 Info 120  [16:04:30.000] Open files: 
 Info 120  [16:04:31.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 120  [16:04:32.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/main/main.ts:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 120  [16:04:33.000] response:{"responseRequired":false}
 Info 121  [16:04:34.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/main/main.ts:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 122  [16:04:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info 123  [16:04:36.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info 123  [16:04:37.000] 	Files (3)
@@ -297,8 +1785,90 @@ Info 123  [16:04:43.000] 	Files (2)
 
 Info 123  [16:04:44.000] -----------------------------------------------
 Info 123  [16:04:45.000] Open files: 
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/main/main.ts:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+/user/username/projects/myproject/random/random.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 123  [16:04:46.000] response:{"responseRequired":false}
 Info 124  [16:04:47.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/main/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/dependency/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/decls/fns.d.ts.map:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+/user/username/projects/myproject/main/main.ts:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+/user/username/projects/myproject/random/random.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/main:
+  {}
+/user/username/projects/myproject/decls:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+/user/username/projects/myproject/random:
+  {}
+
 Info 125  [16:04:48.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info 126  [16:04:49.000] Search path: /user/username/projects/myproject/random
 Info 127  [16:04:50.000] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
@@ -358,4 +1928,21 @@ Info 156  [16:05:21.000] -----------------------------------------------
 Info 156  [16:05:22.000] Open files: 
 Info 156  [16:05:23.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 156  [16:05:24.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/random/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/random/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/random:
+  {}
+
 Info 156  [16:05:25.000] response:{"responseRequired":false}

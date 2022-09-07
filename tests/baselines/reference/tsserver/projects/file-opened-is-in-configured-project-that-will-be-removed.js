@@ -1,5 +1,40 @@
 Info 0    [16:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:36.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/playground/tests.ts"}}
+//// [/user/username/projects/myproject/playground/tsconfig.json]
+{}
+
+//// [/user/username/projects/myproject/playground/tests.ts]
+export function foo() {}
+
+//// [/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts]
+export function bar() { }
+
+//// [/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json]
+{"include":["./src"]}
+
+//// [/user/username/projects/myproject/playground/tsconfig-json/src/src.ts]
+export function foobar() { }
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:37.000] Search path: /user/username/projects/myproject/playground
 Info 3    [16:00:38.000] For info: /user/username/projects/myproject/playground/tests.ts :: Config file name: /user/username/projects/myproject/playground/tsconfig.json
 Info 4    [16:00:39.000] Creating configuration project /user/username/projects/myproject/playground/tsconfig.json
@@ -51,16 +86,104 @@ Info 22   [16:00:59.000] -----------------------------------------------
 Info 22   [16:01:00.000] Open files: 
 Info 22   [16:01:01.000] 	FileName: /user/username/projects/myproject/playground/tests.ts ProjectRootPath: undefined
 Info 22   [16:01:02.000] 		Projects: /user/username/projects/myproject/playground/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig.json:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground:
+  {}
+
 Info 22   [16:01:03.000] response:{"responseRequired":false}
 Info 23   [16:01:04.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/playground/tests.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig.json:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground:
+  {}
+
 Info 24   [16:01:05.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/playground/tests.ts 500 undefined WatchType: Closed Script info
 Info 25   [16:01:06.000] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
 Info 25   [16:01:07.000] 	Files (4)
 
 Info 25   [16:01:08.000] -----------------------------------------------
 Info 25   [16:01:09.000] Open files: 
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig.json:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tests.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground:
+  {}
+
 Info 25   [16:01:10.000] response:{"responseRequired":false}
 Info 26   [16:01:11.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig.json:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tests.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground:
+  {}
+
 Info 27   [16:01:12.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts 500 undefined WatchType: Closed Script info
 Info 28   [16:01:13.000] Search path: /user/username/projects/myproject/playground/tsconfig-json/tests
 Info 29   [16:01:14.000] For info: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts :: Config file name: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json
@@ -131,8 +254,50 @@ Info 59   [16:01:46.000] -----------------------------------------------
 Info 59   [16:01:47.000] Open files: 
 Info 59   [16:01:48.000] 	FileName: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts ProjectRootPath: undefined
 Info 59   [16:01:49.000] 		Projects: 
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground/tsconfig-json/src:
+  {}
+
 Info 59   [16:01:50.000] response:{"responseRequired":false}
 Info 60   [16:01:51.000] request:{"command":"getOutliningSpans","arguments":{"file":"/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts"},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground/tsconfig-json/src:
+  {}
+
 Info 61   [16:01:52.000] Before ensureProjectForOpenFiles:
 Info 62   [16:01:53.000] Project '/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json' (Configured)
 Info 62   [16:01:54.000] 	Files (2)
@@ -183,4 +348,41 @@ Info 84   [16:02:26.000] -----------------------------------------------
 Info 84   [16:02:27.000] Open files: 
 Info 84   [16:02:28.000] 	FileName: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts ProjectRootPath: undefined
 Info 84   [16:02:29.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/playground/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/playground/tsconfig-json/tests/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
+  {}
+/user/username/projects/myproject/playground/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/playground/tsconfig-json/src:
+  {}
+
 Info 84   [16:02:30.000] response:{"response":[{"textSpan":{"start":{"line":1,"offset":22},"end":{"line":1,"offset":26}},"hintSpan":{"start":{"line":1,"offset":1},"end":{"line":1,"offset":26}},"bannerText":"...","autoCollapse":true,"kind":"code"}],"responseRequired":true}

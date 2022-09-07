@@ -1,5 +1,42 @@
 Info 0    [16:00:51.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:52.000] request:{"command":"open","arguments":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","projectRootPath":"/users/username/projects/myproject"},"seq":1,"type":"request"}
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts]
+import {C} from "@microsoft/recognizers-text";
+new C();
+
+//// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json]
+{"compilerOptions":{"rootDir":"src","baseUrl":"./","paths":{"@microsoft/*":["../*"]}},"include":["src"]}
+
+//// [/users/username/projects/myproject/javascript/packages/recognizers-text/src/recognizers-text.ts]
+export class C { method () { return 10; } }
+
+//// [/users/username/projects/myproject/javascript/packages/recognizers-text/package.json]
+{"typings":"dist/types/recognizers-text.d.ts"}
+
+//// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@microsoft/recognizers-text] symlink(/users/username/projects/myproject/javascript/packages/recognizers-text)
+//// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
+export class C { method(): number; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:53.000] Search path: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime
 Info 3    [16:00:54.000] For info: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts :: Config file name: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info 4    [16:00:55.000] Creating configuration project /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
@@ -68,8 +105,89 @@ Info 32   [16:01:25.000] -----------------------------------------------
 Info 32   [16:01:26.000] Open files: 
 Info 32   [16:01:27.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
 Info 32   [16:01:28.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 32   [16:01:29.000] response:{"responseRequired":false}
 Info 33   [16:01:30.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]},"seq":2,"type":"request"}
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 34   [16:01:31.000] response:{"responseRequired":false}
 Info 35   [16:01:32.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
@@ -134,6 +252,77 @@ Info 66   [16:02:18.000] event:
 Info 67   [16:02:19.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 68   [16:02:20.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]},"seq":3,"type":"request"}
+//// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts] deleted
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
 Info 69   [16:02:21.000] response:{"responseRequired":false}
 Info 70   [16:02:22.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
@@ -205,6 +394,63 @@ Info 106  [16:03:16.000] got projects updated in background, updating diagnostic
 Info 107  [16:03:17.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]}}
 Info 108  [16:03:18.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]},"seq":4,"type":"request"}
+//// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
+export class C { method(): number; }
+
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 109  [16:03:19.000] response:{"responseRequired":false}
 Info 110  [16:03:20.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}

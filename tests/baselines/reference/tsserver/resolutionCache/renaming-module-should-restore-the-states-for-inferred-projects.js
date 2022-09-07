@@ -1,5 +1,18 @@
 Info 0    [16:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:12.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/file1.ts"}}
+//// [/a/b/moduleFile.ts]
+export function bar() { };
+
+//// [/a/b/file1.ts]
+import * as T from './moduleFile'; T.bar();
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:13.000] Search path: /a/b
 Info 3    [16:00:14.000] For info: /a/b/file1.ts :: No config files found.
 Info 4    [16:00:15.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -28,8 +41,47 @@ Info 14   [16:00:27.000] -----------------------------------------------
 Info 14   [16:00:28.000] Open files: 
 Info 14   [16:00:29.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 14   [16:00:30.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 14   [16:00:31.000] response:{"responseRequired":false}
 Info 15   [16:00:32.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 16   [16:00:33.000] response:{"response":[],"responseRequired":true}
 Info 17   [16:00:35.000] FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 18   [16:00:36.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
@@ -70,6 +122,40 @@ Info 35   [16:01:04.000] Open files:
 Info 35   [16:01:05.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 35   [16:01:06.000] 		Projects: /dev/null/inferredProject1*
 Info 35   [16:01:07.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+//// [/a/b/moduleFile1.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
 Info 36   [16:01:08.000] response:{"response":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":34},"text":"Cannot find module './moduleFile' or its corresponding type declarations.","code":2307,"category":"error"}],"responseRequired":true}
 Info 37   [16:01:10.000] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 38   [16:01:11.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
@@ -81,6 +167,40 @@ Info 43   [16:01:18.000] Running: /dev/null/inferredProject1*FailedLookupInvalid
 Info 44   [16:01:19.000] Scheduled: /dev/null/inferredProject1*
 Info 45   [16:01:20.000] Scheduled: *ensureProjectForOpenFiles*
 Info 46   [16:01:21.000] request:{"seq":0,"type":"request","command":"change","arguments":{"file":"/a/b/file1.ts","line":1,"offset":44,"endLine":1,"endOffset":44,"insertString":"\n"}}
+//// [/a/b/moduleFile.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile1.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
 Info 47   [16:01:22.000] response:{"responseRequired":false}
 Info 48   [16:01:23.000] Running: /dev/null/inferredProject1*
 Info 49   [16:01:24.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -120,4 +240,30 @@ Info 62   [16:01:46.000] Open files:
 Info 62   [16:01:47.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 62   [16:01:48.000] 		Projects: /dev/null/inferredProject1*
 Info 62   [16:01:49.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 63   [16:01:50.000] response:{"response":[],"responseRequired":true}

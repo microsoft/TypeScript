@@ -1,5 +1,15 @@
 Info 0    [16:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:06.000] request:{"command":"open","arguments":{"file":"/a.ts","fileContent":"1 = 2;"},"seq":1,"type":"request"}
+//// [/a.ts]
+1 = 2;
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:07.000] Search path: /
 Info 3    [16:00:08.000] For info: /a.ts :: No config files found.
 Info 4    [16:00:09.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -22,12 +32,57 @@ Info 11   [16:00:18.000] -----------------------------------------------
 Info 11   [16:00:19.000] Open files: 
 Info 11   [16:00:20.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 11   [16:00:21.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 11   [16:00:22.000] response:{"responseRequired":false}
 Info 12   [16:00:23.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a.ts"]},"seq":2,"type":"request"}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 13   [16:00:24.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 14   [16:00:25.000] response:{"responseRequired":false}
 Info 15   [16:00:26.000] request:{"command":"geterr","arguments":{"delay":0,"file":"/a.ts"},"seq":3,"type":"request"}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 16   [16:00:27.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 17   [16:00:28.000] response:{"responseRequired":false}

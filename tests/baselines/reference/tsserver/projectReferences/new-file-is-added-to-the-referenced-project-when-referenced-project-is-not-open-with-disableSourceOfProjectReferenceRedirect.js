@@ -1,5 +1,40 @@
 Info 0    [16:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:34.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/projects/project2/class2.ts"}}
+//// [/user/username/projects/myproject/projects/project1/tsconfig.json]
+{"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
+
+//// [/user/username/projects/myproject/projects/project1/class1.ts]
+class class1 {}
+
+//// [/user/username/projects/myproject/projects/project1/class1.d.ts]
+declare class class1 {}
+
+//// [/user/username/projects/myproject/projects/project2/tsconfig.json]
+{"compilerOptions":{"module":"none","composite":true,"disableSourceOfProjectReferenceRedirect":true},"references":[{"path":"../project1"}]}
+
+//// [/user/username/projects/myproject/projects/project2/class2.ts]
+class class2 {}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:35.000] Search path: /user/username/projects/myproject/projects/project2
 Info 3    [16:00:36.000] For info: /user/username/projects/myproject/projects/project2/class2.ts :: Config file name: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 4    [16:00:37.000] Creating configuration project /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -71,6 +106,31 @@ Info 29   [16:01:04.000] -----------------------------------------------
 Info 29   [16:01:05.000] Open files: 
 Info 29   [16:01:06.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 29   [16:01:07.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 29   [16:01:08.000] response:{"responseRequired":false}
 Info 30   [16:01:11.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 31   [16:01:12.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json

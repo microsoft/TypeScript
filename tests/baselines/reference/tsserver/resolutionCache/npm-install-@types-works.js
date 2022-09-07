@@ -1,5 +1,28 @@
 Info 0    [16:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:18.000] request:{"command":"open","arguments":{"file":"/a/b/projects/temp/a.ts","fileContent":"import f = require(\"pad\"); f;","scriptKindName":"TS","projectRootPath":"/a/b/projects/temp"},"seq":1,"type":"request"}
+//// [/a/b/projects/temp/a.ts]
+import f = require("pad"); f;
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:19.000] Search path: /a/b/projects/temp
 Info 3    [16:00:20.000] For info: /a/b/projects/temp/a.ts :: No config files found.
 Info 4    [16:00:21.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -31,8 +54,59 @@ Info 17   [16:00:36.000] -----------------------------------------------
 Info 17   [16:00:37.000] Open files: 
 Info 17   [16:00:38.000] 	FileName: /a/b/projects/temp/a.ts ProjectRootPath: /a/b/projects/temp
 Info 17   [16:00:39.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/a/b/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/node_modules:
+  {"pollingInterval":500}
+/a/b/projects/temp/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 17   [16:00:40.000] response:{"responseRequired":false}
 Info 18   [16:00:41.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a/b/projects/temp/a.ts"]},"seq":2,"type":"request"}
+
+PolledWatches::
+/a/b/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/node_modules:
+  {"pollingInterval":500}
+/a/b/projects/temp/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+
+PolledWatches::
+/a/b/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/node_modules:
+  {"pollingInterval":500}
+/a/b/projects/temp/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 19   [16:00:42.000] response:{"responseRequired":false}
 Info 20   [16:00:43.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}

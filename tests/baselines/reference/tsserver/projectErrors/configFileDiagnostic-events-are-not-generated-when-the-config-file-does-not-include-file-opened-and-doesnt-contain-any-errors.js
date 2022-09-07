@@ -1,5 +1,39 @@
 Info 0    [16:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:20.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/test.ts"}}
+//// [/a/b/app.ts]
+let x = 10
+
+//// [/a/b/test.ts]
+let x = 10
+
+//// [/a/b/test2.ts]
+let xy = 10
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/b/tsconfig.json]
+{
+                    "files": ["app.ts"]
+                }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:21.000] Search path: /a/b
 Info 3    [16:00:22.000] For info: /a/b/test.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [16:00:23.000] Creating configuration project /a/b/tsconfig.json
@@ -67,8 +101,38 @@ Info 29   [16:00:53.000] -----------------------------------------------
 Info 29   [16:00:54.000] Open files: 
 Info 29   [16:00:55.000] 	FileName: /a/b/test.ts ProjectRootPath: undefined
 Info 29   [16:00:56.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 29   [16:00:57.000] response:{"responseRequired":false}
 Info 30   [16:00:58.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/app.ts"}}
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 31   [16:00:59.000] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info 32   [16:01:00.000] Search path: /a/b
 Info 33   [16:01:01.000] For info: /a/b/app.ts :: Config file name: /a/b/tsconfig.json
@@ -85,8 +149,34 @@ Info 34   [16:01:09.000] 	FileName: /a/b/test.ts ProjectRootPath: undefined
 Info 34   [16:01:10.000] 		Projects: /dev/null/inferredProject1*
 Info 34   [16:01:11.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 34   [16:01:12.000] 		Projects: /a/b/tsconfig.json
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 34   [16:01:13.000] response:{"responseRequired":false}
 Info 35   [16:01:14.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/test2.ts"}}
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 36   [16:01:15.000] Search path: /a/b
 Info 37   [16:01:16.000] For info: /a/b/test2.ts :: Config file name: /a/b/tsconfig.json
 Info 38   [16:01:17.000] event:
@@ -127,4 +217,17 @@ Info 47   [16:01:38.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 47   [16:01:39.000] 		Projects: /a/b/tsconfig.json
 Info 47   [16:01:40.000] 	FileName: /a/b/test2.ts ProjectRootPath: undefined
 Info 47   [16:01:41.000] 		Projects: /dev/null/inferredProject2*
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 47   [16:01:42.000] response:{"responseRequired":false}

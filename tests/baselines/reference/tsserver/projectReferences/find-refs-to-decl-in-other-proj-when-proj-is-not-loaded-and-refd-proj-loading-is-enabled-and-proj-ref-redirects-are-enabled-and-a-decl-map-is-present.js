@@ -1,5 +1,51 @@
 Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a/index.ts"}}
+//// [/user/username/projects/myproject/a/tsconfig.json]
+{
+        "compilerOptions": {"disableReferencedProjectLoad":false,"disableSourceOfProjectReferenceRedirect":false,"composite":true},
+        "references": [{ "path": "../b" }]
+    }
+
+//// [/user/username/projects/myproject/a/index.ts]
+import { B } from "../b/lib";
+
+const b: B = new B();
+
+//// [/user/username/projects/myproject/b/tsconfig.json]
+{
+"compilerOptions": {
+    "declarationMap": true,
+    "outDir": "lib",
+    "composite": true
+}
+}
+
+//// [/user/username/projects/myproject/b/index.ts]
+export class B {
+    M() {}
+}
+
+//// [/user/username/projects/myproject/b/helper.ts]
+import { B } from ".";
+
+const b: B = new B();
+
+//// [/user/username/projects/myproject/b/lib/index.d.ts]
+export declare class B {
+    M(): void;
+}
+//# sourceMappingURL=index.d.ts.map
+
+//// [/user/username/projects/myproject/b/lib/index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:33.000] Search path: /user/username/projects/myproject/a
 Info 3    [16:00:34.000] For info: /user/username/projects/myproject/a/index.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
 Info 4    [16:00:35.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
@@ -70,8 +116,54 @@ Info 29   [16:01:02.000] -----------------------------------------------
 Info 29   [16:01:03.000] Open files: 
 Info 29   [16:01:04.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
 Info 29   [16:01:05.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/myproject/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/b:
+  {}
+
 Info 29   [16:01:06.000] response:{"responseRequired":false}
 Info 30   [16:01:07.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/a/index.ts","line":3,"offset":10},"seq":1,"type":"request"}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/myproject/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/b:
+  {}
+
 Info 31   [16:01:08.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
 Info 32   [16:01:09.000] Search path: /user/username/projects/myproject/b
 Info 33   [16:01:10.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
@@ -103,4 +195,33 @@ Info 48   [16:01:25.000] -----------------------------------------------
 Info 49   [16:01:26.000] Search path: /user/username/projects/myproject/b
 Info 50   [16:01:27.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
 Info 51   [16:01:28.000] Finding references to /user/username/projects/myproject/b/index.ts position 13 in project /user/username/projects/myproject/b/tsconfig.json
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/myproject/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b/helper.ts:
+  {}
+/user/username/projects/myproject/b:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/b:
+  {}
+
 Info 52   [16:01:29.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":11},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":30},"lineText":"import { B } from \"../b/lib\";","isWriteAccess":true},{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":3,"offset":10},"end":{"line":3,"offset":11},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":3,"offset":18},"end":{"line":3,"offset":19},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/b/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":15},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":3,"offset":2},"lineText":"export class B {","isWriteAccess":true},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":11},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":23},"lineText":"import { B } from \".\";","isWriteAccess":true},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":3,"offset":10},"end":{"line":3,"offset":11},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":3,"offset":18},"end":{"line":3,"offset":19},"lineText":"const b: B = new B();","isWriteAccess":false}],"symbolName":"B","symbolStartOffset":10,"symbolDisplayString":"(alias) class B\nimport B"},"responseRequired":true}

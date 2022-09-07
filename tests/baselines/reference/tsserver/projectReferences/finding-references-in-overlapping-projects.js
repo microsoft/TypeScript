@@ -1,5 +1,70 @@
 Info 0    [16:00:44.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:45.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/solution/b/index.ts"}}
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/solution/tsconfig.json]
+{"files":[],"include":[],"references":[{"path":"./a"},{"path":"./b"},{"path":"./c"},{"path":"./d"}]}
+
+//// [/user/username/projects/solution/a/tsconfig.json]
+{"compilerOptions":{"composite":true,"module":"none"},"files":["./index.ts"]}
+
+//// [/user/username/projects/solution/a/index.ts]
+
+                export interface I {
+                    M(): void;
+                }
+
+//// [/user/username/projects/solution/b/tsconfig.json]
+{"compilerOptions":{"composite":true},"files":["./index.ts"],"references":[{"path":"../a"}]}
+
+//// [/user/username/projects/solution/b/index.ts]
+
+                import { I } from "../a";
+
+                export class B implements I {
+                    M() {}
+                }
+
+//// [/user/username/projects/solution/c/tsconfig.json]
+{"compilerOptions":{"composite":true},"files":["./index.ts"],"references":[{"path":"../b"}]}
+
+//// [/user/username/projects/solution/c/index.ts]
+
+                import { I } from "../a";
+                import { B } from "../b";
+
+                export const C: I = new B();
+                
+
+//// [/user/username/projects/solution/d/tsconfig.json]
+{"compilerOptions":{"composite":true},"files":["./index.ts"],"references":[{"path":"../c"}]}
+
+//// [/user/username/projects/solution/d/index.ts]
+
+                import { I } from "../a";
+                import { C } from "../c";
+
+                export const D: I = C;
+                
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:46.000] Search path: /user/username/projects/solution/b
 Info 3    [16:00:47.000] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info 4    [16:00:48.000] Creating configuration project /user/username/projects/solution/b/tsconfig.json
@@ -76,8 +141,58 @@ Info 31   [16:01:20.000] -----------------------------------------------
 Info 31   [16:01:21.000] Open files: 
 Info 31   [16:01:22.000] 	FileName: /user/username/projects/solution/b/index.ts ProjectRootPath: undefined
 Info 31   [16:01:23.000] 		Projects: /user/username/projects/solution/b/tsconfig.json
+
+PolledWatches::
+/user/username/projects/solution/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/b/tsconfig.json:
+  {}
+/user/username/projects/solution/a/tsconfig.json:
+  {}
+/user/username/projects/solution/a/index.ts:
+  {}
+/user/username/projects/solution:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/a:
+  {}
+
 Info 31   [16:01:24.000] response:{"responseRequired":false}
 Info 32   [16:01:25.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/b/index.ts","line":4,"offset":43},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/solution/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/b/tsconfig.json:
+  {}
+/user/username/projects/solution/a/tsconfig.json:
+  {}
+/user/username/projects/solution/a/index.ts:
+  {}
+/user/username/projects/solution:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/a:
+  {}
+
 Info 33   [16:01:26.000] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/b/tsconfig.json
 Info 34   [16:01:27.000] Search path: /user/username/projects/solution/a
 Info 35   [16:01:28.000] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
@@ -269,8 +384,94 @@ Info 124  [16:02:57.000] Search path: /user/username/projects/solution/c
 Info 125  [16:02:58.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
 Info 126  [16:02:59.000] Search path: /user/username/projects/solution/c
 Info 127  [16:03:00.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
+
+PolledWatches::
+/user/username/projects/solution/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/d/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/b/tsconfig.json:
+  {}
+/user/username/projects/solution/a/tsconfig.json:
+  {}
+/user/username/projects/solution/a/index.ts:
+  {}
+/user/username/projects/solution:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+/user/username/projects/solution/c/tsconfig.json:
+  {}
+/user/username/projects/solution/d/tsconfig.json:
+  {}
+/user/username/projects/solution/c/index.ts:
+  {}
+/user/username/projects/solution/d/index.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/a:
+  {}
+/user/username/projects/solution/b:
+  {}
+/user/username/projects/solution/c:
+  {}
+
 Info 128  [16:03:01.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/b/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/b/index.ts","start":{"line":4,"offset":43},"end":{"line":4,"offset":44},"lineText":"                export class B implements I {","isWriteAccess":false},{"file":"/user/username/projects/solution/a/index.ts","start":{"line":2,"offset":34},"end":{"line":2,"offset":35},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":4,"offset":18},"lineText":"                export interface I {","isWriteAccess":true},{"file":"/user/username/projects/solution/c/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/c/index.ts","start":{"line":5,"offset":33},"end":{"line":5,"offset":34},"lineText":"                export const C: I = new B();","isWriteAccess":false},{"file":"/user/username/projects/solution/d/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/d/index.ts","start":{"line":5,"offset":33},"end":{"line":5,"offset":34},"lineText":"                export const D: I = C;","isWriteAccess":false}],"symbolName":"I","symbolStartOffset":43,"symbolDisplayString":"(alias) interface I\nimport I"},"responseRequired":true}
 Info 129  [16:03:02.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/b/index.ts","line":4,"offset":43},"seq":2,"type":"request"}
+
+PolledWatches::
+/user/username/projects/solution/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/d/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/b/tsconfig.json:
+  {}
+/user/username/projects/solution/a/tsconfig.json:
+  {}
+/user/username/projects/solution/a/index.ts:
+  {}
+/user/username/projects/solution:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+/user/username/projects/solution/c/tsconfig.json:
+  {}
+/user/username/projects/solution/d/tsconfig.json:
+  {}
+/user/username/projects/solution/c/index.ts:
+  {}
+/user/username/projects/solution/d/index.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/a:
+  {}
+/user/username/projects/solution/b:
+  {}
+/user/username/projects/solution/c:
+  {}
+
 Info 130  [16:03:03.000] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/b/tsconfig.json
 Info 131  [16:03:04.000] Search path: /user/username/projects/solution/a
 Info 132  [16:03:05.000] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
@@ -305,4 +506,47 @@ Info 160  [16:03:33.000] For info: /user/username/projects/solution/c/index.ts :
 Info 161  [16:03:34.000] Search path: /user/username/projects/solution/c
 Info 162  [16:03:35.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
 Info 163  [16:03:36.000] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/a/tsconfig.json
+
+PolledWatches::
+/user/username/projects/solution/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/d/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/b/tsconfig.json:
+  {}
+/user/username/projects/solution/a/tsconfig.json:
+  {}
+/user/username/projects/solution/a/index.ts:
+  {}
+/user/username/projects/solution:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+/user/username/projects/solution/c/tsconfig.json:
+  {}
+/user/username/projects/solution/d/tsconfig.json:
+  {}
+/user/username/projects/solution/c/index.ts:
+  {}
+/user/username/projects/solution/d/index.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/a:
+  {}
+/user/username/projects/solution/b:
+  {}
+/user/username/projects/solution/c:
+  {}
+
 Info 164  [16:03:37.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/b/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/b/index.ts","start":{"line":4,"offset":43},"end":{"line":4,"offset":44},"lineText":"                export class B implements I {","isWriteAccess":false},{"file":"/user/username/projects/solution/a/index.ts","start":{"line":2,"offset":34},"end":{"line":2,"offset":35},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":4,"offset":18},"lineText":"                export interface I {","isWriteAccess":true},{"file":"/user/username/projects/solution/c/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/c/index.ts","start":{"line":5,"offset":33},"end":{"line":5,"offset":34},"lineText":"                export const C: I = new B();","isWriteAccess":false},{"file":"/user/username/projects/solution/d/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/d/index.ts","start":{"line":5,"offset":33},"end":{"line":5,"offset":34},"lineText":"                export const D: I = C;","isWriteAccess":false}],"symbolName":"I","symbolStartOffset":43,"symbolDisplayString":"(alias) interface I\nimport I"},"responseRequired":true}

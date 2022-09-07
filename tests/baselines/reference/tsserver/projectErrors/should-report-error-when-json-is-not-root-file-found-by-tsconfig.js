@@ -1,5 +1,36 @@
 Info 0    [16:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:26.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/test.ts"}}
+//// [/user/username/projects/myproject/src/test.ts]
+import * as blabla from "./blabla.json";
+declare var console: any;
+console.log(blabla);
+
+//// [/user/username/projects/myproject/src/blabla.json]
+{}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{"compilerOptions":{"resolveJsonModule":true,"composite":true},"include":["./src/*.ts"]}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:27.000] Search path: /user/username/projects/myproject/src
 Info 3    [16:00:28.000] For info: /user/username/projects/myproject/src/test.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [16:00:29.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -57,8 +88,65 @@ Info 27   [16:00:54.000] -----------------------------------------------
 Info 27   [16:00:55.000] Open files: 
 Info 27   [16:00:56.000] 	FileName: /user/username/projects/myproject/src/test.ts ProjectRootPath: undefined
 Info 27   [16:00:57.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 27   [16:00:58.000] response:{"responseRequired":false}
 Info 28   [16:00:59.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/test.ts"]},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 29   [16:01:00.000] response:{"responseRequired":false}
 Info 30   [16:01:01.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}

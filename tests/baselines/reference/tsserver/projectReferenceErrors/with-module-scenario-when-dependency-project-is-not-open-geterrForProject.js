@@ -1,5 +1,50 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"}}
+//// [/user/username/projects/myproject/dependency/fns.ts]
+export function fn1() { }
+export function fn2() { }
+// Introduce error for fnErr import in main
+// export function fnErr() { }
+// Error in dependency ts file
+export let x: string = 10;
+
+//// [/user/username/projects/myproject/dependency/tsconfig.json]
+{"compilerOptions":{"composite":true,"declarationDir":"../decls"}}
+
+//// [/user/username/projects/myproject/usage/usage.ts]
+import {
+    fn1,
+    fn2,
+    fnErr
+} from '../decls/fns'
+fn1();
+fn2();
+fnErr();
+
+
+//// [/user/username/projects/myproject/usage/tsconfig.json]
+{"compilerOptions":{"composite":true},"references":[{"path":"../dependency"}]}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:31.000] Search path: /user/username/projects/myproject/usage
 Info 3    [16:00:32.000] For info: /user/username/projects/myproject/usage/usage.ts :: Config file name: /user/username/projects/myproject/usage/tsconfig.json
 Info 4    [16:00:33.000] Creating configuration project /user/username/projects/myproject/usage/tsconfig.json
@@ -77,8 +122,83 @@ Info 33   [16:01:04.000] -----------------------------------------------
 Info 33   [16:01:05.000] Open files: 
 Info 33   [16:01:06.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 33   [16:01:07.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/decls:
+  {"pollingInterval":500}
+/user/username/projects/myproject/usage/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/usage/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/usage:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+
 Info 33   [16:01:08.000] response:{"responseRequired":false}
 Info 34   [16:01:09.000] request:{"command":"geterrForProject","arguments":{"delay":0,"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/decls:
+  {"pollingInterval":500}
+/user/username/projects/myproject/usage/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/usage/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/usage:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/decls:
+  {"pollingInterval":500}
+/user/username/projects/myproject/usage/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/usage/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/usage:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+
 Info 35   [16:01:10.000] response:{"responseRequired":false}
 Info 36   [16:01:11.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
@@ -95,6 +215,56 @@ Info 41   [16:01:16.000] event:
 Info 42   [16:01:17.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
 Info 43   [16:01:18.000] request:{"command":"geterrForProject","arguments":{"delay":0,"file":"/user/username/projects/myproject/dependency/fns.ts"},"seq":2,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/decls:
+  {"pollingInterval":500}
+/user/username/projects/myproject/usage/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/usage/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/usage:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/decls:
+  {"pollingInterval":500}
+/user/username/projects/myproject/usage/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/usage/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/tsconfig.json:
+  {}
+/user/username/projects/myproject/dependency/fns.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/usage:
+  {}
+/user/username/projects/myproject/dependency:
+  {}
+
 Info 44   [16:01:19.000] response:{"responseRequired":false}
 Info 45   [16:01:20.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}

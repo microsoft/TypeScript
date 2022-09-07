@@ -1,5 +1,49 @@
 Info 0    [16:00:44.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:45.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/solution/api/src/server.ts"}}
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/solution/tsconfig.json]
+{"files":[],"references":[{"path":"./api"},{"path":"./app"}]}
+
+//// [/user/username/projects/solution/api/tsconfig.json]
+{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"],"references":[{"path":"../shared"}]}
+
+//// [/user/username/projects/solution/api/src/server.ts]
+import * as shared from "../../shared/dist";
+shared.foo.bar();
+
+//// [/user/username/projects/solution/app/tsconfig.json]
+{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"],"references":[{"path":"../shared"}]}
+
+//// [/user/username/projects/solution/app/src/app.ts]
+import * as shared from "../../shared/dist";
+shared.foo.bar();
+
+//// [/user/username/projects/solution/shared/tsconfig.json]
+{"compilerOptions":{"composite":true,"outDir":"dist","rootDir":"src"},"include":["src"]}
+
+//// [/user/username/projects/solution/shared/src/index.ts]
+const local = { bar: () => { } };
+export const foo = local;
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:46.000] Search path: /user/username/projects/solution/api/src
 Info 3    [16:00:47.000] For info: /user/username/projects/solution/api/src/server.ts :: Config file name: /user/username/projects/solution/api/tsconfig.json
 Info 4    [16:00:48.000] Creating configuration project /user/username/projects/solution/api/tsconfig.json
@@ -80,8 +124,62 @@ Info 33   [16:01:22.000] -----------------------------------------------
 Info 33   [16:01:23.000] Open files: 
 Info 33   [16:01:24.000] 	FileName: /user/username/projects/solution/api/src/server.ts ProjectRootPath: undefined
 Info 33   [16:01:25.000] 		Projects: /user/username/projects/solution/api/tsconfig.json
+
+PolledWatches::
+/user/username/projects/solution/api/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/api/tsconfig.json:
+  {}
+/user/username/projects/solution/shared/tsconfig.json:
+  {}
+/user/username/projects/solution/shared/src/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/api/src:
+  {}
+/user/username/projects/solution/shared/src:
+  {}
+/user/username/projects/solution/shared:
+  {}
+
 Info 33   [16:01:26.000] response:{"responseRequired":false}
 Info 34   [16:01:27.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/api/src/server.ts","line":2,"offset":12},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/solution/api/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/api/tsconfig.json:
+  {}
+/user/username/projects/solution/shared/tsconfig.json:
+  {}
+/user/username/projects/solution/shared/src/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/api/src:
+  {}
+/user/username/projects/solution/shared/src:
+  {}
+/user/username/projects/solution/shared:
+  {}
+
 Info 35   [16:01:28.000] Finding references to /user/username/projects/solution/api/src/server.ts position 56 in project /user/username/projects/solution/api/tsconfig.json
 Info 36   [16:01:29.000] Search path: /user/username/projects/solution/shared/src
 Info 37   [16:01:30.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
@@ -108,4 +206,33 @@ Info 48   [16:01:41.000] -----------------------------------------------
 Info 49   [16:01:42.000] Search path: /user/username/projects/solution/shared/src
 Info 50   [16:01:43.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
 Info 51   [16:01:44.000] Finding references to /user/username/projects/solution/shared/src/index.ts position 16 in project /user/username/projects/solution/shared/tsconfig.json
+
+PolledWatches::
+/user/username/projects/solution/api/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/shared/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/solution/api/tsconfig.json:
+  {}
+/user/username/projects/solution/shared/tsconfig.json:
+  {}
+/user/username/projects/solution/shared/src/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/solution/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/solution/api/src:
+  {}
+/user/username/projects/solution/shared/src:
+  {}
+/user/username/projects/solution/shared:
+  {}
+
 Info 52   [16:01:45.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/shared/src/index.ts","start":{"line":1,"offset":17},"end":{"line":1,"offset":20},"contextStart":{"line":1,"offset":17},"contextEnd":{"line":1,"offset":31},"lineText":"const local = { bar: () => { } };","isWriteAccess":true},{"file":"/user/username/projects/solution/api/src/server.ts","start":{"line":2,"offset":12},"end":{"line":2,"offset":15},"lineText":"shared.foo.bar();","isWriteAccess":false}],"symbolName":"bar","symbolStartOffset":12,"symbolDisplayString":"(property) bar: () => void"},"responseRequired":true}

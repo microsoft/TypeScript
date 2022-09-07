@@ -1,5 +1,37 @@
 Info 0    [16:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:26.000] request:{"command":"open","arguments":{"file":"/a/b/projects/config/file.ts"},"seq":1,"type":"request"}
+//// [/a/b/projects/config/tsconfig.json]
+
+
+//// [/a/b/projects/config/file.ts]
+import {a} from "../files/file1"; export let b = a;
+
+//// [/a/b/projects/files/file1.ts]
+export let a = 10;
+
+//// [/a/b/projects/files/file2.ts]
+export let aa = 10;
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:27.000] Search path: /a/b/projects/config
 Info 3    [16:00:28.000] For info: /a/b/projects/config/file.ts :: Config file name: /a/b/projects/config/tsconfig.json
 Info 4    [16:00:29.000] Creating configuration project /a/b/projects/config/tsconfig.json
@@ -43,8 +75,42 @@ Info 19   [16:00:46.000] -----------------------------------------------
 Info 19   [16:00:47.000] Open files: 
 Info 19   [16:00:48.000] 	FileName: /a/b/projects/config/file.ts ProjectRootPath: undefined
 Info 19   [16:00:49.000] 		Projects: /a/b/projects/config/tsconfig.json
+
+PolledWatches::
+/a/b/projects/config/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/config/tsconfig.json:
+  {}
+/a/b/projects/files/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/config:
+  {}
+
 Info 19   [16:00:50.000] response:{"responseRequired":false}
 Info 20   [16:00:51.000] request:{"command":"open","arguments":{"file":"/a/b/projects/files/file1.ts"},"seq":2,"type":"request"}
+
+PolledWatches::
+/a/b/projects/config/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/config/tsconfig.json:
+  {}
+/a/b/projects/files/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/config:
+  {}
+
 Info 21   [16:00:52.000] FileWatcher:: Close:: WatchInfo: /a/b/projects/files/file1.ts 500 undefined WatchType: Closed Script info
 Info 22   [16:00:53.000] Search path: /a/b/projects/files
 Info 23   [16:00:54.000] For info: /a/b/projects/files/file1.ts :: No config files found.
@@ -57,8 +123,38 @@ Info 24   [16:00:59.000] 	FileName: /a/b/projects/config/file.ts ProjectRootPath
 Info 24   [16:01:00.000] 		Projects: /a/b/projects/config/tsconfig.json
 Info 24   [16:01:01.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath: undefined
 Info 24   [16:01:02.000] 		Projects: /a/b/projects/config/tsconfig.json
+
+PolledWatches::
+/a/b/projects/config/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/config/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/config:
+  {}
+
 Info 24   [16:01:03.000] response:{"responseRequired":false}
 Info 25   [16:01:04.000] request:{"command":"close","arguments":{"file":"/a/b/projects/config/file.ts"},"seq":3,"type":"request"}
+
+PolledWatches::
+/a/b/projects/config/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/config/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/config:
+  {}
+
 Info 26   [16:01:05.000] FileWatcher:: Added:: WatchInfo: /a/b/projects/config/file.ts 500 undefined WatchType: Closed Script info
 Info 27   [16:01:06.000] Project '/a/b/projects/config/tsconfig.json' (Configured)
 Info 27   [16:01:07.000] 	Files (3)
@@ -67,8 +163,42 @@ Info 27   [16:01:08.000] -----------------------------------------------
 Info 27   [16:01:09.000] Open files: 
 Info 27   [16:01:10.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath: undefined
 Info 27   [16:01:11.000] 		Projects: /a/b/projects/config/tsconfig.json
+
+PolledWatches::
+/a/b/projects/config/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/config/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/projects/config/file.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/config:
+  {}
+
 Info 27   [16:01:12.000] response:{"responseRequired":false}
 Info 28   [16:01:13.000] request:{"command":"open","arguments":{"file":"/a/b/projects/files/file2.ts"},"seq":4,"type":"request"}
+
+PolledWatches::
+/a/b/projects/config/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/config/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/projects/config/file.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/config:
+  {}
+
 Info 29   [16:01:14.000] Search path: /a/b/projects/files
 Info 30   [16:01:15.000] For info: /a/b/projects/files/file2.ts :: No config files found.
 Info 31   [16:01:16.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -121,8 +251,38 @@ Info 51   [16:01:40.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath
 Info 51   [16:01:41.000] 		Projects: 
 Info 51   [16:01:42.000] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info 51   [16:01:43.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/a/b/projects/files/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/files/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/files/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 51   [16:01:44.000] response:{"responseRequired":false}
 Info 52   [16:01:45.000] request:{"command":"occurrences","arguments":{"file":"/a/b/projects/files/file1.ts","line":1,"offset":11},"seq":5,"type":"request"}
+
+PolledWatches::
+/a/b/projects/files/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/files/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/files/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 53   [16:01:46.000] Before ensureProjectForOpenFiles:
 Info 54   [16:01:47.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 54   [16:01:48.000] 	Files (2)
@@ -164,4 +324,19 @@ Info 63   [16:02:11.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath
 Info 63   [16:02:12.000] 		Projects: /dev/null/inferredProject2*
 Info 63   [16:02:13.000] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info 63   [16:02:14.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/a/b/projects/files/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/files/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/files/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 63   [16:02:15.000] response:{"response":[],"responseRequired":true}

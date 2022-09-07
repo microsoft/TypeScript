@@ -1,5 +1,34 @@
 Info 0    [16:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:28.000] request:{"command":"open","arguments":{"file":"/user/username/projects/myproject/src/foo.ts","fileContent":"export function foo() { }","projectRootPath":"/user/username/projects/myproject"},"seq":1,"type":"request"}
+//// [/user/username/projects/myproject/src/foo.ts]
+export function foo() { }
+
+//// [/user/username/projects/myproject/src/bar.ts]
+export function bar() { }
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{"include":["./src"],"exclude":["./src/sub"]}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:29.000] Search path: /user/username/projects/myproject/src
 Info 3    [16:00:30.000] For info: /user/username/projects/myproject/src/foo.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [16:00:31.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -52,8 +81,42 @@ Info 23   [16:00:52.000] -----------------------------------------------
 Info 23   [16:00:53.000] Open files: 
 Info 23   [16:00:54.000] 	FileName: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject
 Info 23   [16:00:55.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/bar.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 23   [16:00:56.000] response:{"responseRequired":false}
 Info 24   [16:00:57.000] request:{"command":"open","arguments":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","fileContent":"export function fooBar() { }","projectRootPath":"/user/username/projects/myproject"},"seq":2,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/bar.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 25   [16:00:58.000] Search path: /user/username/projects/myproject/src/sub
 Info 26   [16:00:59.000] For info: /user/username/projects/myproject/src/sub/fooBar.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 27   [16:01:00.000] event:
@@ -97,11 +160,107 @@ Info 45   [16:01:25.000] 	FileName: /user/username/projects/myproject/src/foo.ts
 Info 45   [16:01:26.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 45   [16:01:27.000] 	FileName: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject
 Info 45   [16:01:28.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/sub/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/sub/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/sub/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/bar.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 45   [16:01:29.000] response:{"responseRequired":false}
 Info 46   [16:01:32.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 47   [16:01:33.000] Project: /user/username/projects/myproject/tsconfig.json Detected excluded file: /user/username/projects/myproject/src/sub/fooBar.ts
 Info 48   [16:01:34.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 49   [16:01:35.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/sub/fooBar.ts","/user/username/projects/myproject/src/foo.ts"]},"seq":3,"type":"request"}
+//// [/user/username/projects/myproject/src/sub/fooBar.ts]
+export function fooBar() { }
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/sub/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/sub/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/sub/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/bar.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/sub/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/sub/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/sub/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/bar.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 50   [16:01:36.000] response:{"responseRequired":false}
 Info 51   [16:01:37.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}

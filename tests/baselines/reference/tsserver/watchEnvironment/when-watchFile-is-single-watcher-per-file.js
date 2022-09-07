@@ -1,5 +1,31 @@
 Info 0    [16:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:22.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/index.ts"}}
+//// [/user/username/projects/myproject/tsconfig.json]
+{"compilerOptions":{"composite":true,"resolveJsonModule":true}}
+
+//// [/user/username/projects/myproject/index.ts]
+import * as tsconfig from "./tsconfig.json";
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:23.000] Search path: /user/username/projects/myproject
 Info 3    [16:00:24.000] For info: /user/username/projects/myproject/index.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 4    [16:00:25.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -51,22 +77,23 @@ Info 25   [16:00:48.000] -----------------------------------------------
 Info 25   [16:00:49.000] Open files: 
 Info 25   [16:00:50.000] 	FileName: /user/username/projects/myproject/index.ts ProjectRootPath: undefined
 Info 25   [16:00:51.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
 Info 25   [16:00:52.000] response:{"responseRequired":false}
-Info 26   [16:00:53.000] PolledWatches::
-Info 27   [16:00:54.000] /user/username/projects/myproject/tsconfig.json:
-Info 28   [16:00:55.000]   {"pollingInterval":500}
-Info 29   [16:00:56.000] /user/username/projects/myproject/node_modules/@types:
-Info 30   [16:00:57.000]   {"pollingInterval":500}
-Info 31   [16:00:58.000] 
-Info 32   [16:00:59.000] FsWatches::
-Info 33   [16:01:00.000] /user/username/projects/myproject/tsconfig.json:
-Info 34   [16:01:01.000]   {}
-Info 35   [16:01:02.000] /user/username/projects/myproject:
-Info 36   [16:01:03.000]   {}
-Info 37   [16:01:04.000] /a/lib/lib.d.ts:
-Info 38   [16:01:05.000]   {}
-Info 39   [16:01:06.000] 
-Info 40   [16:01:07.000] FsWatchesRecursive::
-Info 41   [16:01:08.000] /user/username/projects/myproject:
-Info 42   [16:01:09.000]   {}
-Info 43   [16:01:10.000] 

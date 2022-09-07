@@ -1,5 +1,30 @@
 Info 0    [16:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:24.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/controllers/vessels/client.ts"}}
+//// [/a/b/controllers/vessels/client.ts]
+
+                    import { Vessel } from '~/models/vessel';
+                    const v = new Vessel();
+                
+
+//// [/a/b/utils/db.ts]
+export class Bookshelf { }
+
+//// [/a/b/models/vessel.ts]
+
+                    import { Bookshelf } from '~/utils/db';
+                    export class Vessel extends Bookshelf {}
+                
+
+//// [/a/b/tsconfig.json]
+{"compilerOptions":{"target":"es6","module":"es6","baseUrl":"./","paths":{"~/*":["*"]}},"exclude":["api","build","node_modules","public","seeds","sql_updates","tests.build"]}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:25.000] Search path: /a/b/controllers/vessels
 Info 3    [16:00:26.000] For info: /a/b/controllers/vessels/client.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [16:00:27.000] Creating configuration project /a/b/tsconfig.json
@@ -57,8 +82,65 @@ Info 20   [16:00:45.000] -----------------------------------------------
 Info 20   [16:00:46.000] Open files: 
 Info 20   [16:00:47.000] 	FileName: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined
 Info 20   [16:00:48.000] 		Projects: /a/b/tsconfig.json
+
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/models/vessel.ts:
+  {}
+/a/b/utils/db.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 20   [16:00:49.000] response:{"responseRequired":false}
 Info 21   [16:00:50.000] request:{"seq":0,"type":"request","command":"definition","arguments":{"file":"/a/b/controllers/vessels/client.ts","position":54}}
+
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/models/vessel.ts:
+  {}
+/a/b/utils/db.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
+
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/models/vessel.ts:
+  {}
+/a/b/utils/db.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 22   [16:00:51.000] response:{"response":[{"file":"/a/b/models/vessel.ts","start":{"line":2,"offset":21},"end":{"line":4,"offset":17}}],"responseRequired":true}
 Info 23   [16:00:52.000] fileExists:: []
 Info 24   [16:00:53.000] directoryExists:: []
@@ -66,6 +148,25 @@ Info 25   [16:00:54.000] getDirectories:: []
 Info 26   [16:00:55.000] readFile:: []
 Info 27   [16:00:56.000] readDirectory:: []
 Info 28   [16:00:57.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/models/vessel.ts"}}
+
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/models/vessel.ts:
+  {}
+/a/b/utils/db.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 29   [16:00:58.000] FileWatcher:: Close:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
 Info 30   [16:00:59.000] Search path: /a/b/models
 Info 31   [16:01:00.000] For info: /a/b/models/vessel.ts :: Config file name: /a/b/tsconfig.json
@@ -78,6 +179,23 @@ Info 32   [16:01:05.000] 	FileName: /a/b/controllers/vessels/client.ts ProjectRo
 Info 32   [16:01:06.000] 		Projects: /a/b/tsconfig.json
 Info 32   [16:01:07.000] 	FileName: /a/b/models/vessel.ts ProjectRootPath: undefined
 Info 32   [16:01:08.000] 		Projects: /a/b/tsconfig.json
+
+PolledWatches::
+/a/lib/lib.es6.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/utils/db.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 32   [16:01:09.000] response:{"responseRequired":false}
 Info 33   [16:01:10.000] fileExists:: [{"key":"/a/b/models/tsconfig.json","count":1},{"key":"/a/b/models/jsconfig.json","count":1}]
 Info 34   [16:01:11.000] directoryExists:: []

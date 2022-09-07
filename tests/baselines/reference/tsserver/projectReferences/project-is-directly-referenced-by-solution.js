@@ -88,6 +88,96 @@ Info 34   [16:01:35.000] 		Projects: /user/username/projects/myproject/tsconfig-
 Info 34   [16:01:36.000] getDefaultProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
 Info 34   [16:01:37.000] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
 Info 34   [16:01:38.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/main.ts"]},"seq":1,"type":"request"}
+//// [/user/username/projects/myproject/tsconfig-src.json]
+{"compilerOptions":{"composite":true,"outDir":"./target/","baseUrl":"./src/"},"include":["./src/**/*"]}
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{"references":[{"path":"./tsconfig-src.json"}],"files":[]}
+
+//// [/user/username/projects/myproject/src/main.ts]
+import { foo } from 'helpers/functions';
+export { foo };
+
+//// [/user/username/projects/myproject/src/helpers/functions.ts]
+export const foo = 1;
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/dummy/dummy.ts]
+let a = 10;
+
+//// [/user/username/projects/myproject/target/src/main.d.ts]
+import { foo } from 'helpers/functions';
+export { foo };
+//# sourceMappingURL=main.d.ts.map
+
+//// [/user/username/projects/myproject/target/src/main.d.ts.map]
+{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"}
+
+//// [/user/username/projects/myproject/target/src/helpers/functions.d.ts]
+export declare const foo = 1;
+//# sourceMappingURL=functions.d.ts.map
+
+//// [/user/username/projects/myproject/target/src/helpers/functions.d.ts.map]
+{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}
+
+//// [/user/username/projects/myproject/indirect3/tsconfig.json]
+{"compilerOptions":{"baseUrl":"../target/src/"}}
+
+//// [/user/username/projects/myproject/indirect3/main.ts]
+import { foo } from 'main';
+foo;
+export function bar() {}
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 35   [16:01:39.000] response:{"responseRequired":false}
 Info 36   [16:01:40.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
@@ -466,9 +556,55 @@ Info 162  [16:05:33.000] 		Projects: /user/username/projects/myproject/tsconfig-
 Info 162  [16:05:34.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info 162  [16:05:35.000] 		Projects: /dev/null/inferredProject1*
 Info 162  [16:05:36.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/src/main.ts","line":2,"offset":10},"seq":2,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/dummy/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 163  [16:05:37.000] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig-src.json
 Info 164  [16:05:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/helpers/functions.d.ts 500 undefined WatchType: Closed Script info
 Info 165  [16:05:39.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/helpers/functions.d.ts.map 500 undefined WatchType: Closed Script info
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/dummy/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 166  [16:05:40.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nexport foo"},"responseRequired":true}
 Info 167  [16:05:41.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Info 168  [16:05:42.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -608,6 +744,33 @@ Info 217  [16:06:56.000] Open files:
 Info 217  [16:06:57.000] 	FileName: /user/username/projects/myproject/indirect3/main.ts ProjectRootPath: undefined
 Info 217  [16:06:58.000] 		Projects: /user/username/projects/myproject/indirect3/tsconfig.json
 Info 217  [16:06:59.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/indirect3/main.ts","line":1,"offset":10},"seq":3,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/indirect3/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
+  {}
+/user/username/projects/myproject/indirect3/tsconfig.json:
+  {}
+/user/username/projects/myproject/target/src/main.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/indirect3:
+  {}
+/user/username/projects/myproject/target:
+  {}
+
 Info 218  [16:07:00.000] Finding references to /user/username/projects/myproject/indirect3/main.ts position 9 in project /user/username/projects/myproject/indirect3/tsconfig.json
 Info 219  [16:07:01.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/main.d.ts.map 500 undefined WatchType: Closed Script info
 Info 220  [16:07:02.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
@@ -687,4 +850,41 @@ Info 254  [16:07:36.000] For info: /user/username/projects/myproject/src/helpers
 Info 255  [16:07:37.000] Search path: /user/username/projects/myproject/src/helpers
 Info 256  [16:07:38.000] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 257  [16:07:39.000] Finding references to /user/username/projects/myproject/src/main.ts position 9 in project /user/username/projects/myproject/tsconfig-src.json
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/indirect3/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
+  {}
+/user/username/projects/myproject/indirect3/tsconfig.json:
+  {}
+/user/username/projects/myproject/target/src/main.d.ts:
+  {}
+/user/username/projects/myproject/target/src/main.d.ts.map:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/indirect3:
+  {}
+/user/username/projects/myproject/target:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
 Info 258  [16:07:40.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nimport foo"},"responseRequired":true}

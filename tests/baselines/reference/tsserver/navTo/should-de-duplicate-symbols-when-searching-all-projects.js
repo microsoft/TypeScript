@@ -1,5 +1,39 @@
 Info 0    [16:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:18.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/index.ts"}}
+//// [/a/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true
+    }
+}
+
+//// [/a/index.ts]
+export const abcdef = 1;
+
+//// [/b/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../a" }
+    ]
+}
+
+//// [/b/index.ts]
+import a = require("../a");
+export const ghijkl = a.abcdef;
+
+//// [/tsconfig.json]
+{"references":[{"path":"./a"},{"path":"./b"}],"files":[]}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:19.000] Search path: /a
 Info 3    [16:00:20.000] For info: /a/index.ts :: Config file name: /a/tsconfig.json
 Info 4    [16:00:21.000] Creating configuration project /a/tsconfig.json
@@ -47,8 +81,42 @@ Info 24   [16:00:46.000] -----------------------------------------------
 Info 24   [16:00:47.000] Open files: 
 Info 24   [16:00:48.000] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info 24   [16:00:49.000] 		Projects: /a/tsconfig.json
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json:
+  {}
+/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/a:
+  {}
+
 Info 24   [16:00:50.000] response:{"responseRequired":false}
 Info 25   [16:00:51.000] request:{"seq":0,"type":"request","command":"navto","arguments":{"searchValue":"abcdef"}}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json:
+  {}
+/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/a:
+  {}
+
 Info 26   [16:00:52.000] Loading configured project /tsconfig.json
 Info 27   [16:00:53.000] Config: /tsconfig.json : {
  "rootNames": [],
@@ -108,4 +176,29 @@ Info 45   [16:01:11.000] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info 46   [16:01:12.000] -----------------------------------------------
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/node_modules/@types:
+  {"pollingInterval":500}
+/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json:
+  {}
+/tsconfig.json:
+  {}
+/b/tsconfig.json:
+  {}
+/b/index.ts:
+  {}
+
+FsWatchesRecursive::
+/a:
+  {}
+/b:
+  {}
+
 Info 47   [16:01:13.000] response:{"response":[{"name":"abcdef","kind":"const","kindModifiers":"export","isCaseSensitive":true,"matchKind":"exact","file":"/a/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":24}}],"responseRequired":true}

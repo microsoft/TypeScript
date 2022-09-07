@@ -1,5 +1,31 @@
 Info 0    [16:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:26.000] request:{"command":"open","arguments":{"file":"untitled:Untitled-1","fileContent":"/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />","scriptKindName":"TS"},"seq":1,"type":"request"}
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/src/somefile.d.ts]
+class c { }
+
+//// [/user/someuser/projects/someFolder/src/somefile.d.ts]
+class c { }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:27.000] Search path: 
 Info 3    [16:00:28.000] For info: untitled:Untitled-1 :: No config files found.
 Info 4    [16:00:29.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -27,6 +53,19 @@ Info 13   [16:00:40.000] -----------------------------------------------
 Info 13   [16:00:41.000] Open files: 
 Info 13   [16:00:42.000] 	FileName: untitled:Untitled-1 ProjectRootPath: undefined
 Info 13   [16:00:43.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 13   [16:00:44.000] response:{"responseRequired":false}
 
 ScriptInfos:
@@ -34,6 +73,32 @@ path: /untitled:untitled-1 fileName: untitled:Untitled-1
 path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
 
 Info 14   [16:00:45.000] request:{"command":"geterr","arguments":{"delay":0,"files":["untitled:Untitled-1"]},"seq":2,"type":"request"}
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 15   [16:00:46.000] response:{"responseRequired":false}
 Info 16   [16:00:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}

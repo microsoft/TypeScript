@@ -1,5 +1,34 @@
 Info 0    [16:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:20.000] request:{"command":"open","arguments":{"file":"/a/b/project/file1.ts"},"seq":1,"type":"request"}
+//// [/a/b/project/file1.ts]
+import a from "file2"
+
+//// [/a/b/project/file3.ts]
+export class c { }
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/b/project/tsconfig.json]
+{"compilerOptions":{"typeRoots":[]}}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:21.000] Search path: /a/b/project
 Info 3    [16:00:22.000] For info: /a/b/project/file1.ts :: Config file name: /a/b/project/tsconfig.json
 Info 4    [16:00:23.000] Creating configuration project /a/b/project/tsconfig.json
@@ -45,6 +74,23 @@ Info 19   [16:00:40.000] -----------------------------------------------
 Info 19   [16:00:41.000] Open files: 
 Info 19   [16:00:42.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
 Info 19   [16:00:43.000] 		Projects: /a/b/project/tsconfig.json
+
+PolledWatches::
+/a/b/project/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/project/tsconfig.json:
+  {}
+/a/b/project/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/project:
+  {}
+
 Info 19   [16:00:44.000] response:{"responseRequired":false}
 Info 20   [16:00:48.000] FileWatcher:: Triggered with /a/b/project/file3.ts 1:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
 Info 21   [16:00:49.000] Scheduled: /a/b/project/tsconfig.json

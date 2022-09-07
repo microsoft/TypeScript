@@ -1,5 +1,21 @@
 Info 0    [16:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:14.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/file1.ts"}}
+//// [/a/b/moduleFile.ts]
+export function bar() { };
+
+//// [/a/b/file1.ts]
+import * as T from './moduleFile'; T.bar();
+
+//// [/a/b/tsconfig.json]
+{}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:15.000] Search path: /a/b
 Info 3    [16:00:16.000] For info: /a/b/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 4    [16:00:17.000] Creating configuration project /a/b/tsconfig.json
@@ -42,8 +58,59 @@ Info 19   [16:00:34.000] -----------------------------------------------
 Info 19   [16:00:35.000] Open files: 
 Info 19   [16:00:36.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 19   [16:00:37.000] 		Projects: /a/b/tsconfig.json
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 19   [16:00:38.000] response:{"responseRequired":false}
 Info 20   [16:00:39.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 21   [16:00:40.000] response:{"response":[],"responseRequired":true}
 Info 22   [16:00:42.000] FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 23   [16:00:43.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
@@ -96,6 +163,52 @@ Info 49   [16:01:20.000] Open files:
 Info 49   [16:01:21.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 49   [16:01:22.000] 		Projects: /a/b/tsconfig.json
 Info 49   [16:01:23.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+//// [/a/b/moduleFile1.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 50   [16:01:24.000] response:{"response":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":34},"text":"Cannot find module './moduleFile' or its corresponding type declarations.","code":2307,"category":"error"}],"responseRequired":true}
 Info 51   [16:01:26.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 2:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info 52   [16:01:27.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
@@ -120,6 +233,29 @@ Info 70   [16:01:47.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 71   [16:01:48.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 72   [16:01:49.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 73   [16:01:50.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+//// [/a/b/moduleFile.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile1.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 74   [16:01:51.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 75   [16:01:52.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 76   [16:01:53.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile 1 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -140,4 +276,21 @@ Info 82   [16:01:59.000] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info 83   [16:02:00.000] -----------------------------------------------
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 84   [16:02:01.000] response:{"response":[],"responseRequired":true}

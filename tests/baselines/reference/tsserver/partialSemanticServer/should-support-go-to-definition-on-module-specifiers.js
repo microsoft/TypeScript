@@ -1,5 +1,44 @@
 Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+//// [/user/username/projects/myproject/a.ts]
+import { y, cc } from "./b";
+import { something } from "something";
+class c { prop = "hello"; foo() { return this.prop; } }
+
+//// [/user/username/projects/myproject/b.ts]
+export { cc } from "./c";
+import { something } from "something";
+                export const y = 10;
+
+//// [/user/username/projects/myproject/c.ts]
+export const cc = 10;
+
+//// [/user/username/projects/myproject/node_modules/something/index.d.ts]
+export const something = 10;
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:33.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
 Info 3    [16:00:34.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 4    [16:00:35.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -22,6 +61,27 @@ Info 8    [16:00:41.000] -----------------------------------------------
 Info 8    [16:00:42.000] Open files: 
 Info 8    [16:00:43.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 8    [16:00:44.000] 		Projects: /dev/null/inferredProject1*
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 8    [16:00:45.000] response:{"responseRequired":false}
 Info 9    [16:00:46.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/a.ts","line":1,"offset":23},"seq":1,"type":"request"}
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 10   [16:00:47.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/b.ts","start":{"line":1,"offset":1},"end":{"line":1,"offset":1}}],"textSpan":{"start":{"line":1,"offset":23},"end":{"line":1,"offset":28}}},"responseRequired":true}

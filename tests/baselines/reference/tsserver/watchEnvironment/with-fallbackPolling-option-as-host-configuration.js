@@ -1,10 +1,53 @@
 Info 0    [16:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:18.000] request:{"command":"configure","arguments":{"watchOptions":{"fallbackPolling":"PriorityInterval"}},"seq":1,"type":"request"}
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/b/commonFile2.ts]
+let y = 1
+
+//// [/a/b/tsconfig.json]
+{}
+
+//// [/a/b/commonFile1.ts]
+let x = 1
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:19.000] Host watch options changed to {"fallbackPolling":1}, it will be take effect for next watches.
 Info 3    [16:00:20.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 4    [16:00:21.000] response:{"responseRequired":false}
 Info 5    [16:00:22.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/commonFile1.ts","projectRootPath":"/a/b"}}
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 6    [16:00:23.000] Search path: /a/b
 Info 7    [16:00:24.000] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
 Info 8    [16:00:25.000] Creating configuration project /a/b/tsconfig.json
@@ -49,20 +92,21 @@ Info 23   [16:00:42.000] -----------------------------------------------
 Info 23   [16:00:43.000] Open files: 
 Info 23   [16:00:44.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
 Info 23   [16:00:45.000] 		Projects: /a/b/tsconfig.json
+
+PolledWatches::
+/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b:
+  {"pollingInterval":500}
+/a/b/commonfile2.ts:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 23   [16:00:46.000] response:{"responseRequired":false}
-Info 24   [16:00:47.000] PolledWatches::
-Info 25   [16:00:48.000] /a/b/tsconfig.json:
-Info 26   [16:00:49.000]   {"pollingInterval":2000}
-Info 27   [16:00:50.000] /a/b:
-Info 28   [16:00:51.000]   {"pollingInterval":500}
-Info 29   [16:00:52.000] /a/b/commonfile2.ts:
-Info 30   [16:00:53.000]   {"pollingInterval":500}
-Info 31   [16:00:54.000] /a/lib/lib.d.ts:
-Info 32   [16:00:55.000]   {"pollingInterval":500}
-Info 33   [16:00:56.000] /a/b/node_modules/@types:
-Info 34   [16:00:57.000]   {"pollingInterval":500}
-Info 35   [16:00:58.000] 
-Info 36   [16:00:59.000] FsWatches::
-Info 37   [16:01:00.000] 
-Info 38   [16:01:01.000] FsWatchesRecursive::
-Info 39   [16:01:02.000] 

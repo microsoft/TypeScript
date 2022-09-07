@@ -1,5 +1,49 @@
 Info 0    [16:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [16:00:36.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/foo/index.ts"}}
+//// [/user/username/projects/myproject/bar/tsconfig.json]
+{"include":["index.ts"],"compilerOptions":{"lib":["dom","es2017"]}}
+
+//// [/user/username/projects/myproject/bar/index.ts]
+
+export function bar() {
+  console.log("hello world");
+}
+
+//// [/user/username/projects/myproject/foo/tsconfig.json]
+{"include":["index.ts"],"compilerOptions":{"lib":["es2017"]}}
+
+//// [/user/username/projects/myproject/foo/index.ts]
+
+import { bar } from "bar";
+bar();
+
+//// [/user/username/projects/myproject/foo/node_modules/bar] symlink(/user/username/projects/myproject/bar)
+//// [/a/lib/lib.es2017.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/lib/lib.dom.d.ts]
+
+declare var console: {
+    log(...args: any[]): void;
+};
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 2    [16:00:37.000] Search path: /user/username/projects/myproject/foo
 Info 3    [16:00:38.000] For info: /user/username/projects/myproject/foo/index.ts :: Config file name: /user/username/projects/myproject/foo/tsconfig.json
 Info 4    [16:00:39.000] Creating configuration project /user/username/projects/myproject/foo/tsconfig.json
@@ -56,8 +100,46 @@ Info 25   [16:01:02.000] -----------------------------------------------
 Info 25   [16:01:03.000] Open files: 
 Info 25   [16:01:04.000] 	FileName: /user/username/projects/myproject/foo/index.ts ProjectRootPath: undefined
 Info 25   [16:01:05.000] 		Projects: /user/username/projects/myproject/foo/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/foo/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/foo/tsconfig.json:
+  {}
+/user/username/projects/myproject/bar/index.ts:
+  {}
+/a/lib/lib.es2017.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/foo/node_modules:
+  {}
+
 Info 25   [16:01:06.000] response:{"responseRequired":false}
 Info 26   [16:01:07.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/bar/index.ts"}}
+
+PolledWatches::
+/user/username/projects/myproject/foo/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/foo/tsconfig.json:
+  {}
+/user/username/projects/myproject/bar/index.ts:
+  {}
+/a/lib/lib.es2017.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/foo/node_modules:
+  {}
+
 Info 27   [16:01:08.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/bar/index.ts 500 undefined WatchType: Closed Script info
 Info 28   [16:01:09.000] Search path: /user/username/projects/myproject/bar
 Info 29   [16:01:10.000] For info: /user/username/projects/myproject/bar/index.ts :: Config file name: /user/username/projects/myproject/bar/tsconfig.json
@@ -119,8 +201,77 @@ Info 48   [16:01:36.000] 	FileName: /user/username/projects/myproject/foo/index.
 Info 48   [16:01:37.000] 		Projects: /user/username/projects/myproject/foo/tsconfig.json
 Info 48   [16:01:38.000] 	FileName: /user/username/projects/myproject/bar/index.ts ProjectRootPath: undefined
 Info 48   [16:01:39.000] 		Projects: /user/username/projects/myproject/foo/tsconfig.json,/user/username/projects/myproject/bar/tsconfig.json
+
+PolledWatches::
+/user/username/projects/myproject/foo/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/bar/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/foo/tsconfig.json:
+  {}
+/a/lib/lib.es2017.d.ts:
+  {}
+/user/username/projects/myproject/bar/tsconfig.json:
+  {}
+/a/lib/lib.dom.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/foo/node_modules:
+  {}
+
 Info 48   [16:01:40.000] response:{"responseRequired":false}
 Info 49   [16:01:41.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/bar/index.ts","/user/username/projects/myproject/foo/index.ts"]},"seq":1,"type":"request"}
+
+PolledWatches::
+/user/username/projects/myproject/foo/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/bar/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/foo/tsconfig.json:
+  {}
+/a/lib/lib.es2017.d.ts:
+  {}
+/user/username/projects/myproject/bar/tsconfig.json:
+  {}
+/a/lib/lib.dom.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/foo/node_modules:
+  {}
+
+
+PolledWatches::
+/user/username/projects/myproject/foo/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/bar/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/foo/tsconfig.json:
+  {}
+/a/lib/lib.es2017.d.ts:
+  {}
+/user/username/projects/myproject/bar/tsconfig.json:
+  {}
+/a/lib/lib.dom.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/foo/node_modules:
+  {}
+
 Info 50   [16:01:42.000] response:{"responseRequired":false}
 Info 51   [16:01:43.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/bar/index.ts","diagnostics":[]}}
