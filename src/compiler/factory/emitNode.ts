@@ -72,8 +72,9 @@ export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
 
 /**
  * Sets flags that control emit behavior of a node.
+ *
+ * @internal
  */
-/* @internal */
 export function addEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
     const emitNode = getOrCreateEmitNode(node);
     emitNode.flags = emitNode.flags | emitFlags;
@@ -114,16 +115,18 @@ export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKin
 
 /**
  * Gets a custom text range to use when emitting comments.
+ *
+ * @internal
  */
-/*@internal*/
 export function getStartsOnNewLine(node: Node) {
     return node.emitNode?.startsOnNewLine;
 }
 
 /**
  * Sets a custom text range to use when emitting comments.
+ *
+ * @internal
  */
-/*@internal*/
 export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
     getOrCreateEmitNode(node).startsOnNewLine = newLine;
     return node;
@@ -263,36 +266,38 @@ export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: 
 
 /**
  * Gets the SnippetElement of a node.
+ *
+ * @internal
  */
-/* @internal */
 export function getSnippetElement(node: Node): SnippetElement | undefined {
     return node.emitNode?.snippetElement;
 }
 
 /**
  * Sets the SnippetElement of a node.
+ *
+ * @internal
  */
-/* @internal */
 export function setSnippetElement<T extends Node>(node: T, snippet: SnippetElement): T {
     const emitNode = getOrCreateEmitNode(node);
     emitNode.snippetElement = snippet;
     return node;
 }
 
-/* @internal */
+/** @internal */
 export function ignoreSourceNewlines<T extends Node>(node: T): T {
     getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
     return node;
 }
 
-/* @internal */
+/** @internal */
 export function setTypeNode<T extends Node>(node: T, type: TypeNode): T {
     const emitNode = getOrCreateEmitNode(node);
     emitNode.typeNode = type;
     return node;
 }
 
-/* @internal */
+/** @internal */
 export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
     return node.emitNode?.typeNode;
 }

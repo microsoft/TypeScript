@@ -49,10 +49,11 @@ registerRefactor(refactorName, {
     getAvailableActions: getRefactorActionsToExtractSymbol,
 });
 
-/** @internal */
 /**
  * Compute the associated code actions
  * Exported for tests.
+ *
+ * @internal
  */
 export function getRefactorActionsToExtractSymbol(context: RefactorContext): readonly ApplicableRefactorInfo[] {
     const requestedRefactor = context.kind;
@@ -196,8 +197,11 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
     }
 }
 
-/* Exported for tests */
-/** @internal */
+/**
+ * Exported for tests
+ *
+ * @internal
+ */
 export function getRefactorEditsToExtractSymbol(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
     const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
@@ -292,14 +296,15 @@ type RangeToExtract = {
  */
 type Scope = FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration;
 
-/** @internal */
+// exported only for tests
 /**
  * getRangeToExtract takes a span inside a text file and returns either an expression or an array
  * of statements representing the minimum set of nodes needed to extract the entire span. This
  * process may fail, in which case a set of errors is returned instead. These errors are shown to
  * users if they have the provideRefactorNotApplicableReason option set.
+ *
+ * @internal
  */
-// exported only for tests
 export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoked = true): RangeToExtract {
     const { length } = span;
     if (length === 0 && !invoked) {

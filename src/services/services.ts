@@ -473,7 +473,7 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     _unaryExpressionBrand: any;
     _expressionBrand: any;
     _declarationBrand: any;
-    /*@internal*/typeArguments!: NodeArray<TypeNode>;
+    /** @internal */typeArguments!: NodeArray<TypeNode>;
     constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(pos, end);
     }
@@ -995,12 +995,12 @@ function getServicesObjectAllocator(): ObjectAllocator {
 
 /// Language Service
 
-/* @internal */
+/** @internal */
 export interface DisplayPartsSymbolWriter extends EmitTextWriter {
     displayParts(): SymbolDisplayPart[];
 }
 
-/* @internal */
+/** @internal */
 export function toEditorSettings(options: FormatCodeOptions | FormatCodeSettings): FormatCodeSettings;
 export function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
 export function toEditorSettings(optionsAsMap: MapLike<any>): MapLike<any> {
@@ -1194,8 +1194,11 @@ class CancellationTokenObject implements CancellationToken {
     }
 }
 
-/* @internal */
-/** A cancellation that throttles calls to the host */
+/**
+ * A cancellation that throttles calls to the host
+ *
+ * @internal
+ */
 export class ThrottledCancellationToken implements CancellationToken {
     // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
     // to marshall over to the host layer).  So we only bother actually checking once enough
@@ -2798,8 +2801,11 @@ export function createLanguageService(
     return ls;
 }
 
-/* @internal */
-/** Names in the name table are escaped, so an identifier `__foo` will have a name table entry `___foo`. */
+/**
+ * Names in the name table are escaped, so an identifier `__foo` will have a name table entry `___foo`.
+ *
+ * @internal
+ */
 export function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number> {
     if (!sourceFile.nameTable) {
         initializeNameTable(sourceFile);
@@ -2844,8 +2850,9 @@ function literalIsName(node: StringLiteralLike | NumericLiteral): boolean {
 
 /**
  * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
+ *
+ * @internal
  */
-/* @internal */
 export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
     const element = getContainingObjectLiteralElementWorker(node);
     return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName : undefined;
@@ -2868,7 +2875,7 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
     return undefined;
 }
 
-/* @internal */
+/** @internal */
 export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes };
 
 function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
@@ -2883,8 +2890,11 @@ function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symb
     return checker.getSymbolAtLocation(node);
 }
 
-/** Gets all symbols for one property. Does not get symbols for every property. */
-/* @internal */
+/**
+ * Gets all symbols for one property. Does not get symbols for every property.
+ *
+ * @internal
+ */
 export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): readonly Symbol[] {
     const name = getNameFromPropertyName(node.name);
     if (!name) return emptyArray;

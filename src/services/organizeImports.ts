@@ -10,12 +10,13 @@ import {
     tryCast, UserPreferences,
 } from "./_namespaces/ts";
 
-/** @internal */
 /**
  * Organize imports by:
  *   1) Removing unused imports
  *   2) Coalescing imports from the same module
  *   3) Sorting imports
+ *
+ * @internal
  */
 export function organizeImports(
     sourceFile: SourceFile,
@@ -244,9 +245,10 @@ function getExternalModuleName(specifier: Expression) {
 }
 
 // Internal for testing
-/** @internal */
 /**
  * @param importGroup a list of ImportDeclarations, all with the same module name.
+ *
+ * @internal
  */
 export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
     if (importGroup.length === 0) {
@@ -385,9 +387,10 @@ function getCategorizedImports(importGroup: readonly ImportDeclaration[]) {
 }
 
 // Internal for testing
-/** @internal */
 /**
  * @param exportGroup a list of ExportDeclarations, all with the same module name.
+ *
+ * @internal
  */
 export function coalesceExports(exportGroup: readonly ExportDeclaration[]) {
     if (exportGroup.length === 0) {
@@ -484,8 +487,11 @@ export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifie
         || compareIdentifiers(s1.name, s2.name);
 }
 
-/* internal */ // Exported for testing
-/** @internal */
+/**
+ * Exported for testing
+ *
+ * @internal
+ */
 export function compareModuleSpecifiers(m1: Expression | undefined, m2: Expression | undefined) {
     const name1 = m1 === undefined ? undefined : getExternalModuleName(m1);
     const name2 = m2 === undefined ? undefined : getExternalModuleName(m2);

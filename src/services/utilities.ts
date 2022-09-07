@@ -60,7 +60,7 @@ import {
     unescapeLeadingUnderscores, UserPreferences, VariableDeclaration, visitEachChild, VoidExpression, YieldExpression,
 } from "./_namespaces/ts";
 
-/* @internal */ // Don't expose that we use this
+/** @internal */ // Don't expose that we use this
 // Based on lib.es6.d.ts
 declare global {
     // Module transform: converted from ambient declaration
@@ -71,7 +71,7 @@ declare global {
         all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
     }
 }
-/* @internal */
+/** @internal */
 declare global {
     // Module transform: converted from ambient declaration
     /** @internal */
@@ -640,9 +640,10 @@ export function startEndOverlapsWithStartEnd(start1: number, end1: number, start
     return start < end;
 }
 
-/** @internal */
 /**
  * Assumes `candidate.start <= position` holds.
+ *
+ * @internal
  */
 export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
     Debug.assert(candidate.pos <= position);
@@ -1196,43 +1197,50 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     return node;
 }
 
-/** @internal */
 /**
  * Adjusts the location used for "find references" and "go to definition" when the cursor was not
  * on a property name.
+ *
+ * @internal
  */
 export function getAdjustedReferenceLocation(node: Node): Node {
     return getAdjustedLocation(node, /*forRename*/ false);
 }
 
-/** @internal */
 /**
  * Adjusts the location used for "rename" when the cursor was not on a property name.
+ *
+ * @internal
  */
 export function getAdjustedRenameLocation(node: Node): Node {
     return getAdjustedLocation(node, /*forRename*/ true);
 }
 
-/** @internal */
 /**
  * Gets the token whose text has range [start, end) and
  * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
+ *
+ * @internal
  */
 export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
     return getTouchingToken(sourceFile, position, n => isPropertyNameLiteral(n) || isKeyword(n.kind) || isPrivateIdentifier(n));
 }
 
-/** @internal */
 /**
  * Returns the token if position is in [start, end).
  * If position === end, returns the preceding token if includeItemAtEndPosition(previousToken) === true
+ *
+ * @internal
  */
 export function getTouchingToken(sourceFile: SourceFile, position: number, includePrecedingTokenAtEndPosition?: (n: Node) => boolean): Node {
     return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includePrecedingTokenAtEndPosition, /*includeEndPosition*/ false);
 }
 
-/** @internal */
-/** Returns a token if position is in [start-of-leading-trivia, end) */
+/**
+ * Returns a token if position is in [start-of-leading-trivia, end)
+ *
+ * @internal
+ */
 export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
     return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, /*includeEndPosition*/ false);
 }
@@ -1333,10 +1341,11 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
     }
 }
 
-/** @internal */
 /**
  * Returns the first token where position is in [start, end),
  * excluding `JsxText` tokens containing only whitespace.
+ *
+ * @internal
  */
 export function findFirstNonJsxWhitespaceToken(sourceFile: SourceFile, position: number): Node | undefined {
     let tokenAtPosition = getTokenAtPosition(sourceFile, position);
@@ -1348,7 +1357,6 @@ export function findFirstNonJsxWhitespaceToken(sourceFile: SourceFile, position:
     return tokenAtPosition;
 }
 
-/** @internal */
 /**
  * The token on the left of the position is the token that strictly includes the position
  * or sits to the left of the cursor if it is on a boundary. For example
@@ -1356,6 +1364,8 @@ export function findFirstNonJsxWhitespaceToken(sourceFile: SourceFile, position:
  *   fo|o               -> will return foo
  *   foo <comment> |bar -> will return foo
  *
+ *
+ * @internal
  */
 export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node | undefined {
     // Ideally, getTokenAtPosition should return a token. However, it is currently
@@ -1388,10 +1398,11 @@ export function findNextToken(previousToken: Node, parent: Node, sourceFile: Sou
     }
 }
 
-/** @internal */
 /**
  * Finds the rightmost token satisfying `token.end <= position`,
  * excluding `JsxText` tokens containing only whitespace.
+ *
+ * @internal
  */
 export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode: Node, excludeJsdoc?: boolean): Node | undefined;
 /** @internal */
@@ -1517,9 +1528,9 @@ export function isInString(sourceFile: SourceFile, position: number, previousTok
     return false;
 }
 
-/** @internal */
 /**
- * returns true if the position is in between the open and close elements of an JSX expression.
+ *
+ * @internal
  */
 export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
     const token = getTokenAtPosition(sourceFile, position);
@@ -1795,12 +1806,13 @@ export function getPossibleTypeArgumentsInfo(tokenIn: Node | undefined, sourceFi
     return undefined;
 }
 
-/** @internal */
 /**
  * Returns true if the cursor at position in sourceFile is within a comment.
  *
  * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)`
  * @param predicate Additional predicate to test on the comment range.
+ *
+ * @internal
  */
 export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined {
     return formatting.getRangeOfEnclosingComment(sourceFile, position, /*precedingToken*/ undefined, tokenAtPosition);
@@ -2029,14 +2041,20 @@ export function isTypeKeywordTokenOrIdentifier(node: Node) {
     return isTypeKeywordToken(node) || isIdentifier(node) && node.text === "type";
 }
 
-/** @internal */
-/** True if the symbol is for an external module, as opposed to a namespace. */
+/**
+ * True if the symbol is for an external module, as opposed to a namespace.
+ *
+ * @internal
+ */
 export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
     return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
 }
 
-/** @internal */
-/** Returns `true` the first time it encounters a node and `false` afterwards. */
+/**
+ * Returns `true` the first time it encounters a node and `false` afterwards.
+ *
+ * @internal
+ */
 export type NodeSeenTracker<T = Node> = (node: T) => boolean;
 /** @internal */
 export function nodeSeenTracker<T extends Node>(): NodeSeenTracker<T> {
@@ -2294,11 +2312,12 @@ export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean {
     return a.fileName === b.fileName && textSpansEqual(a.textSpan, b.textSpan);
 }
 
-/** @internal */
 /**
  * Iterates through 'array' by index and performs the callback on each element of array until the callback
  * returns a truthy value, then returns that value.
  * If no such value is found, the callback is applied to each element of array and undefined is returned.
+ *
+ * @internal
  */
 export function forEachUnique<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U): U | undefined {
     if (array) {
@@ -2635,9 +2654,10 @@ function findLinkNameEnd(text: string) {
 }
 
 const carriageReturnLineFeed = "\r\n";
-/** @internal */
 /**
  * The default is CRLF.
+ *
+ * @internal
  */
 export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings?: FormatCodeSettings) {
     return formatSettings?.newLineCharacter ||
@@ -2747,12 +2767,13 @@ export function getPrecedingNonSpaceCharacterPosition(text: string, position: nu
     return position + 1;
 }
 
-/** @internal */
 /**
  * Creates a deep, memberwise clone of a node with no source map location.
  *
  * WARNING: This is an expensive operation and is only intended to be used in refactorings
  * and code fixes (because those are triggered by explicit user actions).
+ *
+ * @internal
  */
 export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
     const clone = node && getSynthesizedDeepCloneWorker(node);
@@ -2822,26 +2843,29 @@ export function getSynthesizedDeepClonesWithReplacements<T extends Node>(
     return factory.createNodeArray(nodes.map(n => getSynthesizedDeepCloneWithReplacements(n, includeTrivia, replaceNode)), nodes.hasTrailingComma);
 }
 
-/** @internal */
 /**
  * Sets EmitFlags to suppress leading and trailing trivia on the node.
+ *
+ * @internal
  */
 export function suppressLeadingAndTrailingTrivia(node: Node) {
     suppressLeadingTrivia(node);
     suppressTrailingTrivia(node);
 }
 
-/** @internal */
 /**
  * Sets EmitFlags to suppress leading trivia on the node.
+ *
+ * @internal
  */
 export function suppressLeadingTrivia(node: Node) {
     addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
 }
 
-/** @internal */
 /**
  * Sets EmitFlags to suppress trailing trivia on the node.
+ *
+ * @internal
  */
 export function suppressTrailingTrivia(node: Node) {
     addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
@@ -2888,11 +2912,12 @@ export function getUniqueName(baseName: string, sourceFile: SourceFile): string 
     return nameText;
 }
 
-/** @internal */
 /**
  * @return The index of the (only) reference to the extracted symbol.  We want the cursor
  * to be on the reference, rather than the declaration, because it's closer to where the
  * user was before extracting it.
+ *
+ * @internal
  */
 export function getRenameLocation(edits: readonly FileTextChanges[], renameFilename: string, name: string, preferLastLocation: boolean): number {
     let delta = 0;
@@ -2931,13 +2956,14 @@ export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceF
     forEachTrailingCommentRange(sourceFile.text, sourceNode.end, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticTrailingComment));
 }
 
-/** @internal */
 /**
  * This function copies the trailing comments for the token that comes before `sourceNode`, as leading comments of `targetNode`.
  * This is useful because sometimes a comment that refers to `sourceNode` will be a leading comment for `sourceNode`, according to the
  * notion of trivia ownership, and instead will be a trailing comment for the token before `sourceNode`, e.g.:
  * `function foo(\* not leading comment for a *\ a: string) {}`
  * The comment refers to `a` but belongs to the `(` token, but we might want to copy it.
+ *
+ * @internal
  */
 export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
     forEachTrailingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
@@ -2968,7 +2994,7 @@ function indexInTextChange(change: string, name: string): number {
     return idx === -1 ? -1 : idx + 1;
 }
 
-/* @internal */
+/** @internal */
 export function needsParentheses(expression: Expression): boolean {
     return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken
         || isObjectLiteralExpression(expression)
@@ -3528,12 +3554,12 @@ export function getDiagnosticsWithinSpan(span: TextSpan, sortedFileDiagnostics: 
     return result;
 }
 
-/* @internal */
+/** @internal */
 export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
     return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
 }
 
-/* @internal */
+/** @internal */
 export function getFixableErrorSpanExpression(sourceFile: SourceFile, span: TextSpan): Expression | undefined {
     const token = getTokenAtPosition(sourceFile, span.start);
     // Checker has already done work to determine that await might be possible, and has attached
@@ -3549,10 +3575,11 @@ export function getFixableErrorSpanExpression(sourceFile: SourceFile, span: Text
     return expression;
 }
 
-/** @internal */
 /**
  * If the provided value is an array, the mapping function is applied to each element; otherwise, the mapping function is applied
  * to the provided value itself.
+ *
+ * @internal
  */
 export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[], f: (x: T, i: number) => U): U | U[];
 /** @internal */
@@ -3566,9 +3593,10 @@ export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f
     return valueOrArray ? isArray(valueOrArray) ? resultSelector(map(valueOrArray, f)) : f(valueOrArray, 0) : undefined;
 }
 
-/** @internal */
 /**
  * If the provided value is an array, the first element of the array is returned; otherwise, the provided value is returned instead.
+ *
+ * @internal
  */
 export function firstOrOnly<T>(valueOrArray: T | readonly T[]): T {
     return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
@@ -3618,7 +3646,6 @@ function getSymbolParentOrFail(symbol: Symbol) {
         }).join(", ")}.`);
 }
 
-/** @internal */
 /**
  * Useful to check whether a string contains another string at a specific index
  * without allocating another string or traversing the entire contents of the outer string.
@@ -3636,6 +3663,8 @@ function getSymbolParentOrFail(symbol: Symbol) {
  * @param haystack The string that potentially contains `needle`.
  * @param needle The string whose content might sit within `haystack`.
  * @param startIndex The index within `haystack` to start searching for `needle`.
+ *
+ * @internal
  */
 export function stringContainsAt(haystack: string, needle: string, startIndex: number) {
     const needleLength = needle.length;
@@ -3698,9 +3727,10 @@ export function diagnosticToString(diag: DiagnosticAndArguments): string {
         : getLocaleSpecificMessage(diag);
 }
 
-/** @internal */
 /**
  * Get format code settings for a code writing context (e.g. when formatting text changes or completions code).
+ *
+ * @internal
  */
 export function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
     const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;

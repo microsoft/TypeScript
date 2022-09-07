@@ -89,8 +89,9 @@ let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) =>
 
 /**
  * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
+ *
+ * @internal
  */
-/* @internal */
 export const parseBaseNodeFactory: BaseNodeFactory = {
     createBaseSourceFileNode: kind => new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, -1, -1),
     createBaseIdentifierNode: kind => new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, -1, -1),
@@ -99,7 +100,7 @@ export const parseBaseNodeFactory: BaseNodeFactory = {
     createBaseNode: kind => new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, -1, -1),
 };
 
-/* @internal */
+/** @internal */
 export const parseNodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules, parseBaseNodeFactory);
 
 function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {
@@ -120,14 +121,14 @@ function visitNodes<T>(cbNode: (node: Node) => T, cbNodes: ((node: NodeArray<Nod
     }
 }
 
-/*@internal*/
+/** @internal */
 export function isJSDocLikeText(text: string, start: number) {
     return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
         text.charCodeAt(start + 2) === CharacterCodes.asterisk &&
         text.charCodeAt(start + 3) !== CharacterCodes.slash;
 }
 
-/*@internal*/
+/** @internal */
 export function isFileProbablyExternalModule(sourceFile: SourceFile) {
     // Try to use the first top-level import/export when available, then
     // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
@@ -916,7 +917,6 @@ export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefine
     return fn === undefined ? undefined : fn(node, cbNode, cbNodes);
 }
 
-/** @internal */
 /**
  * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
  * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; additionally,
@@ -929,6 +929,8 @@ export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefine
  *
  * @remarks Unlike `forEachChild`, `forEachChildRecursively` handles recursively invoking the traversal on each child node found,
  * and while doing so, handles traversing the structure without relying on the callstack to encode the tree structure.
+ *
+ * @internal
  */
 export function forEachChildRecursively<T>(rootNode: Node, cbNode: (node: Node, parent: Node) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node) => T | "skip" | undefined): T | undefined {
     const queue: (Node | NodeArray<Node>)[] = gatherPossibleChildren(rootNode);
@@ -993,8 +995,8 @@ export interface CreateSourceFileOptions {
      * check specified by `isFileProbablyExternalModule` will be used to set the field.
      */
     setExternalModuleIndicator?: (file: SourceFile) => void;
-    /*@internal*/ packageJsonLocations?: readonly string[];
-    /*@internal*/ packageJsonScope?: PackageJsonInfo;
+    /** @internal */ packageJsonLocations?: readonly string[];
+    /** @internal */ packageJsonScope?: PackageJsonInfo;
 }
 
 function setExternalModuleIndicator(sourceFile: SourceFile) {
@@ -1065,7 +1067,7 @@ export function updateSourceFile(sourceFile: SourceFile, newText: string, textCh
     return newSourceFile;
 }
 
-/* @internal */
+/** @internal */
 export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
     const result = Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
     if (result && result.jsDoc) {
@@ -1077,7 +1079,7 @@ export function parseIsolatedJSDocComment(content: string, start?: number, lengt
     return result;
 }
 
-/* @internal */
+/** @internal */
 // Exposed only for testing.
 export function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number) {
     return Parser.JSDocParser.parseJSDocTypeExpressionForTests(content, start, length);
@@ -9775,7 +9777,7 @@ export function isDeclarationFileName(fileName: string): boolean {
     return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
 }
 
-/*@internal*/
+/** @internal */
 export interface PragmaContext {
     languageVersion: ScriptTarget;
     pragmas?: PragmaMap;
@@ -9802,7 +9804,7 @@ function parseResolutionMode(mode: string | undefined, pos: number, end: number,
     return undefined;
 }
 
-/*@internal*/
+/** @internal */
 export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
     const pragmas: PragmaPseudoMapEntry[] = [];
 
@@ -9827,10 +9829,10 @@ export function processCommentPragmas(context: PragmaContext, sourceText: string
     }
 }
 
-/*@internal*/
+/** @internal */
 type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
 
-/*@internal*/
+/** @internal */
 export function processPragmasIntoFields(context: PragmaContext, reportDiagnostic: PragmaDiagnosticReporter): void {
     context.checkJsDirective = undefined;
     context.referencedFiles = [];

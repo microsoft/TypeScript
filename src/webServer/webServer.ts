@@ -226,7 +226,7 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
         // createSHA256Hash // telemetry of the project
 
         // Logging related
-        // /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
+        // /** @internal */ bufferFrom?(input: string, encoding?: string): Buffer;
         // gc?(): void;
         // getMemoryUsage?(): number;
     };

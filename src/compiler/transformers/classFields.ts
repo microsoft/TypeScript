@@ -159,13 +159,14 @@ const enum ClassFacts {
     NeedsSubstitutionForThisInClassStaticField = 1 << 3,
 }
 
-/** @internal */
 /**
  * Transforms ECMAScript Class Syntax.
  * TypeScript parameter property syntax is transformed in the TypeScript transformer.
  * For now, this transforms public field declarations using TypeScript class semantics,
  * where declarations are elided and initializers are transformed as assignments in the constructor.
  * When --useDefineForClassFields is on, this transforms to ECMAScript semantics, with Object.defineProperty.
+ *
+ * @internal
  */
 export function transformClassFields(context: TransformationContext) {
     const {

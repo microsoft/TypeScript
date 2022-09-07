@@ -180,8 +180,11 @@ function tryGetModuleSpecifiersFromCacheWorker(
     return [cached?.moduleSpecifiers, moduleSourceFile, cached?.modulePaths, cache];
 }
 
-/** @internal */
-/** Returns an import for each symlink and for the realpath. */
+/**
+ * Returns an import for each symlink and for the realpath.
+ *
+ * @internal
+ */
 export function getModuleSpecifiers(
     moduleSymbol: Symbol,
     checker: TypeChecker,

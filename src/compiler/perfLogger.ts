@@ -38,6 +38,9 @@ catch (e) {
     etwModule = undefined;
 }
 
-/** @internal */
-/** Performance logger that will generate ETW events if possible - check for `logEvent` member, as `etwModule` will be `{}` when browserified */
+/**
+ * Performance logger that will generate ETW events if possible - check for `logEvent` member, as `etwModule` will be `{}` when browserified
+ *
+ * @internal
+ */
 export const perfLogger: PerfLogger = etwModule && etwModule.logEvent ? etwModule : nullLogger;

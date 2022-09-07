@@ -9,8 +9,6 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-
-/** @internal */
 export const enum TokenEncodingConsts {
     typeOffset = 8,
     modifierMask = (1 << typeOffset) - 1
@@ -26,8 +24,11 @@ export const enum TokenModifier {
     declaration, static, async, readonly, defaultLibrary, local
 }
 
-/** @internal */
-/** This is mainly used internally for testing */
+/**
+ * This is mainly used internally for testing
+ *
+ * @internal
+ */
 export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan2020[] {
     const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
 

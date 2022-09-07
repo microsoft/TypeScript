@@ -92,9 +92,10 @@ export const enum BuilderFileEmit {
     Full
 }
 
-/** @internal */
 /**
  * State to store the changed files, affected files and cache semantic diagnostics
+ *
+ * @internal
  */
 // TODO: GH#18217 Properties of this interface are frequently asserted to be defined.
 export interface BuilderProgramState extends BuilderState, ReusableBuilderProgramState {
@@ -809,15 +810,17 @@ export type ProgramBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "
      */
     signature: string | false | undefined;
 };
-/** @internal */
 /**
  * [fileId, signature] if different from file's signature
  * fileId if file wasnt emitted
+ *
+ * @internal
  */
 export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, signature: string];
-/** @internal */
 /**
  * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
+ *
+ * @internal
  */
 export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
 /** @internal */
