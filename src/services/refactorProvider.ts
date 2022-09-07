@@ -7,8 +7,11 @@ import { refactorKindBeginsWith } from "./_namespaces/ts.refactor";
 // e.g.  nonSuggestableRefactors[refactorCode] -> the refactor you want
 const refactors = new Map<string, Refactor>();
 
-/** @internal */
-/** @param name An unique code associated with each refactor. Does not have to be human-readable. */
+/**
+ * @param name An unique code associated with each refactor. Does not have to be human-readable.
+ *
+ * @internal
+ */
 export function registerRefactor(name: string, refactor: Refactor) {
     refactors.set(name, refactor);
 }

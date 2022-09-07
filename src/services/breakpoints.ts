@@ -13,9 +13,10 @@ import {
     TypeAssertion, VariableDeclaration, VariableDeclarationList, VariableStatement, WhileStatement, WithStatement,
 } from "./_namespaces/ts";
 
-/** @internal */
 /**
  * Get the breakpoint span in given sourceFile
+ *
+ * @internal
  */
 export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number) {
     // Cannot set breakpoint in dts file

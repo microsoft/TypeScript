@@ -28,7 +28,7 @@ import {
 // limitations under the License.
 //
 
-/* @internal */
+/** @internal */
 let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // eslint-disable-line prefer-const
     return this;
 })();
@@ -74,8 +74,11 @@ export interface Logger {
     error(s: string): void;
 }
 
-/** @internal */
-/** Public interface of the host of a language service shim instance. */
+/**
+ * Public interface of the host of a language service shim instance.
+ *
+ * @internal
+ */
 export interface LanguageServiceShimHost extends Logger {
     getCompilationSettings(): string;
 
@@ -103,8 +106,11 @@ export interface LanguageServiceShimHost extends Logger {
     directoryExists(directoryName: string): boolean;
 }
 
-/** @internal */
-/** Public interface of the core-services host instance used in managed side */
+/**
+ * Public interface of the core-services host instance used in managed side
+ *
+ * @internal
+ */
 export interface CoreServicesShimHost extends Logger {
     directoryExists(directoryName: string): boolean;
     fileExists(fileName: string): boolean;
@@ -140,8 +146,11 @@ export interface ShimsFileReference {
     length: number;
 }
 
-/** @internal */
-/** Public interface of a language service instance shim. */
+/**
+ * Public interface of a language service instance shim.
+ *
+ * @internal
+ */
 export interface ShimFactory {
     registerShim(shim: Shim): void;
     unregisterShim(shim: Shim): void;

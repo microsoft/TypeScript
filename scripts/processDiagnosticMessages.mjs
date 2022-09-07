@@ -9,6 +9,7 @@ import fs from "fs";
     isEarly?: boolean;
     elidedInCompatabilityPyramid?: boolean;
 }} DiagnosticDetails */
+void 0;
 
 /** @typedef {Map<string, DiagnosticDetails>} InputDiagnosticMessageTable */
 

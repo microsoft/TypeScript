@@ -100,9 +100,10 @@ export function nonRelativeModuleNameForTypingCache(moduleName: string) {
     return nodeCoreModules.has(moduleName) ? "node" : moduleName;
 }
 
-/** @internal */
 /**
  * A map of loose file names to library names that we are confident require typings
+ *
+ * @internal
  */
 export type SafeList = ReadonlyESMap<string, string>;
 
@@ -121,7 +122,6 @@ export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): Sa
     return undefined;
 }
 
-/** @internal */
 /**
  * @param host is the object providing I/O related operations.
  * @param fileNames are the file names that belong to the same project
@@ -130,6 +130,8 @@ export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): Sa
  * @param packageNameToTypingLocation is the map of package names to their cached typing locations and installed versions
  * @param typeAcquisition is used to customize the typing acquisition process
  * @param compilerOptions are used as a source for typing inference
+ *
+ * @internal
  */
 export function discoverTypings(
     host: TypingResolutionHost,
@@ -371,9 +373,10 @@ export interface ScopedPackageNameValidationResult {
 /** @internal */
 export type PackageNameValidationResult = NameValidationResult | ScopedPackageNameValidationResult;
 
-/** @internal */
 /**
  * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
+ *
+ * @internal
  */
 export function validatePackageName(packageName: string): PackageNameValidationResult {
     return validatePackageNameWorker(packageName, /*supportScopedPackage*/ true);

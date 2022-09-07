@@ -244,8 +244,11 @@ function findImplementationOrAllInitialDeclarations(typeChecker: TypeChecker, no
     return findAllInitialDeclarations(typeChecker, node) ?? node;
 }
 
-/** @internal */
-/** Resolves the call hierarchy declaration for a node. */
+/**
+ * Resolves the call hierarchy declaration for a node.
+ *
+ * @internal
+ */
 export function resolveCallHierarchyDeclaration(program: Program, location: Node): CallHierarchyDeclaration | CallHierarchyDeclaration[] | undefined {
     // A call hierarchy item must refer to either a SourceFile, Module Declaration, Class Static Block, or something intrinsically callable that has a name:
     // - Class Declarations
@@ -315,8 +318,11 @@ export function resolveCallHierarchyDeclaration(program: Program, location: Node
     }
 }
 
-/** @internal */
-/** Creates a `CallHierarchyItem` for a call hierarchy declaration. */
+/**
+ * Creates a `CallHierarchyItem` for a call hierarchy declaration.
+ *
+ * @internal
+ */
 export function createCallHierarchyItem(program: Program, node: CallHierarchyDeclaration): CallHierarchyItem {
     const sourceFile = node.getSourceFile();
     const name = getCallHierarchyItemName(program, node);
@@ -365,8 +371,11 @@ function convertCallSiteGroupToIncomingCall(program: Program, entries: readonly 
     return createCallHierarchyIncomingCall(createCallHierarchyItem(program, entries[0].declaration), map(entries, entry => createTextSpanFromRange(entry.range)));
 }
 
-/** @internal */
-/** Gets the call sites that call into the provided call hierarchy declaration. */
+/**
+ * Gets the call sites that call into the provided call hierarchy declaration.
+ *
+ * @internal
+ */
 export function getIncomingCalls(program: Program, declaration: CallHierarchyDeclaration, cancellationToken: CancellationToken): CallHierarchyIncomingCall[] {
     // Source files and modules have no incoming calls.
     if (isSourceFile(declaration) || isModuleDeclaration(declaration) || isClassStaticBlockDeclaration(declaration)) {
@@ -575,8 +584,11 @@ function convertCallSiteGroupToOutgoingCall(program: Program, entries: readonly 
     return createCallHierarchyOutgoingCall(createCallHierarchyItem(program, entries[0].declaration), map(entries, entry => createTextSpanFromRange(entry.range)));
 }
 
-/** @internal */
-/** Gets the call sites that call out of the provided call hierarchy declaration. */
+/**
+ * Gets the call sites that call out of the provided call hierarchy declaration.
+ *
+ * @internal
+ */
 export function getOutgoingCalls(program: Program, declaration: CallHierarchyDeclaration): CallHierarchyOutgoingCall[] {
     if (declaration.flags & NodeFlags.Ambient || isMethodSignature(declaration)) {
         return [];

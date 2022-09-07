@@ -106,8 +106,11 @@ export function indent(str: string): string {
     return indentStr + str.replace(/\n/g, indentStr);
 }
 
-/** @internal */
-/** Put stringified JSON on the next line, indented. */
+/**
+ * Put stringified JSON on the next line, indented.
+ *
+ * @internal
+ */
 export function stringifyIndented(json: {}): string {
     return indentStr + JSON.stringify(json);
 }
