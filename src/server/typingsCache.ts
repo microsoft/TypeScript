@@ -86,7 +86,7 @@ function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefi
     return !arrayIsEqualTo(imports1, imports2);
 }
 
-/*@internal*/
+/** @internal */
 export class TypingsCache {
     private readonly perProjectCache = new Map<string, TypingsCacheEntry>();
 

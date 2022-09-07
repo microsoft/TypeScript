@@ -61,7 +61,7 @@ export interface ESMap<K, V> extends ReadonlyESMap<K, V>, Collection<K> {
 export interface Map<T> extends ESMap<string, T> {
 }
 
-/* @internal */
+/** @internal */
 export interface MapConstructor {
     // eslint-disable-next-line @typescript-eslint/prefer-function-type
     new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyESMap<K, V>): ESMap<K, V>;
@@ -81,7 +81,7 @@ export interface Set<T> extends ReadonlySet<T>, Collection<T> {
     delete(value: T): boolean;
 }
 
-/* @internal */
+/** @internal */
 export interface SetConstructor {
     // eslint-disable-next-line @typescript-eslint/prefer-function-type
     new <T>(iterable?: readonly T[] | ReadonlySet<T>): Set<T>;
@@ -95,23 +95,23 @@ export interface Iterator<T> {
 /** Array that is only intended to be pushed to, never read. */
 export interface Push<T> {
     push(...values: T[]): void;
-    /* @internal*/ readonly length: number;
+    /** @internal */ readonly length: number;
 }
 
-/* @internal */
+/** @internal */
 export type EqualityComparer<T> = (a: T, b: T) => boolean;
 
-/* @internal */
+/** @internal */
 export type Comparer<T> = (a: T, b: T) => Comparison;
 
-/* @internal */
+/** @internal */
 export const enum Comparison {
     LessThan    = -1,
     EqualTo     = 0,
     GreaterThan = 1
 }
 
-/* @internal */
+/** @internal */
 namespace NativeCollections {
     declare const self: any;
 
@@ -149,7 +149,7 @@ namespace NativeCollections {
     }
 }
 
-/* @internal */
+/** @internal */
 export const Map = NativeCollections.tryGetNativeMap();
-/* @internal */
+/** @internal */
 export const Set = NativeCollections.tryGetNativeSet();

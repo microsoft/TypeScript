@@ -29,7 +29,7 @@ interface RenameEntry {
     readonly locations: RenameLocation[];
 }
 
-/* @internal */
+/** @internal */
 export function extractMessage(message: string): string {
     // Read the content length
     const contentLengthPrefix = "Content-Length: ";
@@ -138,7 +138,7 @@ export class SessionClient implements LanguageService {
         return response;
     }
 
-    /*@internal*/
+    /** @internal */
     configure(preferences: UserPreferences) {
         this.preferences = preferences;
         const args: protocol.ConfigureRequestArguments = { preferences };
@@ -146,14 +146,14 @@ export class SessionClient implements LanguageService {
         this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
-    /*@internal*/
+    /** @internal */
     setFormattingOptions(formatOptions: FormatCodeSettings) {
         const args: protocol.ConfigureRequestArguments = { formatOptions };
         const request = this.processRequest(CommandNames.Configure, args);
         this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
-    /*@internal*/
+    /** @internal */
     setCompilerOptionsForInferredProjects(options: protocol.CompilerOptions) {
         const args: protocol.SetCompilerOptionsForInferredProjectsArgs = { options };
         const request = this.processRequest(CommandNames.CompilerOptionsForInferredProjects, args);

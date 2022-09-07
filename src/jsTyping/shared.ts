@@ -7,22 +7,22 @@ export type EventTypesRegistry = "event::typesRegistry";
 export type EventBeginInstallTypes = "event::beginInstallTypes";
 export type EventEndInstallTypes = "event::endInstallTypes";
 export type EventInitializationFailed = "event::initializationFailed";
-/* @internal */
+/** @internal */
 export const ActionSet: ActionSet = "action::set";
-/* @internal */
+/** @internal */
 export const ActionInvalidate: ActionInvalidate = "action::invalidate";
-/* @internal */
+/** @internal */
 export const ActionPackageInstalled: ActionPackageInstalled = "action::packageInstalled";
-/* @internal */
+/** @internal */
 export const EventTypesRegistry: EventTypesRegistry = "event::typesRegistry";
-/* @internal */
+/** @internal */
 export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInstallTypes";
-/* @internal */
+/** @internal */
 export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
-/* @internal */
+/** @internal */
 export const EventInitializationFailed: EventInitializationFailed = "event::initializationFailed";
 
-/* @internal */
+/** @internal */
 export namespace Arguments {
     export const GlobalCacheLocation = "--globalTypingsCacheLocation";
     export const LogFile = "--logFile";
@@ -41,12 +41,12 @@ export namespace Arguments {
     export const ValidateDefaultNpmLocation = "--validateDefaultNpmLocation";
 }
 
-/* @internal */
+/** @internal */
 export function hasArgument(argumentName: string) {
     return sys.args.indexOf(argumentName) >= 0;
 }
 
-/* @internal */
+/** @internal */
 export function findArgument(argumentName: string): string | undefined {
     const index = sys.args.indexOf(argumentName);
     return index >= 0 && index < sys.args.length - 1
@@ -54,7 +54,7 @@ export function findArgument(argumentName: string): string | undefined {
         : undefined;
 }
 
-/* @internal */
+/** @internal */
 export function nowString() {
     // E.g. "12:34:56.789"
     const d = new Date();

@@ -99,7 +99,6 @@ export const SortText = {
     },
 };
 
-/** @internal */
 /**
  * Special values for `CompletionInfo['source']` used to disambiguate
  * completion items with the same `name`. (Each completion item must
@@ -110,6 +109,8 @@ export const SortText = {
  * is the module specifier of the suggestion. To avoid collisions,
  * the values here should not be a module specifier we would ever
  * generate for an auto-import.
+ *
+ * @internal
  */
 export enum CompletionSource {
     /** Completions that require `this.` insertion text */

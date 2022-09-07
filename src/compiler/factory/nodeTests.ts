@@ -85,7 +85,7 @@ export function isDotDotDotToken(node: Node): node is DotDotDotToken {
     return node.kind === SyntaxKind.DotDotDotToken;
 }
 
-/*@internal*/
+/** @internal */
 export function isCommaToken(node: Node): node is Token<SyntaxKind.CommaToken> {
     return node.kind === SyntaxKind.CommaToken;
 }
@@ -102,27 +102,27 @@ export function isAsteriskToken(node: Node): node is AsteriskToken {
     return node.kind === SyntaxKind.AsteriskToken;
 }
 
-/*@internal*/
+/** @internal */
 export function isExclamationToken(node: Node): node is ExclamationToken {
     return node.kind === SyntaxKind.ExclamationToken;
 }
 
-/*@internal*/
+/** @internal */
 export function isQuestionToken(node: Node): node is QuestionToken {
     return node.kind === SyntaxKind.QuestionToken;
 }
 
-/*@internal*/
+/** @internal */
 export function isColonToken(node: Node): node is ColonToken {
     return node.kind === SyntaxKind.ColonToken;
 }
 
-/*@internal*/
+/** @internal */
 export function isQuestionDotToken(node: Node): node is QuestionDotToken {
     return node.kind === SyntaxKind.QuestionDotToken;
 }
 
-/*@internal*/
+/** @internal */
 export function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken {
     return node.kind === SyntaxKind.EqualsGreaterThanToken;
 }
@@ -139,57 +139,57 @@ export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
 
 // Reserved Words
 
-/* @internal */
+/** @internal */
 export function isExportModifier(node: Node): node is ExportKeyword {
     return node.kind === SyntaxKind.ExportKeyword;
 }
 
-/* @internal */
+/** @internal */
 export function isAsyncModifier(node: Node): node is AsyncKeyword {
     return node.kind === SyntaxKind.AsyncKeyword;
 }
 
-/* @internal */
+/** @internal */
 export function isAssertsKeyword(node: Node): node is AssertsKeyword {
     return node.kind === SyntaxKind.AssertsKeyword;
 }
 
-/* @internal */
+/** @internal */
 export function isAwaitKeyword(node: Node): node is AwaitKeyword {
     return node.kind === SyntaxKind.AwaitKeyword;
 }
 
-/* @internal */
+/** @internal */
 export function isReadonlyKeyword(node: Node): node is ReadonlyKeyword {
     return node.kind === SyntaxKind.ReadonlyKeyword;
 }
 
-/* @internal */
+/** @internal */
 export function isStaticModifier(node: Node): node is StaticKeyword {
     return node.kind === SyntaxKind.StaticKeyword;
 }
 
-/* @internal */
+/** @internal */
 export function isAbstractModifier(node: Node): node is AbstractKeyword {
     return node.kind === SyntaxKind.AbstractKeyword;
 }
 
-/* @internal */
+/** @internal */
 export function isOverrideModifier(node: Node): node is OverrideKeyword {
     return node.kind === SyntaxKind.OverrideKeyword;
 }
 
-/* @internal */
+/** @internal */
 export function isAccessorModifier(node: Node): node is AccessorKeyword {
     return node.kind === SyntaxKind.AccessorKeyword;
 }
 
-/*@internal*/
+/** @internal */
 export function isSuperKeyword(node: Node): node is SuperExpression {
     return node.kind === SyntaxKind.SuperKeyword;
 }
 
-/*@internal*/
+/** @internal */
 export function isImportKeyword(node: Node): node is ImportExpression {
     return node.kind === SyntaxKind.ImportKeyword;
 }
@@ -703,17 +703,17 @@ export function isNotEmittedStatement(node: Node): node is NotEmittedStatement {
     return node.kind === SyntaxKind.NotEmittedStatement;
 }
 
-/* @internal */
+/** @internal */
 export function isSyntheticReference(node: Node): node is SyntheticReferenceExpression {
     return node.kind === SyntaxKind.SyntheticReferenceExpression;
 }
 
-/* @internal */
+/** @internal */
 export function isMergeDeclarationMarker(node: Node): node is MergeDeclarationMarker {
     return node.kind === SyntaxKind.MergeDeclarationMarker;
 }
 
-/* @internal */
+/** @internal */
 export function isEndOfDeclarationMarker(node: Node): node is EndOfDeclarationMarker {
     return node.kind === SyntaxKind.EndOfDeclarationMarker;
 }
@@ -993,7 +993,7 @@ export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag {
 
 // Synthesized list
 
-/* @internal */
+/** @internal */
 export function isSyntaxList(n: Node): n is SyntaxList {
     return n.kind === SyntaxKind.SyntaxList;
 }

@@ -34,7 +34,6 @@ export const enum FlattenLevel {
     ObjectRest,
 }
 
-/** @internal */
 /**
  * Flattens a DestructuringAssignment or a VariableDeclaration to an expression.
  *
@@ -45,6 +44,8 @@ export const enum FlattenLevel {
  * @param needsValue An optional value indicating whether the value from the right-hand-side of
  * the destructuring assignment is needed as part of a larger expression.
  * @param createAssignmentCallback An optional callback used to create the assignment expression.
+ *
+ * @internal
  */
 export function flattenDestructuringAssignment(
     node: VariableDeclaration | DestructuringAssignment,
@@ -174,7 +175,6 @@ function bindingOrAssignmentPatternContainsNonLiteralComputedName(pattern: Bindi
     return !!forEach(getElementsOfBindingOrAssignmentPattern(pattern), bindingOrAssignmentElementContainsNonLiteralComputedName);
 }
 
-/** @internal */
 /**
  * Flattens a VariableDeclaration or ParameterDeclaration to one or more variable declarations.
  *
@@ -185,6 +185,8 @@ function bindingOrAssignmentPatternContainsNonLiteralComputedName(pattern: Bindi
  * @param skipInitializer A value indicating whether to ignore the initializer of `node`.
  * @param hoistTempVariables Indicates whether temporary variables should not be recorded in-line.
  * @param level Indicates the extent to which flattening should occur.
+ *
+ * @internal
  */
 export function flattenDestructuringBinding(
     node: VariableDeclaration | ParameterDeclaration,

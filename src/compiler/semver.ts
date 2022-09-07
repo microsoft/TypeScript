@@ -28,9 +28,10 @@ const buildRegExp = /^[a-z0-9-]+(?:\.[a-z0-9-]+)*$/i;
 // > Numeric identifiers MUST NOT include leading zeroes.
 const numericIdentifierRegExp = /^(0|[1-9]\d*)$/;
 
-/** @internal */
 /**
  * Describes a precise semantic version number, https://semver.org
+ *
+ * @internal
  */
 export class Version {
     static readonly zero = new Version(0, 0, 0);
@@ -167,9 +168,10 @@ function comparePrereleaseIdentifiers(left: readonly string[], right: readonly s
     return compareValues(left.length, right.length);
 }
 
-/** @internal */
 /**
  * Describes a semantic version range, per https://github.com/npm/node-semver#ranges
+ *
+ * @internal
  */
 export class VersionRange {
     private _alternatives: readonly (readonly Comparator[])[];

@@ -42,7 +42,7 @@ function typingToFileName(cachePath: string, packageName: string, installTypingH
     }
 }
 
-/*@internal*/
+/** @internal */
 export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
     let hasError = false;
     for (let remaining = packageNames.length; remaining > 0;) {
@@ -53,7 +53,7 @@ export function installNpmPackages(npmPath: string, tsVersion: string, packageNa
     return hasError;
 }
 
-/*@internal*/
+/** @internal */
 export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
     const sliceStart = packageNames.length - remaining;
     let command: string, toSlice = remaining;
@@ -116,7 +116,7 @@ export abstract class TypingsInstaller {
     private inFlightRequestCount = 0;
 
     abstract readonly typesRegistry: ESMap<string, MapLike<string>>;
-    /*@internal*/
+    /** @internal */
     private readonly watchFactory: WatchFactory<string, ProjectWatchers>;
 
     constructor(
@@ -551,7 +551,7 @@ export abstract class TypingsInstaller {
     protected readonly latestDistTag = "latest";
 }
 
-/* @internal */
+/** @internal */
 export function typingsName(packageName: string): string {
     return `@types/${packageName}@ts${versionMajorMinor}`;
 }

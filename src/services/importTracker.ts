@@ -29,8 +29,11 @@ export interface ImportsResult {
 /** @internal */
 export type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
 
-/** @internal */
-/** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
+/**
+ * Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.
+ *
+ * @internal
+ */
 export function createImportTracker(sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): ImportTracker {
     const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
     return (exportSymbol, exportInfo, isForRename) => {
@@ -39,8 +42,11 @@ export function createImportTracker(sourceFiles: readonly SourceFile[], sourceFi
     };
 }
 
-/** @internal */
-/** Info about an exported symbol to perform recursive search on. */
+/**
+ * Info about an exported symbol to perform recursive search on.
+ *
+ * @internal
+ */
 export interface ExportInfo {
     exportingModuleSymbol: Symbol;
     exportKind: ExportKind;
@@ -479,13 +485,14 @@ export interface ExportedSymbol {
     exportInfo: ExportInfo;
 }
 
-/** @internal */
 /**
  * Given a local reference, we might notice that it's an import/export and recursively search for references of that.
  * If at an import, look locally for the symbol it imports.
  * If at an export, look for all imports of it.
  * This doesn't handle export specifiers; that is done in `getReferencesAtExportSpecifier`.
  * @param comingFromExport If we are doing a search for all exports, don't bother looking backwards for the imported symbol, since that's the reason we're here.
+ *
+ * @internal
  */
 export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: TypeChecker, comingFromExport: boolean): ImportedSymbol | ExportedSymbol | undefined {
     return comingFromExport ? getExport() : getExport() || getImport();

@@ -124,13 +124,13 @@ export interface DocumentRegistry {
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void; // eslint-disable-line @typescript-eslint/unified-signatures
 
-    /*@internal*/
+    /** @internal */
     getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind): [string, number | undefined][];
 
     reportStats(): string;
 }
 
-/*@internal*/
+/** @internal */
 export interface ExternalDocumentCache {
     setDocument(key: DocumentRegistryBucketKeyWithMode, path: Path, sourceFile: SourceFile): void;
     getDocument(key: DocumentRegistryBucketKeyWithMode, path: Path): SourceFile | undefined;
@@ -156,9 +156,9 @@ export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, curr
     return createDocumentRegistryInternal(useCaseSensitiveFileNames, currentDirectory);
 }
 
-/*@internal*/
+/** @internal */
 export type DocumentRegistryBucketKeyWithMode = string & { __documentRegistryBucketKeyWithMode: any; };
-/*@internal*/
+/** @internal */
 export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
     // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
     // for those settings.

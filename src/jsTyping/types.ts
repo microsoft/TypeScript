@@ -15,7 +15,7 @@ export interface TypingInstallerRequestWithProjectName {
     readonly projectName: string;
 }
 
-/* @internal */
+/** @internal */
 export type TypingInstallerRequestUnion = DiscoverTypings | CloseProject | TypesRegistryRequest | InstallPackageRequest;
 
 export interface DiscoverTypings extends TypingInstallerRequestWithProjectName {
@@ -44,7 +44,7 @@ export interface InstallPackageRequest extends TypingInstallerRequestWithProject
     readonly projectRootPath: Path;
 }
 
-/* @internal */
+/** @internal */
 export interface TypesRegistryResponse extends TypingInstallerResponse {
     readonly kind: EventTypesRegistry;
     readonly typesRegistry: MapLike<MapLike<string>>;
@@ -86,7 +86,7 @@ export interface EndInstallTypes extends InstallTypes {
     readonly installSuccess: boolean;
 }
 
-/* @internal */
+/** @internal */
 export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
     useCaseSensitiveFileNames: boolean;
     writeFile(path: string, content: string): void;
@@ -104,5 +104,5 @@ export interface SetTypings extends ProjectResponse {
     readonly kind: ActionSet;
 }
 
-/* @internal */
+/** @internal */
 export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse;

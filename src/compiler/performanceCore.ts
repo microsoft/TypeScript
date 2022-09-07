@@ -135,8 +135,11 @@ export function tryGetNativePerformanceHooks() {
     return nativePerformanceHooks;
 }
 
-/** @internal */
-/** Gets a timestamp with (at least) ms resolution */
+/**
+ * Gets a timestamp with (at least) ms resolution
+ *
+ * @internal
+ */
 export const timestamp =
     nativePerformance ? () => nativePerformance.now() :
     Date.now ? Date.now :
