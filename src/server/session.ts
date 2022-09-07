@@ -2953,7 +2953,7 @@ export class Session<TMessage = string> implements EventSender {
 
     private handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
         [CommandNames.Status]: () => {
-            const response: protocol.StatusResponseBody = { version: version }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            const response: protocol.StatusResponseBody = { version };
             return this.requiredResponse(response);
         },
         [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
