@@ -1,5 +1,13 @@
 Info 0    [16:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:36.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/playground/tests.ts"}}
+Info 1    [16:00:36.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/playground/tests.ts"
+      }
+    }
 //// [/user/username/projects/myproject/playground/tsconfig.json]
 {}
 
@@ -107,8 +115,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/playground:
   {}
 
-Info 22   [16:01:03.000] response:{"responseRequired":false}
-Info 23   [16:01:04.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/playground/tests.ts"}}
+Info 22   [16:01:03.000] response:
+    {
+      "responseRequired": false
+    }
+Info 23   [16:01:04.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/playground/tests.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -159,8 +178,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/playground:
   {}
 
-Info 25   [16:01:10.000] response:{"responseRequired":false}
-Info 26   [16:01:11.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts"}}
+Info 25   [16:01:10.000] response:
+    {
+      "responseRequired": false
+    }
+Info 26   [16:01:11.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -275,8 +305,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/playground/tsconfig-json/src:
   {}
 
-Info 59   [16:01:50.000] response:{"responseRequired":false}
-Info 60   [16:01:51.000] request:{"command":"getOutliningSpans","arguments":{"file":"/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts"},"seq":1,"type":"request"}
+Info 59   [16:01:50.000] response:
+    {
+      "responseRequired": false
+    }
+Info 60   [16:01:51.000] request:
+    {
+      "command": "getOutliningSpans",
+      "arguments": {
+        "file": "/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -385,4 +426,34 @@ FsWatchesRecursive::
 /user/username/projects/myproject/playground/tsconfig-json/src:
   {}
 
-Info 84   [16:02:30.000] response:{"response":[{"textSpan":{"start":{"line":1,"offset":22},"end":{"line":1,"offset":26}},"hintSpan":{"start":{"line":1,"offset":1},"end":{"line":1,"offset":26}},"bannerText":"...","autoCollapse":true,"kind":"code"}],"responseRequired":true}
+Info 84   [16:02:30.000] response:
+    {
+      "response": [
+        {
+          "textSpan": {
+            "start": {
+              "line": 1,
+              "offset": 22
+            },
+            "end": {
+              "line": 1,
+              "offset": 26
+            }
+          },
+          "hintSpan": {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 26
+            }
+          },
+          "bannerText": "...",
+          "autoCollapse": true,
+          "kind": "code"
+        }
+      ],
+      "responseRequired": true
+    }

@@ -1,5 +1,13 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"}}
+Info 1    [16:00:30.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      }
+    }
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -131,8 +139,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 27   [16:01:02.000] response:{"responseRequired":false}
-Info 28   [16:01:03.000] request:{"command":"compileOnSaveAffectedFileList","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":1,"type":"request"}
+Info 27   [16:01:02.000] response:
+    {
+      "responseRequired": false
+    }
+Info 28   [16:01:03.000] request:
+    {
+      "command": "compileOnSaveAffectedFileList",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -183,8 +203,29 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 29   [16:01:04.000] response:{"response":[{"projectFileName":"/user/username/projects/myproject/usage/tsconfig.json","fileNames":["/user/username/projects/myproject/usage/usage.ts"],"projectUsesOutFile":false}],"responseRequired":true}
-Info 30   [16:01:05.000] request:{"command":"compileOnSaveEmitFile","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":2,"type":"request"}
+Info 29   [16:01:04.000] response:
+    {
+      "response": [
+        {
+          "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json",
+          "fileNames": [
+            "/user/username/projects/myproject/usage/usage.ts"
+          ],
+          "projectUsesOutFile": false
+        }
+      ],
+      "responseRequired": true
+    }
+Info 30   [16:01:05.000] request:
+    {
+      "command": "compileOnSaveEmitFile",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -235,8 +276,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 31   [16:01:06.000] response:{"response":false,"responseRequired":true}
-Info 32   [16:01:07.000] request:{"command":"emit-output","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":3,"type":"request"}
+Info 31   [16:01:06.000] response:
+    {
+      "response": false,
+      "responseRequired": true
+    }
+Info 32   [16:01:07.000] request:
+    {
+      "command": "emit-output",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -287,4 +341,12 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 33   [16:01:08.000] response:{"response":{"emitSkipped":true,"outputFiles":[],"diagnostics":[]},"responseRequired":true}
+Info 33   [16:01:08.000] response:
+    {
+      "response": {
+        "emitSkipped": true,
+        "outputFiles": [],
+        "diagnostics": []
+      },
+      "responseRequired": true
+    }

@@ -1,5 +1,14 @@
 Info 0    [16:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:36.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/a/a.ts","projectRootPath":"/users/username/projects/a"}}
+Info 1    [16:00:36.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/a/a.ts",
+        "projectRootPath": "/users/username/projects/a"
+      }
+    }
 //// [/users/username/projects/c/fc.ts]
 export const C = 8
 
@@ -100,8 +109,20 @@ FsWatchesRecursive::
 /users/username/projects/a:
   {}
 
-Info 19   [16:01:00.000] response:{"responseRequired":false}
-Info 20   [16:01:01.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/b/b.ts","projectRootPath":"/users/username/projects/b"}}
+Info 19   [16:01:00.000] response:
+    {
+      "responseRequired": false
+    }
+Info 20   [16:01:01.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/b/b.ts",
+        "projectRootPath": "/users/username/projects/b"
+      }
+    }
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -195,8 +216,20 @@ FsWatchesRecursive::
 /users/username/projects/b:
   {}
 
-Info 37   [16:01:29.000] response:{"responseRequired":false}
-Info 38   [16:01:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/a/c/fc.ts","projectRootPath":"/users/username/projects/a"}}
+Info 37   [16:01:29.000] response:
+    {
+      "responseRequired": false
+    }
+Info 38   [16:01:30.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/a/c/fc.ts",
+        "projectRootPath": "/users/username/projects/a"
+      }
+    }
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -263,8 +296,20 @@ FsWatchesRecursive::
 /users/username/projects/b:
   {}
 
-Info 42   [16:01:47.000] response:{"responseRequired":false}
-Info 43   [16:01:48.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/b/c/fc.ts","projectRootPath":"/users/username/projects/b"}}
+Info 42   [16:01:47.000] response:
+    {
+      "responseRequired": false
+    }
+Info 43   [16:01:48.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/b/c/fc.ts",
+        "projectRootPath": "/users/username/projects/b"
+      }
+    }
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -329,8 +374,21 @@ FsWatchesRecursive::
 /users/username/projects/b:
   {}
 
-Info 47   [16:02:07.000] response:{"responseRequired":false}
-Info 48   [16:02:08.000] request:{"seq":0,"type":"request","command":"rename","arguments":{"file":"/users/username/projects/a/c/fc.ts","line":1,"offset":14}}
+Info 47   [16:02:07.000] response:
+    {
+      "responseRequired": false
+    }
+Info 48   [16:02:08.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "rename",
+      "arguments": {
+        "file": "/users/username/projects/a/c/fc.ts",
+        "line": 1,
+        "offset": 14
+      }
+    }
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -373,4 +431,140 @@ FsWatchesRecursive::
 /users/username/projects/b:
   {}
 
-Info 49   [16:02:09.000] response:{"response":{"info":{"canRename":true,"displayName":"C","fullDisplayName":"\"/users/username/projects/a/c/fc\".C","kind":"const","kindModifiers":"export","triggerSpan":{"start":{"line":1,"offset":14},"end":{"line":1,"offset":15}}},"locs":[{"file":"/users/username/projects/a/c/fc.ts","locs":[{"start":{"line":1,"offset":14},"end":{"line":1,"offset":15},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":19}}]},{"file":"/users/username/projects/a/a.ts","locs":[{"start":{"line":1,"offset":9},"end":{"line":1,"offset":10},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}},{"start":{"line":1,"offset":39},"end":{"line":1,"offset":40}}]},{"file":"/users/username/projects/b/c/fc.ts","locs":[{"start":{"line":1,"offset":14},"end":{"line":1,"offset":15},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":19}}]},{"file":"/users/username/projects/b/b.ts","locs":[{"start":{"line":1,"offset":9},"end":{"line":1,"offset":10},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}},{"start":{"line":1,"offset":39},"end":{"line":1,"offset":40}}]}]},"responseRequired":true}
+Info 49   [16:02:09.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "C",
+          "fullDisplayName": "\"/users/username/projects/a/c/fc\".C",
+          "kind": "const",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 1,
+              "offset": 14
+            },
+            "end": {
+              "line": 1,
+              "offset": 15
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/users/username/projects/a/c/fc.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 14
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 15
+                },
+                "contextStart": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 1,
+                  "offset": 19
+                }
+              }
+            ]
+          },
+          {
+            "file": "/users/username/projects/a/a.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 9
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 10
+                },
+                "contextStart": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 1,
+                  "offset": 26
+                }
+              },
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 39
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 40
+                }
+              }
+            ]
+          },
+          {
+            "file": "/users/username/projects/b/c/fc.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 14
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 15
+                },
+                "contextStart": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 1,
+                  "offset": 19
+                }
+              }
+            ]
+          },
+          {
+            "file": "/users/username/projects/b/b.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 9
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 10
+                },
+                "contextStart": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 1,
+                  "offset": 26
+                }
+              },
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 39
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 40
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }

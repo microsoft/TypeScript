@@ -1,5 +1,13 @@
 Info 0    [16:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:16.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/app.ts"}}
+Info 1    [16:00:16.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/app.ts"
+      }
+    }
 //// [/a/b/app.ts]
 let x = 10
 
@@ -90,7 +98,10 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 22   [16:00:43.000] response:{"responseRequired":false}
+Info 22   [16:00:43.000] response:
+    {
+      "responseRequired": false
+    }
 Info 23   [16:00:47.000] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info 24   [16:00:48.000] Scheduled: /a/b/tsconfig.json
 Info 25   [16:00:49.000] Scheduled: *ensureProjectForOpenFiles*

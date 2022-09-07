@@ -1,5 +1,13 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"}}
+Info 1    [16:00:30.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      }
+    }
 //// [/user/username/projects/myproject/dependency/fns.ts]
 function fn1() { }
 function fn2() { }
@@ -139,8 +147,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 31   [16:01:06.000] response:{"responseRequired":false}
-Info 32   [16:01:07.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts"}}
+Info 31   [16:01:06.000] response:
+    {
+      "responseRequired": false
+    }
+Info 32   [16:01:07.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -233,8 +252,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 53   [16:01:39.000] response:{"responseRequired":false}
-Info 54   [16:01:40.000] request:{"command":"geterrForProject","arguments":{"delay":0,"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":1,"type":"request"}
+Info 53   [16:01:39.000] response:
+    {
+      "responseRequired": false
+    }
+Info 54   [16:01:40.000] request:
+    {
+      "command": "geterrForProject",
+      "arguments": {
+        "delay": 0,
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -281,7 +312,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 55   [16:01:41.000] response:{"responseRequired":false}
+Info 55   [16:01:41.000] response:
+    {
+      "responseRequired": false
+    }
 Info 56   [16:01:42.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 Info 57   [16:01:43.000] event:
@@ -296,7 +330,16 @@ Info 61   [16:01:47.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Info 62   [16:01:48.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Info 63   [16:01:49.000] request:{"command":"geterrForProject","arguments":{"delay":0,"file":"/user/username/projects/myproject/dependency/fns.ts"},"seq":2,"type":"request"}
+Info 63   [16:01:49.000] request:
+    {
+      "command": "geterrForProject",
+      "arguments": {
+        "delay": 0,
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -343,7 +386,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 64   [16:01:50.000] response:{"responseRequired":false}
+Info 64   [16:01:50.000] response:
+    {
+      "responseRequired": false
+    }
 Info 65   [16:01:51.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Info 66   [16:01:52.000] event:

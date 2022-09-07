@@ -1,5 +1,13 @@
 Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 1    [16:00:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
 import { something } from "something";
@@ -68,8 +76,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 8    [16:00:45.000] response:{"responseRequired":false}
-Info 9    [16:00:46.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 8    [16:00:45.000] response:
+    {
+      "responseRequired": false
+    }
+Info 9    [16:00:46.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -89,8 +108,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 10   [16:00:51.000] response:{"responseRequired":false}
-Info 11   [16:00:52.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/c.ts"}}
+Info 10   [16:00:51.000] response:
+    {
+      "responseRequired": false
+    }
+Info 11   [16:00:52.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/c.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -126,8 +156,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [16:01:04.000] response:{"responseRequired":false}
-Info 18   [16:01:05.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/b.ts"}}
+Info 17   [16:01:04.000] response:
+    {
+      "responseRequired": false
+    }
+Info 18   [16:01:05.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/b.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -168,4 +209,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 24   [16:01:19.000] response:{"responseRequired":false}
+Info 24   [16:01:19.000] response:
+    {
+      "responseRequired": false
+    }

@@ -1,5 +1,13 @@
 Info 0    [16:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:16.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/index.ts"}}
+Info 1    [16:00:16.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/index.ts"
+      }
+    }
 //// [/a/tsconfig.json]
 {
     "compilerOptions": {
@@ -85,8 +93,19 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 20   [16:00:41.000] response:{"responseRequired":false}
-Info 21   [16:00:42.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/b/index.ts"}}
+Info 20   [16:00:41.000] response:
+    {
+      "responseRequired": false
+    }
+Info 21   [16:00:42.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/b/index.ts"
+      }
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -177,8 +196,20 @@ FsWatchesRecursive::
 /b:
   {}
 
-Info 40   [16:01:12.000] response:{"responseRequired":false}
-Info 41   [16:01:13.000] request:{"seq":0,"type":"request","command":"navto","arguments":{"searchValue":"abcdef","file":"/a/index.ts"}}
+Info 40   [16:01:12.000] response:
+    {
+      "responseRequired": false
+    }
+Info 41   [16:01:13.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "navto",
+      "arguments": {
+        "searchValue": "abcdef",
+        "file": "/a/index.ts"
+      }
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -221,4 +252,25 @@ FsWatchesRecursive::
 /b:
   {}
 
-Info 42   [16:01:14.000] response:{"response":[{"name":"abcdef","kind":"const","kindModifiers":"export","isCaseSensitive":true,"matchKind":"exact","file":"/a/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":24}}],"responseRequired":true}
+Info 42   [16:01:14.000] response:
+    {
+      "response": [
+        {
+          "name": "abcdef",
+          "kind": "const",
+          "kindModifiers": "export",
+          "isCaseSensitive": true,
+          "matchKind": "exact",
+          "file": "/a/index.ts",
+          "start": {
+            "line": 1,
+            "offset": 14
+          },
+          "end": {
+            "line": 1,
+            "offset": 24
+          }
+        }
+      ],
+      "responseRequired": true
+    }

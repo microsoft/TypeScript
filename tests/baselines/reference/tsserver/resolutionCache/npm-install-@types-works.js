@@ -1,5 +1,16 @@
 Info 0    [16:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:18.000] request:{"command":"open","arguments":{"file":"/a/b/projects/temp/a.ts","fileContent":"import f = require(\"pad\"); f;","scriptKindName":"TS","projectRootPath":"/a/b/projects/temp"},"seq":1,"type":"request"}
+Info 1    [16:00:18.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/temp/a.ts",
+        "fileContent": "import f = require(\"pad\"); f;",
+        "scriptKindName": "TS",
+        "projectRootPath": "/a/b/projects/temp"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/b/projects/temp/a.ts]
 import f = require("pad"); f;
 
@@ -71,8 +82,22 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [16:00:40.000] response:{"responseRequired":false}
-Info 18   [16:00:41.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a/b/projects/temp/a.ts"]},"seq":2,"type":"request"}
+Info 17   [16:00:40.000] response:
+    {
+      "responseRequired": false
+    }
+Info 18   [16:00:41.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/a/b/projects/temp/a.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/b/projects/temp/tsconfig.json:
@@ -107,7 +132,10 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 19   [16:00:42.000] response:{"responseRequired":false}
+Info 19   [16:00:42.000] response:
+    {
+      "responseRequired": false
+    }
 Info 20   [16:00:43.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/temp/a.ts","diagnostics":[]}}
 Info 21   [16:00:44.000] event:

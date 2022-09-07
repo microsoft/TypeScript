@@ -1,5 +1,15 @@
 Info 0    [16:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:28.000] request:{"command":"open","arguments":{"file":"/user/username/projects/myproject/src/foo.ts","fileContent":"export function foo() { }","projectRootPath":"/user/username/projects/myproject"},"seq":1,"type":"request"}
+Info 1    [16:00:28.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/foo.ts",
+        "fileContent": "export function foo() { }",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/src/foo.ts]
 export function foo() { }
 
@@ -98,12 +108,25 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 23   [16:00:56.000] response:{"responseRequired":false}
+Info 23   [16:00:56.000] response:
+    {
+      "responseRequired": false
+    }
 Info 24   [16:00:59.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 25   [16:01:00.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 26   [16:01:01.000] Scheduled: *ensureProjectForOpenFiles*
 Info 27   [16:01:02.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 28   [16:01:03.000] request:{"command":"open","arguments":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","fileContent":"export function fooBar() { }","projectRootPath":"/user/username/projects/myproject"},"seq":2,"type":"request"}
+Info 28   [16:01:03.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/sub/fooBar.ts",
+        "fileContent": "export function fooBar() { }",
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/src/sub/fooBar.ts]
 export function fooBar() { }
 
@@ -172,8 +195,23 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 36   [16:01:19.000] response:{"responseRequired":false}
-Info 37   [16:01:20.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/sub/fooBar.ts","/user/username/projects/myproject/src/foo.ts"]},"seq":3,"type":"request"}
+Info 36   [16:01:19.000] response:
+    {
+      "responseRequired": false
+    }
+Info 37   [16:01:20.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/sub/fooBar.ts",
+          "/user/username/projects/myproject/src/foo.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -208,7 +246,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 38   [16:01:21.000] response:{"responseRequired":false}
+Info 38   [16:01:21.000] response:
+    {
+      "responseRequired": false
+    }
 Info 39   [16:01:22.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
 Info 40   [16:01:23.000] event:

@@ -1,5 +1,13 @@
 Info 0    [16:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:20.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/file.ts"}}
+Info 1    [16:00:20.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/file.ts"
+      }
+    }
 //// [/user/username/projects/myproject/file.ts]
 const x = 10;
 function foo() {
@@ -79,8 +87,22 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 15   [16:00:40.000] response:{"responseRequired":false}
-Info 16   [16:00:41.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/file.ts"]},"seq":1,"type":"request"}
+Info 15   [16:00:40.000] response:
+    {
+      "responseRequired": false
+    }
+Info 16   [16:00:41.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/file.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
@@ -111,7 +133,10 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [16:00:42.000] response:{"responseRequired":false}
+Info 17   [16:00:42.000] response:
+    {
+      "responseRequired": false
+    }
 Info 18   [16:00:43.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 Info 19   [16:00:44.000] event:
@@ -120,7 +145,32 @@ Info 20   [16:00:45.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 Info 21   [16:00:46.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Info 22   [16:00:47.000] request:{"command":"updateOpen","arguments":{"changedFiles":[{"fileName":"/user/username/projects/myproject/file.ts","textChanges":[{"newText":"             ","start":{"line":3,"offset":5},"end":{"line":3,"offset":18}}]}]},"seq":2,"type":"request"}
+Info 22   [16:00:47.000] request:
+    {
+      "command": "updateOpen",
+      "arguments": {
+        "changedFiles": [
+          {
+            "fileName": "/user/username/projects/myproject/file.ts",
+            "textChanges": [
+              {
+                "newText": "             ",
+                "start": {
+                  "line": 3,
+                  "offset": 5
+                },
+                "end": {
+                  "line": 3,
+                  "offset": 18
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
@@ -151,8 +201,23 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 23   [16:00:48.000] response:{"response":true,"responseRequired":true}
-Info 24   [16:00:49.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/file.ts"]},"seq":3,"type":"request"}
+Info 23   [16:00:48.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 24   [16:00:49.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/file.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
@@ -183,7 +248,10 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 25   [16:00:50.000] response:{"responseRequired":false}
+Info 25   [16:00:50.000] response:
+    {
+      "responseRequired": false
+    }
 Info 26   [16:00:51.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 27   [16:00:52.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 28   [16:00:53.000] Different program with same set of files
@@ -195,7 +263,32 @@ Info 31   [16:00:56.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 Info 32   [16:00:57.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Info 33   [16:00:58.000] request:{"command":"updateOpen","arguments":{"changedFiles":[{"fileName":"/user/username/projects/myproject/file.ts","textChanges":[{"newText":"// @ts-ignore","start":{"line":3,"offset":5},"end":{"line":3,"offset":18}}]}]},"seq":4,"type":"request"}
+Info 33   [16:00:58.000] request:
+    {
+      "command": "updateOpen",
+      "arguments": {
+        "changedFiles": [
+          {
+            "fileName": "/user/username/projects/myproject/file.ts",
+            "textChanges": [
+              {
+                "newText": "// @ts-ignore",
+                "start": {
+                  "line": 3,
+                  "offset": 5
+                },
+                "end": {
+                  "line": 3,
+                  "offset": 18
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "seq": 4,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
@@ -226,8 +319,23 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 34   [16:00:59.000] response:{"response":true,"responseRequired":true}
-Info 35   [16:01:00.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/file.ts"]},"seq":5,"type":"request"}
+Info 34   [16:00:59.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 35   [16:01:00.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/file.ts"
+        ]
+      },
+      "seq": 5,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
@@ -258,7 +366,10 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 36   [16:01:01.000] response:{"responseRequired":false}
+Info 36   [16:01:01.000] response:
+    {
+      "responseRequired": false
+    }
 Info 37   [16:01:02.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 38   [16:01:03.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 39   [16:01:04.000] Different program with same set of files

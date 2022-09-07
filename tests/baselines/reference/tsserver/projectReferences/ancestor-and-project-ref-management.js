@@ -1,5 +1,13 @@
 Info 0    [16:01:14.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:01:15.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/container/compositeExec/index.ts"}}
+Info 1    [16:01:15.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -436,8 +444,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 27   [16:01:50.000] response:{"responseRequired":false}
-Info 28   [16:01:51.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/temp/temp.ts"}}
+Info 27   [16:01:50.000] response:
+    {
+      "responseRequired": false
+    }
+Info 28   [16:01:51.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/temp/temp.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -524,8 +543,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 41   [16:02:18.000] response:{"responseRequired":false}
-Info 42   [16:02:19.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/container/compositeExec/index.ts","line":3,"offset":16},"seq":1,"type":"request"}
+Info 41   [16:02:18.000] response:
+    {
+      "responseRequired": false
+    }
+Info 42   [16:02:19.000] request:
+    {
+      "command": "rename",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts",
+        "line": 3,
+        "offset": 16
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -676,7 +708,84 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 80   [16:02:57.000] response:{"response":{"info":{"canRename":true,"displayName":"myConst","fullDisplayName":"container.myConst","kind":"const","kindModifiers":"export","triggerSpan":{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}},"locs":[{"file":"/user/username/projects/container/lib/index.ts","locs":[{"start":{"line":2,"offset":18},"end":{"line":2,"offset":25},"contextStart":{"line":2,"offset":5},"contextEnd":{"line":2,"offset":31}}]},{"file":"/user/username/projects/container/compositeExec/index.ts","locs":[{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}]},{"file":"/user/username/projects/container/exec/index.ts","locs":[{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}]}]},"responseRequired":true}
+Info 80   [16:02:57.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "myConst",
+          "fullDisplayName": "container.myConst",
+          "kind": "const",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 3,
+              "offset": 16
+            },
+            "end": {
+              "line": 3,
+              "offset": 23
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/user/username/projects/container/lib/index.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 2,
+                  "offset": 18
+                },
+                "end": {
+                  "line": 2,
+                  "offset": 25
+                },
+                "contextStart": {
+                  "line": 2,
+                  "offset": 5
+                },
+                "contextEnd": {
+                  "line": 2,
+                  "offset": 31
+                }
+              }
+            ]
+          },
+          {
+            "file": "/user/username/projects/container/compositeExec/index.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 3,
+                  "offset": 16
+                },
+                "end": {
+                  "line": 3,
+                  "offset": 23
+                }
+              }
+            ]
+          },
+          {
+            "file": "/user/username/projects/container/exec/index.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 3,
+                  "offset": 16
+                },
+                "end": {
+                  "line": 3,
+                  "offset": 23
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }
 Info 81   [16:02:58.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 82   [16:02:59.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 83   [16:03:00.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
@@ -703,7 +812,15 @@ Info 84   [16:03:15.000] -----------------------------------------------
 Info 84   [16:03:16.000] Open files: 
 Info 84   [16:03:17.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
 Info 84   [16:03:18.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
-Info 84   [16:03:19.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/temp/temp.ts"}}
+Info 84   [16:03:19.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/temp/temp.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -816,7 +933,10 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 95   [16:03:50.000] response:{"responseRequired":false}
+Info 95   [16:03:50.000] response:
+    {
+      "responseRequired": false
+    }
 Info 96   [16:03:51.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/index.ts 500 undefined WatchType: Closed Script info
 Info 97   [16:03:52.000] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info 97   [16:03:53.000] 	Files (3)
@@ -865,7 +985,15 @@ Info 100  [16:04:26.000] 	Files (2)
 
 Info 100  [16:04:27.000] -----------------------------------------------
 Info 100  [16:04:28.000] Open files: 
-Info 100  [16:04:29.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/temp/temp.ts"}}
+Info 100  [16:04:29.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/temp/temp.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1015,4 +1143,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 148  [16:05:23.000] response:{"responseRequired":false}
+Info 148  [16:05:23.000] response:
+    {
+      "responseRequired": false
+    }

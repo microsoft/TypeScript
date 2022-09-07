@@ -394,9 +394,9 @@ namespace ts.projectSystem {
 
         private baseline<T extends protocol.Request | server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
             if (!this.logger.hasLevel(server.LogLevel.verbose)) return requestOrResult;
-            if (type === "request") this.logger.info(`request:${JSON.stringify(requestOrResult)}`);
+            if (type === "request") this.logger.info(`request:${server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
             this.baselineHost();
-            if (type === "response") this.logger.info(`response:${JSON.stringify(requestOrResult)}`);
+            if (type === "response") this.logger.info(`response:${server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
             return requestOrResult;
         }
 

@@ -1,5 +1,13 @@
 Info 0    [16:00:22.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:23.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/ui.ts"}}
+Info 1    [16:00:23.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/ui.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -89,8 +97,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 22   [16:00:50.000] response:{"responseRequired":false}
-Info 23   [16:00:51.000] request:{"command":"geterrForProject","arguments":{"delay":0,"file":"/user/username/projects/myproject/ui.ts"},"seq":1,"type":"request"}
+Info 22   [16:00:50.000] response:
+    {
+      "responseRequired": false
+    }
+Info 23   [16:00:51.000] request:
+    {
+      "command": "geterrForProject",
+      "arguments": {
+        "delay": 0,
+        "file": "/user/username/projects/myproject/ui.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -121,7 +141,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 24   [16:00:52.000] response:{"responseRequired":false}
+Info 24   [16:00:52.000] response:
+    {
+      "responseRequired": false
+    }
 Info 25   [16:00:53.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/ui.ts","diagnostics":[]}}
 Info 26   [16:00:54.000] event:

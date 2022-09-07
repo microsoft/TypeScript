@@ -1,5 +1,14 @@
 Info 0    [16:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:18.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/commonFile1.ts","projectRootPath":"/a/b"}}
+Info 1    [16:00:18.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts",
+        "projectRootPath": "/a/b"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -95,4 +104,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 21   [16:00:44.000] response:{"responseRequired":false}
+Info 21   [16:00:44.000] response:
+    {
+      "responseRequired": false
+    }

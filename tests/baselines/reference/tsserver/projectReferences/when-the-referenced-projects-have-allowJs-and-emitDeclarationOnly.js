@@ -1,5 +1,13 @@
 Info 0    [16:00:43.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:44.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts"}}
+Info 1    [16:00:44.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/packages/consumer/src/index.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -181,8 +189,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 43   [16:01:32.000] response:{"responseRequired":false}
-Info 44   [16:01:33.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/packages/consumer/src/index.ts"]},"seq":1,"type":"request"}
+Info 43   [16:01:32.000] response:
+    {
+      "responseRequired": false
+    }
+Info 44   [16:01:33.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/packages/consumer/src/index.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/packages/consumer/node_modules:
@@ -257,7 +279,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 45   [16:01:34.000] response:{"responseRequired":false}
+Info 45   [16:01:34.000] response:
+    {
+      "responseRequired": false
+    }
 Info 46   [16:01:35.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/consumer/src/index.ts","diagnostics":[]}}
 Info 47   [16:01:36.000] event:

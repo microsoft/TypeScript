@@ -1,5 +1,13 @@
 Info 0    [16:01:10.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:01:11.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/container/compositeExec/index.ts"}}
+Info 1    [16:01:11.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -433,8 +441,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 27   [16:01:46.000] response:{"responseRequired":false}
-Info 28   [16:01:47.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/container/compositeExec/index.ts","line":3,"offset":16},"seq":1,"type":"request"}
+Info 27   [16:01:46.000] response:
+    {
+      "responseRequired": false
+    }
+Info 28   [16:01:47.000] request:
+    {
+      "command": "rename",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts",
+        "line": 3,
+        "offset": 16
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -573,4 +594,81 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 66   [16:02:25.000] response:{"response":{"info":{"canRename":true,"displayName":"myConst","fullDisplayName":"container.myConst","kind":"const","kindModifiers":"export","triggerSpan":{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}},"locs":[{"file":"/user/username/projects/container/lib/index.ts","locs":[{"start":{"line":2,"offset":18},"end":{"line":2,"offset":25},"contextStart":{"line":2,"offset":5},"contextEnd":{"line":2,"offset":31}}]},{"file":"/user/username/projects/container/compositeExec/index.ts","locs":[{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}]},{"file":"/user/username/projects/container/exec/index.ts","locs":[{"start":{"line":3,"offset":16},"end":{"line":3,"offset":23}}]}]},"responseRequired":true}
+Info 66   [16:02:25.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "myConst",
+          "fullDisplayName": "container.myConst",
+          "kind": "const",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 3,
+              "offset": 16
+            },
+            "end": {
+              "line": 3,
+              "offset": 23
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/user/username/projects/container/lib/index.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 2,
+                  "offset": 18
+                },
+                "end": {
+                  "line": 2,
+                  "offset": 25
+                },
+                "contextStart": {
+                  "line": 2,
+                  "offset": 5
+                },
+                "contextEnd": {
+                  "line": 2,
+                  "offset": 31
+                }
+              }
+            ]
+          },
+          {
+            "file": "/user/username/projects/container/compositeExec/index.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 3,
+                  "offset": 16
+                },
+                "end": {
+                  "line": 3,
+                  "offset": 23
+                }
+              }
+            ]
+          },
+          {
+            "file": "/user/username/projects/container/exec/index.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 3,
+                  "offset": 16
+                },
+                "end": {
+                  "line": 3,
+                  "offset": 23
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }

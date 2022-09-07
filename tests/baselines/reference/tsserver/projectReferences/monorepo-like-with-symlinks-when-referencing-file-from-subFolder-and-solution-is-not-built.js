@@ -1,5 +1,13 @@
 Info 0    [16:00:45.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:46.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/packages/A/src/test.ts"}}
+Info 1    [16:00:46.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/packages/A/src/test.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -172,8 +180,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 43   [16:01:34.000] response:{"responseRequired":false}
-Info 44   [16:01:35.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/packages/A/src/test.ts"]},"seq":1,"type":"request"}
+Info 43   [16:01:34.000] response:
+    {
+      "responseRequired": false
+    }
+Info 44   [16:01:35.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/packages/A/src/test.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/packages/a/node_modules:
@@ -244,7 +266,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 45   [16:01:36.000] response:{"responseRequired":false}
+Info 45   [16:01:36.000] response:
+    {
+      "responseRequired": false
+    }
 Info 46   [16:01:37.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/test.ts","diagnostics":[]}}
 Info 47   [16:01:38.000] event:
@@ -253,7 +278,32 @@ Info 48   [16:01:39.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/test.ts","diagnostics":[]}}
 Info 49   [16:01:40.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Info 50   [16:01:41.000] request:{"command":"updateOpen","arguments":{"changedFiles":[{"fileName":"/user/username/projects/myproject/packages/A/src/test.ts","textChanges":[{"newText":"\n","start":{"line":5,"offset":1},"end":{"line":5,"offset":1}}]}]},"seq":2,"type":"request"}
+Info 50   [16:01:41.000] request:
+    {
+      "command": "updateOpen",
+      "arguments": {
+        "changedFiles": [
+          {
+            "fileName": "/user/username/projects/myproject/packages/A/src/test.ts",
+            "textChanges": [
+              {
+                "newText": "\n",
+                "start": {
+                  "line": 5,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 5,
+                  "offset": 1
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/packages/a/node_modules:
@@ -324,8 +374,23 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 51   [16:01:42.000] response:{"response":true,"responseRequired":true}
-Info 52   [16:01:43.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/packages/A/src/test.ts"]},"seq":3,"type":"request"}
+Info 51   [16:01:42.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 52   [16:01:43.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/packages/A/src/test.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/packages/a/node_modules:
@@ -396,7 +461,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 53   [16:01:44.000] response:{"responseRequired":false}
+Info 53   [16:01:44.000] response:
+    {
+      "responseRequired": false
+    }
 Info 54   [16:01:45.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
 Info 55   [16:01:46.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 56   [16:01:47.000] Different program with same set of files

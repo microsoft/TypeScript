@@ -141,7 +141,15 @@ Info 49   [16:01:59.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 50   [16:02:00.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info 51   [16:02:01.000] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 52   [16:02:02.000] Different program with same set of files
-Info 53   [16:02:03.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/a/lib/lib.d.ts"},"seq":1,"type":"request"}
+Info 53   [16:02:03.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/lib/lib.d.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -534,8 +542,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 54   [16:02:04.000] response:{"response":[],"responseRequired":true}
-Info 55   [16:02:05.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/a/lib/lib.d.ts"},"seq":2,"type":"request"}
+Info 54   [16:02:04.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 55   [16:02:05.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/lib/lib.d.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -598,8 +618,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 56   [16:02:06.000] response:{"response":[],"responseRequired":true}
-Info 57   [16:02:07.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/lib/tsconfig.json","projectFileName":"/user/username/projects/container/lib/tsconfig.json"},"seq":3,"type":"request"}
+Info 56   [16:02:06.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 57   [16:02:07.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/lib/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -662,8 +695,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 58   [16:02:08.000] response:{"response":[],"responseRequired":true}
-Info 59   [16:02:09.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/lib/tsconfig.json","projectFileName":"/user/username/projects/container/lib/tsconfig.json"},"seq":4,"type":"request"}
+Info 58   [16:02:08.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 59   [16:02:09.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/lib/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
+      },
+      "seq": 4,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -726,8 +772,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 60   [16:02:10.000] response:{"response":[],"responseRequired":true}
-Info 61   [16:02:11.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/lib/index.ts"},"seq":5,"type":"request"}
+Info 60   [16:02:10.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 61   [16:02:11.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/lib/index.ts"
+      },
+      "seq": 5,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -790,8 +848,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 62   [16:02:12.000] response:{"response":[],"responseRequired":true}
-Info 63   [16:02:13.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/lib/index.ts"},"seq":6,"type":"request"}
+Info 62   [16:02:12.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 63   [16:02:13.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/lib/index.ts"
+      },
+      "seq": 6,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -854,8 +924,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 64   [16:02:14.000] response:{"response":[],"responseRequired":true}
-Info 65   [16:02:15.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/exec/tsconfig.json","projectFileName":"/user/username/projects/container/exec/tsconfig.json"},"seq":7,"type":"request"}
+Info 64   [16:02:14.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 65   [16:02:15.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/exec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
+      },
+      "seq": 7,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -918,8 +1001,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 66   [16:02:16.000] response:{"response":[],"responseRequired":true}
-Info 67   [16:02:17.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/exec/tsconfig.json","projectFileName":"/user/username/projects/container/exec/tsconfig.json"},"seq":8,"type":"request"}
+Info 66   [16:02:16.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 67   [16:02:17.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/exec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
+      },
+      "seq": 8,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -982,8 +1078,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 68   [16:02:18.000] response:{"response":[],"responseRequired":true}
-Info 69   [16:02:19.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/exec/index.ts"},"seq":9,"type":"request"}
+Info 68   [16:02:18.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 69   [16:02:19.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/exec/index.ts"
+      },
+      "seq": 9,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1046,8 +1154,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 70   [16:02:20.000] response:{"response":[],"responseRequired":true}
-Info 71   [16:02:21.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/exec/index.ts"},"seq":10,"type":"request"}
+Info 70   [16:02:20.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 71   [16:02:21.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/exec/index.ts"
+      },
+      "seq": 10,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1110,8 +1230,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 72   [16:02:22.000] response:{"response":[],"responseRequired":true}
-Info 73   [16:02:23.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/compositeExec/tsconfig.json","projectFileName":"/user/username/projects/container/compositeExec/tsconfig.json"},"seq":11,"type":"request"}
+Info 72   [16:02:22.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 73   [16:02:23.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
+      },
+      "seq": 11,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1174,8 +1307,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 74   [16:02:24.000] response:{"response":[],"responseRequired":true}
-Info 75   [16:02:25.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/compositeExec/tsconfig.json","projectFileName":"/user/username/projects/container/compositeExec/tsconfig.json"},"seq":12,"type":"request"}
+Info 74   [16:02:24.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 75   [16:02:25.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
+      },
+      "seq": 12,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1238,8 +1384,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 76   [16:02:26.000] response:{"response":[],"responseRequired":true}
-Info 77   [16:02:27.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/compositeExec/index.ts"},"seq":13,"type":"request"}
+Info 76   [16:02:26.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 77   [16:02:27.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts"
+      },
+      "seq": 13,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1302,8 +1460,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 78   [16:02:28.000] response:{"response":[],"responseRequired":true}
-Info 79   [16:02:29.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/compositeExec/index.ts"},"seq":14,"type":"request"}
+Info 78   [16:02:28.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 79   [16:02:29.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts"
+      },
+      "seq": 14,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1366,8 +1536,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 80   [16:02:30.000] response:{"response":[],"responseRequired":true}
-Info 81   [16:02:31.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/tsconfig.json","projectFileName":"/user/username/projects/container/tsconfig.json"},"seq":15,"type":"request"}
+Info 80   [16:02:30.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 81   [16:02:31.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/tsconfig.json"
+      },
+      "seq": 15,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1430,8 +1613,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 82   [16:02:32.000] response:{"response":[],"responseRequired":true}
-Info 83   [16:02:33.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/container/tsconfig.json","projectFileName":"/user/username/projects/container/tsconfig.json"},"seq":16,"type":"request"}
+Info 82   [16:02:32.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 83   [16:02:33.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/container/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/tsconfig.json"
+      },
+      "seq": 16,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1494,8 +1690,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 84   [16:02:34.000] response:{"response":[],"responseRequired":true}
-Info 85   [16:02:35.000] request:{"command":"compilerOptionsDiagnostics-full","arguments":{"projectFileName":"/user/username/projects/container/tsconfig.json"},"seq":17,"type":"request"}
+Info 84   [16:02:34.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 85   [16:02:35.000] request:
+    {
+      "command": "compilerOptionsDiagnostics-full",
+      "arguments": {
+        "projectFileName": "/user/username/projects/container/tsconfig.json"
+      },
+      "seq": 17,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1558,4 +1766,8 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 86   [16:02:36.000] response:{"response":[],"responseRequired":true}
+Info 86   [16:02:36.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }

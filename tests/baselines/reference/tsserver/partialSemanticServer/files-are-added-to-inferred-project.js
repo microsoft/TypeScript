@@ -1,5 +1,13 @@
 Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 1    [16:00:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
 import { something } from "something";
@@ -68,8 +76,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 8    [16:00:45.000] response:{"responseRequired":false}
-Info 9    [16:00:46.000] request:{"command":"completions","arguments":{"file":"/user/username/projects/myproject/a.ts","line":3,"offset":47},"seq":1,"type":"request"}
+Info 8    [16:00:45.000] response:
+    {
+      "responseRequired": false
+    }
+Info 9    [16:00:46.000] request:
+    {
+      "command": "completions",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "line": 3,
+        "offset": 47
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -90,8 +111,33 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 16   [16:00:53.000] response:{"response":[{"name":"foo","kind":"method","kindModifiers":"","sortText":"11"},{"name":"prop","kind":"property","kindModifiers":"","sortText":"11"}],"responseRequired":true}
-Info 17   [16:00:54.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/b.ts"}}
+Info 16   [16:00:53.000] response:
+    {
+      "response": [
+        {
+          "name": "foo",
+          "kind": "method",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "prop",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        }
+      ],
+      "responseRequired": true
+    }
+Info 17   [16:00:54.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/b.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -132,8 +178,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 23   [16:01:08.000] response:{"responseRequired":false}
-Info 24   [16:01:09.000] request:{"command":"completions","arguments":{"file":"/user/username/projects/myproject/a.ts","line":3,"offset":47},"seq":2,"type":"request"}
+Info 23   [16:01:08.000] response:
+    {
+      "responseRequired": false
+    }
+Info 24   [16:01:09.000] request:
+    {
+      "command": "completions",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "line": 3,
+        "offset": 47
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -154,4 +213,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 31   [16:01:16.000] response:{"response":[{"name":"foo","kind":"method","kindModifiers":"","sortText":"11"},{"name":"prop","kind":"property","kindModifiers":"","sortText":"11"}],"responseRequired":true}
+Info 31   [16:01:16.000] response:
+    {
+      "response": [
+        {
+          "name": "foo",
+          "kind": "method",
+          "kindModifiers": "",
+          "sortText": "11"
+        },
+        {
+          "name": "prop",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11"
+        }
+      ],
+      "responseRequired": true
+    }

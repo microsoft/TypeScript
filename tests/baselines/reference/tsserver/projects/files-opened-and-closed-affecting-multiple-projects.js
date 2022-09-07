@@ -1,5 +1,13 @@
 Info 0    [16:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:26.000] request:{"command":"open","arguments":{"file":"/a/b/projects/config/file.ts"},"seq":1,"type":"request"}
+Info 1    [16:00:26.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/config/file.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/b/projects/config/tsconfig.json]
 
 
@@ -92,8 +100,19 @@ FsWatchesRecursive::
 /a/b/projects/config:
   {}
 
-Info 19   [16:00:50.000] response:{"responseRequired":false}
-Info 20   [16:00:51.000] request:{"command":"open","arguments":{"file":"/a/b/projects/files/file1.ts"},"seq":2,"type":"request"}
+Info 19   [16:00:50.000] response:
+    {
+      "responseRequired": false
+    }
+Info 20   [16:00:51.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/files/file1.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -138,8 +157,19 @@ FsWatchesRecursive::
 /a/b/projects/config:
   {}
 
-Info 24   [16:01:03.000] response:{"responseRequired":false}
-Info 25   [16:01:04.000] request:{"command":"close","arguments":{"file":"/a/b/projects/config/file.ts"},"seq":3,"type":"request"}
+Info 24   [16:01:03.000] response:
+    {
+      "responseRequired": false
+    }
+Info 25   [16:01:04.000] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/a/b/projects/config/file.ts"
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -180,8 +210,19 @@ FsWatchesRecursive::
 /a/b/projects/config:
   {}
 
-Info 27   [16:01:12.000] response:{"responseRequired":false}
-Info 28   [16:01:13.000] request:{"command":"open","arguments":{"file":"/a/b/projects/files/file2.ts"},"seq":4,"type":"request"}
+Info 27   [16:01:12.000] response:
+    {
+      "responseRequired": false
+    }
+Info 28   [16:01:13.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/files/file2.ts"
+      },
+      "seq": 4,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -266,8 +307,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 51   [16:01:44.000] response:{"responseRequired":false}
-Info 52   [16:01:45.000] request:{"command":"occurrences","arguments":{"file":"/a/b/projects/files/file1.ts","line":1,"offset":11},"seq":5,"type":"request"}
+Info 51   [16:01:44.000] response:
+    {
+      "responseRequired": false
+    }
+Info 52   [16:01:45.000] request:
+    {
+      "command": "occurrences",
+      "arguments": {
+        "file": "/a/b/projects/files/file1.ts",
+        "line": 1,
+        "offset": 11
+      },
+      "seq": 5,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/b/projects/files/tsconfig.json:
@@ -339,4 +393,8 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 63   [16:02:15.000] response:{"response":[],"responseRequired":true}
+Info 63   [16:02:15.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }

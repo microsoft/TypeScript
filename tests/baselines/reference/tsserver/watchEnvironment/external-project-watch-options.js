@@ -1,5 +1,29 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"command":"openExternalProject","arguments":{"projectFileName":"/user/username/projects/myproject/project.csproj","rootFiles":[{"fileName":"/user/username/projects/myproject/src/main.ts"},{"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts"},{"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts"}],"options":{"excludeDirectories":["node_modules"]}},"seq":1,"type":"request"}
+Info 1    [16:00:30.000] request:
+    {
+      "command": "openExternalProject",
+      "arguments": {
+        "projectFileName": "/user/username/projects/myproject/project.csproj",
+        "rootFiles": [
+          {
+            "fileName": "/user/username/projects/myproject/src/main.ts"
+          },
+          {
+            "fileName": "/user/username/projects/myproject/node_modules/bar/index.d.ts"
+          },
+          {
+            "fileName": "/user/username/projects/myproject/node_modules/bar/foo.d.ts"
+          }
+        ],
+        "options": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -76,8 +100,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 16   [16:00:45.000] response:{"response":true,"responseRequired":true}
-Info 17   [16:00:46.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/main.ts"}}
+Info 16   [16:00:45.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 17   [16:00:46.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -114,4 +150,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 19   [16:00:54.000] response:{"responseRequired":false}
+Info 19   [16:00:54.000] response:
+    {
+      "responseRequired": false
+    }

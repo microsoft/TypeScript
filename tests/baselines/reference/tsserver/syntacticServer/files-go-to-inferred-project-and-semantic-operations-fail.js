@@ -1,5 +1,13 @@
 Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 1    [16:00:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
 import { something } from "something";
@@ -60,8 +68,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 8    [16:00:45.000] response:{"responseRequired":false}
-Info 9    [16:00:46.000] request:{"command":"completions","arguments":{"file":"/user/username/projects/myproject/a.ts","line":3,"offset":47},"seq":1,"type":"request"}
+Info 8    [16:00:45.000] response:
+    {
+      "responseRequired": false
+    }
+Info 9    [16:00:46.000] request:
+    {
+      "command": "completions",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "line": 3,
+        "offset": 47
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -70,7 +91,17 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 10   [16:00:47.000] Request: completions not allowed in LanguageServiceMode.Syntactic
-Info 11   [16:00:48.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/a.ts","line":1,"offset":10},"seq":2,"type":"request"}
+Info 11   [16:00:48.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "line": 1,
+        "offset": 10
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -79,7 +110,15 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 12   [16:00:49.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
-Info 13   [16:00:50.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/b.ts"}}
+Info 13   [16:00:50.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/b.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -109,8 +148,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 19   [16:01:04.000] response:{"responseRequired":false}
-Info 20   [16:01:05.000] request:{"command":"completions","arguments":{"file":"/user/username/projects/myproject/a.ts","line":3,"offset":47},"seq":3,"type":"request"}
+Info 19   [16:01:04.000] response:
+    {
+      "responseRequired": false
+    }
+Info 20   [16:01:05.000] request:
+    {
+      "command": "completions",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "line": 3,
+        "offset": 47
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -119,7 +171,17 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 21   [16:01:06.000] Request: completions not allowed in LanguageServiceMode.Syntactic
-Info 22   [16:01:07.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/a.ts","line":1,"offset":10},"seq":4,"type":"request"}
+Info 22   [16:01:07.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "line": 1,
+        "offset": 10
+      },
+      "seq": 4,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -128,7 +190,17 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 23   [16:01:08.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
-Info 24   [16:01:09.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/a.ts","line":1,"offset":13},"seq":5,"type":"request"}
+Info 24   [16:01:09.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "line": 1,
+        "offset": 13
+      },
+      "seq": 5,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -137,7 +209,15 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 25   [16:01:10.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
-Info 26   [16:01:11.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/c.ts"}}
+Info 26   [16:01:11.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/c.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -169,8 +249,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 32   [16:01:27.000] response:{"responseRequired":false}
-Info 33   [16:01:28.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/node_modules/something/index.d.ts"}}
+Info 32   [16:01:27.000] response:
+    {
+      "responseRequired": false
+    }
+Info 33   [16:01:28.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/node_modules/something/index.d.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -204,8 +295,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 39   [16:01:46.000] response:{"responseRequired":false}
-Info 40   [16:01:47.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/c.ts"}}
+Info 39   [16:01:46.000] response:
+    {
+      "responseRequired": false
+    }
+Info 40   [16:01:47.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/c.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -231,8 +333,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 41   [16:01:58.000] response:{"responseRequired":false}
-Info 42   [16:01:59.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/b.ts"}}
+Info 41   [16:01:58.000] response:
+    {
+      "responseRequired": false
+    }
+Info 42   [16:01:59.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/b.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -256,4 +369,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 43   [16:02:08.000] response:{"responseRequired":false}
+Info 43   [16:02:08.000] response:
+    {
+      "responseRequired": false
+    }

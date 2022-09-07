@@ -1,5 +1,14 @@
 Info 0    [16:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:34.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/client/app.js","projectRootPath":"/user/username/projects/myproject"}}
+Info 1    [16:00:34.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/client/app.js",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -91,8 +100,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 19   [16:00:58.000] response:{"responseRequired":false}
-Info 20   [16:00:59.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/test/backend/index.js","projectRootPath":"/user/username/projects/myproject"}}
+Info 19   [16:00:58.000] response:
+    {
+      "responseRequired": false
+    }
+Info 20   [16:00:59.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/test/backend/index.js",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/src/client/tsconfig.json:
@@ -201,8 +222,23 @@ FsWatchesRecursive::
 /user/username/projects/myproject/test:
   {}
 
-Info 35   [16:01:22.000] response:{"responseRequired":false}
-Info 36   [16:01:23.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/test/backend/index.js","/user/username/projects/myproject/src/client/app.js"]},"seq":1,"type":"request"}
+Info 35   [16:01:22.000] response:
+    {
+      "responseRequired": false
+    }
+Info 36   [16:01:23.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/test/backend/index.js",
+          "/user/username/projects/myproject/src/client/app.js"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/src/client/tsconfig.json:
@@ -285,7 +321,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/test:
   {}
 
-Info 37   [16:01:24.000] response:{"responseRequired":false}
+Info 37   [16:01:24.000] response:
+    {
+      "responseRequired": false
+    }
 Info 38   [16:01:25.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/test/backend/index.js","diagnostics":[]}}
 Info 39   [16:01:26.000] event:
@@ -300,7 +339,15 @@ Info 43   [16:01:30.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
 Info 44   [16:01:31.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Info 45   [16:01:32.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/test/backend/index.js"}}
+Info 45   [16:01:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/test/backend/index.js"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/src/client/tsconfig.json:
@@ -389,8 +436,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/test:
   {}
 
-Info 51   [16:01:44.000] response:{"responseRequired":false}
-Info 52   [16:01:45.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/server/utilities.js","projectRootPath":"/user/username/projects/myproject"}}
+Info 51   [16:01:44.000] response:
+    {
+      "responseRequired": false
+    }
+Info 52   [16:01:45.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/server/utilities.js",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/src/client/tsconfig.json:
@@ -507,8 +566,23 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 71   [16:02:12.000] response:{"responseRequired":false}
-Info 72   [16:02:13.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/server/utilities.js","/user/username/projects/myproject/src/client/app.js"]},"seq":2,"type":"request"}
+Info 71   [16:02:12.000] response:
+    {
+      "responseRequired": false
+    }
+Info 72   [16:02:13.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/server/utilities.js",
+          "/user/username/projects/myproject/src/client/app.js"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/src/client/tsconfig.json:
@@ -575,7 +649,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 73   [16:02:14.000] response:{"responseRequired":false}
+Info 73   [16:02:14.000] response:
+    {
+      "responseRequired": false
+    }
 Info 74   [16:02:15.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/server/utilities.js","diagnostics":[]}}
 Info 75   [16:02:16.000] event:

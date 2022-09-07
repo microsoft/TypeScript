@@ -1,5 +1,13 @@
 Info 0    [16:01:53.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:01:54.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/main/src/file1.ts"}}
+Info 1    [16:01:54.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/src/file1.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -409,8 +417,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/noCoreRef2:
   {}
 
-Info 66   [16:03:05.000] response:{"responseRequired":false}
-Info 67   [16:03:06.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/core/src/file1.ts"}}
+Info 66   [16:03:05.000] response:
+    {
+      "responseRequired": false
+    }
+Info 67   [16:03:06.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/core/src/file1.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -572,8 +591,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/noCoreRef2:
   {}
 
-Info 83   [16:03:33.000] response:{"responseRequired":false}
-Info 84   [16:03:34.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/core/src/file1.ts","line":1,"offset":14},"seq":1,"type":"request"}
+Info 83   [16:03:33.000] response:
+    {
+      "responseRequired": false
+    }
+Info 84   [16:03:34.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/myproject/core/src/file1.ts",
+        "line": 1,
+        "offset": 14
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -854,4 +886,36 @@ FsWatchesRecursive::
 /user/username/projects/myproject/noCoreRef2:
   {}
 
-Info 159  [16:04:49.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/core/src/file1.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":23},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":29},"lineText":"export const coreConst = 10;","isWriteAccess":true,"isDefinition":true}],"symbolName":"coreConst","symbolStartOffset":14,"symbolDisplayString":"const coreConst: 10"},"responseRequired":true}
+Info 159  [16:04:49.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/myproject/core/src/file1.ts",
+            "start": {
+              "line": 1,
+              "offset": 14
+            },
+            "end": {
+              "line": 1,
+              "offset": 23
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 29
+            },
+            "lineText": "export const coreConst = 10;",
+            "isWriteAccess": true,
+            "isDefinition": true
+          }
+        ],
+        "symbolName": "coreConst",
+        "symbolStartOffset": 14,
+        "symbolDisplayString": "const coreConst: 10"
+      },
+      "responseRequired": true
+    }

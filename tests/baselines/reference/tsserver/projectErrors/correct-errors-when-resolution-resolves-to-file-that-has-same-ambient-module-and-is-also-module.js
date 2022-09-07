@@ -1,5 +1,13 @@
 Info 0    [16:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:34.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/myproject/src/a.ts"}}
+Info 1    [16:00:34.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/myproject/src/a.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -114,8 +122,22 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
-Info 26   [16:01:05.000] response:{"responseRequired":false}
-Info 27   [16:01:06.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/src/a.ts"]},"seq":1,"type":"request"}
+Info 26   [16:01:05.000] response:
+    {
+      "responseRequired": false
+    }
+Info 27   [16:01:06.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/src/a.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -150,7 +172,10 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
-Info 28   [16:01:07.000] response:{"responseRequired":false}
+Info 28   [16:01:07.000] response:
+    {
+      "responseRequired": false
+    }
 Info 29   [16:01:08.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
 Info 30   [16:01:09.000] event:
@@ -159,7 +184,20 @@ Info 31   [16:01:10.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 32   [16:01:11.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Info 33   [16:01:12.000] request:{"command":"change","arguments":{"file":"/users/username/projects/myproject/src/a.ts","line":3,"offset":8,"endLine":3,"endOffset":8,"insertString":"o"},"seq":2,"type":"request"}
+Info 33   [16:01:12.000] request:
+    {
+      "command": "change",
+      "arguments": {
+        "file": "/users/username/projects/myproject/src/a.ts",
+        "line": 3,
+        "offset": 8,
+        "endLine": 3,
+        "endOffset": 8,
+        "insertString": "o"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -194,8 +232,22 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
-Info 34   [16:01:13.000] response:{"responseRequired":false}
-Info 35   [16:01:14.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/src/a.ts"]},"seq":3,"type":"request"}
+Info 34   [16:01:13.000] response:
+    {
+      "responseRequired": false
+    }
+Info 35   [16:01:14.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/src/a.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -230,7 +282,10 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
-Info 36   [16:01:15.000] response:{"responseRequired":false}
+Info 36   [16:01:15.000] response:
+    {
+      "responseRequired": false
+    }
 Info 37   [16:01:16.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json
 Info 38   [16:01:17.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 39   [16:01:18.000] Different program with same set of files

@@ -1,5 +1,14 @@
 Info 0    [16:00:39.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:40.000] request:{"command":"open","arguments":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","projectRootPath":"/users/username/projects/myproject"},"seq":1,"type":"request"}
+Info 1    [16:00:40.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts",
+        "projectRootPath": "/users/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -144,8 +153,22 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-text:
   {}
 
-Info 43   [16:01:28.000] response:{"responseRequired":false}
-Info 44   [16:01:29.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]},"seq":2,"type":"request"}
+Info 43   [16:01:28.000] response:
+    {
+      "responseRequired": false
+    }
+Info 44   [16:01:29.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
@@ -216,7 +239,10 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-text:
   {}
 
-Info 45   [16:01:30.000] response:{"responseRequired":false}
+Info 45   [16:01:30.000] response:
+    {
+      "responseRequired": false
+    }
 Info 46   [16:01:31.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 47   [16:01:32.000] event:
@@ -297,7 +323,18 @@ Info 93   [16:02:42.000] 		Projects: /users/username/projects/myproject/javascri
 Info 93   [16:02:43.000] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
 Info 94   [16:02:44.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]}}
-Info 95   [16:02:45.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]},"seq":3,"type":"request"}
+Info 95   [16:02:45.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@microsoft/recognizers-text] symlink(/users/username/projects/myproject/javascript/packages/recognizers-text)
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
 export class C { method(): number; }
@@ -356,7 +393,10 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
   {}
 
-Info 96   [16:02:46.000] response:{"responseRequired":false}
+Info 96   [16:02:46.000] response:
+    {
+      "responseRequired": false
+    }
 Info 97   [16:02:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 98   [16:02:48.000] event:

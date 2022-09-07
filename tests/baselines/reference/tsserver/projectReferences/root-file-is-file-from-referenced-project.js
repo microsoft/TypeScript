@@ -1,5 +1,13 @@
 Info 0    [16:01:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:01:18.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/project/src/common/input/keyboard.ts"}}
+Info 1    [16:01:18.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/project/src/common/input/keyboard.ts"
+      }
+    }
 //// [/user/username/projects/project/src/common/tsconfig.json]
 {"compilerOptions":{"composite":true,"declarationMap":true,"outDir":"../../out","baseUrl":"..","disableSourceOfProjectReferenceRedirect":false},"include":["./**/*"]}
 
@@ -311,8 +319,19 @@ FsWatchesRecursive::
 /user/username/projects/project/src/common:
   {}
 
-Info 29   [16:01:55.000] response:{"responseRequired":false}
-Info 30   [16:01:56.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/project/src/terminal.ts"}}
+Info 29   [16:01:55.000] response:
+    {
+      "responseRequired": false
+    }
+Info 30   [16:01:56.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/project/src/terminal.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/project/src/common/node_modules/@types:
@@ -436,8 +455,21 @@ FsWatchesRecursive::
 /user/username/projects/project/src:
   {}
 
-Info 49   [16:02:26.000] response:{"responseRequired":false}
-Info 50   [16:02:27.000] request:{"command":"references","arguments":{"file":"/user/username/projects/project/src/common/input/keyboard.ts","line":2,"offset":17},"seq":1,"type":"request"}
+Info 49   [16:02:26.000] response:
+    {
+      "responseRequired": false
+    }
+Info 50   [16:02:27.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/project/src/common/input/keyboard.ts",
+        "line": 2,
+        "offset": 17
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/project/src/common/node_modules/@types:
@@ -500,4 +532,108 @@ FsWatchesRecursive::
 /user/username/projects/project/src:
   {}
 
-Info 63   [16:02:40.000] response:{"response":{"refs":[{"file":"/user/username/projects/project/src/common/input/keyboard.ts","start":{"line":2,"offset":17},"end":{"line":2,"offset":38},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":44},"lineText":"export function evaluateKeyboardEvent() { }","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/project/src/common/input/keyboard.test.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":31},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":63},"lineText":"import { evaluateKeyboardEvent } from 'common/input/keyboard';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/project/src/common/input/keyboard.test.ts","start":{"line":3,"offset":12},"end":{"line":3,"offset":33},"lineText":"    return evaluateKeyboardEvent();","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/project/src/terminal.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":31},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":63},"lineText":"import { evaluateKeyboardEvent } from 'common/input/keyboard';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/project/src/terminal.ts","start":{"line":3,"offset":12},"end":{"line":3,"offset":33},"lineText":"    return evaluateKeyboardEvent();","isWriteAccess":false,"isDefinition":false}],"symbolName":"evaluateKeyboardEvent","symbolStartOffset":17,"symbolDisplayString":"function evaluateKeyboardEvent(): void"},"responseRequired":true}
+Info 63   [16:02:40.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/project/src/common/input/keyboard.ts",
+            "start": {
+              "line": 2,
+              "offset": 17
+            },
+            "end": {
+              "line": 2,
+              "offset": 38
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 44
+            },
+            "lineText": "export function evaluateKeyboardEvent() { }",
+            "isWriteAccess": true,
+            "isDefinition": true
+          },
+          {
+            "file": "/user/username/projects/project/src/common/input/keyboard.test.ts",
+            "start": {
+              "line": 1,
+              "offset": 10
+            },
+            "end": {
+              "line": 1,
+              "offset": 31
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 63
+            },
+            "lineText": "import { evaluateKeyboardEvent } from 'common/input/keyboard';",
+            "isWriteAccess": true,
+            "isDefinition": false
+          },
+          {
+            "file": "/user/username/projects/project/src/common/input/keyboard.test.ts",
+            "start": {
+              "line": 3,
+              "offset": 12
+            },
+            "end": {
+              "line": 3,
+              "offset": 33
+            },
+            "lineText": "    return evaluateKeyboardEvent();",
+            "isWriteAccess": false,
+            "isDefinition": false
+          },
+          {
+            "file": "/user/username/projects/project/src/terminal.ts",
+            "start": {
+              "line": 1,
+              "offset": 10
+            },
+            "end": {
+              "line": 1,
+              "offset": 31
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 63
+            },
+            "lineText": "import { evaluateKeyboardEvent } from 'common/input/keyboard';",
+            "isWriteAccess": true,
+            "isDefinition": false
+          },
+          {
+            "file": "/user/username/projects/project/src/terminal.ts",
+            "start": {
+              "line": 3,
+              "offset": 12
+            },
+            "end": {
+              "line": 3,
+              "offset": 33
+            },
+            "lineText": "    return evaluateKeyboardEvent();",
+            "isWriteAccess": false,
+            "isDefinition": false
+          }
+        ],
+        "symbolName": "evaluateKeyboardEvent",
+        "symbolStartOffset": 17,
+        "symbolDisplayString": "function evaluateKeyboardEvent(): void"
+      },
+      "responseRequired": true
+    }

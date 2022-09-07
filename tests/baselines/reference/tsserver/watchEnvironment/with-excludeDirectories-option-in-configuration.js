@@ -1,5 +1,17 @@
 Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:32.000] request:{"command":"configure","arguments":{"watchOptions":{"excludeDirectories":["node_modules"]}},"seq":1,"type":"request"}
+Info 1    [16:00:32.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -42,8 +54,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 4    [16:00:35.000] response:{"responseRequired":false}
-Info 5    [16:00:36.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/main.ts"}}
+Info 4    [16:00:35.000] response:
+    {
+      "responseRequired": false
+    }
+Info 5    [16:00:36.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -119,4 +142,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 27   [16:01:04.000] response:{"responseRequired":false}
+Info 27   [16:01:04.000] response:
+    {
+      "responseRequired": false
+    }

@@ -1,5 +1,14 @@
 Info 0    [16:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:26.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/project/b.ts","projectRootPath":"/users/username/projects/project"}}
+Info 1    [16:00:26.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/project/b.ts",
+        "projectRootPath": "/users/username/projects/project"
+      }
+    }
 //// [/users/username/projects/project/sub/a.ts]
 export const a = 10;
 
@@ -98,8 +107,20 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 23   [16:00:54.000] response:{"responseRequired":false}
-Info 24   [16:00:55.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/project/sub/a.ts","projectRootPath":"/users/username/projects/project"}}
+Info 23   [16:00:54.000] response:
+    {
+      "responseRequired": false
+    }
+Info 24   [16:00:55.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/project/sub/a.ts",
+        "projectRootPath": "/users/username/projects/project"
+      }
+    }
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types:
@@ -144,7 +165,10 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 28   [16:01:07.000] response:{"responseRequired":false}
+Info 28   [16:01:07.000] response:
+    {
+      "responseRequired": false
+    }
 Info 29   [16:01:09.000] DirectoryWatcher:: Triggered with /users/username/projects/project/sub/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info 30   [16:01:10.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/sub/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info 31   [16:01:12.000] DirectoryWatcher:: Triggered with /users/username/projects/project/sub :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
@@ -155,7 +179,15 @@ Info 35   [16:01:18.000] DirectoryWatcher:: Triggered with /users/username/proje
 Info 36   [16:01:19.000] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info 37   [16:01:20.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 38   [16:01:21.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Info 39   [16:01:22.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/users/username/projects/project/sub/a.ts"}}
+Info 39   [16:01:22.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/users/username/projects/project/sub/a.ts"
+      }
+    }
 //// [/users/username/projects/project/a.ts]
 export const a = 10;
 
@@ -199,8 +231,20 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 42   [16:01:31.000] response:{"responseRequired":false}
-Info 43   [16:01:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/project/a.ts","projectRootPath":"/users/username/projects/project"}}
+Info 42   [16:01:31.000] response:
+    {
+      "responseRequired": false
+    }
+Info 43   [16:01:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/project/a.ts",
+        "projectRootPath": "/users/username/projects/project"
+      }
+    }
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types:
@@ -259,7 +303,10 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 51   [16:01:48.000] response:{"responseRequired":false}
+Info 51   [16:01:48.000] response:
+    {
+      "responseRequired": false
+    }
 Info 52   [16:01:49.000] Running: /users/username/projects/project/tsconfig.json
 Info 53   [16:01:50.000] Running: *ensureProjectForOpenFiles*
 Info 54   [16:01:51.000] Before ensureProjectForOpenFiles:
@@ -285,7 +332,15 @@ Info 56   [16:02:08.000] 		Projects: /users/username/projects/project/tsconfig.j
 Info 56   [16:02:09.000] got projects updated in background, updating diagnostics for /users/username/projects/project/b.ts,/users/username/projects/project/a.ts
 Info 57   [16:02:10.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/project/b.ts","/users/username/projects/project/a.ts"]}}
-Info 58   [16:02:11.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/users/username/projects/project/a.ts"}}
+Info 58   [16:02:11.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/users/username/projects/project/a.ts"
+      }
+    }
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types:
@@ -325,8 +380,20 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 61   [16:02:20.000] response:{"responseRequired":false}
-Info 62   [16:02:21.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/username/projects/project/sub/a.ts","projectRootPath":"/users/username/projects/project"}}
+Info 61   [16:02:20.000] response:
+    {
+      "responseRequired": false
+    }
+Info 62   [16:02:21.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/project/sub/a.ts",
+        "projectRootPath": "/users/username/projects/project"
+      }
+    }
 
 PolledWatches::
 /users/username/projects/project/node_modules/@types:
@@ -421,7 +488,10 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 85   [16:02:55.000] response:{"responseRequired":false}
+Info 85   [16:02:55.000] response:
+    {
+      "responseRequired": false
+    }
 Info 86   [16:02:56.000] Running: /users/username/projects/project/tsconfig.json
 Info 87   [16:02:57.000] Running: *ensureProjectForOpenFiles*
 Info 88   [16:02:58.000] Before ensureProjectForOpenFiles:
@@ -467,7 +537,19 @@ Info 100  [16:03:37.000] DirectoryWatcher:: Triggered with /users/username/proje
 Info 101  [16:03:38.000] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
 Info 102  [16:03:39.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 103  [16:03:40.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/sub/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
-Info 104  [16:03:41.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/project/b.ts","/users/username/projects/project/sub/a.ts"]},"seq":1,"type":"request"}
+Info 104  [16:03:41.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/project/b.ts",
+          "/users/username/projects/project/sub/a.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/users/username/projects/project/sub/a.ts]
 export const a = 10;
 
@@ -522,7 +604,10 @@ FsWatchesRecursive::
 /users/username/projects/project:
   {}
 
-Info 105  [16:03:42.000] response:{"responseRequired":false}
+Info 105  [16:03:42.000] response:
+    {
+      "responseRequired": false
+    }
 Info 106  [16:03:43.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 107  [16:03:44.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 108  [16:03:45.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root

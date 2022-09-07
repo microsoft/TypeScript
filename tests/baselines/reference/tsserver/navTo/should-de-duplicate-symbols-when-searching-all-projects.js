@@ -1,5 +1,13 @@
 Info 0    [16:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:18.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/index.ts"}}
+Info 1    [16:00:18.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/index.ts"
+      }
+    }
 //// [/a/tsconfig.json]
 {
     "compilerOptions": {
@@ -98,8 +106,19 @@ FsWatchesRecursive::
 /a:
   {}
 
-Info 24   [16:00:50.000] response:{"responseRequired":false}
-Info 25   [16:00:51.000] request:{"seq":0,"type":"request","command":"navto","arguments":{"searchValue":"abcdef"}}
+Info 24   [16:00:50.000] response:
+    {
+      "responseRequired": false
+    }
+Info 25   [16:00:51.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "navto",
+      "arguments": {
+        "searchValue": "abcdef"
+      }
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -201,4 +220,25 @@ FsWatchesRecursive::
 /b:
   {}
 
-Info 47   [16:01:13.000] response:{"response":[{"name":"abcdef","kind":"const","kindModifiers":"export","isCaseSensitive":true,"matchKind":"exact","file":"/a/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":24}}],"responseRequired":true}
+Info 47   [16:01:13.000] response:
+    {
+      "response": [
+        {
+          "name": "abcdef",
+          "kind": "const",
+          "kindModifiers": "export",
+          "isCaseSensitive": true,
+          "matchKind": "exact",
+          "file": "/a/index.ts",
+          "start": {
+            "line": 1,
+            "offset": 14
+          },
+          "end": {
+            "line": 1,
+            "offset": 24
+          }
+        }
+      ],
+      "responseRequired": true
+    }

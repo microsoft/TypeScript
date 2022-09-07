@@ -1,5 +1,13 @@
 Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 1    [16:00:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
 import { something } from "something";
@@ -68,8 +76,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 8    [16:00:45.000] response:{"responseRequired":false}
-Info 9    [16:00:46.000] request:{"type":"request","seq":1,"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 8    [16:00:45.000] response:
+    {
+      "responseRequired": false
+    }
+Info 9    [16:00:46.000] request:
+    {
+      "type": "request",
+      "seq": 1,
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 
 PolledWatches::
 

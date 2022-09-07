@@ -1,5 +1,13 @@
 Info 0    [16:00:44.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:45.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/solution/api/src/server.ts"}}
+Info 1    [16:00:45.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/solution/api/src/server.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -150,8 +158,21 @@ FsWatchesRecursive::
 /user/username/projects/solution/shared:
   {}
 
-Info 33   [16:01:26.000] response:{"responseRequired":false}
-Info 34   [16:01:27.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/api/src/server.ts","line":2,"offset":8},"seq":1,"type":"request"}
+Info 33   [16:01:26.000] response:
+    {
+      "responseRequired": false
+    }
+Info 34   [16:01:27.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/solution/api/src/server.ts",
+        "line": 2,
+        "offset": 8
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/solution/api/node_modules/@types:
@@ -316,4 +337,61 @@ FsWatchesRecursive::
 /user/username/projects/solution/app/src:
   {}
 
-Info 83   [16:02:16.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/shared/src/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":30},"lineText":"export const dog = () => { };","isWriteAccess":true},{"file":"/user/username/projects/solution/api/src/server.ts","start":{"line":2,"offset":8},"end":{"line":2,"offset":11},"lineText":"shared.dog();","isWriteAccess":false},{"file":"/user/username/projects/solution/app/src/app.ts","start":{"line":2,"offset":8},"end":{"line":2,"offset":11},"lineText":"shared.dog();","isWriteAccess":false}],"symbolName":"dog","symbolStartOffset":8,"symbolDisplayString":"const dog: () => void"},"responseRequired":true}
+Info 83   [16:02:16.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/solution/shared/src/index.ts",
+            "start": {
+              "line": 1,
+              "offset": 14
+            },
+            "end": {
+              "line": 1,
+              "offset": 17
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 30
+            },
+            "lineText": "export const dog = () => { };",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/api/src/server.ts",
+            "start": {
+              "line": 2,
+              "offset": 8
+            },
+            "end": {
+              "line": 2,
+              "offset": 11
+            },
+            "lineText": "shared.dog();",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/solution/app/src/app.ts",
+            "start": {
+              "line": 2,
+              "offset": 8
+            },
+            "end": {
+              "line": 2,
+              "offset": 11
+            },
+            "lineText": "shared.dog();",
+            "isWriteAccess": false
+          }
+        ],
+        "symbolName": "dog",
+        "symbolStartOffset": 8,
+        "symbolDisplayString": "const dog: () => void"
+      },
+      "responseRequired": true
+    }

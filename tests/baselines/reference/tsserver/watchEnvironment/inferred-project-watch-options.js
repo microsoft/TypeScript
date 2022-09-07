@@ -1,5 +1,18 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"command":"compilerOptionsForInferredProjects","arguments":{"options":{"excludeDirectories":["node_modules"]},"projectRootPath":"/user/username/projects/myproject"},"seq":1,"type":"request"}
+Info 1    [16:00:30.000] request:
+    {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        },
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -36,8 +49,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 2    [16:00:31.000] response:{"response":true,"responseRequired":true}
-Info 3    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/main.ts","projectRootPath":"/user/username/projects/myproject"}}
+Info 2    [16:00:31.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 3    [16:00:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 
 PolledWatches::
 
@@ -107,4 +133,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 23   [16:00:58.000] response:{"responseRequired":false}
+Info 23   [16:00:58.000] response:
+    {
+      "responseRequired": false
+    }

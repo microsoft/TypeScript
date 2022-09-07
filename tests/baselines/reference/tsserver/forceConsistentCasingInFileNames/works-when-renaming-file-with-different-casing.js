@@ -1,5 +1,14 @@
 Info 0    [16:00:24.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:25.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/Logger.ts","projectRootPath":"/user/username/projects/myproject"}}
+Info 1    [16:00:25.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/Logger.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 //// [/user/username/projects/myproject/Logger.ts]
 export class logger { }
 
@@ -100,8 +109,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 23   [16:00:53.000] response:{"responseRequired":false}
-Info 24   [16:00:54.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/Logger.ts"]},"seq":1,"type":"request"}
+Info 23   [16:00:53.000] response:
+    {
+      "responseRequired": false
+    }
+Info 24   [16:00:54.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/Logger.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -136,7 +159,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 25   [16:00:55.000] response:{"responseRequired":false}
+Info 25   [16:00:55.000] response:
+    {
+      "responseRequired": false
+    }
 Info 26   [16:00:56.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/Logger.ts","diagnostics":[]}}
 Info 27   [16:00:57.000] event:
@@ -149,7 +175,15 @@ Info 30   [16:01:01.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 31   [16:01:02.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/Logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 32   [16:01:05.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 33   [16:01:06.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 34   [16:01:07.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/Logger.ts"}}
+Info 34   [16:01:07.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/Logger.ts"
+      }
+    }
 //// [/user/username/projects/myproject/logger.ts] file was renamed from file /user/username/projects/myproject/Logger.ts
 
 PolledWatches::
@@ -193,8 +227,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 36   [16:01:13.000] response:{"responseRequired":false}
-Info 37   [16:01:14.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/logger.ts","projectRootPath":"/user/username/projects/myproject"}}
+Info 36   [16:01:13.000] response:
+    {
+      "responseRequired": false
+    }
+Info 37   [16:01:14.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/logger.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -244,8 +290,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 44   [16:01:27.000] response:{"responseRequired":false}
-Info 45   [16:01:28.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/another.ts","projectRootPath":"/user/username/projects/myproject"}}
+Info 44   [16:01:27.000] response:
+    {
+      "responseRequired": false
+    }
+Info 45   [16:01:28.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/another.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -290,8 +348,36 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 49   [16:01:40.000] response:{"responseRequired":false}
-Info 50   [16:01:41.000] request:{"command":"updateOpen","arguments":{"changedFiles":[{"fileName":"/user/username/projects/myproject/another.ts","textChanges":[{"newText":"./logger","start":{"line":1,"offset":25},"end":{"line":1,"offset":33}}]}]},"seq":2,"type":"request"}
+Info 49   [16:01:40.000] response:
+    {
+      "responseRequired": false
+    }
+Info 50   [16:01:41.000] request:
+    {
+      "command": "updateOpen",
+      "arguments": {
+        "changedFiles": [
+          {
+            "fileName": "/user/username/projects/myproject/another.ts",
+            "textChanges": [
+              {
+                "newText": "./logger",
+                "start": {
+                  "line": 1,
+                  "offset": 25
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 33
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -322,8 +408,24 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 51   [16:01:42.000] response:{"response":true,"responseRequired":true}
-Info 52   [16:01:43.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/logger.ts","/user/username/projects/myproject/another.ts"]},"seq":3,"type":"request"}
+Info 51   [16:01:42.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 52   [16:01:43.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/logger.ts",
+          "/user/username/projects/myproject/another.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -354,7 +456,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 53   [16:01:44.000] response:{"responseRequired":false}
+Info 53   [16:01:44.000] response:
+    {
+      "responseRequired": false
+    }
 Info 54   [16:01:45.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 55   [16:01:46.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info 56   [16:01:47.000] Different program with same set of files

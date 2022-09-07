@@ -1,6 +1,14 @@
 Info 0    [16:00:15.000] For files of style c:/myprojects/project/x.js
 Info 1    [16:00:16.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 2    [16:00:17.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"c:/myprojects/project/x.js"}}
+Info 2    [16:00:17.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "c:/myprojects/project/x.js"
+      }
+    }
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -72,10 +80,21 @@ c:/a/lib/lib.d.ts:
 
 FsWatchesRecursive::
 
-Info 16   [16:00:37.000] response:{"responseRequired":false}
+Info 16   [16:00:37.000] response:
+    {
+      "responseRequired": false
+    }
 Info 17   [16:00:17.000] For files of style //vda1cs4850/myprojects/project/x.js
 Info 18   [16:00:18.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
-Info 19   [16:00:19.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"//vda1cs4850/myprojects/project/x.js"}}
+Info 19   [16:00:19.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "//vda1cs4850/myprojects/project/x.js"
+      }
+    }
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -147,10 +166,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 33   [16:00:39.000] response:{"responseRequired":false}
+Info 33   [16:00:39.000] response:
+    {
+      "responseRequired": false
+    }
 Info 34   [16:00:19.000] For files of style //vda1cs4850/c$/myprojects/project/x.js
 Info 35   [16:00:20.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
-Info 36   [16:00:21.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"//vda1cs4850/c$/myprojects/project/x.js"}}
+Info 36   [16:00:21.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "//vda1cs4850/c$/myprojects/project/x.js"
+      }
+    }
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -222,10 +252,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 50   [16:00:41.000] response:{"responseRequired":false}
+Info 50   [16:00:41.000] response:
+    {
+      "responseRequired": false
+    }
 Info 51   [16:00:19.000] For files of style c:/users/username/myprojects/project/x.js
 Info 52   [16:00:20.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 53   [16:00:21.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"c:/users/username/myprojects/project/x.js"}}
+Info 53   [16:00:21.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "c:/users/username/myprojects/project/x.js"
+      }
+    }
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -297,10 +338,21 @@ c:/a/lib/lib.d.ts:
 
 FsWatchesRecursive::
 
-Info 67   [16:00:41.000] response:{"responseRequired":false}
+Info 67   [16:00:41.000] response:
+    {
+      "responseRequired": false
+    }
 Info 68   [16:00:23.000] For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
 Info 69   [16:00:24.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
-Info 70   [16:00:25.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"//vda1cs4850/c$/users/username/myprojects/project/x.js"}}
+Info 70   [16:00:25.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "//vda1cs4850/c$/users/username/myprojects/project/x.js"
+      }
+    }
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -372,4 +424,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 84   [16:00:45.000] response:{"responseRequired":false}
+Info 84   [16:00:45.000] response:
+    {
+      "responseRequired": false
+    }

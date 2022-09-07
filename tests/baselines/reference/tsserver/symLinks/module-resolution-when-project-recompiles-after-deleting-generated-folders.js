@@ -1,5 +1,14 @@
 Info 0    [16:00:51.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:52.000] request:{"command":"open","arguments":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","projectRootPath":"/users/username/projects/myproject"},"seq":1,"type":"request"}
+Info 1    [16:00:52.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts",
+        "projectRootPath": "/users/username/projects/myproject"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -126,8 +135,22 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
   {}
 
-Info 34   [16:01:31.000] response:{"responseRequired":false}
-Info 35   [16:01:32.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]},"seq":2,"type":"request"}
+Info 34   [16:01:31.000] response:
+    {
+      "responseRequired": false
+    }
+Info 35   [16:01:32.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
@@ -182,7 +205,10 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
   {}
 
-Info 36   [16:01:33.000] response:{"responseRequired":false}
+Info 36   [16:01:33.000] response:
+    {
+      "responseRequired": false
+    }
 Info 37   [16:01:34.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 38   [16:01:35.000] event:
@@ -239,7 +265,18 @@ Info 62   [16:02:14.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]}}
 Info 63   [16:02:15.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
-Info 64   [16:02:16.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]},"seq":3,"type":"request"}
+Info 64   [16:02:16.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts] deleted
 
 PolledWatches::
@@ -303,7 +340,10 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
   {}
 
-Info 65   [16:02:17.000] response:{"responseRequired":false}
+Info 65   [16:02:17.000] response:
+    {
+      "responseRequired": false
+    }
 Info 66   [16:02:18.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 67   [16:02:19.000] event:
@@ -312,7 +352,18 @@ Info 68   [16:02:20.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 69   [16:02:21.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Info 70   [16:02:28.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]},"seq":4,"type":"request"}
+Info 70   [16:02:28.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
+        ]
+      },
+      "seq": 4,
+      "type": "request"
+    }
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
 export class C { method(): number; }
 
@@ -378,7 +429,10 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
   {}
 
-Info 71   [16:02:29.000] response:{"responseRequired":false}
+Info 71   [16:02:29.000] response:
+    {
+      "responseRequired": false
+    }
 Info 72   [16:02:30.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 73   [16:02:31.000] event:

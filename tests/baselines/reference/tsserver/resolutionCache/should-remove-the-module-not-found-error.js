@@ -1,5 +1,13 @@
 Info 0    [16:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:10.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/file1.ts"}}
+Info 1    [16:00:10.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
 //// [/a/b/file1.ts]
 import * as T from './moduleFile'; T.bar();
 
@@ -53,8 +61,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [16:00:32.000] response:{"responseRequired":false}
-Info 18   [16:00:33.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+Info 17   [16:00:32.000] response:
+    {
+      "responseRequired": false
+    }
+Info 18   [16:00:33.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
 
 PolledWatches::
 /a/b/modulefile:
@@ -85,14 +104,45 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 19   [16:00:34.000] response:{"response":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":34},"text":"Cannot find module './moduleFile' or its corresponding type declarations.","code":2307,"category":"error"}],"responseRequired":true}
+Info 19   [16:00:34.000] response:
+    {
+      "response": [
+        {
+          "start": {
+            "line": 1,
+            "offset": 20
+          },
+          "end": {
+            "line": 1,
+            "offset": 34
+          },
+          "text": "Cannot find module './moduleFile' or its corresponding type declarations.",
+          "code": 2307,
+          "category": "error"
+        }
+      ],
+      "responseRequired": true
+    }
 Info 20   [16:00:37.000] DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 21   [16:00:38.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 22   [16:00:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 23   [16:00:40.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 24   [16:00:41.000] Scheduled: /dev/null/inferredProject1*
 Info 25   [16:00:42.000] Scheduled: *ensureProjectForOpenFiles*
-Info 26   [16:00:43.000] request:{"seq":0,"type":"request","command":"change","arguments":{"file":"/a/b/file1.ts","line":1,"offset":44,"endLine":1,"endOffset":44,"insertString":"\n"}}
+Info 26   [16:00:43.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "change",
+      "arguments": {
+        "file": "/a/b/file1.ts",
+        "line": 1,
+        "offset": 44,
+        "endLine": 1,
+        "endOffset": 44,
+        "insertString": "\n"
+      }
+    }
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -126,8 +176,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 27   [16:00:44.000] response:{"responseRequired":false}
-Info 28   [16:00:45.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+Info 27   [16:00:44.000] response:
+    {
+      "responseRequired": false
+    }
+Info 28   [16:00:45.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
 
 PolledWatches::
 /a/b/modulefile:
@@ -175,4 +236,8 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 39   [16:00:56.000] response:{"response":[],"responseRequired":true}
+Info 39   [16:00:56.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }

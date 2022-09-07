@@ -1,5 +1,13 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"}}
+Info 1    [16:00:30.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      }
+    }
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -147,8 +155,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 33   [16:01:08.000] response:{"responseRequired":false}
-Info 34   [16:01:09.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/usage/usage.ts"]},"seq":1,"type":"request"}
+Info 33   [16:01:08.000] response:
+    {
+      "responseRequired": false
+    }
+Info 34   [16:01:09.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/usage/usage.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -199,7 +221,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 35   [16:01:10.000] response:{"responseRequired":false}
+Info 35   [16:01:10.000] response:
+    {
+      "responseRequired": false
+    }
 Info 36   [16:01:11.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 Info 37   [16:01:12.000] event:

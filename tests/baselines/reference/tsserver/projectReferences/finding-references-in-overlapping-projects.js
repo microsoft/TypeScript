@@ -1,5 +1,13 @@
 Info 0    [16:00:44.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:45.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/solution/b/index.ts"}}
+Info 1    [16:00:45.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/solution/b/index.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -166,8 +174,21 @@ FsWatchesRecursive::
 /user/username/projects/solution/a:
   {}
 
-Info 31   [16:01:24.000] response:{"responseRequired":false}
-Info 32   [16:01:25.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/b/index.ts","line":4,"offset":43},"seq":1,"type":"request"}
+Info 31   [16:01:24.000] response:
+    {
+      "responseRequired": false
+    }
+Info 32   [16:01:25.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/solution/b/index.ts",
+        "line": 4,
+        "offset": 43
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/solution/b/node_modules/@types:
@@ -427,8 +448,151 @@ FsWatchesRecursive::
 /user/username/projects/solution/c:
   {}
 
-Info 128  [16:03:01.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/b/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/b/index.ts","start":{"line":4,"offset":43},"end":{"line":4,"offset":44},"lineText":"                export class B implements I {","isWriteAccess":false},{"file":"/user/username/projects/solution/a/index.ts","start":{"line":2,"offset":34},"end":{"line":2,"offset":35},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":4,"offset":18},"lineText":"                export interface I {","isWriteAccess":true},{"file":"/user/username/projects/solution/c/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/c/index.ts","start":{"line":5,"offset":33},"end":{"line":5,"offset":34},"lineText":"                export const C: I = new B();","isWriteAccess":false},{"file":"/user/username/projects/solution/d/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/d/index.ts","start":{"line":5,"offset":33},"end":{"line":5,"offset":34},"lineText":"                export const D: I = C;","isWriteAccess":false}],"symbolName":"I","symbolStartOffset":43,"symbolDisplayString":"(alias) interface I\nimport I"},"responseRequired":true}
-Info 129  [16:03:02.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/b/index.ts","line":4,"offset":43},"seq":2,"type":"request"}
+Info 128  [16:03:01.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/solution/b/index.ts",
+            "start": {
+              "line": 2,
+              "offset": 26
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 17
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 42
+            },
+            "lineText": "                import { I } from \"../a\";",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/b/index.ts",
+            "start": {
+              "line": 4,
+              "offset": 43
+            },
+            "end": {
+              "line": 4,
+              "offset": 44
+            },
+            "lineText": "                export class B implements I {",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/solution/a/index.ts",
+            "start": {
+              "line": 2,
+              "offset": 34
+            },
+            "end": {
+              "line": 2,
+              "offset": 35
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 17
+            },
+            "contextEnd": {
+              "line": 4,
+              "offset": 18
+            },
+            "lineText": "                export interface I {",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/c/index.ts",
+            "start": {
+              "line": 2,
+              "offset": 26
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 17
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 42
+            },
+            "lineText": "                import { I } from \"../a\";",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/c/index.ts",
+            "start": {
+              "line": 5,
+              "offset": 33
+            },
+            "end": {
+              "line": 5,
+              "offset": 34
+            },
+            "lineText": "                export const C: I = new B();",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/solution/d/index.ts",
+            "start": {
+              "line": 2,
+              "offset": 26
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 17
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 42
+            },
+            "lineText": "                import { I } from \"../a\";",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/d/index.ts",
+            "start": {
+              "line": 5,
+              "offset": 33
+            },
+            "end": {
+              "line": 5,
+              "offset": 34
+            },
+            "lineText": "                export const D: I = C;",
+            "isWriteAccess": false
+          }
+        ],
+        "symbolName": "I",
+        "symbolStartOffset": 43,
+        "symbolDisplayString": "(alias) interface I\nimport I"
+      },
+      "responseRequired": true
+    }
+Info 129  [16:03:02.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/solution/b/index.ts",
+        "line": 4,
+        "offset": 43
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/solution/b/node_modules/@types:
@@ -549,4 +713,137 @@ FsWatchesRecursive::
 /user/username/projects/solution/c:
   {}
 
-Info 164  [16:03:37.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/b/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/b/index.ts","start":{"line":4,"offset":43},"end":{"line":4,"offset":44},"lineText":"                export class B implements I {","isWriteAccess":false},{"file":"/user/username/projects/solution/a/index.ts","start":{"line":2,"offset":34},"end":{"line":2,"offset":35},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":4,"offset":18},"lineText":"                export interface I {","isWriteAccess":true},{"file":"/user/username/projects/solution/c/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/c/index.ts","start":{"line":5,"offset":33},"end":{"line":5,"offset":34},"lineText":"                export const C: I = new B();","isWriteAccess":false},{"file":"/user/username/projects/solution/d/index.ts","start":{"line":2,"offset":26},"end":{"line":2,"offset":27},"contextStart":{"line":2,"offset":17},"contextEnd":{"line":2,"offset":42},"lineText":"                import { I } from \"../a\";","isWriteAccess":true},{"file":"/user/username/projects/solution/d/index.ts","start":{"line":5,"offset":33},"end":{"line":5,"offset":34},"lineText":"                export const D: I = C;","isWriteAccess":false}],"symbolName":"I","symbolStartOffset":43,"symbolDisplayString":"(alias) interface I\nimport I"},"responseRequired":true}
+Info 164  [16:03:37.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/solution/b/index.ts",
+            "start": {
+              "line": 2,
+              "offset": 26
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 17
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 42
+            },
+            "lineText": "                import { I } from \"../a\";",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/b/index.ts",
+            "start": {
+              "line": 4,
+              "offset": 43
+            },
+            "end": {
+              "line": 4,
+              "offset": 44
+            },
+            "lineText": "                export class B implements I {",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/solution/a/index.ts",
+            "start": {
+              "line": 2,
+              "offset": 34
+            },
+            "end": {
+              "line": 2,
+              "offset": 35
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 17
+            },
+            "contextEnd": {
+              "line": 4,
+              "offset": 18
+            },
+            "lineText": "                export interface I {",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/c/index.ts",
+            "start": {
+              "line": 2,
+              "offset": 26
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 17
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 42
+            },
+            "lineText": "                import { I } from \"../a\";",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/c/index.ts",
+            "start": {
+              "line": 5,
+              "offset": 33
+            },
+            "end": {
+              "line": 5,
+              "offset": 34
+            },
+            "lineText": "                export const C: I = new B();",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/solution/d/index.ts",
+            "start": {
+              "line": 2,
+              "offset": 26
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 17
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 42
+            },
+            "lineText": "                import { I } from \"../a\";",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/solution/d/index.ts",
+            "start": {
+              "line": 5,
+              "offset": 33
+            },
+            "end": {
+              "line": 5,
+              "offset": 34
+            },
+            "lineText": "                export const D: I = C;",
+            "isWriteAccess": false
+          }
+        ],
+        "symbolName": "I",
+        "symbolStartOffset": 43,
+        "symbolDisplayString": "(alias) interface I\nimport I"
+      },
+      "responseRequired": true
+    }

@@ -1,5 +1,13 @@
 Info 0    [16:00:53.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:54.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/SiblingClass/Source.ts"}}
+Info 1    [16:00:54.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/SiblingClass/Source.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -335,8 +343,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 24   [16:01:23.000] response:{"responseRequired":false}
-Info 25   [16:01:24.000] request:{"command":"compileOnSaveEmitFile","arguments":{"file":"/user/username/projects/myproject/SiblingClass/Source.ts","projectFileName":"/user/username/projects/myproject/SiblingClass/tsconfig.json"},"seq":1,"type":"request"}
+Info 24   [16:01:23.000] response:
+    {
+      "responseRequired": false
+    }
+Info 25   [16:01:24.000] request:
+    {
+      "command": "compileOnSaveEmitFile",
+      "arguments": {
+        "file": "/user/username/projects/myproject/SiblingClass/Source.ts",
+        "projectFileName": "/user/username/projects/myproject/SiblingClass/tsconfig.json"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/SiblingClass/node_modules/@types:
@@ -381,4 +401,8 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 26   [16:01:31.000] response:{"response":true,"responseRequired":true}
+Info 26   [16:01:31.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }

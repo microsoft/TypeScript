@@ -1,5 +1,17 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"command":"configure","arguments":{"watchOptions":{"excludeDirectories":["node_modules"]}},"seq":1,"type":"request"}
+Info 1    [16:00:30.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -39,8 +51,35 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 4    [16:00:33.000] response:{"responseRequired":false}
-Info 5    [16:00:34.000] request:{"command":"openExternalProject","arguments":{"projectFileName":"/user/username/projects/myproject/project.csproj","rootFiles":[{"fileName":"/user/username/projects/myproject/src/main.ts"},{"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts"},{"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts"}],"options":{"excludeDirectories":["node_modules"]}},"seq":2,"type":"request"}
+Info 4    [16:00:33.000] response:
+    {
+      "responseRequired": false
+    }
+Info 5    [16:00:34.000] request:
+    {
+      "command": "openExternalProject",
+      "arguments": {
+        "projectFileName": "/user/username/projects/myproject/project.csproj",
+        "rootFiles": [
+          {
+            "fileName": "/user/username/projects/myproject/src/main.ts"
+          },
+          {
+            "fileName": "/user/username/projects/myproject/node_modules/bar/index.d.ts"
+          },
+          {
+            "fileName": "/user/username/projects/myproject/node_modules/bar/foo.d.ts"
+          }
+        ],
+        "options": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -92,8 +131,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 19   [16:00:48.000] response:{"response":true,"responseRequired":true}
-Info 20   [16:00:49.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/main.ts"}}
+Info 19   [16:00:48.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 20   [16:00:49.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -126,4 +177,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 22   [16:00:57.000] response:{"responseRequired":false}
+Info 22   [16:00:57.000] response:
+    {
+      "responseRequired": false
+    }

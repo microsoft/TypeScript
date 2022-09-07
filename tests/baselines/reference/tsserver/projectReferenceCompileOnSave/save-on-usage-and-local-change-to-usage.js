@@ -1,5 +1,13 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"}}
+Info 1    [16:00:30.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      }
+    }
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -131,8 +139,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 27   [16:01:02.000] response:{"responseRequired":false}
-Info 28   [16:01:03.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts"}}
+Info 27   [16:01:02.000] response:
+    {
+      "responseRequired": false
+    }
+Info 28   [16:01:03.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -221,8 +240,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 45   [16:01:31.000] response:{"responseRequired":false}
-Info 46   [16:01:32.000] request:{"command":"compileOnSaveAffectedFileList","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts"},"seq":1,"type":"request"}
+Info 45   [16:01:31.000] response:
+    {
+      "responseRequired": false
+    }
+Info 46   [16:01:32.000] request:
+    {
+      "command": "compileOnSaveAffectedFileList",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -301,8 +331,40 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 49   [16:01:57.000] response:{"response":[{"projectFileName":"/user/username/projects/myproject/usage/tsconfig.json","fileNames":["/user/username/projects/myproject/usage/usage.ts"],"projectUsesOutFile":false},{"projectFileName":"/user/username/projects/myproject/dependency/tsconfig.json","fileNames":["/user/username/projects/myproject/dependency/fns.ts"],"projectUsesOutFile":false}],"responseRequired":true}
-Info 50   [16:01:58.000] request:{"command":"change","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts","line":7,"offset":1,"endLine":7,"endOffset":1,"insertString":"function fn3() { }"},"seq":2,"type":"request"}
+Info 49   [16:01:57.000] response:
+    {
+      "response": [
+        {
+          "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json",
+          "fileNames": [
+            "/user/username/projects/myproject/usage/usage.ts"
+          ],
+          "projectUsesOutFile": false
+        },
+        {
+          "projectFileName": "/user/username/projects/myproject/dependency/tsconfig.json",
+          "fileNames": [
+            "/user/username/projects/myproject/dependency/fns.ts"
+          ],
+          "projectUsesOutFile": false
+        }
+      ],
+      "responseRequired": true
+    }
+Info 50   [16:01:58.000] request:
+    {
+      "command": "change",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts",
+        "line": 7,
+        "offset": 1,
+        "endLine": 7,
+        "endOffset": 1,
+        "insertString": "function fn3() { }"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -353,8 +415,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 51   [16:01:59.000] response:{"responseRequired":false}
-Info 52   [16:02:00.000] request:{"command":"compileOnSaveAffectedFileList","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":3,"type":"request"}
+Info 51   [16:01:59.000] response:
+    {
+      "responseRequired": false
+    }
+Info 52   [16:02:00.000] request:
+    {
+      "command": "compileOnSaveAffectedFileList",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -436,8 +509,28 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 58   [16:02:28.000] response:{"response":[{"projectFileName":"/user/username/projects/myproject/usage/tsconfig.json","fileNames":["/user/username/projects/myproject/usage/usage.ts"],"projectUsesOutFile":false}],"responseRequired":true}
-Info 59   [16:02:29.000] request:{"command":"compileOnSaveEmitFile","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":4,"type":"request"}
+Info 58   [16:02:28.000] response:
+    {
+      "response": [
+        {
+          "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json",
+          "fileNames": [
+            "/user/username/projects/myproject/usage/usage.ts"
+          ],
+          "projectUsesOutFile": false
+        }
+      ],
+      "responseRequired": true
+    }
+Info 59   [16:02:29.000] request:
+    {
+      "command": "compileOnSaveEmitFile",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 4,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -500,8 +593,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 63   [16:02:35.000] response:{"response":true,"responseRequired":true}
-Info 64   [16:02:36.000] request:{"command":"emit-output","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":5,"type":"request"}
+Info 63   [16:02:35.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 64   [16:02:36.000] request:
+    {
+      "command": "emit-output",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 5,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -552,4 +657,18 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 65   [16:02:37.000] response:{"response":{"outputFiles":[{"name":"/user/username/projects/myproject/usage/usage.js","writeByteOrderMark":false,"text":"\"use strict\";\nexports.__esModule = true;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\n"}],"emitSkipped":false,"diagnostics":[]},"responseRequired":true}
+Info 65   [16:02:37.000] response:
+    {
+      "response": {
+        "outputFiles": [
+          {
+            "name": "/user/username/projects/myproject/usage/usage.js",
+            "writeByteOrderMark": false,
+            "text": "\"use strict\";\nexports.__esModule = true;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\n"
+          }
+        ],
+        "emitSkipped": false,
+        "diagnostics": []
+      },
+      "responseRequired": true
+    }

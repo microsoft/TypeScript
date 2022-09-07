@@ -1,5 +1,15 @@
 Info 0    [16:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:18.000] request:{"command":"configure","arguments":{"watchOptions":{"fallbackPolling":"PriorityInterval"}},"seq":1,"type":"request"}
+Info 1    [16:00:18.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "fallbackPolling": "PriorityInterval"
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -39,8 +49,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 4    [16:00:21.000] response:{"responseRequired":false}
-Info 5    [16:00:22.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/commonFile1.ts","projectRootPath":"/a/b"}}
+Info 4    [16:00:21.000] response:
+    {
+      "responseRequired": false
+    }
+Info 5    [16:00:22.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts",
+        "projectRootPath": "/a/b"
+      }
+    }
 
 PolledWatches::
 
@@ -109,4 +131,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 23   [16:00:46.000] response:{"responseRequired":false}
+Info 23   [16:00:46.000] response:
+    {
+      "responseRequired": false
+    }

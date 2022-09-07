@@ -1,5 +1,13 @@
 Info 0    [16:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:22.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/username/project/src/index.ts"}}
+Info 1    [16:00:22.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/username/project/src/index.ts"
+      }
+    }
 //// [/a/username/project/src/index.ts]
 import {} from "./"
 
@@ -100,8 +108,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 23   [16:00:50.000] response:{"responseRequired":false}
-Info 24   [16:00:51.000] request:{"command":"completionInfo","arguments":{"file":"/a/username/project/src/index.ts","line":1,"offset":19},"seq":1,"type":"request"}
+Info 23   [16:00:50.000] response:
+    {
+      "responseRequired": false
+    }
+Info 24   [16:00:51.000] request:
+    {
+      "command": "completionInfo",
+      "arguments": {
+        "file": "/a/username/project/src/index.ts",
+        "line": 1,
+        "offset": 19
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/username/project/node_modules/@types:
@@ -140,7 +161,23 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 25   [16:00:52.000] response:{"response":{"isGlobalCompletion":false,"isMemberCompletion":false,"isNewIdentifierLocation":true,"entries":[{"name":"file1","kind":"script","kindModifiers":".ts","sortText":"11"}]},"responseRequired":true}
+Info 25   [16:00:52.000] response:
+    {
+      "response": {
+        "isGlobalCompletion": false,
+        "isMemberCompletion": false,
+        "isNewIdentifierLocation": true,
+        "entries": [
+          {
+            "name": "file1",
+            "kind": "script",
+            "kindModifiers": ".ts",
+            "sortText": "11"
+          }
+        ]
+      },
+      "responseRequired": true
+    }
 Info 26   [16:00:55.000] DirectoryWatcher:: Triggered with /a/username/project/src/file2.ts :: WatchInfo: /a/username/project 1 {"synchronousWatchDirectory":true} Config: /a/username/project/tsconfig.json WatchType: Wild card directory
 Info 27   [16:00:56.000] Scheduled: /a/username/project/tsconfig.json
 Info 28   [16:00:57.000] Scheduled: *ensureProjectForOpenFiles*
@@ -188,7 +225,17 @@ Info 43   [16:01:20.000] -----------------------------------------------
 Info 43   [16:01:21.000] Open files: 
 Info 43   [16:01:22.000] 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
 Info 43   [16:01:23.000] 		Projects: /a/username/project/tsconfig.json
-Info 43   [16:01:24.000] request:{"command":"completionInfo","arguments":{"file":"/a/username/project/src/index.ts","line":1,"offset":19},"seq":2,"type":"request"}
+Info 43   [16:01:24.000] request:
+    {
+      "command": "completionInfo",
+      "arguments": {
+        "file": "/a/username/project/src/index.ts",
+        "line": 1,
+        "offset": 19
+      },
+      "seq": 2,
+      "type": "request"
+    }
 //// [/a/username/project/src/file2.ts]
 
 
@@ -234,4 +281,26 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 44   [16:01:25.000] response:{"response":{"isGlobalCompletion":false,"isMemberCompletion":false,"isNewIdentifierLocation":true,"entries":[{"name":"file1","kind":"script","kindModifiers":".ts","sortText":"11"},{"name":"file2","kind":"script","kindModifiers":".ts","sortText":"11"}]},"responseRequired":true}
+Info 44   [16:01:25.000] response:
+    {
+      "response": {
+        "isGlobalCompletion": false,
+        "isMemberCompletion": false,
+        "isNewIdentifierLocation": true,
+        "entries": [
+          {
+            "name": "file1",
+            "kind": "script",
+            "kindModifiers": ".ts",
+            "sortText": "11"
+          },
+          {
+            "name": "file2",
+            "kind": "script",
+            "kindModifiers": ".ts",
+            "sortText": "11"
+          }
+        ]
+      },
+      "responseRequired": true
+    }

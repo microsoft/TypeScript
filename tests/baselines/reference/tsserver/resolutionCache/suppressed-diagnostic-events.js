@@ -1,5 +1,14 @@
 Info 0    [16:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:06.000] request:{"command":"open","arguments":{"file":"/a.ts","fileContent":"1 = 2;"},"seq":1,"type":"request"}
+Info 1    [16:00:06.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a.ts",
+        "fileContent": "1 = 2;"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a.ts]
 1 = 2;
 
@@ -41,8 +50,22 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 11   [16:00:22.000] response:{"responseRequired":false}
-Info 12   [16:00:23.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a.ts"]},"seq":2,"type":"request"}
+Info 11   [16:00:22.000] response:
+    {
+      "responseRequired": false
+    }
+Info 12   [16:00:23.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/a.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -63,8 +86,20 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 14   [16:00:25.000] response:{"responseRequired":false}
-Info 15   [16:00:26.000] request:{"command":"geterr","arguments":{"delay":0,"file":"/a.ts"},"seq":3,"type":"request"}
+Info 14   [16:00:25.000] response:
+    {
+      "responseRequired": false
+    }
+Info 15   [16:00:26.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "file": "/a.ts"
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -85,4 +120,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [16:00:28.000] response:{"responseRequired":false}
+Info 17   [16:00:28.000] response:
+    {
+      "responseRequired": false
+    }

@@ -1,5 +1,13 @@
 Info 0    [16:01:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:01:04.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/main/main.ts"}}
+Info 1    [16:01:04.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts"
+      }
+    }
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
 export function fn2() { }
@@ -263,8 +271,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/decls:
   {}
 
-Info 25   [16:01:34.000] response:{"responseRequired":false}
-Info 26   [16:01:35.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts"}}
+Info 25   [16:01:34.000] response:
+    {
+      "responseRequired": false
+    }
+Info 26   [16:01:35.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -364,8 +383,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 46   [16:02:06.000] response:{"responseRequired":false}
-Info 47   [16:02:07.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+Info 46   [16:02:06.000] response:
+    {
+      "responseRequired": false
+    }
+Info 47   [16:02:07.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/random/random.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -478,8 +508,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 65   [16:02:41.000] response:{"responseRequired":false}
-Info 66   [16:02:42.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":9,"offset":1},"seq":1,"type":"request"}
+Info 65   [16:02:41.000] response:
+    {
+      "responseRequired": false
+    }
+Info 66   [16:02:42.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts",
+        "line": 9,
+        "offset": 1
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -549,8 +592,54 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 68   [16:02:44.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","start":{"line":1,"offset":17},"end":{"line":1,"offset":20},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}}],"textSpan":{"start":{"line":9,"offset":1},"end":{"line":9,"offset":4}}},"responseRequired":true}
-Info 69   [16:02:45.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":1,"offset":17},"seq":2,"type":"request"}
+Info 68   [16:02:44.000] response:
+    {
+      "response": {
+        "definitions": [
+          {
+            "file": "/user/username/projects/myproject/dependency/FnS.ts",
+            "start": {
+              "line": 1,
+              "offset": 17
+            },
+            "end": {
+              "line": 1,
+              "offset": 20
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 26
+            }
+          }
+        ],
+        "textSpan": {
+          "start": {
+            "line": 9,
+            "offset": 1
+          },
+          "end": {
+            "line": 9,
+            "offset": 4
+          }
+        }
+      },
+      "responseRequired": true
+    }
+Info 69   [16:02:45.000] request:
+    {
+      "command": "rename",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts",
+        "line": 1,
+        "offset": 17
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -623,7 +712,87 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 72   [16:02:48.000] response:{"response":{"info":{"canRename":true,"displayName":"fn1","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn1","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}}]},{"file":"/user/username/projects/myproject/main/main.ts","locs":[{"start":{"line":2,"offset":5},"end":{"line":2,"offset":8},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":7,"offset":22}},{"start":{"line":9,"offset":1},"end":{"line":9,"offset":4}}]}]},"responseRequired":true}
+Info 72   [16:02:48.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "fn1",
+          "fullDisplayName": "\"/user/username/projects/myproject/dependency/FnS\".fn1",
+          "kind": "function",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 1,
+              "offset": 17
+            },
+            "end": {
+              "line": 1,
+              "offset": 20
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/user/username/projects/myproject/dependency/FnS.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 20
+                },
+                "contextStart": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 1,
+                  "offset": 26
+                }
+              }
+            ]
+          },
+          {
+            "file": "/user/username/projects/myproject/main/main.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 2,
+                  "offset": 5
+                },
+                "end": {
+                  "line": 2,
+                  "offset": 8
+                },
+                "contextStart": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 7,
+                  "offset": 22
+                }
+              },
+              {
+                "start": {
+                  "line": 9,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 9,
+                  "offset": 4
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }
 Info 73   [16:02:50.000] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 2:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info 74   [16:02:51.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info 75   [16:02:52.000] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
@@ -633,7 +802,17 @@ Info 78   [16:02:55.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 Info 79   [16:02:56.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 2:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info 80   [16:02:57.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info 81   [16:02:58.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info 82   [16:02:59.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":9,"offset":1},"seq":3,"type":"request"}
+Info 82   [16:02:59.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts",
+        "line": 9,
+        "offset": 1
+      },
+      "seq": 3,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map] deleted
 
 PolledWatches::
@@ -706,8 +885,54 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 86   [16:03:03.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":1,"offset":25},"end":{"line":1,"offset":28},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":37}}],"textSpan":{"start":{"line":9,"offset":1},"end":{"line":9,"offset":4}}},"responseRequired":true}
-Info 87   [16:03:04.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":10,"offset":1},"seq":4,"type":"request"}
+Info 86   [16:03:03.000] response:
+    {
+      "response": {
+        "definitions": [
+          {
+            "file": "/user/username/projects/myproject/decls/fns.d.ts",
+            "start": {
+              "line": 1,
+              "offset": 25
+            },
+            "end": {
+              "line": 1,
+              "offset": 28
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 37
+            }
+          }
+        ],
+        "textSpan": {
+          "start": {
+            "line": 9,
+            "offset": 1
+          },
+          "end": {
+            "line": 9,
+            "offset": 4
+          }
+        }
+      },
+      "responseRequired": true
+    }
+Info 87   [16:03:04.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts",
+        "line": 10,
+        "offset": 1
+      },
+      "seq": 4,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -778,8 +1003,54 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 88   [16:03:05.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":2,"offset":25},"end":{"line":2,"offset":28},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":37}}],"textSpan":{"start":{"line":10,"offset":1},"end":{"line":10,"offset":4}}},"responseRequired":true}
-Info 89   [16:03:06.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":11,"offset":1},"seq":5,"type":"request"}
+Info 88   [16:03:05.000] response:
+    {
+      "response": {
+        "definitions": [
+          {
+            "file": "/user/username/projects/myproject/decls/fns.d.ts",
+            "start": {
+              "line": 2,
+              "offset": 25
+            },
+            "end": {
+              "line": 2,
+              "offset": 28
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 37
+            }
+          }
+        ],
+        "textSpan": {
+          "start": {
+            "line": 10,
+            "offset": 1
+          },
+          "end": {
+            "line": 10,
+            "offset": 4
+          }
+        }
+      },
+      "responseRequired": true
+    }
+Info 89   [16:03:06.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts",
+        "line": 11,
+        "offset": 1
+      },
+      "seq": 5,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -850,8 +1121,54 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 90   [16:03:07.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":3,"offset":25},"end":{"line":3,"offset":28},"contextStart":{"line":3,"offset":1},"contextEnd":{"line":3,"offset":37}}],"textSpan":{"start":{"line":11,"offset":1},"end":{"line":11,"offset":4}}},"responseRequired":true}
-Info 91   [16:03:08.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":12,"offset":1},"seq":6,"type":"request"}
+Info 90   [16:03:07.000] response:
+    {
+      "response": {
+        "definitions": [
+          {
+            "file": "/user/username/projects/myproject/decls/fns.d.ts",
+            "start": {
+              "line": 3,
+              "offset": 25
+            },
+            "end": {
+              "line": 3,
+              "offset": 28
+            },
+            "contextStart": {
+              "line": 3,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 3,
+              "offset": 37
+            }
+          }
+        ],
+        "textSpan": {
+          "start": {
+            "line": 11,
+            "offset": 1
+          },
+          "end": {
+            "line": 11,
+            "offset": 4
+          }
+        }
+      },
+      "responseRequired": true
+    }
+Info 91   [16:03:08.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts",
+        "line": 12,
+        "offset": 1
+      },
+      "seq": 6,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -922,8 +1239,54 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 92   [16:03:09.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":4,"offset":25},"end":{"line":4,"offset":28},"contextStart":{"line":4,"offset":1},"contextEnd":{"line":4,"offset":37}}],"textSpan":{"start":{"line":12,"offset":1},"end":{"line":12,"offset":4}}},"responseRequired":true}
-Info 93   [16:03:10.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/main/main.ts","line":13,"offset":1},"seq":7,"type":"request"}
+Info 92   [16:03:09.000] response:
+    {
+      "response": {
+        "definitions": [
+          {
+            "file": "/user/username/projects/myproject/decls/fns.d.ts",
+            "start": {
+              "line": 4,
+              "offset": 25
+            },
+            "end": {
+              "line": 4,
+              "offset": 28
+            },
+            "contextStart": {
+              "line": 4,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 4,
+              "offset": 37
+            }
+          }
+        ],
+        "textSpan": {
+          "start": {
+            "line": 12,
+            "offset": 1
+          },
+          "end": {
+            "line": 12,
+            "offset": 4
+          }
+        }
+      },
+      "responseRequired": true
+    }
+Info 93   [16:03:10.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts",
+        "line": 13,
+        "offset": 1
+      },
+      "seq": 7,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -994,8 +1357,54 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 94   [16:03:11.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/decls/fns.d.ts","start":{"line":5,"offset":25},"end":{"line":5,"offset":28},"contextStart":{"line":5,"offset":1},"contextEnd":{"line":5,"offset":37}}],"textSpan":{"start":{"line":13,"offset":1},"end":{"line":13,"offset":4}}},"responseRequired":true}
-Info 95   [16:03:12.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":1,"offset":17},"seq":8,"type":"request"}
+Info 94   [16:03:11.000] response:
+    {
+      "response": {
+        "definitions": [
+          {
+            "file": "/user/username/projects/myproject/decls/fns.d.ts",
+            "start": {
+              "line": 5,
+              "offset": 25
+            },
+            "end": {
+              "line": 5,
+              "offset": 28
+            },
+            "contextStart": {
+              "line": 5,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 5,
+              "offset": 37
+            }
+          }
+        ],
+        "textSpan": {
+          "start": {
+            "line": 13,
+            "offset": 1
+          },
+          "end": {
+            "line": 13,
+            "offset": 4
+          }
+        }
+      },
+      "responseRequired": true
+    }
+Info 95   [16:03:12.000] request:
+    {
+      "command": "rename",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts",
+        "line": 1,
+        "offset": 17
+      },
+      "seq": 8,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1068,8 +1477,65 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 98   [16:03:15.000] response:{"response":{"info":{"canRename":true,"displayName":"fn1","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn1","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}}]}]},"responseRequired":true}
-Info 99   [16:03:16.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":2,"offset":17},"seq":9,"type":"request"}
+Info 98   [16:03:15.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "fn1",
+          "fullDisplayName": "\"/user/username/projects/myproject/dependency/FnS\".fn1",
+          "kind": "function",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 1,
+              "offset": 17
+            },
+            "end": {
+              "line": 1,
+              "offset": 20
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/user/username/projects/myproject/dependency/FnS.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 1,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 20
+                },
+                "contextStart": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 1,
+                  "offset": 26
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+Info 99   [16:03:16.000] request:
+    {
+      "command": "rename",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts",
+        "line": 2,
+        "offset": 17
+      },
+      "seq": 9,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1140,8 +1606,65 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 100  [16:03:17.000] response:{"response":{"info":{"canRename":true,"displayName":"fn2","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn2","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":2,"offset":17},"end":{"line":2,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":2,"offset":17},"end":{"line":2,"offset":20},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":26}}]}]},"responseRequired":true}
-Info 101  [16:03:18.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":3,"offset":17},"seq":10,"type":"request"}
+Info 100  [16:03:17.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "fn2",
+          "fullDisplayName": "\"/user/username/projects/myproject/dependency/FnS\".fn2",
+          "kind": "function",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 2,
+              "offset": 17
+            },
+            "end": {
+              "line": 2,
+              "offset": 20
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/user/username/projects/myproject/dependency/FnS.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 2,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 2,
+                  "offset": 20
+                },
+                "contextStart": {
+                  "line": 2,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 2,
+                  "offset": 26
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+Info 101  [16:03:18.000] request:
+    {
+      "command": "rename",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts",
+        "line": 3,
+        "offset": 17
+      },
+      "seq": 10,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1212,8 +1735,65 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 102  [16:03:19.000] response:{"response":{"info":{"canRename":true,"displayName":"fn3","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn3","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":3,"offset":17},"end":{"line":3,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":3,"offset":17},"end":{"line":3,"offset":20},"contextStart":{"line":3,"offset":1},"contextEnd":{"line":3,"offset":26}}]}]},"responseRequired":true}
-Info 103  [16:03:20.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":4,"offset":17},"seq":11,"type":"request"}
+Info 102  [16:03:19.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "fn3",
+          "fullDisplayName": "\"/user/username/projects/myproject/dependency/FnS\".fn3",
+          "kind": "function",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 3,
+              "offset": 17
+            },
+            "end": {
+              "line": 3,
+              "offset": 20
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/user/username/projects/myproject/dependency/FnS.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 3,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 3,
+                  "offset": 20
+                },
+                "contextStart": {
+                  "line": 3,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 3,
+                  "offset": 26
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+Info 103  [16:03:20.000] request:
+    {
+      "command": "rename",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts",
+        "line": 4,
+        "offset": 17
+      },
+      "seq": 11,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1284,8 +1864,65 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 104  [16:03:21.000] response:{"response":{"info":{"canRename":true,"displayName":"fn4","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn4","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":4,"offset":17},"end":{"line":4,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":4,"offset":17},"end":{"line":4,"offset":20},"contextStart":{"line":4,"offset":1},"contextEnd":{"line":4,"offset":26}}]}]},"responseRequired":true}
-Info 105  [16:03:22.000] request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":5,"offset":17},"seq":12,"type":"request"}
+Info 104  [16:03:21.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "fn4",
+          "fullDisplayName": "\"/user/username/projects/myproject/dependency/FnS\".fn4",
+          "kind": "function",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 4,
+              "offset": 17
+            },
+            "end": {
+              "line": 4,
+              "offset": 20
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/user/username/projects/myproject/dependency/FnS.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 4,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 4,
+                  "offset": 20
+                },
+                "contextStart": {
+                  "line": 4,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 4,
+                  "offset": 26
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+Info 105  [16:03:22.000] request:
+    {
+      "command": "rename",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts",
+        "line": 5,
+        "offset": 17
+      },
+      "seq": 12,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1356,8 +1993,63 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 106  [16:03:23.000] response:{"response":{"info":{"canRename":true,"displayName":"fn5","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn5","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":5,"offset":17},"end":{"line":5,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":5,"offset":17},"end":{"line":5,"offset":20},"contextStart":{"line":5,"offset":1},"contextEnd":{"line":5,"offset":26}}]}]},"responseRequired":true}
-Info 107  [16:03:24.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+Info 106  [16:03:23.000] response:
+    {
+      "response": {
+        "info": {
+          "canRename": true,
+          "displayName": "fn5",
+          "fullDisplayName": "\"/user/username/projects/myproject/dependency/FnS\".fn5",
+          "kind": "function",
+          "kindModifiers": "export",
+          "triggerSpan": {
+            "start": {
+              "line": 5,
+              "offset": 17
+            },
+            "end": {
+              "line": 5,
+              "offset": 20
+            }
+          }
+        },
+        "locs": [
+          {
+            "file": "/user/username/projects/myproject/dependency/FnS.ts",
+            "locs": [
+              {
+                "start": {
+                  "line": 5,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 5,
+                  "offset": 20
+                },
+                "contextStart": {
+                  "line": 5,
+                  "offset": 1
+                },
+                "contextEnd": {
+                  "line": 5,
+                  "offset": 26
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+Info 107  [16:03:24.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/random/random.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1448,8 +2140,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 109  [16:03:40.000] response:{"responseRequired":false}
-Info 110  [16:03:41.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+Info 109  [16:03:40.000] response:
+    {
+      "responseRequired": false
+    }
+Info 110  [16:03:41.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/random/random.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1544,8 +2247,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 114  [16:04:01.000] response:{"responseRequired":false}
-Info 115  [16:04:02.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/main/main.ts"}}
+Info 114  [16:04:01.000] response:
+    {
+      "responseRequired": false
+    }
+Info 115  [16:04:02.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/main/main.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1636,8 +2350,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 117  [16:04:18.000] response:{"responseRequired":false}
-Info 118  [16:04:19.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts"}}
+Info 117  [16:04:18.000] response:
+    {
+      "responseRequired": false
+    }
+Info 118  [16:04:19.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/FnS.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1730,8 +2455,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 120  [16:04:33.000] response:{"responseRequired":false}
-Info 121  [16:04:34.000] request:{"seq":0,"type":"request","command":"close","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+Info 120  [16:04:33.000] response:
+    {
+      "responseRequired": false
+    }
+Info 121  [16:04:34.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/random/random.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1826,8 +2562,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 123  [16:04:46.000] response:{"responseRequired":false}
-Info 124  [16:04:47.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/random/random.ts"}}
+Info 123  [16:04:46.000] response:
+    {
+      "responseRequired": false
+    }
+Info 124  [16:04:47.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/random/random.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1945,4 +2692,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
-Info 156  [16:05:25.000] response:{"responseRequired":false}
+Info 156  [16:05:25.000] response:
+    {
+      "responseRequired": false
+    }

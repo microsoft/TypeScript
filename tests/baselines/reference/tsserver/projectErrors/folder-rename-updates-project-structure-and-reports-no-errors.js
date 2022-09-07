@@ -1,5 +1,13 @@
 Info 0    [16:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:22.000] request:{"command":"open","arguments":{"file":"/a/b/projects/myproject/bar/app.ts"},"seq":1,"type":"request"}
+Info 1    [16:00:22.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/myproject/bar/app.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/b/projects/myproject/bar/app.ts]
 class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }
 
@@ -83,8 +91,22 @@ FsWatchesRecursive::
 /a/b/projects/myproject:
   {}
 
-Info 23   [16:00:50.000] response:{"responseRequired":false}
-Info 24   [16:00:51.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a/b/projects/myproject/bar/app.ts"]},"seq":2,"type":"request"}
+Info 23   [16:00:50.000] response:
+    {
+      "responseRequired": false
+    }
+Info 24   [16:00:51.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/a/b/projects/myproject/bar/app.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -119,7 +141,10 @@ FsWatchesRecursive::
 /a/b/projects/myproject:
   {}
 
-Info 25   [16:00:52.000] response:{"responseRequired":false}
+Info 25   [16:00:52.000] response:
+    {
+      "responseRequired": false
+    }
 Info 26   [16:00:53.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
 Info 27   [16:00:54.000] event:
@@ -187,7 +212,18 @@ Info 62   [16:01:44.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/a/b/projects/myproject/bar/app.ts"]}}
 Info 63   [16:01:45.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
-Info 64   [16:01:46.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a/b/projects/myproject/bar/app.ts"]},"seq":3,"type":"request"}
+Info 64   [16:01:46.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/a/b/projects/myproject/bar/app.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 //// [/a/b/projects/myproject/foo2/foo.ts]
 declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
 
@@ -226,7 +262,10 @@ FsWatchesRecursive::
 /a/b/projects/myproject:
   {}
 
-Info 65   [16:01:47.000] response:{"responseRequired":false}
+Info 65   [16:01:47.000] response:
+    {
+      "responseRequired": false
+    }
 Info 66   [16:01:48.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/projects/myproject/bar/app.ts","diagnostics":[]}}
 Info 67   [16:01:49.000] event:

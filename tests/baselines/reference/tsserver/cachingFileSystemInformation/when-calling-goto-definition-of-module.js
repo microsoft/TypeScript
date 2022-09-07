@@ -1,5 +1,13 @@
 Info 0    [16:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:24.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/controllers/vessels/client.ts"}}
+Info 1    [16:00:24.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/controllers/vessels/client.ts"
+      }
+    }
 //// [/a/b/controllers/vessels/client.ts]
 
                     import { Vessel } from '~/models/vessel';
@@ -101,8 +109,20 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 20   [16:00:49.000] response:{"responseRequired":false}
-Info 21   [16:00:50.000] request:{"seq":0,"type":"request","command":"definition","arguments":{"file":"/a/b/controllers/vessels/client.ts","position":54}}
+Info 20   [16:00:49.000] response:
+    {
+      "responseRequired": false
+    }
+Info 21   [16:00:50.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "definition",
+      "arguments": {
+        "file": "/a/b/controllers/vessels/client.ts",
+        "position": 54
+      }
+    }
 
 PolledWatches::
 /a/lib/lib.es6.d.ts:
@@ -141,13 +161,37 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 22   [16:00:51.000] response:{"response":[{"file":"/a/b/models/vessel.ts","start":{"line":2,"offset":21},"end":{"line":4,"offset":17}}],"responseRequired":true}
+Info 22   [16:00:51.000] response:
+    {
+      "response": [
+        {
+          "file": "/a/b/models/vessel.ts",
+          "start": {
+            "line": 2,
+            "offset": 21
+          },
+          "end": {
+            "line": 4,
+            "offset": 17
+          }
+        }
+      ],
+      "responseRequired": true
+    }
 Info 23   [16:00:52.000] fileExists:: []
 Info 24   [16:00:53.000] directoryExists:: []
 Info 25   [16:00:54.000] getDirectories:: []
 Info 26   [16:00:55.000] readFile:: []
 Info 27   [16:00:56.000] readDirectory:: []
-Info 28   [16:00:57.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/models/vessel.ts"}}
+Info 28   [16:00:57.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/models/vessel.ts"
+      }
+    }
 
 PolledWatches::
 /a/lib/lib.es6.d.ts:
@@ -196,7 +240,10 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 32   [16:01:09.000] response:{"responseRequired":false}
+Info 32   [16:01:09.000] response:
+    {
+      "responseRequired": false
+    }
 Info 33   [16:01:10.000] fileExists:: [{"key":"/a/b/models/tsconfig.json","count":1},{"key":"/a/b/models/jsconfig.json","count":1}]
 Info 34   [16:01:11.000] directoryExists:: []
 Info 35   [16:01:12.000] getDirectories:: []

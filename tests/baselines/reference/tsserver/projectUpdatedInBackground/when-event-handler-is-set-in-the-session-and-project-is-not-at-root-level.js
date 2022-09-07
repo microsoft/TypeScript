@@ -1,5 +1,13 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"command":"open","arguments":{"file":"/user/username/rootfolder/otherfolder/a/b/project/file1.ts"},"seq":1,"type":"request"}
+Info 1    [16:00:30.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/user/username/rootfolder/otherfolder/a/b/project/file1.ts]
 import a from "file2"
 
@@ -103,7 +111,10 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project:
   {}
 
-Info 25   [16:01:00.000] response:{"responseRequired":false}
+Info 25   [16:01:00.000] response:
+    {
+      "responseRequired": false
+    }
 Info 26   [16:01:04.000] FileWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/project/file3.ts 1:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/file3.ts 500 undefined WatchType: Closed Script info
 Info 27   [16:01:05.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info 28   [16:01:06.000] Scheduled: *ensureProjectForOpenFiles*

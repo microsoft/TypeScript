@@ -1,5 +1,14 @@
 Info 0    [16:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:06.000] request:{"command":"open","arguments":{"file":"/a.js","fileContent":"function f(p) {}"},"seq":1,"type":"request"}
+Info 1    [16:00:06.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a.js",
+        "fileContent": "function f(p) {}"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a.js]
 function f(p) {}
 
@@ -45,8 +54,22 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 11   [16:00:22.000] response:{"responseRequired":false}
-Info 12   [16:00:23.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a.js"]},"seq":2,"type":"request"}
+Info 11   [16:00:22.000] response:
+    {
+      "responseRequired": false
+    }
+Info 12   [16:00:23.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/a.js"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -73,7 +96,10 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 13   [16:00:24.000] response:{"responseRequired":false}
+Info 13   [16:00:24.000] response:
+    {
+      "responseRequired": false
+    }
 Info 14   [16:00:25.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a.js","diagnostics":[]}}
 Info 15   [16:00:26.000] event:

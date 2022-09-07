@@ -1,5 +1,13 @@
 Info 0    [16:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:22.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 1    [16:00:22.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 //// [/user/username/projects/myproject/a.ts]
 if (a < (b + c) { }
 
@@ -55,8 +63,19 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 8    [16:00:35.000] response:{"responseRequired":false}
-Info 9    [16:00:36.000] request:{"type":"request","seq":1,"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 8    [16:00:35.000] response:
+    {
+      "responseRequired": false
+    }
+Info 9    [16:00:36.000] request:
+    {
+      "type": "request",
+      "seq": 1,
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 
 PolledWatches::
 
@@ -71,8 +90,55 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 10   [16:00:37.000] response:{"response":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":18},"text":"')' expected.","code":1005,"category":"error","relatedInformation":[{"span":{"start":{"line":1,"offset":4},"end":{"line":1,"offset":5},"file":"/user/username/projects/myproject/a.ts"},"message":"The parser expected to find a ')' to match the '(' token here.","category":"error","code":1007}]}],"responseRequired":true}
-Info 11   [16:00:38.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/a.ts"]},"seq":2,"type":"request"}
+Info 10   [16:00:37.000] response:
+    {
+      "response": [
+        {
+          "start": {
+            "line": 1,
+            "offset": 17
+          },
+          "end": {
+            "line": 1,
+            "offset": 18
+          },
+          "text": "')' expected.",
+          "code": 1005,
+          "category": "error",
+          "relatedInformation": [
+            {
+              "span": {
+                "start": {
+                  "line": 1,
+                  "offset": 4
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 5
+                },
+                "file": "/user/username/projects/myproject/a.ts"
+              },
+              "message": "The parser expected to find a ')' to match the '(' token here.",
+              "category": "error",
+              "code": 1007
+            }
+          ]
+        }
+      ],
+      "responseRequired": true
+    }
+Info 11   [16:00:38.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/a.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -87,6 +153,9 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 12   [16:00:39.000] response:{"responseRequired":false}
+Info 12   [16:00:39.000] response:
+    {
+      "responseRequired": false
+    }
 Info 13   [16:00:40.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/a.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":18},"text":"')' expected.","code":1005,"category":"error","relatedInformation":[{"span":{"start":{"line":1,"offset":4},"end":{"line":1,"offset":5},"file":"/user/username/projects/myproject/a.ts"},"message":"The parser expected to find a ')' to match the '(' token here.","category":"error","code":1007}]}]}}
 Info 14   [16:00:41.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}

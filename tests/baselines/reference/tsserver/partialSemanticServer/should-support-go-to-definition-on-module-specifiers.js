@@ -1,5 +1,13 @@
 Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 1    [16:00:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts"
+      }
+    }
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
 import { something } from "something";
@@ -68,8 +76,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 8    [16:00:45.000] response:{"responseRequired":false}
-Info 9    [16:00:46.000] request:{"command":"definitionAndBoundSpan","arguments":{"file":"/user/username/projects/myproject/a.ts","line":1,"offset":23},"seq":1,"type":"request"}
+Info 8    [16:00:45.000] response:
+    {
+      "responseRequired": false
+    }
+Info 9    [16:00:46.000] request:
+    {
+      "command": "definitionAndBoundSpan",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a.ts",
+        "line": 1,
+        "offset": 23
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -84,4 +105,32 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 10   [16:00:47.000] response:{"response":{"definitions":[{"file":"/user/username/projects/myproject/b.ts","start":{"line":1,"offset":1},"end":{"line":1,"offset":1}}],"textSpan":{"start":{"line":1,"offset":23},"end":{"line":1,"offset":28}}},"responseRequired":true}
+Info 10   [16:00:47.000] response:
+    {
+      "response": {
+        "definitions": [
+          {
+            "file": "/user/username/projects/myproject/b.ts",
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 1
+            }
+          }
+        ],
+        "textSpan": {
+          "start": {
+            "line": 1,
+            "offset": 23
+          },
+          "end": {
+            "line": 1,
+            "offset": 28
+          }
+        }
+      },
+      "responseRequired": true
+    }

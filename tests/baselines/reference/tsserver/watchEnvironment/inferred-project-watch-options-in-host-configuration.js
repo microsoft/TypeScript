@@ -1,5 +1,17 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"command":"configure","arguments":{"watchOptions":{"excludeDirectories":["node_modules"]}},"seq":1,"type":"request"}
+Info 1    [16:00:30.000] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -39,8 +51,24 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 4    [16:00:33.000] response:{"responseRequired":false}
-Info 5    [16:00:34.000] request:{"command":"compilerOptionsForInferredProjects","arguments":{"options":{"excludeDirectories":["node_modules"]},"projectRootPath":"/user/username/projects/myproject"},"seq":2,"type":"request"}
+Info 4    [16:00:33.000] response:
+    {
+      "responseRequired": false
+    }
+Info 5    [16:00:34.000] request:
+    {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "excludeDirectories": [
+            "node_modules"
+          ]
+        },
+        "projectRootPath": "/user/username/projects/myproject"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 
@@ -55,8 +83,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 6    [16:00:35.000] response:{"response":true,"responseRequired":true}
-Info 7    [16:00:36.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/main.ts","projectRootPath":"/user/username/projects/myproject"}}
+Info 6    [16:00:35.000] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+Info 7    [16:00:36.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 
 PolledWatches::
 
@@ -123,4 +164,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 26   [16:01:01.000] response:{"responseRequired":false}
+Info 26   [16:01:01.000] response:
+    {
+      "responseRequired": false
+    }

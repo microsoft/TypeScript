@@ -1,5 +1,13 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"}}
+Info 1    [16:00:30.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      }
+    }
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -139,8 +147,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 29   [16:01:04.000] response:{"responseRequired":false}
-Info 30   [16:01:05.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":1,"type":"request"}
+Info 29   [16:01:04.000] response:
+    {
+      "responseRequired": false
+    }
+Info 30   [16:01:05.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -191,8 +210,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 31   [16:01:06.000] response:{"response":[],"responseRequired":true}
-Info 32   [16:01:07.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":2,"type":"request"}
+Info 31   [16:01:06.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 32   [16:01:07.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -243,8 +274,34 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 33   [16:01:08.000] response:{"response":[{"start":{"line":4,"offset":5},"end":{"line":4,"offset":10},"text":"Module '\"../decls/fns\"' has no exported member 'fnErr'.","code":2305,"category":"error"}],"responseRequired":true}
-Info 34   [16:01:09.000] request:{"command":"suggestionDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":3,"type":"request"}
+Info 33   [16:01:08.000] response:
+    {
+      "response": [
+        {
+          "start": {
+            "line": 4,
+            "offset": 5
+          },
+          "end": {
+            "line": 4,
+            "offset": 10
+          },
+          "text": "Module '\"../decls/fns\"' has no exported member 'fnErr'.",
+          "code": 2305,
+          "category": "error"
+        }
+      ],
+      "responseRequired": true
+    }
+Info 34   [16:01:09.000] request:
+    {
+      "command": "suggestionDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -295,8 +352,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 35   [16:01:10.000] response:{"response":[],"responseRequired":true}
-Info 36   [16:01:11.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts"},"seq":4,"type":"request"}
+Info 35   [16:01:10.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 36   [16:01:11.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
+      },
+      "seq": 4,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -347,8 +416,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 37   [16:01:12.000] response:{"response":[],"responseRequired":true}
-Info 38   [16:01:13.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts"},"seq":5,"type":"request"}
+Info 37   [16:01:12.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 38   [16:01:13.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
+      },
+      "seq": 5,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -399,8 +480,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 39   [16:01:14.000] response:{"response":[],"responseRequired":true}
-Info 40   [16:01:15.000] request:{"command":"suggestionDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts"},"seq":6,"type":"request"}
+Info 39   [16:01:14.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 40   [16:01:15.000] request:
+    {
+      "command": "suggestionDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
+      },
+      "seq": 6,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -451,8 +544,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 41   [16:01:16.000] response:{"response":[],"responseRequired":true}
-Info 42   [16:01:17.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":7,"type":"request"}
+Info 41   [16:01:16.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 42   [16:01:17.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 7,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -503,8 +609,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 43   [16:01:18.000] response:{"response":[],"responseRequired":true}
-Info 44   [16:01:19.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":8,"type":"request"}
+Info 43   [16:01:18.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 44   [16:01:19.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 8,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -555,8 +674,35 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 45   [16:01:20.000] response:{"response":[{"start":{"line":4,"offset":5},"end":{"line":4,"offset":10},"text":"Module '\"../decls/fns\"' has no exported member 'fnErr'.","code":2305,"category":"error"}],"responseRequired":true}
-Info 46   [16:01:21.000] request:{"command":"suggestionDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":9,"type":"request"}
+Info 45   [16:01:20.000] response:
+    {
+      "response": [
+        {
+          "start": {
+            "line": 4,
+            "offset": 5
+          },
+          "end": {
+            "line": 4,
+            "offset": 10
+          },
+          "text": "Module '\"../decls/fns\"' has no exported member 'fnErr'.",
+          "code": 2305,
+          "category": "error"
+        }
+      ],
+      "responseRequired": true
+    }
+Info 46   [16:01:21.000] request:
+    {
+      "command": "suggestionDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 9,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -607,8 +753,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 47   [16:01:22.000] response:{"response":[],"responseRequired":true}
-Info 48   [16:01:23.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":10,"type":"request"}
+Info 47   [16:01:22.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 48   [16:01:23.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 10,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -659,8 +818,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 49   [16:01:24.000] response:{"response":[],"responseRequired":true}
-Info 50   [16:01:25.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":11,"type":"request"}
+Info 49   [16:01:24.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 50   [16:01:25.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 11,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -711,8 +883,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 51   [16:01:26.000] response:{"response":[],"responseRequired":true}
-Info 52   [16:01:27.000] request:{"command":"suggestionDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/dependency/fns.ts","projectFileName":"/user/username/projects/myproject/usage/tsconfig.json"},"seq":12,"type":"request"}
+Info 51   [16:01:26.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 52   [16:01:27.000] request:
+    {
+      "command": "suggestionDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/dependency/fns.ts",
+        "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
+      },
+      "seq": 12,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -763,4 +948,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 53   [16:01:28.000] response:{"response":[],"responseRequired":true}
+Info 53   [16:01:28.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }

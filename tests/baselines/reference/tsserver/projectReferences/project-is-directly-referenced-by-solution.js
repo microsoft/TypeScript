@@ -87,7 +87,18 @@ Info 34   [16:01:34.000] 	FileName: /user/username/projects/myproject/src/main.t
 Info 34   [16:01:35.000] 		Projects: /user/username/projects/myproject/tsconfig-src.json
 Info 34   [16:01:36.000] getDefaultProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
 Info 34   [16:01:37.000] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
-Info 34   [16:01:38.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/main.ts"]},"seq":1,"type":"request"}
+Info 34   [16:01:38.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/main.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/tsconfig-src.json]
 {"compilerOptions":{"composite":true,"outDir":"./target/","baseUrl":"./src/"},"include":["./src/**/*"]}
 
@@ -178,7 +189,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 35   [16:01:39.000] response:{"responseRequired":false}
+Info 35   [16:01:39.000] response:
+    {
+      "responseRequired": false
+    }
 Info 36   [16:01:40.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 37   [16:01:41.000] event:
@@ -555,7 +569,17 @@ Info 162  [16:05:32.000] 	FileName: /user/username/projects/myproject/src/main.t
 Info 162  [16:05:33.000] 		Projects: /user/username/projects/myproject/tsconfig-src.json
 Info 162  [16:05:34.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info 162  [16:05:35.000] 		Projects: /dev/null/inferredProject1*
-Info 162  [16:05:36.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/src/main.ts","line":2,"offset":10},"seq":2,"type":"request"}
+Info 162  [16:05:36.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "line": 2,
+        "offset": 10
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -605,7 +629,83 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 166  [16:05:40.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nexport foo"},"responseRequired":true}
+Info 166  [16:05:40.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/myproject/src/main.ts",
+            "start": {
+              "line": 1,
+              "offset": 10
+            },
+            "end": {
+              "line": 1,
+              "offset": 13
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 41
+            },
+            "lineText": "import { foo } from 'helpers/functions';",
+            "isWriteAccess": true,
+            "isDefinition": false
+          },
+          {
+            "file": "/user/username/projects/myproject/src/main.ts",
+            "start": {
+              "line": 2,
+              "offset": 10
+            },
+            "end": {
+              "line": 2,
+              "offset": 13
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 16
+            },
+            "lineText": "export { foo };",
+            "isWriteAccess": true,
+            "isDefinition": true
+          },
+          {
+            "file": "/user/username/projects/myproject/src/helpers/functions.ts",
+            "start": {
+              "line": 1,
+              "offset": 14
+            },
+            "end": {
+              "line": 1,
+              "offset": 17
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 22
+            },
+            "lineText": "export const foo = 1;",
+            "isWriteAccess": true,
+            "isDefinition": false
+          }
+        ],
+        "symbolName": "foo",
+        "symbolStartOffset": 10,
+        "symbolDisplayString": "(alias) const foo: 1\nexport foo"
+      },
+      "responseRequired": true
+    }
 Info 167  [16:05:41.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Info 168  [16:05:42.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 168  [16:05:43.000] 	Files (0)
@@ -743,7 +843,17 @@ Info 217  [16:06:55.000] -----------------------------------------------
 Info 217  [16:06:56.000] Open files: 
 Info 217  [16:06:57.000] 	FileName: /user/username/projects/myproject/indirect3/main.ts ProjectRootPath: undefined
 Info 217  [16:06:58.000] 		Projects: /user/username/projects/myproject/indirect3/tsconfig.json
-Info 217  [16:06:59.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/indirect3/main.ts","line":1,"offset":10},"seq":3,"type":"request"}
+Info 217  [16:06:59.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/myproject/indirect3/main.ts",
+        "line": 1,
+        "offset": 10
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -887,4 +997,116 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 258  [16:07:40.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nimport foo"},"responseRequired":true}
+Info 258  [16:07:40.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/myproject/indirect3/main.ts",
+            "start": {
+              "line": 1,
+              "offset": 10
+            },
+            "end": {
+              "line": 1,
+              "offset": 13
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 28
+            },
+            "lineText": "import { foo } from 'main';",
+            "isWriteAccess": true,
+            "isDefinition": true
+          },
+          {
+            "file": "/user/username/projects/myproject/indirect3/main.ts",
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 4
+            },
+            "lineText": "foo;",
+            "isWriteAccess": false,
+            "isDefinition": false
+          },
+          {
+            "file": "/user/username/projects/myproject/src/main.ts",
+            "start": {
+              "line": 1,
+              "offset": 10
+            },
+            "end": {
+              "line": 1,
+              "offset": 13
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 41
+            },
+            "lineText": "import { foo } from 'helpers/functions';",
+            "isWriteAccess": true,
+            "isDefinition": false
+          },
+          {
+            "file": "/user/username/projects/myproject/src/main.ts",
+            "start": {
+              "line": 2,
+              "offset": 10
+            },
+            "end": {
+              "line": 2,
+              "offset": 13
+            },
+            "contextStart": {
+              "line": 2,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 2,
+              "offset": 16
+            },
+            "lineText": "export { foo };",
+            "isWriteAccess": true,
+            "isDefinition": false
+          },
+          {
+            "file": "/user/username/projects/myproject/src/helpers/functions.ts",
+            "start": {
+              "line": 1,
+              "offset": 14
+            },
+            "end": {
+              "line": 1,
+              "offset": 17
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 22
+            },
+            "lineText": "export const foo = 1;",
+            "isWriteAccess": true,
+            "isDefinition": false
+          }
+        ],
+        "symbolName": "foo",
+        "symbolStartOffset": 10,
+        "symbolDisplayString": "(alias) const foo: 1\nimport foo"
+      },
+      "responseRequired": true
+    }

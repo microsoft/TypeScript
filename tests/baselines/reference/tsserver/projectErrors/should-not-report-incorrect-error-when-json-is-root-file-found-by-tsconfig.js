@@ -1,5 +1,13 @@
 Info 0    [16:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:26.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/test.ts"}}
+Info 1    [16:00:26.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/test.ts"
+      }
+    }
 //// [/user/username/projects/myproject/src/test.ts]
 import * as blabla from "./blabla.json";
 declare var console: any;
@@ -109,8 +117,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 27   [16:00:58.000] response:{"responseRequired":false}
-Info 28   [16:00:59.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/test.ts"]},"seq":1,"type":"request"}
+Info 27   [16:00:58.000] response:
+    {
+      "responseRequired": false
+    }
+Info 28   [16:00:59.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/test.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -149,7 +171,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 29   [16:01:00.000] response:{"responseRequired":false}
+Info 29   [16:01:00.000] response:
+    {
+      "responseRequired": false
+    }
 Info 30   [16:01:01.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
 Info 31   [16:01:02.000] event:

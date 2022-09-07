@@ -1,5 +1,13 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a/index.ts"}}
+Info 1    [16:00:30.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a/index.ts"
+      }
+    }
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {
         "compilerOptions": {"disableReferencedProjectLoad":false,"disableSourceOfProjectReferenceRedirect":false,"composite":true},
@@ -136,8 +144,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 29   [16:01:04.000] response:{"responseRequired":false}
-Info 30   [16:01:05.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/a/index.ts","line":3,"offset":10},"seq":1,"type":"request"}
+Info 29   [16:01:04.000] response:
+    {
+      "responseRequired": false
+    }
+Info 30   [16:01:05.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/myproject/a/index.ts",
+        "line": 3,
+        "offset": 10
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -221,4 +242,129 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
-Info 52   [16:01:27.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":11},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":30},"lineText":"import { B } from \"../b/lib\";","isWriteAccess":true},{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":3,"offset":10},"end":{"line":3,"offset":11},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":3,"offset":18},"end":{"line":3,"offset":19},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/b/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":15},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":3,"offset":2},"lineText":"export class B {","isWriteAccess":true},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":11},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":23},"lineText":"import { B } from \".\";","isWriteAccess":true},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":3,"offset":10},"end":{"line":3,"offset":11},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":3,"offset":18},"end":{"line":3,"offset":19},"lineText":"const b: B = new B();","isWriteAccess":false}],"symbolName":"B","symbolStartOffset":10,"symbolDisplayString":"(alias) class B\nimport B"},"responseRequired":true}
+Info 52   [16:01:27.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/myproject/a/index.ts",
+            "start": {
+              "line": 1,
+              "offset": 10
+            },
+            "end": {
+              "line": 1,
+              "offset": 11
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 30
+            },
+            "lineText": "import { B } from \"../b/lib\";",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/myproject/a/index.ts",
+            "start": {
+              "line": 3,
+              "offset": 10
+            },
+            "end": {
+              "line": 3,
+              "offset": 11
+            },
+            "lineText": "const b: B = new B();",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/myproject/a/index.ts",
+            "start": {
+              "line": 3,
+              "offset": 18
+            },
+            "end": {
+              "line": 3,
+              "offset": 19
+            },
+            "lineText": "const b: B = new B();",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/myproject/b/index.ts",
+            "start": {
+              "line": 1,
+              "offset": 14
+            },
+            "end": {
+              "line": 1,
+              "offset": 15
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 3,
+              "offset": 2
+            },
+            "lineText": "export class B {",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/myproject/b/helper.ts",
+            "start": {
+              "line": 1,
+              "offset": 10
+            },
+            "end": {
+              "line": 1,
+              "offset": 11
+            },
+            "contextStart": {
+              "line": 1,
+              "offset": 1
+            },
+            "contextEnd": {
+              "line": 1,
+              "offset": 23
+            },
+            "lineText": "import { B } from \".\";",
+            "isWriteAccess": true
+          },
+          {
+            "file": "/user/username/projects/myproject/b/helper.ts",
+            "start": {
+              "line": 3,
+              "offset": 10
+            },
+            "end": {
+              "line": 3,
+              "offset": 11
+            },
+            "lineText": "const b: B = new B();",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/myproject/b/helper.ts",
+            "start": {
+              "line": 3,
+              "offset": 18
+            },
+            "end": {
+              "line": 3,
+              "offset": 19
+            },
+            "lineText": "const b: B = new B();",
+            "isWriteAccess": false
+          }
+        ],
+        "symbolName": "B",
+        "symbolStartOffset": 10,
+        "symbolDisplayString": "(alias) class B\nimport B"
+      },
+      "responseRequired": true
+    }

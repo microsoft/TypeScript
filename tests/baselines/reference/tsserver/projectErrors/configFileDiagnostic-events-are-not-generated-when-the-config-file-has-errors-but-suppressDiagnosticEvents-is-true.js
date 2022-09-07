@@ -1,5 +1,13 @@
 Info 0    [16:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:16.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/app.ts"}}
+Info 1    [16:00:16.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/app.ts"
+      }
+    }
 //// [/a/b/app.ts]
 let x = 10
 
@@ -91,4 +99,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 21   [16:00:42.000] response:{"responseRequired":false}
+Info 21   [16:00:42.000] response:
+    {
+      "responseRequired": false
+    }

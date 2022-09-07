@@ -1,5 +1,13 @@
 Info 0    [16:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:28.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/fileA.ts"}}
+Info 1    [16:00:28.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/fileA.ts"
+      }
+    }
 //// [/user/username/projects/myproject/src/tsconfig.json]
 {"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out","traceResolution":true}}
 
@@ -141,7 +149,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 45   [16:01:18.000] response:{"responseRequired":false}
+Info 45   [16:01:18.000] response:
+    {
+      "responseRequired": false
+    }
 Info 46   [16:01:19.000] Modify package json file to add type module
 Info 47   [16:01:23.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 48   [16:01:24.000] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
@@ -194,7 +205,18 @@ Info 81   [16:02:08.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 81   [16:02:09.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 82   [16:02:10.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 83   [16:02:11.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/fileA.ts"]},"seq":1,"type":"request"}
+Info 83   [16:02:11.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0","type":"module"}
 
@@ -244,7 +266,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 84   [16:02:12.000] response:{"responseRequired":false}
+Info 84   [16:02:12.000] response:
+    {
+      "responseRequired": false
+    }
 Info 85   [16:02:13.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 86   [16:02:14.000] event:
@@ -308,7 +333,18 @@ Info 127  [16:03:09.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 127  [16:03:10.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 128  [16:03:11.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 129  [16:03:12.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/fileA.ts"]},"seq":2,"type":"request"}
+Info 129  [16:03:12.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0"}
 
@@ -362,7 +398,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 130  [16:03:13.000] response:{"responseRequired":false}
+Info 130  [16:03:13.000] response:
+    {
+      "responseRequired": false
+    }
 Info 131  [16:03:14.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 132  [16:03:15.000] event:
@@ -425,7 +464,18 @@ Info 172  [16:04:07.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 172  [16:04:08.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 173  [16:04:09.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 174  [16:04:10.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/fileA.ts"]},"seq":3,"type":"request"}
+Info 174  [16:04:10.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/package.json] deleted
 
 PolledWatches::
@@ -481,7 +531,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 175  [16:04:11.000] response:{"responseRequired":false}
+Info 175  [16:04:11.000] response:
+    {
+      "responseRequired": false
+    }
 Info 176  [16:04:12.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 177  [16:04:13.000] event:
@@ -533,7 +586,18 @@ Info 206  [16:04:55.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 206  [16:04:56.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 207  [16:04:57.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 208  [16:04:58.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/fileA.ts"]},"seq":4,"type":"request"}
+Info 208  [16:04:58.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 4,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0","type":"module"}
 
@@ -587,7 +651,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 209  [16:04:59.000] response:{"responseRequired":false}
+Info 209  [16:04:59.000] response:
+    {
+      "responseRequired": false
+    }
 Info 210  [16:05:00.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 211  [16:05:01.000] event:
@@ -646,7 +713,18 @@ Info 247  [16:05:49.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 247  [16:05:50.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 248  [16:05:51.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 249  [16:05:52.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/fileA.ts"]},"seq":5,"type":"request"}
+Info 249  [16:05:52.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 5,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/package.json] deleted
 
 PolledWatches::
@@ -702,7 +780,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 250  [16:05:53.000] response:{"responseRequired":false}
+Info 250  [16:05:53.000] response:
+    {
+      "responseRequired": false
+    }
 Info 251  [16:05:54.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 252  [16:05:55.000] event:

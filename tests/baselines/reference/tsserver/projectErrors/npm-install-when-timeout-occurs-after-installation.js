@@ -1,5 +1,14 @@
 Info 0    [16:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:24.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/src/main.ts","projectRootPath":"/user/username/projects/myproject"}}
+Info 1    [16:00:24.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts",
+        "projectRootPath": "/user/username/projects/myproject"
+      }
+    }
 //// [/user/username/projects/myproject/src/main.ts]
 import * as _a from '@angular/core';
 
@@ -96,8 +105,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 26   [16:00:55.000] response:{"responseRequired":false}
-Info 27   [16:00:56.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/main.ts"]},"seq":1,"type":"request"}
+Info 26   [16:00:55.000] response:
+    {
+      "responseRequired": false
+    }
+Info 27   [16:00:56.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/main.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules:
@@ -136,7 +159,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 28   [16:00:57.000] response:{"responseRequired":false}
+Info 28   [16:00:57.000] response:
+    {
+      "responseRequired": false
+    }
 Info 29   [16:00:58.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 30   [16:00:59.000] event:
@@ -177,7 +203,18 @@ Info 61   [16:01:40.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 62   [16:01:41.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/core-js-db53158d :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 63   [16:01:42.000] Project: /user/username/projects/myproject/tsconfig.json Detected ignored path: /user/username/projects/myproject/node_modules/.staging/core-js-db53158d
 Info 64   [16:01:43.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/core-js-db53158d :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 65   [16:01:44.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/main.ts"]},"seq":2,"type":"request"}
+Info 65   [16:01:44.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/main.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -216,7 +253,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 66   [16:01:45.000] response:{"responseRequired":false}
+Info 66   [16:01:45.000] response:
+    {
+      "responseRequired": false
+    }
 Info 67   [16:01:46.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 68   [16:01:47.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 69   [16:01:48.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -264,7 +304,18 @@ Info 106  [16:02:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 107  [16:02:40.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 108  [16:02:41.000] Project: /user/username/projects/myproject/tsconfig.json Detected ignored path: /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts
 Info 109  [16:02:42.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 110  [16:02:43.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/main.ts"]},"seq":3,"type":"request"}
+Info 110  [16:02:43.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/main.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts]
 export const x = 10;
 
@@ -309,7 +360,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 111  [16:02:44.000] response:{"responseRequired":false}
+Info 111  [16:02:44.000] response:
+    {
+      "responseRequired": false
+    }
 Info 112  [16:02:45.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 113  [16:02:46.000] event:
@@ -318,7 +372,18 @@ Info 114  [16:02:47.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 115  [16:02:48.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
-Info 116  [16:02:55.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/main.ts"]},"seq":4,"type":"request"}
+Info 116  [16:02:55.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/main.ts"
+        ]
+      },
+      "seq": 4,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/node_modules/@angular/core/index.d.ts]
 export const y = 10;
 
@@ -360,7 +425,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 117  [16:02:56.000] response:{"responseRequired":false}
+Info 117  [16:02:56.000] response:
+    {
+      "responseRequired": false
+    }
 Info 118  [16:02:57.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 119  [16:02:58.000] event:
@@ -469,7 +537,18 @@ Info 193  [16:04:34.000] 		Projects: /user/username/projects/myproject/tsconfig.
 Info 193  [16:04:35.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/main.ts
 Info 194  [16:04:36.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/main.ts"]}}
-Info 195  [16:04:37.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/src/main.ts"]},"seq":5,"type":"request"}
+Info 195  [16:04:37.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/main.ts"
+        ]
+      },
+      "seq": 5,
+      "type": "request"
+    }
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts] deleted
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts] deleted
 
@@ -510,7 +589,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 196  [16:04:38.000] response:{"responseRequired":false}
+Info 196  [16:04:38.000] response:
+    {
+      "responseRequired": false
+    }
 Info 197  [16:04:39.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/main.ts","diagnostics":[]}}
 Info 198  [16:04:40.000] event:

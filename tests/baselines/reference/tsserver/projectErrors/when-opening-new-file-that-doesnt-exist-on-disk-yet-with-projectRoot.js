@@ -1,5 +1,16 @@
 Info 0    [16:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:26.000] request:{"command":"open","arguments":{"file":"untitled:Untitled-1","fileContent":"/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />","scriptKindName":"TS","projectRootPath":"/user/someuser/projects/someFolder"},"seq":1,"type":"request"}
+Info 1    [16:00:26.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "untitled:Untitled-1",
+        "fileContent": "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />",
+        "scriptKindName": "TS",
+        "projectRootPath": "/user/someuser/projects/someFolder"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -70,13 +81,27 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 15   [16:00:46.000] response:{"responseRequired":false}
+Info 15   [16:00:46.000] response:
+    {
+      "responseRequired": false
+    }
 
 ScriptInfos:
 path: /user/someuser/projects/somefolder/untitled:untitled-1 fileName: untitled:Untitled-1
 path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
 
-Info 16   [16:00:47.000] request:{"command":"geterr","arguments":{"delay":0,"files":["untitled:Untitled-1"]},"seq":2,"type":"request"}
+Info 16   [16:00:47.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "untitled:Untitled-1"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /typings/@epic/core.d.ts:
@@ -107,7 +132,10 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [16:00:48.000] response:{"responseRequired":false}
+Info 17   [16:00:48.000] response:
+    {
+      "responseRequired": false
+    }
 Info 18   [16:00:49.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
 Info 19   [16:00:50.000] event:

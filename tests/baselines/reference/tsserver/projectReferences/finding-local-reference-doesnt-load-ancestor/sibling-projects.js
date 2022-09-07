@@ -1,5 +1,13 @@
 Info 0    [16:00:34.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:35.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/solution/compiler/program.ts"}}
+Info 1    [16:00:35.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/solution/compiler/program.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -127,8 +135,21 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 25   [16:01:08.000] response:{"responseRequired":false}
-Info 26   [16:01:09.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/compiler/program.ts","line":4,"offset":48},"seq":1,"type":"request"}
+Info 25   [16:01:08.000] response:
+    {
+      "responseRequired": false
+    }
+Info 26   [16:01:09.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/solution/compiler/program.ts",
+        "line": 4,
+        "offset": 48
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:
@@ -168,8 +189,62 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 28   [16:01:11.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":4,"offset":48},"end":{"line":4,"offset":61},"lineText":"                        getSourceFiles: () => [getSourceFile()]","isWriteAccess":false},{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":6,"offset":30},"end":{"line":6,"offset":43},"contextStart":{"line":6,"offset":21},"contextEnd":{"line":6,"offset":69},"lineText":"                    function getSourceFile() { return \"something\"; }","isWriteAccess":true}],"symbolName":"getSourceFile","symbolStartOffset":48,"symbolDisplayString":"function getSourceFile(): string"},"responseRequired":true}
-Info 29   [16:01:12.000] request:{"command":"references","arguments":{"file":"/user/username/projects/solution/compiler/program.ts","line":4,"offset":25},"seq":2,"type":"request"}
+Info 28   [16:01:11.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/solution/compiler/program.ts",
+            "start": {
+              "line": 4,
+              "offset": 48
+            },
+            "end": {
+              "line": 4,
+              "offset": 61
+            },
+            "lineText": "                        getSourceFiles: () => [getSourceFile()]",
+            "isWriteAccess": false
+          },
+          {
+            "file": "/user/username/projects/solution/compiler/program.ts",
+            "start": {
+              "line": 6,
+              "offset": 30
+            },
+            "end": {
+              "line": 6,
+              "offset": 43
+            },
+            "contextStart": {
+              "line": 6,
+              "offset": 21
+            },
+            "contextEnd": {
+              "line": 6,
+              "offset": 69
+            },
+            "lineText": "                    function getSourceFile() { return \"something\"; }",
+            "isWriteAccess": true
+          }
+        ],
+        "symbolName": "getSourceFile",
+        "symbolStartOffset": 48,
+        "symbolDisplayString": "function getSourceFile(): string"
+      },
+      "responseRequired": true
+    }
+Info 29   [16:01:12.000] request:
+    {
+      "command": "references",
+      "arguments": {
+        "file": "/user/username/projects/solution/compiler/program.ts",
+        "line": 4,
+        "offset": 25
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:
@@ -291,4 +366,72 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 61   [16:01:44.000] response:{"response":{"refs":[{"file":"/user/username/projects/solution/compiler/types.ts","start":{"line":4,"offset":25},"end":{"line":4,"offset":39},"contextStart":{"line":4,"offset":25},"contextEnd":{"line":4,"offset":52},"lineText":"                        getSourceFiles(): string[];","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":4,"offset":25},"end":{"line":4,"offset":39},"contextStart":{"line":4,"offset":25},"contextEnd":{"line":4,"offset":64},"lineText":"                        getSourceFiles: () => [getSourceFile()]","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/solution/services/services.ts","start":{"line":3,"offset":44},"end":{"line":3,"offset":58},"lineText":"                    const result = program.getSourceFiles();","isWriteAccess":false,"isDefinition":false}],"symbolName":"getSourceFiles","symbolStartOffset":25,"symbolDisplayString":"(method) ts.Program.getSourceFiles(): string[]"},"responseRequired":true}
+Info 61   [16:01:44.000] response:
+    {
+      "response": {
+        "refs": [
+          {
+            "file": "/user/username/projects/solution/compiler/types.ts",
+            "start": {
+              "line": 4,
+              "offset": 25
+            },
+            "end": {
+              "line": 4,
+              "offset": 39
+            },
+            "contextStart": {
+              "line": 4,
+              "offset": 25
+            },
+            "contextEnd": {
+              "line": 4,
+              "offset": 52
+            },
+            "lineText": "                        getSourceFiles(): string[];",
+            "isWriteAccess": false,
+            "isDefinition": false
+          },
+          {
+            "file": "/user/username/projects/solution/compiler/program.ts",
+            "start": {
+              "line": 4,
+              "offset": 25
+            },
+            "end": {
+              "line": 4,
+              "offset": 39
+            },
+            "contextStart": {
+              "line": 4,
+              "offset": 25
+            },
+            "contextEnd": {
+              "line": 4,
+              "offset": 64
+            },
+            "lineText": "                        getSourceFiles: () => [getSourceFile()]",
+            "isWriteAccess": true,
+            "isDefinition": true
+          },
+          {
+            "file": "/user/username/projects/solution/services/services.ts",
+            "start": {
+              "line": 3,
+              "offset": 44
+            },
+            "end": {
+              "line": 3,
+              "offset": 58
+            },
+            "lineText": "                    const result = program.getSourceFiles();",
+            "isWriteAccess": false,
+            "isDefinition": false
+          }
+        ],
+        "symbolName": "getSourceFiles",
+        "symbolStartOffset": 25,
+        "symbolDisplayString": "(method) ts.Program.getSourceFiles(): string[]"
+      },
+      "responseRequired": true
+    }

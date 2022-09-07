@@ -1,5 +1,13 @@
 Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/usage/usage.ts"}}
+Info 1    [16:00:30.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      }
+    }
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -147,8 +155,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 33   [16:01:08.000] response:{"responseRequired":false}
-Info 34   [16:01:09.000] request:{"command":"geterrForProject","arguments":{"delay":0,"file":"/user/username/projects/myproject/usage/usage.ts"},"seq":1,"type":"request"}
+Info 33   [16:01:08.000] response:
+    {
+      "responseRequired": false
+    }
+Info 34   [16:01:09.000] request:
+    {
+      "command": "geterrForProject",
+      "arguments": {
+        "delay": 0,
+        "file": "/user/username/projects/myproject/usage/usage.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -199,7 +219,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 35   [16:01:10.000] response:{"responseRequired":false}
+Info 35   [16:01:10.000] response:
+    {
+      "responseRequired": false
+    }
 Info 36   [16:01:11.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/usage/usage.ts","diagnostics":[]}}
 Info 37   [16:01:12.000] event:
@@ -214,7 +237,16 @@ Info 41   [16:01:16.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Info 42   [16:01:17.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Info 43   [16:01:18.000] request:{"command":"geterrForProject","arguments":{"delay":0,"file":"/user/username/projects/myproject/dependency/fns.ts"},"seq":2,"type":"request"}
+Info 43   [16:01:18.000] request:
+    {
+      "command": "geterrForProject",
+      "arguments": {
+        "delay": 0,
+        "file": "/user/username/projects/myproject/dependency/fns.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -265,7 +297,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
-Info 44   [16:01:19.000] response:{"responseRequired":false}
+Info 44   [16:01:19.000] response:
+    {
+      "responseRequired": false
+    }
 Info 45   [16:01:20.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Info 46   [16:01:21.000] event:

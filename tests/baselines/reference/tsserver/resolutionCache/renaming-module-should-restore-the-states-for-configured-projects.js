@@ -1,5 +1,13 @@
 Info 0    [16:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:14.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/file1.ts"}}
+Info 1    [16:00:14.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -75,8 +83,19 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 19   [16:00:38.000] response:{"responseRequired":false}
-Info 20   [16:00:39.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+Info 19   [16:00:38.000] response:
+    {
+      "responseRequired": false
+    }
+Info 20   [16:00:39.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -111,7 +130,11 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 21   [16:00:40.000] response:{"response":[],"responseRequired":true}
+Info 21   [16:00:40.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
 Info 22   [16:00:42.000] FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 23   [16:00:43.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info 24   [16:00:44.000] Scheduled: /a/b/tsconfig.json
@@ -162,7 +185,15 @@ Info 49   [16:01:19.000] -----------------------------------------------
 Info 49   [16:01:20.000] Open files: 
 Info 49   [16:01:21.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 49   [16:01:22.000] 		Projects: /a/b/tsconfig.json
-Info 49   [16:01:23.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+Info 49   [16:01:23.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
 //// [/a/b/moduleFile1.ts]
 export function bar() { };
 
@@ -209,7 +240,25 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 50   [16:01:24.000] response:{"response":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":34},"text":"Cannot find module './moduleFile' or its corresponding type declarations.","code":2307,"category":"error"}],"responseRequired":true}
+Info 50   [16:01:24.000] response:
+    {
+      "response": [
+        {
+          "start": {
+            "line": 1,
+            "offset": 20
+          },
+          "end": {
+            "line": 1,
+            "offset": 34
+          },
+          "text": "Cannot find module './moduleFile' or its corresponding type declarations.",
+          "code": 2307,
+          "category": "error"
+        }
+      ],
+      "responseRequired": true
+    }
 Info 51   [16:01:26.000] FileWatcher:: Triggered with /a/b/moduleFile1.ts 2:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info 52   [16:01:27.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info 53   [16:01:28.000] Scheduled: /a/b/tsconfig.json
@@ -232,7 +281,15 @@ Info 69   [16:01:46.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/mo
 Info 70   [16:01:47.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 71   [16:01:48.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 72   [16:01:49.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info 73   [16:01:50.000] request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
+Info 73   [16:01:50.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -293,4 +350,8 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 84   [16:02:01.000] response:{"response":[],"responseRequired":true}
+Info 84   [16:02:01.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }

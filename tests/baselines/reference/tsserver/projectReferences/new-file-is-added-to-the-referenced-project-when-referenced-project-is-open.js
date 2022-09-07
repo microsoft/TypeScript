@@ -1,5 +1,13 @@
 Info 0    [16:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:34.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/projects/project2/class2.ts"}}
+Info 1    [16:00:34.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/projects/project2/class2.ts"
+      }
+    }
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
 
@@ -130,8 +138,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 29   [16:01:08.000] response:{"responseRequired":false}
-Info 30   [16:01:09.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/projects/project1/class1.ts"}}
+Info 29   [16:01:08.000] response:
+    {
+      "responseRequired": false
+    }
+Info 30   [16:01:09.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/projects/project1/class1.ts"
+      }
+    }
 
 PolledWatches::
 /user/username/projects/myproject/projects/project2/node_modules/@types:
@@ -222,7 +241,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
   {}
 
-Info 49   [16:01:39.000] response:{"responseRequired":false}
+Info 49   [16:01:39.000] response:
+    {
+      "responseRequired": false
+    }
 Info 50   [16:01:42.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 51   [16:01:43.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 52   [16:01:44.000] Scheduled: *ensureProjectForOpenFiles*

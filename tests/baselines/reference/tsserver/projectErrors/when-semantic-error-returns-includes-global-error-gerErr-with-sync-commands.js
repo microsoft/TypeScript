@@ -1,5 +1,13 @@
 Info 0    [16:00:22.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:23.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/ui.ts"}}
+Info 1    [16:00:23.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/ui.ts"
+      }
+    }
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -81,8 +89,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 18   [16:00:46.000] response:{"responseRequired":false}
-Info 19   [16:00:47.000] request:{"command":"syntacticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/ui.ts","projectFileName":"/user/username/projects/myproject/tsconfig.json"},"seq":1,"type":"request"}
+Info 18   [16:00:46.000] response:
+    {
+      "responseRequired": false
+    }
+Info 19   [16:00:47.000] request:
+    {
+      "command": "syntacticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/ui.ts",
+        "projectFileName": "/user/username/projects/myproject/tsconfig.json"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -113,8 +133,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 20   [16:00:48.000] response:{"response":[],"responseRequired":true}
-Info 21   [16:00:49.000] request:{"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/ui.ts","projectFileName":"/user/username/projects/myproject/tsconfig.json"},"seq":2,"type":"request"}
+Info 20   [16:00:48.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 21   [16:00:49.000] request:
+    {
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/ui.ts",
+        "projectFileName": "/user/username/projects/myproject/tsconfig.json"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -145,8 +178,35 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 22   [16:00:50.000] response:{"response":[{"start":{"line":1,"offset":11},"end":{"line":1,"offset":39},"text":"An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.","code":2697,"category":"error"}],"responseRequired":true}
-Info 23   [16:00:51.000] request:{"command":"suggestionDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/ui.ts","projectFileName":"/user/username/projects/myproject/tsconfig.json"},"seq":3,"type":"request"}
+Info 22   [16:00:50.000] response:
+    {
+      "response": [
+        {
+          "start": {
+            "line": 1,
+            "offset": 11
+          },
+          "end": {
+            "line": 1,
+            "offset": 39
+          },
+          "text": "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.",
+          "code": 2697,
+          "category": "error"
+        }
+      ],
+      "responseRequired": true
+    }
+Info 23   [16:00:51.000] request:
+    {
+      "command": "suggestionDiagnosticsSync",
+      "arguments": {
+        "file": "/user/username/projects/myproject/ui.ts",
+        "projectFileName": "/user/username/projects/myproject/tsconfig.json"
+      },
+      "seq": 3,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -177,4 +237,8 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-Info 24   [16:00:52.000] response:{"response":[],"responseRequired":true}
+Info 24   [16:00:52.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }

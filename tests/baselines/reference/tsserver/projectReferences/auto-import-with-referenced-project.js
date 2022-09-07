@@ -1,5 +1,13 @@
 Info 0    [16:00:47.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:48.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/app/src/program/index.ts"}}
+Info 1    [16:00:48.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/app/src/program/index.ts"
+      }
+    }
 //// [/user/username/projects/myproject/tsconfig.json]
 {"files":[],"references":[{"path":"shared/src/library"},{"path":"app/src/program"}]}
 
@@ -177,8 +185,26 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 45   [16:01:41.000] response:{"responseRequired":false}
-Info 46   [16:01:42.000] request:{"command":"getCodeFixes","arguments":{"file":"/user/username/projects/myproject/app/src/program/index.ts","startLine":1,"startOffset":1,"endLine":1,"endOffset":4,"errorCodes":[2304]},"seq":1,"type":"request"}
+Info 45   [16:01:41.000] response:
+    {
+      "responseRequired": false
+    }
+Info 46   [16:01:42.000] request:
+    {
+      "command": "getCodeFixes",
+      "arguments": {
+        "file": "/user/username/projects/myproject/app/src/program/index.ts",
+        "startLine": 1,
+        "startOffset": 1,
+        "endLine": 1,
+        "endOffset": 4,
+        "errorCodes": [
+          2304
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
 
 PolledWatches::
 /user/username/projects/myproject/app/src/program/node_modules:
@@ -263,4 +289,31 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-Info 49   [16:01:45.000] response:{"response":[{"fixName":"import","description":"Add import from \"shared\"","changes":[{"fileName":"/user/username/projects/myproject/app/src/program/index.ts","textChanges":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":1},"newText":"import { foo } from \"shared\";\n\n"}]}]}],"responseRequired":true}
+Info 49   [16:01:45.000] response:
+    {
+      "response": [
+        {
+          "fixName": "import",
+          "description": "Add import from \"shared\"",
+          "changes": [
+            {
+              "fileName": "/user/username/projects/myproject/app/src/program/index.ts",
+              "textChanges": [
+                {
+                  "start": {
+                    "line": 1,
+                    "offset": 1
+                  },
+                  "end": {
+                    "line": 1,
+                    "offset": 1
+                  },
+                  "newText": "import { foo } from \"shared\";\n\n"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "responseRequired": true
+    }
