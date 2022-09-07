@@ -23,18 +23,21 @@ export interface BuilderProgramHost {
     writeFile?: WriteFileCallback;
     /**
      * disable using source file version as signature for testing
+     *
+     * @internal
      */
-    /*@internal*/
     disableUseFileVersionAsSignature?: boolean;
     /**
      * Store the list of files that update signature during the emit
+     *
+     * @internal
      */
-    /*@internal*/
     storeFilesChangingSignatureDuringEmit?: boolean;
     /**
      * Gets the current time
+     *
+     * @internal
      */
-    /*@internal*/
     now?(): Date;
 }
 
@@ -42,13 +45,13 @@ export interface BuilderProgramHost {
  * Builder to manage the program state changes
  */
 export interface BuilderProgram {
-    /*@internal*/
+    /** @internal */
     getState(): ReusableBuilderProgramState;
-    /*@internal*/
+    /** @internal */
     saveEmitState(): SavedBuildProgramEmitState;
-    /*@internal*/
+    /** @internal */
     restoreEmitState(saved: SavedBuildProgramEmitState): void;
-    /*@internal*/
+    /** @internal */
     hasChangedEmitSignature?(): boolean;
     /**
      * Returns current program
@@ -56,13 +59,15 @@ export interface BuilderProgram {
     getProgram(): Program;
     /**
      * Returns current program that could be undefined if the program was released
+     *
+     * @internal
      */
-    /*@internal*/
     getProgramOrUndefined(): Program | undefined;
     /**
      * Releases reference to the program, making all the other operations that need program to fail.
+     *
+     * @internal
      */
-    /*@internal*/
     releaseProgram(): void;
     /**
      * Get compiler options of the program
@@ -122,13 +127,13 @@ export interface BuilderProgram {
      * in that order would be used to write the files
      */
     emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
-    /*@internal*/
+    /** @internal */
     emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     /**
      * Get the current directory of the program
      */
     getCurrentDirectory(): string;
-    /*@internal*/
+    /** @internal */
     close(): void;
 }
 

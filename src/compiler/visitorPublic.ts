@@ -64,7 +64,7 @@ export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor 
     return visitedNode as T;
 }
 
-/* @internal */
+/** @internal */
 export function visitNodes<T extends Node, U extends T>(nodes: NodeArray<T>, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): NodeArray<U>;
 
 /**
@@ -78,7 +78,7 @@ export function visitNodes<T extends Node, U extends T>(nodes: NodeArray<T>, vis
  */
 export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
 
-/* @internal */
+/** @internal */
 export function visitNodes<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): NodeArray<U> | undefined;
 
 /**
@@ -141,13 +141,13 @@ export function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visi
     return nodes;
 }
 
-/* @internal */
+/** @internal */
 export function visitArray<T extends Node, U extends T>(nodes: T[] | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): U[] | undefined;
-/* @internal */
+/** @internal */
 export function visitArray<T extends Node, U extends T>(nodes: readonly T[] | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): readonly U[] | undefined;
-/* @internal */
+/** @internal */
 export function visitArray<T extends Node>(nodes: T[] | undefined, visitor: Visitor, test: (node: Node) => node is T, start?: number, count?: number): T[] | undefined;
-/* @internal */
+/** @internal */
 export function visitArray<T extends Node>(nodes: readonly T[] | undefined, visitor: Visitor, test: (node: Node) => node is T, start?: number, count?: number): readonly T[] | undefined;
 export function visitArray<T extends Node, U extends T>(nodes: readonly T[] | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number) {
     if (nodes === undefined) {
@@ -167,7 +167,7 @@ export function visitArray<T extends Node, U extends T>(nodes: readonly T[] | un
     return visitArrayWorker(nodes, visitor, test, start, count) as readonly U[];
 }
 
-/* @internal */
+/** @internal */
 function visitArrayWorker<T extends Node>(nodes: readonly T[], visitor: Visitor, test: ((node: Node) => boolean) | undefined, start: number, count: number): readonly T[] | undefined {
     let updated: T[] | undefined;
 
@@ -355,9 +355,9 @@ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visit
  * environment and merging hoisted declarations upon completion.
  */
 export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
-/* @internal*/ export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
-/* @internal*/ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-/* @internal*/ export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
 export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): ConciseBody | undefined {
     context.resumeLexicalEnvironment();
     const updated = nodeVisitor(node, visitor, isConciseBody);
@@ -377,7 +377,7 @@ export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visito
  * Visits an iteration body, adding any block-scoped variables required by the transformation.
  */
 export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement;
-/* @internal */
+/** @internal */
 export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): Statement; // eslint-disable-line @typescript-eslint/unified-signatures
 export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): Statement {
     context.startBlockScope();
@@ -402,7 +402,7 @@ export function visitIterationBody(body: Statement, visitor: Visitor, context: T
  * @param context A lexical environment context for the visitor.
  */
 export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
-/* @internal */
+/** @internal */
 export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
 /**
  * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
@@ -412,7 +412,7 @@ export function visitEachChild<T extends Node>(node: T, visitor: Visitor, contex
  * @param context A lexical environment context for the visitor.
  */
 export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
-/* @internal */
+/** @internal */
 export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
     if (node === undefined) {

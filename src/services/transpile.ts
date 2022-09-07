@@ -127,8 +127,11 @@ export function transpile(input: string, compilerOptions?: CompilerOptions, file
 
 let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
-/** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
-/*@internal*/
+/**
+ * JS users may pass in string values for enum compiler options (such as ModuleKind), so convert.
+ *
+ * @internal
+ */
 export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
     // Lazily create this value to fix module loading errors.
     commandLineOptionsStringToEnum = commandLineOptionsStringToEnum ||

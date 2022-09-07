@@ -7,7 +7,7 @@ import { TypeScriptServicesFactory, versionMajorMinor } from "./_namespaces/ts";
 
 // #region The polyfill starts here.
 /* eslint-disable no-var */
-/* @internal */
+/** @internal */
 declare global {
     // Module transform: converted from ambient declaration
     /** @internal */

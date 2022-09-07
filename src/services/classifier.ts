@@ -467,7 +467,7 @@ function classFromKind(token: SyntaxKind): ClassificationType {
     }
 }
 
-/* @internal */
+/** @internal */
 export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): ClassifiedSpan[] {
     return convertClassificationsToSpans(getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span));
 }
@@ -495,7 +495,7 @@ function checkForClassificationCancellation(cancellationToken: CancellationToken
     }
 }
 
-/* @internal */
+/** @internal */
 export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): Classifications {
     const spans: number[] = [];
     sourceFile.forEachChild(function cb(node: Node): void {
@@ -610,12 +610,12 @@ function convertClassificationsToSpans(classifications: Classifications): Classi
     return result;
 }
 
-/* @internal */
+/** @internal */
 export function getSyntacticClassifications(cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[] {
     return convertClassificationsToSpans(getEncodedSyntacticClassifications(cancellationToken, sourceFile, span));
 }
 
-/* @internal */
+/** @internal */
 export function getEncodedSyntacticClassifications(cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
     const spanStart = span.start;
     const spanLength = span.length;

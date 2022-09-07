@@ -274,11 +274,12 @@ function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
     return values;
 }
 
-/** @internal */
 /**
  * Used in the module transformer to check if an expression is reasonably without sideeffect,
  *  and thus better to copy into multiple places rather than to cache in a temporary variable
  *  - this is mostly subjective beyond the requirement that the expression not be sideeffecting
+ *
+ * @internal
  */
 export function isSimpleCopiableExpression(expression: Expression) {
     return isStringLiteralLike(expression) ||
@@ -287,11 +288,12 @@ export function isSimpleCopiableExpression(expression: Expression) {
         isIdentifier(expression);
 }
 
-/** @internal */
 /**
  * A simple inlinable expression is an expression which can be copied into multiple locations
  * without risk of repeating any sideeffects and whose value could not possibly change between
  * any such locations
+ *
+ * @internal
  */
 export function isSimpleInlineableExpression(expression: Expression) {
     return !isIdentifier(expression) && isSimpleCopiableExpression(expression);
@@ -325,9 +327,10 @@ export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssi
     }
 }
 
-/** @internal */
 /**
  * @returns Contained super() call from descending into the statement ignoring parentheses, if that call exists.
+ *
+ * @internal
  */
 export function getSuperCallFromStatement(statement: Statement) {
     if (!isExpressionStatement(statement)) {
@@ -340,9 +343,10 @@ export function getSuperCallFromStatement(statement: Statement) {
         : undefined;
 }
 
-/** @internal */
 /**
  * @returns The index (after prologue statements) of a super call, or -1 if not found.
+ *
+ * @internal
  */
 export function findSuperStatementIndex(statements: NodeArray<Statement>, indexAfterLastPrologueStatement: number) {
     for (let i = indexAfterLastPrologueStatement; i < statements.length; i += 1) {
@@ -356,12 +360,13 @@ export function findSuperStatementIndex(statements: NodeArray<Statement>, indexA
     return -1;
 }
 
-/** @internal */
 /**
  * Gets all the static or all the instance property declarations of a class
  *
  * @param node The class node.
  * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
+ *
+ * @internal
  */
 export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: true, isStatic: boolean): readonly InitializedPropertyDeclaration[];
 /** @internal */
@@ -400,23 +405,25 @@ function isStaticPropertyDeclaration(member: ClassElement) {
     return isPropertyDeclaration(member) && hasStaticModifier(member);
 }
 
-/** @internal */
 /**
  * Gets a value indicating whether a class element is either a static or an instance property declaration with an initializer.
  *
  * @param member The class element node.
  * @param isStatic A value indicating whether the member should be a static or instance member.
+ *
+ * @internal
  */
 export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
     return member.kind === SyntaxKind.PropertyDeclaration
         && (member as PropertyDeclaration).initializer !== undefined;
 }
 
-/** @internal */
 /**
  * Gets a value indicating whether a class element is a private instance method or accessor.
  *
  * @param member The class element node.
+ *
+ * @internal
  */
 export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierAutoAccessorPropertyDeclaration {
     return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) && isPrivateIdentifier(member.name);
@@ -450,12 +457,13 @@ function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
     return decorators;
 }
 
-/** @internal */
 /**
  * Gets an AllDecorators object containing the decorators for the class and the decorators for the
  * parameters of the constructor of the class.
  *
  * @param node The class node.
+ *
+ * @internal
  */
 export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorators | undefined {
     const decorators = getDecorators(node);
@@ -470,12 +478,13 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
     };
 }
 
-/** @internal */
 /**
  * Gets an AllDecorators object containing the decorators for the member and its parameters.
  *
  * @param parent The class node that contains the member.
  * @param member The class member.
+ *
+ * @internal
  */
 export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration): AllDecorators | undefined {
     switch (member.kind) {
