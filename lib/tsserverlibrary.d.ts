@@ -7033,7 +7033,6 @@ declare namespace ts.server {
         gc?(): void;
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): ModuleImportResult;
-        importServicePlugin?(root: string, moduleName: string): Promise<ModuleImportResult>;
     }
 }
 declare namespace ts.server {
