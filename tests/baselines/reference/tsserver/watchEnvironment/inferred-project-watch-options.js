@@ -40,22 +40,22 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/jsconfig.json:
-  {"fileName":"/user/username/projects/myproject/src/jsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/jsconfig.json:
-  {"fileName":"/user/username/projects/myproject/jsconfig.json","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}

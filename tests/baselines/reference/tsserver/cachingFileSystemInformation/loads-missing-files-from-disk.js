@@ -58,7 +58,7 @@ Project '/dev/null/inferredProject1*' (Inferred)
 
 -----------------------------------------------
 getSemanticDiagnostics:: /c/foo.ts:: 0
-fileExists:: [{"key":"/c/bar.ts","count":1},{"key":"/c/bar.tsx","count":1},{"key":"/c/bar.d.ts","count":2}]
+fileExists:: [{"key":"/c/bar.ts","count":1},{"key":"/c/bar.tsx","count":1},{"key":"/c/bar.d.ts","count":3}]
 directoryExists:: [{"key":"/c","count":1},{"key":"/c/node_modules/@types","count":1},{"key":"/node_modules/@types","count":1}]
 getDirectories:: []
 readFile:: [{"key":"/c/bar.d.ts","count":1}]

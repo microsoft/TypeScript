@@ -30,18 +30,18 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: /User/userName/Projects/i/foo.ts ProjectRootPath: /User/userName/Projects/i
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 /user/username/projects/i/tsconfig.json:
-  {"fileName":"/User/userName/Projects/i/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/i/jsconfig.json:
-  {"fileName":"/User/userName/Projects/i/jsconfig.json","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/i/node_modules:
-  {"fileName":"/User/userName/Projects/i/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/i/node_modules/@types:
-  {"fileName":"/User/userName/Projects/i/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::

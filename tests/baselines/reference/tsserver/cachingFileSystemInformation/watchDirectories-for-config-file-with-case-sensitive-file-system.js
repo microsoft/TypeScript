@@ -116,7 +116,7 @@ Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Open files: 
 	FileName: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts ProjectRootPath: undefined
 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
-fileExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
+fileExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":2}]
 directoryExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
 getDirectories:: []
 readFile:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]

@@ -39,14 +39,14 @@ Project '/user/username/projects/myproject/project.csproj' (External)
 Open files: 
 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 		Projects: /user/username/projects/myproject/project.csproj
-WatchedFiles::
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
