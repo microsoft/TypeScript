@@ -18,13 +18,14 @@ import {
 } from "../_namespaces/ts";
 import { ImportAdder } from "../_namespaces/ts.codefix";
 
-/** @internal */
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl
  * and generates source code for the missing members.
  * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
  * @param importAdder If provided, type annotations will use identifier type references instead of ImportTypeNodes, and the missing imports will be added to the importAdder.
  * @returns Empty string iff there are no member insertions.
+ *
+ * @internal
  */
 export function createMissingMemberNodes(
     classDeclaration: ClassLikeDeclaration,
@@ -65,10 +66,11 @@ export const enum PreserveOptionalFlags {
     All     = Method | Property
 }
 
-/** @internal */
 /**
  * `addClassElement` will not be called if we can't figure out a representation for `symbol` in `enclosingDeclaration`.
  * @param body If defined, this will be the body of the member node passed to `addClassElement`. Otherwise, the body will default to a stub.
+ *
+ * @internal
  */
 export function addNewNodeForMemberSymbol(
     symbol: Symbol,
@@ -729,11 +731,12 @@ export function findJsonProperty(obj: ObjectLiteralExpression, name: string): Pr
     return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
 }
 
-/** @internal */
 /**
  * Given a type node containing 'import("./a").SomeType<import("./b").OtherType<...>>',
  * returns an equivalent type reference node with any nested ImportTypeNodes also replaced
  * with type references, and a list of symbols that must be imported to use the type reference.
+ *
+ * @internal
  */
 export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
     let symbols: Symbol[] | undefined;

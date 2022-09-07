@@ -353,9 +353,10 @@ export function getLineInfo(text: string, lineStarts: readonly number[]): LineIn
     };
 }
 
-/** @internal */
 /**
  * Tries to find the sourceMappingURL comment at the end of a file.
+ *
+ * @internal
  */
 export function tryGetSourceMappingURL(lineInfo: LineInfo) {
     for (let index = lineInfo.getLineCount() - 1; index >= 0; index--) {

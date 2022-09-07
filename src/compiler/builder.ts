@@ -39,8 +39,11 @@ export interface ReusableDiagnosticRelatedInformation {
 /** @internal */
 export type ReusableDiagnosticMessageChain = DiagnosticMessageChain;
 
-/** @internal */
-/** Signature (Hash of d.ts emitted), is string if it was emitted using same d.ts.map option as what compilerOptions indicate, otherwise tuple of string */
+/**
+ * Signature (Hash of d.ts emitted), is string if it was emitted using same d.ts.map option as what compilerOptions indicate, otherwise tuple of string
+ *
+ * @internal
+ */
 export type EmitSignature = string | [signature: string];
 
 /** @internal */
@@ -105,9 +108,10 @@ export const enum BuilderFileEmit {
     All                 = AllJs | AllDts,
 }
 
-/** @internal */
 /**
  * State to store the changed files, affected files and cache semantic diagnostics
+ *
+ * @internal
  */
 // TODO: GH#18217 Properties of this interface are frequently asserted to be defined.
 export interface BuilderProgramState extends BuilderState, ReusableBuilderProgramState {
@@ -174,8 +178,11 @@ export type SavedBuildProgramEmitState = Pick<BuilderProgramState,
     "hasChangedEmitSignature"
 > & { changedFilesSet: BuilderProgramState["changedFilesSet"] | undefined };
 
-/** @internal */
-/** Get flags determining what all needs to be emitted */
+/**
+ * Get flags determining what all needs to be emitted
+ *
+ * @internal
+ */
 export function getBuilderFileEmit(options: CompilerOptions) {
     let result = BuilderFileEmit.Js;
     if (options.sourceMap) result = result | BuilderFileEmit.JsMap;
@@ -186,8 +193,11 @@ export function getBuilderFileEmit(options: CompilerOptions) {
     return result;
 }
 
-/** @internal */
-/** Determing what all is pending to be emitted based on previous options or previous file emit flags */
+/**
+ * Determing what all is pending to be emitted based on previous options or previous file emit flags
+ *
+ * @internal
+ */
 export function getPendingEmitKind(optionsOrEmitKind: CompilerOptions | BuilderFileEmit, oldOptionsOrEmitKind: CompilerOptions | BuilderFileEmit | undefined): BuilderFileEmit {
     const oldEmitKind = oldOptionsOrEmitKind && (isNumber(oldOptionsOrEmitKind) ? oldOptionsOrEmitKind : getBuilderFileEmit(oldOptionsOrEmitKind));
     const emitKind = isNumber(optionsOrEmitKind) ? optionsOrEmitKind : getBuilderFileEmit(optionsOrEmitKind);
@@ -821,11 +831,12 @@ export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: a
 export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any };
 /** @internal */
 export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
-/** @internal */
 /**
  * fileId if pending emit is same as what compilerOptions suggest
  * [fileId] if pending emit is only dts file emit
  * [fileId, emitKind] if any other type emit is pending
+ *
+ * @internal
  */
 export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId] | [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
 /** @internal */
@@ -840,15 +851,17 @@ export type ProgramMultiFileEmitBuildInfoBuilderStateFileInfo = Omit<BuilderStat
      */
     signature: string | false | undefined;
 };
-/** @internal */
 /**
  * [fileId, signature] if different from file's signature
  * fileId if file wasnt emitted
+ *
+ * @internal
  */
 export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, signature: EmitSignature | []];
-/** @internal */
 /**
  * ProgramMultiFileEmitBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
+ *
+ * @internal
  */
 export type ProgramMultiFileEmitBuildInfoFileInfo = string | ProgramMultiFileEmitBuildInfoBuilderStateFileInfo;
 /** @internal */
@@ -866,15 +879,17 @@ export interface ProgramMultiFileEmitBuildInfo {
     // Because this is only output file in the program, we dont need fileId to deduplicate name
     latestChangedDtsFile?: string | undefined;
 }
-/** @internal */
 /**
  * ProgramBundleEmitBuildInfoFileInfo is string if !FileInfo.impliedFormat otherwise encoded FileInfo
+ *
+ * @internal
  */
 export type ProgramBundleEmitBuildInfoFileInfo = string | BuilderState.FileInfo;
-/** @internal */
 /**
  * false if it is the emit corresponding to compilerOptions
  * value otherwise
+ *
+ * @internal
  */
 export type ProgramBuildInfoBundlePendingEmit = BuilderFileEmit | false;
 /** @internal */

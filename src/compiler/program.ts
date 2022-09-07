@@ -74,7 +74,7 @@ export function resolveTripleslashReference(moduleName: string, containingFile: 
     return normalizePath(referencedFileName);
 }
 
-/* @internal */
+/** @internal */
 export function computeCommonSourceDirectoryOfFilenames(fileNames: readonly string[], currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
     let commonPathComponents: string[] | undefined;
     const failed = forEach(fileNames, sourceFile => {
@@ -124,7 +124,7 @@ export function createCompilerHost(options: CompilerOptions, setParentNodes?: bo
     return createCompilerHostWorker(options, setParentNodes);
 }
 
-/*@internal*/
+/** @internal */
 export function createGetSourceFile(
     readFile: ProgramHost<any>["readFile"],
     getCompilerOptions: () => CompilerOptions,
@@ -148,7 +148,7 @@ export function createGetSourceFile(
     };
 }
 
-/*@internal*/
+/** @internal */
 export function createWriteFileMeasuringIO(
     actualWriteFile: (path: string, data: string, writeByteOrderMark: boolean) => void,
     createDirectory: (path: string) => void,
@@ -181,7 +181,7 @@ export function createWriteFileMeasuringIO(
     };
 }
 
-/*@internal*/
+/** @internal */
 export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
@@ -229,7 +229,7 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
     return compilerHost;
 }
 
-/*@internal*/
+/** @internal */
 interface CompilerHostLikeForCache {
     fileExists(fileName: string): boolean;
     readFile(fileName: string, encoding?: string): string | undefined;
@@ -238,7 +238,7 @@ interface CompilerHostLikeForCache {
     writeFile?: WriteFileCallback;
 }
 
-/*@internal*/
+/** @internal */
 export function changeCompilerHostLikeToUseCache(
     host: CompilerHostLikeForCache,
     toPath: (fileName: string) => Path,
@@ -354,7 +354,7 @@ export function changeCompilerHostLikeToUseCache(
 }
 
 export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
-/*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[]; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[]; // eslint-disable-line @typescript-eslint/unified-signatures
 export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
     let diagnostics: Diagnostic[] | undefined;
     diagnostics = addRange(diagnostics, program.getConfigFileParsingDiagnostics());
@@ -480,7 +480,7 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
     return context;
 }
 
-/* @internal */
+/** @internal */
 export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color = formatColorAndReset) {
     const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start); // TODO: GH#18217
     const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
@@ -553,7 +553,7 @@ export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageCha
     return result;
 }
 
-/* @internal */
+/** @internal */
 export function loadWithTypeDirectiveCache<T>(names: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: SourceFile["impliedNodeFormat"], loader: (name: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: SourceFile["impliedNodeFormat"]) => T): T[] {
     if (names.length === 0) {
         return [];
@@ -585,8 +585,8 @@ export function loadWithTypeDirectiveCache<T>(names: string[] | readonly FileRef
  * @internal
  */
 export interface SourceFileImportsList {
-    /* @internal */ imports: SourceFile["imports"];
-    /* @internal */ moduleAugmentations: SourceFile["moduleAugmentations"];
+    /** @internal */ imports: SourceFile["imports"];
+    /** @internal */ moduleAugmentations: SourceFile["moduleAugmentations"];
     impliedNodeFormat?: SourceFile["impliedNodeFormat"];
 }
 
@@ -616,7 +616,7 @@ export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: 
     return getModeForUsageLocation(file, getModuleNameStringLiteralAt(file, index));
 }
 
-/* @internal */
+/** @internal */
 export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration) {
     if (isExportDeclaration(decl)) {
         return decl.isTypeOnly;
@@ -663,7 +663,7 @@ export function getModeForUsageLocation(file: {impliedNodeFormat?: SourceFile["i
     return exprParentParent && isImportEqualsDeclaration(exprParentParent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
 }
 
-/* @internal */
+/** @internal */
 export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
     if (!clause) return undefined;
     if (length(clause.elements) !== 1) {
@@ -684,7 +684,7 @@ export function getResolutionModeOverrideForClause(clause: AssertClause | undefi
     return elem.value.text === "import" ? ModuleKind.ESNext : ModuleKind.CommonJS;
 }
 
-/* @internal */
+/** @internal */
 export function loadWithModeAwareCache<T>(names: readonly StringLiteralLike[] | readonly string[], containingFile: SourceFile, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined, resolutionInfo: ModuleResolutionInfo | undefined, loader: (name: string, resolverMode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined) => T): T[] {
     if (names.length === 0) {
         return [];
@@ -711,7 +711,7 @@ export function loadWithModeAwareCache<T>(names: readonly StringLiteralLike[] | 
     return resolutions;
 }
 
-/* @internal */
+/** @internal */
 export function forEachResolvedProjectReference<T>(
     resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
     cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined
@@ -756,7 +756,7 @@ function forEachProjectReference<T>(
     }
 }
 
-/* @internal */
+/** @internal */
 export const inferredTypesContainingFile = "__inferred type names__.ts";
 
 interface DiagnosticCache<T extends Diagnostic> {
@@ -764,7 +764,7 @@ interface DiagnosticCache<T extends Diagnostic> {
     allDiagnostics?: readonly T[];
 }
 
-/*@internal*/
+/** @internal */
 export function isReferencedFile(reason: FileIncludeReason | undefined): reason is ReferencedFile {
     switch (reason?.kind) {
         case FileIncludeKind.Import:
@@ -777,7 +777,7 @@ export function isReferencedFile(reason: FileIncludeReason | undefined): reason 
     }
 }
 
-/*@internal*/
+/** @internal */
 export interface ReferenceFileLocation {
     file: SourceFile;
     pos: number;
@@ -785,19 +785,19 @@ export interface ReferenceFileLocation {
     packageId: PackageId | undefined;
 }
 
-/*@internal*/
+/** @internal */
 export interface SyntheticReferenceFileLocation {
     file: SourceFile;
     packageId: PackageId | undefined;
     text: string;
 }
 
-/*@internal*/
+/** @internal */
 export function isReferenceFileLocation(location: ReferenceFileLocation | SyntheticReferenceFileLocation): location is ReferenceFileLocation {
     return (location as ReferenceFileLocation).pos !== undefined;
 }
 
-/*@internal*/
+/** @internal */
 export function getReferencedFileLocation(getSourceFileByPath: (path: Path) => SourceFile | undefined, ref: ReferencedFile): ReferenceFileLocation | SyntheticReferenceFileLocation {
     const file = Debug.checkDefined(getSourceFileByPath(ref.file));
     const { kind, index } = ref;
@@ -828,8 +828,9 @@ export function getReferencedFileLocation(getSourceFileByPath: (path: Path) => S
 
 /**
  * Determines if program structure is upto date or needs to be recreated
+ *
+ * @internal
  */
-/* @internal */
 export function isProgramUptoDate(
     program: Program | undefined,
     rootFileNames: string[],
@@ -935,7 +936,7 @@ export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache
     return typeof result === "object" ? result.impliedNodeFormat : result;
 }
 
-/*@internal*/
+/** @internal */
 export function getImpliedNodeFormatForFileWorker(
     fileName: string,
     packageJsonInfoCache: PackageJsonInfoCache | undefined,
@@ -4307,10 +4308,10 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
     }
 }
 
-/*@internal*/
+/** @internal */
 export const emitSkippedWithNoDiagnostics: EmitResult = { diagnostics: emptyArray, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
 
-/*@internal*/
+/** @internal */
 export function handleNoEmitOptions<T extends BuilderProgram>(
     program: Program | T,
     sourceFile: SourceFile | undefined,
@@ -4351,12 +4352,12 @@ export function handleNoEmitOptions<T extends BuilderProgram>(
     return { diagnostics, sourceMaps: undefined, emittedFiles, emitSkipped: true };
 }
 
-/*@internal*/
+/** @internal */
 export function filterSemanticDiagnostics(diagnostic: readonly Diagnostic[], option: CompilerOptions): readonly Diagnostic[] {
     return filter(diagnostic, d => !d.skippedOn || !option[d.skippedOn]);
 }
 
-/*@internal*/
+/** @internal */
 interface CompilerHostLike {
     useCaseSensitiveFileNames(): boolean;
     getCurrentDirectory(): string;
@@ -4367,7 +4368,7 @@ interface CompilerHostLike {
     onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter;
 }
 
-/* @internal */
+/** @internal */
 export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, directoryStructureHost: DirectoryStructureHost = host): ParseConfigFileHost {
     return {
         fileExists: f => directoryStructureHost.fileExists(f),
@@ -4388,7 +4389,7 @@ export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, dire
     fileExists(fileName: string): boolean;
 }
 
-/* @internal */
+/** @internal */
 export function createPrependNodes(
     projectReferences: readonly ProjectReference[] | undefined,
     getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined,
@@ -4423,11 +4424,12 @@ export function resolveProjectReferencePath(hostOrRef: ResolveProjectReferencePa
     return resolveConfigFileProjectName(passedInRef.path);
 }
 
-/* @internal */
 /**
  * Returns a DiagnosticMessage if we won't include a resolved module due to its extension.
  * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
  * This returns a diagnostic even if the module will be an untyped module.
+ *
+ * @internal
  */
 export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModuleFull): DiagnosticMessage | undefined {
     switch (extension) {
@@ -4467,7 +4469,7 @@ function getModuleNames({ imports, moduleAugmentations }: SourceFile): StringLit
     return res;
 }
 
-/* @internal */
+/** @internal */
 export function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: SourceFileImportsList, index: number): StringLiteralLike {
     if (index < imports.length) return imports[index];
     let augIndex = imports.length;

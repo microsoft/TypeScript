@@ -54,11 +54,12 @@ const marks = new Map<string, number>();
 const counts = new Map<string, number>();
 const durations = new Map<string, number>();
 
-/** @internal */
 /**
  * Marks a performance event.
  *
  * @param markName The name of the mark.
+ *
+ * @internal
  */
 export function mark(markName: string) {
     if (enabled) {
@@ -69,7 +70,6 @@ export function mark(markName: string) {
     }
 }
 
-/** @internal */
 /**
  * Adds a performance measurement with the specified name.
  *
@@ -78,6 +78,8 @@ export function mark(markName: string) {
  *      profiler was enabled is used.
  * @param endMarkName The name of the ending mark. If not supplied, the current timestamp is
  *      used.
+ *
+ * @internal
  */
 export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
     if (enabled) {
@@ -89,31 +91,34 @@ export function measure(measureName: string, startMarkName?: string, endMarkName
     }
 }
 
-/** @internal */
 /**
  * Gets the number of times a marker was encountered.
  *
  * @param markName The name of the mark.
+ *
+ * @internal
  */
 export function getCount(markName: string) {
     return counts.get(markName) || 0;
 }
 
-/** @internal */
 /**
  * Gets the total duration of all measurements with the supplied name.
  *
  * @param measureName The name of the measure whose durations should be accumulated.
+ *
+ * @internal
  */
 export function getDuration(measureName: string) {
     return durations.get(measureName) || 0;
 }
 
-/** @internal */
 /**
  * Iterate over each measure, performing some action
  *
  * @param cb The action to perform for each measure
+ *
+ * @internal
  */
 export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
     durations.forEach((duration, measureName) => cb(measureName, duration));
@@ -144,16 +149,20 @@ export function clearMarks(name?: string) {
     performanceImpl?.clearMarks(name);
 }
 
-/** @internal */
 /**
  * Indicates whether the performance API is enabled.
+ *
+ * @internal
  */
 export function isEnabled() {
     return enabled;
 }
 
-/** @internal */
-/** Enables (and resets) performance measurements for the compiler. */
+/**
+ * Enables (and resets) performance measurements for the compiler.
+ *
+ * @internal
+ */
 export function enable(system: System = sys) {
     if (!enabled) {
         enabled = true;
@@ -172,8 +181,11 @@ export function enable(system: System = sys) {
     return true;
 }
 
-/** @internal */
-/** Disables performance measurements for the compiler. */
+/**
+ * Disables performance measurements for the compiler.
+ *
+ * @internal
+ */
 export function disable() {
     if (enabled) {
         marks.clear();

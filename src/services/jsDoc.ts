@@ -337,7 +337,6 @@ export function getJSDocParameterNameCompletionDetails(name: string): Completion
     };
 }
 
-/** @internal */
 /**
  * Checks if position points to a valid position to add JSDoc comments, and if so,
  * returns the appropriate template. Otherwise returns an empty string.
@@ -360,6 +359,8 @@ export function getJSDocParameterNameCompletionDetails(name: string): Completion
  * @param fileName The file in which to perform the check.
  * @param position The (character-indexed) position in the file where the check should
  * be performed.
+ *
+ * @internal
  */
 export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
     const tokenAtPos = getTokenAtPosition(sourceFile, position);

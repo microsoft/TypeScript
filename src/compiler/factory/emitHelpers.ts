@@ -412,7 +412,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 }
 
-/* @internal */
+/** @internal */
 export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
     if (x === y) return Comparison.EqualTo;
     if (x.priority === y.priority) return Comparison.EqualTo;
@@ -421,10 +421,11 @@ export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
     return compareValues(x.priority, y.priority);
 }
 
-/** @internal */
 /**
  * @param input Template string input strings
  * @param args Names which need to be made file-level unique
+ *
+ * @internal
  */
 export function helperString(input: TemplateStringsArray, ...args: string[]) {
     return (uniqueName: EmitHelperUniqueNameCallback) => {
@@ -880,7 +881,6 @@ export const exportStarHelper: UnscopedEmitHelper = {
             };`
 };
 
-/** @internal */
 /**
  * Parameters:
  *  @param receiver — The object from which the private member will be read.
@@ -928,6 +928,8 @@ export const exportStarHelper: UnscopedEmitHelper = {
  *
  * Reading from a private static method (TS 4.3+):
  *      __classPrivateFieldGet(<any>, <constructor>, "m", <function>)
+ *
+ * @internal
  */
 export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldGet",
@@ -941,7 +943,6 @@ export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
             };`
 };
 
-/** @internal */
 /**
  * Parameters:
  *  @param receiver — The object on which the private member will be set.
@@ -992,6 +993,8 @@ export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
  * Writing to a private static method (TS 4.3+):
  *      __classPrivateFieldSet(<any>, <constructor>, <any>, "m", <function>)
  *      NOTE: This always results in a runtime error.
+ *
+ * @internal
  */
 export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldSet",
@@ -1006,7 +1009,6 @@ export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
             };`
 };
 
-/** @internal */
 /**
  * Parameters:
  *  @param state — One of the following:
@@ -1018,6 +1020,8 @@ export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
  * Usage:
  * This helper is used to transform `#field in expression` to
  *      `__classPrivateFieldIn(<weakMap/weakSet/constructor>, expression)`
+ *
+ * @internal
  */
 export const classPrivateFieldInHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldIn",

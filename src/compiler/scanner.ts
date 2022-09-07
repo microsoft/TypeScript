@@ -7,12 +7,12 @@ import {
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
-/* @internal */
+/** @internal */
 export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
     return token >= SyntaxKind.Identifier;
 }
 
-/* @internal */
+/** @internal */
 export function tokenIsIdentifierOrKeywordOrGreaterThan(token: SyntaxKind): boolean {
     return token === SyntaxKind.GreaterThanToken || tokenIsIdentifierOrKeyword(token);
 }
@@ -27,16 +27,16 @@ export interface Scanner {
     hasUnicodeEscape(): boolean;
     hasExtendedUnicodeEscape(): boolean;
     hasPrecedingLineBreak(): boolean;
-    /* @internal */
+    /** @internal */
     hasPrecedingJSDocComment(): boolean;
     isIdentifier(): boolean;
     isReservedWord(): boolean;
     isUnterminated(): boolean;
-    /* @internal */
+    /** @internal */
     getNumericLiteralFlags(): TokenFlags;
-    /* @internal */
+    /** @internal */
     getCommentDirectives(): CommentDirective[] | undefined;
-    /* @internal */
+    /** @internal */
     getTokenFlags(): TokenFlags;
     reScanGreaterToken(): SyntaxKind;
     reScanSlashToken(): SyntaxKind;
@@ -56,7 +56,7 @@ export interface Scanner {
     scan(): SyntaxKind;
 
     getText(): string;
-    /* @internal */
+    /** @internal */
     clearCommentDirectives(): void;
     // Sets the text for the scanner to scan.  An optional subrange starting point and length
     // can be provided to have the scanner only scan a portion of the text.
@@ -65,7 +65,7 @@ export interface Scanner {
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
     setTextPos(textPos: number): void;
-    /* @internal */
+    /** @internal */
     setInJSDocType(inType: boolean): void;
     // Invokes the provided callback then unconditionally restores the scanner to the state it
     // was in immediately prior to invoking the callback.  The result of invoking the callback
@@ -333,7 +333,7 @@ function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     return false;
 }
 
-/* @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget | undefined) {
+/** @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget | undefined) {
     return languageVersion! >= ScriptTarget.ES2015 ?
         lookupInUnicodeMap(code, unicodeESNextIdentifierStart) :
         languageVersion === ScriptTarget.ES5 ? lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
@@ -360,12 +360,12 @@ export function tokenToString(t: SyntaxKind): string | undefined {
     return tokenStrings[t];
 }
 
-/* @internal */
+/** @internal */
 export function stringToToken(s: string): SyntaxKind | undefined {
     return textToToken.get(s);
 }
 
-/* @internal */
+/** @internal */
 export function computeLineStarts(text: string): number[] {
     const result: number[] = [];
     let pos = 0;
@@ -396,7 +396,7 @@ export function computeLineStarts(text: string): number[] {
 }
 
 export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
-/* @internal */
+/** @internal */
 export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number; // eslint-disable-line @typescript-eslint/unified-signatures
 export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
     return sourceFile.getPositionOfLineAndCharacter ?
@@ -404,7 +404,7 @@ export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: 
         computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, allowEdits);
 }
 
-/* @internal */
+/** @internal */
 export function computePositionOfLineAndCharacter(lineStarts: readonly number[], line: number, character: number, debugText?: string, allowEdits?: true): number {
     if (line < 0 || line >= lineStarts.length) {
         if (allowEdits) {
@@ -432,12 +432,12 @@ export function computePositionOfLineAndCharacter(lineStarts: readonly number[],
     return res;
 }
 
-/* @internal */
+/** @internal */
 export function getLineStarts(sourceFile: SourceFileLike): readonly number[] {
     return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
 }
 
-/* @internal */
+/** @internal */
 export function computeLineAndCharacterOfPosition(lineStarts: readonly number[], position: number): LineAndCharacter {
     const lineNumber = computeLineOfPosition(lineStarts, position);
     return {
@@ -534,7 +534,7 @@ function isCodePoint(code: number): boolean {
     return code <= 0x10FFFF;
 }
 
-/* @internal */
+/** @internal */
 export function isOctalDigit(ch: number): boolean {
     return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
 }
@@ -566,7 +566,7 @@ export function couldStartTrivia(text: string, pos: number): boolean {
     }
 }
 
-/* @internal */
+/** @internal */
 export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments?: boolean, inJSDoc?: boolean): number {
     if (positionIsSynthesized(pos)) {
         return pos;
@@ -720,14 +720,14 @@ function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: Diag
 
 const shebangTriviaRegex = /^#!.*/;
 
-/*@internal*/
+/** @internal */
 export function isShebangTrivia(text: string, pos: number) {
     // Shebangs check must only be done at the start of the file
     Debug.assert(pos === 0);
     return shebangTriviaRegex.test(text);
 }
 
-/*@internal*/
+/** @internal */
 export function scanShebangTrivia(text: string, pos: number) {
     const shebang = shebangTriviaRegex.exec(text)![0];
     pos = pos + shebang.length;
@@ -918,7 +918,7 @@ export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | und
         ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
 }
 
-/* @internal */
+/** @internal */
 export function isIdentifierText(name: string, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
     let ch = codePointAt(name, 0);
     if (!isIdentifierStart(ch, languageVersion)) {
@@ -2616,7 +2616,7 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 }
 
-/* @internal */
+/** @internal */
 const codePointAt: (s: string, i: number) => number = (String.prototype as any).codePointAt ? (s, i) => (s as any).codePointAt(i) : function codePointAt(str, i): number {
     // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt
     const size = str.length;
@@ -2637,7 +2637,7 @@ const codePointAt: (s: string, i: number) => number = (String.prototype as any).
     return first;
 };
 
-/* @internal */
+/** @internal */
 function charSize(ch: number) {
     if (ch >= 0x10000) {
         return 2;
@@ -2661,7 +2661,7 @@ function utf16EncodeAsStringFallback(codePoint: number) {
 
 const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ? codePoint => (String as any).fromCodePoint(codePoint) : utf16EncodeAsStringFallback;
 
-/* @internal */
+/** @internal */
 export function utf16EncodeAsString(codePoint: number) {
     return utf16EncodeAsStringWorker(codePoint);
 }

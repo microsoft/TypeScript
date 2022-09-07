@@ -159,7 +159,6 @@ export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: 
     callback(hint, node);
 }
 
-/** @internal */
 /**
  * Transforms an array of SourceFiles by passing them through each transformer.
  *
@@ -169,6 +168,8 @@ export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: 
  * @param nodes An array of nodes to transform.
  * @param transforms An array of `TransformerFactory` callbacks.
  * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
+ *
+ * @internal
  */
 export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
     const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);

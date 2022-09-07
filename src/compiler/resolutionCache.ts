@@ -18,8 +18,11 @@ import {
     stringContains, trace, unorderedRemoveItem, WatchDirectoryFlags,
 } from "./_namespaces/ts";
 
-/** @internal */
-/** This is the cache of module/typedirectives resolution that can be retained across program */
+/**
+ * This is the cache of module/typedirectives resolution that can be retained across program
+ *
+ * @internal
+ */
 export interface ResolutionCache {
     startRecordingFilesWithChangedResolutions(): void;
     finishRecordingFilesWithChangedResolutions(): Path[] | undefined;
@@ -132,12 +135,13 @@ export function removeIgnoredPath(path: Path): Path | undefined {
         path;
 }
 
-/** @internal */
 /**
  * Filter out paths like
  * "/", "/user", "/user/username", "/user/username/folderAtRoot",
  * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
  * @param dirPath
+ *
+ * @internal
  */
 export function canWatchDirectoryOrFile(dirPath: Path) {
     const rootLength = getRootLength(dirPath);

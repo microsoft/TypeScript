@@ -15,10 +15,10 @@ declare module "../compiler/types" {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
-        /* @internal */
+        /** @internal */
         getChildren(sourceFile?: SourceFileLike): Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
-        /* @internal */
+        /** @internal */
         getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
         getFullStart(): number;
         getEnd(): number;
@@ -28,10 +28,10 @@ declare module "../compiler/types" {
         getFullText(sourceFile?: SourceFile): string;
         getText(sourceFile?: SourceFile): string;
         getFirstToken(sourceFile?: SourceFile): Node | undefined;
-        /* @internal */
+        /** @internal */
         getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         getLastToken(sourceFile?: SourceFile): Node | undefined;
-        /* @internal */
+        /** @internal */
         getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         // See ts.forEachChild for documentation.
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
@@ -61,10 +61,10 @@ declare module "../compiler/types" {
         getName(): string;
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
-        /* @internal */
+        /** @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
-        /* @internal */
+        /** @internal */
         getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[];
     }
 }
@@ -83,8 +83,8 @@ declare module "../compiler/types" {
         getNumberIndexType(): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
-        /*@internal*/ getNonOptionalType(): Type;
-        /*@internal*/ isNullableType(): boolean;
+        /** @internal */ getNonOptionalType(): Type;
+        /** @internal */ isNullableType(): boolean;
         getConstraint(): Type | undefined;
         getDefault(): Type | undefined;
 
@@ -124,11 +124,11 @@ declare module "../compiler/types" {
 declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
     export interface SourceFile {
-        /* @internal */ version: string;
-        /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
-        /* @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
+        /** @internal */ version: string;
+        /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
+        /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
 
-        /* @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
+        /** @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
@@ -136,7 +136,7 @@ declare module "../compiler/types" {
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 
-        /* @internal */ sourceMapper?: DocumentPositionMapper;
+        /** @internal */ sourceMapper?: DocumentPositionMapper;
     }
 }
 
@@ -226,7 +226,7 @@ export interface InstallPackageOptions {
     packageName: string;
 }
 
-/* @internal */
+/** @internal */
 export const enum PackageJsonDependencyGroup {
     Dependencies         = 1 << 0,
     DevDependencies      = 1 << 1,
@@ -235,7 +235,7 @@ export const enum PackageJsonDependencyGroup {
     All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
 }
 
-/* @internal */
+/** @internal */
 export interface ProjectPackageJsonInfo {
     fileName: string;
     parseable: boolean;
@@ -247,12 +247,12 @@ export interface ProjectPackageJsonInfo {
     has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
 }
 
-/* @internal */
+/** @internal */
 export interface FormattingHost {
     getNewLine?(): string;
 }
 
-/* @internal */
+/** @internal */
 export const enum PackageJsonAutoImportPreference {
     Off,
     On,
@@ -326,12 +326,12 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
     getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
     resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
-    /* @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
-    /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
-    /* @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
-    /* @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
+    /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
+    /** @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
+    /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
+    /** @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
     /* Lets the Program from a AutoImportProviderProject use its host project's ModuleResolutionCache */
-    /* @internal */ getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+    /** @internal */ getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
     /*
      * Required for full import and type reference completions.
@@ -348,23 +348,23 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     writeFile?(fileName: string, content: string): void;
 
-    /* @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
-    /* @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-    /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
-    /* @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
-    /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly ProjectPackageJsonInfo[];
-    /* @internal */ getCachedExportInfoMap?(): ExportInfoMap;
-    /* @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
-    /* @internal */ setCompilerHost?(host: CompilerHost): void;
-    /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
-    /* @internal */ getPackageJsonAutoImportProvider?(): Program | undefined;
-    /* @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
+    /** @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
+    /** @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
+    /** @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
+    /** @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
+    /** @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly ProjectPackageJsonInfo[];
+    /** @internal */ getCachedExportInfoMap?(): ExportInfoMap;
+    /** @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
+    /** @internal */ setCompilerHost?(host: CompilerHost): void;
+    /** @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
+    /** @internal */ getPackageJsonAutoImportProvider?(): Program | undefined;
+    /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-    /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
-    /* @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
+    /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
 }
 
-/* @internal */
+/** @internal */
 export const emptyOptions = {};
 
 export type WithMetadata<T> = T & { metadata?: unknown; };
@@ -514,10 +514,10 @@ export interface LanguageService {
 
     getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
-    /*@internal*/
+    /** @internal */
     // eslint-disable-next-line @typescript-eslint/unified-signatures
     getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
-    /*@internal*/
+    /** @internal */
     // eslint-disable-next-line @typescript-eslint/unified-signatures
     getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
     getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -590,15 +590,15 @@ export interface LanguageService {
     getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
     getProgram(): Program | undefined;
-    /*@internal*/ getCurrentProgram(): Program | undefined;
+    /** @internal */ getCurrentProgram(): Program | undefined;
 
-    /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
-    /* @internal */ getAutoImportProvider(): Program | undefined;
+    /** @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
+    /** @internal */ getAutoImportProvider(): Program | undefined;
 
     /// Returns true if a suitable symbol was found in the project.
     /// May set isDefinition properties in `referencedSymbols` to false.
     /// May add elements to `knownSymbolSpans`.
-    /* @internal */ updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean;
+    /** @internal */ updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean;
 
     toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
     toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
@@ -844,9 +844,9 @@ export interface CombinedCodeActions {
 export type CodeActionCommand = InstallPackageAction;
 
 export interface InstallPackageAction {
-    /* @internal */ readonly type: "install package";
-    /* @internal */ readonly file: string;
-    /* @internal */ readonly packageName: string;
+    /** @internal */ readonly type: "install package";
+    /** @internal */ readonly file: string;
+    /** @internal */ readonly packageName: string;
 }
 
 /**
@@ -1084,7 +1084,7 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
     };
 }
 
-/* @internal */
+/** @internal */
 export const testFormatSettings = getDefaultFormatCodeSettings("\n");
 
 export interface DefinitionInfo extends DocumentSpan {
@@ -1099,8 +1099,8 @@ export interface DefinitionInfo extends DocumentSpan {
      * may be "incomplete" if this span has yet to be checked.
      */
     isLocal?: boolean;
-    /* @internal */ isAmbient?: boolean;
-    /* @internal */ failedAliasResolution?: boolean;
+    /** @internal */ isAmbient?: boolean;
+    /** @internal */ failedAliasResolution?: boolean;
 }
 
 export interface DefinitionInfoAndBoundSpan {

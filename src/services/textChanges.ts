@@ -110,7 +110,6 @@ function hasCommentsBeforeLineBreak(text: string, start: number) {
     return false;
 }
 
-/** @internal */
 /**
  * Usually node.pos points to a position immediately after the previous token.
  * If this position is used as a beginning of the span to remove - it might lead to removing the trailing trivia of the previous node, i.e:
@@ -123,6 +122,8 @@ function hasCommentsBeforeLineBreak(text: string, start: number) {
  * By default when removing nodes we adjust start and end positions to respect specification of the trivia above.
  * If pos\end should be interpreted literally (that is, withouth including leading and trailing trivia), `leadingTriviaOption` should be set to `LeadingTriviaOption.Exclude`
  * and `trailingTriviaOption` to `TrailingTriviaOption.Exclude`.
+ *
+ * @internal
  */
 export interface ConfigurableStartEnd extends ConfigurableStart, ConfigurableEnd {}
 
@@ -1635,9 +1636,12 @@ namespace deleteDeclaration {
     }
 }
 
-/** @internal */
-/** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
 // Exported for tests only! (TODO: improve tests to not need this)
+/**
+ * Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`.
+ *
+ * @internal
+ */
 export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
     const startPosition = getAdjustedStartPosition(sourceFile, node, options);
     const endPosition = getAdjustedEndPosition(sourceFile, node, options);

@@ -5,11 +5,12 @@ import {
     SourceFile, stringToToken, SyntaxKind, TransformationContext,
 } from "../_namespaces/ts";
 
-/** @internal */
 /**
  * Transforms ES5 syntax into ES3 syntax.
  *
  * @param context Context and state information for the transformation.
+ *
+ * @internal
  */
 export function transformES5(context: TransformationContext) {
     const { factory } = context;

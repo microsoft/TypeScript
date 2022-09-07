@@ -15,7 +15,7 @@ import {
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
     Brace = "brace",
-    /* @internal */
+    /** @internal */
     BraceFull = "brace-full",
     BraceCompletion = "braceCompletion",
     GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
@@ -24,36 +24,36 @@ export const enum CommandTypes {
     /** @deprecated Prefer CompletionInfo -- see comment on CompletionsResponse */
     Completions = "completions",
     CompletionInfo = "completionInfo",
-    /* @internal */
+    /** @internal */
     CompletionsFull = "completions-full",
     CompletionDetails = "completionEntryDetails",
-    /* @internal */
+    /** @internal */
     CompletionDetailsFull = "completionEntryDetails-full",
     CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
     CompileOnSaveEmitFile = "compileOnSaveEmitFile",
     Configure = "configure",
     Definition = "definition",
-    /* @internal */
+    /** @internal */
     DefinitionFull = "definition-full",
     DefinitionAndBoundSpan = "definitionAndBoundSpan",
-    /* @internal */
+    /** @internal */
     DefinitionAndBoundSpanFull = "definitionAndBoundSpan-full",
     Implementation = "implementation",
-    /* @internal */
+    /** @internal */
     ImplementationFull = "implementation-full",
-    /* @internal */
+    /** @internal */
     EmitOutput = "emit-output",
     Exit = "exit",
     FileReferences = "fileReferences",
-    /* @internal */
+    /** @internal */
     FileReferencesFull = "fileReferences-full",
     Format = "format",
     Formatonkey = "formatonkey",
-    /* @internal */
+    /** @internal */
     FormatFull = "format-full",
-    /* @internal */
+    /** @internal */
     FormatonkeyFull = "formatonkey-full",
-    /* @internal */
+    /** @internal */
     FormatRangeFull = "formatRange-full",
     Geterr = "geterr",
     GeterrForProject = "geterrForProject",
@@ -61,34 +61,34 @@ export const enum CommandTypes {
     SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
     SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
     NavBar = "navbar",
-    /* @internal */
+    /** @internal */
     NavBarFull = "navbar-full",
     Navto = "navto",
-    /* @internal */
+    /** @internal */
     NavtoFull = "navto-full",
     NavTree = "navtree",
     NavTreeFull = "navtree-full",
     /** @deprecated */
     Occurrences = "occurrences",
     DocumentHighlights = "documentHighlights",
-    /* @internal */
+    /** @internal */
     DocumentHighlightsFull = "documentHighlights-full",
     Open = "open",
     Quickinfo = "quickinfo",
-    /* @internal */
+    /** @internal */
     QuickinfoFull = "quickinfo-full",
     References = "references",
-    /* @internal */
+    /** @internal */
     ReferencesFull = "references-full",
     Reload = "reload",
     Rename = "rename",
-    /* @internal */
+    /** @internal */
     RenameInfoFull = "rename-full",
-    /* @internal */
+    /** @internal */
     RenameLocationsFull = "renameLocations-full",
     Saveto = "saveto",
     SignatureHelp = "signatureHelp",
-    /* @internal */
+    /** @internal */
     SignatureHelpFull = "signatureHelp-full",
     FindSourceDefinition = "findSourceDefinition",
     Status = "status",
@@ -99,65 +99,65 @@ export const enum CommandTypes {
     OpenExternalProject = "openExternalProject",
     OpenExternalProjects = "openExternalProjects",
     CloseExternalProject = "closeExternalProject",
-    /* @internal */
+    /** @internal */
     SynchronizeProjectList = "synchronizeProjectList",
-    /* @internal */
+    /** @internal */
     ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
     UpdateOpen = "updateOpen",
-    /* @internal */
+    /** @internal */
     EncodedSyntacticClassificationsFull = "encodedSyntacticClassifications-full",
-    /* @internal */
+    /** @internal */
     EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
-    /* @internal */
+    /** @internal */
     Cleanup = "cleanup",
     GetOutliningSpans = "getOutliningSpans",
-    /* @internal */
+    /** @internal */
     GetOutliningSpansFull = "outliningSpans", // Full command name is different for backward compatibility purposes
     TodoComments = "todoComments",
     Indentation = "indentation",
     DocCommentTemplate = "docCommentTemplate",
-    /* @internal */
+    /** @internal */
     CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full",
-    /* @internal */
+    /** @internal */
     NameOrDottedNameSpan = "nameOrDottedNameSpan",
-    /* @internal */
+    /** @internal */
     BreakpointStatement = "breakpointStatement",
     CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
     GetCodeFixes = "getCodeFixes",
-    /* @internal */
+    /** @internal */
     GetCodeFixesFull = "getCodeFixes-full",
     GetCombinedCodeFix = "getCombinedCodeFix",
-    /* @internal */
+    /** @internal */
     GetCombinedCodeFixFull = "getCombinedCodeFix-full",
     ApplyCodeActionCommand = "applyCodeActionCommand",
     GetSupportedCodeFixes = "getSupportedCodeFixes",
 
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
-    /* @internal */
+    /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
     OrganizeImports = "organizeImports",
-    /* @internal */
+    /** @internal */
     OrganizeImportsFull = "organizeImports-full",
     GetEditsForFileRename = "getEditsForFileRename",
-    /* @internal */
+    /** @internal */
     GetEditsForFileRenameFull = "getEditsForFileRename-full",
     ConfigurePlugin = "configurePlugin",
     SelectionRange = "selectionRange",
-    /* @internal */
+    /** @internal */
     SelectionRangeFull = "selectionRange-full",
     ToggleLineComment = "toggleLineComment",
-    /* @internal */
+    /** @internal */
     ToggleLineCommentFull = "toggleLineComment-full",
     ToggleMultilineComment = "toggleMultilineComment",
-    /* @internal */
+    /** @internal */
     ToggleMultilineCommentFull = "toggleMultilineComment-full",
     CommentSelection = "commentSelection",
-    /* @internal */
+    /** @internal */
     CommentSelectionFull = "commentSelection-full",
     UncommentSelection = "uncommentSelection",
-    /* @internal */
+    /** @internal */
     UncommentSelectionFull = "uncommentSelection-full",
     PrepareCallHierarchy = "prepareCallHierarchy",
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
@@ -402,16 +402,18 @@ export interface OutliningSpansResponse extends Response {
 
 /**
  * Request to obtain outlining spans in file.
+ *
+ * @internal
  */
-/* @internal */
 export interface OutliningSpansRequestFull extends FileRequest {
     command: CommandTypes.GetOutliningSpansFull;
 }
 
 /**
  * Response to OutliningSpansRequest request.
+ *
+ * @internal
  */
-/* @internal */
 export interface OutliningSpansResponseFull extends Response {
     body?: ts.OutliningSpan[];
 }
@@ -560,8 +562,9 @@ export interface FileLocationRequestArgs extends FileRequestArgs {
 
     /**
      * Position (can be specified instead of line/offset pair)
+     *
+     * @internal
      */
-    /* @internal */
     position?: number;
 }
 
@@ -758,8 +761,9 @@ export interface FileRangeRequestArgs extends FileRequestArgs {
 
     /**
      * Position (can be specified instead of line/offset pair)
+     *
+     * @internal
      */
-    /* @internal */
     startPosition?: number;
 
     /**
@@ -774,8 +778,9 @@ export interface FileRangeRequestArgs extends FileRequestArgs {
 
     /**
      * Position (can be specified instead of line/offset pair)
+     *
+     * @internal
      */
-    /* @internal */
     endPosition?: number;
 }
 
@@ -837,16 +842,18 @@ export interface GetSupportedCodeFixesResponse extends Response {
 
 /**
  * A request to get encoded Syntactic classifications for a span in the file
+ *
+ * @internal
  */
-/** @internal */
 export interface EncodedSyntacticClassificationsRequest extends FileRequest {
     arguments: EncodedSyntacticClassificationsRequestArgs;
 }
 
 /**
  * Arguments for EncodedSyntacticClassificationsRequest request.
+ *
+ * @internal
  */
-/** @internal */
 export interface EncodedSyntacticClassificationsRequestArgs extends FileRequestArgs {
     /**
      * Start position of the span.
@@ -1264,13 +1271,13 @@ export interface RenameRequest extends FileLocationRequest {
     arguments: RenameRequestArgs;
 }
 
-/* @internal */
+/** @internal */
 export interface RenameFullRequest extends FileLocationRequest {
     readonly command: CommandTypes.RenameLocationsFull;
     readonly arguments: RenameRequestArgs;
 }
 
-/* @internal */
+/** @internal */
 export interface RenameFullResponse extends Response {
     readonly body: readonly RenameLocation[];
 }
@@ -1424,8 +1431,9 @@ export type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixi
 
 /**
  * Contains information about current project version
+ *
+ * @internal
  */
-/* @internal */
 export interface ProjectVersionInfo {
     /**
      * Project name
@@ -1494,8 +1502,9 @@ export interface ProjectChanges {
  * if files is set - then this is the entire set of files in the project
  * if changes is set - then this is the set of changes that should be applied to existing project
  * otherwise - assume that nothing is changed
+ *
+ * @internal
  */
-/* @internal */
 export interface ProjectFiles {
     /**
      * Information about project verison
@@ -1515,8 +1524,9 @@ export interface ProjectFiles {
 
 /**
  * Combines project information with project level errors.
+ *
+ * @internal
  */
-/* @internal */
 export interface ProjectFilesWithDiagnostics extends ProjectFiles {
     /**
      * List of errors in project
@@ -1526,8 +1536,9 @@ export interface ProjectFilesWithDiagnostics extends ProjectFiles {
 
 /**
  * Represents set of changes in open file
+ *
+ * @internal
  */
-/* @internal */
 export interface ChangedOpenFile {
     /**
      * Name of file
@@ -1779,16 +1790,18 @@ export interface CloseExternalProjectResponse extends Response {
 
 /**
  * Request to check if given list of projects is up-to-date and synchronize them if necessary
+ *
+ * @internal
  */
-/* @internal */
 export interface SynchronizeProjectListRequest extends Request {
     arguments: SynchronizeProjectListRequestArgs;
 }
 
 /**
  * Arguments to SynchronizeProjectListRequest
+ *
+ * @internal
  */
-/* @internal */
 export interface SynchronizeProjectListRequestArgs {
     /**
      * List of last known projects
@@ -1803,16 +1816,18 @@ export interface SynchronizeProjectListRequestArgs {
 
 /**
  * Request to synchronize list of open files with the client
+ *
+ * @internal
  */
-/* @internal */
 export interface ApplyChangedToOpenFilesRequest extends Request {
     arguments: ApplyChangedToOpenFilesRequestArgs;
 }
 
 /**
  * Arguments to ApplyChangedToOpenFilesRequest
+ *
+ * @internal
  */
-/* @internal */
 export interface ApplyChangedToOpenFilesRequestArgs {
     /**
      * List of newly open files
@@ -2055,8 +2070,9 @@ export interface FormatRequestArgs extends FileLocationRequestArgs {
 
     /**
      * End position of the range for which to format text in file.
+     *
+     * @internal
      */
-    /* @internal */
     endPosition?: number;
     /**
      * Format options to be used.
@@ -2968,7 +2984,7 @@ export interface LargeFileReferencedEventBody {
     maxFileSize: number;
 }
 
-/*@internal*/
+/** @internal */
 export type AnyEvent =
     RequestCompletedEvent
     | DiagnosticEvent

@@ -19,13 +19,13 @@ import {
     tryParsePatterns, tryRemoveExtension, version, Version, versionMajorMinor, VersionRange,
 } from "./_namespaces/ts";
 
-/* @internal */
+/** @internal */
 export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
 export function trace(host: ModuleResolutionHost): void {
     host.trace!(formatMessage.apply(undefined, arguments));
 }
 
-/* @internal */
+/** @internal */
 export function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean {
     return !!compilerOptions.traceResolution && host.trace !== undefined;
 }
@@ -127,7 +127,7 @@ function createResolvedModuleWithFailedLookupLocations(
     };
 }
 
-/*@internal*/
+/** @internal */
 interface ModuleResolutionState {
     host: ModuleResolutionHost;
     compilerOptions: CompilerOptions;
@@ -142,8 +142,10 @@ interface ModuleResolutionState {
     reportDiagnostic: DiagnosticReporter;
 }
 
-/** Just the fields that we use for module resolution. */
-/*@internal*/
+/** Just the fields that we use for module resolution.
+ *
+ * @internal
+ */
 interface PackageJsonPathFields {
     typings?: string;
     types?: string;
@@ -223,7 +225,7 @@ function readPackageJsonTypesVersionsField(jsonContent: PackageJson, state: Modu
     return typesVersions;
 }
 
-/*@internal*/
+/** @internal */
 interface VersionPaths {
     version: string;
     paths: MapLike<string[]>;
@@ -262,7 +264,7 @@ function readPackageJsonTypesVersionPaths(jsonContent: PackageJson, state: Modul
 
 let typeScriptVersion: Version | undefined;
 
-/* @internal */
+/** @internal */
 export function getPackageJsonTypesVersionsPaths(typesVersions: MapLike<MapLike<string[]>>) {
     if (!typeScriptVersion) typeScriptVersion = new Version(version);
 
@@ -565,7 +567,7 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
 }
 
 export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
-    /*@internal*/ clearAllExceptPackageJsonInfoCache(): void;
+    /** @internal */ clearAllExceptPackageJsonInfoCache(): void;
 }
 
 export interface ModeAwareCache<T> {
@@ -593,7 +595,7 @@ export interface PerDirectoryResolutionCache<T> {
 
 export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
     getPackageJsonInfoCache(): PackageJsonInfoCache;
-    /*@internal*/ clearAllExceptPackageJsonInfoCache(): void;
+    /** @internal */ clearAllExceptPackageJsonInfoCache(): void;
 }
 
 /**
@@ -605,10 +607,10 @@ export interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCac
 }
 
 export interface PackageJsonInfoCache {
-    /*@internal*/ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
-    /*@internal*/ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
-    /*@internal*/ entries(): [Path, PackageJsonInfo | boolean][];
-    /*@internal*/ getInternalMap(): ESMap<Path, PackageJsonInfo | boolean> | undefined;
+    /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
+    /** @internal */ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
+    /** @internal */ entries(): [Path, PackageJsonInfo | boolean][];
+    /** @internal */ getInternalMap(): ESMap<Path, PackageJsonInfo | boolean> | undefined;
     clear(): void;
 }
 
@@ -617,7 +619,7 @@ export interface PerModuleNameCache {
     set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void;
 }
 
-/*@internal*/
+/** @internal */
 export interface CacheWithRedirects<T> {
     getOwnMap: () => ESMap<string, T>;
     redirectsMap: ESMap<Path, ESMap<string, T>>;
@@ -627,7 +629,7 @@ export interface CacheWithRedirects<T> {
     setOwnMap(newOwnMap: ESMap<string, T>): void;
 }
 
-/*@internal*/
+/** @internal */
 export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
     let ownMap: ESMap<string, T> = new Map();
     const redirectsMap = new Map<Path, ESMap<string, T>>();
@@ -752,7 +754,7 @@ function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanon
     }
 }
 
-/* @internal */
+/** @internal */
 export function createModeAwareCache<T>(): ModeAwareCache<T> {
     const underlying = new Map<ModeAwareCacheKey, T>();
     type ModeAwareCacheKey = string & { __modeAwareCacheKey: any; };
@@ -792,18 +794,18 @@ export function createModeAwareCache<T>(): ModeAwareCache<T> {
     }
 }
 
-/* @internal */
+/** @internal */
 export function getResolutionName(entry: FileReference | StringLiteralLike) {
     // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
     return isStringLiteralLike(entry) ? entry.text : entry.fileName.toLowerCase();
 }
 
-/* @internal */
+/** @internal */
 export function getResolutionMode(entry: FileReference | StringLiteralLike, file: SourceFile) {
     return isStringLiteralLike(entry) ? getModeForUsageLocation(file, entry) : entry.resolutionMode || file.impliedNodeFormat;
 }
 
-/* @internal */
+/** @internal */
 export function zipToModeAwareCache<V>(file: SourceFile, keys: readonly StringLiteralLike[] | readonly FileReference[], values: readonly V[]): ModeAwareCache<V> {
     Debug.assert(keys.length === values.length);
     const map = createModeAwareCache<V>();
@@ -819,7 +821,7 @@ export function createModuleResolutionCache(
     getCanonicalFileName: (s: string) => string,
     options?: CompilerOptions
 ): ModuleResolutionCache;
-/*@internal*/
+/** @internal */
 export function createModuleResolutionCache(
     currentDirectory: string,
     getCanonicalFileName: GetCanonicalFileName,
@@ -946,7 +948,7 @@ export function createTypeReferenceDirectiveResolutionCache(
     options?: CompilerOptions,
     packageJsonInfoCache?: PackageJsonInfoCache,
 ): TypeReferenceDirectiveResolutionCache;
-/*@internal*/
+/** @internal */
 export function createTypeReferenceDirectiveResolutionCache(
     currentDirectory: string,
     getCanonicalFileName: GetCanonicalFileName,
@@ -1276,8 +1278,9 @@ function tryLoadModuleUsingBaseUrl(extensions: Extensions, moduleName: string, l
  * Expose resolution logic to allow us to use Node module resolution logic from arbitrary locations.
  * No way to do this with `require()`: https://github.com/nodejs/node/issues/5963
  * Throws an error if the module can't be resolved.
+ *
+ * @internal
  */
-/* @internal */
 export function resolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
     const { resolvedModule, failedLookupLocations } = tryResolveJSModuleWorker(moduleName, initialDir, host);
     if (!resolvedModule) {
@@ -1286,7 +1289,7 @@ export function resolveJSModule(moduleName: string, initialDir: string, host: Mo
     return resolvedModule.resolvedFileName;
 }
 
-/* @internal */
+/** @internal */
 enum NodeResolutionFeatures {
     None = 0,
     // resolving `#local` names in your own package.json
@@ -1358,7 +1361,7 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
 }
 
 export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-/* @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
 export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations {
     let extensions;
     if (lookupConfig) {
@@ -1524,9 +1527,9 @@ function nodeLoadModuleByRelativeName(extensions: Extensions, candidate: string,
     return undefined;
 }
 
-/*@internal*/
+/** @internal */
 export const nodeModulesPathPart = "/node_modules/";
-/*@internal*/
+/** @internal */
 export function pathContainsNodeModules(path: string): boolean {
     return stringContains(path, nodeModulesPathPart);
 }
@@ -1540,8 +1543,9 @@ export function pathContainsNodeModules(path: string): boolean {
  *   For `/node_modules/foo/bar.d.ts` this is packageDirectory: "foo"
  *   For `/node_modules/@types/foo/bar/index.d.ts` this is packageDirectory: "@types/foo"
  *   For `/node_modules/foo/bar/index.d.ts` this is packageDirectory: "foo"
+ *
+ * @internal
  */
-/* @internal */
 export function parseNodeModuleFromPath(resolved: string): string | undefined {
     const path = normalizePath(resolved);
     const idx = path.lastIndexOf(nodeModulesPathPart);
@@ -1717,7 +1721,7 @@ function loadNodeModuleFromDirectory(extensions: Extensions, candidate: string, 
     return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
 }
 
-/* @internal */
+/** @internal */
 export function getEntrypointsFromPackageJsonInfo(
     packageJsonInfo: PackageJsonInfo,
     options: CompilerOptions,
@@ -1822,7 +1826,7 @@ function loadEntrypointsFromExportMap(
     }
 }
 
-/*@internal*/
+/** @internal */
 export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleResolutionState {
     return {
         host,
@@ -1838,12 +1842,12 @@ export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJ
     };
 }
 
-/*@internal*/
+/** @internal */
 export interface PackageJsonInfo {
     packageDirectory: string;
     contents: PackageJsonInfoContents;
 }
-/*@internal*/
+/** @internal */
 export interface PackageJsonInfoContents {
     packageJsonContent: PackageJsonPathFields;
     versionPaths: VersionPaths | undefined;
@@ -1853,8 +1857,9 @@ export interface PackageJsonInfoContents {
 
 /**
  * A function for locating the package.json scope for a given path
+ *
+ * @internal
  */
-/*@internal*/
  export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
     const parts = getPathComponents(fileName);
     parts.pop();
@@ -1868,7 +1873,7 @@ export interface PackageJsonInfoContents {
     return undefined;
 }
 
-/*@internal*/
+/** @internal */
 export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PackageJsonInfo | undefined {
     const { host, traceEnabled } = state;
     const packageJsonPath = combinePaths(packageDirectory, "package.json");
@@ -2014,7 +2019,7 @@ function extensionIsOk(extensions: Extensions, extension: Extension): boolean {
     }
 }
 
-/* @internal */
+/** @internal */
 export function parsePackageName(moduleName: string): { packageName: string, rest: string } {
     let idx = moduleName.indexOf(directorySeparator);
     if (moduleName[0] === "@") {
@@ -2023,7 +2028,7 @@ export function parsePackageName(moduleName: string): { packageName: string, res
     return idx === -1 ? { packageName: moduleName, rest: "" } : { packageName: moduleName.slice(0, idx), rest: moduleName.slice(idx + 1) };
 }
 
-/* @internal */
+/** @internal */
 export function allKeysStartWithDot(obj: MapLike<unknown>) {
     return every(getOwnKeys(obj), k => startsWith(k, "."));
 }
@@ -2404,7 +2409,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
     }
 }
 
-/* @internal */
+/** @internal */
 export function isApplicableVersionedTypesKey(conditions: readonly string[], key: string) {
     if (conditions.indexOf("types") === -1) return false; // only apply versioned types conditions if the types condition is applied
     if (!startsWith(key, "types@")) return false;
@@ -2574,12 +2579,12 @@ function mangleScopedPackageNameWithTrace(packageName: string, state: ModuleReso
     return mangled;
 }
 
-/* @internal */
+/** @internal */
 export function getTypesPackageName(packageName: string): string {
     return `@types/${mangleScopedPackageName(packageName)}`;
 }
 
-/* @internal */
+/** @internal */
 export function mangleScopedPackageName(packageName: string): string {
     if (startsWith(packageName, "@")) {
         const replaceSlash = packageName.replace(directorySeparator, mangledScopedPackageSeparator);
@@ -2590,7 +2595,7 @@ export function mangleScopedPackageName(packageName: string): string {
     return packageName;
 }
 
-/* @internal */
+/** @internal */
 export function getPackageNameFromTypesPackageName(mangledName: string): string {
     const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
     if (withoutAtTypePrefix !== mangledName) {
@@ -2599,7 +2604,7 @@ export function getPackageNameFromTypesPackageName(mangledName: string): string 
     return mangledName;
 }
 
-/* @internal */
+/** @internal */
 export function unmangleScopedPackageName(typesPackageName: string): string {
     return stringContains(typesPackageName, mangledScopedPackageSeparator) ?
         "@" + typesPackageName.replace(mangledScopedPackageSeparator, directorySeparator) :
@@ -2681,8 +2686,9 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 /**
  * A host may load a module from a global cache of typings.
  * This is the minumum code needed to expose that functionality; the rest is in the host.
+ *
+ * @internal
  */
-/* @internal */
 export function loadModuleFromGlobalCache(moduleName: string, projectName: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string, packageJsonInfoCache: PackageJsonInfoCache): ResolvedModuleWithFailedLookupLocations {
     const traceEnabled = isTraceEnabled(compilerOptions, host);
     if (traceEnabled) {

@@ -82,7 +82,7 @@ import {
 
 let nextAutoGenerateId = 0;
 
-/* @internal */
+/** @internal */
 export const enum NodeFactoryFlags {
     None = 0,
     // Disables the parenthesizer rules for the factory.
@@ -97,7 +97,7 @@ export const enum NodeFactoryFlags {
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
-/* @internal */
+/** @internal */
 export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
     nodeFactoryPatchers.push(fn);
 }
@@ -106,8 +106,9 @@ export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
  * Creates a `NodeFactory` that can be used to create and update a syntax tree.
  * @param flags Flags that control factory behavior.
  * @param baseFactory A `BaseNodeFactory` used to create the base `Node` objects.
+ *
+ * @internal
  */
-/* @internal */
 export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory): NodeFactory {
     const update = flags & NodeFactoryFlags.NoOriginalNode ? updateWithoutOriginal : updateWithOriginal;
 
@@ -6565,8 +6566,9 @@ function aggregateChildrenFlags(children: MutableNodeArray<Node>) {
 
 /**
  * Gets the transform flags to exclude when unioning the transform flags of a subtree.
+ *
+ * @internal
  */
-/* @internal */
 export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
     if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
         return TransformFlags.TypeExcludes;
@@ -6876,7 +6878,7 @@ export function createInputFiles(
             declarationMapTextOrBuildInfoPath,
         );
 }
-/*@internal*/
+/** @internal */
 export function createInputFilesWithFilePaths(
     readFileText: (path: string) => string | undefined,
     javascriptPath: string,
@@ -6929,7 +6931,7 @@ export function createInputFilesWithFilePaths(
     });
     return node;
 }
-/*@internal*/
+/** @internal */
 export function createInputFilesWithFileTexts(
     javascriptPath: string | undefined,
     javascriptText: string,

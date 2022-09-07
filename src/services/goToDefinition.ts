@@ -424,8 +424,11 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
     }
 }
 
-/** @internal */
-/** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
+/**
+ * Creates a DefinitionInfo from a Declaration, using the declaration's name if possible.
+ *
+ * @internal
+ */
 export function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, unverified?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
     const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
     const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
