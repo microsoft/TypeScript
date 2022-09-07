@@ -75,8 +75,8 @@ declare global {
 declare global {
     // Module transform: converted from ambient declaration
     /** @internal */
-    var Promise: PromiseConstructor;
-} // eslint-disable-line no-var
+    var Promise: PromiseConstructor; // eslint-disable-line no-var
+}
 
 // These utilities are common to multiple language service features.
 //#region

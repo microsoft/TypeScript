@@ -2079,7 +2079,7 @@ export class ProjectService {
             configFileName: configFileName(),
             projectType: project instanceof ExternalProject ? "external" : "configured",
             languageServiceEnabled: project.languageServiceEnabled,
-            version: version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            version,
         };
         this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
 

@@ -1,7 +1,6 @@
 import * as ts from "./_namespaces/ts";
 import * as Harness from "./_namespaces/Harness";
 
-// eslint-disable-line local/one-namespace-per-file
 interface FileInformation {
     contents?: string;
     contentsPath?: string;
