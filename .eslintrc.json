@@ -94,7 +94,8 @@
         "local/simple-indent": "error",
         "local/debug-assert": "error",
         "local/no-keywords": "error",
-        "local/one-namespace-per-file": "error",
+        // TOOD(jakebailey): delete; no longer relavent after modules.
+        // "local/one-namespace-per-file": "error",
 
         // eslint-plugin-import
         "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
