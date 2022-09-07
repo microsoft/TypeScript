@@ -17,7 +17,7 @@ export interface ScriptInfoVersion {
     text: number;
 }
 
-/* @internal */
+/** @internal */
 export class TextStorage {
     version: ScriptInfoVersion;
 
@@ -290,13 +290,13 @@ export function isDynamicFileName(fileName: NormalizedPath) {
         (stringContains(fileName, ":^") && !stringContains(fileName, directorySeparator));
 }
 
-/*@internal*/
+/** @internal */
 export interface DocumentRegistrySourceFileCache {
     key: DocumentRegistryBucketKeyWithMode;
     sourceFile: SourceFile;
 }
 
-/*@internal*/
+/** @internal */
 export interface SourceMapFileWatcher {
     watcher: FileWatcher;
     sourceInfos?: Set<Path>;
@@ -310,35 +310,35 @@ export class ScriptInfo {
     private formatSettings: FormatCodeSettings | undefined;
     private preferences: protocol.UserPreferences | undefined;
 
-    /* @internal */
+    /** @internal */
     fileWatcher: FileWatcher | undefined;
     private textStorage: TextStorage;
 
-    /*@internal*/
+    /** @internal */
     readonly isDynamic: boolean;
 
-    /*@internal*/
+    /** @internal */
     /** Set to real path if path is different from info.path */
     private realpath: Path | undefined;
 
-    /*@internal*/
+    /** @internal */
     cacheSourceFile: DocumentRegistrySourceFileCache | undefined;
 
-    /*@internal*/
+    /** @internal */
     mTime?: number;
 
-    /*@internal*/
+    /** @internal */
     sourceFileLike?: SourceFileLike;
 
-    /*@internal*/
+    /** @internal */
     sourceMapFilePath?: Path | SourceMapFileWatcher | false;
 
     // Present on sourceMapFile info
-    /*@internal*/
+    /** @internal */
     declarationInfoPath?: Path;
-    /*@internal*/
+    /** @internal */
     sourceInfos?: Set<Path>;
-    /*@internal*/
+    /** @internal */
     documentPositionMapper?: DocumentPositionMapper | false;
 
     constructor(
@@ -360,17 +360,17 @@ export class ScriptInfo {
             : getScriptKindFromFileName(fileName);
     }
 
-    /*@internal*/
+    /** @internal */
     getVersion() {
         return this.textStorage.version;
     }
 
-    /*@internal*/
+    /** @internal */
     getTelemetryFileSize() {
         return this.textStorage.getTelemetryFileSize();
     }
 
-    /*@internal*/
+    /** @internal */
     public isDynamicOrHasMixedContent() {
         return this.hasMixedContent || this.isDynamic;
     }
@@ -423,7 +423,7 @@ export class ScriptInfo {
         }
     }
 
-    /*@internal*/
+    /** @internal */
     getRealpathIfDifferent(): Path | undefined {
         return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
     }
@@ -592,7 +592,7 @@ export class ScriptInfo {
         this.host.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
     }
 
-    /*@internal*/
+    /** @internal */
     delayReloadNonMixedContentFile() {
         Debug.assert(!this.isDynamicOrHasMixedContent());
         this.textStorage.delayReloadFromFileIntoText();
@@ -614,7 +614,7 @@ export class ScriptInfo {
         return false;
     }
 
-    /*@internal*/
+    /** @internal */
     getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
         return this.textStorage.getAbsolutePositionAndLineText(line);
     }
@@ -634,7 +634,7 @@ export class ScriptInfo {
         return !forEach(this.containingProjects, p => !p.isOrphan());
     }
 
-    /*@internal*/
+    /** @internal */
     isContainedByBackgroundProject() {
         return some(
             this.containingProjects,
@@ -653,7 +653,7 @@ export class ScriptInfo {
      * @param offset 1 based index
      */
     lineOffsetToPosition(line: number, offset: number): number;
-    /*@internal*/
+    /** @internal */
     lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number; // eslint-disable-line @typescript-eslint/unified-signatures
     lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
         return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
@@ -670,12 +670,12 @@ export class ScriptInfo {
         return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
     }
 
-    /*@internal*/
+    /** @internal */
     getLineInfo(): LineInfo {
         return this.textStorage.getLineInfo();
     }
 
-    /*@internal*/
+    /** @internal */
     closeSourceMapFileWatcher() {
         if (this.sourceMapFilePath && !isString(this.sourceMapFilePath)) {
             closeFileWatcherOf(this.sourceMapFilePath);

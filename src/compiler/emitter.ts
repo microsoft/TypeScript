@@ -81,12 +81,11 @@ import {
 
 const brackets = createBracketsMap();
 
-/*@internal*/
+/** @internal */
 export function isBuildInfoFile(file: string) {
     return fileExtensionIs(file, Extension.TsBuildInfo);
 }
 
-/*@internal*/
 /**
  * Iterates over the source files that are expected to have an emit output.
  *
@@ -95,6 +94,8 @@ export function isBuildInfoFile(file: string) {
  * @param sourceFilesOrTargetSourceFile
  *   If an array, the full list of source files to emit.
  *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
+ *
+ * @internal
  */
 export function forEachEmittedFile<T>(
     host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) => T,
@@ -151,7 +152,7 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     return buildInfoExtensionLess + Extension.TsBuildInfo;
 }
 
-/*@internal*/
+/** @internal */
 export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
     const outPath = outFile(options)!;
     const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
@@ -162,7 +163,7 @@ export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths:
     return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
 }
 
-/*@internal*/
+/** @internal */
 export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean): EmitFileNames {
     const options = host.getCompilerOptions();
     if (sourceFile.kind === SyntaxKind.Bundle) {
@@ -186,7 +187,7 @@ function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
     return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
 }
 
-/* @internal */
+/** @internal */
 export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
     return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
     options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
@@ -204,7 +205,7 @@ function getOutputPathWithoutChangingExt(inputFileName: string, configFile: Pars
         inputFileName;
 }
 
-/* @internal */
+/** @internal */
 export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
     return changeExtension(
         getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir, getCommonSourceDirectory),
@@ -263,7 +264,7 @@ function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: str
     }
 }
 
-/*@internal*/
+/** @internal */
 export function getCommonSourceDirectory(
     options: CompilerOptions,
     emittedFiles: () => readonly string[],
@@ -295,7 +296,7 @@ export function getCommonSourceDirectory(
     return commonSourceDirectory;
 }
 
-/*@internal*/
+/** @internal */
 export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
     return getCommonSourceDirectory(
         options,
@@ -305,7 +306,7 @@ export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedC
     );
 }
 
-/*@internal*/
+/** @internal */
 export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: boolean): readonly string[] {
     const { addOutput, getOutputs } = createAddOutput();
     if (outFile(configFile.options)) {
@@ -334,7 +335,7 @@ export function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName
     return getOutputs();
 }
 
-/*@internal*/
+/** @internal */
 export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase: boolean): string {
     if (outFile(configFile.options)) {
         const { jsFilePath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
@@ -356,7 +357,7 @@ export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase:
     return Debug.fail(`project ${configFile.options.configFilePath} expected to have at least one output`);
 }
 
-/*@internal*/
+/** @internal */
 // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
 export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnlyDtsFiles?: boolean, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
     const compilerOptions = host.getCompilerOptions();
@@ -726,17 +727,17 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
     }
 }
 
-/*@internal*/
+/** @internal */
 export function getBuildInfoText(buildInfo: BuildInfo) {
     return JSON.stringify(buildInfo);
 }
 
-/*@internal*/
+/** @internal */
 export function getBuildInfo(buildInfoFile: string, buildInfoText: string) {
     return readJsonOrUndefined(buildInfoFile, buildInfoText) as BuildInfo | undefined;
 }
 
-/*@internal*/
+/** @internal */
 export const notImplementedResolver: EmitResolver = {
     hasGlobalName: notImplemented,
     getReferencedExportContainer: notImplemented,
@@ -781,11 +782,14 @@ export const notImplementedResolver: EmitResolver = {
     isImportRequiredByAugmentation: notImplemented,
 };
 
-/*@internal*/
-/** File that isnt present resulting in error or output files */
+/**
+ * File that isnt present resulting in error or output files
+ *
+ * @internal
+ */
 export type EmitUsingBuildInfoResult = string | readonly OutputFile[];
 
-/*@internal*/
+/** @internal */
 export interface EmitUsingBuildInfoHost extends ModuleResolutionHost {
     getCurrentDirectory(): string;
     getCanonicalFileName(fileName: string): string;
@@ -822,7 +826,7 @@ function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfo
     });
 }
 
-/*@internal*/
+/** @internal */
 export function emitUsingBuildInfo(
     config: ParsedCommandLine,
     host: EmitUsingBuildInfoHost,

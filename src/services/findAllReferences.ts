@@ -638,8 +638,11 @@ function isWriteAccessForReference(node: Node): boolean {
     return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
 }
 
-/** @internal */
-/** Whether a reference, `node`, is a definition of the `target` symbol */
+/**
+ * Whether a reference, `node`, is a definition of the `target` symbol
+ *
+ * @internal
+ */
 export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
     if (!target) return false;
     const source = getDeclarationFromName(node) ||
@@ -712,8 +715,11 @@ function declarationIsWriteAccess(decl: Declaration): boolean {
     }
 }
 
-/** @internal */
-/** Encapsulates the core find-all-references algorithm. */
+/**
+ * Encapsulates the core find-all-references algorithm.
+ *
+ * @internal
+ */
 export namespace Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
     export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly SymbolAndEntries[] | undefined {

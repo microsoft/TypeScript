@@ -67,9 +67,10 @@ registerCodeFix({
     },
 });
 
-/** @internal */
 /**
  * Computes multiple import additions to a file and writes them to a ChangeTracker.
+ *
+ * @internal
  */
 export interface ImportAdder {
     hasFixes(): boolean;
@@ -266,9 +267,10 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
     }
 }
 
-/** @internal */
 /**
  * Computes module specifiers for multiple import additions to a file.
+ *
+ * @internal
  */
  export interface ImportSpecifierResolver {
     getModuleSpecifierForBestExportInfo(
@@ -886,10 +888,11 @@ function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
         : undefined;
 }
 
-/** @internal */
 /**
  * @param forceImportKeyword Indicates that the user has already typed `import`, so the result must start with `import`.
  * (In other words, do not allow `const x = require("...")` for JS files.)
+ *
+ * @internal
  */
 export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {
     switch (exportKind) {

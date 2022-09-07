@@ -62,7 +62,7 @@ export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile)
         const commentRanges = previousSibling
             ? concatenate(
                 // to handle
-                // ... parameters, /* @internal */
+                // ... parameters, /** @internal */
                 // public param: string
                 getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
                 getLeadingCommentRanges(text, node.pos)
@@ -85,12 +85,13 @@ const declarationEmitNodeBuilderFlags =
     NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
     NodeBuilderFlags.NoTruncation;
 
-/** @internal */
 /**
  * Transforms a ts file into a .d.ts file
  * This process requires type information, which is retrieved through the emit resolver. Because of this,
  * in many places this transformer assumes it will be operating on parse tree nodes directly.
  * This means that _no transforms should be allowed to occur before this one_.
+ *
+ * @internal
  */
 export function transformDeclarations(context: TransformationContext) {
     const throwDiagnostic = () => Debug.fail("Diagnostic emitted without context");

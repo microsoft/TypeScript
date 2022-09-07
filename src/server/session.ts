@@ -3531,7 +3531,7 @@ export interface HandlerResponse {
     responseRequired?: boolean;
 }
 
-/* @internal */ // Exported only for tests
+/** @internal */ // Exported only for tests
 export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: readonly FileTextChanges[]): protocol.Location {
     const newText = applyEdits(oldText, renameFilename, edits);
     const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);

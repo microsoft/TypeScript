@@ -26,8 +26,11 @@ export const enum TokenModifier {
     declaration, static, async, readonly, defaultLibrary, local
 }
 
-/** @internal */
-/** This is mainly used internally for testing */
+/**
+ * This is mainly used internally for testing
+ *
+ * @internal
+ */
 export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan2020[] {
     const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
 

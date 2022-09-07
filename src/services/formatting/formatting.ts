@@ -1316,9 +1316,9 @@ function formatSpanWorker(
 
 const enum LineAction { None, LineAdded, LineRemoved }
 
-/** @internal */
 /**
- * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
+ *
+ * @internal
  */
 export function getRangeOfEnclosingComment(
     sourceFile: SourceFile,

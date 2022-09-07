@@ -343,7 +343,6 @@ export function createExpressionForObjectLiteralElementLike(factory: NodeFactory
     }
 }
 
-/** @internal */
 /**
  * Expand the read and increment/decrement operations a pre- or post-increment or pre- or post-decrement expression.
  *
@@ -375,6 +374,8 @@ export function createExpressionForObjectLiteralElementLike(factory: NodeFactory
  * @param node The original prefix or postfix unary node.
  * @param expression The expression to use as the value to increment or decrement
  * @param resultVariable A temporary variable in which to store the result. Pass `undefined` if the result is discarded, or if the value of `<temp>` is the expected result.
+ *
+ * @internal
  */
 export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
     const operator = node.operator;
@@ -405,26 +406,29 @@ export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFa
     return expression;
 }
 
-/** @internal */
 /**
  * Gets whether an identifier should only be referred to by its internal name.
+ *
+ * @internal
  */
 export function isInternalName(node: Identifier) {
     return (getEmitFlags(node) & EmitFlags.InternalName) !== 0;
 }
 
-/** @internal */
 /**
  * Gets whether an identifier should only be referred to by its local name.
+ *
+ * @internal
  */
 export function isLocalName(node: Identifier) {
     return (getEmitFlags(node) & EmitFlags.LocalName) !== 0;
 }
 
-/** @internal */
 /**
  * Gets whether an identifier should only be referred to by its export representation if the
  * name points to an exported symbol.
+ *
+ * @internal
  */
 export function isExportName(node: Identifier) {
     return (getEmitFlags(node) & EmitFlags.ExportName) !== 0;
@@ -623,9 +627,10 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactor
     }
 }
 
-/** @internal */
 /**
  * Get the name of that target module from an import or export declaration
+ *
+ * @internal
  */
 export function getLocalNameForExternalImport(factory: NodeFactory, node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier | undefined {
     const namespaceDeclaration = getNamespaceDeclarationNode(node);
@@ -642,7 +647,6 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
     return undefined;
 }
 
-/** @internal */
 /**
  * Get the name of a target module from an import/export declaration as should be written in the emitted output.
  * The emitted output name can be different from the input if:
@@ -650,6 +654,8 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
  *  2. --out or --outFile is used, making the name relative to the rootDir
  *  3- The containing SourceFile has an entry in renamedDependencies for the import as requested by some module loaders (e.g. System).
  * Otherwise, a new StringLiteral node representing the module name will be returned.
+ *
+ * @internal
  */
 export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
     const moduleName = getExternalModuleName(importNode);
@@ -671,13 +677,14 @@ function tryRenameExternalModule(factory: NodeFactory, moduleName: LiteralExpres
     return rename ? factory.createStringLiteral(rename) : undefined;
 }
 
-/** @internal */
 /**
  * Get the name of a module as should be written in the emitted output.
  * The emitted output name can be different from the input if:
  *  1. The module has a /// <amd-module name="<new name>" />
  *  2. --out or --outFile is used, making the name relative to the rootDir
  * Otherwise, a new StringLiteral node representing the module name will be returned.
+ *
+ * @internal
  */
 export function tryGetModuleNameFromFile(factory: NodeFactory, file: SourceFile | undefined, host: EmitHost, options: CompilerOptions): StringLiteral | undefined {
     if (!file) {
@@ -696,9 +703,10 @@ function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | 
     return tryGetModuleNameFromFile(factory, resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
 }
 
-/** @internal */
 /**
  * Gets the initializer of an BindingOrAssignmentElement.
+ *
+ * @internal
  */
 export function getInitializerOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Expression | undefined {
     if (isDeclarationBindingElement(bindingElement)) {
@@ -740,9 +748,10 @@ export function getInitializerOfBindingOrAssignmentElement(bindingElement: Bindi
     }
 }
 
-/** @internal */
 /**
  * Gets the name of an BindingOrAssignmentElement.
+ *
+ * @internal
  */
 export function getTargetOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementTarget | undefined {
     if (isDeclarationBindingElement(bindingElement)) {
@@ -816,9 +825,10 @@ export function getTargetOfBindingOrAssignmentElement(bindingElement: BindingOrA
     return bindingElement;
 }
 
-/** @internal */
 /**
  * Determines whether an BindingOrAssignmentElement is a rest element.
+ *
+ * @internal
  */
 export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementRestIndicator | undefined {
     switch (bindingElement.kind) {
@@ -836,9 +846,10 @@ export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: Bin
     return undefined;
 }
 
-/** @internal */
 /**
  * Gets the property name of a BindingOrAssignmentElement
+ *
+ * @internal
  */
 export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
     const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement);
@@ -903,9 +914,10 @@ function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLi
         || kind === SyntaxKind.NumericLiteral;
 }
 
-/** @internal */
 /**
  * Gets the elements of a BindingOrAssignmentPattern
+ *
+ * @internal
  */
 export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmentPattern): readonly BindingOrAssignmentElement[] {
     switch (name.kind) {
@@ -922,7 +934,7 @@ export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmen
     }
 }
 
-/* @internal */
+/** @internal */
 export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
     if (fullName) {
         let rightNode = fullName;
@@ -1256,7 +1268,6 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
     }
 }
 
-/** @internal */
 /**
  * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
  * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
@@ -1265,6 +1276,8 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
  * @param onExit Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
  * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
  * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
+ *
+ * @internal
  */
  export function createBinaryExpressionTrampoline<TState, TResult>(
     onEnter: (node: BinaryExpression, prev: TState | undefined) => TState,
@@ -1274,7 +1287,6 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
     onExit: (node: BinaryExpression, userState: TState) => TResult,
     foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
 ): (node: BinaryExpression) => TResult;
-/** @internal */
 /**
  * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
  * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
@@ -1283,6 +1295,8 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
  * @param onExit Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
  * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
  * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
+ *
+ * @internal
  */
 export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
     onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
@@ -1332,9 +1346,10 @@ export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArra
     return setTextRange(factory.createNodeArray([], nodes.hasTrailingComma), nodes);
 }
 
-/** @internal */
 /**
  * Gets the node from which a name should be generated.
+ *
+ * @internal
  */
 export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
     if (name.autoGenerateFlags & GeneratedIdentifierFlags.Node) {
@@ -1359,14 +1374,16 @@ export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPri
     return name;
 }
 
-/** @internal */
 /**
  * Formats a prefix or suffix of a generated name.
+ *
+ * @internal
  */
 export function formatGeneratedNamePart(part: string | undefined): string;
-/** @internal */
 /**
  * Formats a prefix or suffix of a generated name. If the part is a {@link GeneratedNamePart}, calls {@link generateName} to format the source node.
+ *
+ * @internal
  */
 export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
 /** @internal */
@@ -1388,16 +1405,16 @@ function formatIdentifierWorker(node: Identifier | PrivateIdentifier, generateNa
         idText(node);
 }
 
-/** @internal */
 /**
  * Formats a generated name.
  * @param privateName When `true`, inserts a `#` character at the start of the result.
  * @param prefix The prefix (if any) to include before the base name.
  * @param baseName The base name for the generated name.
  * @param suffix The suffix (if any) to include after the base name.
+ *
+ * @internal
  */
 export function formatGeneratedName(privateName: boolean, prefix: string | undefined, baseName: string, suffix: string | undefined): string;
-/** @internal */
 /**
  * Formats a generated name.
  * @param privateName When `true`, inserts a `#` character at the start of the result.
@@ -1405,6 +1422,8 @@ export function formatGeneratedName(privateName: boolean, prefix: string | undef
  * @param baseName The base name for the generated name.
  * @param suffix The suffix (if any) to include after the base name.
  * @param generateName Called to format the source node of {@link prefix} when it is a {@link GeneratedNamePart}.
+ *
+ * @internal
  */
 export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
 /** @internal */
@@ -1416,9 +1435,10 @@ export function formatGeneratedName(privateName: boolean, prefix: string | Gener
 }
 
 
-/** @internal */
 /**
  * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
+ *
+ * @internal
  */
 export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined) {
     return factory.updatePropertyDeclaration(
@@ -1431,9 +1451,10 @@ export function createAccessorPropertyBackingField(factory: NodeFactory, node: P
     );
 }
 
-/** @internal */
 /**
  * Creates a {@link GetAccessorDeclaration} that reads from a private backing field.
+ *
+ * @internal
  */
 export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
     return factory.createGetAccessorDeclaration(
@@ -1452,9 +1473,10 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
     );
 }
 
-/** @internal */
 /**
  * Creates a {@link SetAccessorDeclaration} that writes to a private backing field.
+ *
+ * @internal
  */
 export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
     return factory.createSetAccessorDeclaration(
