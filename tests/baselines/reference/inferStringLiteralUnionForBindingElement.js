@@ -1,4 +1,4 @@
-//// [issue50680.ts]
+//// [inferStringLiteralUnionForBindingElement.ts]
 declare function func<T extends string>(arg: { keys: T[] }): { readonly keys: T[]; readonly firstKey: T; };
 
 function func1() {
@@ -22,7 +22,7 @@ function func3() {
 }
 
 
-//// [issue50680.js]
+//// [inferStringLiteralUnionForBindingElement.js]
 function func1() {
     var firstKey = func({ keys: ["aa", "bb"] }).firstKey;
     var a = firstKey;
