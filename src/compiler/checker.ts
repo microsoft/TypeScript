@@ -33774,6 +33774,12 @@ namespace ts {
             return booleanType;
         }
 
+        function hasEmptyAnonymousObjectType(type: Type): boolean {
+            const t = getBaseConstraintOrType(type);
+            return isEmptyAnonymousObjectType(t) && !(getObjectFlags(t) & ObjectFlags.FreshLiteral) ||
+                !!(t.flags & TypeFlags.UnionOrIntersection && some((t as UnionType).types, hasEmptyAnonymousObjectType));
+        }
+
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
             if (leftType === silentNeverType || rightType === silentNeverType) {
                 return silentNeverType;
@@ -33794,7 +33800,11 @@ namespace ts {
                 checkTypeAssignableTo(checkNonNullType(leftType, left), stringNumberSymbolType, left);
             }
             // The type of the right operand must be assignable to 'object'.
-            checkTypeAssignableTo(checkNonNullType(rightType, right), nonPrimitiveType, right);
+            if (checkTypeAssignableTo(checkNonNullType(rightType, right), nonPrimitiveType, right)) {
+                if (hasEmptyAnonymousObjectType(rightType)) {
+                    error(right, Diagnostics.Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operator, typeToString(rightType));
+                }
+            }
             // The result is always of the Boolean primitive type.
             return booleanType;
         }
