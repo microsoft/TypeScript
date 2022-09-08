@@ -10,18 +10,18 @@ function func1() {
 >func1 : () => void
 
     const { firstKey } = func({keys: ["aa", "bb"]})
->firstKey : string
->func({keys: ["aa", "bb"]}) : { readonly keys: string[]; readonly firstKey: string; }
+>firstKey : "aa" | "bb"
+>func({keys: ["aa", "bb"]}) : { readonly keys: ("aa" | "bb")[]; readonly firstKey: "aa" | "bb"; }
 >func : <T extends string>(arg: { keys: T[]; }) => { readonly keys: T[]; readonly firstKey: T; }
->{keys: ["aa", "bb"]} : { keys: string[]; }
->keys : string[]
->["aa", "bb"] : string[]
+>{keys: ["aa", "bb"]} : { keys: ("aa" | "bb")[]; }
+>keys : ("aa" | "bb")[]
+>["aa", "bb"] : ("aa" | "bb")[]
 >"aa" : "aa"
 >"bb" : "bb"
 
     const a: "aa" | "bb" = firstKey;
 >a : "aa" | "bb"
->firstKey : string
+>firstKey : "aa" | "bb"
 
     const { keys } = func({keys: ["aa", "bb"]})
 >keys : ("aa" | "bb")[]
@@ -42,23 +42,23 @@ function func2() {
 >func2 : () => void
 
     const { keys, firstKey } = func({keys: ["aa", "bb"]})
->keys : string[]
->firstKey : string
->func({keys: ["aa", "bb"]}) : { readonly keys: string[]; readonly firstKey: string; }
+>keys : ("aa" | "bb")[]
+>firstKey : "aa" | "bb"
+>func({keys: ["aa", "bb"]}) : { readonly keys: ("aa" | "bb")[]; readonly firstKey: "aa" | "bb"; }
 >func : <T extends string>(arg: { keys: T[]; }) => { readonly keys: T[]; readonly firstKey: T; }
->{keys: ["aa", "bb"]} : { keys: string[]; }
->keys : string[]
->["aa", "bb"] : string[]
+>{keys: ["aa", "bb"]} : { keys: ("aa" | "bb")[]; }
+>keys : ("aa" | "bb")[]
+>["aa", "bb"] : ("aa" | "bb")[]
 >"aa" : "aa"
 >"bb" : "bb"
 
     const a: "aa" | "bb" = firstKey;
 >a : "aa" | "bb"
->firstKey : string
+>firstKey : "aa" | "bb"
 
     const b: ("aa" | "bb")[] = keys;
 >b : ("aa" | "bb")[]
->keys : string[]
+>keys : ("aa" | "bb")[]
 }
 
 function func3() {
