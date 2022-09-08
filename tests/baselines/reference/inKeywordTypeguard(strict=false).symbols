@@ -637,21 +637,91 @@ function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
     }
 }
 
+const sym = Symbol();
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+function f8(x: object) {
+>f8 : Symbol(f8, Decl(inKeywordTypeguard.ts, 250, 21))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+
+    if ("a" in x && 1 in x && sym in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>a : Symbol(a)
+
+        x["a"];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>"a" : Symbol(a)
+
+        x[1];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>1 : Symbol(1)
+
+        x["1"];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>"1" : Symbol(1)
+
+        x[sym];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+    }
+}
+
+function f9(x: object) {
+>f9 : Symbol(f9, Decl(inKeywordTypeguard.ts, 260, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+
+    if ("a" in x && "1" in x && sym in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>a : Symbol(a)
+
+        x["a"];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>"a" : Symbol(a)
+
+        x[1];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>1 : Symbol(1)
+
+        x["1"];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>"1" : Symbol(1)
+
+        x[sym];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+    }
+}
+
 // Repro from #50639
 
-function f8<A>(value: A) {
->f8 : Symbol(f8, Decl(inKeywordTypeguard.ts, 248, 1))
->A : Symbol(A, Decl(inKeywordTypeguard.ts, 252, 12))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 252, 15))
->A : Symbol(A, Decl(inKeywordTypeguard.ts, 252, 12))
+function foo<A>(value: A) {
+>foo : Symbol(foo, Decl(inKeywordTypeguard.ts, 270, 1))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 274, 13))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 274, 13))
 
     if (typeof value === "object" && value !== null && "prop" in value) {
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 252, 15))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 252, 15))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 252, 15))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
 
         value;  // A & object & Record<"prop", unknown>
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 252, 15))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 274, 16))
     }
 }
 

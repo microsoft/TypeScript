@@ -794,10 +794,103 @@ function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
     }
 }
 
+const sym = Symbol();
+>sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+function f8(x: object) {
+>f8 : (x: object) => void
+>x : object
+
+    if ("a" in x && 1 in x && sym in x) {
+>"a" in x && 1 in x && sym in x : boolean
+>"a" in x && 1 in x : boolean
+>"a" in x : boolean
+>"a" : "a"
+>x : object
+>1 in x : boolean
+>1 : 1
+>x : Record<"a", unknown>
+>sym in x : boolean
+>sym : unique symbol
+>x : Record<"a", unknown> & Record<1, unknown>
+
+        x.a;
+>x.a : unknown
+>x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>a : unknown
+
+        x["a"];
+>x["a"] : unknown
+>x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>"a" : "a"
+
+        x[1];
+>x[1] : unknown
+>x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>1 : 1
+
+        x["1"];
+>x["1"] : unknown
+>x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>"1" : "1"
+
+        x[sym];
+>x[sym] : unknown
+>x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>sym : unique symbol
+    }
+}
+
+function f9(x: object) {
+>f9 : (x: object) => void
+>x : object
+
+    if ("a" in x && "1" in x && sym in x) {
+>"a" in x && "1" in x && sym in x : boolean
+>"a" in x && "1" in x : boolean
+>"a" in x : boolean
+>"a" : "a"
+>x : object
+>"1" in x : boolean
+>"1" : "1"
+>x : Record<"a", unknown>
+>sym in x : boolean
+>sym : unique symbol
+>x : Record<"a", unknown> & Record<"1", unknown>
+
+        x.a;
+>x.a : unknown
+>x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>a : unknown
+
+        x["a"];
+>x["a"] : unknown
+>x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>"a" : "a"
+
+        x[1];
+>x[1] : unknown
+>x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>1 : 1
+
+        x["1"];
+>x["1"] : unknown
+>x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>"1" : "1"
+
+        x[sym];
+>x[sym] : unknown
+>x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>sym : unique symbol
+    }
+}
+
 // Repro from #50639
 
-function f8<A>(value: A) {
->f8 : <A>(value: A) => void
+function foo<A>(value: A) {
+>foo : <A>(value: A) => void
 >value : A
 
     if (typeof value === "object" && value !== null && "prop" in value) {

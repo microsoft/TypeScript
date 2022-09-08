@@ -249,9 +249,31 @@ function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
     }
 }
 
+const sym = Symbol();
+
+function f8(x: object) {
+    if ("a" in x && 1 in x && sym in x) {
+        x.a;
+        x["a"];
+        x[1];
+        x["1"];
+        x[sym];
+    }
+}
+
+function f9(x: object) {
+    if ("a" in x && "1" in x && sym in x) {
+        x.a;
+        x["a"];
+        x[1];
+        x["1"];
+        x[sym];
+    }
+}
+
 // Repro from #50639
 
-function f8<A>(value: A) {
+function foo<A>(value: A) {
     if (typeof value === "object" && value !== null && "prop" in value) {
         value;  // A & object & Record<"prop", unknown>
     }
@@ -259,16 +281,10 @@ function f8<A>(value: A) {
 
 
 //// [inKeywordTypeguard.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class A {
+}
+class B {
+}
 function negativeClassesTest(x) {
     if ("a" in x) {
         x.b = "1";
@@ -285,16 +301,10 @@ function positiveClassesTest(x) {
         x.a = "1";
     }
 }
-var AWithOptionalProp = /** @class */ (function () {
-    function AWithOptionalProp() {
-    }
-    return AWithOptionalProp;
-}());
-var BWithOptionalProp = /** @class */ (function () {
-    function BWithOptionalProp() {
-    }
-    return BWithOptionalProp;
-}());
+class AWithOptionalProp {
+}
+class BWithOptionalProp {
+}
 function positiveTestClassesWithOptionalProperties(x) {
     if ("a" in x) {
         x.a = "1";
@@ -303,18 +313,12 @@ function positiveTestClassesWithOptionalProperties(x) {
         x.b = "1";
     }
 }
-var AWithMethod = /** @class */ (function () {
-    function AWithMethod() {
-    }
-    AWithMethod.prototype.a = function () { return ""; };
-    return AWithMethod;
-}());
-var BWithMethod = /** @class */ (function () {
-    function BWithMethod() {
-    }
-    BWithMethod.prototype.b = function () { return ""; };
-    return BWithMethod;
-}());
+class AWithMethod {
+    a() { return ""; }
+}
+class BWithMethod {
+    b() { return ""; }
+}
 function negativeTestClassesWithMembers(x) {
     if ("a" in x) {
         x.a();
@@ -333,16 +337,10 @@ function negativeTestClassesWithMemberMissingInBothClasses(x) {
         x.b();
     }
 }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class D {
+}
 function negativeMultipleClassesTest(x) {
     if ("a" in x) {
         x.b = "1";
@@ -351,50 +349,41 @@ function negativeMultipleClassesTest(x) {
         x.a = "1";
     }
 }
-var ClassWithUnionProp = /** @class */ (function () {
-    function ClassWithUnionProp() {
-    }
-    return ClassWithUnionProp;
-}());
+class ClassWithUnionProp {
+}
 function negativePropTest(x) {
     if ("a" in x.prop) {
-        var y = x.prop.b;
+        let y = x.prop.b;
     }
     else {
-        var z = x.prop.a;
+        let z = x.prop.a;
     }
 }
-var NegativeClassTest = /** @class */ (function () {
-    function NegativeClassTest() {
-    }
-    NegativeClassTest.prototype.inThis = function () {
+class NegativeClassTest {
+    inThis() {
         if ("a" in this.prop) {
-            var z = this.prop.b;
+            let z = this.prop.b;
         }
         else {
-            var y = this.prop.a;
+            let y = this.prop.a;
         }
-    };
-    return NegativeClassTest;
-}());
-var UnreachableCodeDetection = /** @class */ (function () {
-    function UnreachableCodeDetection() {
     }
-    UnreachableCodeDetection.prototype.inThis = function () {
+}
+class UnreachableCodeDetection {
+    inThis() {
         if ("a" in this) {
         }
         else {
-            var y = this.a;
+            let y = this.a;
         }
-    };
-    return UnreachableCodeDetection;
-}());
+    }
+}
 function positiveIntersectionTest(x) {
     if ("a" in x) {
-        var s = x.a;
+        let s = x.a;
     }
     else {
-        var n = x;
+        let n = x;
     }
 }
 if ('extra' in error) {
@@ -404,7 +393,7 @@ else {
     error; // Error
 }
 function narrowsToNever(x) {
-    var v;
+    let v;
     if ("l" in x) {
         v = x.l;
     }
@@ -425,7 +414,7 @@ if (isAOrB(x)) {
     }
     // x is never because of the type predicate from unknown
     else if ("cProp" in x) {
-        var _never = x;
+        const _never = x;
     }
 }
 function negativeIntersectionTest() {
@@ -525,8 +514,27 @@ function f7(x, y) {
         y; // never
     }
 }
+const sym = Symbol();
+function f8(x) {
+    if ("a" in x && 1 in x && sym in x) {
+        x.a;
+        x["a"];
+        x[1];
+        x["1"];
+        x[sym];
+    }
+}
+function f9(x) {
+    if ("a" in x && "1" in x && sym in x) {
+        x.a;
+        x["a"];
+        x[1];
+        x["1"];
+        x[sym];
+    }
+}
 // Repro from #50639
-function f8(value) {
+function foo(value) {
     if (typeof value === "object" && value !== null && "prop" in value) {
         value; // A & object & Record<"prop", unknown>
     }

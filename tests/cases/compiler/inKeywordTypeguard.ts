@@ -1,4 +1,5 @@
 // @strict: true, false
+// @target: es2015
 
 class A { a: string; }
 class B { b: string; }
@@ -250,9 +251,31 @@ function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
     }
 }
 
+const sym = Symbol();
+
+function f8(x: object) {
+    if ("a" in x && 1 in x && sym in x) {
+        x.a;
+        x["a"];
+        x[1];
+        x["1"];
+        x[sym];
+    }
+}
+
+function f9(x: object) {
+    if ("a" in x && "1" in x && sym in x) {
+        x.a;
+        x["a"];
+        x[1];
+        x["1"];
+        x[sym];
+    }
+}
+
 // Repro from #50639
 
-function f8<A>(value: A) {
+function foo<A>(value: A) {
     if (typeof value === "object" && value !== null && "prop" in value) {
         value;  // A & object & Record<"prop", unknown>
     }
