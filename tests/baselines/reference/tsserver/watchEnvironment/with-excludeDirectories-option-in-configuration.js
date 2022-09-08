@@ -1,5 +1,5 @@
-Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:32.000] request:
+Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:32.000] request:
     {
       "command": "configure",
       "arguments": {
@@ -45,8 +45,8 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 2    [16:00:33.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
-Info 3    [16:00:34.000] response:
+Info 2    [00:00:33.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
+Info 3    [00:00:34.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
 After request
 
@@ -56,11 +56,11 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 4    [16:00:35.000] response:
+Info 4    [00:00:35.000] response:
     {
       "responseRequired": false
     }
-Info 5    [16:00:36.000] request:
+Info 5    [00:00:36.000] request:
     {
       "seq": 0,
       "type": "request",
@@ -77,11 +77,11 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 6    [16:00:37.000] Search path: /user/username/projects/myproject/src
-Info 7    [16:00:38.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 8    [16:00:39.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
-Info 9    [16:00:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 10   [16:00:41.000] Config: /user/username/projects/myproject/tsconfig.json : {
+Info 6    [00:00:37.000] Search path: /user/username/projects/myproject/src
+Info 7    [00:00:38.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 8    [00:00:39.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
+Info 9    [00:00:40.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 10   [00:00:41.000] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/src/main.ts"
  ],
@@ -94,21 +94,21 @@ Info 10   [16:00:41.000] Config: /user/username/projects/myproject/tsconfig.json
   ]
  }
 }
-Info 11   [16:00:42.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 12   [16:00:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 13   [16:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 14   [16:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 15   [16:00:46.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 16   [16:00:47.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 17   [16:00:48.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["node_modules"]} WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 18   [16:00:49.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 19   [16:00:50.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 {"excludeDirectories":["node_modules"]} WatchType: Closed Script info
-Info 20   [16:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 21   [16:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 22   [16:00:53.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 23   [16:00:54.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 24   [16:00:55.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 25   [16:00:56.000] 	Files (4)
+Info 11   [00:00:42.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 12   [00:00:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 13   [00:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 14   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 15   [00:00:46.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 16   [00:00:47.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 17   [00:00:48.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["node_modules"]} WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 18   [00:00:49.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 19   [00:00:50.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 {"excludeDirectories":["node_modules"]} WatchType: Closed Script info
+Info 20   [00:00:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 21   [00:00:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 22   [00:00:53.000] ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 23   [00:00:54.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 24   [00:00:55.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 25   [00:00:56.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/node_modules/bar/foo.d.ts
 	/user/username/projects/myproject/node_modules/bar/index.d.ts
@@ -124,14 +124,14 @@ Info 25   [16:00:56.000] 	Files (4)
 	src/main.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
-Info 26   [16:00:57.000] -----------------------------------------------
-Info 27   [16:00:58.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 27   [16:00:59.000] 	Files (4)
+Info 26   [00:00:57.000] -----------------------------------------------
+Info 27   [00:00:58.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 27   [00:00:59.000] 	Files (4)
 
-Info 27   [16:01:00.000] -----------------------------------------------
-Info 27   [16:01:01.000] Open files: 
-Info 27   [16:01:02.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info 27   [16:01:03.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 27   [00:01:00.000] -----------------------------------------------
+Info 27   [00:01:01.000] Open files: 
+Info 27   [00:01:02.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+Info 27   [00:01:03.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
 PolledWatches::
@@ -146,7 +146,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 27   [16:01:04.000] response:
+Info 27   [00:01:04.000] response:
     {
       "responseRequired": false
     }

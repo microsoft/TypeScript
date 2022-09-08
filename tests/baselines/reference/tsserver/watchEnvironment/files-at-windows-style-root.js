@@ -1,5 +1,5 @@
-Info 0    [16:00:17.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:18.000] request:
+Info 0    [00:00:17.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:18.000] request:
     {
       "seq": 0,
       "type": "request",
@@ -38,11 +38,11 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 2    [16:00:19.000] Search path: c:/project
-Info 3    [16:00:20.000] For info: c:/project/file1.ts :: Config file name: c:/project/tsconfig.json
-Info 4    [16:00:21.000] Creating configuration project c:/project/tsconfig.json
-Info 5    [16:00:22.000] FileWatcher:: Added:: WatchInfo: c:/project/tsconfig.json 2000 undefined Project: c:/project/tsconfig.json WatchType: Config file
-Info 6    [16:00:23.000] Config: c:/project/tsconfig.json : {
+Info 2    [00:00:19.000] Search path: c:/project
+Info 3    [00:00:20.000] For info: c:/project/file1.ts :: Config file name: c:/project/tsconfig.json
+Info 4    [00:00:21.000] Creating configuration project c:/project/tsconfig.json
+Info 5    [00:00:22.000] FileWatcher:: Added:: WatchInfo: c:/project/tsconfig.json 2000 undefined Project: c:/project/tsconfig.json WatchType: Config file
+Info 6    [00:00:23.000] Config: c:/project/tsconfig.json : {
  "rootNames": [
   "c:/project/file1.ts",
   "c:/project/file2.ts"
@@ -51,17 +51,17 @@ Info 6    [16:00:23.000] Config: c:/project/tsconfig.json : {
   "configFilePath": "c:/project/tsconfig.json"
  }
 }
-Info 7    [16:00:24.000] DirectoryWatcher:: Added:: WatchInfo: c:/project 1 undefined Config: c:/project/tsconfig.json WatchType: Wild card directory
-Info 8    [16:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/project 1 undefined Config: c:/project/tsconfig.json WatchType: Wild card directory
-Info 9    [16:00:26.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 10   [16:00:27.000] FileWatcher:: Added:: WatchInfo: c:/project/file2.ts 500 undefined WatchType: Closed Script info
-Info 11   [16:00:28.000] Starting updateGraphWorker: Project: c:/project/tsconfig.json
-Info 12   [16:00:29.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 13   [16:00:30.000] DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
-Info 14   [16:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
-Info 15   [16:00:32.000] Finishing updateGraphWorker: Project: c:/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 16   [16:00:33.000] Project 'c:/project/tsconfig.json' (Configured)
-Info 17   [16:00:34.000] 	Files (3)
+Info 7    [00:00:24.000] DirectoryWatcher:: Added:: WatchInfo: c:/project 1 undefined Config: c:/project/tsconfig.json WatchType: Wild card directory
+Info 8    [00:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/project 1 undefined Config: c:/project/tsconfig.json WatchType: Wild card directory
+Info 9    [00:00:26.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 10   [00:00:27.000] FileWatcher:: Added:: WatchInfo: c:/project/file2.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:00:28.000] Starting updateGraphWorker: Project: c:/project/tsconfig.json
+Info 12   [00:00:29.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 13   [00:00:30.000] DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
+Info 14   [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
+Info 15   [00:00:32.000] Finishing updateGraphWorker: Project: c:/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 16   [00:00:33.000] Project 'c:/project/tsconfig.json' (Configured)
+Info 17   [00:00:34.000] 	Files (3)
 	c:/a/lib/lib.d.ts
 	c:/project/file1.ts
 	c:/project/file2.ts
@@ -74,14 +74,14 @@ Info 17   [16:00:34.000] 	Files (3)
 	file2.ts
 	  Matched by default include pattern '**/*'
 
-Info 18   [16:00:35.000] -----------------------------------------------
-Info 19   [16:00:36.000] Project 'c:/project/tsconfig.json' (Configured)
-Info 19   [16:00:37.000] 	Files (3)
+Info 18   [00:00:35.000] -----------------------------------------------
+Info 19   [00:00:36.000] Project 'c:/project/tsconfig.json' (Configured)
+Info 19   [00:00:37.000] 	Files (3)
 
-Info 19   [16:00:38.000] -----------------------------------------------
-Info 19   [16:00:39.000] Open files: 
-Info 19   [16:00:40.000] 	FileName: c:/project/file1.ts ProjectRootPath: undefined
-Info 19   [16:00:41.000] 		Projects: c:/project/tsconfig.json
+Info 19   [00:00:38.000] -----------------------------------------------
+Info 19   [00:00:39.000] Open files: 
+Info 19   [00:00:40.000] 	FileName: c:/project/file1.ts ProjectRootPath: undefined
+Info 19   [00:00:41.000] 		Projects: c:/project/tsconfig.json
 After request
 
 PolledWatches::
@@ -100,7 +100,7 @@ FsWatchesRecursive::
 c:/project:
   {}
 
-Info 19   [16:00:42.000] response:
+Info 19   [00:00:42.000] response:
     {
       "responseRequired": false
     }

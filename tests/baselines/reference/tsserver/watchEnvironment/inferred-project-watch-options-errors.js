@@ -1,4 +1,4 @@
-Info 0    [16:00:29.000] Provided types map file "/typesMap.json" doesn't exist
+Info 0    [00:00:29.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,26 +29,26 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 1    [16:00:30.000] Search path: /user/username/projects/myproject/src
-Info 2    [16:00:31.000] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
-Info 3    [16:00:32.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 4    [16:00:33.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 5    [16:00:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 6    [16:00:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 7    [16:00:36.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 8    [16:00:37.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 9    [16:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 10   [16:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 11   [16:00:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 12   [16:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 13   [16:00:42.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 14   [16:00:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 15   [16:00:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 16   [16:00:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 17   [16:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 18   [16:00:47.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 19   [16:00:48.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 20   [16:00:49.000] 	Files (4)
+Info 1    [00:00:30.000] Search path: /user/username/projects/myproject/src
+Info 2    [00:00:31.000] For info: /user/username/projects/myproject/src/main.ts :: No config files found.
+Info 3    [00:00:32.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 4    [00:00:33.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 5    [00:00:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 6    [00:00:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 7    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 8    [00:00:37.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 9    [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 10   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 11   [00:00:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 12   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 13   [00:00:42.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 14   [00:00:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 15   [00:00:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 16   [00:00:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 17   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":[]} Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 18   [00:00:47.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 19   [00:00:48.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 20   [00:00:49.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/node_modules/bar/foo.d.ts
 	/user/username/projects/myproject/node_modules/bar/index.d.ts
@@ -64,15 +64,15 @@ Info 20   [16:00:49.000] 	Files (4)
 	src/main.ts
 	  Root file specified for compilation
 
-Info 21   [16:00:50.000] -----------------------------------------------
-Info 22   [16:00:51.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 22   [16:00:52.000] 	Files (4)
+Info 21   [00:00:50.000] -----------------------------------------------
+Info 22   [00:00:51.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 22   [00:00:52.000] 	Files (4)
 
-Info 22   [16:00:53.000] -----------------------------------------------
-Info 22   [16:00:54.000] Open files: 
-Info 22   [16:00:55.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
-Info 22   [16:00:56.000] 		Projects: /dev/null/inferredProject1*
-Info 22   [16:00:57.000] [
+Info 22   [00:00:53.000] -----------------------------------------------
+Info 22   [00:00:54.000] Open files: 
+Info 22   [00:00:55.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
+Info 22   [00:00:56.000] 		Projects: /dev/null/inferredProject1*
+Info 22   [00:00:57.000] [
   {
     "messageText": "File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.",
     "category": 1,

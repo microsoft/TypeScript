@@ -1,5 +1,5 @@
-Info 0    [16:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
-Info 1    [16:00:16.000] request:
+Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:16.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -43,7 +43,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 2    [16:00:17.000] response:
+Info 2    [00:00:17.000] response:
     {
       "responseRequired": false
     }
@@ -55,7 +55,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 3    [16:00:18.000] event:
+Info 3    [00:00:18.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
 After checking timeout queue length (1) and running
 

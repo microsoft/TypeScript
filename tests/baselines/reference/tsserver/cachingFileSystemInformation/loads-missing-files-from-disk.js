@@ -1,4 +1,4 @@
-Info 0    [16:00:07.000] Provided types map file "/typesMap.json" doesn't exist
+Info 0    [00:00:07.000] Provided types map file "/typesMap.json" doesn't exist
 Creating project service
 //// [/c/foo.ts]
 import {y} from "bar"
@@ -10,44 +10,44 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 1    [16:00:08.000] Search path: /c
-Info 2    [16:00:09.000] For info: /c/foo.ts :: No config files found.
-Info 3    [16:00:10.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 4    [16:00:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 5    [16:00:12.000] DirectoryWatcher:: Added:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 6    [16:00:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 7    [16:00:14.000] DirectoryWatcher:: Added:: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 8    [16:00:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 9    [16:00:16.000] DirectoryWatcher:: Added:: WatchInfo: /c/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 10   [16:00:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /c/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 11   [16:00:18.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 12   [16:00:19.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 13   [16:00:20.000] 	Files (1)
+Info 1    [00:00:08.000] Search path: /c
+Info 2    [00:00:09.000] For info: /c/foo.ts :: No config files found.
+Info 3    [00:00:10.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 4    [00:00:11.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:12.000] DirectoryWatcher:: Added:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 6    [00:00:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 7    [00:00:14.000] DirectoryWatcher:: Added:: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 8    [00:00:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 9    [00:00:16.000] DirectoryWatcher:: Added:: WatchInfo: /c/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 10   [00:00:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /c/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 11   [00:00:18.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 12   [00:00:19.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 13   [00:00:20.000] 	Files (1)
 	/c/foo.ts
 
 
 	foo.ts
 	  Root file specified for compilation
 
-Info 14   [16:00:21.000] -----------------------------------------------
-Info 15   [16:00:22.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 15   [16:00:23.000] 	Files (1)
+Info 14   [00:00:21.000] -----------------------------------------------
+Info 15   [00:00:22.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 15   [00:00:23.000] 	Files (1)
 
-Info 15   [16:00:24.000] -----------------------------------------------
-Info 15   [16:00:25.000] Open files: 
-Info 15   [16:00:26.000] 	FileName: /c/foo.ts ProjectRootPath: undefined
-Info 15   [16:00:27.000] 		Projects: /dev/null/inferredProject1*
-Info 15   [16:00:28.000] getSemanticDiagnostics:: /c/foo.ts:: 1
-Info 16   [16:00:29.000] foo.ts(1,17): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+Info 15   [00:00:24.000] -----------------------------------------------
+Info 15   [00:00:25.000] Open files: 
+Info 15   [00:00:26.000] 	FileName: /c/foo.ts ProjectRootPath: undefined
+Info 15   [00:00:27.000] 		Projects: /dev/null/inferredProject1*
+Info 15   [00:00:28.000] getSemanticDiagnostics:: /c/foo.ts:: 1
+Info 16   [00:00:29.000] foo.ts(1,17): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
-Info 17   [16:00:30.000] fileExists:: [{"key":"/c/tsconfig.json","count":1},{"key":"/c/jsconfig.json","count":1},{"key":"/tsconfig.json","count":1},{"key":"/jsconfig.json","count":1},{"key":"/c/bar.ts","count":1},{"key":"/c/bar.tsx","count":1},{"key":"/c/bar.d.ts","count":1},{"key":"/bar.ts","count":1},{"key":"/bar.tsx","count":1},{"key":"/bar.d.ts","count":1},{"key":"/c/bar.js","count":1},{"key":"/c/bar.jsx","count":1},{"key":"/bar.js","count":1},{"key":"/bar.jsx","count":1},{"key":"/c/package.json","count":1},{"key":"/package.json","count":1}]
-Info 18   [16:00:31.000] directoryExists:: [{"key":"/c","count":3},{"key":"/","count":2},{"key":"/c/node_modules","count":2},{"key":"/node_modules","count":1},{"key":"/c/node_modules/@types","count":2},{"key":"/node_modules/@types","count":1}]
-Info 19   [16:00:32.000] getDirectories:: []
-Info 20   [16:00:33.000] readFile:: [{"key":"/c/foo.ts","count":1}]
-Info 21   [16:00:34.000] readDirectory:: []
-Info 22   [16:00:37.000] DirectoryWatcher:: Triggered with /c/bar.d.ts :: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 23   [16:00:38.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
-Info 24   [16:00:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /c/bar.d.ts :: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 17   [00:00:30.000] fileExists:: [{"key":"/c/tsconfig.json","count":1},{"key":"/c/jsconfig.json","count":1},{"key":"/tsconfig.json","count":1},{"key":"/jsconfig.json","count":1},{"key":"/c/bar.ts","count":1},{"key":"/c/bar.tsx","count":1},{"key":"/c/bar.d.ts","count":1},{"key":"/bar.ts","count":1},{"key":"/bar.tsx","count":1},{"key":"/bar.d.ts","count":1},{"key":"/c/bar.js","count":1},{"key":"/c/bar.jsx","count":1},{"key":"/bar.js","count":1},{"key":"/bar.jsx","count":1},{"key":"/c/package.json","count":1},{"key":"/package.json","count":1}]
+Info 18   [00:00:31.000] directoryExists:: [{"key":"/c","count":3},{"key":"/","count":2},{"key":"/c/node_modules","count":2},{"key":"/node_modules","count":1},{"key":"/c/node_modules/@types","count":2},{"key":"/node_modules/@types","count":1}]
+Info 19   [00:00:32.000] getDirectories:: []
+Info 20   [00:00:33.000] readFile:: [{"key":"/c/foo.ts","count":1}]
+Info 21   [00:00:34.000] readDirectory:: []
+Info 22   [00:00:37.000] DirectoryWatcher:: Triggered with /c/bar.d.ts :: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 23   [00:00:38.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
+Info 24   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /c/bar.d.ts :: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Before running timeout callbacks
 //// [/c/bar.d.ts]
 export var y = 1
@@ -65,9 +65,9 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 25   [16:00:40.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
-Info 26   [16:00:41.000] Scheduled: /dev/null/inferredProject1*
-Info 27   [16:00:42.000] Scheduled: *ensureProjectForOpenFiles*
+Info 25   [00:00:40.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
+Info 26   [00:00:41.000] Scheduled: /dev/null/inferredProject1*
+Info 27   [00:00:42.000] Scheduled: *ensureProjectForOpenFiles*
 After running timeout callbacks
 
 PolledWatches::
@@ -82,13 +82,13 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 28   [16:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 29   [16:00:44.000] FileWatcher:: Added:: WatchInfo: /c/bar.d.ts 500 undefined WatchType: Closed Script info
-Info 30   [16:00:45.000] DirectoryWatcher:: Close:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 31   [16:00:46.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 32   [16:00:47.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 33   [16:00:48.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 34   [16:00:49.000] 	Files (2)
+Info 28   [00:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 29   [00:00:44.000] FileWatcher:: Added:: WatchInfo: /c/bar.d.ts 500 undefined WatchType: Closed Script info
+Info 30   [00:00:45.000] DirectoryWatcher:: Close:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 31   [00:00:46.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 32   [00:00:47.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info 33   [00:00:48.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 34   [00:00:49.000] 	Files (2)
 	/c/bar.d.ts
 	/c/foo.ts
 
@@ -98,10 +98,10 @@ Info 34   [16:00:49.000] 	Files (2)
 	foo.ts
 	  Root file specified for compilation
 
-Info 35   [16:00:50.000] -----------------------------------------------
-Info 36   [16:00:51.000] getSemanticDiagnostics:: /c/foo.ts:: 0
-Info 37   [16:00:52.000] fileExists:: [{"key":"/c/bar.ts","count":1},{"key":"/c/bar.tsx","count":1},{"key":"/c/bar.d.ts","count":3}]
-Info 38   [16:00:53.000] directoryExists:: [{"key":"/c","count":1},{"key":"/c/node_modules/@types","count":1},{"key":"/node_modules/@types","count":1}]
-Info 39   [16:00:54.000] getDirectories:: []
-Info 40   [16:00:55.000] readFile:: [{"key":"/c/bar.d.ts","count":1}]
-Info 41   [16:00:56.000] readDirectory:: []
+Info 35   [00:00:50.000] -----------------------------------------------
+Info 36   [00:00:51.000] getSemanticDiagnostics:: /c/foo.ts:: 0
+Info 37   [00:00:52.000] fileExists:: [{"key":"/c/bar.ts","count":1},{"key":"/c/bar.tsx","count":1},{"key":"/c/bar.d.ts","count":3}]
+Info 38   [00:00:53.000] directoryExists:: [{"key":"/c","count":1},{"key":"/c/node_modules/@types","count":1},{"key":"/node_modules/@types","count":1}]
+Info 39   [00:00:54.000] getDirectories:: []
+Info 40   [00:00:55.000] readFile:: [{"key":"/c/bar.d.ts","count":1}]
+Info 41   [00:00:56.000] readDirectory:: []
