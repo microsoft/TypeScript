@@ -1,0 +1,26 @@
+tests/cases/compiler/inKeywordAndUnknown.ts(4,18): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+tests/cases/compiler/inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+
+
+==== tests/cases/compiler/inKeywordAndUnknown.ts (2 errors) ====
+    // Repro from #50531
+    
+    function f(x: {}, y: unknown) {
+        if (!("a" in x)) {
+                     ~
+!!! error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+            return;
+        }
+        x;  // {}
+        if (!y) {
+            return;
+        }
+        y;  // {}
+        if (!("a" in y)) {
+                     ~
+!!! error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+            return;
+        }
+        y;  // {}
+    }
+    

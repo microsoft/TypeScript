@@ -1,0 +1,36 @@
+tests/cases/compiler/typePredicateWithThisParameter.ts(11,21): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+tests/cases/compiler/typePredicateWithThisParameter.ts(15,21): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+
+
+==== tests/cases/compiler/typePredicateWithThisParameter.ts (2 errors) ====
+    // Repro from #15310
+    
+    interface Foo {
+        foo: string;
+    }
+    interface Bar {
+        bar: string;
+    }
+    
+    function isFoo1(object: {}): object is Foo {
+        return 'foo' in object;
+                        ~~~~~~
+!!! error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+    }
+    
+    function isFoo2(this: void, object: {}): object is Foo {
+        return 'foo' in object;
+                        ~~~~~~
+!!! error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+    }
+    
+    declare let test: Foo | Bar;
+    
+    if (isFoo1(test)) {
+        test.foo = 'hi';
+    }
+    
+    if (isFoo2(test)) {
+        test.foo = 'hi';
+    }
+    

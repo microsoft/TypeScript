@@ -1,3 +1,4 @@
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(12,29): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(21,29): error TS2571: Object is of type 'unknown'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(23,19): error TS2339: Property '#fiel' does not exist on type 'any'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(25,20): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
@@ -7,7 +8,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(114,12): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts (7 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts (8 errors) ====
     class Foo {
         #field = 1;
         static #staticField = 2;
@@ -20,6 +21,8 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
             const b = #field in v.p1.p2;
     
             const c = #field in (v as {});
+                                ~~~~~~~~~
+!!! error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
     
             const d = #field in (v as Foo);
     
