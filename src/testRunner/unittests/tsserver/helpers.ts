@@ -106,7 +106,7 @@ namespace ts.projectSystem {
         function nowString() {
             // E.g. "12:34:56.789"
             const d = logger.host!.now();
-            return `${padLeft(d.getHours().toString(), 2, "0")}:${padLeft(d.getMinutes().toString(), 2, "0")}:${padLeft(d.getSeconds().toString(), 2, "0")}.${padLeft(d.getMilliseconds().toString(), 3, "0")}`;
+            return `${padLeft(d.getUTCHours().toString(), 2, "0")}:${padLeft(d.getUTCMinutes().toString(), 2, "0")}:${padLeft(d.getUTCSeconds().toString(), 2, "0")}.${padLeft(d.getUTCMilliseconds().toString(), 3, "0")}`;
         }
     }
 
