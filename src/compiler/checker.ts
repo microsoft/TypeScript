@@ -25152,7 +25152,8 @@ namespace ts {
                     !!getApplicableIndexInfoForName(type, propName) || !assumeTrue;
             }
 
-            function narrowByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
+            function narrowByInKeyword(type: Type, nameType: StringLiteralType | NumberLiteralType | UniqueESSymbolType, assumeTrue: boolean) {
+                const name = getPropertyNameFromType(nameType);
                 const isKnownProperty = someType(type, t => isTypePresencePossible(t, name, /*assumeTrue*/ true));
                 if (isKnownProperty) {
                     // If the check is for a known property (i.e. a property declared in some constituent of
@@ -25164,7 +25165,7 @@ namespace ts {
                     // where X is the name of the property.
                     const recordSymbol = getGlobalRecordSymbol();
                     if (recordSymbol !== unknownSymbol) {
-                        const record = getTypeAliasInstantiation(recordSymbol, [getStringLiteralType(unescapeLeadingUnderscores(name)), unknownType]);
+                        const record = getTypeAliasInstantiation(recordSymbol, [nameType, unknownType]);
                         return mapType(type, t => t.flags & TypeFlags.NonPrimitive ? record : getIntersectionType([t, record]));
                     }
                 }
@@ -25227,15 +25228,14 @@ namespace ts {
                             return narrowTypeByPrivateIdentifierInInExpression(type, expr, assumeTrue);
                         }
                         const target = getReferenceCandidate(expr.right);
-                        const leftType = getTypeOfNode(expr.left);
-                        if (leftType.flags & TypeFlags.StringLiteral) {
-                            const name = escapeLeadingUnderscores((leftType as StringLiteralType).value);
+                        const leftType = getTypeOfExpression(expr.left);
+                        if (leftType.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
                             if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
-                                getAccessedPropertyName(reference) === name) {
+                                getAccessedPropertyName(reference) === getPropertyNameFromType(leftType as StringLiteralType | NumberLiteralType | UniqueESSymbolType)) {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
                             }
                             if (isMatchingReference(reference, target)) {
-                                return narrowByInKeyword(type, name, assumeTrue);
+                                return narrowByInKeyword(type, leftType as StringLiteralType | NumberLiteralType | UniqueESSymbolType, assumeTrue);
                             }
                         }
                         break;
