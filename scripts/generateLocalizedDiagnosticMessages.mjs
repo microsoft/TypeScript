@@ -52,7 +52,6 @@ async function main() {
         const inputFilePath = path.join(inputPath, name, "diagnosticMessages", "diagnosticMessages.generated.json.lcl");
         const contents = await fs.promises.readFile(inputFilePath);
         /** @type {ParsedLCL} */
-        // eslint-disable-next-line local/object-literal-surrounding-space
         const result = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "$_" }).parse(contents);
         if (!result || !result.LCX || !result.LCX.$_TgtCul) {
             console.error("Unexpected XML file structure. Expected to find result.LCX.$_TgtCul.");
