@@ -402,7 +402,13 @@ namespace ts.refactor {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 if (isUnused(name)) {
-                    changes.delete(sourceFile, name);
+                    if (varDecl.initializer && isRequireCall(varDecl.initializer, /*requireStringLiteralLikeArgument*/ true)) {
+                        changes.delete(sourceFile,
+                            isVariableDeclarationList(varDecl.parent) && length(varDecl.parent.declarations) === 1 ? varDecl.parent.parent : varDecl);
+                    }
+                    else {
+                        changes.delete(sourceFile, name);
+                    }
                 }
                 break;
             case SyntaxKind.ArrayBindingPattern:
