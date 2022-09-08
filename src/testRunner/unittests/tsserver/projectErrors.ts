@@ -232,7 +232,7 @@ namespace ts.projectSystem {
                     content: "class c { }"
                 };
                 const host = createServerHost([libFile, fileInRoot, fileInProjectRoot]);
-                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(), useInferredProjectPerProjectRoot: true });
+                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host), useInferredProjectPerProjectRoot: true });
 
                 const untitledFile = "untitled:Untitled-1";
                 const refPathNotFound1 = "../../../../../../typings/@epic/Core.d.ts";
@@ -280,7 +280,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] })
             };
             const host = createServerHost([app, foo, configFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -289,8 +289,8 @@ namespace ts.projectSystem {
             verifyGetErrRequest({ session, host, files: [app] });
 
             host.renameFolder(`${projectDir}/foo`, `${projectDir}/foo2`);
-            host.runQueuedTimeoutCallbacks();
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             verifyGetErrRequest({ session, host, files: [app] });
             baselineTsserverLogs("projectErrors", `folder rename updates project structure and reports no errors`, session);
         });
@@ -301,7 +301,7 @@ namespace ts.projectSystem {
                 content: "let x: number = false;"
             };
             const host = createServerHost([file, libFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq<protocol.GeterrRequest>({
                 command: server.CommandNames.Geterr,
                 arguments: {
@@ -310,7 +310,7 @@ namespace ts.projectSystem {
                 }
             });
 
-            host.checkTimeoutQueueLengthAndRun(1);
+            session.checkTimeoutQueueLengthAndRun(1);
             baselineTsserverLogs("projectErrors", "getting errors before opening file", session);
         });
 
@@ -329,7 +329,7 @@ namespace ts.projectSystem {
             };
             const files = [libFile, app, serverUtilities, backendTest];
             const host = createServerHost(files);
-            const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([{ file: app, projectRootPath: tscWatch.projectRoot }], session);
             openFilesForSession([{ file: backendTest, projectRootPath: tscWatch.projectRoot }], session);
             verifyGetErrRequest({ session, host, files: [backendTest.path, app.path] });
@@ -367,7 +367,7 @@ declare module '@custom/plugin' {
             };
             const files = [libFile, aFile, config, plugin, pluginProposed];
             const host = createServerHost(files);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([aFile], session);
 
             checkErrors();
@@ -430,7 +430,7 @@ declare module '@custom/plugin' {
                 }`
             };
             const host = createServerHost([file, libFile, configFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file], session);
             baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file has errors", session);
         });
@@ -447,7 +447,7 @@ declare module '@custom/plugin' {
                 }`
             };
             const host = createServerHost([file, libFile, configFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file], session);
             baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file doesnt have errors", session);
         });
@@ -465,7 +465,7 @@ declare module '@custom/plugin' {
             };
 
             const host = createServerHost([file, libFile, configFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file], session);
 
             configFile.content = `{
@@ -474,13 +474,13 @@ declare module '@custom/plugin' {
                 }
             }`;
             host.writeFile(configFile.path, configFile.content);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
 
             configFile.content = `{
                 "compilerOptions": {}
             }`;
             host.writeFile(configFile.path, configFile.content);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file changes", session);
         });
 
@@ -508,7 +508,7 @@ declare module '@custom/plugin' {
                 }`
             };
             const host = createServerHost([file, libFile, configFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file2], session);
             openFilesForSession([file], session);
             // We generate only if project is created when opening file from the project
@@ -531,7 +531,7 @@ declare module '@custom/plugin' {
                 }`
             };
             const host = createServerHost([file, libFile, configFile]);
-            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file], session);
             baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file has errors but suppressDiagnosticEvents is true", session);
         });
@@ -557,7 +557,7 @@ declare module '@custom/plugin' {
             };
 
             const host = createServerHost([file, file2, file3, libFile, configFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file2], session);
             openFilesForSession([file], session);
             // We generate only if project is created when opening file from the project
@@ -580,7 +580,7 @@ declare module '@custom/plugin' {
             };
 
             const host = createServerHost([file, libFile, configFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file], session);
             baselineTsserverLogs("projectErrors", "configFileDiagnostic events contains the project reference errors", session);
         });
@@ -788,7 +788,7 @@ console.log(blabla);`
             };
 
             const host = createServerHost([test, blabla, libFile, tsconfig]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([test], session);
             return { host, session, test, blabla, tsconfig };
         }
@@ -827,7 +827,7 @@ console.log(blabla);`
             };
             const projectFiles = [main, libFile, config];
             const host = createServerHost(projectFiles);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([{ file: main, projectRootPath: tscWatch.projectRoot }], session);
             verifyGetErrRequest({ session, host, files: [main] });
 
@@ -868,13 +868,13 @@ console.log(blabla);`
             function verifyWhileNpmInstall(timeouts: number) {
                 filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
                 if (npmInstallComplete || timeoutDuringPartialInstallation) {
-                    host.checkTimeoutQueueLengthAndRun(timeouts); // Invalidation of failed lookups
+                    session.checkTimeoutQueueLengthAndRun(timeouts); // Invalidation of failed lookups
                     if (timeouts) {
-                        host.checkTimeoutQueueLengthAndRun(timeouts - 1); // Actual update
+                        session.checkTimeoutQueueLengthAndRun(timeouts - 1); // Actual update
                     }
                 }
                 else {
-                    host.checkTimeoutQueueLength(timeouts ? 3 : 2);
+                    session.checkTimeoutQueueLength(timeouts ? 3 : 2);
                 }
                 verifyGetErrRequest({ session, host, files: [main], existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation ? timeouts ? 3 : 2 : undefined });
             }

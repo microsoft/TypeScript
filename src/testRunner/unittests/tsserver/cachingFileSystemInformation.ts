@@ -76,7 +76,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([root, imported]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             projectService.openClientFile(root.path);
             const project = projectService.inferredProjects[0];
@@ -134,7 +134,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([root]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             const logCacheAndClear = createLoggerTrackingHostCalls(host);
             projectService.openClientFile(root.path);
@@ -146,7 +146,7 @@ namespace ts.projectSystem {
             logCacheAndClear(projectService.logger);
 
             host.writeFile(imported.path, imported.content);
-            host.runQueuedTimeoutCallbacks();
+            projectService.runQueuedTimeoutCallbacks();
             logSemanticDiagnostics(projectService, project, root);
             logCacheAndClear(projectService.logger);
             baselineTsserverLogs("cachingFileSystemInformation", "loads missing files from disk", projectService);
@@ -195,7 +195,7 @@ namespace ts.projectSystem {
             };
             const projectFiles = [clientFile, anotherModuleFile, moduleFile, tsconfigFile];
             const host = createServerHost(projectFiles);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([clientFile], session);
             const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
@@ -273,14 +273,14 @@ namespace ts.projectSystem {
                     };
                     const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
                     const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
-                    const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                    const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                     projectService.openClientFile(file1.path);
 
                     const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
                     // Create file cookie.ts
                     host.writeFile(file3.path, file3.content);
-                    host.runQueuedTimeoutCallbacks();
+                    projectService.runQueuedTimeoutCallbacks();
                     logCacheAndClear(projectService.logger);
 
                     projectService.openClientFile(file3.path);
@@ -383,7 +383,7 @@ namespace ts.projectSystem {
 `
                 });
                 const host = createServerHost([app, libFile, tsconfigJson, packageJson]);
-                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
                 projectService.openClientFile(app.path);
 
@@ -479,15 +479,15 @@ namespace ts.projectSystem {
                     if (npmInstallComplete || timeoutDuringPartialInstallation) {
                         if (timeoutQueueLengthWhenRunningTimeouts) {
                             // Expected project update
-                            host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts + 1); // Scheduled invalidation of resolutions
-                            host.runQueuedTimeoutCallbacks(); // Actual update
+                            projectService.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts + 1); // Scheduled invalidation of resolutions
+                            projectService.runQueuedTimeoutCallbacks(); // Actual update
                         }
                         else {
-                            host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
+                            projectService.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
                         }
                     }
                     else {
-                        host.checkTimeoutQueueLength(3);
+                        projectService.checkTimeoutQueueLength(3);
                     }
                 }
             }

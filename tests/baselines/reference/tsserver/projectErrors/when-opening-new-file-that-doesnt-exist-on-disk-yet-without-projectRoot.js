@@ -1,15 +1,52 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"command":"open","arguments":{"file":"untitled:Untitled-1","fileContent":"/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />","scriptKindName":"TS"},"seq":1,"type":"request"}
-Search path: 
-For info: untitled:Untitled-1 :: No config files found.
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-FileWatcher:: Added:: WatchInfo: /src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:26.000] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "untitled:Untitled-1",
+        "fileContent": "/// <reference path=\"../../../../../../typings/@epic/Core.d.ts\" />\n/// <reference path=\"./src/somefile.d.ts\" />",
+        "scriptKindName": "TS"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/src/somefile.d.ts]
+class c { }
+
+//// [/user/someuser/projects/someFolder/src/somefile.d.ts]
+class c { }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+Info 2    [00:00:27.000] Search path: 
+Info 3    [00:00:28.000] For info: untitled:Untitled-1 :: No config files found.
+Info 4    [00:00:29.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 5    [00:00:30.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 6    [00:00:31.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 7    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 8    [00:00:33.000] FileWatcher:: Added:: WatchInfo: /src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 9    [00:00:34.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 10   [00:00:35.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 11   [00:00:36.000] 	Files (2)
 	/a/lib/lib.d.ts
 	untitled:Untitled-1
 
@@ -19,27 +56,169 @@ Project '/dev/null/inferredProject1*' (Inferred)
 	untitled:Untitled-1
 	  Root file specified for compilation
 
------------------------------------------------
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 12   [00:00:37.000] -----------------------------------------------
+Info 13   [00:00:38.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 13   [00:00:39.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: untitled:Untitled-1 ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-response:{"responseRequired":false}
+Info 13   [00:00:40.000] -----------------------------------------------
+Info 13   [00:00:41.000] Open files: 
+Info 13   [00:00:42.000] 	FileName: untitled:Untitled-1 ProjectRootPath: undefined
+Info 13   [00:00:43.000] 		Projects: /dev/null/inferredProject1*
+After request
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 13   [00:00:44.000] response:
+    {
+      "responseRequired": false
+    }
 
 ScriptInfos:
 path: /untitled:untitled-1 fileName: untitled:Untitled-1
 path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
 
-request:{"command":"geterr","arguments":{"delay":0,"files":["untitled:Untitled-1"]},"seq":2,"type":"request"}
-response:{"responseRequired":false}
-event:
+Info 14   [00:00:45.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "untitled:Untitled-1"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+After request
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 15   [00:00:46.000] response:
+    {
+      "responseRequired": false
+    }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 16   [00:00:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
-event:
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 17   [00:00:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"untitled:Untitled-1","diagnostics":[{"start":{"line":1,"offset":22},"end":{"line":1,"offset":63},"text":"File '../../../../../../typings/@epic/Core.d.ts' not found.","code":6053,"category":"error"},{"start":{"line":2,"offset":22},"end":{"line":2,"offset":41},"text":"File 'src/somefile.d.ts' not found.","code":6053,"category":"error"}]}}
-event:
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 18   [00:00:49.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
-event:
+Info 19   [00:00:50.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::

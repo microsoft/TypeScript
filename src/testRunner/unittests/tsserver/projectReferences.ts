@@ -26,7 +26,7 @@ namespace ts.projectSystem {
                 const host = createHostWithSolutionBuild(files, [containerConfig.path]);
 
                 // Open external project for the folder
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 const service = session.getProjectService();
                 service.openExternalProjects([{
                     projectFileName: TestFSWithWatch.getTsBuildProjectFilePath(project, project),
@@ -57,7 +57,7 @@ namespace ts.projectSystem {
 
             it("can successfully find references with --out options", () => {
                 const host = createHostWithSolutionBuild(files, [containerConfig.path]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([containerCompositeExec[1]], session);
                 const myConstStart = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
                 session.executeCommandSeq<protocol.RenameRequest>({
@@ -74,7 +74,7 @@ namespace ts.projectSystem {
                     content: "let x = 10"
                 };
                 const host = createHostWithSolutionBuild(files.concat([tempFile]), [containerConfig.path]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([containerCompositeExec[1]], session);
                 const service = session.getProjectService();
 
@@ -164,7 +164,7 @@ function foo() {
                     [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs, libFile],
                     [srcConfig.path]
                 );
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([keyboardTs, terminalTs], session);
 
                 const searchStr = "evaluateKeyboardEvent";
@@ -341,7 +341,7 @@ function foo() {
                     createServerHost(files);
 
                 // Create symlink in node module
-                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([aTest], session);
                 verifyGetErrRequest({ session, host, files: [aTest] });
                 session.executeCommandSeq<protocol.UpdateOpenRequest>({
@@ -492,7 +492,7 @@ testCompositeFunction('why hello there', 42);`
                 symLink: `${tscWatch.projectRoot}/packages/emit-composite`
             };
             const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([consumerIndex], session);
             verifyGetErrRequest({ host, session, files: [consumerIndex] });
             baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
@@ -562,7 +562,7 @@ testCompositeFunction('why hello there', 42);`
 
             const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
             const host = createServerHost(files);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([programFile], session);
 
             // Find all references for getSourceFile
@@ -682,7 +682,7 @@ testCompositeFunction('why hello there', 42);`
 
             const files = [libFile, solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile, libFile];
             const host = createServerHost(files);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([bFile], session);
 
             // The first search will trigger project loads
@@ -756,7 +756,7 @@ ${usage}`
                         content: definition
                     };
                     const host = createServerHost([libFile, solution, libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
-                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([apiFile], session);
 
                     // Find all references
@@ -874,7 +874,7 @@ export const foo = local;`,
 
             const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
             const host = createServerHost(files);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([programFile], session);
 
             // Find all references
@@ -969,7 +969,7 @@ export function bar() {}`
                     mainDts, mainDtsMap, helperDts, helperDtsMap,
                     tsconfigIndirect3, fileResolvingToMainDts,
                     ...additionalFiles]);
-                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
                 const service = session.getProjectService();
                 service.openClientFile(main.path);
                 return { session, service, host };
@@ -979,10 +979,10 @@ export function bar() {}`
                 const { session, service, host } = setup(input);
 
                 const info = service.getScriptInfoForPath(main.path as Path)!;
-                session.logger.logs.push("");
-                session.logger.logs.push(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-                session.logger.logs.push(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)!.projectName}`);
-                session.logger.logs.push("");
+                session.logger.startGroup();
+                session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
+                session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)!.projectName}`);
+                session.logger.endGroup();
 
                 // Verify errors
                 verifyGetErrRequest({ session, host, files: [main] });
@@ -1046,10 +1046,10 @@ export function bar() {}`
                 const { session, service } = setup(input);
 
                 const info = service.getScriptInfoForPath(main.path as Path)!;
-                session.logger.logs.push("");
-                session.logger.logs.push(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-                session.logger.logs.push(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)?.projectName}`);
-                session.logger.logs.push("");
+                session.logger.startGroup();
+                session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
+                session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)?.projectName}`);
+                session.logger.endGroup();
 
                 // Verify collection of script infos
                 service.openClientFile(dummyFilePath);
@@ -1246,7 +1246,7 @@ bar;`
                     content: `class class2 {}`
                 };
                 const host = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([class2], session);
                 return { host, session, class1 };
             }
@@ -1257,16 +1257,16 @@ bar;`
                 // Add new class to referenced project
                 const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(2);
+                session.checkTimeoutQueueLengthAndRun(2);
 
                 // Add excluded file to referenced project
                 host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-                host.checkTimeoutQueueLengthAndRun(0);
+                session.checkTimeoutQueueLengthAndRun(0);
 
                 // Add output from new class to referenced project
                 const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(0);
+                session.checkTimeoutQueueLengthAndRun(0);
                 baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open`, session);
             });
 
@@ -1277,14 +1277,14 @@ bar;`
                 // Add new class to referenced project
                 const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(3);
+                session.checkTimeoutQueueLengthAndRun(3);
                 // Add excluded file to referenced project
                 host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-                host.checkTimeoutQueueLengthAndRun(0);
+                session.checkTimeoutQueueLengthAndRun(0);
                 // Add output from new class to referenced project
                 const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(0);
+                session.checkTimeoutQueueLengthAndRun(0);
                 baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open`, session);
             });
 
@@ -1294,20 +1294,20 @@ bar;`
                 // Add new class to referenced project
                 const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(2);
+                session.checkTimeoutQueueLengthAndRun(2);
                 // Add output of new class to referenced project
                 const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(2);
+                session.checkTimeoutQueueLengthAndRun(2);
                 // Add excluded file to referenced project
                 host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-                host.checkTimeoutQueueLengthAndRun(0);
+                session.checkTimeoutQueueLengthAndRun(0);
                 // Delete output from new class to referenced project
                 host.deleteFile(class3Dts);
-                host.checkTimeoutQueueLengthAndRun(2);
+                session.checkTimeoutQueueLengthAndRun(2);
                 // Write back output of new class to referenced project
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(2);
+                session.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`, session);
             });
 
@@ -1318,20 +1318,20 @@ bar;`
                 // Add new class to referenced project
                 const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(3);
+                session.checkTimeoutQueueLengthAndRun(3);
                 // Add output of new class to referenced project
                 const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(2);
+                session.checkTimeoutQueueLengthAndRun(2);
                 // Add excluded file to referenced project
                 host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-                host.checkTimeoutQueueLengthAndRun(0);
+                session.checkTimeoutQueueLengthAndRun(0);
                 // Delete output from new class to referenced project
                 host.deleteFile(class3Dts);
-                host.checkTimeoutQueueLengthAndRun(2);
+                session.checkTimeoutQueueLengthAndRun(2);
                 // Write back output of new class to referenced project
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(2);
+                session.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`, session);
             });
         });
@@ -1401,7 +1401,7 @@ bar;`
                     tscWatch.solutionBuildWithBaseline(host, [solnConfig.path]);
                     host.clearOutput();
                 }
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([appIndex], session);
                 session.executeCommandSeq<protocol.CodeFixRequest>({
                     command: protocol.CommandTypes.GetCodeFixes,
@@ -1464,7 +1464,7 @@ bar;`
                 refToCoreRef3File, refToCoreRef3Config,
                 indirectNoCoreRefFile, indirectNoCoreRefConfig, noCoreRef2File, noCoreRef2Config
             ], { useCaseSensitiveFileNames: true });
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([mainFile, coreFile], session);
 
             // Find all refs in coreFile
@@ -1549,7 +1549,7 @@ const b: B = new B();`
                     };
 
                     const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
-                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
 
                     session.executeCommandSeq<protocol.ReferencesRequest>({

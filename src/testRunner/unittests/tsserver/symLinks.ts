@@ -40,7 +40,7 @@ namespace ts.projectSystem {
 
             const files = [cFile, libFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
             const host = createServerHost(files);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession(
                 [
                     { file: aFile, projectRootPath: folderA },
@@ -106,7 +106,7 @@ new C();`
             };
 
             function createSessionAndOpenFile(host: TestServerHost) {
-                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
                 session.executeCommandSeq<protocol.OpenRequest>({
                     command: protocol.CommandTypes.Open,
                     arguments: {
@@ -127,8 +127,8 @@ new C();`
 
                         host.ensureFileOrFolder(nodeModulesRecorgnizersText);
                         host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
-                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                        host.runQueuedTimeoutCallbacks(); // Actual update
+                        session.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        session.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
 
@@ -138,8 +138,8 @@ new C();`
                             ...config,
                             compilerOptions: { ...config.compilerOptions, resolveJsonModule: true }
                         }));
-                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                        host.runQueuedTimeoutCallbacks(); // Actual update
+                        session.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        session.runQueuedTimeoutCallbacks(); // Actual update
 
                         baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project compiles from sources`, session);
                     });
@@ -150,8 +150,8 @@ new C();`
                         verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
 
                         host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
-                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                        host.runQueuedTimeoutCallbacks(); // Actual update
+                        session.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        session.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
                         baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project has node_modules setup but doesnt have modules in typings folder and then recompiles`, session);
@@ -164,14 +164,14 @@ new C();`
                         verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
 
                         host.deleteFolder(recognizersTextDist, /*recursive*/ true);
-                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                        host.runQueuedTimeoutCallbacks(); // Actual update
+                        session.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        session.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
 
                         host.ensureFileOrFolder(recongnizerTextDistTypingFile);
-                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                        host.runQueuedTimeoutCallbacks(); // Actual update
+                        session.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        session.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
                         baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project recompiles after deleting generated folders`, session);

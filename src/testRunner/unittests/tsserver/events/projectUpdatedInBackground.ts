@@ -437,12 +437,12 @@ namespace ts.projectSystem {
 
                         const openFiles = [file1.path];
                         const host = createServerHost([file1, file3, libFile, configFile]);
-                        const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host, createLoggerWithInMemoryLogs());
+                        const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host, createLoggerWithInMemoryLogs(host));
                         verifyInitialOpen(file1);
 
                         file3.content += "export class d {}";
                         host.writeFile(file3.path, file3.content);
-                        host.checkTimeoutQueueLengthAndRun(2);
+                        session.checkTimeoutQueueLengthAndRun(2);
 
                         // Since this is first event
                         verifyProjectsUpdatedInBackgroundEventHandler([{
@@ -453,8 +453,8 @@ namespace ts.projectSystem {
                         }]);
 
                         host.writeFile(file2.path, file2.content);
-                        host.runQueuedTimeoutCallbacks(); // For invalidation
-                        host.runQueuedTimeoutCallbacks(); // For actual update
+                        session.runQueuedTimeoutCallbacks(); // For invalidation
+                        session.runQueuedTimeoutCallbacks(); // For actual update
 
                         verifyProjectsUpdatedInBackgroundEventHandler(useSlashRootAsSomeNotRootFolderInUserDirectory ? [{
                             eventName: server.ProjectsUpdatedInBackgroundEvent,

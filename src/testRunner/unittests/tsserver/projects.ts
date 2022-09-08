@@ -7,7 +7,7 @@ namespace ts.projectSystem {
                     let x = y`
             };
             const host = createServerHost([file1, libFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1], session);
 
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
@@ -19,7 +19,7 @@ namespace ts.projectSystem {
             session.executeCommand(getErrRequest);
 
             host.writeFile(commonFile2.path, commonFile2.content);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             session.executeCommand(getErrRequest);
             baselineTsserverLogs("projects", "handles the missing files added with tripleslash ref", session);
         });
@@ -861,7 +861,7 @@ namespace ts.projectSystem {
                 content: `<html><script language="javascript">var x = 1;</></html>`
             };
             const host = createServerHost([file1]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             const projectFileName = "projectFileName";
             projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
 
@@ -1005,7 +1005,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: {} })
             };
             const host = createServerHost([f1, libFile, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq({
                 command: server.CommandNames.Open,
                 arguments: {
@@ -1074,7 +1074,7 @@ namespace ts.projectSystem {
 
             const files = [config, file, filesFile1, filesFile2, libFile];
             const host = createServerHost(files);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             // Create configured project
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
@@ -1516,28 +1516,28 @@ namespace ts.projectSystem {
             };
             const files = [fileSubA, fileB, config, libFile];
             const host = createServerHost(files);
-            const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs(host) });
             openFile(fileB);
             openFile(fileSubA);
 
-            host.checkTimeoutQueueLengthAndRun(0);
+            session.checkTimeoutQueueLengthAndRun(0);
 
             // This should schedule 2 timeouts for ensuring project structure and ensuring projects for open file
             host.deleteFile(fileSubA.path);
             host.deleteFolder(getDirectoryPath(fileSubA.path));
             host.writeFile(fileA.path, fileA.content);
-            host.checkTimeoutQueueLength(2);
+            session.checkTimeoutQueueLength(2);
 
             closeFilesForSession([fileSubA], session);
             // This should cancel existing updates and schedule new ones
-            host.checkTimeoutQueueLength(2);
+            session.checkTimeoutQueueLength(2);
 
             // Open the fileA (as if rename)
             // config project is updated to check if fileA is present in it
             openFile(fileA);
 
             // Run the timeout for updating configured project and ensuring projects for open file
-            host.checkTimeoutQueueLengthAndRun(2);
+            session.checkTimeoutQueueLengthAndRun(2);
 
             // file is deleted but watches are not yet invoked
             const originalFileExists = host.fileExists;
@@ -1548,13 +1548,13 @@ namespace ts.projectSystem {
             // This should create inferred project since fileSubA not on the disk
             openFile(fileSubA);
 
-            host.checkTimeoutQueueLengthAndRun(2); // Update configured project and projects for open file
+            session.checkTimeoutQueueLengthAndRun(2); // Update configured project and projects for open file
             host.fileExists = originalFileExists;
 
             // Actually trigger the file move
             host.deleteFile(fileA.path);
             host.ensureFileOrFolder(fileSubA);
-            host.checkTimeoutQueueLength(2);
+            session.checkTimeoutQueueLength(2);
 
             verifyGetErrRequest({ session, host, files: [fileB, fileSubA], existingTimeouts: 2 });
             baselineTsserverLogs("projects", "handles delayed directory watch invoke on file creation", session);
@@ -1634,7 +1634,7 @@ namespace ts.projectSystem {
                 content: `export function foobar() { }`
             };
             const host = createServerHost([testsConfig, testsFile, innerFile, innerConfig, innerSrcFile, libFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([testsFile], session);
             closeFilesForSession([testsFile], session);
             openFilesForSession([innerFile], session);

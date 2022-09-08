@@ -132,13 +132,13 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host, {
                 useSingleInferredProject: true,
                 typingsInstaller: installer,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
             projectService.openClientFile(file1.path);
 
             installer.installAll(/*expectedCount*/ 1);
-            host.checkTimeoutQueueLengthAndRun(2);
+            projectService.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("typingsInstaller", "configured projects", projectService);
         });
 
@@ -1029,13 +1029,13 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host, {
                 useSingleInferredProject: true,
                 typingsInstaller: installer,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             projectService.openClientFile(app.path);
 
             installer.installAll(/*expectedCount*/ 1);
 
-            host.checkTimeoutQueueLengthAndRun(2);
+            projectService.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("typingsInstaller", "configured projects discover from bower_components", projectService);
         });
 
@@ -1204,7 +1204,7 @@ namespace ts.projectSystem {
             })();
             const service = createProjectService(host, {
                 typingsInstaller: installer,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             service.openClientFile(file.path);
 
@@ -1212,7 +1212,7 @@ namespace ts.projectSystem {
             for (const name of typeNames) {
                 assert.isTrue(host.fileExists(typePath(name)), `typings for '${name}' should be created`);
             }
-            host.checkTimeoutQueueLengthAndRun(2);
+            service.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("typingsInstaller", "redo resolutions pointing to js on typing install", service);
         });
 

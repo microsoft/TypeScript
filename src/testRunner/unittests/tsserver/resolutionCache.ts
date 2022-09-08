@@ -12,7 +12,7 @@ namespace ts.projectSystem {
             const host: TestServerHost & ModuleResolutionHost = createServerHost([file1, lib]);
             const projectService = createProjectService(host, {
                 typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host),
-                logger: createLoggerWithInMemoryLogs()
+                logger: createLoggerWithInMemoryLogs(host)
             });
 
             projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
@@ -78,7 +78,7 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([file1]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
@@ -87,7 +87,7 @@ namespace ts.projectSystem {
             session.executeCommand(getErrRequest);
 
             host.writeFile(moduleFile.path, moduleFile.content);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
 
             // Make a change to trigger the program rebuild
             const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
@@ -108,7 +108,7 @@ namespace ts.projectSystem {
                 content: 'import f = require("pad"); f;'
             };
             const host = createServerHost([file1, libFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
                 arguments: {
@@ -126,10 +126,10 @@ namespace ts.projectSystem {
                 content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
             };
             host.ensureFileOrFolder(padIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
-            host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-            host.runQueuedTimeoutCallbacks(); // Actual update
-            host.runQueuedTimeoutCallbacks();
-            host.runQueuedImmediateCallbacks();
+            session.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            session.runQueuedTimeoutCallbacks(); // Actual update
+            session.runQueuedTimeoutCallbacks();
+            session.runQueuedImmediateCallbacks();
             baselineTsserverLogs("resolutionCache", `npm install @types works`, session);
         });
 
@@ -140,7 +140,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -159,7 +159,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -185,7 +185,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -210,7 +210,7 @@ namespace ts.projectSystem {
                 }
             });
 
-            host.checkTimeoutQueueLength(0);
+            session.checkTimeoutQueueLength(0);
             baselineTsserverLogs("resolutionCache", "suppressed diagnostic events", session);
         });
     });
@@ -226,7 +226,7 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([moduleFile, file1]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
@@ -237,11 +237,11 @@ namespace ts.projectSystem {
 
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             host.renameFile(moduleFile.path, moduleFileNewPath);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             session.executeCommand(getErrRequest);
 
             host.renameFile(moduleFileNewPath, moduleFile.path);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
 
             // Make a change to trigger the program rebuild
             const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
@@ -249,7 +249,7 @@ namespace ts.projectSystem {
                 { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
             );
             session.executeCommand(changeRequest);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
 
             session.executeCommand(getErrRequest);
             baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
@@ -269,7 +269,7 @@ namespace ts.projectSystem {
                 content: `{}`
             };
             const host = createServerHost([moduleFile, file1, configFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
@@ -280,11 +280,11 @@ namespace ts.projectSystem {
 
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             host.renameFile(moduleFile.path, moduleFileNewPath);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             session.executeCommand(getErrRequest);
 
             host.renameFile(moduleFileNewPath, moduleFile.path);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             session.executeCommand(getErrRequest);
             baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
         });
@@ -372,12 +372,12 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/module1.ts`, `${tscWatch.projectRoot}/module2.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 host.writeFile(file1.path, file1.content + fileContent);
                 host.writeFile(file2.path, file2.content + fileContent);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
 
                 baselineTsserverLogs("resolutionCache", "relative module name from files in same folder", service);
             });
@@ -388,12 +388,12 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 host.writeFile(file1.path, file1.content + fileContent);
                 host.writeFile(file2.path, file2.content + fileContent);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", "non relative module name from files in same folder", service);
             });
         });
@@ -428,14 +428,14 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/src/module1.ts`, `${tscWatch.projectRoot}/product/module2.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 host.writeFile(file1.path, file1.content + fileContent1);
                 host.writeFile(file2.path, file2.content + fileContent2);
                 host.writeFile(file3.path, file3.content + fileContent3);
                 host.writeFile(file4.path, file4.content + fileContent4);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", "relative module name from files in different folders", service);
             });
 
@@ -445,14 +445,14 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 host.writeFile(file1.path, file1.content + fileContent);
                 host.writeFile(file2.path, file2.content + fileContent);
                 host.writeFile(file3.path, file3.content + fileContent);
                 host.writeFile(file4.path, file4.content + fileContent);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", "non relative module name from files in different folders", service);
             });
 
@@ -467,14 +467,14 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.setCompilerOptionsForInferredProjects({ traceResolution: true });
                 service.openClientFile(file1.path);
                 host.writeFile(file1.path, file1.content + importModuleContent);
                 host.writeFile(file2.path, file2.content + importModuleContent);
                 host.writeFile(file3.path, file3.content + importModuleContent);
                 host.writeFile(file4.path, file4.content + importModuleContent);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", "non relative module name from inferred project", service);
             });
         });
@@ -526,7 +526,7 @@ export const x = 10;`
 
                     const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
                     const host = createServerHost(files);
-                    const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                    const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                     service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, tscWatch.projectRoot);
                     baselineTsserverLogs("resolutionCache", scenario, service);
                 });
@@ -590,12 +590,12 @@ export const x = 10;`
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 // invoke callback to simulate saving
                 host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
-                host.checkTimeoutQueueLengthAndRun(0);
+                service.checkTimeoutQueueLengthAndRun(0);
                 baselineTsserverLogs("resolutionCache", "avoid unnecessary lookup invalidation on save", service);
             });
         });
