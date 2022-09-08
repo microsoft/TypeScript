@@ -29,6 +29,10 @@ Output::
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file
+Enabling watchFactory myplugin from candidate paths: /a/lib/tsc.js/../../..
+Loading myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+Require:: Resolving myplugin from /a/lib/tsc.js/../../../node_modules
+Skipped loading plugin myplugin because it did not expose a proper factory function
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]

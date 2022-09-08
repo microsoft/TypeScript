@@ -2188,6 +2188,7 @@ export class InferredProject extends Project {
 
     override close() {
         forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info));
+        this.projectService.clearWatchOptionsFromProjectWatchOptions(this.watchOptions);
         super.close();
     }
 
@@ -2847,6 +2848,11 @@ export class ExternalProject extends Project {
 
     override getExcludedFiles() {
         return this.excludedFiles;
+    }
+
+    override close() {
+        this.projectService.clearWatchOptionsFromProjectWatchOptions(this.watchOptions);
+        super.close();
     }
 }
 

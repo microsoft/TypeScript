@@ -342,6 +342,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             tscWatchDirectory,
             inodeWatching: !!this.inodeWatching,
             sysLog: s => this.write(s + this.newLine),
+            getSystem: () => this,
         });
         this.watchFile = watchFile;
         this.watchDirectory = watchDirectory;

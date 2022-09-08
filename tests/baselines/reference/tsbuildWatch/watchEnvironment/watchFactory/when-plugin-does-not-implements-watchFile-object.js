@@ -30,7 +30,12 @@ Output::
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file /user/username/projects/myproject/tsconfig.json
+Enabling watchFactory myplugin from candidate paths: /a/lib/tsc.js/../../..
+Loading myplugin from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+Require:: Resolving myplugin from /a/lib/tsc.js/../../../node_modules
+Require:: Module myplugin created with config: {"name":"myplugin"} and options: {"watchFactory":"myplugin"}
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
+Custom watchDirectory: /user/username/projects/myproject true {"watchFactory":"myplugin"}
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
@@ -62,9 +67,9 @@ FsWatches::
 /user/username/projects/myproject/b.ts: *new*
   {}
 
-FsWatchesRecursive::
+Plugin WatchedDirectories:Recursive::
 /user/username/projects/myproject: *new*
-  {}
+  {"options":{"watchFactory":"myplugin"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -157,6 +162,17 @@ Input::
 export function foo() { }
 
 
+Before running Timeout callback:: count: 0
+After running Timeout callback:: count: 0
+Output::
+
+exitCode:: ExitStatus.undefined
+
+
+Change:: Invoke plugin watches
+
+Input::
+
 Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
 After running Timeout callback:: count: 0
@@ -166,9 +182,6 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c.ts 250 {"watchFactory":"myplugin"} Source file /user/username/projects/myproject/tsconfig.json
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/c.js :: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
-Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/c.js
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/c.js :: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Wild card directory /user/username/projects/myproject/tsconfig.json
 [[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -198,9 +211,9 @@ FsWatches::
 /user/username/projects/myproject/c.ts: *new*
   {}
 
-FsWatchesRecursive::
+Plugin WatchedDirectories:Recursive::
 /user/username/projects/myproject:
-  {}
+  {"options":{"watchFactory":"myplugin"}}
 
 exitCode:: ExitStatus.undefined
 

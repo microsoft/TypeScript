@@ -59,6 +59,9 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/a.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin2"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+CustomRequire:: Resolving myplugin2 from /a/lib/tsc.js/../../../node_modules
+Require:: Module myplugin2 created with config: {"name":"myplugin2"} and options: {"watchFactory":"myplugin2"}
+Custom myplugin2watchFile: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin2"}
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/a.ts",
@@ -73,12 +76,19 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin2"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+CustomRequire:: Resolving myplugin from /a/lib/tsc.js/../../../node_modules
+Require:: Module myplugin created with config: {"name":"myplugin"} and options: {"watchFactory":"myplugin"}
+Custom watchFile: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Custom watchDirectory: /user/username/projects/myproject true {"watchFactory":"myplugin"}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 500 {"watchFactory":"myplugin2"} WatchType: Closed Script info
+Custom myplugin2watchFile: /user/username/projects/myproject/b.ts 500 {"watchFactory":"myplugin2"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 {"watchFactory":"myplugin2"} WatchType: Closed Script info
+Custom myplugin2watchFile: /a/lib/lib.d.ts 500 {"watchFactory":"myplugin2"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFactory":"myplugin"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Custom watchDirectory: /user/username/projects/myproject/node_modules/@types true {"watchFactory":"myplugin"}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFactory":"myplugin"} Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -109,23 +119,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
+Plugin WatchedFiles::
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
+  {"pollingInterval":2000,"options":{"watchFactory":"myplugin"}}
 
-FsWatchesRecursive::
+Plugin WatchedDirectories:Recursive::
 /user/username/projects/myproject: *new*
-  {}
+  {"options":{"watchFactory":"myplugin"}}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"options":{"watchFactory":"myplugin"}}
+
+myplugin2Plugin WatchedFiles::
+/user/username/projects/myproject/b.ts: *new*
+  {"pollingInterval":500,"options":{"watchFactory":"myplugin2"}}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500,"options":{"watchFactory":"myplugin2"}}
 
 Add a file
+Before running Timeout callback:: count: 0
+//// [/user/username/projects/myproject/c.ts]
+export class a { prop = "hello"; foo() { return this.prop; } }
+
+
+After running Timeout callback:: count: 0
+
+Invoke plugin watches
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/c.ts :: WatchInfo: /user/username/projects/myproject 1 {"watchFactory":"myplugin"} Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -133,12 +151,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Before running Timeout callback:: count: 2
 1: /user/username/projects/myproject/tsconfig.json
 2: *ensureProjectForOpenFiles*
-//// [/user/username/projects/myproject/c.ts]
-export class a { prop = "hello"; foo() { return this.prop; } }
-
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c.ts 500 {"watchFactory":"myplugin2"} WatchType: Closed Script info
+Custom myplugin2watchFile: /user/username/projects/myproject/c.ts 500 {"watchFactory":"myplugin2"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -178,29 +194,33 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
+Plugin WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/c.ts: *new*
-  {}
+  {"pollingInterval":2000,"options":{"watchFactory":"myplugin"}}
 
-FsWatchesRecursive::
+Plugin WatchedDirectories:Recursive::
 /user/username/projects/myproject:
-  {}
+  {"options":{"watchFactory":"myplugin"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"options":{"watchFactory":"myplugin"}}
 
+myplugin2Plugin WatchedFiles::
+/user/username/projects/myproject/b.ts:
+  {"pollingInterval":500,"options":{"watchFactory":"myplugin2"}}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500,"options":{"watchFactory":"myplugin2"}}
+/user/username/projects/myproject/c.ts: *new*
+  {"pollingInterval":500,"options":{"watchFactory":"myplugin2"}}
+
+Change file
 Before running Timeout callback:: count: 0
+//// [/user/username/projects/myproject/b.ts]
+export class a { prop = "hello"; foo() { return this.prop; } }
+
 
 After running Timeout callback:: count: 0
 
-Change file
+Invoke plugin watches
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 500 {"watchFactory":"myplugin2"} WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -208,9 +228,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Before running Timeout callback:: count: 2
 3: /user/username/projects/myproject/tsconfig.json
 4: *ensureProjectForOpenFiles*
-//// [/user/username/projects/myproject/b.ts]
-export class a { prop = "hello"; foo() { return this.prop; } }
-
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -240,10 +257,6 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
-After running Timeout callback:: count: 0
-
-Before running Timeout callback:: count: 0
-
 After running Timeout callback:: count: 0
 
 Before request

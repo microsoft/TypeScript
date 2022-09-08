@@ -338,7 +338,7 @@ interface WatchedDirectoryCallback {
     callback: ts.DirectoryWatcherCallback;
     options: ts.WatchOptions | undefined;
 }
-export interface WatchFactorySystem extends TestServerHost {
+export type WatchFactorySystem = TscWatchSystem & {
     factoryData: {
         watchedFiles: ts.MultiMap<string, WatchedFileCallback>;
         watchedDirectories: ts.MultiMap<string, WatchedDirectoryCallback>;
@@ -347,7 +347,7 @@ export interface WatchFactorySystem extends TestServerHost {
         watchDirectory(path: string, callback: ts.DirectoryWatcherCallback, recursive?: boolean, options?: ts.WatchOptions): ts.FileWatcher;
         onConfigurationChanged(config: any): void;
     }
-}
+};
 
 export function createWatchFactorySystem(inputSystem: TestServerHost, log: (s: string) => void = s => inputSystem.write(s + "\n"), pluginName?: string): WatchFactorySystem {
     const watchedFiles = ts.createMultiMap<string, WatchedFileCallback>();

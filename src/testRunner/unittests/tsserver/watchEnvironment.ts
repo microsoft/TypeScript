@@ -552,9 +552,9 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
             // Since we have overriden watch, this shouldnt do anything
             host.runQueuedTimeoutCallbacks();
 
-            // // Actually invoke watches
-            // session.logger.log("Invoke plugin watches");
-            // plugin.watchedDirectoriesRecursive.get("/user/username/projects/myproject")!.forEach(({ callback }) => callback(`/user/username/projects/myproject/c.ts`));
+            // Actually invoke watches
+            session.logger.log("Invoke plugin watches");
+            plugin.watchedDirectoriesRecursive.get("/user/username/projects/myproject")!.forEach(({ callback }) => callback(`/user/username/projects/myproject/c.ts`));
             // Host should have updates queued
             host.runQueuedTimeoutCallbacks();
 
@@ -578,9 +578,9 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
             // Since we have overriden watch, this shouldnt do anything
             host.runQueuedTimeoutCallbacks();
 
-            // // Actually invoke watches
-            // session.logger.log("Invoke plugin watches");
-            // plugin.watchedFiles.get(bTs.path)!.forEach(({ callback }) => callback(bTs.path, ts.FileWatcherEventKind.Changed));
+            // Actually invoke watches
+            session.logger.log("Invoke plugin watches");
+            plugin.watchedFiles.get(bTs.path)!.forEach(({ callback }) => callback(bTs.path, ts.FileWatcherEventKind.Changed));
             // Host should have updates queued
             host.runQueuedTimeoutCallbacks();
 
@@ -611,9 +611,9 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
             // Since we have overriden watch, this shouldnt do anything
             host.runQueuedTimeoutCallbacks();
 
-            // // Actually invoke watches
-            // session.logger.log("Invoke plugin watches");
-            // plugin.watchedDirectoriesRecursive.get("/user/username/projects/myproject")!.forEach(({ callback }) => callback(`/user/username/projects/myproject/c.ts`));
+            // Actually invoke watches
+            session.logger.log("Invoke plugin watches");
+            plugin.watchedDirectoriesRecursive.get("/user/username/projects/myproject")!.forEach(({ callback }) => callback(`/user/username/projects/myproject/c.ts`));
             // Host should have updates queued
             host.runQueuedTimeoutCallbacks();
 
@@ -623,9 +623,9 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
             // Since we have overriden watch, this shouldnt do anything
             host.runQueuedTimeoutCallbacks();
 
-            // // Actually invoke watches
-            // session.logger.log("Invoke plugin watches");
-            // plugin2.watchedFiles.get(bTs.path)!.forEach(({ callback }) => callback(bTs.path, ts.FileWatcherEventKind.Changed));
+            // Actually invoke watches
+            session.logger.log("Invoke plugin watches");
+            plugin2.watchedFiles.get(bTs.path)!.forEach(({ callback }) => callback(bTs.path, ts.FileWatcherEventKind.Changed));
             // Host should have updates queued
             host.runQueuedTimeoutCallbacks();
 

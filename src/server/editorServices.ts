@@ -830,7 +830,7 @@ export interface WatchOptionsAndErrors {
 }
 
 /** @internal */
-export interface ParsedConfig{
+export interface ParsedConfig {
     cachedDirectoryStructureHost: CachedDirectoryStructureHost;
     /**
      * The map contains
@@ -940,6 +940,7 @@ export class ProjectService {
     /** @internal */ readonly throttledOperations: ThrottledOperations;
 
     private readonly hostConfiguration: HostConfiguration;
+    /** @internal */ private readonly projectWatchOptions = new Map<WatchOptions, WatchOptions>();
     private safelist: SafeList = defaultTypeSafeList;
     private readonly legacySafelist = new Map<string, string>();
 
@@ -1309,6 +1310,7 @@ export class ProjectService {
                 !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
                 project.setCompilerOptions(compilerOptions);
                 project.setTypeAcquisition(typeAcquisition);
+                this.clearWatchOptionsFromProjectWatchOptions(project.getWatchOptions());
                 project.setWatchOptions(watchOptions?.watchOptions);
                 project.setProjectErrors(watchOptions?.errors);
                 project.compileOnSaveEnabled = compilerOptions.compileOnSave!;
@@ -1887,6 +1889,7 @@ export class ProjectService {
         // If there are still projects watching this config file existence and config, there is nothing to do
         if (configFileExistenceInfo.config?.projects.size) return;
 
+        this.clearWatchOptionsFromProjectWatchOptions(configFileExistenceInfo.config.parsedCommandLine?.watchOptions);
         configFileExistenceInfo.config = undefined;
         clearSharedExtendedConfigFileWatcher(canonicalConfigFilePath, this.sharedExtendedConfigFileWatchers);
         Debug.checkDefined(configFileExistenceInfo.watcher);
@@ -2404,6 +2407,7 @@ export class ProjectService {
         }, /*replacer*/ undefined, " ")}`);
 
         const oldCommandLine = configFileExistenceInfo.config?.parsedCommandLine;
+        this.clearWatchOptionsFromProjectWatchOptions(oldCommandLine?.watchOptions);
         if (!configFileExistenceInfo.config) {
             configFileExistenceInfo.config = { parsedCommandLine, cachedDirectoryStructureHost, projects: new Map() };
         }
@@ -3227,6 +3231,7 @@ export class ProjectService {
             if (args.watchOptions) {
                 const result = convertWatchOptions(args.watchOptions);
                 this.hostConfiguration.watchOptions = result?.watchOptions;
+                this.projectWatchOptions.clear();
                 this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
                 if (result?.errors?.length) {
                     this.logger.info(`Watch options supplied had errors: Supplied options: ${JSON.stringify(args.watchOptions)}`);
@@ -3247,9 +3252,19 @@ export class ProjectService {
 
     /** @internal */
     private getWatchOptionsFromProjectWatchOptions(projectOptions: WatchOptions | undefined) {
-        return projectOptions && this.hostConfiguration.watchOptions ?
+        if (!projectOptions) return this.hostConfiguration.watchOptions;
+        let options = this.projectWatchOptions.get(projectOptions);
+        if (options) return options;
+        this.projectWatchOptions.set(projectOptions, options = this.hostConfiguration.watchOptions ?
             { ...this.hostConfiguration.watchOptions, ...projectOptions } :
-            projectOptions || this.hostConfiguration.watchOptions;
+            projectOptions
+        );
+        return options;
+    }
+
+    /** @internal */
+    clearWatchOptionsFromProjectWatchOptions(projectOptions: WatchOptions | undefined) {
+        if (projectOptions) this.projectWatchOptions.delete(projectOptions);
     }
 
     closeLog() {
@@ -3881,7 +3896,7 @@ export class ProjectService {
         currentProjects: Iterable<Project>,
         includeProjectReferenceRedirectInfo: boolean | undefined,
         result: ProjectFilesWithTSDiagnostics[]
-        ): void {
+    ): void {
         for (const proj of currentProjects) {
             const knownProject = find(lastKnownProjectVersions, p => p.projectName === proj.getProjectName());
             result.push(proj.getChangesSinceVersion(knownProject && knownProject.version, includeProjectReferenceRedirectInfo));
@@ -4172,6 +4187,7 @@ export class ProjectService {
                     externalProject.enableLanguageService();
                 }
                 externalProject.setProjectErrors(watchOptionsAndErrors?.errors);
+                this.clearWatchOptionsFromProjectWatchOptions(externalProject.getWatchOptions());
                 // external project already exists and not config files were added - update the project and return;
                 // The graph update here isnt postponed since any file open operation needs all updated external projects
                 this.updateRootAndOptionsOfNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave, watchOptionsAndErrors?.watchOptions);

@@ -7221,7 +7221,10 @@ export interface WatchOptions {
     excludeFiles?: string[];
     watchFactory?: string | PluginImport;
 
-    [option: string]: CompilerOptionsValue | undefined;
+    // All the internal properties are set as non enumerable and non configurable so that they arenot enumerated when checking if options have changed
+    /** @internal */ getResolvedWatchFactory?(): UserWatchFactory | undefined;
+
+    [option: string]: CompilerOptionsValue | Function | undefined;
 }
 
 export interface TypeAcquisition {

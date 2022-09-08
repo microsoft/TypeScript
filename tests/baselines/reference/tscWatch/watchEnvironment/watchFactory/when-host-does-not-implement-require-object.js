@@ -29,6 +29,7 @@ Output::
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFactory":"myplugin"} Config file
+Custom watchFactory is ignored because of not running in environment that supports 'require'. Watches will defualt to builtin.
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
