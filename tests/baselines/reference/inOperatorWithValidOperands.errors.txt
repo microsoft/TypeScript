@@ -1,4 +1,3 @@
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts(22,16): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
 tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts(26,20): error TS2322: Type 'T' is not assignable to type 'object'.
 tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts(30,20): error TS2322: Type 'T | U' is not assignable to type 'object'.
   Type 'T' is not assignable to type 'object'.
@@ -6,7 +5,7 @@ tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithVal
   Type 'T' is not assignable to type 'object'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts (4 errors) ====
+==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts (3 errors) ====
     var x: any;
     
     // valid left operands
@@ -29,8 +28,6 @@ tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithVal
     var b1: {};
     
     var rb1 = x in b1;
-                   ~~
-!!! error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
     var rb2 = x in {};
     
     function foo<T>(t: T) {
