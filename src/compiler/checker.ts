@@ -33801,7 +33801,7 @@ namespace ts {
             }
             // The type of the right operand must be assignable to 'object'.
             if (checkTypeAssignableTo(checkNonNullType(rightType, right), nonPrimitiveType, right)) {
-                if (hasEmptyAnonymousObjectType(rightType)) {
+                if (strictNullChecks && hasEmptyAnonymousObjectType(rightType)) {
                     error(right, Diagnostics.Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operator, typeToString(rightType));
                 }
             }
