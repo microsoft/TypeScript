@@ -11780,6 +11780,12 @@ namespace ts {
                 return mapType(type as UnionType, getLowerBoundOfKeyType);
             }
             if (type.flags & TypeFlags.Intersection) {
+                // Similarly to getTypeFromIntersectionTypeNode, we preserve the special string & {}, number & {},
+                // and bigint & {} intersections that are used to prevent subtype reduction in union types.
+                const types = (type as IntersectionType).types;
+                if (types.length === 2 && !!(types[0].flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) && types[1] === emptyTypeLiteralType) {
+                    return type;
+                }
                 return getIntersectionType(sameMap((type as UnionType).types, getLowerBoundOfKeyType));
             }
             return type;
