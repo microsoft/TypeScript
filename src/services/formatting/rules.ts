@@ -59,7 +59,7 @@ namespace ts.formatting {
             // in other cases there should be no space between '?' and next token
             rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext, isNotPropertyAccessOnNumericLiteral], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext, isNotPropertyAccessOnIntegerLiteral], RuleAction.DeleteSpace),
             rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.DeleteSpace),
@@ -894,7 +894,9 @@ namespace ts.formatting {
         return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
     }
 
-    function isNotPropertyAccessOnNumericLiteral(context: FormattingContext): boolean {
-        return !isPropertyAccessExpression(context.contextNode) || !isNumericLiteral(context.contextNode.expression);
+    function isNotPropertyAccessOnIntegerLiteral(context: FormattingContext): boolean {
+        return !isPropertyAccessExpression(context.contextNode)
+            || !isNumericLiteral(context.contextNode.expression)
+            || context.contextNode.expression.getText().indexOf(".") !== -1;
     }
 }
