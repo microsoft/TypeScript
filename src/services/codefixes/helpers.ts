@@ -100,7 +100,7 @@ namespace ts.codefix {
                 }
                 addClassElement(factory.createPropertyDeclaration(
                     createModifiers(visibilityModifier),
-                    declaration ? createName(declarationName) : symbol.getName(),
+                    declaration ? createName(declarationName, declaration) : symbol.getName(),
                     optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
                     /*initializer*/ undefined));
@@ -187,7 +187,10 @@ namespace ts.codefix {
             if (method) addClassElement(method);
         }
 
-        function createName(node: PropertyName) {
+        function createName(node: PropertyName, parent?: Declaration) {
+            if (parent && isPropertySignature(parent) && isIdentifier(node) && node.escapedText === "constructor") {
+                return factory.createComputedPropertyName(factory.createStringLiteral(idText(node), quotePreference === QuotePreference.Single));
+            }
             return getSynthesizedDeepClone(node, /*includeTrivia*/ false);
         }
 
