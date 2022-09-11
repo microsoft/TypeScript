@@ -10,7 +10,7 @@ if (match !== null) {
     const foo: string = match[0]
 >foo : Symbol(foo, Decl(firstMatchRegExpMatchArray.ts, 3, 9))
 >match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))
->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
+>0 : Symbol(BaseRegExpArray[0], Decl(lib.es5.d.ts, --, --))
 
     const bar: string = match[1]
 >bar : Symbol(bar, Decl(firstMatchRegExpMatchArray.ts, 4, 9))
