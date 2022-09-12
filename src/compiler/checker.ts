@@ -3627,7 +3627,7 @@ namespace ts {
                                 if (ext === Extension.Ts || ext === Extension.Js || ext === Extension.Tsx || ext === Extension.Jsx) {
                                     const scope = currentSourceFile.packageJsonScope;
                                     const targetExt = ext === Extension.Ts ? Extension.Mts : ext === Extension.Js ? Extension.Mjs : undefined;
-                                    if (scope && !scope.packageJsonContent.type) {
+                                    if (scope && !scope.contents.packageJsonContent.type) {
                                         if (targetExt) {
                                             diagnosticDetails = chainDiagnosticMessages(
                                                 /*details*/ undefined,
