@@ -3481,8 +3481,19 @@ namespace FourSlash {
 
         public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string) {
             let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
-            refactors = refactors.filter(r =>
-                r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)) && (actionDescription === undefined || r.actions.some(a => a.description === actionDescription)));
+            refactors = refactors.filter(r => r.name === name);
+
+            refactors = actionName === undefined ? refactors : refactors.map(r => {
+                                r.actions = r.actions.filter(a => a.name === actionName);
+                                return r;
+                            });
+            refactors = actionDescription === undefined ? refactors : refactors.map(r => {
+                                r.actions = r.actions.filter(a => a.description === actionDescription);
+                                return r;
+                            });
+
+            refactors = refactors.filter(r => r.actions.length > 0);
+
             const isAvailable = refactors.length > 0;
 
             if (negative) {
