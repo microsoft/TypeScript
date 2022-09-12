@@ -311,11 +311,11 @@ fn5();
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToMainTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -355,7 +355,7 @@ fn5();
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -395,7 +395,7 @@ fn5();
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -554,11 +554,11 @@ fn5();
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToMainTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -598,7 +598,7 @@ fn5();
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -638,7 +638,7 @@ fn5();
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -778,7 +778,7 @@ fn5();
                     // Make change, without rebuild of solution
                     host.writeFile(dependencyTs.path, `function fooBar() { }
 ${dependencyTs.content}`);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -855,11 +855,11 @@ ${dependencyTs.content}`);
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToMainTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -899,7 +899,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -939,7 +939,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1107,11 +1107,11 @@ ${dependencyTs.content}`);
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToDependencyTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1151,7 +1151,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1191,7 +1191,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1350,11 +1350,11 @@ ${dependencyTs.content}`);
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToDependencyTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1394,7 +1394,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1434,7 +1434,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1568,7 +1568,7 @@ ${dependencyTs.content}`);
                 });
                 it(`when defining project source changes, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     // Make change, without rebuild of solution
@@ -1578,7 +1578,7 @@ ${dependencyTs.content}`);
                             file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
 `}
                     });
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1659,11 +1659,11 @@ ${dependencyTs.content}`);
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToDependencyTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1703,7 +1703,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1743,7 +1743,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1921,12 +1921,12 @@ ${dependencyTs.content}`);
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToMainTs(session);
                     makeChangeToDependencyTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -1983,7 +1983,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -2039,7 +2039,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -2274,12 +2274,12 @@ ${dependencyTs.content}`);
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToMainTs(session);
                     makeChangeToDependencyTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -2336,7 +2336,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -2392,7 +2392,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -2592,7 +2592,7 @@ ${dependencyTs.content}`);
                 });
                 it(`when defining project source changes, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     // Make change, without rebuild of solution
@@ -2602,7 +2602,7 @@ ${dependencyTs.content}`);
                             file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
 `}
                     });
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -2716,12 +2716,12 @@ ${dependencyTs.content}`);
                 // Edit
                 it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                     // Create DocumentPositionMapper
-                    const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                    const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
 
                     // change
                     makeChangeToMainTs(session);
                     makeChangeToDependencyTs(session);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -2778,7 +2778,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
@@ -2834,7 +2834,7 @@ ${dependencyTs.content}`);
 
                     // change
                     changeDtsMapFile(host);
-                    session.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
                     // action
