@@ -1827,6 +1827,7 @@ namespace ts {
          * the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
          * the given name can be found.
          *
+         * @param nameNotFoundMessage If defined, we will report errors found during resolve.
          * @param isUse If true, this will count towards --noUnusedLocals / --noUnusedParameters.
          */
         function resolveName(
@@ -1837,9 +1838,8 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals = false,
-            getSpellingSuggestions = true,
-            reportErrors = true): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggestions, getSymbol, reportErrors);
+            getSpellingSuggestions = true): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggestions, getSymbol);
         }
 
         function resolveNameHelper(
@@ -1851,8 +1851,7 @@ namespace ts {
             isUse: boolean,
             excludeGlobals: boolean,
             getSpellingSuggestions: boolean,
-            lookup: typeof getSymbol,
-            reportErrors = true): Symbol | undefined {
+            lookup: typeof getSymbol): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -2013,7 +2012,7 @@ namespace ts {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
-                                if (reportErrors) {
+                                if (nameNotFoundMessage) {
                                     error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
                                 }
                                 return undefined;
@@ -2033,7 +2032,7 @@ namespace ts {
                         if (lastLocation === (location as ExpressionWithTypeArguments).expression && (location.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword) {
                             const container = location.parent.parent;
                             if (isClassLike(container) && (result = lookup(getSymbolOfNode(container).members!, name, meaning & SymbolFlags.Type))) {
-                                if (reportErrors && nameNotFoundMessage) {
+                                if (nameNotFoundMessage) {
                                     error(errorLocation, Diagnostics.Base_class_expressions_cannot_reference_class_type_parameters);
                                 }
                                 return undefined;
@@ -2053,7 +2052,7 @@ namespace ts {
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = lookup(getSymbolOfNode(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
-                                if (reportErrors) {
+                                if (nameNotFoundMessage) {
                                     error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                                 }
                                 return undefined;
@@ -2212,7 +2211,7 @@ namespace ts {
             }
 
             if (!result) {
-                if (reportErrors && nameNotFoundMessage) {
+                if (nameNotFoundMessage) {
                     addLazyDiagnostic(() => {
                         if (!errorLocation ||
                             !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
@@ -2265,12 +2264,12 @@ namespace ts {
                 }
                 return undefined;
             }
-            else if (reportErrors && checkAndReportErrorForInvalidInitializer()) {
+            else if (nameNotFoundMessage && checkAndReportErrorForInvalidInitializer()) {
                 return undefined;
             }
 
             // Perform extra checks only if error reporting was requested
-            if (reportErrors && nameNotFoundMessage) {
+            if (nameNotFoundMessage) {
                 addLazyDiagnostic(() => {
                     // Only check for block-scoped variable if we have an error location and are looking for the
                     // name with variable meaning
@@ -43502,8 +43501,7 @@ namespace ts {
                 /*nameArg*/ undefined,
                 /*isUse*/ true,
                 /*excludeGlobals*/ undefined,
-                /*getSpellingSuggestions*/ undefined,
-                /*reportErrors*/ false);
+                /*getSpellingSuggestions*/ undefined);
         }
 
         function getReferencedValueDeclaration(referenceIn: Identifier): Declaration | undefined {
