@@ -32,30 +32,21 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-File '/users/name/projects/lib-boilerplate/src/package.json' does not exist.
-Found 'package.json' at '/users/name/projects/lib-boilerplate/package.json'.
+File '/Users/name/projects/lib-boilerplate/src/package.json' does not exist.
+Found 'package.json' at '/Users/name/projects/lib-boilerplate/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/users/name/projects/lib-boilerplate/test/package.json' does not exist.
-File '/users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
+File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist.
+File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'lib-boilerplate' from '/Users/name/projects/lib-boilerplate/test/basic.spec.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-File '/users/name/projects/lib-boilerplate/test/package.json' does not exist according to earlier cached lookups.
-File '/users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
-File '/users/name/projects/lib-boilerplate/src/index.ts' exist - use it as a name resolution result.
-Resolving real path for '/users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
-======== Module name 'lib-boilerplate' was successfully resolved to '/users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
+File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist according to earlier cached lookups.
+File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
+File '/Users/name/projects/lib-boilerplate/src/index.ts' exist - use it as a name resolution result.
+Resolving real path for '/Users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
+======== Module name 'lib-boilerplate' was successfully resolved to '/Users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mtest/basic.spec.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS1149: [0mFile name '/users/name/projects/lib-boilerplate/src/index.ts' differs from already included file name '/Users/name/projects/lib-boilerplate/src/index.ts' only in casing.
-  The file is in the program because:
-    Matched by default include pattern '**/*'
-    Imported via 'lib-boilerplate' from file '/Users/name/projects/lib-boilerplate/test/basic.spec.ts' with packageId 'lib-boilerplate/src/index.ts@0.0.2'
-  File is ECMAScript module because '/users/name/projects/lib-boilerplate/package.json' has field "type" with value "module"
-
-[7m1[0m import { thing } from 'lib-boilerplate'
-[7m [0m [91m                      ~~~~~~~~~~~~~~~~~[0m
-
 ../../../../a/lib/lib.es2021.full.d.ts
   Default library for target 'es2021'
 src/index.ts
@@ -65,7 +56,7 @@ src/index.ts
 test/basic.spec.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

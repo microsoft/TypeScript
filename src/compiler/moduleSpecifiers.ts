@@ -807,7 +807,7 @@ namespace ts.moduleSpecifiers {
             let maybeBlockedByTypesVersions = false;
             const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
             if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
-                const packageJsonContent = cachedPackageJson?.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
+                const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
                 const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
                 if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
                     const conditions = ["node", importMode === ModuleKind.ESNext ? "import" : "require", "types"];
