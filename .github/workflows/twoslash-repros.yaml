@@ -24,9 +24,12 @@ jobs:
     if: ${{ github.repository == 'microsoft/TypeScript' }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - if: ${{ github.events.input.bisect }}
+      uses: actions/checkout@v3
       with:
-        fetch-depth: ${{ github.events.input.bisect && '0' || '1' }}
+        fetch-depth: 0
+    - if: ${{ !github.events.input.bisect }}
+      uses: actions/checkout@v3
     - uses: actions/setup-node@v3
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
       with:
