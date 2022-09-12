@@ -33,19 +33,19 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
-File '/users/name/projects/web/src/package.json' does not exist.
-File '/users/name/projects/web/package.json' does not exist.
-File '/users/name/projects/package.json' does not exist.
-File '/users/name/package.json' does not exist.
-File '/users/package.json' does not exist.
+File '/Users/name/projects/web/src/package.json' does not exist.
+File '/Users/name/projects/web/package.json' does not exist.
+File '/Users/name/projects/package.json' does not exist.
+File '/Users/name/package.json' does not exist.
+File '/Users/package.json' does not exist.
 File '/package.json' does not exist.
 ======== Resolving module 'yargs' from '/Users/name/projects/web/src/bin.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-File '/users/name/projects/web/src/package.json' does not exist according to earlier cached lookups.
-File '/users/name/projects/web/package.json' does not exist according to earlier cached lookups.
-File '/users/name/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/name/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
+File '/Users/name/projects/web/src/package.json' does not exist according to earlier cached lookups.
+File '/Users/name/projects/web/package.json' does not exist according to earlier cached lookups.
+File '/Users/name/projects/package.json' does not exist according to earlier cached lookups.
+File '/Users/name/package.json' does not exist according to earlier cached lookups.
+File '/Users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'yargs' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/Users/name/projects/web/src/node_modules' does not exist, skipping all lookups in it.
@@ -57,7 +57,7 @@ Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/pack
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Module name 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12'. ========
-File '/users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
+File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
 ======== Resolving type reference directive 'yargs', containing file '/Users/name/projects/web/__inferred type names__.ts', root directory '/Users/name/projects/web/node_modules/@types'. ========
 Resolving with primary search path '/Users/name/projects/web/node_modules/@types'.
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.

@@ -326,5 +326,36 @@ a;b;
             }, { currentDirectory: "/Users/name/projects/web" }),
             changes: emptyArray,
         });
+
+
+        verifyTscWatch({
+            scenario: "forceConsistentCasingInFileNames",
+            subScenario: "package json is looked up for file",
+            commandLineArgs: ["-w", "--explainFiles"],
+            sys: () => createWatchedSystem({
+                "/Users/name/projects/lib-boilerplate/package.json": JSON.stringify({
+                    name: "lib-boilerplate",
+                    version: "0.0.2",
+                    type: "module",
+                    exports: "./src/index.ts",
+                }),
+                "/Users/name/projects/lib-boilerplate/src/index.ts": Utils.dedent`
+                    export function thing(): void {}
+                `,
+                "/Users/name/projects/lib-boilerplate/test/basic.spec.ts": Utils.dedent`
+                    import { thing } from 'lib-boilerplate'
+                `,
+                "/Users/name/projects/lib-boilerplate/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        module: "node16",
+                        target: "es2021",
+                        forceConsistentCasingInFileNames: true,
+                        traceResolution: true,
+                    }
+                }),
+                "/a/lib/lib.es2021.full.d.ts": libFile.content,
+            }, { currentDirectory: "/Users/name/projects/lib-boilerplate" }),
+            changes: emptyArray,
+        });
     });
 }
