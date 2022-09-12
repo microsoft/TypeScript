@@ -2313,6 +2313,7 @@ namespace ts {
                     return canFollowExportModifier();
                 case SyntaxKind.DefaultKeyword:
                     return nextTokenCanFollowDefaultKeyword();
+                case SyntaxKind.AccessorKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.GetKeyword:
                 case SyntaxKind.SetKeyword:
@@ -6613,6 +6614,7 @@ namespace ts {
                     case SyntaxKind.NamespaceKeyword:
                         return nextTokenIsIdentifierOrStringLiteralOnSameLine();
                     case SyntaxKind.AbstractKeyword:
+                    case SyntaxKind.AccessorKeyword:
                     case SyntaxKind.AsyncKeyword:
                     case SyntaxKind.DeclareKeyword:
                     case SyntaxKind.PrivateKeyword:
@@ -6705,6 +6707,7 @@ namespace ts {
                     // When these don't start a declaration, they're an identifier in an expression statement
                     return true;
 
+                case SyntaxKind.AccessorKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
@@ -6791,6 +6794,7 @@ namespace ts {
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.AccessorKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.ReadonlyKeyword:
                 case SyntaxKind.GlobalKeyword:

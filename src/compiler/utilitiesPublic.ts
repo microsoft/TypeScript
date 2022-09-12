@@ -1199,6 +1199,11 @@ namespace ts {
         return isIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
     }
 
+    /* @internal */
+    export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
+        return isPrivateIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+    }
+
     // Private Identifiers
     /*@internal*/
     export function isPrivateIdentifierClassElementDeclaration(node: Node): node is PrivateClassElementDeclaration {
@@ -1216,6 +1221,7 @@ namespace ts {
     export function isModifierKind(token: SyntaxKind): token is Modifier["kind"] {
         switch (token) {
             case SyntaxKind.AbstractKeyword:
+            case SyntaxKind.AccessorKeyword:
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.DeclareKeyword:
@@ -1241,7 +1247,10 @@ namespace ts {
 
     /* @internal */
     export function isClassMemberModifier(idToken: SyntaxKind): boolean {
-        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword || idToken === SyntaxKind.OverrideKeyword;
+        return isParameterPropertyModifier(idToken) ||
+            idToken === SyntaxKind.StaticKeyword ||
+            idToken === SyntaxKind.OverrideKeyword ||
+            idToken === SyntaxKind.AccessorKeyword;
     }
 
     export function isModifier(node: Node): node is Modifier {
@@ -1349,12 +1358,29 @@ namespace ts {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
+    export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration {
+        return isPropertyDeclaration(node) && hasAccessorModifier(node);
+    }
+
     /* @internal */
     export function isMethodOrAccessor(node: Node): node is MethodDeclaration | AccessorDeclaration {
         switch (node.kind) {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /* @internal */
+    export function isNamedClassElement(node: Node): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.PropertyDeclaration:
                 return true;
             default:
                 return false;
