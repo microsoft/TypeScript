@@ -223,7 +223,7 @@ namespace ts.OrganizeImports {
 
     // Internal for testing
     /**
-     * @param importGroup a list of ImportDeclarations, all with the same module name.
+     * @param importGroup - a list of ImportDeclarations, all with the same module name.
      */
     export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
         if (importGroup.length === 0) {
@@ -363,7 +363,7 @@ namespace ts.OrganizeImports {
 
     // Internal for testing
     /**
-     * @param exportGroup a list of ExportDeclarations, all with the same module name.
+     * @param exportGroup - a list of ExportDeclarations, all with the same module name.
      */
     export function coalesceExports(exportGroup: readonly ExportDeclaration[]) {
         if (exportGroup.length === 0) {

@@ -107,13 +107,13 @@ namespace ts.JsTyping {
     }
 
     /**
-     * @param host is the object providing I/O related operations.
-     * @param fileNames are the file names that belong to the same project
-     * @param projectRootPath is the path to the project root directory
-     * @param safeListPath is the path used to retrieve the safe list
-     * @param packageNameToTypingLocation is the map of package names to their cached typing locations and installed versions
-     * @param typeAcquisition is used to customize the typing acquisition process
-     * @param compilerOptions are used as a source for typing inference
+     * @param host - is the object providing I/O related operations.
+     * @param fileNames - are the file names that belong to the same project
+     * @param projectRootPath - is the path to the project root directory
+     * @param safeListPath - is the path used to retrieve the safe list
+     * @param packageNameToTypingLocation - is the map of package names to their cached typing locations and installed versions
+     * @param typeAcquisition - is used to customize the typing acquisition process
+     * @param compilerOptions - are used as a source for typing inference
      */
     export function discoverTypings(
         host: TypingResolutionHost,
@@ -210,10 +210,10 @@ namespace ts.JsTyping {
         /**
          * Adds inferred typings from manifest/module pairs (think package.json + node_modules)
          *
-         * @param projectRootPath is the path to the directory where to look for package.json, bower.json and other typing information
-         * @param manifestName is the name of the manifest (package.json or bower.json)
-         * @param modulesDirName is the directory name for modules (node_modules or bower_components). Should be lowercase!
-         * @param filesToWatch are the files to watch for changes. We will push things into this array.
+         * @param projectRootPath - is the path to the directory where to look for package.json, bower.json and other typing information
+         * @param manifestName - is the name of the manifest (package.json or bower.json)
+         * @param modulesDirName - is the directory name for modules (node_modules or bower_components). Should be lowercase!
+         * @param filesToWatch - are the files to watch for changes. We will push things into this array.
          */
         function getTypingNames(projectRootPath: string, manifestName: string, modulesDirName: string, filesToWatch: string[]): void {
             // First, we check the manifests themselves. They're not
@@ -312,7 +312,7 @@ namespace ts.JsTyping {
          * Infer typing names from given file names. For example, the file name "jquery-min.2.3.4.js"
          * should be inferred to the 'jquery' typing name; and "angular-route.1.2.3.js" should be inferred
          * to the 'angular-route' typing name.
-         * @param fileNames are the names for source files in the project
+         * @param fileNames - are the names for source files in the project
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
             const fromFileNames = mapDefined(fileNames, j => {

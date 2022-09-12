@@ -2,10 +2,10 @@ interface Array<T> {
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
      * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
+     * @param predicate - find calls predicate once for each element of the array, in ascending
      * order, until it finds one where predicate returns true. If such an element is found, find
      * immediately returns that element value. Otherwise, find returns undefined.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * @param thisArg - If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
     find<S extends T>(predicate: (this: void, value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
@@ -14,20 +14,20 @@ interface Array<T> {
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
      * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
+     * @param predicate - find calls predicate once for each element of the array, in ascending
      * order, until it finds one where predicate returns true. If such an element is found,
      * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * @param thisArg - If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
     findIndex(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): number;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
-     * @param value value to fill array section with
-     * @param start index to start filling the array at. If start is negative, it is treated as
+     * @param value - value to fill array section with
+     * @param start - index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
-     * @param end index to stop filling the array at. If end is negative, it is treated as
+     * @param end - index to stop filling the array at. If end is negative, it is treated as
      * length+end.
      */
     fill(value: T, start?: number, end?: number): this;
@@ -35,11 +35,11 @@ interface Array<T> {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target - If target is negative, it is treated as length+target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
+     * @param start - If start is negative, it is treated as length+start. If end is negative, it
      * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * @param end - If not specified, length of the this object is used as its default value.
      */
     copyWithin(target: number, start: number, end?: number): this;
 }
@@ -47,21 +47,21 @@ interface Array<T> {
 interface ArrayConstructor {
     /**
      * Creates an array from an array-like object.
-     * @param arrayLike An array-like object to convert to an array.
+     * @param arrayLike - An array-like object to convert to an array.
      */
     from<T>(arrayLike: ArrayLike<T>): T[];
 
     /**
      * Creates an array from an iterable object.
-     * @param arrayLike An array-like object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
 
     /**
      * Returns a new array from a set of elements.
-     * @param items A set of elements to include in the new array object.
+     * @param items - A set of elements to include in the new array object.
      */
     of<T>(...items: T[]): T[];
 }
@@ -80,38 +80,38 @@ interface Function {
 interface Math {
     /**
      * Returns the number of leading zero bits in the 32-bit binary representation of a number.
-     * @param x A numeric expression.
+     * @param x - A numeric expression.
      */
     clz32(x: number): number;
 
     /**
      * Returns the result of 32-bit multiplication of two numbers.
-     * @param x First number
-     * @param y Second number
+     * @param x - First number
+     * @param y - Second number
      */
     imul(x: number, y: number): number;
 
     /**
      * Returns the sign of the x, indicating whether x is positive, negative or zero.
-     * @param x The numeric expression to test
+     * @param x - The numeric expression to test
      */
     sign(x: number): number;
 
     /**
      * Returns the base 10 logarithm of a number.
-     * @param x A numeric expression.
+     * @param x - A numeric expression.
      */
     log10(x: number): number;
 
     /**
      * Returns the base 2 logarithm of a number.
-     * @param x A numeric expression.
+     * @param x - A numeric expression.
      */
     log2(x: number): number;
 
     /**
      * Returns the natural logarithm of 1 + x.
-     * @param x A numeric expression.
+     * @param x - A numeric expression.
      */
     log1p(x: number): number;
 
@@ -119,49 +119,49 @@ interface Math {
      * Returns the result of (e^x - 1), which is an implementation-dependent approximation to
      * subtracting 1 from the exponential function of x (e raised to the power of x, where e
      * is the base of the natural logarithms).
-     * @param x A numeric expression.
+     * @param x - A numeric expression.
      */
     expm1(x: number): number;
 
     /**
      * Returns the hyperbolic cosine of a number.
-     * @param x A numeric expression that contains an angle measured in radians.
+     * @param x - A numeric expression that contains an angle measured in radians.
      */
     cosh(x: number): number;
 
     /**
      * Returns the hyperbolic sine of a number.
-     * @param x A numeric expression that contains an angle measured in radians.
+     * @param x - A numeric expression that contains an angle measured in radians.
      */
     sinh(x: number): number;
 
     /**
      * Returns the hyperbolic tangent of a number.
-     * @param x A numeric expression that contains an angle measured in radians.
+     * @param x - A numeric expression that contains an angle measured in radians.
      */
     tanh(x: number): number;
 
     /**
      * Returns the inverse hyperbolic cosine of a number.
-     * @param x A numeric expression that contains an angle measured in radians.
+     * @param x - A numeric expression that contains an angle measured in radians.
      */
     acosh(x: number): number;
 
     /**
      * Returns the inverse hyperbolic sine of a number.
-     * @param x A numeric expression that contains an angle measured in radians.
+     * @param x - A numeric expression that contains an angle measured in radians.
      */
     asinh(x: number): number;
 
     /**
      * Returns the inverse hyperbolic tangent of a number.
-     * @param x A numeric expression that contains an angle measured in radians.
+     * @param x - A numeric expression that contains an angle measured in radians.
      */
     atanh(x: number): number;
 
     /**
      * Returns the square root of the sum of squares of its arguments.
-     * @param values Values to compute the square root for.
+     * @param values - Values to compute the square root for.
      *     If no arguments are passed, the result is +0.
      *     If there is only one argument, the result is the absolute value.
      *     If any argument is +Infinity or -Infinity, the result is +Infinity.
@@ -173,19 +173,19 @@ interface Math {
     /**
      * Returns the integral part of the a numeric expression, x, removing any fractional digits.
      * If x is already an integer, the result is x.
-     * @param x A numeric expression.
+     * @param x - A numeric expression.
      */
     trunc(x: number): number;
 
     /**
      * Returns the nearest single precision float representation of a number.
-     * @param x A numeric expression.
+     * @param x - A numeric expression.
      */
     fround(x: number): number;
 
     /**
      * Returns an implementation-dependent approximation to the cube root of number.
-     * @param x A numeric expression.
+     * @param x - A numeric expression.
      */
     cbrt(x: number): number;
 }
@@ -202,13 +202,13 @@ interface NumberConstructor {
      * Returns true if passed value is finite.
      * Unlike the global isFinite, Number.isFinite doesn't forcibly convert the parameter to a
      * number. Only finite values of the type number, result in true.
-     * @param number A numeric value.
+     * @param number - A numeric value.
      */
     isFinite(number: unknown): boolean;
 
     /**
      * Returns true if the value passed is an integer, false otherwise.
-     * @param number A numeric value.
+     * @param number - A numeric value.
      */
     isInteger(number: unknown): boolean;
 
@@ -216,13 +216,13 @@ interface NumberConstructor {
      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
      * number). Unlike the global isNaN(), Number.isNaN() doesn't forcefully convert the parameter
      * to a number. Only values of the type number, that are also NaN, result in true.
-     * @param number A numeric value.
+     * @param number - A numeric value.
      */
     isNaN(number: unknown): boolean;
 
     /**
      * Returns true if the value passed is a safe integer.
-     * @param number A numeric value.
+     * @param number - A numeric value.
      */
     isSafeInteger(number: unknown): boolean;
 
@@ -242,14 +242,14 @@ interface NumberConstructor {
 
     /**
      * Converts a string to a floating-point number.
-     * @param string A string that contains a floating-point number.
+     * @param string - A string that contains a floating-point number.
      */
     parseFloat(string: string): number;
 
     /**
      * Converts A string to an integer.
-     * @param string A string to convert into a number.
-     * @param radix A value between 2 and 36 that specifies the base of the number in `string`.
+     * @param string - A string to convert into a number.
+     * @param radix - A value between 2 and 36 that specifies the base of the number in `string`.
      * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
      * All other strings are considered decimal.
      */
@@ -260,61 +260,61 @@ interface ObjectConstructor {
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
-     * @param target The target object to copy to.
-     * @param source The source object from which to copy properties.
+     * @param target - The target object to copy to.
+     * @param source - The source object from which to copy properties.
      */
     assign<T extends {}, U>(target: T, source: U): T & U;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
-     * @param target The target object to copy to.
-     * @param source1 The first source object from which to copy properties.
-     * @param source2 The second source object from which to copy properties.
+     * @param target - The target object to copy to.
+     * @param source1 - The first source object from which to copy properties.
+     * @param source2 - The second source object from which to copy properties.
      */
     assign<T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
-     * @param target The target object to copy to.
-     * @param source1 The first source object from which to copy properties.
-     * @param source2 The second source object from which to copy properties.
-     * @param source3 The third source object from which to copy properties.
+     * @param target - The target object to copy to.
+     * @param source1 - The first source object from which to copy properties.
+     * @param source2 - The second source object from which to copy properties.
+     * @param source3 - The third source object from which to copy properties.
      */
     assign<T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
-     * @param target The target object to copy to.
-     * @param sources One or more source objects from which to copy properties
+     * @param target - The target object to copy to.
+     * @param sources - One or more source objects from which to copy properties
      */
     assign(target: object, ...sources: any[]): any;
 
     /**
      * Returns an array of all symbol properties found directly on object o.
-     * @param o Object to retrieve the symbols from.
+     * @param o - Object to retrieve the symbols from.
      */
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
      * Returns the names of the enumerable string properties and methods of an object.
-     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     * @param o - Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
      */
     keys(o: {}): string[];
 
     /**
      * Returns true if the values are the same value, false otherwise.
-     * @param value1 The first value.
-     * @param value2 The second value.
+     * @param value1 - The first value.
+     * @param value2 - The second value.
      */
     is(value1: any, value2: any): boolean;
 
     /**
      * Sets the prototype of a specified object o to object proto or null. Returns the object o.
-     * @param o The object to change its prototype.
-     * @param proto The value of the new prototype or null.
+     * @param o - The object to change its prototype.
+     * @param proto - The value of the new prototype or null.
      */
     setPrototypeOf(o: any, proto: object | null): any;
 }
@@ -323,10 +323,10 @@ interface ReadonlyArray<T> {
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
      * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
+     * @param predicate - find calls predicate once for each element of the array, in ascending
      * order, until it finds one where predicate returns true. If such an element is found, find
      * immediately returns that element value. Otherwise, find returns undefined.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * @param thisArg - If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
     find<S extends T>(predicate: (this: void, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
@@ -335,10 +335,10 @@ interface ReadonlyArray<T> {
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
      * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
+     * @param predicate - find calls predicate once for each element of the array, in ascending
      * order, until it finds one where predicate returns true. If such an element is found,
      * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * @param thisArg - If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
     findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
@@ -391,8 +391,8 @@ interface String {
      * Returns true if searchString appears as a substring of the result of converting this
      * object to a String, at one or more positions that are
      * greater than or equal to position; otherwise, returns false.
-     * @param searchString search string
-     * @param position If position is undefined, 0 is assumed, so as to search all of the String.
+     * @param searchString - search string
+     * @param position - If position is undefined, 0 is assumed, so as to search all of the String.
      */
     includes(searchString: string, position?: number): boolean;
 
@@ -406,7 +406,7 @@ interface String {
     /**
      * Returns the String value result of normalizing the string into the normalization form
      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
+     * @param form - Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
      * is "NFC"
      */
     normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
@@ -414,7 +414,7 @@ interface String {
     /**
      * Returns the String value result of normalizing the string into the normalization form
      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
+     * @param form - Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
      * is "NFC"
      */
     normalize(form?: string): string;
@@ -422,7 +422,7 @@ interface String {
     /**
      * Returns a String value that is made from count copies appended together. If count is 0,
      * the empty string is returned.
-     * @param count number of copies to append
+     * @param count - number of copies to append
      */
     repeat(count: number): string;
 
@@ -436,7 +436,7 @@ interface String {
     /**
      * Returns an `<a>` HTML anchor element and sets the name attribute to the text value
      * @deprecated A legacy feature for browser compatibility
-     * @param name
+     * @param name -
      */
     anchor(name: string): string;
 
@@ -532,8 +532,8 @@ interface StringConstructor {
      * parameter will contain the substitution values. It can also be called directly, for example,
      * to interleave strings and values from your own tag function, and in this case the only thing
      * it needs from the first argument is the raw property.
-     * @param template A well-formed template string call site representation.
-     * @param substitutions A set of substitution values.
+     * @param template - A well-formed template string call site representation.
+     * @param substitutions - A set of substitution values.
      */
     raw(template: { raw: readonly string[] | ArrayLike<string>}, ...substitutions: any[]): string;
 }

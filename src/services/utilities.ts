@@ -1097,7 +1097,7 @@ namespace ts {
 
     /**
      * Gets the token whose text has range [start, end) and
-     * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
+     * position \>= start and (position \< end or (position === end && token is literal or keyword or identifier))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
         return getTouchingToken(sourceFile, position, n => isPropertyNameLiteral(n) || isKeyword(n.kind) || isPrivateIdentifier(n));
@@ -1230,9 +1230,10 @@ namespace ts {
      * The token on the left of the position is the token that strictly includes the position
      * or sits to the left of the cursor if it is on a boundary. For example
      *
-     *   fo|o               -> will return foo
-     *   foo <comment> |bar -> will return foo
-     *
+     * ```plaintext
+     * fo|o               -> will return foo
+     * foo <comment> |bar -> will return foo
+     * ```
      */
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node | undefined {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
@@ -1659,8 +1660,7 @@ namespace ts {
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
      *
-     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
-     * @param predicate Additional predicate to test on the comment range.
+     * @param tokenAtPosition - Must equal `getTokenAtPosition(sourceFile, position)`
      */
     export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined {
         return formatting.getRangeOfEnclosingComment(sourceFile, position, /*precedingToken*/ undefined, tokenAtPosition);
@@ -2646,7 +2646,7 @@ namespace ts {
     }
 
     /**
-     * @return The index of the (only) reference to the extracted symbol.  We want the cursor
+     * @returns The index of the (only) reference to the extracted symbol.  We want the cursor
      * to be on the reference, rather than the declaration, because it's closer to where the
      * user was before extracting it.
      */
@@ -3348,9 +3348,9 @@ namespace ts {
      * haystack.indexOf(needle, startIndex) === startIndex
      * ```
      *
-     * @param haystack The string that potentially contains `needle`.
-     * @param needle The string whose content might sit within `haystack`.
-     * @param startIndex The index within `haystack` to start searching for `needle`.
+     * @param haystack - The string that potentially contains `needle`.
+     * @param needle - The string whose content might sit within `haystack`.
+     * @param startIndex - The index within `haystack` to start searching for `needle`.
      */
     export function stringContainsAt(haystack: string, needle: string, startIndex: number) {
         const needleLength = needle.length;

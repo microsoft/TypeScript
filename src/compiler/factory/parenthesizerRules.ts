@@ -64,9 +64,9 @@ namespace ts {
         /**
          * Determines whether the operand to a BinaryExpression needs to be parenthesized.
          *
-         * @param binaryOperator The operator for the BinaryExpression.
-         * @param operand The operand for the BinaryExpression.
-         * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
+         * @param binaryOperator - The operator for the BinaryExpression.
+         * @param operand - The operand for the BinaryExpression.
+         * @param isLeftSideOfBinary - A value indicating whether the operand is the left side of the
          *                           BinaryExpression.
          */
         function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression | undefined) {
@@ -169,7 +169,7 @@ namespace ts {
         /**
          * Determines whether a binary operator is mathematically associative.
          *
-         * @param binaryOperator The binary operator.
+         * @param binaryOperator - The binary operator.
          */
         function operatorHasAssociativeProperty(binaryOperator: SyntaxKind) {
             // The following operators are associative in JavaScript:
@@ -223,9 +223,9 @@ namespace ts {
          * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
          * order of operations.
          *
-         * @param binaryOperator The operator for the BinaryExpression.
-         * @param operand The operand for the BinaryExpression.
-         * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
+         * @param binaryOperator - The operator for the BinaryExpression.
+         * @param operand - The operand for the BinaryExpression.
+         * @param isLeftSideOfBinary - A value indicating whether the operand is the left side of the
          *                           BinaryExpression.
          */
         function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression) {

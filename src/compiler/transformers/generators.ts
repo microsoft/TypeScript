@@ -308,7 +308,7 @@ namespace ts {
         /**
          * Visits a node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitor(node: Node): VisitResult<Node> {
             const transformFlags = node.transformFlags;
@@ -332,7 +332,7 @@ namespace ts {
         /**
          * Visits a node that is contained within a statement that contains yield.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitJavaScriptInStatementContainingYield(node: Node): VisitResult<Node> {
             switch (node.kind) {
@@ -352,7 +352,7 @@ namespace ts {
         /**
          * Visits a node that is contained within a generator function.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitJavaScriptInGeneratorFunctionBody(node: Node): VisitResult<Node> {
             switch (node.kind) {
@@ -391,7 +391,7 @@ namespace ts {
         /**
          * Visits a node that contains a YieldExpression.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitJavaScriptContainingYield(node: Node): VisitResult<Node> {
             switch (node.kind) {
@@ -421,7 +421,7 @@ namespace ts {
         /**
          * Visits a generator function.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitGenerator(node: Node): VisitResult<Node> {
             switch (node.kind) {
@@ -443,7 +443,7 @@ namespace ts {
          * - The function declaration is a generator function.
          * - The function declaration is contained within the body of a generator function.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Statement | undefined {
             // Currently, we only support generators that were originally async functions.
@@ -492,7 +492,7 @@ namespace ts {
          * - The function expression is a generator function.
          * - The function expression is contained within the body of a generator function.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
             // Currently, we only support generators that were originally async functions.
@@ -532,7 +532,7 @@ namespace ts {
          * This will be called when one of the following conditions are met:
          * - The accessor is contained within the body of a generator function.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitAccessorDeclaration(node: AccessorDeclaration) {
             const savedInGeneratorFunctionBody = inGeneratorFunctionBody;
@@ -548,7 +548,7 @@ namespace ts {
         /**
          * Transforms the body of a generator function declaration.
          *
-         * @param node The function body to transform.
+         * @param node - The function body to transform.
          */
         function transformGeneratorFunctionBody(body: Block) {
             // Save existing generator state
@@ -617,7 +617,7 @@ namespace ts {
          * This will be called when one of the following conditions are met:
          * - The variable statement is contained within the body of a generator function.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitVariableStatement(node: VariableStatement): Statement | undefined {
             if (node.transformFlags & TransformFlags.ContainsYield) {
@@ -656,7 +656,7 @@ namespace ts {
          * This will be called when one of the following conditions are met:
          * - The node contains a YieldExpression.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitBinaryExpression(node: BinaryExpression): Expression {
             const assoc = getExpressionAssociativity(node);
@@ -673,7 +673,7 @@ namespace ts {
         /**
          * Visits a right-associative binary expression containing `yield`.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitRightAssociativeBinaryExpression(node: BinaryExpression) {
             const { left, right } = node;
@@ -776,7 +776,7 @@ namespace ts {
         /**
          * Visits a comma expression containing `yield`.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitCommaExpression(node: BinaryExpression) {
             // [source]
@@ -812,7 +812,7 @@ namespace ts {
         /**
          * Visits a comma-list expression.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitCommaListExpression(node: CommaListExpression) {
             // flattened version of `visitCommaExpression`
@@ -835,7 +835,7 @@ namespace ts {
         /**
          * Visits a logical binary expression containing `yield`.
          *
-         * @param node A node to visit.
+         * @param node - A node to visit.
          */
         function visitLogicalBinaryExpression(node: BinaryExpression) {
             // Logical binary expressions (`&&` and `||`) are shortcutting expressions and need
@@ -888,7 +888,7 @@ namespace ts {
         /**
          * Visits a conditional expression containing `yield`.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitConditionalExpression(node: ConditionalExpression): Expression {
             // [source]
@@ -928,7 +928,7 @@ namespace ts {
         /**
          * Visits a `yield` expression.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitYieldExpression(node: YieldExpression): LeftHandSideExpression {
             // [source]
@@ -959,7 +959,7 @@ namespace ts {
         /**
          * Visits an ArrayLiteralExpression that contains a YieldExpression.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression) {
             return visitElements(node.elements, /*leadingElement*/ undefined, /*location*/ undefined, node.multiLine);
@@ -969,8 +969,8 @@ namespace ts {
          * Visits an array of expressions containing one or more YieldExpression nodes
          * and returns an expression for the resulting value.
          *
-         * @param elements The elements to visit.
-         * @param multiLine Whether array literals created should be emitted on multiple lines.
+         * @param elements - The elements to visit.
+         * @param multiLine - Whether array literals created should be emitted on multiple lines.
          */
         function visitElements(elements: NodeArray<Expression>, leadingElement?: Expression, location?: TextRange, multiLine?: boolean) {
             // [source]
@@ -1092,7 +1092,7 @@ namespace ts {
         /**
          * Visits an ElementAccessExpression that contains a YieldExpression.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitElementAccessExpression(node: ElementAccessExpression) {
             if (containsYield(node.argumentExpression)) {
@@ -2026,7 +2026,7 @@ namespace ts {
         /**
          * Begins a block operation (With, Break/Continue, Try/Catch/Finally)
          *
-         * @param block Information about the block.
+         * @param block - Information about the block.
          */
         function beginBlock(block: CodeBlock): number {
             if (!blocks) {
@@ -2077,7 +2077,7 @@ namespace ts {
         /**
          * Begins a code block for a generated `with` statement.
          *
-         * @param expression An identifier representing expression for the `with` block.
+         * @param expression - An identifier representing expression for the `with` block.
          */
         function beginWithBlock(expression: Identifier): void {
             const startLabel = defineLabel();
@@ -2120,7 +2120,7 @@ namespace ts {
         /**
          * Enters the `catch` clause of a generated `try` statement.
          *
-         * @param variable The catch variable.
+         * @param variable - The catch variable.
          */
         function beginCatchBlock(variable: VariableDeclaration): void {
             Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
@@ -2201,7 +2201,7 @@ namespace ts {
          * Begins a code block that supports `break` or `continue` statements that are defined in
          * the source tree and not from generated code.
          *
-         * @param labelText Names from containing labeled statements.
+         * @param labelText - Names from containing labeled statements.
          */
         function beginScriptLoopBlock(): void {
             beginBlock({
@@ -2217,7 +2217,7 @@ namespace ts {
          * generated code. Returns a label used to mark the operation to which to jump when a
          * `break` statement targets this block.
          *
-         * @param continueLabel A Label used to mark the operation to which to jump when a
+         * @param continueLabel - A Label used to mark the operation to which to jump when a
          *                      `continue` statement targets this block.
          */
         function beginLoopBlock(continueLabel: Label): Label {
@@ -2314,7 +2314,7 @@ namespace ts {
         /**
          * Indicates whether the provided block supports `break` statements.
          *
-         * @param block A code block.
+         * @param block - A code block.
          */
         function supportsUnlabeledBreak(block: CodeBlock): block is SwitchBlock | LoopBlock {
             return block.kind === CodeBlockKind.Switch
@@ -2324,7 +2324,7 @@ namespace ts {
         /**
          * Indicates whether the provided block supports `break` statements with labels.
          *
-         * @param block A code block.
+         * @param block - A code block.
          */
         function supportsLabeledBreakOrContinue(block: CodeBlock): block is LabeledBlock {
             return block.kind === CodeBlockKind.Labeled;
@@ -2333,7 +2333,7 @@ namespace ts {
         /**
          * Indicates whether the provided block supports `continue` statements.
          *
-         * @param block A code block.
+         * @param block - A code block.
          */
         function supportsUnlabeledContinue(block: CodeBlock): block is LoopBlock {
             return block.kind === CodeBlockKind.Loop;
@@ -2358,7 +2358,7 @@ namespace ts {
         /**
          * Finds the label that is the target for a `break` statement.
          *
-         * @param labelText An optional name of a containing labeled statement.
+         * @param labelText - An optional name of a containing labeled statement.
          */
         function findBreakTarget(labelText?: string): Label {
             if (blockStack) {
@@ -2388,7 +2388,7 @@ namespace ts {
         /**
          * Finds the label that is the target for a `continue` statement.
          *
-         * @param labelText An optional name of a containing labeled statement.
+         * @param labelText - An optional name of a containing labeled statement.
          */
         function findContinueTarget(labelText?: string): Label {
             if (blockStack) {
@@ -2415,7 +2415,7 @@ namespace ts {
         /**
          * Creates an expression that can be used to indicate the value for a label.
          *
-         * @param label A label.
+         * @param label - A label.
          */
         function createLabel(label: Label | undefined): Expression {
             if (label !== undefined && label > 0) {
@@ -2449,8 +2449,8 @@ namespace ts {
         /**
          * Creates a statement that can be used indicate a Break operation to the provided label.
          *
-         * @param label A label.
-         * @param location An optional source map location for the statement.
+         * @param label - A label.
+         * @param location - An optional source map location for the statement.
          */
         function createInlineBreak(label: Label, location?: TextRange): ReturnStatement {
             Debug.assertLessThan(0, label, "Invalid label");
@@ -2468,8 +2468,8 @@ namespace ts {
         /**
          * Creates a statement that can be used indicate a Return operation.
          *
-         * @param expression The expression for the return statement.
-         * @param location An optional source map location for the statement.
+         * @param expression - The expression for the return statement.
+         * @param location - An optional source map location for the statement.
          */
         function createInlineReturn(expression?: Expression, location?: TextRange): ReturnStatement {
             return setTextRange(
@@ -2507,7 +2507,7 @@ namespace ts {
         /**
          * Emits a Statement.
          *
-         * @param node A statement.
+         * @param node - A statement.
          */
         function emitStatement(node: Statement): void {
             if (node) {
@@ -2521,9 +2521,9 @@ namespace ts {
         /**
          * Emits an Assignment operation.
          *
-         * @param left The left-hand side of the assignment.
-         * @param right The right-hand side of the assignment.
-         * @param location An optional source map location for the assignment.
+         * @param left - The left-hand side of the assignment.
+         * @param right - The right-hand side of the assignment.
+         * @param location - An optional source map location for the assignment.
          */
         function emitAssignment(left: Expression, right: Expression, location?: TextRange): void {
             emitWorker(OpCode.Assign, [left, right], location);
@@ -2532,8 +2532,8 @@ namespace ts {
         /**
          * Emits a Break operation to the specified label.
          *
-         * @param label A label.
-         * @param location An optional source map location for the assignment.
+         * @param label - A label.
+         * @param location - An optional source map location for the assignment.
          */
         function emitBreak(label: Label, location?: TextRange): void {
             emitWorker(OpCode.Break, [label], location);
@@ -2543,9 +2543,9 @@ namespace ts {
          * Emits a Break operation to the specified label when a condition evaluates to a truthy
          * value at runtime.
          *
-         * @param label A label.
-         * @param condition The condition.
-         * @param location An optional source map location for the assignment.
+         * @param label - A label.
+         * @param condition - The condition.
+         * @param location - An optional source map location for the assignment.
          */
         function emitBreakWhenTrue(label: Label, condition: Expression, location?: TextRange): void {
             emitWorker(OpCode.BreakWhenTrue, [label, condition], location);
@@ -2555,9 +2555,9 @@ namespace ts {
          * Emits a Break to the specified label when a condition evaluates to a falsey value at
          * runtime.
          *
-         * @param label A label.
-         * @param condition The condition.
-         * @param location An optional source map location for the assignment.
+         * @param label - A label.
+         * @param condition - The condition.
+         * @param location - An optional source map location for the assignment.
          */
         function emitBreakWhenFalse(label: Label, condition: Expression, location?: TextRange): void {
             emitWorker(OpCode.BreakWhenFalse, [label, condition], location);
@@ -2566,8 +2566,8 @@ namespace ts {
         /**
          * Emits a YieldStar operation for the provided expression.
          *
-         * @param expression An optional value for the yield operation.
-         * @param location An optional source map location for the assignment.
+         * @param expression - An optional value for the yield operation.
+         * @param location - An optional source map location for the assignment.
          */
         function emitYieldStar(expression?: Expression, location?: TextRange): void {
             emitWorker(OpCode.YieldStar, [expression], location);
@@ -2576,8 +2576,8 @@ namespace ts {
         /**
          * Emits a Yield operation for the provided expression.
          *
-         * @param expression An optional value for the yield operation.
-         * @param location An optional source map location for the assignment.
+         * @param expression - An optional value for the yield operation.
+         * @param location - An optional source map location for the assignment.
          */
         function emitYield(expression?: Expression, location?: TextRange): void {
             emitWorker(OpCode.Yield, [expression], location);
@@ -2586,8 +2586,8 @@ namespace ts {
         /**
          * Emits a Return operation for the provided expression.
          *
-         * @param expression An optional value for the operation.
-         * @param location An optional source map location for the assignment.
+         * @param expression - An optional value for the operation.
+         * @param location - An optional source map location for the assignment.
          */
         function emitReturn(expression?: Expression, location?: TextRange): void {
             emitWorker(OpCode.Return, [expression], location);
@@ -2596,8 +2596,8 @@ namespace ts {
         /**
          * Emits a Throw operation for the provided expression.
          *
-         * @param expression A value for the operation.
-         * @param location An optional source map location for the assignment.
+         * @param expression - A value for the operation.
+         * @param location - An optional source map location for the assignment.
          */
         function emitThrow(expression: Expression, location?: TextRange): void {
             emitWorker(OpCode.Throw, [expression], location);
@@ -2613,8 +2613,8 @@ namespace ts {
         /**
          * Emits an operation.
          *
-         * @param code The OpCode for the operation.
-         * @param args The optional arguments for the operation.
+         * @param code - The OpCode for the operation.
+         * @param args - The optional arguments for the operation.
          */
         function emitWorker(code: OpCode, args?: OperationArguments, location?: TextRange): void {
             if (operations === undefined) {
@@ -2760,7 +2760,7 @@ namespace ts {
         /**
          * Appends a case clause for the last label and sets the new label.
          *
-         * @param markLabelEnd Indicates that the transition between labels was a fall-through
+         * @param markLabelEnd - Indicates that the transition between labels was a fall-through
          *                     from a previous case clause and the change in labels should be
          *                     reflected on the `state` object.
          */
@@ -2920,7 +2920,7 @@ namespace ts {
         /**
          * Writes an operation as a statement to the current label's statement list.
          *
-         * @param operation The OpCode of the operation
+         * @param operation - The OpCode of the operation
          */
         function writeOperation(operationIndex: number): void {
             tryEnterLabel(operationIndex);
@@ -2971,7 +2971,7 @@ namespace ts {
         /**
          * Writes a statement to the current label's statement list.
          *
-         * @param statement A statement to write.
+         * @param statement - A statement to write.
          */
         function writeStatement(statement: Statement): void {
             if (statement) {
@@ -2987,9 +2987,9 @@ namespace ts {
         /**
          * Writes an Assign operation to the current label's statement list.
          *
-         * @param left The left-hand side of the assignment.
-         * @param right The right-hand side of the assignment.
-         * @param operationLocation The source map location for the operation.
+         * @param left - The left-hand side of the assignment.
+         * @param right - The right-hand side of the assignment.
+         * @param operationLocation - The source map location for the operation.
          */
         function writeAssign(left: Expression, right: Expression, operationLocation: TextRange | undefined): void {
             writeStatement(setTextRange(factory.createExpressionStatement(factory.createAssignment(left, right)), operationLocation));
@@ -2998,8 +2998,8 @@ namespace ts {
         /**
          * Writes a Throw operation to the current label's statement list.
          *
-         * @param expression The value to throw.
-         * @param operationLocation The source map location for the operation.
+         * @param expression - The value to throw.
+         * @param operationLocation - The source map location for the operation.
          */
         function writeThrow(expression: Expression, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
@@ -3010,8 +3010,8 @@ namespace ts {
         /**
          * Writes a Return operation to the current label's statement list.
          *
-         * @param expression The value to return.
-         * @param operationLocation The source map location for the operation.
+         * @param expression - The value to return.
+         * @param operationLocation - The source map location for the operation.
          */
         function writeReturn(expression: Expression | undefined, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
@@ -3035,8 +3035,8 @@ namespace ts {
         /**
          * Writes a Break operation to the current label's statement list.
          *
-         * @param label The label for the Break.
-         * @param operationLocation The source map location for the operation.
+         * @param label - The label for the Break.
+         * @param operationLocation - The source map location for the operation.
          */
         function writeBreak(label: Label, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
@@ -3059,9 +3059,9 @@ namespace ts {
         /**
          * Writes a BreakWhenTrue operation to the current label's statement list.
          *
-         * @param label The label for the Break.
-         * @param condition The condition for the Break.
-         * @param operationLocation The source map location for the operation.
+         * @param label - The label for the Break.
+         * @param condition - The condition for the Break.
+         * @param operationLocation - The source map location for the operation.
          */
         function writeBreakWhenTrue(label: Label, condition: Expression, operationLocation: TextRange | undefined): void {
             writeStatement(
@@ -3089,9 +3089,9 @@ namespace ts {
         /**
          * Writes a BreakWhenFalse operation to the current label's statement list.
          *
-         * @param label The label for the Break.
-         * @param condition The condition for the Break.
-         * @param operationLocation The source map location for the operation.
+         * @param label - The label for the Break.
+         * @param condition - The condition for the Break.
+         * @param operationLocation - The source map location for the operation.
          */
         function writeBreakWhenFalse(label: Label, condition: Expression, operationLocation: TextRange | undefined): void {
             writeStatement(
@@ -3119,8 +3119,8 @@ namespace ts {
         /**
          * Writes a Yield operation to the current label's statement list.
          *
-         * @param expression The expression to yield.
-         * @param operationLocation The source map location for the operation.
+         * @param expression - The expression to yield.
+         * @param operationLocation - The source map location for the operation.
          */
         function writeYield(expression: Expression, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;
@@ -3144,8 +3144,8 @@ namespace ts {
         /**
          * Writes a YieldStar instruction to the current label's statement list.
          *
-         * @param expression The expression to yield.
-         * @param operationLocation The source map location for the operation.
+         * @param expression - The expression to yield.
+         * @param operationLocation - The source map location for the operation.
          */
         function writeYieldStar(expression: Expression, operationLocation: TextRange | undefined): void {
             lastOperationWasAbrupt = true;

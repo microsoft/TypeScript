@@ -366,12 +366,12 @@ namespace ts.formatting {
      * for which you're meant to look at them. You then declare what should the
      * whitespace annotation be between these tokens via the action param.
      *
-     * @param debugName Name to print
-     * @param left The left side of the comparison
-     * @param right The right side of the comparison
-     * @param context A set of filters to narrow down the space in which this formatter rule applies
-     * @param action a declaration of the expected whitespace
-     * @param flags whether the rule deletes a line or not, defaults to no-op
+     * @param debugName - Name to print
+     * @param left - The left side of the comparison
+     * @param right - The right side of the comparison
+     * @param context - A set of filters to narrow down the space in which this formatter rule applies
+     * @param action - a declaration of the expected whitespace
+     * @param flags - whether the rule deletes a line or not, defaults to no-op
      */
     function rule(
         debugName: string,

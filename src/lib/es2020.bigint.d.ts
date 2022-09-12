@@ -2,7 +2,7 @@
 
 interface BigIntToLocaleStringOptions {
     /**
-     * The locale matching algorithm to use.The default is "best fit". For information about this option, see the {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation Intl page}.
+     * The locale matching algorithm to use.The default is "best fit". For information about this option, see the {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation | Intl page}.
      */
     localeMatcher?: string;
     /**
@@ -48,12 +48,12 @@ interface BigIntToLocaleStringOptions {
     minimumIntegerDigits?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
 
     /**
-     * The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the {@link http://www.currency-iso.org/en/home/tables/table-a1.html ISO 4217 currency codes list} (2 if the list doesn't provide that information).
+     * The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the {@link http://www.currency-iso.org/en/home/tables/table-a1.html | ISO 4217 currency codes list} (2 if the list doesn't provide that information).
      */
     minimumFractionDigits?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
 
     /**
-     * The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of minimumFractionDigits and 3; the default for currency formatting is the larger of minimumFractionDigits and the number of minor unit digits provided by the {@link http://www.currency-iso.org/en/home/tables/table-a1.html ISO 4217 currency codes list} (2 if the list doesn't provide that information); the default for percent formatting is the larger of minimumFractionDigits and 0.
+     * The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of minimumFractionDigits and 3; the default for currency formatting is the larger of minimumFractionDigits and the number of minor unit digits provided by the {@link http://www.currency-iso.org/en/home/tables/table-a1.html | ISO 4217 currency codes list} (2 if the list doesn't provide that information); the default for percent formatting is the larger of minimumFractionDigits and 0.
      */
     maximumFractionDigits?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
 
@@ -89,7 +89,7 @@ interface BigIntToLocaleStringOptions {
 interface BigInt {
     /**
      * Returns a string representation of an object.
-     * @param radix Specifies a radix for converting numeric values to strings.
+     * @param radix - Specifies a radix for converting numeric values to strings.
      */
     toString(radix?: number): string;
 
@@ -109,15 +109,15 @@ interface BigIntConstructor {
     /**
      * Interprets the low bits of a BigInt as a 2's-complement signed integer.
      * All higher bits are discarded.
-     * @param bits The number of low bits to use
-     * @param int The BigInt whose bits to extract
+     * @param bits - The number of low bits to use
+     * @param int - The BigInt whose bits to extract
      */
     asIntN(bits: number, int: bigint): bigint;
     /**
      * Interprets the low bits of a BigInt as an unsigned integer.
      * All higher bits are discarded.
-     * @param bits The number of low bits to use
-     * @param int The BigInt whose bits to extract
+     * @param bits - The number of low bits to use
+     * @param int - The BigInt whose bits to extract
      */
     asUintN(bits: number, int: bigint): bigint;
 }
@@ -144,11 +144,11 @@ interface BigInt64Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target - If target is negative, it is treated as length+target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
+     * @param start - If start is negative, it is treated as length+start. If end is negative, it
      * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * @param end - If not specified, length of the this object is used as its default value.
      */
     copyWithin(target: number, start: number, end?: number): this;
 
@@ -157,29 +157,29 @@ interface BigInt64Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param predicate A function that accepts up to three arguments. The every method calls
+     * @param predicate - A function that accepts up to three arguments. The every method calls
      * the predicate function for each element in the array until the predicate returns false,
      * or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the predicate function.
+     * @param thisArg - An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     every(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
-     * @param value value to fill array section with
-     * @param start index to start filling the array at. If start is negative, it is treated as
+     * @param value - value to fill array section with
+     * @param start - index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
-     * @param end index to stop filling the array at. If end is negative, it is treated as
+     * @param end - index to stop filling the array at. If end is negative, it is treated as
      * length+end.
      */
     fill(value: bigint, start?: number, end?: number): this;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * @param predicate - A function that accepts up to three arguments. The filter method calls
      * the predicate function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the predicate function.
+     * @param thisArg - An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     filter(predicate: (value: bigint, index: number, array: BigInt64Array) => any, thisArg?: any): BigInt64Array;
@@ -187,10 +187,10 @@ interface BigInt64Array {
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
      * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
+     * @param predicate - find calls predicate once for each element of the array, in ascending
      * order, until it finds one where predicate returns true. If such an element is found, find
      * immediately returns that element value. Otherwise, find returns undefined.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * @param thisArg - If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
     find(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): bigint | undefined;
@@ -198,41 +198,41 @@ interface BigInt64Array {
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
      * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
+     * @param predicate - find calls predicate once for each element of the array, in ascending
      * order, until it finds one where predicate returns true. If such an element is found,
      * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * @param thisArg - If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
     findIndex(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn - A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg - An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: bigint, index: number, array: BigInt64Array) => void, thisArg?: any): void;
 
     /**
      * Determines whether an array includes a certain element, returning true or false as appropriate.
-     * @param searchElement The element to search for.
-     * @param fromIndex The position in this array at which to begin searching for searchElement.
+     * @param searchElement - The element to search for.
+     * @param fromIndex - The position in this array at which to begin searching for searchElement.
      */
     includes(searchElement: bigint, fromIndex?: number): boolean;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
-     * @param searchElement The value to locate in the array.
-     * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
+     * @param searchElement - The value to locate in the array.
+     * @param fromIndex - The array index at which to begin the search. If fromIndex is omitted, the
      * search starts at index 0.
      */
     indexOf(searchElement: bigint, fromIndex?: number): number;
 
     /**
      * Adds all the elements of an array separated by the specified separator string.
-     * @param separator A string used to separate one element of an array from the next in the
+     * @param separator - A string used to separate one element of an array from the next in the
      * resulting String. If omitted, the array elements are separated with a comma.
      */
     join(separator?: string): string;
@@ -242,8 +242,8 @@ interface BigInt64Array {
 
     /**
      * Returns the index of the last occurrence of a value in an array.
-     * @param searchElement The value to locate in the array.
-     * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
+     * @param searchElement - The value to locate in the array.
+     * @param fromIndex - The array index at which to begin the search. If fromIndex is omitted, the
      * search starts at index 0.
      */
     lastIndexOf(searchElement: bigint, fromIndex?: number): number;
@@ -254,9 +254,9 @@ interface BigInt64Array {
     /**
      * Calls a defined callback function on each element of an array, and returns an array that
      * contains the results.
-     * @param callbackfn A function that accepts up to three arguments. The map method calls the
+     * @param callbackfn - A function that accepts up to three arguments. The map method calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg - An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     map(callbackfn: (value: bigint, index: number, array: BigInt64Array) => bigint, thisArg?: any): BigInt64Array;
@@ -265,9 +265,9 @@ interface BigInt64Array {
      * Calls the specified callback function for all the elements in an array. The return value of
      * the callback function is the accumulated result, and is provided as an argument in the next
      * call to the callback function.
-     * @param callbackfn A function that accepts up to four arguments. The reduce method calls the
+     * @param callbackfn - A function that accepts up to four arguments. The reduce method calls the
      * callbackfn function one time for each element in the array.
-     * @param initialValue If initialValue is specified, it is used as the initial value to start
+     * @param initialValue - If initialValue is specified, it is used as the initial value to start
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
@@ -277,9 +277,9 @@ interface BigInt64Array {
      * Calls the specified callback function for all the elements in an array. The return value of
      * the callback function is the accumulated result, and is provided as an argument in the next
      * call to the callback function.
-     * @param callbackfn A function that accepts up to four arguments. The reduce method calls the
+     * @param callbackfn - A function that accepts up to four arguments. The reduce method calls the
      * callbackfn function one time for each element in the array.
-     * @param initialValue If initialValue is specified, it is used as the initial value to start
+     * @param initialValue - If initialValue is specified, it is used as the initial value to start
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
@@ -289,9 +289,9 @@ interface BigInt64Array {
      * Calls the specified callback function for all the elements in an array, in descending order.
      * The return value of the callback function is the accumulated result, and is provided as an
      * argument in the next call to the callback function.
-     * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
+     * @param callbackfn - A function that accepts up to four arguments. The reduceRight method calls
      * the callbackfn function one time for each element in the array.
-     * @param initialValue If initialValue is specified, it is used as the initial value to start
+     * @param initialValue - If initialValue is specified, it is used as the initial value to start
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
@@ -301,9 +301,9 @@ interface BigInt64Array {
      * Calls the specified callback function for all the elements in an array, in descending order.
      * The return value of the callback function is the accumulated result, and is provided as an
      * argument in the next call to the callback function.
-     * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
+     * @param callbackfn - A function that accepts up to four arguments. The reduceRight method calls
      * the callbackfn function one time for each element in the array.
-     * @param initialValue If initialValue is specified, it is used as the initial value to start
+     * @param initialValue - If initialValue is specified, it is used as the initial value to start
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
@@ -314,39 +314,39 @@ interface BigInt64Array {
 
     /**
      * Sets a value or an array of values.
-     * @param array A typed or untyped array of values to set.
-     * @param offset The index in the current array at which the values are to be written.
+     * @param array - A typed or untyped array of values to set.
+     * @param offset - The index in the current array at which the values are to be written.
      */
     set(array: ArrayLike<bigint>, offset?: number): void;
 
     /**
      * Returns a section of an array.
-     * @param start The beginning of the specified portion of the array.
-     * @param end The end of the specified portion of the array.
+     * @param start - The beginning of the specified portion of the array.
+     * @param end - The end of the specified portion of the array.
      */
     slice(start?: number, end?: number): BigInt64Array;
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param predicate A function that accepts up to three arguments. The some method calls the
+     * @param predicate - A function that accepts up to three arguments. The some method calls the
      * predicate function for each element in the array until the predicate returns true, or until
      * the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the predicate function.
+     * @param thisArg - An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     some(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
 
     /**
      * Sorts the array.
-     * @param compareFn The function used to determine the order of the elements. If omitted, the elements are sorted in ascending order.
+     * @param compareFn - The function used to determine the order of the elements. If omitted, the elements are sorted in ascending order.
      */
     sort(compareFn?: (a: bigint, b: bigint) => number | bigint): this;
 
     /**
      * Gets a new BigInt64Array view of the ArrayBuffer store for this array, referencing the elements
      * at begin, inclusive, up to end, exclusive.
-     * @param begin The index of the beginning of the array.
-     * @param end The index of the end of the array.
+     * @param begin - The index of the beginning of the array.
+     * @param end - The index of the end of the array.
      */
     subarray(begin?: number, end?: number): BigInt64Array;
 
@@ -380,15 +380,15 @@ interface BigInt64ArrayConstructor {
 
     /**
      * Returns a new array from a set of elements.
-     * @param items A set of elements to include in the new array object.
+     * @param items - A set of elements to include in the new array object.
      */
     of(...items: bigint[]): BigInt64Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: ArrayLike<bigint>): BigInt64Array;
     from<U>(arrayLike: ArrayLike<U>, mapfn: (v: U, k: number) => bigint, thisArg?: any): BigInt64Array;
@@ -416,11 +416,11 @@ interface BigUint64Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target - If target is negative, it is treated as length+target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
+     * @param start - If start is negative, it is treated as length+start. If end is negative, it
      * is treated as length+end.
-     * @param end If not specified, length of the this object is used as its default value.
+     * @param end - If not specified, length of the this object is used as its default value.
      */
     copyWithin(target: number, start: number, end?: number): this;
 
@@ -429,29 +429,29 @@ interface BigUint64Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param predicate A function that accepts up to three arguments. The every method calls
+     * @param predicate - A function that accepts up to three arguments. The every method calls
      * the predicate function for each element in the array until the predicate returns false,
      * or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the predicate function.
+     * @param thisArg - An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     every(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
-     * @param value value to fill array section with
-     * @param start index to start filling the array at. If start is negative, it is treated as
+     * @param value - value to fill array section with
+     * @param start - index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
-     * @param end index to stop filling the array at. If end is negative, it is treated as
+     * @param end - index to stop filling the array at. If end is negative, it is treated as
      * length+end.
      */
     fill(value: bigint, start?: number, end?: number): this;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * @param predicate - A function that accepts up to three arguments. The filter method calls
      * the predicate function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the predicate function.
+     * @param thisArg - An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     filter(predicate: (value: bigint, index: number, array: BigUint64Array) => any, thisArg?: any): BigUint64Array;
@@ -459,10 +459,10 @@ interface BigUint64Array {
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
      * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
+     * @param predicate - find calls predicate once for each element of the array, in ascending
      * order, until it finds one where predicate returns true. If such an element is found, find
      * immediately returns that element value. Otherwise, find returns undefined.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * @param thisArg - If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
     find(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): bigint | undefined;
@@ -470,41 +470,41 @@ interface BigUint64Array {
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
      * otherwise.
-     * @param predicate find calls predicate once for each element of the array, in ascending
+     * @param predicate - find calls predicate once for each element of the array, in ascending
      * order, until it finds one where predicate returns true. If such an element is found,
      * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
-     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * @param thisArg - If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
     findIndex(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn - A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg - An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: bigint, index: number, array: BigUint64Array) => void, thisArg?: any): void;
 
     /**
      * Determines whether an array includes a certain element, returning true or false as appropriate.
-     * @param searchElement The element to search for.
-     * @param fromIndex The position in this array at which to begin searching for searchElement.
+     * @param searchElement - The element to search for.
+     * @param fromIndex - The position in this array at which to begin searching for searchElement.
      */
     includes(searchElement: bigint, fromIndex?: number): boolean;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
-     * @param searchElement The value to locate in the array.
-     * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
+     * @param searchElement - The value to locate in the array.
+     * @param fromIndex - The array index at which to begin the search. If fromIndex is omitted, the
      * search starts at index 0.
      */
     indexOf(searchElement: bigint, fromIndex?: number): number;
 
     /**
      * Adds all the elements of an array separated by the specified separator string.
-     * @param separator A string used to separate one element of an array from the next in the
+     * @param separator - A string used to separate one element of an array from the next in the
      * resulting String. If omitted, the array elements are separated with a comma.
      */
     join(separator?: string): string;
@@ -514,8 +514,8 @@ interface BigUint64Array {
 
     /**
      * Returns the index of the last occurrence of a value in an array.
-     * @param searchElement The value to locate in the array.
-     * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
+     * @param searchElement - The value to locate in the array.
+     * @param fromIndex - The array index at which to begin the search. If fromIndex is omitted, the
      * search starts at index 0.
      */
     lastIndexOf(searchElement: bigint, fromIndex?: number): number;
@@ -526,9 +526,9 @@ interface BigUint64Array {
     /**
      * Calls a defined callback function on each element of an array, and returns an array that
      * contains the results.
-     * @param callbackfn A function that accepts up to three arguments. The map method calls the
+     * @param callbackfn - A function that accepts up to three arguments. The map method calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg - An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     map(callbackfn: (value: bigint, index: number, array: BigUint64Array) => bigint, thisArg?: any): BigUint64Array;
@@ -537,9 +537,9 @@ interface BigUint64Array {
      * Calls the specified callback function for all the elements in an array. The return value of
      * the callback function is the accumulated result, and is provided as an argument in the next
      * call to the callback function.
-     * @param callbackfn A function that accepts up to four arguments. The reduce method calls the
+     * @param callbackfn - A function that accepts up to four arguments. The reduce method calls the
      * callbackfn function one time for each element in the array.
-     * @param initialValue If initialValue is specified, it is used as the initial value to start
+     * @param initialValue - If initialValue is specified, it is used as the initial value to start
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
@@ -549,9 +549,9 @@ interface BigUint64Array {
      * Calls the specified callback function for all the elements in an array. The return value of
      * the callback function is the accumulated result, and is provided as an argument in the next
      * call to the callback function.
-     * @param callbackfn A function that accepts up to four arguments. The reduce method calls the
+     * @param callbackfn - A function that accepts up to four arguments. The reduce method calls the
      * callbackfn function one time for each element in the array.
-     * @param initialValue If initialValue is specified, it is used as the initial value to start
+     * @param initialValue - If initialValue is specified, it is used as the initial value to start
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
@@ -561,9 +561,9 @@ interface BigUint64Array {
      * Calls the specified callback function for all the elements in an array, in descending order.
      * The return value of the callback function is the accumulated result, and is provided as an
      * argument in the next call to the callback function.
-     * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
+     * @param callbackfn - A function that accepts up to four arguments. The reduceRight method calls
      * the callbackfn function one time for each element in the array.
-     * @param initialValue If initialValue is specified, it is used as the initial value to start
+     * @param initialValue - If initialValue is specified, it is used as the initial value to start
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
@@ -573,9 +573,9 @@ interface BigUint64Array {
      * Calls the specified callback function for all the elements in an array, in descending order.
      * The return value of the callback function is the accumulated result, and is provided as an
      * argument in the next call to the callback function.
-     * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
+     * @param callbackfn - A function that accepts up to four arguments. The reduceRight method calls
      * the callbackfn function one time for each element in the array.
-     * @param initialValue If initialValue is specified, it is used as the initial value to start
+     * @param initialValue - If initialValue is specified, it is used as the initial value to start
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
@@ -586,39 +586,39 @@ interface BigUint64Array {
 
     /**
      * Sets a value or an array of values.
-     * @param array A typed or untyped array of values to set.
-     * @param offset The index in the current array at which the values are to be written.
+     * @param array - A typed or untyped array of values to set.
+     * @param offset - The index in the current array at which the values are to be written.
      */
     set(array: ArrayLike<bigint>, offset?: number): void;
 
     /**
      * Returns a section of an array.
-     * @param start The beginning of the specified portion of the array.
-     * @param end The end of the specified portion of the array.
+     * @param start - The beginning of the specified portion of the array.
+     * @param end - The end of the specified portion of the array.
      */
     slice(start?: number, end?: number): BigUint64Array;
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param predicate A function that accepts up to three arguments. The some method calls the
+     * @param predicate - A function that accepts up to three arguments. The some method calls the
      * predicate function for each element in the array until the predicate returns true, or until
      * the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the predicate function.
+     * @param thisArg - An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     some(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
 
     /**
      * Sorts the array.
-     * @param compareFn The function used to determine the order of the elements. If omitted, the elements are sorted in ascending order.
+     * @param compareFn - The function used to determine the order of the elements. If omitted, the elements are sorted in ascending order.
      */
     sort(compareFn?: (a: bigint, b: bigint) => number | bigint): this;
 
     /**
      * Gets a new BigUint64Array view of the ArrayBuffer store for this array, referencing the elements
      * at begin, inclusive, up to end, exclusive.
-     * @param begin The index of the beginning of the array.
-     * @param end The index of the end of the array.
+     * @param begin - The index of the beginning of the array.
+     * @param end - The index of the end of the array.
      */
     subarray(begin?: number, end?: number): BigUint64Array;
 
@@ -652,15 +652,15 @@ interface BigUint64ArrayConstructor {
 
     /**
      * Returns a new array from a set of elements.
-     * @param items A set of elements to include in the new array object.
+     * @param items - A set of elements to include in the new array object.
      */
     of(...items: bigint[]): BigUint64Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: ArrayLike<bigint>): BigUint64Array;
     from<U>(arrayLike: ArrayLike<U>, mapfn: (v: U, k: number) => bigint, thisArg?: any): BigUint64Array;
@@ -672,32 +672,32 @@ interface DataView {
     /**
      * Gets the BigInt64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
-     * @param byteOffset The place in the buffer at which the value should be retrieved.
-     * @param littleEndian If false or undefined, a big-endian value should be read.
+     * @param byteOffset - The place in the buffer at which the value should be retrieved.
+     * @param littleEndian - If false or undefined, a big-endian value should be read.
      */
     getBigInt64(byteOffset: number, littleEndian?: boolean): bigint;
 
     /**
      * Gets the BigUint64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
-     * @param byteOffset The place in the buffer at which the value should be retrieved.
-     * @param littleEndian If false or undefined, a big-endian value should be read.
+     * @param byteOffset - The place in the buffer at which the value should be retrieved.
+     * @param littleEndian - If false or undefined, a big-endian value should be read.
      */
     getBigUint64(byteOffset: number, littleEndian?: boolean): bigint;
 
     /**
      * Stores a BigInt64 value at the specified byte offset from the start of the view.
-     * @param byteOffset The place in the buffer at which the value should be set.
-     * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written.
+     * @param byteOffset - The place in the buffer at which the value should be set.
+     * @param value - The value to set.
+     * @param littleEndian - If false or undefined, a big-endian value should be written.
      */
     setBigInt64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
 
     /**
      * Stores a BigUint64 value at the specified byte offset from the start of the view.
-     * @param byteOffset The place in the buffer at which the value should be set.
-     * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written.
+     * @param byteOffset - The place in the buffer at which the value should be set.
+     * @param value - The value to set.
+     * @param littleEndian - If false or undefined, a big-endian value should be written.
      */
     setBigUint64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
 }

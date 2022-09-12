@@ -7,7 +7,7 @@ namespace ts.formatting {
         }
 
         /**
-         * @param assumeNewLineBeforeCloseBrace
+         * @param assumeNewLineBeforeCloseBrace -
          * `false` when called on text from a real source file.
          * `true` when we need to assume `position` is on a newline.
          *
@@ -548,7 +548,7 @@ namespace ts.formatting {
         /**
          * Character is the actual index of the character since the beginning of the line.
          * Column - position of the character after expanding tabs to spaces.
-         * "0\t2$"
+         * `"0\t2$"`
          * value of 'character' for '$' is 3
          * value of 'column' for '$' is 6 (assuming that tab size is 4)
          */
@@ -693,7 +693,7 @@ namespace ts.formatting {
 
         /**
          * True when the parent node should indent the given child by an explicit rule.
-         * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
+         * @param isNextChild - If true, we are judging indent of a hypothetical child *after* this one, not the current child.
          */
         export function shouldIndentChildNode(settings: FormatCodeSettings, parent: TextRangeWithKind, child?: Node, sourceFile?: SourceFileLike, isNextChild = false): boolean {
             return nodeWillIndentChild(settings, parent, child, sourceFile, /*indentByDefault*/ false)

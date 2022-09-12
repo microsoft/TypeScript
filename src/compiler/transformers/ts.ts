@@ -98,7 +98,7 @@ namespace ts {
         /**
          * Transform TypeScript-specific syntax in a SourceFile.
          *
-         * @param node A SourceFile node.
+         * @param node - A SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -117,7 +117,7 @@ namespace ts {
         /**
          * Visits a node, saving and restoring state variables on the stack.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             // Save state
@@ -143,7 +143,7 @@ namespace ts {
         /**
          * Performs actions that should always occur immediately before visiting a node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function onBeforeVisitNode(node: Node) {
             switch (node.kind) {
@@ -179,7 +179,7 @@ namespace ts {
         /**
          * General-purpose node visitor.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitor(node: Node): VisitResult<Node> {
             return saveStateAndInvoke(node, visitorWorker);
@@ -188,7 +188,7 @@ namespace ts {
         /**
          * Visits and possibly transforms any node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitorWorker(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.ContainsTypeScript) {
@@ -200,7 +200,7 @@ namespace ts {
         /**
          * Specialized visitor that visits the immediate children of a SourceFile.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function sourceElementVisitor(node: Node): VisitResult<Node> {
             return saveStateAndInvoke(node, sourceElementVisitorWorker);
@@ -209,7 +209,7 @@ namespace ts {
         /**
          * Specialized visitor that visits the immediate children of a SourceFile.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function sourceElementVisitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
@@ -254,7 +254,7 @@ namespace ts {
         /**
          * Specialized visitor that visits the immediate children of a namespace.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function namespaceElementVisitor(node: Node): VisitResult<Node> {
             return saveStateAndInvoke(node, namespaceElementVisitorWorker);
@@ -263,7 +263,7 @@ namespace ts {
         /**
          * Specialized visitor that visits the immediate children of a namespace.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
             if (node.kind === SyntaxKind.ExportDeclaration ||
@@ -284,7 +284,7 @@ namespace ts {
         /**
          * Gets a specialized visitor that visits the immediate children of a class with TypeScript syntax.
          *
-         * @param parent The class containing the elements to visit.
+         * @param parent - The class containing the elements to visit.
          */
         function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node> {
             return node => saveStateAndInvoke(node, n => classElementVisitorWorker(n, parent));
@@ -293,7 +293,7 @@ namespace ts {
         /**
          * Specialized visitor that visits the immediate children of a class with TypeScript syntax.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node> {
             switch (node.kind) {
@@ -377,7 +377,7 @@ namespace ts {
         /**
          * Branching visitor, visits a TypeScript syntax node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitTypeScript(node: Node): VisitResult<Node> {
             if (isStatement(node) && hasSyntacticModifier(node, ModifierFlags.Ambient)) {
@@ -761,7 +761,7 @@ namespace ts {
         /**
          * Transforms the members of a class.
          *
-         * @param node The current class.
+         * @param node - The current class.
          */
         function transformClassMembers(node: ClassDeclaration | ClassExpression) {
             const members: ClassElement[] = [];
@@ -789,8 +789,8 @@ namespace ts {
         /**
          * Transforms all of the decorators for a declaration into an array of expressions.
          *
-         * @param node The declaration node.
-         * @param allDecorators An object containing all of the decorators for the declaration.
+         * @param node - The declaration node.
+         * @param allDecorators - An object containing all of the decorators for the declaration.
          */
         function transformAllDecoratorsOfDeclaration(node: Declaration, container: ClassLikeDeclaration, allDecorators: AllDecorators | undefined) {
             if (!allDecorators) {
@@ -810,8 +810,8 @@ namespace ts {
         /**
          * Transforms the decorators of a parameter into decorators of the class/method.
          *
-         * @param parameterDecorators The decorators for the parameter at the provided offset.
-         * @param parameterOffset The offset of the parameter.
+         * @param parameterDecorators - The decorators for the parameter at the provided offset.
+         * @param parameterOffset - The offset of the parameter.
          */
         function transformDecoratorsOfParameter(parameterDecorators: Decorator[], parameterOffset: number) {
             if (parameterDecorators) {
@@ -835,7 +835,7 @@ namespace ts {
         /**
          * Gets optional type metadata for a declaration.
          *
-         * @param node The declaration node.
+         * @param node - The declaration node.
          */
         function getTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
             return USE_NEW_TYPE_METADATA_FORMAT ?
@@ -889,7 +889,7 @@ namespace ts {
          * The caller should have already tested whether the node has decorators and whether the
          * emitDecoratorMetadata compiler option is set.
          *
-         * @param node The node to test.
+         * @param node - The node to test.
          */
         function shouldAddTypeMetadata(node: Declaration): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
             const kind = node.kind;
@@ -904,7 +904,7 @@ namespace ts {
          * The caller should have already tested whether the node has decorators and whether the
          * emitDecoratorMetadata compiler option is set.
          *
-         * @param node The node to test.
+         * @param node - The node to test.
          */
         function shouldAddReturnTypeMetadata(node: Declaration): node is MethodDeclaration {
             return node.kind === SyntaxKind.MethodDeclaration;
@@ -915,7 +915,7 @@ namespace ts {
          * The caller should have already tested whether the node has decorators and whether the
          * emitDecoratorMetadata compiler option is set.
          *
-         * @param node The node to test.
+         * @param node - The node to test.
          */
         function shouldAddParamTypesMetadata(node: Declaration): node is ClassLikeDeclaration & { _hasConstructorBrand: never } | MethodDeclaration | AccessorDeclaration {
             switch (node.kind) {
@@ -934,7 +934,7 @@ namespace ts {
          * Gets an expression that represents a property name (for decorated properties or enums).
          * For a computed property, a name is generated for the node.
          *
-         * @param member The member whose name should be converted into an expression.
+         * @param member - The member whose name should be converted into an expression.
          */
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name!;
@@ -959,7 +959,7 @@ namespace ts {
          * initializers. For a computed property on a node with decorators, a temporary
          * value is stored for later use.
          *
-         * @param member The member whose name should be visited.
+         * @param member - The member whose name should be visited.
          */
         function visitPropertyNameOfClassElement(member: ClassElement): PropertyName {
             const name = member.name!;
@@ -986,7 +986,7 @@ namespace ts {
          * - The node is a non-`extends` heritage clause that should be elided.
          * - The node is an `extends` heritage clause that should be visited, but only allow a single type.
          *
-         * @param node The HeritageClause to transform.
+         * @param node - The HeritageClause to transform.
          */
         function visitHeritageClause(node: HeritageClause): HeritageClause | undefined {
             if (node.token === SyntaxKind.ImplementsKeyword) {
@@ -1002,7 +1002,7 @@ namespace ts {
          * This function will only be called when one of the following conditions are met:
          * - The node contains type arguments that should be elided.
          *
-         * @param node The ExpressionWithTypeArguments to transform.
+         * @param node - The ExpressionWithTypeArguments to transform.
          */
         function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): ExpressionWithTypeArguments {
             return factory.updateExpressionWithTypeArguments(
@@ -1016,7 +1016,7 @@ namespace ts {
          * Determines whether to emit a function-like declaration. We should not emit the
          * declaration if it does not have a body.
          *
-         * @param node The declaration node.
+         * @param node - The declaration node.
          */
         function shouldEmitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): node is T & { body: NonNullable<T["body"]> } {
             return !nodeIsMissing(node.body);
@@ -1130,7 +1130,7 @@ namespace ts {
         /**
          * Transforms a parameter into a property assignment statement.
          *
-         * @param node The parameter declaration.
+         * @param node - The parameter declaration.
          */
         function transformParameterWithPropertyAssignment(node: ParameterPropertyDeclaration) {
             const name = node.name;
@@ -1198,7 +1198,7 @@ namespace ts {
          * Determines whether to emit an accessor declaration. We should not emit the
          * declaration if it does not have a body and is abstract.
          *
-         * @param node The declaration node.
+         * @param node - The declaration node.
          */
         function shouldEmitAccessorDeclaration(node: AccessorDeclaration) {
             return !(nodeIsMissing(node.body) && hasSyntacticModifier(node, ModifierFlags.Abstract));
@@ -1472,7 +1472,7 @@ namespace ts {
         /**
          * Determines whether to emit an enum declaration.
          *
-         * @param node The enum declaration node.
+         * @param node - The enum declaration node.
          */
         function shouldEmitEnumDeclaration(node: EnumDeclaration) {
             return !isEnumConst(node)
@@ -1484,7 +1484,7 @@ namespace ts {
          *
          * This function will be called any time a TypeScript enum is encountered.
          *
-         * @param node The enum declaration node.
+         * @param node - The enum declaration node.
          */
         function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
             if (!shouldEmitEnumDeclaration(node)) {
@@ -1577,7 +1577,7 @@ namespace ts {
         /**
          * Transforms the body of an enum declaration.
          *
-         * @param node The enum declaration node.
+         * @param node - The enum declaration node.
          */
         function transformEnumBody(node: EnumDeclaration, localName: Identifier): Block {
             const savedCurrentNamespaceLocalName = currentNamespaceContainerName;
@@ -1599,7 +1599,7 @@ namespace ts {
         /**
          * Transforms an enum member into a statement.
          *
-         * @param member The enum member node.
+         * @param member - The enum member node.
          */
         function transformEnumMember(member: EnumMember): Statement {
             // enums don't support computed properties
@@ -1637,7 +1637,7 @@ namespace ts {
         /**
          * Transforms the value of an enum member.
          *
-         * @param member The enum member node.
+         * @param member - The enum member node.
          */
         function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
             const value = resolver.getConstantValue(member);
@@ -1658,7 +1658,7 @@ namespace ts {
         /**
          * Determines whether to elide a module declaration.
          *
-         * @param node The module declaration node.
+         * @param node - The module declaration node.
          */
         function shouldEmitModuleDeclaration(nodeIn: ModuleDeclaration) {
             const node = getParseTreeNode(nodeIn, isModuleDeclaration);
@@ -1783,7 +1783,7 @@ namespace ts {
          *
          * This function will be called any time a TypeScript namespace (ModuleDeclaration) is encountered.
          *
-         * @param node The module declaration node.
+         * @param node - The module declaration node.
          */
         function visitModuleDeclaration(node: ModuleDeclaration): VisitResult<Statement> {
             if (!shouldEmitModuleDeclaration(node)) {
@@ -1878,7 +1878,7 @@ namespace ts {
         /**
          * Transforms the body of a module declaration.
          *
-         * @param node The module declaration node.
+         * @param node - The module declaration node.
          */
         function transformModuleBody(node: ModuleDeclaration, namespaceLocalName: Identifier): Block {
             const savedCurrentNamespaceContainerName = currentNamespaceContainerName;
@@ -1965,7 +1965,7 @@ namespace ts {
         /**
          * Visits an import declaration, eliding it if it is type-only or if it has an import clause that may be elided.
          *
-         * @param node The import declaration node.
+         * @param node - The import declaration node.
          */
         function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
             if (!node.importClause) {
@@ -1995,7 +1995,7 @@ namespace ts {
         /**
          * Visits an import clause, eliding it if its `name` and `namedBindings` may both be elided.
          *
-         * @param node The import clause node.
+         * @param node - The import clause node.
          */
         function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
             Debug.assert(!node.isTypeOnly);
@@ -2008,7 +2008,7 @@ namespace ts {
         /**
          * Visits named import bindings, eliding them if their targets, their references, and the compilation settings allow.
          *
-         * @param node The named import bindings node.
+         * @param node - The named import bindings node.
          */
         function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
             if (node.kind === SyntaxKind.NamespaceImport) {
@@ -2028,7 +2028,7 @@ namespace ts {
         /**
          * Visits an import specifier, eliding it if its target, its references, and the compilation settings allow.
          *
-         * @param node The import specifier node.
+         * @param node - The import specifier node.
          */
         function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
             return !node.isTypeOnly && shouldEmitAliasDeclaration(node) ? node : undefined;
@@ -2038,7 +2038,7 @@ namespace ts {
          * Visits an export assignment, eliding it if it does not contain a clause that resolves
          * to a value.
          *
-         * @param node The export assignment node.
+         * @param node - The export assignment node.
          */
         function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
             // Elide the export assignment if it does not reference a value.
@@ -2050,7 +2050,7 @@ namespace ts {
         /**
          * Visits an export declaration, eliding it if it does not contain a clause that resolves to a value.
          *
-         * @param node The export declaration node.
+         * @param node - The export declaration node.
          */
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (node.isTypeOnly) {
@@ -2088,7 +2088,7 @@ namespace ts {
          * Visits named exports, eliding it if it does not contain an export specifier that
          * resolves to a value.
          *
-         * @param node The named exports node.
+         * @param node - The named exports node.
          */
         function visitNamedExports(node: NamedExports, allowEmpty: boolean): VisitResult<NamedExports> {
             // Elide the named exports if all of its export specifiers were elided.
@@ -2107,7 +2107,7 @@ namespace ts {
         /**
          * Visits an export specifier, eliding it if it does not resolve to a value.
          *
-         * @param node The export specifier node.
+         * @param node - The export specifier node.
          */
         function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> {
             // Elide an export specifier if it does not reference a value.
@@ -2117,7 +2117,7 @@ namespace ts {
         /**
          * Determines whether to emit an import equals declaration.
          *
-         * @param node The import equals declaration node.
+         * @param node - The import equals declaration node.
          */
         function shouldEmitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
             // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
@@ -2131,7 +2131,7 @@ namespace ts {
         /**
          * Visits an import equals declaration.
          *
-         * @param node The import equals declaration node.
+         * @param node - The import equals declaration node.
          */
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             // Always elide type-only imports
@@ -2207,7 +2207,7 @@ namespace ts {
         /**
          * Gets a value indicating whether the node is exported from a namespace.
          *
-         * @param node The node to test.
+         * @param node - The node to test.
          */
         function isExportOfNamespace(node: Node) {
             return currentNamespace !== undefined && hasSyntacticModifier(node, ModifierFlags.Export);
@@ -2216,7 +2216,7 @@ namespace ts {
         /**
          * Gets a value indicating whether the node is exported from an external module.
          *
-         * @param node The node to test.
+         * @param node - The node to test.
          */
         function isExternalModuleExport(node: Node) {
             return currentNamespace === undefined && hasSyntacticModifier(node, ModifierFlags.Export);
@@ -2225,7 +2225,7 @@ namespace ts {
         /**
          * Gets a value indicating whether the node is a named export from an external module.
          *
-         * @param node The node to test.
+         * @param node - The node to test.
          */
         function isNamedExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
@@ -2235,7 +2235,7 @@ namespace ts {
         /**
          * Gets a value indicating whether the node is the default export of an external module.
          *
-         * @param node The node to test.
+         * @param node - The node to test.
          */
         function isDefaultExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
@@ -2323,9 +2323,9 @@ namespace ts {
         /**
          * Hook for node emit.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to emit.
+         * @param emit - A callback used to emit the node in the printer.
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             const savedApplicableSubstitutions = applicableSubstitutions;
@@ -2352,8 +2352,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to substitute.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);

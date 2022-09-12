@@ -10,9 +10,9 @@ namespace ts {
     /**
      * Iterates over the source files that are expected to have an emit output.
      *
-     * @param host An EmitHost.
-     * @param action The action to execute.
-     * @param sourceFilesOrTargetSourceFile
+     * @param host - An EmitHost.
+     * @param action - The action to execute.
+     * @param sourceFilesOrTargetSourceFile -
      *   If an array, the full list of source files to emit.
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
@@ -3529,7 +3529,7 @@ namespace ts {
             writeSpace();
 
             const value = node.value;
-            /** @see {emitPropertyAssignment} */
+            /** see {@link emitPropertyAssignment} */
             if ((getEmitFlags(value) & EmitFlags.NoLeadingComments) === 0) {
                 const commentRange = getCommentRange(value);
                 emitTrailingCommentsOfPosition(commentRange.pos);
@@ -5813,7 +5813,7 @@ namespace ts {
         /**
          * Determine if the given comment is a triple-slash
          *
-         * @return true if the comment is a triple-slash comment else false
+         * @returns true if the comment is a triple-slash comment else false
          */
         function isTripleSlashComment(commentPos: number, commentEnd: number) {
             return !!currentSourceFile && isRecognizedTripleSlashComment(currentSourceFile.text, commentPos, commentEnd);
@@ -5897,7 +5897,7 @@ namespace ts {
          * If the position is synthetic (undefined or a negative value), no mapping will be
          * created.
          *
-         * @param pos The position.
+         * @param pos - The position.
          */
         function emitPos(pos: number) {
             if (sourceMapsDisabled || positionIsSynthesized(pos) || isJsonSourceMapSource(sourceMapSource)) {
@@ -5930,10 +5930,10 @@ namespace ts {
         /**
          * Emits a token of a node with possible leading and trailing source maps.
          *
-         * @param node The node containing the token.
-         * @param token The token to emit.
-         * @param tokenStartPos The start pos of the token.
-         * @param emitCallback The callback used to emit the token.
+         * @param node - The node containing the token.
+         * @param token - The token to emit.
+         * @param tokenStartPos - The start pos of the token.
+         * @param emitCallback - The callback used to emit the token.
          */
         function emitTokenWithSourceMap(node: Node | undefined, token: SyntaxKind, writer: (s: string) => void, tokenPos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number) => number) {
             if (sourceMapsDisabled || node && isInJsonFile(node)) {

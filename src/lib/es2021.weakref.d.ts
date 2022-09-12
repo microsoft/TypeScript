@@ -13,7 +13,7 @@ interface WeakRefConstructor {
 
     /**
      * Creates a WeakRef instance for the given target object.
-     * @param target The target object for the WeakRef instance.
+     * @param target - The target object for the WeakRef instance.
      */
     new<T extends object>(target: T): WeakRef<T>;
 }
@@ -25,10 +25,10 @@ interface FinalizationRegistry<T> {
 
     /**
      * Registers an object with the registry.
-     * @param target The target object to register.
-     * @param heldValue The value to pass to the finalizer for this object. This cannot be the
+     * @param target - The target object to register.
+     * @param heldValue - The value to pass to the finalizer for this object. This cannot be the
      * target object.
-     * @param unregisterToken The token to pass to the unregister method to unregister the target
+     * @param unregisterToken - The token to pass to the unregister method to unregister the target
      * object. If provided (and not undefined), this must be an object. If not provided, the target
      * cannot be unregistered.
      */
@@ -36,7 +36,7 @@ interface FinalizationRegistry<T> {
 
     /**
      * Unregisters an object from the registry.
-     * @param unregisterToken The token that was used as the unregisterToken argument when calling
+     * @param unregisterToken - The token that was used as the unregisterToken argument when calling
      * register to register the target object.
      */
     unregister(unregisterToken: object): void;
@@ -47,7 +47,7 @@ interface FinalizationRegistryConstructor {
 
     /**
      * Creates a finalization registry with an associated cleanup callback
-     * @param cleanupCallback The callback to call after an object in the registry has been reclaimed.
+     * @param cleanupCallback - The callback to call after an object in the registry has been reclaimed.
      */
     new<T>(cleanupCallback: (heldValue: T) => void): FinalizationRegistry<T>;
 }

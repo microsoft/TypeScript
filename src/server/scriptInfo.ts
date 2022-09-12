@@ -171,7 +171,7 @@ namespace ts.server {
             return this.switchToScriptVersionCache().getAbsolutePositionAndLineText(line);
         }
         /**
-         *  @param line 0 based index
+         *  @param line - 0 based index
          */
         lineToTextSpan(line: number): TextSpan {
             if (!this.useScriptVersionCacheIfValidOrOpen()) {
@@ -184,8 +184,8 @@ namespace ts.server {
         }
 
         /**
-         * @param line 1 based index
-         * @param offset 1 based index
+         * @param line - 1 based index
+         * @param offset - 1 based index
          */
         lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
             if (!this.useScriptVersionCacheIfValidOrOpen()) {
@@ -629,15 +629,15 @@ namespace ts.server {
         }
 
         /**
-         *  @param line 1 based index
+         *  @param line - 1 based index
          */
         lineToTextSpan(line: number) {
             return this.textStorage.lineToTextSpan(line);
         }
 
         /**
-         * @param line 1 based index
-         * @param offset 1 based index
+         * @param line - 1 based index
+         * @param offset - 1 based index
          */
         lineOffsetToPosition(line: number, offset: number): number;
         /*@internal*/

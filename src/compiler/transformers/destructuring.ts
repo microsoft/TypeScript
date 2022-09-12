@@ -22,13 +22,13 @@ namespace ts {
     /**
      * Flattens a DestructuringAssignment or a VariableDeclaration to an expression.
      *
-     * @param node The node to flatten.
-     * @param visitor An optional visitor used to visit initializers.
-     * @param context The transformation context.
-     * @param level Indicates the extent to which flattening should occur.
-     * @param needsValue An optional value indicating whether the value from the right-hand-side of
+     * @param node - The node to flatten.
+     * @param visitor - An optional visitor used to visit initializers.
+     * @param context - The transformation context.
+     * @param level - Indicates the extent to which flattening should occur.
+     * @param needsValue - An optional value indicating whether the value from the right-hand-side of
      * the destructuring assignment is needed as part of a larger expression.
-     * @param createAssignmentCallback An optional callback used to create the assignment expression.
+     * @param createAssignmentCallback - An optional callback used to create the assignment expression.
      */
     export function flattenDestructuringAssignment(
         node: VariableDeclaration | DestructuringAssignment,
@@ -161,13 +161,13 @@ namespace ts {
     /**
      * Flattens a VariableDeclaration or ParameterDeclaration to one or more variable declarations.
      *
-     * @param node The node to flatten.
-     * @param visitor An optional visitor used to visit initializers.
-     * @param context The transformation context.
-     * @param boundValue The value bound to the declaration.
-     * @param skipInitializer A value indicating whether to ignore the initializer of `node`.
-     * @param hoistTempVariables Indicates whether temporary variables should not be recorded in-line.
-     * @param level Indicates the extent to which flattening should occur.
+     * @param node - The node to flatten.
+     * @param visitor - An optional visitor used to visit initializers.
+     * @param context - The transformation context.
+     * @param boundValue - The value bound to the declaration.
+     * @param skipInitializer - A value indicating whether to ignore the initializer of `node`.
+     * @param hoistTempVariables - Indicates whether temporary variables should not be recorded in-line.
+     * @param level - Indicates the extent to which flattening should occur.
      */
     export function flattenDestructuringBinding(
         node: VariableDeclaration | ParameterDeclaration,
@@ -253,11 +253,11 @@ namespace ts {
     /**
      * Flattens a BindingOrAssignmentElement into zero or more bindings or assignments.
      *
-     * @param flattenContext Options used to control flattening.
-     * @param element The element to flatten.
-     * @param value The current RHS value to assign to the element.
-     * @param location The location to use for source maps and comments.
-     * @param skipInitializer An optional value indicating whether to include the initializer
+     * @param flattenContext - Options used to control flattening.
+     * @param element - The element to flatten.
+     * @param value - The current RHS value to assign to the element.
+     * @param location - The location to use for source maps and comments.
+     * @param skipInitializer - An optional value indicating whether to include the initializer
      * for the element.
      */
     function flattenBindingOrAssignmentElement(
@@ -301,11 +301,11 @@ namespace ts {
     /**
      * Flattens an ObjectBindingOrAssignmentPattern into zero or more bindings or assignments.
      *
-     * @param flattenContext Options used to control flattening.
-     * @param parent The parent element of the pattern.
-     * @param pattern The ObjectBindingOrAssignmentPattern to flatten.
-     * @param value The current RHS value to assign to the element.
-     * @param location The location to use for source maps and comments.
+     * @param flattenContext - Options used to control flattening.
+     * @param parent - The parent element of the pattern.
+     * @param pattern - The ObjectBindingOrAssignmentPattern to flatten.
+     * @param value - The current RHS value to assign to the element.
+     * @param location - The location to use for source maps and comments.
      */
     function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ObjectBindingOrAssignmentPattern, value: Expression, location: TextRange) {
         const elements = getElementsOfBindingOrAssignmentPattern(pattern);
@@ -359,11 +359,11 @@ namespace ts {
     /**
      * Flattens an ArrayBindingOrAssignmentPattern into zero or more bindings or assignments.
      *
-     * @param flattenContext Options used to control flattening.
-     * @param parent The parent element of the pattern.
-     * @param pattern The ArrayBindingOrAssignmentPattern to flatten.
-     * @param value The current RHS value to assign to the element.
-     * @param location The location to use for source maps and comments.
+     * @param flattenContext - Options used to control flattening.
+     * @param parent - The parent element of the pattern.
+     * @param pattern - The ArrayBindingOrAssignmentPattern to flatten.
+     * @param value - The current RHS value to assign to the element.
+     * @param location - The location to use for source maps and comments.
      */
     function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: TextRange) {
         const elements = getElementsOfBindingOrAssignmentPattern(pattern);
@@ -453,10 +453,10 @@ namespace ts {
     /**
      * Creates an expression used to provide a default value if a value is `undefined` at runtime.
      *
-     * @param flattenContext Options used to control flattening.
-     * @param value The RHS value to test.
-     * @param defaultValue The default value to use if `value` is `undefined` at runtime.
-     * @param location The location to use for source maps and comments.
+     * @param flattenContext - Options used to control flattening.
+     * @param value - The RHS value to test.
+     * @param defaultValue - The default value to use if `value` is `undefined` at runtime.
+     * @param location - The location to use for source maps and comments.
      */
     function createDefaultValueCheck(flattenContext: FlattenContext, value: Expression, defaultValue: Expression, location: TextRange): Expression {
         value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
@@ -467,11 +467,11 @@ namespace ts {
      * Creates either a PropertyAccessExpression or an ElementAccessExpression for the
      * right-hand side of a transformed destructuring assignment.
      *
-     * @link https://tc39.github.io/ecma262/#sec-runtime-semantics-keyeddestructuringassignmentevaluation
+     * {@link https://tc39.github.io/ecma262/#sec-runtime-semantics-keyeddestructuringassignmentevaluation}
      *
-     * @param flattenContext Options used to control flattening.
-     * @param value The RHS value that is the source of the property.
-     * @param propertyName The destructuring property name.
+     * @param flattenContext - Options used to control flattening.
+     * @param value - The RHS value that is the source of the property.
+     * @param propertyName - The destructuring property name.
      */
     function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
         if (isComputedPropertyName(propertyName)) {
@@ -493,11 +493,11 @@ namespace ts {
      * This function is useful to ensure that the expression's value can be read from in subsequent expressions.
      * Unless 'reuseIdentifierExpressions' is false, 'value' will be returned if it is just an identifier.
      *
-     * @param flattenContext Options used to control flattening.
-     * @param value the expression whose value needs to be bound.
-     * @param reuseIdentifierExpressions true if identifier expressions can simply be returned;
+     * @param flattenContext - Options used to control flattening.
+     * @param value - the expression whose value needs to be bound.
+     * @param reuseIdentifierExpressions - true if identifier expressions can simply be returned;
      * false if it is necessary to always emit an identifier.
-     * @param location The location to use for source maps and comments.
+     * @param location - The location to use for source maps and comments.
      */
     function ensureIdentifier(flattenContext: FlattenContext, value: Expression, reuseIdentifierExpressions: boolean, location: TextRange) {
         if (isIdentifier(value) && reuseIdentifierExpressions) {

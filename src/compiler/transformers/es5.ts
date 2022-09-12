@@ -3,7 +3,7 @@ namespace ts {
     /**
      * Transforms ES5 syntax into ES3 syntax.
      *
-     * @param context Context and state information for the transformation.
+     * @param context - Context and state information for the transformation.
      */
     export function transformES5(context: TransformationContext) {
         const { factory } = context;
@@ -30,7 +30,7 @@ namespace ts {
         /**
          * Transforms an ES5 source file to ES3.
          *
-         * @param node A SourceFile
+         * @param node - A SourceFile
          */
         function transformSourceFile(node: SourceFile) {
             return node;
@@ -39,9 +39,9 @@ namespace ts {
         /**
          * Called by the printer just before a node is printed.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emitCallback A callback used to emit the node.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to emit.
+         * @param emitCallback - A callback used to emit the node.
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (emitContext: EmitHint, node: Node) => void) {
             switch (node.kind) {
@@ -59,8 +59,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to substitute.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             if (node.id && noSubstitution && noSubstitution[node.id]) {
@@ -80,7 +80,7 @@ namespace ts {
         /**
          * Substitutes a PropertyAccessExpression whose name is a reserved word.
          *
-         * @param node A PropertyAccessExpression
+         * @param node - A PropertyAccessExpression
          */
         function substitutePropertyAccessExpression(node: PropertyAccessExpression): Expression {
             if (isPrivateIdentifier(node.name)) {
@@ -96,7 +96,7 @@ namespace ts {
         /**
          * Substitutes a PropertyAssignment whose name is a reserved word.
          *
-         * @param node A PropertyAssignment
+         * @param node - A PropertyAssignment
          */
         function substitutePropertyAssignment(node: PropertyAssignment): PropertyAssignment {
             const literalName = isIdentifier(node.name) && trySubstituteReservedName(node.name);
@@ -109,7 +109,7 @@ namespace ts {
         /**
          * If an identifier name is a reserved word, returns a string literal for the name.
          *
-         * @param name An Identifier
+         * @param name - An Identifier
          */
         function trySubstituteReservedName(name: Identifier) {
             const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(idText(name)) : undefined);

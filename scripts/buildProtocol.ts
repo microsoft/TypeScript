@@ -124,7 +124,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
 
     /**
      * 1st pass - generate a program from protocol.ts and typescriptservices.d.ts and emit core version of protocol.d.ts with all internal members stripped
-     * @return text of protocol.d.t.s
+     * @returns text of protocol.d.t.s
      */
     function getInitialDtsFileForProtocol() {
         const program = ts.createProgram([protocolTs, typeScriptServicesDts, path.join(typeScriptServicesDts, "../lib.es5.d.ts")], options);

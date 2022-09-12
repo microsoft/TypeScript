@@ -969,11 +969,15 @@ namespace ts.Completions.StringCompletions {
      * for completions.
      * For example, this matches
      *
+     * ```
      * /// <reference path="fragment
+     * ```
      *
      * but not
      *
+     * ```
      * /// <reference path="fragment"
+     * ```
      */
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 

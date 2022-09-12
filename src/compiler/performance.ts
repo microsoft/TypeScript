@@ -50,7 +50,7 @@ namespace ts.performance {
     /**
      * Marks a performance event.
      *
-     * @param markName The name of the mark.
+     * @param markName - The name of the mark.
      */
     export function mark(markName: string) {
         if (enabled) {
@@ -64,10 +64,10 @@ namespace ts.performance {
     /**
      * Adds a performance measurement with the specified name.
      *
-     * @param measureName The name of the performance measurement.
-     * @param startMarkName The name of the starting mark. If not supplied, the point at which the
+     * @param measureName - The name of the performance measurement.
+     * @param startMarkName - The name of the starting mark. If not supplied, the point at which the
      *      profiler was enabled is used.
-     * @param endMarkName The name of the ending mark. If not supplied, the current timestamp is
+     * @param endMarkName - The name of the ending mark. If not supplied, the current timestamp is
      *      used.
      */
     export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
@@ -83,7 +83,7 @@ namespace ts.performance {
     /**
      * Gets the number of times a marker was encountered.
      *
-     * @param markName The name of the mark.
+     * @param markName - The name of the mark.
      */
     export function getCount(markName: string) {
         return counts.get(markName) || 0;
@@ -92,7 +92,7 @@ namespace ts.performance {
     /**
      * Gets the total duration of all measurements with the supplied name.
      *
-     * @param measureName The name of the measure whose durations should be accumulated.
+     * @param measureName - The name of the measure whose durations should be accumulated.
      */
     export function getDuration(measureName: string) {
         return durations.get(measureName) || 0;
@@ -101,7 +101,7 @@ namespace ts.performance {
     /**
      * Iterate over each measure, performing some action
      *
-     * @param cb The action to perform for each measure
+     * @param cb - The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
         durations.forEach((duration, measureName) => cb(measureName, duration));

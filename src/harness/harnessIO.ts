@@ -1180,7 +1180,7 @@ namespace Harness {
             symlinks?: vfs.FileSet;
         }
 
-        /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
+        /** Given a test file containing `// @FileName` directives, return an array of named units of code to be added to an existing compiler instance */
         export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string, settings = extractCompilerSettings(code)): TestCaseContent {
             // List of all the subfiles we've parsed out
             const testUnitData: TestUnitData[] = [];

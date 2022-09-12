@@ -330,10 +330,10 @@ namespace ts {
      * The temporary variable `<temp>` is injected so that `++` and `--` work uniformly with `number` and `bigint`.
      * The result of the expression is always the final result of incrementing or decrementing the expression, so that it can be used for storage.
      *
-     * @param factory {@link NodeFactory} used to create the expanded representation.
-     * @param node The original prefix or postfix unary node.
-     * @param expression The expression to use as the value to increment or decrement
-     * @param resultVariable A temporary variable in which to store the result. Pass `undefined` if the result is discarded, or if the value of `<temp>` is the expected result.
+     * @param factory - {@link NodeFactory} used to create the expanded representation.
+     * @param node - The original prefix or postfix unary node.
+     * @param expression - The expression to use as the value to increment or decrement
+     * @param resultVariable - A temporary variable in which to store the result. Pass `undefined` if the result is discarded, or if the value of `<temp>` is the expected result.
      */
     export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
         const operator = node.operator;
@@ -1029,8 +1029,8 @@ namespace ts {
     namespace BinaryExpressionState {
         /**
          * Handles walking into a `BinaryExpression`.
-         * @param machine State machine handler functions
-         * @param frame The current frame
+         * @param machine - State machine handler functions
+         * @param frame - The current frame
          * @returns The new frame
          */
         export function enter<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, outerState: TOuterState): number {
@@ -1043,8 +1043,8 @@ namespace ts {
 
         /**
          * Handles walking the `left` side of a `BinaryExpression`.
-         * @param machine State machine handler functions
-         * @param frame The current frame
+         * @param machine - State machine handler functions
+         * @param frame - The current frame
          * @returns The new frame
          */
         export function left<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
@@ -1061,8 +1061,8 @@ namespace ts {
 
         /**
          * Handles walking the `operatorToken` of a `BinaryExpression`.
-         * @param machine State machine handler functions
-         * @param frame The current frame
+         * @param machine - State machine handler functions
+         * @param frame - The current frame
          * @returns The new frame
          */
         export function operator<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
@@ -1075,8 +1075,8 @@ namespace ts {
 
         /**
          * Handles walking the `right` side of a `BinaryExpression`.
-         * @param machine State machine handler functions
-         * @param frame The current frame
+         * @param machine - State machine handler functions
+         * @param frame - The current frame
          * @returns The new frame
          */
         export function right<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
@@ -1093,8 +1093,8 @@ namespace ts {
 
         /**
          * Handles walking out of a `BinaryExpression`.
-         * @param machine State machine handler functions
-         * @param frame The current frame
+         * @param machine - State machine handler functions
+         * @param frame - The current frame
          * @returns The new frame
          */
         export function exit<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, _outerState: TOuterState): number {
@@ -1176,11 +1176,11 @@ namespace ts {
 
     /**
      * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
-     * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
-     * @param onLeft Callback evaluated when walking the left side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the right side.
-     * @param onRight Callback evaluated when walking the right side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the end of the node.
-     * @param onExit Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
-     * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
+     * @param onEnter - Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
+     * @param onLeft - Callback evaluated when walking the left side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the right side.
+     * @param onRight - Callback evaluated when walking the right side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the end of the node.
+     * @param onExit - Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
+     * @param foldState - Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
      * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
      */
      export function createBinaryExpressionTrampoline<TState, TResult>(
@@ -1193,11 +1193,11 @@ namespace ts {
     ): (node: BinaryExpression) => TResult;
     /**
      * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
-     * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
-     * @param onLeft Callback evaluated when walking the left side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the right side.
-     * @param onRight Callback evaluated when walking the right side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the end of the node.
-     * @param onExit Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
-     * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
+     * @param onEnter - Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
+     * @param onLeft - Callback evaluated when walking the left side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the right side.
+     * @param onRight - Callback evaluated when walking the right side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the end of the node.
+     * @param onExit - Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
+     * @param foldState - Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
      * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
      */
     export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
@@ -1299,19 +1299,19 @@ namespace ts {
 
     /**
      * Formats a generated name.
-     * @param privateName When `true`, inserts a `#` character at the start of the result.
-     * @param prefix The prefix (if any) to include before the base name.
-     * @param baseName The base name for the generated name.
-     * @param suffix The suffix (if any) to include after the base name.
+     * @param privateName - When `true`, inserts a `#` character at the start of the result.
+     * @param prefix - The prefix (if any) to include before the base name.
+     * @param baseName - The base name for the generated name.
+     * @param suffix - The suffix (if any) to include after the base name.
      */
     export function formatGeneratedName(privateName: boolean, prefix: string | undefined, baseName: string, suffix: string | undefined): string;
     /**
      * Formats a generated name.
-     * @param privateName When `true`, inserts a `#` character at the start of the result.
-     * @param prefix The prefix (if any) to include before the base name.
-     * @param baseName The base name for the generated name.
-     * @param suffix The suffix (if any) to include after the base name.
-     * @param generateName Called to format the source node of {@link prefix} when it is a {@link GeneratedNamePart}.
+     * @param privateName - When `true`, inserts a `#` character at the start of the result.
+     * @param prefix - The prefix (if any) to include before the base name.
+     * @param baseName - The base name for the generated name.
+     * @param suffix - The suffix (if any) to include after the base name.
+     * @param generateName - Called to format the source node of {@link prefix} when it is a {@link GeneratedNamePart}.
      */
     export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
     export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {

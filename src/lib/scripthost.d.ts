@@ -76,7 +76,7 @@ interface TextStreamReader extends TextStreamBase {
     /**
      * Skips a specified number of characters when reading from an input text stream.
      * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
-     * @param characters Positive number of characters to skip forward. (Backward skipping is not supported.)
+     * @param characters - Positive number of characters to skip forward. (Backward skipping is not supported.)
      */
     Skip(characters: number): void;
 
@@ -175,8 +175,8 @@ declare var WScript: {
 
     /**
      * Creates a COM object.
-     * @param strProgiID
-     * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
+     * @param strProgID -
+     * @param strPrefix - Function names in the form prefix_event will be bound to this object's COM events.
      */
     CreateObject(strProgID: string, strPrefix?: string): any;
 
@@ -187,16 +187,16 @@ declare var WScript: {
 
     /**
      * Retrieves an existing object with the specified ProgID from memory, or creates a new one from a file.
-     * @param strPathname Fully qualified path to the file containing the object persisted to disk.
+     * @param strPathname - Fully qualified path to the file containing the object persisted to disk.
      *                       For objects in memory, pass a zero-length string.
-     * @param strProgID
-     * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
+     * @param strProgID -
+     * @param strPrefix - Function names in the form prefix_event will be bound to this object's COM events.
      */
     GetObject(strPathname: string, strProgID?: string, strPrefix?: string): any;
 
     /**
      * Suspends script execution for a specified length of time, then continues execution.
-     * @param intTime Interval (in milliseconds) to suspend script execution.
+     * @param intTime - Interval (in milliseconds) to suspend script execution.
      */
     Sleep(intTime: number): void;
 };
@@ -266,13 +266,13 @@ interface VBArray<T = any> {
 
     /**
      * Returns the smallest available index for a given dimension.
-     * @param dimension 1-based dimension (defaults to 1)
+     * @param dimension - 1-based dimension (defaults to 1)
      */
     lbound(dimension?: number): number;
 
     /**
      * Returns the largest available index for a given dimension.
-     * @param dimension 1-based dimension (defaults to 1)
+     * @param dimension - 1-based dimension (defaults to 1)
      */
     ubound(dimension?: number): number;
 

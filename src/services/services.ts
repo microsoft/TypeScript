@@ -598,7 +598,7 @@ namespace ts {
 
     /**
      * Returns whether or not the given node has a JSDoc "inheritDoc" tag on it.
-     * @param node the Node in question.
+     * @param node - the Node in question.
      * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
      */
     function hasJSDocInheritDocTag(node: Node) {
@@ -2784,7 +2784,7 @@ namespace ts {
     }
 
     /**
-     * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
+     * Returns the containing object literal property declaration given a possible name node, e.g. "a" in `x = { "a": 1 }`
      */
     /* @internal */
     export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {

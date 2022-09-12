@@ -86,7 +86,7 @@ namespace ts {
         /**
          * Creates a `require()` call to import an external module.
          *
-         * @param importNode The declaration to import.
+         * @param importNode - The declaration to import.
          */
          function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
             const moduleName = getExternalModuleNameLiteral(factory, importNode, Debug.checkDefined(currentSourceFile), host, resolver, compilerOptions);
@@ -137,7 +137,7 @@ namespace ts {
         /**
          * Visits an ImportEqualsDeclaration node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
@@ -230,9 +230,9 @@ namespace ts {
         /**
          * Hook for node emit.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to emit.
+         * @param emit - A callback used to emit the node in the printer.
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (isSourceFile(node)) {
@@ -254,8 +254,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to substitute.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);

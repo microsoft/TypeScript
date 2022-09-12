@@ -1092,7 +1092,7 @@ namespace ts.server {
 
         /**
          * Updates set of files that contribute to this project
-         * @returns: true if set of files in the project stays the same and false - otherwise.
+         * @returns true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
             tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
@@ -2453,7 +2453,7 @@ namespace ts.server {
 
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
-         * @returns: true if set of files in the project stays the same and false - otherwise.
+         * @returns true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
             const isInitialLoad = this.isInitialLoadPending();

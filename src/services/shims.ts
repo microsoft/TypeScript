@@ -43,7 +43,9 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         *   { span: { start: number; length: number }; newLength: number }
+         * ```
+         * { span: { start: number; length: number }; newLength: number }
+         * ```
          *
          * Or undefined value if there was no change.
          */
@@ -97,7 +99,7 @@ namespace ts {
         /**
          * Returns a JSON-encoded value of the type: string[]
          *
-         * @param exclude A JSON encoded string[] containing the paths to exclude
+         * @param exclude - A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
         readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
@@ -163,20 +165,26 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
+         * ```
          */
         getRenameInfo(fileName: string, position: number, preferences: UserPreferences): string;
         getSmartSelectionRange(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { fileName: string, textSpan: { start: number, length: number } }[]
+         * ```
          */
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string;
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
+         * ```
          *
          * Or undefined value if no definition can be found.
          */
@@ -186,7 +194,9 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
+         * ```
          *
          * Or undefined value if no definition can be found.
          */
@@ -194,53 +204,69 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { fileName: string; textSpan: { start: number; length: number}; }[]
+         * ```
          */
         getImplementationAtPosition(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
+         * ```
          */
         getReferencesAtPosition(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { definition: <encoded>; references: <encoded>[] }[]
+         * ```
          */
         findReferences(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
+         * ```
          */
         getFileReferences(fileName: string): string;
 
         /**
          * @deprecated
          * Returns a JSON-encoded value of the type:
+         * ```
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
+         * ```
          */
         getOccurrencesAtPosition(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { fileName: string; highlights: { start: number; length: number }[] }[]
+         * ```
          *
-         * @param fileToSearch A JSON encoded string[] containing the file names that should be
+         * @param fileToSearch - A JSON encoded string[] containing the file names that should be
          *  considered when searching.
          */
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
+         * ```
          */
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { text: string; kind: string; kindModifiers: string; bolded: boolean; grayed: boolean; indent: number; spans: { start: number; length: number; }[]; childItems: <recursive use of this type>[] } [] = [];
+         * ```
          */
         getNavigationBarItems(fileName: string): string;
 
@@ -249,7 +275,9 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * ```
          * { textSpan: { start: number, length: number }; hintSpan: { start: number, length: number }; bannerText: string; autoCollapse: boolean } [] = [];
+         * ```
          */
         getOutliningSpans(fileName: string): string;
 

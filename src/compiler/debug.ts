@@ -99,8 +99,8 @@ namespace ts {
         /**
          * Tests whether an assertion function should be executed. If it shouldn't, it is cached and replaced with `ts.noop`.
          * Replaced assertion functions are restored when `Debug.setAssertionLevel` is set to a high enough level.
-         * @param level The minimum assertion level required.
-         * @param name The name of the current assertion function.
+         * @param level - The minimum assertion level required.
+         * @param name - The name of the current assertion function.
          */
         function shouldAssertFunction<K extends AssertionKeys>(level: AssertionLevel, name: K): boolean {
             if (!shouldAssert(level)) {

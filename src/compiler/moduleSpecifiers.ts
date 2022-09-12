@@ -523,12 +523,14 @@ namespace ts.moduleSpecifiers {
 
         // the module could be a namespace, which is export through "export=" from an ambient module.
         /**
+         * ```
          * declare module "m" {
          *     namespace ns {
          *         class c {}
          *     }
          *     export = ns;
          * }
+         * ```
          */
         // `import {c} from "m";` is valid, in which case, `moduleSymbol` is "ns", but the module name should be "m"
         const ambientModuleDeclareCandidates = mapDefined(moduleSymbol.declarations,

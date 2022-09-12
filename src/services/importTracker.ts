@@ -353,7 +353,7 @@ namespace ts.FindAllReferences {
     export type ModuleReference =
         /** "import" also includes require() calls. */
         | { kind: "import", literal: StringLiteralLike }
-        /** <reference path> or <reference types> */
+        /** `<reference path>` or `<reference types>` */
         | { kind: "reference", referencingFile: SourceFile, ref: FileReference };
     export function findModuleReferences(program: Program, sourceFiles: readonly SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
         const refs: ModuleReference[] = [];
@@ -458,7 +458,7 @@ namespace ts.FindAllReferences {
      * If at an import, look locally for the symbol it imports.
      * If at an export, look for all imports of it.
      * This doesn't handle export specifiers; that is done in `getReferencesAtExportSpecifier`.
-     * @param comingFromExport If we are doing a search for all exports, don't bother looking backwards for the imported symbol, since that's the reason we're here.
+     * @param comingFromExport - If we are doing a search for all exports, don't bother looking backwards for the imported symbol, since that's the reason we're here.
      */
     export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: TypeChecker, comingFromExport: boolean): ImportedSymbol | ExportedSymbol | undefined {
         return comingFromExport ? getExport() : getExport() || getImport();

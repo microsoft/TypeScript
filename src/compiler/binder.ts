@@ -2996,7 +2996,7 @@ namespace ts {
             }
         }
 
-        /** For `x.prototype = { p, ... }`, declare members p,... if `x` is function/class/{}, or not declared. */
+        /** For `x.prototype = { p, ... }`, declare members p,... if `x` is function/class/`{}`, or not declared. */
         function bindPrototypeAssignment(node: BindableStaticPropertyAssignmentExpression) {
             setParent(node.left, node);
             setParent(node.right, node);
@@ -3067,8 +3067,8 @@ namespace ts {
         }
 
         /**
-         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function (or IIFE) or class or {}, or not declared.
-         * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
+         * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function (or IIFE) or class or `{}`, or not declared.
+         * Also works for expression statements preceded by JSDoc, like `/ ** @type number * / x.y`;
          */
         function bindStaticPropertyAssignment(node: BindableStaticNameExpression) {
             Debug.assert(!isIdentifier(node));

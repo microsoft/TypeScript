@@ -65,7 +65,7 @@ namespace ts {
         /**
          * Transform JSX-specific syntax in a SourceFile.
          *
-         * @param node A SourceFile node.
+         * @param node - A SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {

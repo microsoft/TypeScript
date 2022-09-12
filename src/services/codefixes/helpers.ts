@@ -3,8 +3,8 @@ namespace ts.codefix {
     /**
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
-     * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
-     * @param importAdder If provided, type annotations will use identifier type references instead of ImportTypeNodes, and the missing imports will be added to the importAdder.
+     * @param possiblyMissingSymbols - The collection of symbols to filter and then get insertions for.
+     * @param importAdder - If provided, type annotations will use identifier type references instead of ImportTypeNodes, and the missing imports will be added to the importAdder.
      * @returns Empty string iff there are no member insertions.
      */
     export function createMissingMemberNodes(
@@ -45,7 +45,7 @@ namespace ts.codefix {
 
     /**
      * `addClassElement` will not be called if we can't figure out a representation for `symbol` in `enclosingDeclaration`.
-     * @param body If defined, this will be the body of the member node passed to `addClassElement`. Otherwise, the body will default to a stub.
+     * @param body - If defined, this will be the body of the member node passed to `addClassElement`. Otherwise, the body will default to a stub.
      */
     export function addNewNodeForMemberSymbol(
         symbol: Symbol,
@@ -70,11 +70,11 @@ namespace ts.codefix {
          * `MappedIndirect.ax` and `MappedIndirect.ay` have no declaration node attached (due to their mapped-type
          * parent):
          *
-         * >>> ```ts
-         * >>> type Base = { ax: number; ay: string };
-         * >>> type BaseKeys = keyof Base;
-         * >>> type MappedIndirect = { [K in BaseKeys]: boolean };
-         * >>> ```
+         * ```ts
+         * type Base = { ax: number; ay: string };
+         * type BaseKeys = keyof Base;
+         * type MappedIndirect = { [K in BaseKeys]: boolean };
+         * ```
          *
          * In such cases, we assume the declaration to be a `PropertySignature`.
          */
@@ -698,7 +698,7 @@ namespace ts.codefix {
     }
 
     /**
-     * Given a type node containing 'import("./a").SomeType<import("./b").OtherType<...>>',
+     * Given a type node containing `import("./a").SomeType<import("./b").OtherType<...>>`,
      * returns an equivalent type reference node with any nested ImportTypeNodes also replaced
      * with type references, and a list of symbols that must be imported to use the type reference.
      */

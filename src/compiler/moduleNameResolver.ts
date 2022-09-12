@@ -280,7 +280,7 @@ namespace ts {
     }
 
     /**
-     * Returns the path to every node_modules/@types directory from some ancestor directory.
+     * Returns the path to every node_modules/`@types` directory from some ancestor directory.
      * Returns undefined if there are none.
      */
     function getDefaultTypeRoots(currentDirectory: string, host: { directoryExists?: (directoryName: string) => boolean }): string[] | undefined {
@@ -307,7 +307,7 @@ namespace ts {
     }
 
     /**
-     * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
+     * @param containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
      * is assumed to be the same as root directory of the project.
      */
@@ -577,7 +577,7 @@ namespace ts {
     }
 
     /**
-     * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
+     * Stored map from non-relative module name to a table: directory to result of module lookup in this directory
      * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
      */
     export interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCache {
@@ -848,9 +848,9 @@ namespace ts {
             }
 
             /**
-             * At first this function add entry directory -> module resolution result to the table.
+             * At first this function add entry directory -\> module resolution result to the table.
              * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
-             * and for every parent folder in set it adds entry: parent -> module resolution. .
+             * and for every parent folder in set it adds entry: parent -\> module resolution. .
              * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
              * Set of parent folders that should have the same result will be:
              * [
@@ -1075,12 +1075,14 @@ namespace ts {
      * - paths - this setting can only be used when baseUrl is specified. allows to tune how non-relative module names
      * will be resolved based on the content of the module name.
      * Structure of 'paths' compiler options
+     * ```
      * 'paths': {
      *    pattern-1: [...substitutions],
      *    pattern-2: [...substitutions],
      *    ...
      *    pattern-n: [...substitutions]
      * }
+     * ```
      * Pattern here is a string that can contain zero or one '*' character. During module resolution module name will be matched against
      * all patterns in the list. Matching for patterns that don't contain '*' means that module name must be equal to pattern respecting the case.
      * If pattern contains '*' then to match pattern "<prefix>*<suffix>" module name must start with the <prefix> and end with <suffix>.
@@ -1093,6 +1095,7 @@ namespace ts {
      * will be converted to absolute using baseUrl.
      * For example:
      * baseUrl: /a/b/c
+     * ```
      * "paths": {
      *     // match all module names
      *     "*": [
@@ -1106,13 +1109,14 @@ namespace ts {
      *     "components/*": [ "/root/components/*" ] // substitution will convert /components/folder1/<matched name> to '/root/components/folder1/<matched name>',
      *                                              // it is rooted so it will be final candidate location
      * }
+     * ```
      *
      * 'rootDirs' allows the project to be spreaded across multiple locations and resolve modules with relative names as if
      * they were in the same location. For example lets say there are two files
      * '/local/src/content/file1.ts'
      * '/shared/components/contracts/src/content/protocols/file2.ts'
      * After bundling content of '/shared/components/contracts/src' will be merged with '/local/src' so
-     * if file1 has the following import 'import {x} from "./protocols/file2"' it will be resolved successfully in runtime.
+     * if file1 has the following import `import {x} from "./protocols/file2"` it will be resolved successfully in runtime.
      * 'rootDirs' provides the way to tell compiler that in order to get the whole project it should behave as if content of all
      * root dirs were merged together.
      * I.e. for the example above 'rootDirs' will have two entries: [ '/local/src', '/shared/components/contracts/src' ].
@@ -1505,7 +1509,7 @@ namespace ts {
      * packageDirectory is the directory of the package itself.
      *   For `blah/node_modules/foo/index.d.ts` this is packageDirectory: "foo"
      *   For `/node_modules/foo/bar.d.ts` this is packageDirectory: "foo"
-     *   For `/node_modules/@types/foo/bar/index.d.ts` this is packageDirectory: "@types/foo"
+     *   For `/node_modules/@types/foo/bar/index.d.ts` this is packageDirectory: `"@types/foo"`
      *   For `/node_modules/foo/bar/index.d.ts` this is packageDirectory: "foo"
      */
     /* @internal */
@@ -1534,7 +1538,7 @@ namespace ts {
     }
 
     /**
-     * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
+     * @param onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
@@ -2670,14 +2674,14 @@ namespace ts {
      * However this does not allow us to represent final result that should be used instead of further searching (i.e. a final result that was found in cache).
      * SearchResult is used to deal with this issue, its values represents following outcomes:
      * - undefined - not found, continue searching
-     * - { value: undefined } - not found - stop searching
-     * - { value: <some-value> } - found - stop searching
+     * - `{ value: undefined }` - not found - stop searching
+     * - `{ value: <some-value> }` - found - stop searching
      */
     type SearchResult<T> = { value: T | undefined } | undefined;
 
     /**
      * Wraps value to SearchResult.
-     * @returns undefined if value is undefined or { value } otherwise
+     * @returns undefined if value is undefined or `{ value }` otherwise
      */
     function toSearchResult<T>(value: T | undefined): SearchResult<T> {
         return value !== undefined ? { value } : undefined;

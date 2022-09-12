@@ -973,7 +973,7 @@ namespace ts {
         }
 
         /**
-         * @param optionKey key of CommandLineOption to use to determine if the option should be serialized in tsbuildinfo
+         * @param optionKey - key of CommandLineOption to use to determine if the option should be serialized in tsbuildinfo
          */
         function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions, optionKey: "affectsBundleEmitBuildInfo" | "affectsMultiFileEmitBuildInfo") {
             let result: CompilerOptions | undefined;

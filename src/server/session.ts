@@ -487,11 +487,11 @@ namespace ts.server {
     }
 
     /**
-     * @param projects Projects initially known to contain {@link initialLocation}
-     * @param defaultProject The default project containing {@link initialLocation}
-     * @param initialLocation Where the search operation was triggered
-     * @param getResultsForPosition This is where you plug in `findReferences`, `renameLocation`, etc
-     * @param forPositionInResult Given an item returned by {@link getResultsForPosition} enumerate the positions referred to by that result
+     * @param projects - Projects initially known to contain {@link initialLocation}
+     * @param defaultProject - The default project containing {@link initialLocation}
+     * @param initialLocation - Where the search operation was triggered
+     * @param getResultsForPosition - This is where you plug in `findReferences`, `renameLocation`, etc
+     * @param forPositionInResult - Given an item returned by {@link getResultsForPosition} enumerate the positions referred to by that result
      * @returns In the common case where there's only one project, returns an array of results from {@link getResultsForPosition}.
      * If multiple projects were searched - even if they didn't return results - the result will be a map from project to per-project results.
      */
@@ -1002,8 +1002,7 @@ namespace ts.server {
             this.send(toEvent(eventName, body));
         }
 
-        // For backwards-compatibility only.
-        /** @deprecated */
+        /** @deprecated For backwards-compatibility only. */
         public output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void {
             this.doOutput(info, cmdName, reqSeq!, /*success*/ !errorMsg, errorMsg); // TODO: GH#18217
         }
@@ -1846,8 +1845,8 @@ namespace ts.server {
         }
 
         /**
-         * @param fileName is the name of the file to be opened
-         * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
+         * @param fileName - is the name of the file to be opened
+         * @param fileContent - is a version of the file content that is known to be more up to date than the one on disk
          */
         private openClientFile(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: NormalizedPath) {
             this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath);

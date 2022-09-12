@@ -517,8 +517,8 @@ namespace ts {
      * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
      * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
      * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
-     * @param file File to fetch the resolution mode within
-     * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+     * @param file - File to fetch the resolution mode within
+     * @param index - Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
      */
     export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     /** @internal */
@@ -547,8 +547,8 @@ namespace ts {
      * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
      * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
      * `moduleResolution` is `node16`+.
-     * @param file The file the import or import-like reference is contained within
-     * @param usage The module reference string
+     * @param file - The file the import or import-like reference is contained within
+     * @param usage - The module reference string
      * @returns The final resolution mode of the import
      */
     export function getModeForUsageLocation(file: {impliedNodeFormat?: SourceFile["impliedNodeFormat"]}, usage: StringLiteralLike) {
@@ -836,10 +836,10 @@ namespace ts {
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
      * `options` parameter.
      *
-     * @param fileName The normalized absolute path to check the format of (it need not exist on disk)
-     * @param [packageJsonInfoCache] A cache for package file lookups - it's best to have a cache when this function is called often
-     * @param host The ModuleResolutionHost which can perform the filesystem lookups for package json data
-     * @param options The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`
+     * @param fileName - The normalized absolute path to check the format of (it need not exist on disk)
+     * @param packageJsonInfoCache - A cache for package file lookups - it's best to have a cache when this function is called often
+     * @param host - The ModuleResolutionHost which can perform the filesystem lookups for package json data
+     * @param options - The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`
      * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
      */
     export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
@@ -997,7 +997,7 @@ namespace ts {
      * that represent a compilation unit.
      *
      * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
-     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     * triple-slash-reference-path directives transitively. `@types` and triple-slash-reference-types are also pulled in.
      *
      * @param createProgramOptions - The options for creating a program.
      * @returns A 'Program' object.
@@ -1008,7 +1008,7 @@ namespace ts {
      * that represent a compilation unit.
      *
      * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
-     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     * triple-slash-reference-path directives transitively. `@types` and triple-slash-reference-types are also pulled in.
      *
      * @param rootNames - A set of root files.
      * @param options - The compiler options which should be used.
@@ -4282,8 +4282,7 @@ namespace ts {
         };
     }
 
-    // For backward compatibility
-    /** @deprecated */ export interface ResolveProjectReferencePathHost {
+    /** @deprecated For backward compatibility */ export interface ResolveProjectReferencePathHost {
         fileExists(fileName: string): boolean;
     }
 
@@ -4311,7 +4310,7 @@ namespace ts {
      * Note: The file might not exist.
      */
     export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
-    /** @deprecated */ export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
+    /** @deprecated For backward compatibility */ export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
     export function resolveProjectReferencePath(hostOrRef: ResolveProjectReferencePathHost | ProjectReference, ref?: ProjectReference): ResolvedConfigFileName {
         const passedInRef = ref ? ref : hostOrRef as ProjectReference;
         return resolveConfigFileProjectName(passedInRef.path);

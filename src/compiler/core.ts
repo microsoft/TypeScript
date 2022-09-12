@@ -358,7 +358,7 @@ namespace ts {
     /**
      * Flattens an array containing a mix of array or non-array elements.
      *
-     * @param array The array to flatten.
+     * @param array - The array to flatten.
      */
     export function flatten<T>(array: T[][] | readonly (T | readonly T[] | undefined)[]): T[] {
         const result = [];
@@ -378,8 +378,8 @@ namespace ts {
     /**
      * Maps an array. If the mapped value is an array, it is spread into the result.
      *
-     * @param array The array to map.
-     * @param mapfn The callback used to map the result into one or more values.
+     * @param array - The array to map.
+     * @param mapfn - The callback used to map the result into one or more values.
      */
     export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
         let result: U[] | undefined;
@@ -449,8 +449,8 @@ namespace ts {
      * Maps an array. If the mapped value is an array, it is spread into the result.
      * Avoids allocation if all elements map to themselves.
      *
-     * @param array The array to map.
-     * @param mapfn The callback used to map the result into one or more values.
+     * @param array - The array to map.
+     * @param mapfn - The callback used to map the result into one or more values.
      */
     export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | readonly T[]): T[];
     export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[];
@@ -587,9 +587,9 @@ namespace ts {
     /**
      * Maps contiguous spans of values with the same key.
      *
-     * @param array The array to map.
-     * @param keyfn A callback used to select the key for an element.
-     * @param mapfn A callback used to map a contiguous chunk of values to a single value.
+     * @param array - The array to map.
+     * @param keyfn - A callback used to select the key for an element.
+     * @param mapfn - A callback used to map a contiguous chunk of values to a single value.
      */
     export function spanMap<T, K, U>(array: readonly T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[];
     export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[] | undefined;
@@ -733,8 +733,8 @@ namespace ts {
 
     /**
      * Deduplicates an unsorted array.
-     * @param equalityComparer An `EqualityComparer` used to determine if two values are duplicates.
-     * @param comparer An optional `Comparer` used to sort entries before comparison, though the
+     * @param equalityComparer - An `EqualityComparer` used to determine if two values are duplicates.
+     * @param comparer - An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
      */
     export function deduplicate<T>(array: readonly T[], equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
@@ -914,9 +914,9 @@ namespace ts {
     /**
      * Appends a value to an array, returning the array.
      *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * @param to - The array to which `value` is to be appended. If `to` is `undefined`, a new array
      * is created if `value` was appended.
-     * @param value The value to append to the array. If `value` is `undefined`, nothing is
+     * @param value - The value to append to the array. If `value` is `undefined`, nothing is
      * appended.
      */
     export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(to: TArray, value: TValue): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
@@ -964,12 +964,12 @@ namespace ts {
     /**
      * Appends a range of value to an array, returning the array.
      *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * @param to - The array to which `value` is to be appended. If `to` is `undefined`, a new array
      * is created if `value` was appended.
-     * @param from The values to append to the array. If `from` is `undefined`, nothing is
+     * @param from - The values to append to the array. If `from` is `undefined`, nothing is
      * appended. If an element of `from` is `undefined`, that element is not appended.
-     * @param start The offset in `from` at which to start copying values.
-     * @param end The offset in `from` at which to stop copying values (non-inclusive).
+     * @param start - The offset in `from` at which to start copying values.
+     * @param end - The offset in `from` at which to stop copying values (non-inclusive).
      */
     export function addRange<T>(to: T[], from: readonly T[] | undefined, start?: number, end?: number): T[];
     export function addRange<T>(to: T[] | undefined, from: readonly T[] | undefined, start?: number, end?: number): T[] | undefined;
@@ -987,7 +987,7 @@ namespace ts {
     }
 
     /**
-     * @return Whether the value was added.
+     * @returns Whether the value was added.
      */
     export function pushIfUnique<T>(array: T[], toAdd: T, equalityComparer?: EqualityComparer<T>): boolean {
         if (contains(array, toAdd, equalityComparer)) {
@@ -1149,12 +1149,12 @@ namespace ts {
      * Performs a binary search, finding the index at which `value` occurs in `array`.
      * If no such index is found, returns the 2's-complement of first index at which
      * `array[index]` exceeds `value`.
-     * @param array A sorted array whose first element must be no larger than number
-     * @param value The value to be searched for in the array.
-     * @param keySelector A callback used to select the search key from `value` and each element of
+     * @param array - A sorted array whose first element must be no larger than number
+     * @param value - The value to be searched for in the array.
+     * @param keySelector - A callback used to select the search key from `value` and each element of
      * `array`.
-     * @param keyComparer A callback used to compare two keys in a sorted array.
-     * @param offset An offset into `array` at which to start the search.
+     * @param keyComparer - A callback used to compare two keys in a sorted array.
+     * @param offset - An offset into `array` at which to start the search.
      */
     export function binarySearch<T, U>(array: readonly T[], value: T, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
         return binarySearchKey(array, keySelector(value), keySelector, keyComparer, offset);
@@ -1164,11 +1164,11 @@ namespace ts {
      * Performs a binary search, finding the index at which an object with `key` occurs in `array`.
      * If no such index is found, returns the 2's-complement of first index at which
      * `array[index]` exceeds `key`.
-     * @param array A sorted array whose first element must be no larger than number
-     * @param key The key to be searched for in the array.
-     * @param keySelector A callback used to select the search key from each element of `array`.
-     * @param keyComparer A callback used to compare two keys in a sorted array.
-     * @param offset An offset into `array` at which to start the search.
+     * @param array - A sorted array whose first element must be no larger than number
+     * @param key - The key to be searched for in the array.
+     * @param keySelector - A callback used to select the search key from each element of `array`.
+     * @param keyComparer - A callback used to compare two keys in a sorted array.
+     * @param offset - An offset into `array` at which to start the search.
      */
     export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: (v: T, i: number) => U, keyComparer: Comparer<U>, offset?: number): number {
         if (!some(array)) {
@@ -1226,8 +1226,8 @@ namespace ts {
     /**
      * Indicates whether a map-like contains an own property with the specified key.
      *
-     * @param map A map-like.
-     * @param key A property key.
+     * @param map - A map-like.
+     * @param key - A property key.
      */
     export function hasProperty(map: MapLike<any>, key: string): boolean {
         return hasOwnProperty.call(map, key);
@@ -1236,8 +1236,8 @@ namespace ts {
     /**
      * Gets the value of an owned property in a map-like.
      *
-     * @param map A map-like.
-     * @param key A property key.
+     * @param map - A map-like.
+     * @param key - A property key.
      */
     export function getProperty<T>(map: MapLike<T>, key: string): T | undefined {
         return hasOwnProperty.call(map, key) ? map[key] : undefined;
@@ -1327,8 +1327,8 @@ namespace ts {
     /**
      * Performs a shallow equality comparison of the contents of two map-likes.
      *
-     * @param left A map-like whose properties should be compared.
-     * @param right A map-like whose properties should be compared.
+     * @param left - A map-like whose properties should be compared.
+     * @param right - A map-like whose properties should be compared.
      */
     export function equalOwnProperties<T>(left: MapLike<T> | undefined, right: MapLike<T> | undefined, equalityComparer: EqualityComparer<T> = equateValues) {
         if (left === right) return true;
@@ -1352,8 +1352,8 @@ namespace ts {
     /**
      * Creates a map from the elements of an array.
      *
-     * @param array the array of input elements.
-     * @param makeKey a function that produces a key for a given element.
+     * @param array - the array of input elements.
+     * @param makeKey - a function that produces a key for a given element.
      *
      * This function makes no effort to avoid collisions; if any two elements produce
      * the same key with the given 'makeKey' function, then the element with the higher
@@ -1790,7 +1790,7 @@ namespace ts {
     // a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
     const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_\. ]+/g;
     /**
-     * Case insensitive file systems have descripencies in how they handle some characters (eg. turkish Upper case I with dot on top - \u0130)
+     * Case insensitive file systems have descripencies in how they handle some characters (eg. turkish Upper case I with dot on top - `\u0130`)
      * This function is used in places where we want to make file name as a key on these systems
      * It is possible on mac to be able to refer to file name with I with dot on top as a fileName with its lower case form
      * But on windows we cannot. Windows can have fileName with I with dot on top next to its lower case and they can not each be referred with the lowercase forms
@@ -1840,7 +1840,7 @@ namespace ts {
      * High-order function, composes functions. Note that functions are composed inside-out;
      * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
      *
-     * @param args The functions to compose.
+     * @param args - The functions to compose.
      */
     export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
     export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
@@ -2153,7 +2153,7 @@ namespace ts {
     function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
         let previous = new Array(s2.length + 1);
         let current = new Array(s2.length + 1);
-        /** Represents any value > max. We don't care about the particular value. */
+        /** Represents any `value > max`. We don't care about the particular value. */
         const big = max + 0.01;
 
         for (let i = 0; i <= s2.length; i++) {
@@ -2469,9 +2469,9 @@ namespace ts {
     /**
      * Returns string left-padded with spaces or zeros until it reaches the given length.
      *
-     * @param s String to pad.
-     * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
-     * @param padString Character to use as padding (default " ").
+     * @param s - String to pad.
+     * @param length - Final padded length. If less than or equal to 's.length', returns 's' unchanged.
+     * @param padString - Character to use as padding (default " ").
      */
     export function padLeft(s: string, length: number, padString: " " | "0" = " ") {
         return length <= s.length ? s : padString.repeat(length - s.length) + s;
@@ -2480,9 +2480,9 @@ namespace ts {
     /**
      * Returns string right-padded with spaces until it reaches the given length.
      *
-     * @param s String to pad.
-     * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
-     * @param padString Character to use as padding (default " ").
+     * @param s - String to pad.
+     * @param length - Final padded length. If less than or equal to 's.length', returns 's' unchanged.
+     * @param padString - Character to use as padding (default " ").
      */
     export function padRight(s: string, length: number, padString: " " = " ") {
         return length <= s.length ? s : s + padString.repeat(length - s.length);
@@ -2515,7 +2515,7 @@ namespace ts {
 
     /**
      * https://jsbench.me/gjkoxld4au/1
-     * The simple regex for this, /\s+$/g is O(n^2) in v8.
+     * The simple regex for this, `/\s+$/g` is O(n^2) in v8.
      * The native .trimEnd method is by far best, but since that's technically ES2019,
      * we provide a (still much faster than the simple regex) fallback.
      */

@@ -74,6 +74,7 @@
         "eslint-plugin-jsdoc": "^39.3.6",
         "eslint-plugin-local": "^1.0.0",
         "eslint-plugin-no-null": "^1.0.2",
+        "eslint-plugin-tsdoc": "^0.2.16",
         "fancy-log": "latest",
         "fs-extra": "^9.1.0",
         "glob": "latest",

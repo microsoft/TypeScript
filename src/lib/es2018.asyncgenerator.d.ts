@@ -11,12 +11,12 @@ interface AsyncGenerator<T = unknown, TReturn = any, TNext = unknown> extends As
 interface AsyncGeneratorFunction {
     /**
      * Creates a new AsyncGenerator object.
-     * @param args A list of arguments the function accepts.
+     * @param args - A list of arguments the function accepts.
      */
     new (...args: any[]): AsyncGenerator;
     /**
      * Creates a new AsyncGenerator object.
-     * @param args A list of arguments the function accepts.
+     * @param args - A list of arguments the function accepts.
      */
     (...args: any[]): AsyncGenerator;
     /**
@@ -36,12 +36,12 @@ interface AsyncGeneratorFunction {
 interface AsyncGeneratorFunctionConstructor {
     /**
      * Creates a new AsyncGenerator function.
-     * @param args A list of arguments the function accepts.
+     * @param args - A list of arguments the function accepts.
      */
     new (...args: string[]): AsyncGeneratorFunction;
     /**
      * Creates a new AsyncGenerator function.
-     * @param args A list of arguments the function accepts.
+     * @param args - A list of arguments the function accepts.
      */
     (...args: string[]): AsyncGeneratorFunction;
     /**

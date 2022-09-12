@@ -358,7 +358,7 @@ namespace ts {
          * While these represent the majority of syntax-related diagnostics, there are some
          * that require the type system, which will be present in `getSemanticDiagnostics`.
          *
-         * @param fileName A path to the file you want syntactic diagnostics for
+         * @param fileName - A path to the file you want syntactic diagnostics for
          */
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
 
@@ -375,7 +375,7 @@ namespace ts {
          * sentence: "The sun is green." is syntactically correct; those are real English words with
          * correct sentence structure. However, it is semantically invalid, because it is not true.
          *
-         * @param fileName A path to the file you want semantic diagnostics for
+         * @param fileName - A path to the file you want semantic diagnostics for
          */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
 
@@ -384,7 +384,7 @@ namespace ts {
          * proactively suggest refactors, as opposed to diagnostics that indicate
          * potentially incorrect runtime behavior.
          *
-         * @param fileName A path to the file you want semantic diagnostics for
+         * @param fileName - A path to the file you want semantic diagnostics for
          */
         getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
 
@@ -411,9 +411,9 @@ namespace ts {
          * Gets semantic highlights information for a particular file. Has two formats, an older
          * version used by VS and a format used by VS Code.
          *
-         * @param fileName The path to the file
-         * @param position A text span to return results within
-         * @param format Which format to use, defaults to "original"
+         * @param fileName - The path to the file
+         * @param position - A text span to return results within
+         * @param format - Which format to use, defaults to "original"
          * @returns a number array encoded as triples of [start, length, ClassificationType, ...].
          */
         getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications;
@@ -421,24 +421,24 @@ namespace ts {
         /**
          * Gets completion entries at a particular position in a file.
          *
-         * @param fileName The path to the file
-         * @param position A zero-based index of the character where you want the entries
-         * @param options An object describing how the request was triggered and what kinds
+         * @param fileName - The path to the file
+         * @param position - A zero-based index of the character where you want the entries
+         * @param options - An object describing how the request was triggered and what kinds
          * of code actions can be returned with the completions.
-         * @param formattingSettings settings needed for calling formatting functions.
+         * @param formattingSettings - settings needed for calling formatting functions.
          */
         getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfo> | undefined;
 
         /**
          * Gets the extended details for a completion entry retrieved from `getCompletionsAtPosition`.
          *
-         * @param fileName The path to the file
-         * @param position A zero based index of the character where you want the entries
-         * @param entryName The `name` from an existing completion which came from `getCompletionsAtPosition`
-         * @param formatOptions How should code samples in the completions be formatted, can be undefined for backwards compatibility
-         * @param source `source` property from the completion entry
-         * @param preferences User settings, can be undefined for backwards compatibility
-         * @param data `data` property from the completion entry
+         * @param fileName - The path to the file
+         * @param position - A zero based index of the character where you want the entries
+         * @param entryName - The `name` from an existing completion which came from `getCompletionsAtPosition`
+         * @param formatOptions - How should code samples in the completions be formatted, can be undefined for backwards compatibility
+         * @param source - `source` property from the completion entry
+         * @param preferences - User settings, can be undefined for backwards compatibility
+         * @param data - `data` property from the completion entry
          */
         getCompletionEntryDetails(
             fileName: string,
@@ -456,8 +456,8 @@ namespace ts {
          * Gets semantic information about the identifier at a particular position in a
          * file. Quick info is what you typically see when you hover in an editor.
          *
-         * @param fileName The path to the file
-         * @param position A zero-based index of the character where you want the quick info
+         * @param fileName - The path to the file
+         * @param position - A zero-based index of the character where you want the quick info
          */
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
 
@@ -491,7 +491,7 @@ namespace ts {
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
 
-        /** @deprecated */
+        /** @deprecated Use document highlights. */
         getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
 
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
@@ -1214,7 +1214,7 @@ namespace ts {
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
-         * In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
          * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
          * must be used to commit that completion entry.
          */
@@ -1392,9 +1392,9 @@ namespace ts {
          * syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
          * lexical, syntactic, and semantic classifiers may issue the best user experience.
          *
-         * @param text                      The text of a line to classify.
-         * @param lexState                  The state of the lexical classifier at the end of the previous line.
-         * @param syntacticClassifierAbsent Whether the client is *not* using a syntactic classifier.
+         * @param text - The text of a line to classify.
+         * @param lexState - The state of the lexical classifier at the end of the previous line.
+         * @param syntacticClassifierAbsent - Whether the client is *not* using a syntactic classifier.
          *                                  If there is no syntactic classifier (syntacticClassifierAbsent=true),
          *                                  certain heuristics may be used in its place; however, if there is a
          *                                  syntactic classifier (syntacticClassifierAbsent=false), certain
@@ -1417,28 +1417,54 @@ namespace ts {
         /** top level script node */
         scriptElement = "script",
 
-        /** module foo {} */
+        /**
+         * ```
+         * module foo {}
+         * ```
+         */
         moduleElement = "module",
 
-        /** class X {} */
+        /**
+         * ```
+         * class X {}
+         * ```
+         */
         classElement = "class",
 
-        /** var x = class X {} */
+        /**
+         * ```
+         * var x = class X {}
+         * ```
+         */
         localClassElement = "local class",
 
-        /** interface Y {} */
+        /**
+         * ```
+         * interface Y {}
+         * ```
+         */
         interfaceElement = "interface",
 
-        /** type T = ... */
+        /**
+         * ```
+         * type T = ...
+         * ```
+         */
         typeElement = "type",
 
-        /** enum E */
+        /**
+         * ```
+         * enum E
+         * ```
+         */
         enumElement = "enum",
         enumMemberElement = "enum member",
 
         /**
          * Inside module and script only
+         * ```
          * const v = ..
+         * ```
          */
         variableElement = "var",
 
@@ -1447,45 +1473,84 @@ namespace ts {
 
         /**
          * Inside module and script only
+         * ```
          * function f() { }
+         * ```
          */
         functionElement = "function",
 
         /** Inside function */
         localFunctionElement = "local function",
 
-        /** class X { [public|private]* foo() {} } */
+        /**
+         * ```
+         * class X { [public|private]* foo() {} }
+         * ```
+         */
         memberFunctionElement = "method",
 
-        /** class X { [public|private]* [get|set] foo:number; } */
+        /**
+         * ```
+         * class X { [public|private]* get foo:number; }
+         * ```
+         */
         memberGetAccessorElement = "getter",
+        /**
+         * ```
+         * class X { [public|private]* set foo:number; }
+         * ```
+         */
         memberSetAccessorElement = "setter",
 
         /**
+         * ```
          * class X { [public|private]* foo:number; }
          * interface Y { foo:number; }
+         * ```
          */
         memberVariableElement = "property",
 
-        /** class X { [public|private]* accessor foo: number; } */
+        /**
+         * ```
+         * class X { [public|private]* accessor foo: number; }
+         * ```
+         */
         memberAccessorVariableElement = "accessor",
 
         /**
+         * ```
          * class X { constructor() { } }
          * class X { static { } }
+         * ```
          */
         constructorImplementationElement = "constructor",
 
-        /** interface Y { ():number; } */
+        /**
+         * ```
+         * interface Y { ():number; }
+         * ```
+         */
         callSignatureElement = "call",
 
-        /** interface Y { []:number; } */
+        /**
+         * ```
+         * interface Y { []:number; }
+         * ```
+         */
         indexSignatureElement = "index",
 
-        /** interface Y { new():Y; } */
+        /**
+         * ```
+         * interface Y { new():Y; }
+         * ```
+         */
         constructSignatureElement = "construct",
 
-        /** function foo(*Y*: string) */
+        /**
+         * ```
+         * function foo(*Y*: string)
+         * ```
+         */
         parameterElement = "parameter",
 
         typeParameterElement = "type parameter",
@@ -1505,21 +1570,23 @@ namespace ts {
         externalModuleName = "external module name",
 
         /**
+         * ```jsx
          * <JsxTagName attribute1 attribute2={0} />
-         * @deprecated
+         * ```
+         * @deprecated No longer returned by any API.
          */
         jsxAttribute = "JSX attribute",
 
         /** String literal */
         string = "string",
 
-        /** Jsdoc @link: in `{@link C link text}`, the before and after text "{@link " and "}" */
+        /** Jsdoc `@link`: in `{@link C link text}`, the before and after text "{@link " and "}" */
         link = "link",
 
-        /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
+        /** Jsdoc `@link`: in `{@link C link text}`, the entity name "C" */
         linkName = "link name",
 
-        /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
+        /** Jsdoc `@link`: in `{@link C link text}`, the link text "link text" */
         linkText = "link text",
     }
 

@@ -81,8 +81,8 @@ namespace ts {
 
         /**
          * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
-         * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
-         * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
+         * @param excludeFacts - The existing `HierarchyFacts` to reset before visiting the subtree.
+         * @param includeFacts - The new `HierarchyFacts` to set before visiting the subtree.
          */
         function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             const ancestorFacts = hierarchyFacts;
@@ -93,7 +93,7 @@ namespace ts {
         /**
          * Restores the `HierarchyFacts` for this node's ancestor after visiting this node's
          * subtree.
-         * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
+         * @param ancestorFacts - The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
          */
         function exitSubtree(ancestorFacts: HierarchyFacts) {
             hierarchyFacts = ancestorFacts;
@@ -149,7 +149,7 @@ namespace ts {
         }
 
         /**
-         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * @param expressionResultIsUnused - Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
         function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node> {
@@ -422,7 +422,7 @@ namespace ts {
         }
 
         /**
-         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * @param expressionResultIsUnused - Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
         function visitParenthesizedExpression(node: ParenthesizedExpression, expressionResultIsUnused: boolean): ParenthesizedExpression {
@@ -460,8 +460,8 @@ namespace ts {
         /**
          * Visits a BinaryExpression that contains a destructuring assignment.
          *
-         * @param node A BinaryExpression node.
-         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * @param node - A BinaryExpression node.
+         * @param expressionResultIsUnused - Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
         function visitBinaryExpression(node: BinaryExpression, expressionResultIsUnused: boolean): Expression {
@@ -486,7 +486,7 @@ namespace ts {
         }
 
         /**
-         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * @param expressionResultIsUnused - Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
         function visitCommaListExpression(node: CommaListExpression, expressionResultIsUnused: boolean): Expression {
@@ -542,7 +542,7 @@ namespace ts {
         /**
          * Visits a VariableDeclaration node with a binding pattern.
          *
-         * @param node A VariableDeclaration node.
+         * @param node - A VariableDeclaration node.
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             if (exportedVariableStatement) {
@@ -587,7 +587,7 @@ namespace ts {
         /**
          * Visits a ForOfStatement and converts it into a ES2015-compatible ForOfStatement.
          *
-         * @param node A ForOfStatement.
+         * @param node - A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
             const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
@@ -1177,9 +1177,9 @@ namespace ts {
         /**
          * Called by the printer just before a node is printed.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to be printed.
-         * @param emitCallback The callback used to emit the node.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to be printed.
+         * @param emitCallback - The callback used to emit the node.
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             // If we need to support substitutions for `super` in an async method,
@@ -1209,8 +1209,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint The context for the emitter.
-         * @param node The node to substitute.
+         * @param hint - The context for the emitter.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);

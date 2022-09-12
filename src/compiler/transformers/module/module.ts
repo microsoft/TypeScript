@@ -53,7 +53,7 @@ namespace ts {
         /**
          * Transforms the module aspects of a SourceFile.
          *
-         * @param node The SourceFile node.
+         * @param node - The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile ||
@@ -87,7 +87,7 @@ namespace ts {
         /**
          * Transforms a SourceFile into a CommonJS module.
          *
-         * @param node The SourceFile node.
+         * @param node - The SourceFile node.
          */
         function transformCommonJSModule(node: SourceFile) {
             startLexicalEnvironment();
@@ -128,7 +128,7 @@ namespace ts {
         /**
          * Transforms a SourceFile into an AMD module.
          *
-         * @param node The SourceFile node.
+         * @param node - The SourceFile node.
          */
         function transformAMDModule(node: SourceFile) {
             const define = factory.createIdentifier("define");
@@ -215,7 +215,7 @@ namespace ts {
         /**
          * Transforms a SourceFile into a UMD module.
          *
-         * @param node The SourceFile node.
+         * @param node - The SourceFile node.
          */
         function transformUMDModule(node: SourceFile) {
             const { aliasedModuleNames, unaliasedModuleNames, importAliasNames } = collectAsynchronousDependencies(node, /*includeNonAmdDependencies*/ false);
@@ -355,8 +355,8 @@ namespace ts {
         /**
          * Collect the additional asynchronous dependencies for the module.
          *
-         * @param node The source file.
-         * @param includeNonAmdDependencies A value indicating whether to include non-AMD dependencies.
+         * @param node - The source file.
+         * @param includeNonAmdDependencies - A value indicating whether to include non-AMD dependencies.
          */
         function collectAsynchronousDependencies(node: SourceFile, includeNonAmdDependencies: boolean): AsynchronousDependencies {
             // names of modules with corresponding parameter in the factory function
@@ -422,7 +422,7 @@ namespace ts {
         /**
          * Transforms a SourceFile into an AMD or UMD module body.
          *
-         * @param node The SourceFile node.
+         * @param node - The SourceFile node.
          */
         function transformAsynchronousModuleBody(node: SourceFile) {
             startLexicalEnvironment();
@@ -463,8 +463,8 @@ namespace ts {
          * Adds the down-level representation of `export=` to the statement list if one exists
          * in the source file.
          *
-         * @param statements The Statement list to modify.
-         * @param emitAsReturn A value indicating whether to emit the `export=` statement as a
+         * @param statements - The Statement list to modify.
+         * @param emitAsReturn - A value indicating whether to emit the `export=` statement as a
          * return statement.
          */
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
@@ -503,7 +503,7 @@ namespace ts {
         /**
          * Visits a node at the top level of the source file.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function topLevelVisitor(node: Node): VisitResult<Node> {
             switch (node.kind) {
@@ -889,7 +889,7 @@ namespace ts {
         /**
          * Visits an ImportDeclaration node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
             let statements: Statement[] | undefined;
@@ -994,7 +994,7 @@ namespace ts {
         /**
          * Creates a `require()` call to import an external module.
          *
-         * @param importNode The declararation to import.
+         * @param importNode - The declararation to import.
          */
         function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
             const moduleName = getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
@@ -1009,7 +1009,7 @@ namespace ts {
         /**
          * Visits an ImportEqualsDeclaration node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
@@ -1085,7 +1085,7 @@ namespace ts {
         /**
          * Visits an ExportDeclaration node.
          *
-         * @param The node to visit.
+         * @param The - node to visit.
          */
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (!node.moduleSpecifier) {
@@ -1195,7 +1195,7 @@ namespace ts {
         /**
          * Visits an ExportAssignment node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
             if (node.isExportEquals) {
@@ -1219,7 +1219,7 @@ namespace ts {
         /**
          * Visits a FunctionDeclaration node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             let statements: Statement[] | undefined;
@@ -1261,7 +1261,7 @@ namespace ts {
         /**
          * Visits a ClassDeclaration node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             let statements: Statement[] | undefined;
@@ -1301,7 +1301,7 @@ namespace ts {
         /**
          * Visits a VariableStatement node.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
             let statements: Statement[] | undefined;
@@ -1397,7 +1397,7 @@ namespace ts {
         /**
          * Transforms an exported variable with an initializer into an expression.
          *
-         * @param node The node to transform.
+         * @param node - The node to transform.
          */
         function transformInitializedVariable(node: InitializedVariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
@@ -1428,7 +1428,7 @@ namespace ts {
          * Visits a MergeDeclarationMarker used as a placeholder for the beginning of a merged
          * and transformed declaration.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitMergeDeclarationMarker(node: MergeDeclarationMarker): VisitResult<Statement> {
             // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
@@ -1449,7 +1449,7 @@ namespace ts {
         /**
          * Determines whether a node has an associated EndOfDeclarationMarker.
          *
-         * @param node The node to test.
+         * @param node - The node to test.
          */
         function hasAssociatedEndOfDeclarationMarker(node: Node) {
             return (getEmitFlags(node) & EmitFlags.HasEndOfDeclarationMarker) !== 0;
@@ -1459,7 +1459,7 @@ namespace ts {
          * Visits a DeclarationMarker used as a placeholder for the end of a transformed
          * declaration.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitEndOfDeclarationMarker(node: EndOfDeclarationMarker): VisitResult<Statement> {
             // For some transformations we emit an `EndOfDeclarationMarker` to mark the actual
@@ -1479,10 +1479,10 @@ namespace ts {
          * Appends the exports of an ImportDeclaration to a statement list, returning the
          * statement list.
          *
-         * @param statements A statement list to which the down-level export statements are to be
+         * @param statements - A statement list to which the down-level export statements are to be
          * appended. If `statements` is `undefined`, a new array is allocated if statements are
          * appended.
-         * @param decl The declaration whose exports are to be recorded.
+         * @param decl - The declaration whose exports are to be recorded.
          */
         function appendExportsOfImportDeclaration(statements: Statement[] | undefined, decl: ImportDeclaration): Statement[] | undefined {
             if (currentModuleInfo.exportEquals) {
@@ -1521,10 +1521,10 @@ namespace ts {
          * Appends the exports of an ImportEqualsDeclaration to a statement list, returning the
          * statement list.
          *
-         * @param statements A statement list to which the down-level export statements are to be
+         * @param statements - A statement list to which the down-level export statements are to be
          * appended. If `statements` is `undefined`, a new array is allocated if statements are
          * appended.
-         * @param decl The declaration whose exports are to be recorded.
+         * @param decl - The declaration whose exports are to be recorded.
          */
         function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, decl: ImportEqualsDeclaration): Statement[] | undefined {
             if (currentModuleInfo.exportEquals) {
@@ -1538,10 +1538,10 @@ namespace ts {
          * Appends the exports of a VariableStatement to a statement list, returning the statement
          * list.
          *
-         * @param statements A statement list to which the down-level export statements are to be
+         * @param statements - A statement list to which the down-level export statements are to be
          * appended. If `statements` is `undefined`, a new array is allocated if statements are
          * appended.
-         * @param node The VariableStatement whose exports are to be recorded.
+         * @param node - The VariableStatement whose exports are to be recorded.
          */
         function appendExportsOfVariableStatement(statements: Statement[] | undefined, node: VariableStatement): Statement[] | undefined {
             if (currentModuleInfo.exportEquals) {
@@ -1559,10 +1559,10 @@ namespace ts {
          * Appends the exports of a VariableDeclaration or BindingElement to a statement list,
          * returning the statement list.
          *
-         * @param statements A statement list to which the down-level export statements are to be
+         * @param statements - A statement list to which the down-level export statements are to be
          * appended. If `statements` is `undefined`, a new array is allocated if statements are
          * appended.
-         * @param decl The declaration whose exports are to be recorded.
+         * @param decl - The declaration whose exports are to be recorded.
          */
         function appendExportsOfBindingElement(statements: Statement[] | undefined, decl: VariableDeclaration | BindingElement): Statement[] | undefined {
             if (currentModuleInfo.exportEquals) {
@@ -1587,10 +1587,10 @@ namespace ts {
          * Appends the exports of a ClassDeclaration or FunctionDeclaration to a statement list,
          * returning the statement list.
          *
-         * @param statements A statement list to which the down-level export statements are to be
+         * @param statements - A statement list to which the down-level export statements are to be
          * appended. If `statements` is `undefined`, a new array is allocated if statements are
          * appended.
-         * @param decl The declaration whose exports are to be recorded.
+         * @param decl - The declaration whose exports are to be recorded.
          */
         function appendExportsOfHoistedDeclaration(statements: Statement[] | undefined, decl: ClassDeclaration | FunctionDeclaration): Statement[] | undefined {
             if (currentModuleInfo.exportEquals) {
@@ -1612,10 +1612,10 @@ namespace ts {
         /**
          * Appends the exports of a declaration to a statement list, returning the statement list.
          *
-         * @param statements A statement list to which the down-level export statements are to be
+         * @param statements - A statement list to which the down-level export statements are to be
          * appended. If `statements` is `undefined`, a new array is allocated if statements are
          * appended.
-         * @param decl The declaration to export.
+         * @param decl - The declaration to export.
          */
         function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
             const name = factory.getDeclarationName(decl);
@@ -1632,13 +1632,13 @@ namespace ts {
          * Appends the down-level representation of an export to a statement list, returning the
          * statement list.
          *
-         * @param statements A statement list to which the down-level export statements are to be
+         * @param statements - A statement list to which the down-level export statements are to be
          * appended. If `statements` is `undefined`, a new array is allocated if statements are
          * appended.
-         * @param exportName The name of the export.
-         * @param expression The expression to export.
-         * @param location The location to use for source maps and comments for the export.
-         * @param allowComments Whether to allow comments on the export.
+         * @param exportName - The name of the export.
+         * @param expression - The expression to export.
+         * @param location - The location to use for source maps and comments for the export.
+         * @param allowComments - Whether to allow comments on the export.
          */
         function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
             statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
@@ -1677,10 +1677,10 @@ namespace ts {
         /**
          * Creates a call to the current file's export function to export a value.
          *
-         * @param name The bound name of the export.
-         * @param value The exported value.
-         * @param location The location to use for source maps and comments for the export.
-         * @param allowComments An optional value indicating whether to emit comments for the statement.
+         * @param name - The bound name of the export.
+         * @param value - The exported value.
+         * @param location - The location to use for source maps and comments for the export.
+         * @param allowComments - An optional value indicating whether to emit comments for the statement.
          */
         function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
             const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /* location */ undefined, liveBinding)), location);
@@ -1695,9 +1695,9 @@ namespace ts {
         /**
          * Creates a call to the current file's export function to export a value.
          *
-         * @param name The bound name of the export.
-         * @param value The exported value.
-         * @param location The location to use for source maps and comments for the export.
+         * @param name - The bound name of the export.
+         * @param value - The exported value.
+         * @param location - The location to use for source maps and comments for the export.
          */
         function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
             return setTextRange(
@@ -1741,7 +1741,7 @@ namespace ts {
         /**
          * Visit nodes to elide module-specific modifiers.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function modifierVisitor(node: Node): VisitResult<Node> {
             // Elide module-specific modifiers.
@@ -1761,9 +1761,9 @@ namespace ts {
         /**
          * Hook for node emit notifications.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to emit.
+         * @param emit - A callback used to emit the node in the printer.
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
@@ -1787,8 +1787,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to substitute.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
@@ -1810,7 +1810,7 @@ namespace ts {
          * Substitution for a ShorthandPropertyAssignment whose declaration name is an imported
          * or exported symbol.
          *
-         * @param node The node to substitute.
+         * @param node - The node to substitute.
          */
         function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
             const name = node.name;
@@ -1830,7 +1830,7 @@ namespace ts {
         /**
          * Substitution for an Expression that may contain an imported or exported symbol.
          *
-         * @param node The node to substitute.
+         * @param node - The node to substitute.
          */
         function substituteExpression(node: Expression) {
             switch (node.kind) {
@@ -1888,7 +1888,7 @@ namespace ts {
          * Substitution for an Identifier expression that may contain an imported or exported
          * symbol.
          *
-         * @param node The node to substitute.
+         * @param node - The node to substitute.
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
             if (getEmitFlags(node) & EmitFlags.HelperName) {
@@ -1938,7 +1938,7 @@ namespace ts {
         /**
          * Substitution for a BinaryExpression that may contain an imported or exported symbol.
          *
-         * @param node The node to substitute.
+         * @param node - The node to substitute.
          */
         function substituteBinaryExpression(node: BinaryExpression): Expression {
             // When we see an assignment expression whose left-hand side is an exported symbol,
@@ -1974,7 +1974,7 @@ namespace ts {
         /**
          * Gets the additional exports of a name.
          *
-         * @param name The name.
+         * @param name - The name.
          */
         function getExports(name: Identifier): Identifier[] | undefined {
             if (!isGeneratedIdentifier(name)) {

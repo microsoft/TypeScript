@@ -16,8 +16,8 @@ namespace ts {
 
     /**
      * Creates a `NodeFactory` that can be used to create and update a syntax tree.
-     * @param flags Flags that control factory behavior.
-     * @param baseFactory A `BaseNodeFactory` used to create the base `Node` objects.
+     * @param flags - Flags that control factory behavior.
+     * @param baseFactory - A `BaseNodeFactory` used to create the base `Node` objects.
      */
     /* @internal */
     export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory): NodeFactory {
@@ -1872,7 +1872,7 @@ namespace ts {
             return node;
         }
 
-        /** @deprecated */
+        /** @deprecated Use createConstructorTypeNode. */
         function createConstructorTypeNode2(
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
@@ -1903,7 +1903,7 @@ namespace ts {
                 : node;
         }
 
-        /** @deprecated */
+        /** @deprecated Use updateConstructorTypeNode. */
         function updateConstructorTypeNode2(
             node: ConstructorTypeNode,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
@@ -5511,7 +5511,7 @@ namespace ts {
          * Creates a synthetic statement to act as a placeholder for a not-emitted statement in
          * order to preserve comments.
          *
-         * @param original The original statement.
+         * @param original - The original statement.
          */
         // @api
         function createNotEmittedStatement(original: Node) {
@@ -5525,8 +5525,8 @@ namespace ts {
          * Creates a synthetic expression to act as a placeholder for a not-emitted expression in
          * order to preserve comments or sourcemap positions.
          *
-         * @param expression The inner expression to emit.
-         * @param original The original outer expression.
+         * @param expression - The inner expression to emit.
+         * @param original - The original outer expression.
          */
         // @api
         function createPartiallyEmittedExpression(expression: Expression, original?: Node) {
@@ -6000,9 +6000,9 @@ namespace ts {
          * expression. An internal name will also *never* be renamed due to a collision with a block
          * scoped variable.
          *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         function getInternalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
             return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName | EmitFlags.InternalName);
@@ -6014,9 +6014,9 @@ namespace ts {
          * local name will *never* be prefixed with an module or namespace export modifier like
          * "exports." when emitted as an expression.
          *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         function getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
             return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName);
@@ -6028,9 +6028,9 @@ namespace ts {
          * export name will *always* be prefixed with an module or namespace export modifier like
          * `"exports."` when emitted as an expression if the name points to an exported symbol.
          *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         function getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier {
             return getName(node, allowComments, allowSourceMaps, EmitFlags.ExportName);
@@ -6039,9 +6039,9 @@ namespace ts {
         /**
          * Gets the name of a declaration for use in declarations.
          *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         function getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean) {
             return getName(node, allowComments, allowSourceMaps);
@@ -6050,10 +6050,10 @@ namespace ts {
         /**
          * Gets a namespace-qualified name for use in expressions.
          *
-         * @param ns The namespace identifier.
-         * @param name The name.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param ns - The namespace identifier.
+         * @param name - The name.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
             const qualifiedName = createPropertyAccessExpression(ns, nodeIsSynthesized(name) ? name : cloneNode(name));
@@ -6071,10 +6071,10 @@ namespace ts {
          * An exported name will *always* be prefixed with an module or namespace export modifier like
          * "exports." if the name points to an exported symbol.
          *
-         * @param ns The namespace identifier.
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param ns - The namespace identifier.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
             if (ns && hasSyntacticModifier(node, ModifierFlags.Export)) {
@@ -6085,10 +6085,10 @@ namespace ts {
 
         /**
          * Copies any necessary standard and custom prologue-directives into target array.
-         * @param source origin statements array
-         * @param target result statements array
-         * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
-         * @param visitor Optional callback used to visit any custom prologue directives.
+         * @param source - origin statements array
+         * @param target - result statements array
+         * @param ensureUseStrict - boolean determining whether the function need to add prologue-directives
+         * @param visitor - Optional callback used to visit any custom prologue directives.
          */
         function copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
             const offset = copyStandardPrologue(source, target, 0, ensureUseStrict);
@@ -6105,10 +6105,10 @@ namespace ts {
 
         /**
          * Copies only the standard (string-expression) prologue-directives into the target statement-array.
-         * @param source origin statements array
-         * @param target result statements array
-         * @param statementOffset The offset at which to begin the copy.
-         * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
+         * @param source - origin statements array
+         * @param target - result statements array
+         * @param statementOffset - The offset at which to begin the copy.
+         * @param ensureUseStrict - boolean determining whether the function need to add prologue-directives
          * @returns Count of how many directive statements were copied.
          */
         function copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset = 0, ensureUseStrict?: boolean): number {
@@ -6136,10 +6136,10 @@ namespace ts {
 
         /**
          * Copies only the custom prologue-directives into target statement-array.
-         * @param source origin statements array
-         * @param target result statements array
-         * @param statementOffset The offset at which to begin the copy.
-         * @param visitor Optional callback used to visit any custom prologue directives.
+         * @param source - origin statements array
+         * @param target - result statements array
+         * @param statementOffset - The offset at which to begin the copy.
+         * @param visitor - Optional callback used to visit any custom prologue directives.
          */
         function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number;
         function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number | undefined;
@@ -6161,7 +6161,7 @@ namespace ts {
         /**
          * Ensures "use strict" directive is added
          *
-         * @param statements An array of statements
+         * @param statements - An array of statements
          */
         function ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement> {
             const foundUseStrict = findUseStrictPrologue(statements);
@@ -6176,7 +6176,7 @@ namespace ts {
         /**
          * Lifts a NodeArray containing only Statement nodes to a block.
          *
-         * @param nodes The NodeArray.
+         * @param nodes - The NodeArray.
          */
         function liftToBlock(nodes: readonly Node[]): Statement {
             Debug.assert(every(nodes, isStatementOrBlock), "Cannot lift nodes to a Block.");

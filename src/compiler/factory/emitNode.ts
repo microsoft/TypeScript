@@ -28,7 +28,7 @@ namespace ts {
 
     /**
      * Clears any `EmitNode` entries from parse-tree nodes.
-     * @param sourceFile A source file.
+     * @param sourceFile - A source file.
      */
     export function disposeEmitNodes(sourceFile: SourceFile | undefined) {
         // During transformation we may need to annotate a parse tree node with transient

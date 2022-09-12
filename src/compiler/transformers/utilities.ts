@@ -330,8 +330,8 @@ namespace ts {
     /**
      * Gets all the static or all the instance property declarations of a class
      *
-     * @param node The class node.
-     * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
+     * @param node - The class node.
+     * @param isStatic - A value indicating whether to get properties from the static or instance side of the class.
      */
     export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: true, isStatic: boolean): readonly InitializedPropertyDeclaration[];
     export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[];
@@ -352,8 +352,8 @@ namespace ts {
     /**
      * Is a class element either a static or an instance property declaration with an initializer?
      *
-     * @param member The class element node.
-     * @param isStatic A value indicating whether the member should be a static or instance member.
+     * @param member - The class element node.
+     * @param isStatic - A value indicating whether the member should be a static or instance member.
      */
     function isInitializedOrStaticProperty(member: ClassElement, requireInitializer: boolean, isStatic: boolean) {
         return isPropertyDeclaration(member)
@@ -368,8 +368,8 @@ namespace ts {
     /**
      * Gets a value indicating whether a class element is either a static or an instance property declaration with an initializer.
      *
-     * @param member The class element node.
-     * @param isStatic A value indicating whether the member should be a static or instance member.
+     * @param member - The class element node.
+     * @param isStatic - A value indicating whether the member should be a static or instance member.
      */
     export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
         return member.kind === SyntaxKind.PropertyDeclaration
@@ -379,7 +379,7 @@ namespace ts {
     /**
      * Gets a value indicating whether a class element is a private instance method or accessor.
      *
-     * @param member The class element node.
+     * @param member - The class element node.
      */
     export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierAutoAccessorPropertyDeclaration {
         return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) && isPrivateIdentifier(member.name);
@@ -389,7 +389,7 @@ namespace ts {
      * Gets an array of arrays of decorators for the parameters of a function-like node.
      * The offset into the result array should correspond to the offset of the parameter.
      *
-     * @param node The function-like node.
+     * @param node - The function-like node.
      */
     function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
         let decorators: (readonly Decorator[] | undefined)[] | undefined;
@@ -417,7 +417,7 @@ namespace ts {
      * Gets an AllDecorators object containing the decorators for the class and the decorators for the
      * parameters of the constructor of the class.
      *
-     * @param node The class node.
+     * @param node - The class node.
      */
     export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorators | undefined {
         const decorators = getDecorators(node);
@@ -435,8 +435,8 @@ namespace ts {
     /**
      * Gets an AllDecorators object containing the decorators for the member and its parameters.
      *
-     * @param parent The class node that contains the member.
-     * @param member The class member.
+     * @param parent - The class node that contains the member.
+     * @param member - The class member.
      */
     export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration): AllDecorators | undefined {
         switch (member.kind) {
@@ -458,8 +458,8 @@ namespace ts {
     /**
      * Gets an AllDecorators object containing the decorators for the accessor and its parameters.
      *
-     * @param parent The class node that contains the accessor.
-     * @param accessor The class accessor member.
+     * @param parent - The class node that contains the accessor.
+     * @param accessor - The class accessor member.
      */
     function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: ClassExpression | ClassDeclaration): AllDecorators | undefined {
         if (!accessor.body) {
@@ -493,7 +493,7 @@ namespace ts {
     /**
      * Gets an AllDecorators object containing the decorators for the method and its parameters.
      *
-     * @param method The class method member.
+     * @param method - The class method member.
      */
     function getAllDecoratorsOfMethod(method: MethodDeclaration): AllDecorators | undefined {
         if (!method.body) {
@@ -512,7 +512,7 @@ namespace ts {
     /**
      * Gets an AllDecorators object containing the decorators for the property.
      *
-     * @param property The class property member.
+     * @param property - The class property member.
      */
     function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorators | undefined {
         const decorators = getDecorators(property);

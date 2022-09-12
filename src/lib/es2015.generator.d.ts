@@ -11,12 +11,12 @@ interface Generator<T = unknown, TReturn = any, TNext = unknown> extends Iterato
 interface GeneratorFunction {
     /**
      * Creates a new Generator object.
-     * @param args A list of arguments the function accepts.
+     * @param args - A list of arguments the function accepts.
      */
     new (...args: any[]): Generator;
     /**
      * Creates a new Generator object.
-     * @param args A list of arguments the function accepts.
+     * @param args - A list of arguments the function accepts.
      */
     (...args: any[]): Generator;
     /**
@@ -36,12 +36,12 @@ interface GeneratorFunction {
 interface GeneratorFunctionConstructor {
     /**
      * Creates a new Generator function.
-     * @param args A list of arguments the function accepts.
+     * @param args - A list of arguments the function accepts.
      */
     new (...args: string[]): GeneratorFunction;
     /**
      * Creates a new Generator function.
-     * @param args A list of arguments the function accepts.
+     * @param args - A list of arguments the function accepts.
      */
     (...args: string[]): GeneratorFunction;
     /**

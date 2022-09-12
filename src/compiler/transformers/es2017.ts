@@ -259,7 +259,7 @@ namespace ts {
          *
          * This function will be called any time a ES2017 await expression is encountered.
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
             // do not downlevel a top-level await as it is module syntax...
@@ -284,7 +284,7 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is marked as async
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitMethodDeclaration(node: MethodDeclaration) {
             return factory.updateMethodDeclaration(
@@ -308,7 +308,7 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is marked async
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             return factory.updateFunctionDeclaration(
@@ -331,7 +331,7 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is marked async
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
             return factory.updateFunctionExpression(
@@ -354,7 +354,7 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is marked async
          *
-         * @param node The node to visit.
+         * @param node - The node to visit.
          */
         function visitArrowFunction(node: ArrowFunction) {
             return factory.updateArrowFunction(
@@ -593,9 +593,9 @@ namespace ts {
         /**
          * Hook for node emit.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to emit.
+         * @param emit - A callback used to emit the node in the printer.
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             // If we need to support substitutions for `super` in an async method,
@@ -624,8 +624,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to substitute.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);

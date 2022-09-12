@@ -4240,7 +4240,7 @@ namespace ts {
 
         /**
          * Gets a value indicating whether the specified path exists and is a file.
-         * @param path The path to test.
+         * @param path - The path to test.
          */
         fileExists(path: string): boolean;
 
@@ -4691,7 +4691,7 @@ namespace ts {
         /**
          * returns unknownSignature in the case of an error.
          * returns undefined if the node is not valid.
-         * @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
+         * @param argumentCount - Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
@@ -4816,10 +4816,12 @@ namespace ts {
 
         /**
          * Note that this will return undefined in the following case:
+         * ```
          *     // a.ts
          *     export namespace N { export class C { } }
          *     // b.ts
          *     <<enclosingDeclaration>>
+         * ```
          * Where `C` is the symbol we're looking for.
          * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
          */
@@ -4831,7 +4833,7 @@ namespace ts {
          * and an external module with no 'export =' declaration resolves to the module itself.
          */
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
-        /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
+        /** @param node - A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
         /* @internal */ tryGetThisTypeAt(node: Node, includeGlobalThis?: boolean, container?: Node): Type | undefined;
         /* @internal */ getTypeArgumentConstraint(node: TypeNode): Type | undefined;
 
@@ -4961,7 +4963,7 @@ namespace ts {
         InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
         InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
 
-        /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
+        /** @deprecated Unused. */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
@@ -6322,8 +6324,8 @@ namespace ts {
 
     /**
      * Ternary values are defined such that
-     * x & y picks the lesser in the order False < Unknown < Maybe < True, and
-     * x | y picks the greater in the order False < Unknown < Maybe < True.
+     * x & y picks the lesser in the order False \< Unknown \< Maybe \< True, and
+     * x | y picks the greater in the order False \< Unknown \< Maybe \< True.
      * Generally, Ternary.Maybe is used as the result of a relation that depends on itself, and
      * Ternary.Unknown is used as the result of a variance check that depends on itself. We make
      * a distinction because we don't want to cache circular variance check results.
@@ -7654,10 +7656,10 @@ namespace ts {
 
         /**
          * Create a unique temporary variable.
-         * @param recordTempVariable An optional callback used to record the temporary variable name. This
+         * @param recordTempVariable - An optional callback used to record the temporary variable name. This
          * should usually be a reference to `hoistVariableDeclaration` from a `TransformationContext`, but
          * can be `undefined` if you plan to record the temporary variable manually.
-         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * @param reservedInNestedScopes - When `true`, reserves the temporary variable name in all nested scopes
          * during emit so that the variable can be referenced in a nested function body. This is an alternative to
          * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
          */
@@ -7666,7 +7668,7 @@ namespace ts {
 
         /**
          * Create a unique temporary variable for use in a loop.
-         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * @param reservedInNestedScopes - When `true`, reserves the temporary variable name in all nested scopes
          * during emit so that the variable can be referenced in a nested function body. This is an alternative to
          * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
          */
@@ -8272,8 +8274,8 @@ namespace ts {
          * ({ set value(_a) { Reflect.set(obj, "x", _a); } }).value
          * ```
          *
-         * @param paramName
-         * @param expression
+         * @param paramName -
+         * @param expression -
          */
         /* @internal */ createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): LeftHandSideExpression;
         /* @internal */ inlineExpressions(expressions: readonly Expression[]): Expression;
@@ -8284,9 +8286,9 @@ namespace ts {
          * expression. An internal name will also *never* be renamed due to a collision with a block
          * scoped variable.
          *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         /* @internal */ getInternalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
         /**
@@ -8295,9 +8297,9 @@ namespace ts {
          * local name will *never* be prefixed with an module or namespace export modifier like
          * "exports." when emitted as an expression.
          *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         /* @internal */ getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
         /**
@@ -8306,26 +8308,26 @@ namespace ts {
          * export name will *always* be prefixed with a module or namespace export modifier like
          * `"exports."` when emitted as an expression if the name points to an exported symbol.
          *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         /* @internal */ getExportName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
         /**
          * Gets the name of a declaration for use in declarations.
          *
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         /* @internal */ getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
         /**
          * Gets a namespace-qualified name for use in expressions.
          *
-         * @param ns The namespace identifier.
-         * @param name The name.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param ns - The namespace identifier.
+         * @param name - The name.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         /* @internal */ getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression;
         /**
@@ -8334,10 +8336,10 @@ namespace ts {
          * An exported name will *always* be prefixed with an module or namespace export modifier like
          * "exports." if the name points to an exported symbol.
          *
-         * @param ns The namespace identifier.
-         * @param node The declaration.
-         * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param ns - The namespace identifier.
+         * @param node - The declaration.
+         * @param allowComments - A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps - A value indicating whether source maps may be emitted for the name.
          */
         /* @internal */ getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression;
 
@@ -8350,26 +8352,26 @@ namespace ts {
         /* @internal */ createUseStrictPrologue(): PrologueDirective;
         /**
          * Copies any necessary standard and custom prologue-directives into target array.
-         * @param source origin statements array
-         * @param target result statements array
-         * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
-         * @param visitor Optional callback used to visit any custom prologue directives.
+         * @param source - origin statements array
+         * @param target - result statements array
+         * @param ensureUseStrict - boolean determining whether the function need to add prologue-directives
+         * @param visitor - Optional callback used to visit any custom prologue directives.
          */
         /* @internal */ copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number;
         /**
          * Copies only the standard (string-expression) prologue-directives into the target statement-array.
-         * @param source origin statements array
-         * @param target result statements array
-         * @param statementOffset The offset at which to begin the copy.
-         * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
+         * @param source - origin statements array
+         * @param target - result statements array
+         * @param statementOffset - The offset at which to begin the copy.
+         * @param ensureUseStrict - boolean determining whether the function need to add prologue-directives
          */
         /* @internal */ copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, ensureUseStrict?: boolean): number;
         /**
          * Copies only the custom prologue-directives into target statement-array.
-         * @param source origin statements array
-         * @param target result statements array
-         * @param statementOffset The offset at which to begin the copy.
-         * @param visitor Optional callback used to visit any custom prologue directives.
+         * @param source - origin statements array
+         * @param target - result statements array
+         * @param statementOffset - The offset at which to begin the copy.
+         * @param visitor - Optional callback used to visit any custom prologue directives.
          */
         /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number;
         /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number | undefined;
@@ -8498,24 +8500,24 @@ namespace ts {
         /**
          * Gets a substitute for a node, if one is available; otherwise, returns the original node.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to substitute.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to substitute.
          */
         substituteNode(hint: EmitHint, node: Node): Node;
 
         /**
          * Emits a node with possible notification.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emitCallback A callback used to emit the node.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to emit.
+         * @param emitCallback - A callback used to emit the node.
          */
         emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
 
         /**
          * Indicates if a given node needs an emit notification
          *
-         * @param node The node to emit.
+         * @param node - The node to emit.
          */
         isEmitNotificationEnabled?(node: Node): boolean;
 
@@ -8556,13 +8558,13 @@ namespace ts {
     export interface Printer {
         /**
          * Print a node and its subtree as-is, without any emit transformations.
-         * @param hint A value indicating the purpose of a node. This is primarily used to
+         * @param hint - A value indicating the purpose of a node. This is primarily used to
          * distinguish between an `Identifier` used in an expression position, versus an
          * `Identifier` used as an `IdentifierName` as part of a declaration. For most nodes you
          * should just pass `Unspecified`.
-         * @param node The node to print. The node and its subtree are printed as-is, without any
+         * @param node - The node to print. The node and its subtree are printed as-is, without any
          * emit transformations.
-         * @param sourceFile A source file that provides context for the node. The source text of
+         * @param sourceFile - A source file that provides context for the node. The source text of
          * the file is used to emit the original source content for literals and identifiers, while
          * the identifiers of the source file are used when generating unique names to avoid
          * collisions.
@@ -8713,9 +8715,9 @@ namespace ts {
          * A hook used by the Printer to provide notifications prior to emitting a node. A
          * compatible implementation **must** invoke `emitCallback` with the provided `hint` and
          * `node` values.
-         * @param hint A hint indicating the intended purpose of the node.
-         * @param node The node to emit.
-         * @param emitCallback A callback that, when invoked, will emit the node.
+         * @param hint - A hint indicating the intended purpose of the node.
+         * @param node - The node to emit.
+         * @param emitCallback - A callback that, when invoked, will emit the node.
          * @example
          * ```ts
          * var printer = createPrinter(printerOptions, {
@@ -8731,15 +8733,15 @@ namespace ts {
 
         /**
          * A hook used to check if an emit notification is required for a node.
-         * @param node The node to emit.
+         * @param node - The node to emit.
          */
         isEmitNotificationEnabled?(node: Node): boolean;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
          * such as replacing `myExportedVar` with `exports.myExportedVar`.
-         * @param hint A hint indicating the intended purpose of the node.
-         * @param node The node to emit.
+         * @param hint - A hint indicating the intended purpose of the node.
+         * @param node - The node to emit.
          * @example
          * ```ts
          * var printer = createPrinter(printerOptions, {
@@ -9085,14 +9087,20 @@ namespace ts {
         TripleSlashXML  = 1 << 0,
         /**
          * Single line comment of the form
+         * ```
          * // @pragma-name argval1 argval2
+         * ```
          * or
+         * ```
          * /// @pragma-name argval1 argval2
+         * ```
          */
         SingleLine      = 1 << 1,
         /**
          * Multiline non-jsdoc pragma of the form
+         * ```
          * /* @pragma-name argval1 argval2 * /
+         * ```
          */
         MultiLine       = 1 << 2,
         All = TripleSlashXML | SingleLine | MultiLine,

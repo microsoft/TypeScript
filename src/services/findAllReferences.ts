@@ -1076,9 +1076,11 @@ namespace ts.FindAllReferences {
             /**
              * It's possible that we will encounter the right side of `export { foo as bar } from "x";` more than once.
              * For example:
+             * ```
              *     // b.ts
              *     export { foo as bar } from "./a";
              *     import { bar } from "./b";
+             * ```
              *
              * Normally at `foo as bar` we directly add `foo` and do not locally search for it (since it doesn't declare a local).
              * But another reference to it may appear in the same source file.
@@ -1108,7 +1110,7 @@ namespace ts.FindAllReferences {
                 return this.importTracker(exportSymbol, exportInfo, this.options.use === FindReferencesUse.Rename);
             }
 
-            /** @param allSearchSymbols set of additional symbols for use by `includes`. */
+            /** @param allSearchSymbols - set of additional symbols for use by `includes`. */
             createSearch(location: Node | undefined, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
                 // Note: if this is an external module symbol, the name doesn't include quotes.
                 // Note: getLocalSymbolForExportDefault handles `export default class C {}`, but not `export default C` or `export { C as default }`.
@@ -1933,8 +1935,10 @@ namespace ts.FindAllReferences {
          * is an interface, determines if some ancestor of the child symbol extends or inherits from it.
          * Also takes in a cache of previous results which makes this slightly more efficient and is
          * necessary to avoid potential loops like so:
+         * ```
          *     class A extends B { }
          *     class B extends A { }
+         * ```
          *
          * We traverse the AST rather than using the type checker because users are typically only interested
          * in explicit implementations of an interface/class when calling "Go to Implementation". Sibling
@@ -1943,9 +1947,9 @@ namespace ts.FindAllReferences {
          * distinction between structurally compatible implementations and explicit implementations, so we
          * must use the AST.
          *
-         * @param symbol         A class or interface Symbol
-         * @param parent        Another class or interface Symbol
-         * @param cachedResults A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
+         * @param symbol -         A class or interface Symbol
+         * @param parent -        Another class or interface Symbol
+         * @param cachedResults - A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
          */
         function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: ESMap<string, boolean>, checker: TypeChecker): boolean {
             if (symbol === parent) {
@@ -2130,12 +2134,12 @@ namespace ts.FindAllReferences {
         }
 
         /**
-         * @param allowBaseTypes return true means it would try to find in base class or interface.
+         * @param allowBaseTypes - return true means it would try to find in base class or interface.
          */
         function forEachRelatedSymbol<T>(
             symbol: Symbol, location: Node, checker: TypeChecker, isForRenamePopulateSearchSymbolSet: boolean, onlyIncludeBindingElementAtReferenceLocation: boolean,
             /**
-             * @param baseSymbol This symbol means one property/mehtod from base class or interface when it is not null or undefined,
+             * @param baseSymbol - This symbol means one property/mehtod from base class or interface when it is not null or undefined,
              */
             cbSymbol: (symbol: Symbol, rootSymbol?: Symbol, baseSymbol?: Symbol, kind?: NodeEntryKind) => T | undefined,
             allowBaseTypes: (rootSymbol: Symbol) => boolean,
@@ -2253,10 +2257,10 @@ namespace ts.FindAllReferences {
 
         /**
          * Find symbol of the given property-name and add the symbol to the given result array
-         * @param symbol a symbol to start searching for the given propertyName
-         * @param propertyName a name of property to search for
-         * @param result an array of symbol of found property symbols
-         * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
+         * @param symbol - a symbol to start searching for the given propertyName
+         * @param propertyName - a name of property to search for
+         * @param result - an array of symbol of found property symbols
+         * @param previousIterationSymbolsCache - a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
          *                                The value of previousIterationSymbol is undefined when the function is first called.
          */
         function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {

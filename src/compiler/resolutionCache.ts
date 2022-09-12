@@ -108,7 +108,7 @@ namespace ts {
      * Filter out paths like
      * "/", "/user", "/user/username", "/user/username/folderAtRoot",
      * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
-     * @param dirPath
+     * @param dirPath -
      */
     export function canWatchDirectoryOrFile(dirPath: Path) {
         const rootLength = getRootLength(dirPath);

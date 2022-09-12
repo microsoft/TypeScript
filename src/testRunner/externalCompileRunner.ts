@@ -296,10 +296,12 @@ ${result.stderr.toString().replace(/\r\n/g, "\n")}`;
     /**
      * Split an array into multiple arrays whenever `isStart` returns true.
      * @example
+     * ```
      * splitBy([1,2,3,4,5,6], isOdd)
      * ==> [[1, 2], [3, 4], [5, 6]]
      * where
      * const isOdd = n => !!(n % 2)
+     * ```
      */
     function splitBy<T>(xs: T[], isStart: (x: T) => boolean): T[][] {
         const result = [];

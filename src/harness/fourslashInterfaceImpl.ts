@@ -1771,20 +1771,20 @@ namespace FourSlashInterface {
 
     export interface VerifySignatureHelpOptions {
         readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
-        /** @default 1 */
+        /** @defaultValue 1 */
         readonly overloadsCount?: number;
-        /** @default undefined */
+        /** @defaultValue undefined */
         readonly docComment?: string;
         readonly text?: string;
         readonly parameterName?: string;
         readonly parameterSpan?: string;
-        /** @default undefined */
+        /** @defaultValue undefined */
         readonly parameterDocComment?: string;
         readonly parameterCount?: number;
         readonly argumentCount?: number;
-        /** @default false */
+        /** @defaultValue false */
         readonly isVariadic?: boolean;
-        /** @default ts.emptyArray */
+        /** @defaultValue ts.emptyArray */
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly triggerReason?: ts.SignatureHelpTriggerReason;
         readonly overrideSelectedItemIndex?: number;

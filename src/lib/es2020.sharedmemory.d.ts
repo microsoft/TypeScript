@@ -64,9 +64,9 @@ interface Atomics {
     /**
      * Wakes up sleeping agents that are waiting on the given index of the array, returning the
      * number of agents that were awoken.
-     * @param typedArray A shared BigInt64Array.
-     * @param index The position in the typedArray to wake up on.
-     * @param count The number of sleeping agents to notify. Defaults to +Infinity.
+     * @param typedArray - A shared BigInt64Array.
+     * @param index - The position in the typedArray to wake up on.
+     * @param count - The number of sleeping agents to notify. Defaults to +Infinity.
      */
     notify(typedArray: BigInt64Array, index: number, count?: number): number;
 

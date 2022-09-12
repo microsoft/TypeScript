@@ -290,8 +290,8 @@ namespace ts.codefix {
     // dispatch function to recursively build the refactoring
     // should be kept up to date with isFixablePromiseHandler in suggestionDiagnostics.ts
     /**
-     * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows the continuation to which this expression belongs.
-     * @param continuationArgName The argument name for the continuation that follows this call.
+     * @param hasContinuation - Whether another `then`, `catch`, or `finally` continuation follows the continuation to which this expression belongs.
+     * @param continuationArgName - The argument name for the continuation that follows this call.
      */
     function transformExpression(returnContextNode: Expression, node: Expression, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
         if (isPromiseReturningCallExpression(node, transformer.checker, "then")) {
@@ -396,8 +396,8 @@ namespace ts.codefix {
     }
 
     /**
-     * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows this continuation.
-     * @param continuationArgName The argument name for the continuation that follows this call.
+     * @param hasContinuation - Whether another `then`, `catch`, or `finally` continuation follows this continuation.
+     * @param continuationArgName - The argument name for the continuation that follows this call.
      */
     function transformFinally(node: PromiseReturningCallExpression<"finally">, onFinally: Expression | undefined, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
         if (!onFinally || isNullOrUndefined(transformer, onFinally)) {
@@ -423,8 +423,8 @@ namespace ts.codefix {
     }
 
     /**
-     * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows this continuation.
-     * @param continuationArgName The argument name for the continuation that follows this call.
+     * @param hasContinuation - Whether another `then`, `catch`, or `finally` continuation follows this continuation.
+     * @param continuationArgName - The argument name for the continuation that follows this call.
      */
     function transformCatch(node: PromiseReturningCallExpression<"then" | "catch">, onRejected: Expression | undefined, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
         if (!onRejected || isNullOrUndefined(transformer, onRejected)) {
@@ -451,8 +451,8 @@ namespace ts.codefix {
     }
 
     /**
-     * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows this continuation.
-     * @param continuationArgName The argument name for the continuation that follows this call.
+     * @param hasContinuation - Whether another `then`, `catch`, or `finally` continuation follows this continuation.
+     * @param continuationArgName - The argument name for the continuation that follows this call.
      */
     function transformThen(node: PromiseReturningCallExpression<"then">, onFulfilled: Expression | undefined, onRejected: Expression | undefined, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
         if (!onFulfilled || isNullOrUndefined(transformer, onFulfilled)) {
@@ -530,9 +530,9 @@ namespace ts.codefix {
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
     /**
-     * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows the continuation to which this callback belongs.
-     * @param continuationArgName The argument name for the continuation that follows this call.
-     * @param inputArgName The argument name provided to this call
+     * @param hasContinuation - Whether another `then`, `catch`, or `finally` continuation follows the continuation to which this callback belongs.
+     * @param continuationArgName - The argument name for the continuation that follows this call.
+     * @param inputArgName - The argument name provided to this call
      */
     function transformCallbackArgument(func: Expression, hasContinuation: boolean, continuationArgName: SynthBindingName | undefined, inputArgName: SynthBindingName | undefined, parent: PromiseReturningCallExpression<"then" | "catch" | "finally">, transformer: Transformer): readonly Statement[] {
         switch (func.kind) {
@@ -716,8 +716,8 @@ namespace ts.codefix {
     }
 
     /**
-     * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows the continuation to which this statement belongs.
-     * @param continuationArgName The argument name for the continuation that follows this call.
+     * @param hasContinuation - Whether another `then`, `catch`, or `finally` continuation follows the continuation to which this statement belongs.
+     * @param continuationArgName - The argument name for the continuation that follows this call.
      */
     function transformReturnStatementWithFixablePromiseHandler(transformer: Transformer, innerRetStmt: ReturnStatement, hasContinuation: boolean, continuationArgName?: SynthBindingName) {
         let innerCbBody: Statement[] = [];

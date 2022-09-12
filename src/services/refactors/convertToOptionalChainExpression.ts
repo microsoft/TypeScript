@@ -238,7 +238,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
      * Gets a property access expression which may be nested inside of a binary expression. The final
      * expression in an && chain will occur as the right child of the parent binary expression, unless
      * it is followed by a different binary operator.
-     * @param node the right child of a binary expression or a call expression.
+     * @param node - the right child of a binary expression or a call expression.
      */
     function getFinalExpressionInChain(node: Expression): CallExpression | PropertyAccessExpression | ElementAccessExpression | undefined {
         // foo && |foo.bar === 1|; - here the right child of the && binary expression is another binary expression.

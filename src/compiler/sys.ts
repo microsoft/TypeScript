@@ -1341,7 +1341,7 @@ namespace ts {
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
 
         /**
-         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
+         * @param pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
          */
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;

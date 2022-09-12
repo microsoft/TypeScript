@@ -58,7 +58,7 @@ interface WeakMap<K extends object, V> {
     has(key: K): boolean;
     /**
      * Adds a new element with a specified key and value.
-     * @param key Must be an object.
+     * @param key - Must be an object.
      */
     set(key: K, value: V): this;
 }

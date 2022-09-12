@@ -833,9 +833,9 @@ namespace ts {
      * embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
      * a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
      *
-     * @param node a given node to visit its children
-     * @param cbNode a callback to be invoked for all child nodes
-     * @param cbNodes a callback to be invoked for embedded array
+     * @param node - a given node to visit its children
+     * @param cbNode - a callback to be invoked for all child nodes
+     * @param cbNodes - a callback to be invoked for embedded array
      *
      * @remarks `forEachChild` must visit the children of a node in the order
      * that they appear in the source code. The language service depends on this property to locate nodes by position.
@@ -855,9 +855,9 @@ namespace ts {
      * unlike `forEachChild`, embedded arrays are flattened and the 'cbNode' callback is invoked for each element.
      *  If a callback returns a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
      *
-     * @param node a given node to visit its children
-     * @param cbNode a callback to be invoked for all child nodes
-     * @param cbNodes a callback to be invoked for embedded array
+     * @param node - a given node to visit its children
+     * @param cbNode - a callback to be invoked for all child nodes
+     * @param cbNodes - a callback to be invoked for embedded array
      *
      * @remarks Unlike `forEachChild`, `forEachChildRecursively` handles recursively invoking the traversal on each child node found,
      * and while doing so, handles traversing the structure without relying on the callstack to encode the tree structure.
@@ -968,8 +968,8 @@ namespace ts {
 
     /**
      * Parse json text into SyntaxTree and return node and parse errors if any
-     * @param fileName
-     * @param sourceText
+     * @param fileName -
+     * @param sourceText -
      */
     export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile {
         return Parser.parseJsonText(fileName, sourceText);
@@ -1895,7 +1895,7 @@ namespace ts {
          * Provides a better error message than the generic "';' expected" if possible for
          * known common variants of a missing semicolon, such as from a mispelled names.
          *
-         * @param node Node preceding the expected semicolon location.
+         * @param node - Node preceding the expected semicolon location.
          */
         function parseErrorForMissingSemicolonAfter(node: Expression | PropertyName): void {
             // Tagged template literals are sometimes used in places where only simple strings are allowed, i.e.:
@@ -1964,9 +1964,9 @@ namespace ts {
         /**
          * Reports a diagnostic error for the current token being an invalid name.
          *
-         * @param blankDiagnostic Diagnostic to report for the case of the name being blank (matched tokenIfBlankName).
-         * @param nameDiagnostic Diagnostic to report for all other cases.
-         * @param tokenIfBlankName Current token if the name was invalid for being blank (not provided / skipped).
+         * @param blankDiagnostic - Diagnostic to report for the case of the name being blank (matched tokenIfBlankName).
+         * @param nameDiagnostic - Diagnostic to report for all other cases.
+         * @param tokenIfBlankName - Current token if the name was invalid for being blank (not provided / skipped).
          */
         function parseErrorForInvalidName(nameDiagnostic: DiagnosticMessage, blankDiagnostic: DiagnosticMessage, tokenIfBlankName: SyntaxKind) {
             if (token() === tokenIfBlankName) {

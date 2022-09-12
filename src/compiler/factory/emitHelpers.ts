@@ -195,7 +195,7 @@ namespace ts {
 
         // ES2018 Destructuring Helpers
 
-        /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
+        /** Given value: o, propName: p, pattern: `{ a, b, ...p }` from the original statement
          * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`
          */
         function createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression {
@@ -413,8 +413,8 @@ namespace ts {
     }
 
     /**
-     * @param input Template string input strings
-     * @param args Names which need to be made file-level unique
+     * @param input - Template string input strings
+     * @param args - Names which need to be made file-level unique
      */
     export function helperString(input: TemplateStringsArray, ...args: string[]) {
         return (uniqueName: EmitHelperUniqueNameCallback) => {
@@ -849,17 +849,17 @@ namespace ts {
 
     /**
      * Parameters:
-     *  @param receiver — The object from which the private member will be read.
-     *  @param state — One of the following:
+     *  @param receiver - The object from which the private member will be read.
+     *  @param state - One of the following:
      *      - A WeakMap used to read a private instance field.
      *      - A WeakSet used as an instance brand for private instance methods and accessors.
      *      - A function value that should be the undecorated class constructor used to brand check private static fields, methods, and accessors.
-     *  @param kind — (optional pre TS 4.3, required for TS 4.3+) One of the following values:
-     *      - undefined — Indicates a private instance field (pre TS 4.3).
-     *      - "f" — Indicates a private field (instance or static).
-     *      - "m" — Indicates a private method (instance or static).
-     *      - "a" — Indicates a private accessor (instance or static).
-     *  @param f — (optional pre TS 4.3) Depends on the arguments for state and kind:
+     *  @param kind - (optional pre TS 4.3, required for TS 4.3+) One of the following values:
+     *      - undefined - Indicates a private instance field (pre TS 4.3).
+     *      - "f" - Indicates a private field (instance or static).
+     *      - "m" - Indicates a private method (instance or static).
+     *      - "a" - Indicates a private accessor (instance or static).
+     *  @param f - (optional pre TS 4.3) Depends on the arguments for state and kind:
      *      - If kind is "m", this should be the function corresponding to the static or instance method.
      *      - If kind is "a", this should be the function corresponding to the getter method, or undefined if the getter was not defined.
      *      - If kind is "f" and state is a function, this should be an object holding the value of a static field, or undefined if the static field declaration has not yet been evaluated.
@@ -867,33 +867,51 @@ namespace ts {
      * This helper will only ever be used by the compiler in the following ways:
      *
      * Reading from a private instance field (pre TS 4.3):
+     * ```
      *      __classPrivateFieldGet(<any>, <WeakMap>)
+     * ```
      *
      * Reading from a private instance field (TS 4.3+):
+     * ```
      *      __classPrivateFieldGet(<any>, <WeakMap>, "f")
+     * ```
      *
      * Reading from a private instance get accessor (when defined, TS 4.3+):
+     * ```
      *      __classPrivateFieldGet(<any>, <WeakSet>, "a", <function>)
+     * ```
      *
      * Reading from a private instance get accessor (when not defined, TS 4.3+):
+     * ```
      *      __classPrivateFieldGet(<any>, <WeakSet>, "a", void 0)
      *      NOTE: This always results in a runtime error.
+     * ```
      *
      * Reading from a private instance method (TS 4.3+):
+     * ```
      *      __classPrivateFieldGet(<any>, <WeakSet>, "m", <function>)
+     * ```
      *
      * Reading from a private static field (TS 4.3+):
+     * ```
      *      __classPrivateFieldGet(<any>, <constructor>, "f", <{ value: any }>)
+     * ```
      *
      * Reading from a private static get accessor (when defined, TS 4.3+):
+     * ```
      *      __classPrivateFieldGet(<any>, <constructor>, "a", <function>)
+     * ```
      *
      * Reading from a private static get accessor (when not defined, TS 4.3+):
+     * ```
      *      __classPrivateFieldGet(<any>, <constructor>, "a", void 0)
      *      NOTE: This always results in a runtime error.
+     * ```
      *
      * Reading from a private static method (TS 4.3+):
+     * ```
      *      __classPrivateFieldGet(<any>, <constructor>, "m", <function>)
+     * ```
      */
     export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldGet",
@@ -909,18 +927,18 @@ namespace ts {
 
     /**
      * Parameters:
-     *  @param receiver — The object on which the private member will be set.
-     *  @param state — One of the following:
+     *  @param receiver - The object on which the private member will be set.
+     *  @param state - One of the following:
      *      - A WeakMap used to store a private instance field.
      *      - A WeakSet used as an instance brand for private instance methods and accessors.
      *      - A function value that should be the undecorated class constructor used to brand check private static fields, methods, and accessors.
-     *  @param value — The value to set.
-     *  @param kind — (optional pre TS 4.3, required for TS 4.3+) One of the following values:
-     *       - undefined — Indicates a private instance field (pre TS 4.3).
-     *       - "f" — Indicates a private field (instance or static).
-     *       - "m" — Indicates a private method (instance or static).
-     *       - "a" — Indicates a private accessor (instance or static).
-     *   @param f — (optional pre TS 4.3) Depends on the arguments for state and kind:
+     *  @param value - The value to set.
+     *  @param kind - (optional pre TS 4.3, required for TS 4.3+) One of the following values:
+     *       - undefined - Indicates a private instance field (pre TS 4.3).
+     *       - "f" - Indicates a private field (instance or static).
+     *       - "m" - Indicates a private method (instance or static).
+     *       - "a" - Indicates a private accessor (instance or static).
+     *   @param f - (optional pre TS 4.3) Depends on the arguments for state and kind:
      *       - If kind is "m", this should be the function corresponding to the static or instance method.
      *       - If kind is "a", this should be the function corresponding to the setter method, or undefined if the setter was not defined.
      *       - If kind is "f" and state is a function, this should be an object holding the value of a static field, or undefined if the static field declaration has not yet been evaluated.
@@ -928,35 +946,53 @@ namespace ts {
      * This helper will only ever be used by the compiler in the following ways:
      *
      * Writing to a private instance field (pre TS 4.3):
+     * ```
      *      __classPrivateFieldSet(<any>, <WeakMap>, <any>)
+     * ```
      *
      * Writing to a private instance field (TS 4.3+):
+     * ```
      *      __classPrivateFieldSet(<any>, <WeakMap>, <any>, "f")
+     * ```
      *
      * Writing to a private instance set accessor (when defined, TS 4.3+):
+     * ```
      *      __classPrivateFieldSet(<any>, <WeakSet>, <any>, "a", <function>)
+     * ```
      *
      * Writing to a private instance set accessor (when not defined, TS 4.3+):
+     * ```
      *      __classPrivateFieldSet(<any>, <WeakSet>, <any>, "a", void 0)
      *      NOTE: This always results in a runtime error.
+     * ```
      *
      * Writing to a private instance method (TS 4.3+):
+     * ```
      *      __classPrivateFieldSet(<any>, <WeakSet>, <any>, "m", <function>)
      *      NOTE: This always results in a runtime error.
+     * ```
      *
      * Writing to a private static field (TS 4.3+):
+     * ```
      *      __classPrivateFieldSet(<any>, <constructor>, <any>, "f", <{ value: any }>)
+     * ```
      *
      * Writing to a private static set accessor (when defined, TS 4.3+):
+     * ```
      *      __classPrivateFieldSet(<any>, <constructor>, <any>, "a", <function>)
+     * ```
      *
      * Writing to a private static set accessor (when not defined, TS 4.3+):
+     * ```
      *      __classPrivateFieldSet(<any>, <constructor>, <any>, "a", void 0)
      *      NOTE: This always results in a runtime error.
+     * ```
      *
      * Writing to a private static method (TS 4.3+):
+     * ```
      *      __classPrivateFieldSet(<any>, <constructor>, <any>, "m", <function>)
      *      NOTE: This always results in a runtime error.
+     * ```
      */
     export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldSet",
@@ -973,11 +1009,11 @@ namespace ts {
 
     /**
      * Parameters:
-     *  @param state — One of the following:
+     *  @param state - One of the following:
      *      - A WeakMap when the member is a private instance field.
      *      - A WeakSet when the member is a private instance method or accessor.
      *      - A function value that should be the undecorated class constructor when the member is a private static field, method, or accessor.
-     *  @param receiver — The object being checked if it has the private member.
+     *  @param receiver - The object being checked if it has the private member.
      *
      * Usage:
      * This helper is used to transform `#field in expression` to

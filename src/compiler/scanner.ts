@@ -735,16 +735,16 @@ namespace ts {
      * line break. Multi-line comment ranges include the leading slash-asterisk and trailing
      * asterisk-slash characters.
      *
-     * @param reduce If true, accumulates the result of calling the callback in a fashion similar
+     * @param reduce - If true, accumulates the result of calling the callback in a fashion similar
      *      to reduceLeft. If false, iteration stops when the callback returns a truthy value.
-     * @param text The source text to scan.
-     * @param pos The position at which to start scanning.
-     * @param trailing If false, whitespace is skipped until the first line break and comments
+     * @param text - The source text to scan.
+     * @param pos - The position at which to start scanning.
+     * @param trailing - If false, whitespace is skipped until the first line break and comments
      *      between that location and the next token are returned. If true, comments occurring
      *      between the given position and the next line break are returned.
-     * @param cb The callback to execute as each comment range is encountered.
-     * @param state A state value to pass to each iteration of the callback.
-     * @param initial An initial value to pass when accumulating results (when "reduce" is true).
+     * @param cb - The callback to execute as each comment range is encountered.
+     * @param state - A state value to pass to each iteration of the callback.
+     * @param initial - An initial value to pass when accumulating results (when "reduce" is true).
      * @returns If "reduce" is true, the accumulated value. If "reduce" is false, the first truthy
      *      return value of the callback.
      */

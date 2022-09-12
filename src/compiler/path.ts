@@ -371,6 +371,7 @@ namespace ts {
      * getAnyExtensionFromPath("/path/to/file.js", ".ext", true) === ""
      * getAnyExtensionFromPath("/path/to/file.js", [".ext", ".js"], true) === ".js"
      * getAnyExtensionFromPath("/path/to/file.ext", ".EXT", false) === ""
+     * ```
      */
     export function getAnyExtensionFromPath(path: string, extensions: string | readonly string[], ignoreCase: boolean): string;
     export function getAnyExtensionFromPath(path: string, extensions?: string | readonly string[], ignoreCase?: boolean): string {
@@ -396,7 +397,7 @@ namespace ts {
 
     /**
      * Parse a path into an array containing a root component (at index 0) and zero or more path
-     * components (at indices > 0). The result is not normalized.
+     * components (at indices \> 0). The result is not normalized.
      * If the path is relative, the root component is `""`.
      * If the path is absolute, the root component includes the first path separator (`/`).
      *
@@ -423,6 +424,7 @@ namespace ts {
      * getPathComponents("file:///path/to/") === ["file:///", "path", "to"]
      * getPathComponents("file:///") === ["file:///"]
      * getPathComponents("file://") === ["file://"]
+     * ```
      */
     export function getPathComponents(path: string, currentDirectory = "") {
         path = combinePaths(currentDirectory, path);
@@ -433,7 +435,7 @@ namespace ts {
 
     /**
      * Formats a parsed path consisting of a root component (at index 0) and zero or more path
-     * segments (at indices > 0).
+     * segments (at indices \> 0).
      *
      * ```ts
      * getPathFromPathComponents(["/", "path", "to", "file.ext"]) === "/path/to/file.ext"
@@ -531,7 +533,7 @@ namespace ts {
 
     /**
      * Parse a path into an array containing a root component (at index 0) and zero or more path
-     * components (at indices > 0). The result is normalized.
+     * components (at `indices > 0`). The result is normalized.
      * If the path is relative, the root component is `""`.
      * If the path is absolute, the root component includes the first path separator (`/`).
      *

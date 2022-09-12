@@ -229,7 +229,7 @@ namespace ts {
         Parameter,
     }
 
-    /** @param containingNode Node to check for parse error */
+    /** @param containingNode - Node to check for parse error */
     type AddUnusedDiagnostic = (containingNode: Node, type: UnusedKind, diagnostic: DiagnosticWithLocation) => void;
 
     const isNotOverloadAndNotAccessor = and(isNotOverload, isNotAccessor);
@@ -1545,9 +1545,9 @@ namespace ts {
 
         /**
          * Get symbols that represent parameter-property-declaration as parameter and as property declaration
-         * @param parameter a parameterDeclaration node
-         * @param parameterName a name of the parameter to get the symbols for.
-         * @return a tuple of two symbols
+         * @param parameter - a parameterDeclaration node
+         * @param parameterName - a name of the parameter to get the symbols for.
+         * @returns a tuple of two symbols
          */
         function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: __String): [Symbol, Symbol] {
             const constructorDeclaration = parameter.parent;
@@ -1829,7 +1829,7 @@ namespace ts {
          * the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
          * the given name can be found.
          *
-         * @param isUse If true, this will count towards --noUnusedLocals / --noUnusedParameters.
+         * @param isUse - If true, this will count towards --noUnusedLocals / --noUnusedParameters.
          */
         function resolveName(
             location: Node | undefined,
@@ -2658,6 +2658,7 @@ namespace ts {
 
         /**
          * An alias symbol is created by one of the following declarations:
+         * ```
          * import <symbol> = ...
          * import <symbol> from ...
          * import * as <symbol> from ...
@@ -2670,6 +2671,7 @@ namespace ts {
          * {<Identifier>}
          * {name: <EntityNameExpression>}
          * const { x } = require ...
+         * ```
          */
         function isAliasSymbolDeclaration(node: Node): boolean {
             return node.kind === SyntaxKind.ImportEqualsDeclaration
@@ -3238,10 +3240,10 @@ namespace ts {
          * JS-emitting expression, we can quickly determine if that symbol is effectively type-only
          * and issue an error if so.
          *
-         * @param aliasDeclaration The alias declaration not marked as type-only
-         * @param immediateTarget The symbol to which the alias declaration immediately resolves
-         * @param finalTarget The symbol to which the alias declaration ultimately resolves
-         * @param overwriteEmpty Checks `resolvesToSymbol` for type-only declarations even if `aliasDeclaration`
+         * @param aliasDeclaration - The alias declaration not marked as type-only
+         * @param immediateTarget - The symbol to which the alias declaration immediately resolves
+         * @param finalTarget - The symbol to which the alias declaration ultimately resolves
+         * @param overwriteEmpty - Checks `resolvesToSymbol` for type-only declarations even if `aliasDeclaration`
          * has already been marked as not resolving to a type-only alias. Used when recursively resolving qualified
          * names of import aliases, e.g. `import C = a.b.C`. If namespace `a` is not found to be type-only, the
          * import declaration will initially be marked as not resolving to a type-only symbol. But, namespace `b`
@@ -4437,7 +4439,7 @@ namespace ts {
             return result;
 
             /**
-             * @param {ignoreQualification} boolean Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
+             * @param ignoreQualification - Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
              */
             function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable, ignoreQualification?: boolean, isLocalNameLookup?: boolean): Symbol[] | undefined {
                 if (!pushIfUnique(visitedSymbolTables!, symbols)) {
@@ -4650,10 +4652,10 @@ namespace ts {
         /**
          * Check if the given symbol in given enclosing declaration is accessible and mark all associated alias to be visible if requested
          *
-         * @param symbol a Symbol to check if accessible
-         * @param enclosingDeclaration a Node containing reference to the symbol
-         * @param meaning a SymbolFlags to check if such meaning of the symbol is accessible
-         * @param shouldComputeAliasToMakeVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
+         * @param symbol - a Symbol to check if accessible
+         * @param enclosingDeclaration - a Node containing reference to the symbol
+         * @param meaning - a SymbolFlags to check if such meaning of the symbol is accessible
+         * @param shouldComputeAliasToMakeVisible - a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
          */
         function isSymbolAccessible(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
             return isSymbolAccessibleWorker(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, /*allowModules*/ true);
@@ -6175,7 +6177,7 @@ namespace ts {
                 }
                 return chain;
 
-                /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
+                /** @param endOfChain - Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
                     let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, !!(context.flags & NodeBuilderFlags.UseOnlyExternalAliasing));
                     let parentSpecifiers: (string | undefined)[];
@@ -8708,8 +8710,8 @@ namespace ts {
          * In order to see if the same query has already been done before, the target object and the propertyName both
          * must match the one passed in.
          *
-         * @param target The symbol, type, or signature whose type is being queried
-         * @param propertyName The property name that should be used to query the target for its type
+         * @param target - The symbol, type, or signature whose type is being queried
+         * @param propertyName - The property name that should be used to query the target for its type
          */
         function pushTypeResolution(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
             const resolutionCycleStartIndex = findResolutionCycleStartIndex(target, propertyName);
@@ -11000,21 +11002,23 @@ namespace ts {
          *
          * For example, given:
          *
+         * ```
          *   const x = Symbol();
          *
          *   interface I {
          *     [x]: number;
          *   }
+         * ```
          *
          * The binder gives the property `[x]: number` a special symbol with the name "__computed".
          * In the late-binding phase we can type-check the expression `x` and see that it has a
          * unique symbol type which we can then use as the name of the member. This allows users
          * to define custom symbols that can be used in the members of an object type.
          *
-         * @param parent The containing symbol for the member.
-         * @param earlySymbols The early-bound symbols of the parent.
-         * @param lateSymbols The late-bound symbols of the parent.
-         * @param decl The member to bind.
+         * @param parent - The containing symbol for the member.
+         * @param earlySymbols - The early-bound symbols of the parent.
+         * @param lateSymbols - The late-bound symbols of the parent.
+         * @param decl - The member to bind.
          */
         function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: UnderscoreEscapedMap<TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
@@ -11831,7 +11835,7 @@ namespace ts {
             }
         }
 
-        /** Resolve the members of a mapped type { [P in K]: T } */
+        /** Resolve the members of a mapped type `{ [P in K]: T }` */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
             let indexInfos: IndexInfo[] | undefined;
@@ -12758,8 +12762,8 @@ namespace ts {
          * necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
          * Object and Function as appropriate.
          *
-         * @param type a type to look up property from
-         * @param name a name of property to look up in a given type
+         * @param type - a type to look up property from
+         * @param name - a name of property to look up in a given type
          */
         function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean, includeTypeOnlyMembers?: boolean): Symbol | undefined {
             type = getReducedApparentType(type);
@@ -12979,9 +12983,9 @@ namespace ts {
          * Fill in default types for unsupplied type arguments. If `typeArguments` is undefined
          * when a default type is supplied, a new array will be created and returned.
          *
-         * @param typeArguments The supplied type arguments.
-         * @param typeParameters The requested type parameters.
-         * @param minTypeArgumentCount The minimum number of required type arguments.
+         * @param typeArguments - The supplied type arguments.
+         * @param typeParameters - The requested type parameters.
+         * @param minTypeArgumentCount - The minimum number of required type arguments.
          */
         function fillMissingTypeArguments(typeArguments: readonly Type[], typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
         function fillMissingTypeArguments(typeArguments: readonly Type[] | undefined, typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[] | undefined;
@@ -15332,7 +15336,7 @@ namespace ts {
          * rather than manufacturing the properties. We can't just fetch the `constraintType` since that would ignore mappings
          * and mapping the `constraintType` directly ignores how mapped types map _properties_ and not keys (thus ignoring subtype
          * reduction in the constraintType) when possible.
-         * @param noIndexSignatures Indicates if _string_ index signatures should be elided. (other index signatures are always reported)
+         * @param noIndexSignatures - Indicates if _string_ index signatures should be elided. (other index signatures are always reported)
          */
         function getIndexTypeForMappedType(type: MappedType, stringsOnly: boolean, noIndexSignatures: boolean | undefined) {
             const typeParameter = getTypeParameterFromMappedType(type);
@@ -18530,14 +18534,14 @@ namespace ts {
 
         /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
-         * @param source The left-hand-side of the relation.
-         * @param target The right-hand-side of the relation.
-         * @param relation The relation considered. One of 'identityRelation', 'subtypeRelation', 'assignableRelation', or 'comparableRelation'.
+         * @param source - The left-hand-side of the relation.
+         * @param target - The right-hand-side of the relation.
+         * @param relation - The relation considered. One of 'identityRelation', 'subtypeRelation', 'assignableRelation', or 'comparableRelation'.
          * Used as both to determine which checks are performed and as a cache of previously computed results.
-         * @param errorNode The suggested node upon which all errors will be reported, if defined. This may or may not be the actual node used.
-         * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
-         * @param containingMessageChain A chain of errors to prepend any new errors found.
-         * @param errorOutputContainer Return the diagnostic. Do not log if 'skipLogging' is truthy.
+         * @param errorNode - The suggested node upon which all errors will be reported, if defined. This may or may not be the actual node used.
+         * @param headMessage - If the error chain should be prepended by a head message, then headMessage will be used.
+         * @param containingMessageChain - A chain of errors to prepend any new errors found.
+         * @param errorOutputContainer - Return the diagnostic. Do not log if 'skipLogging' is truthy.
          */
         function checkTypeRelatedTo(
             source: Type,
@@ -21701,8 +21705,8 @@ namespace ts {
          *
          * @see narrowTypeByEquality
          *
-         * @param source
-         * @param target
+         * @param source -
+         * @param target -
          */
         function isCoercibleUnderDoubleEquals(source: Type, target: Type): boolean {
             return ((source.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.BooleanLiteral)) !== 0)
@@ -22226,7 +22230,7 @@ namespace ts {
         }
 
         /**
-         * Infer a suitable input type for a homomorphic mapped type { [P in keyof T]: X }. We construct
+         * Infer a suitable input type for a homomorphic mapped type `{ [P in keyof T]: X }`. We construct
          * an object type with the same set of properties as the source type, where the type of each
          * property is computed by inferring from the source property type to X for the type
          * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
@@ -22370,8 +22374,8 @@ namespace ts {
 
         /**
          * Tests whether the provided string can be parsed as a number.
-         * @param s The string to test.
-         * @param roundTripOnly Indicates the resulting number matches the input when converted back to a string.
+         * @param s - The string to test.
+         * @param roundTripOnly - Indicates the resulting number matches the input when converted back to a string.
          */
         function isValidNumberString(s: string, roundTripOnly: boolean): boolean {
             if (s === "") return false;
@@ -22380,7 +22384,7 @@ namespace ts {
         }
 
         /**
-         * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
+         * @param text - a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
          */
         function parseBigIntLiteralType(text: string) {
             const negative = text.startsWith("-");
@@ -22390,8 +22394,8 @@ namespace ts {
 
         /**
          * Tests whether the provided string can be parsed as a bigint.
-         * @param s The string to test.
-         * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
+         * @param s - The string to test.
+         * @param roundTripOnly - Indicates the resulting bigint matches the input when converted back to a string.
          */
         function isValidBigIntString(s: string, roundTripOnly: boolean): boolean {
             if (s === "") return false;
@@ -26310,7 +26314,7 @@ namespace ts {
         /**
          * Check if the given class-declaration extends null then return true.
          * Otherwise, return false
-         * @param classDecl a class declaration to check if it extends null
+         * @param classDecl - a class declaration to check if it extends null
          */
         function classDeclarationExtendsNull(classDecl: ClassDeclaration): boolean {
             const classSymbol = getSymbolOfNode(classDecl);
@@ -27495,7 +27499,7 @@ namespace ts {
          *   - Use 'getContextualType' when you are simply going to propagate the result to the expression.
          *   - Use 'getApparentTypeOfContextualType' when you're going to need the members of the type.
          *
-         * @param node the expression whose contextual type will be returned.
+         * @param node - the expression whose contextual type will be returned.
          * @returns the contextual type of an expression.
          */
         function getContextualType(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -28398,9 +28402,9 @@ namespace ts {
         /**
          * Get attributes type of the JSX opening-like element. The result is from resolving "attributes" property of the opening-like element.
          *
-         * @param openingLikeElement a JSX opening-like element
-         * @param filter a function to remove attributes that will not participate in checking whether attributes are assignable
-         * @return an anonymous type (similar to the one returned by checkObjectLiteral) in which its properties are attributes property.
+         * @param openingLikeElement - a JSX opening-like element
+         * @param filter - a function to remove attributes that will not participate in checking whether attributes are assignable
+         * @returns an anonymous type (similar to the one returned by checkObjectLiteral) in which its properties are attributes property.
          * @remarks Because this function calls getSpreadType, it needs to use the same checks as checkObjectLiteral,
          * which also calls getSpreadType.
          */
@@ -28514,8 +28518,8 @@ namespace ts {
 
             /**
              * Create anonymous type from given attributes symbol table.
-             * @param symbol a symbol of JsxAttributes containing attributes corresponding to attributesTable
-             * @param attributesTable a symbol table of attributes property
+             * @param symbol - a symbol of JsxAttributes containing attributes corresponding to attributesTable
+             * @param attributesTable - a symbol table of attributes property
              */
             function createJsxAttributesType() {
                 objectFlags |= freshObjectLiteralFlag;
@@ -28560,7 +28564,7 @@ namespace ts {
         /**
          * Check attributes property of opening-like element. This function is called during chooseOverload to get call signature of a JSX opening-like element.
          * (See "checkApplicableSignatureForJsxOpeningLikeElement" for how the function is used)
-         * @param node a JSXAttributes to be resolved of its type
+         * @param node - a JSXAttributes to be resolved of its type
          */
         function checkJsxAttributes(node: JsxAttributes, checkMode: CheckMode | undefined) {
             return createJsxAttributesTypeFromAttributesProperty(node.parent, checkMode);
@@ -28676,7 +28680,7 @@ namespace ts {
          * Look into JSX namespace and then look for container with matching name as nameOfAttribPropContainer.
          * Get a single property from that container if existed. Report an error if there are more than one property.
          *
-         * @param nameOfAttribPropContainer a string of value JsxNames.ElementAttributesPropertyNameContainer or JsxNames.ElementChildrenAttributeNameContainer
+         * @param nameOfAttribPropContainer - a string of value JsxNames.ElementAttributesPropertyNameContainer or JsxNames.ElementChildrenAttributeNameContainer
          *          if other string is given or the container doesn't exist, return undefined.
          */
         function getNameFromJsxElementAttributesContainer(nameOfAttribPropContainer: __String, jsxNamespace: Symbol): __String | undefined {
@@ -28806,7 +28810,7 @@ namespace ts {
         /**
          * Get attributes type of the given intrinsic opening-like Jsx element by resolving the tag name.
          * The function is intended to be called from a function which has checked that the opening element is an intrinsic element.
-         * @param node an intrinsic JSX opening-like element
+         * @param node - an intrinsic JSX opening-like element
          */
         function getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node: JsxOpeningLikeElement): Type {
             Debug.assert(isJsxIntrinsicIdentifier(node.tagName));
@@ -28925,9 +28929,9 @@ namespace ts {
          *    (this means that 'toString', for example, is not usually a known property).
          * 4. In a union or intersection type,
          *    a property is considered known if it is known in any constituent type.
-         * @param targetType a type to search a given name in
-         * @param name a property name to search
-         * @param isComparingJsxAttributes a boolean flag indicating whether we are searching in JsxAttributesType
+         * @param targetType - a type to search a given name in
+         * @param name - a property name to search
+         * @param isComparingJsxAttributes - a boolean flag indicating whether we are searching in JsxAttributesType
          */
         function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
@@ -28995,10 +28999,10 @@ namespace ts {
         /**
          * Check whether the requested property access is valid.
          * Returns true if node is a valid property access, and false otherwise.
-         * @param node The node to be checked.
-         * @param isSuper True if the access is from `super.`.
-         * @param type The type of the object whose property is being accessed. (Not the type of the property.)
-         * @param prop The symbol for the property being accessed.
+         * @param node - The node to be checked.
+         * @param isSuper - True if the access is from `super.`.
+         * @param type - The type of the object whose property is being accessed. (Not the type of the property.)
+         * @param prop - The symbol for the property being accessed.
          */
         function checkPropertyAccessibility(
             node: PropertyAccessExpression | QualifiedName | PropertyAccessExpression | VariableDeclaration | ParameterDeclaration | ImportTypeNode | PropertyAssignment | ShorthandPropertyAssignment | BindingElement,
@@ -29015,12 +29019,12 @@ namespace ts {
         /**
          * Check whether the requested property can be accessed at the requested location.
          * Returns true if node is a valid property access, and false otherwise.
-         * @param location The location node where we want to check if the property is accessible.
-         * @param isSuper True if the access is from `super.`.
-         * @param writing True if this is a write property access, false if it is a read property access.
-         * @param containingType The type of the object whose property is being accessed. (Not the type of the property.)
-         * @param prop The symbol for the property being accessed.
-         * @param errorNode The node where we should report an invalid property access error, or undefined if we should not report errors.
+         * @param location - The location node where we want to check if the property is accessible.
+         * @param isSuper - True if the access is from `super.`.
+         * @param writing - True if this is a write property access, false if it is a read property access.
+         * @param containingType - The type of the object whose property is being accessed. (Not the type of the property.)
+         * @param prop - The symbol for the property being accessed.
+         * @param errorNode - The node where we should report an invalid property access error, or undefined if we should not report errors.
          */
         function checkPropertyAccessibilityAtLocation(location: Node,
             isSuper: boolean, writing: boolean,
@@ -29491,7 +29495,7 @@ namespace ts {
 
         /**
          * Determines whether a did-you-mean error should be a suggestion in an unchecked JS file.
-         * Only applies to unchecked JS files without checkJS, // @ts-check or // @ts-nocheck
+         * Only applies to unchecked JS files without checkJS, `// @ts-check` or `// @ts-nocheck`
          * It does not suggest when the suggestion:
          * - Is from a global file that is different from the reference file, or
          * - (optionally) Is a class, or is a this.x property access expression
@@ -29921,13 +29925,13 @@ namespace ts {
 
         /**
          * Checks if an existing property access is valid for completions purposes.
-         * @param node a property access-like node where we want to check if we can access a property.
+         * @param node - a property access-like node where we want to check if we can access a property.
          * This node does not need to be an access of the property we are checking.
          * e.g. in completions, this node will often be an incomplete property access node, as in `foo.`.
          * Besides providing a location (i.e. scope) used to check property accessibility, we use this node for
          * computing whether this is a `super` property access.
-         * @param type the type whose property we are checking.
-         * @param property the accessed property's symbol.
+         * @param type - the type whose property we are checking.
+         * @param property - the accessed property's symbol.
          */
         function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean {
             return isPropertyAccessible(node,
@@ -29957,11 +29961,11 @@ namespace ts {
          * Checks if a property can be accessed in a location.
          * The location is given by the `node` parameter.
          * The node does not need to be a property access.
-         * @param node location where to check property accessibility
-         * @param isSuper whether to consider this a `super` property access, e.g. `super.foo`.
-         * @param isWrite whether this is a write access, e.g. `++foo.x`.
-         * @param containingType type where the property comes from.
-         * @param property property symbol.
+         * @param node - location where to check property accessibility
+         * @param isSuper - whether to consider this a `super` property access, e.g. `super.foo`.
+         * @param isWrite - whether this is a write access, e.g. `++foo.x`.
+         * @param containingType - type where the property comes from.
+         * @param property - property symbol.
          */
         function isPropertyAccessible(
             node: Node,
@@ -30496,9 +30500,9 @@ namespace ts {
 
         /**
          * Check if the given signature can possibly be a signature called by the JSX opening-like element.
-         * @param node a JSX opening-like element we are trying to figure its call signature
-         * @param signature a candidate signature we are trying whether it is a call signature
-         * @param relation a relationship to check parameter and argument type
+         * @param node - a JSX opening-like element we are trying to figure its call signature
+         * @param signature - a candidate signature we are trying whether it is a call signature
+         * @param relation - a relationship to check parameter and argument type
          */
         function checkApplicableSignatureForJsxOpeningLikeElement(
             node: JsxOpeningLikeElement,
@@ -31963,10 +31967,10 @@ namespace ts {
 
         /**
          * Resolve a signature of a given call-like expression.
-         * @param node a call-like expression to try resolve a signature for
-         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
+         * @param node - a call-like expression to try resolve a signature for
+         * @param candidatesOutArray - an array of signature to be filled in by the function. It is passed by signature help in the language service;
          *                           the function will fill it up with appropriate candidate signatures
-         * @return a signature of the call-like expression or undefined if one can't be found
+         * @returns a signature of the call-like expression or undefined if one can't be found
          */
         function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[] | undefined, checkMode?: CheckMode): Signature {
             const links = getNodeLinks(node);
@@ -32107,7 +32111,7 @@ namespace ts {
 
         /**
          * Syntactically and semantically checks a call or new expression.
-         * @param node The call/new expression to be checked.
+         * @param node - The call/new expression to be checked.
          * @returns On success, the expression's signature's return type. On failure, anyType.
          */
         function checkCallExpression(node: CallExpression | NewExpression, checkMode?: CheckMode): Type {
@@ -36744,7 +36748,7 @@ namespace ts {
 
         /**
          * Gets the "promised type" of a promise.
-         * @param type The type of the promise.
+         * @param type - The type of the promise.
          * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
          */
         function getPromisedTypeOfPromise(type: Type, errorNode?: Node, thisTypeForErrorOut?: { value?: Type }): Type | undefined {
@@ -36830,8 +36834,8 @@ namespace ts {
 
         /**
          * Gets the "awaited type" of a type.
-         * @param type The type to await.
-         * @param withAlias When `true`, wraps the "awaited type" in `Awaited<T>` if needed.
+         * @param type - The type to await.
+         * @param withAlias - When `true`, wraps the "awaited type" in `Awaited<T>` if needed.
          * @remarks The "awaited type" of an expression is its "promised type" if the expression is a
          * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
          * The runtime behavior of the `await` keyword.
@@ -37088,7 +37092,7 @@ namespace ts {
          * that in turn supplies a `resolve` function as one of its arguments and results in an
          * object with a callable `then` signature.
          *
-         * @param node The signature to check
+         * @param node - The signature to check
          */
         function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature, returnTypeNode: TypeNode) {
             // As part of our emit for an async function, we will need to emit the entity name of
@@ -37265,7 +37269,7 @@ namespace ts {
          * from external module.
          * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
          * union and intersection type
-         * @param node
+         * @param node -
          */
         function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode | undefined): void {
             const entityName = getEntityNameForDecoratorMetadata(node);
@@ -37769,7 +37773,9 @@ namespace ts {
                 if (isObjectBindingPattern(declaration.parent)) {
                     /**
                      * ignore starts with underscore names _
+                     * ```
                      * const { a: _a } = { a: 1 }
+                     * ```
                      */
                     return !!(declaration.propertyName && isIdentifierThatStartsWithUnderscore(declaration.name));
                 }
@@ -40228,7 +40234,7 @@ namespace ts {
         }
 
         /**
-         * @param member Existing member node to be checked.
+         * @param member - Existing member node to be checked.
          * Note: `member` cannot be a synthetic node.
          */
         function checkExistingMemberForOverrideModifier(
@@ -40271,7 +40277,7 @@ namespace ts {
          * i.e. checking a member that does not yet exist in the program.
          * An example of that would be to call this function in a completions scenario,
          * when offering a method declaration as completion.
-         * @param errorNode The node where we should report an error, or undefined if we should not report errors.
+         * @param errorNode - The node where we should report an error, or undefined if we should not report errors.
          */
         function checkMemberForOverrideModifier(
             node: ClassLikeDeclaration,
@@ -40406,8 +40412,8 @@ namespace ts {
 
         /**
          * Checks a member declaration node to see if has a missing or invalid `override` modifier.
-         * @param node Class-like node where the member is declared.
-         * @param member Member declaration node.
+         * @param node - Class-like node where the member is declared.
+         * @param member - Member declaration node.
          * Note: `member` can be a synthetic node without a parent.
          */
         function getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus {
@@ -42411,9 +42417,9 @@ namespace ts {
             /**
              * Copy the given symbol into symbol tables if the symbol has the given meaning
              * and it doesn't already existed in the symbol table
-             * @param key a key for storing in symbol table; if undefined, use symbol.name
-             * @param symbol the symbol to be added into symbol table
-             * @param meaning meaning of symbol to filter by before adding to symbol table
+             * @param key - a key for storing in symbol table; if undefined, use symbol.name
+             * @param symbol - the symbol to be added into symbol table
+             * @param meaning - meaning of symbol to filter by before adding to symbol table
              */
             function copySymbol(symbol: Symbol, meaning: SymbolFlags): void {
                 if (getCombinedLocalAndExportSymbolFlags(symbol) & meaning) {

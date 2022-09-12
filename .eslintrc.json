@@ -11,7 +11,7 @@
         "es6": true
     },
     "plugins": [
-        "@typescript-eslint", "jsdoc", "no-null", "import", "eslint-plugin-local"
+        "@typescript-eslint", "jsdoc", "no-null", "import", "eslint-plugin-local", "eslint-plugin-tsdoc"
     ],
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at
@@ -22,7 +22,13 @@
         //
         // ESLint in VS Code will lint any opened file (so long as it's not eslintignore'd), so
         // that will work regardless of the below.
-        { "files": ["*.ts", "*.mts", "*.cts", "*.mjs", "*.cjs"] }
+        { "files": ["*.ts", "*.mts", "*.cts", "*.mjs", "*.cjs"] },
+        {
+            "files": ["*.js", "*.mjs", "*.cjs"],
+            "rules": {
+                "tsdoc/syntax": "off"
+            }
+        }
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
@@ -104,6 +110,9 @@
 
         // eslint-plugin-jsdoc
         "jsdoc/check-alignment": "error",
+        
+        // eslint-plugin-tsdoc
+        "tsdoc/syntax": "error",
 
         // eslint
         "constructor-super": "error",

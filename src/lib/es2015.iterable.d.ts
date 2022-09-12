@@ -58,15 +58,15 @@ interface Array<T> {
 interface ArrayConstructor {
     /**
      * Creates an array from an iterable object.
-     * @param iterable An iterable object to convert to an array.
+     * @param iterable - An iterable object to convert to an array.
      */
     from<T>(iterable: Iterable<T> | ArrayLike<T>): T[];
 
     /**
      * Creates an array from an iterable object.
-     * @param iterable An iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param iterable - An iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
 }
@@ -201,7 +201,7 @@ interface PromiseConstructor {
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
-     * @param values An iterable of Promises.
+     * @param values - An iterable of Promises.
      * @returns A new Promise.
      */
     all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>;
@@ -209,7 +209,7 @@ interface PromiseConstructor {
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
      * or rejected.
-     * @param values An iterable of Promises.
+     * @param values - An iterable of Promises.
      * @returns A new Promise.
      */
     race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>;
@@ -241,9 +241,9 @@ interface Int8ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
 }
@@ -269,9 +269,9 @@ interface Uint8ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
 }
@@ -300,9 +300,9 @@ interface Uint8ClampedArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
 }
@@ -330,9 +330,9 @@ interface Int16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
 }
@@ -358,9 +358,9 @@ interface Uint16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
 }
@@ -386,9 +386,9 @@ interface Int32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
 }
@@ -414,9 +414,9 @@ interface Uint32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
 }
@@ -442,9 +442,9 @@ interface Float32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
 }
@@ -470,9 +470,9 @@ interface Float64ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param arrayLike - An array-like or iterable object to convert to an array.
+     * @param mapfn - A mapping function to call on every element of the array.
+     * @param thisArg - Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
 }

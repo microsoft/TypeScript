@@ -67,7 +67,7 @@ namespace ts {
         const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
         const symbols = new Map<number, [symbol: Symbol, moduleSymbol: Symbol]>();
         /**
-         * Key: node_modules package name (no @types).
+         * Key: node_modules package name (no `@types`).
          * Value: path to deepest node_modules folder seen that is
          * both visible to `usableByFileName` and contains the package.
          *

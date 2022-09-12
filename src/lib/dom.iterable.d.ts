@@ -27,8 +27,8 @@ interface NodeList {
     entries(): IterableIterator<[number, Node]>;
     /**
      * Performs the specified action for each node in an list.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @param callbackfn -  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
+     * @param thisArg -  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: Node, index: number, listObj: NodeList) => void, thisArg?: any): void;
     /**
@@ -54,8 +54,8 @@ interface NodeListOf<TNode extends Node> {
 
     /**
      * Performs the specified action for each node in an list.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @param callbackfn -  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
+     * @param thisArg -  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: TNode, index: number, listObj: NodeListOf<TNode>) => void, thisArg?: any): void;
     /**

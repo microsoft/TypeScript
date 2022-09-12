@@ -1899,7 +1899,7 @@ namespace ts {
 
     /**
      * Read tsconfig.json file
-     * @param fileName The path to the config file
+     * @param fileName - The path to the config file
      */
     export function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): { config?: any; error?: Diagnostic } {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
@@ -1908,8 +1908,8 @@ namespace ts {
 
     /**
      * Parse the text of the tsconfig.json file
-     * @param fileName The path to the config file
-     * @param jsonText The text of the config file
+     * @param fileName - The path to the config file
+     * @param jsonText - The text of the config file
      */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
@@ -1921,7 +1921,7 @@ namespace ts {
 
     /**
      * Read tsconfig.json file
-     * @param fileName The path to the config file
+     * @param fileName - The path to the config file
      */
     export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
@@ -2062,25 +2062,25 @@ namespace ts {
          * Notifies parent option object is being set with the optionKey and a valid optionValue
          * Currently it notifies only if there is element with type object (parentOption) and
          * has element's option declarations map associated with it
-         * @param parentOption parent option name in which the option and value are being set
-         * @param option option declaration which is being set with the value
-         * @param value value of the option
+         * @param parentOption - parent option name in which the option and value are being set
+         * @param option - option declaration which is being set with the value
+         * @param value - value of the option
          */
         onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue): void;
         /**
          * Notify when valid root key value option is being set
-         * @param key option key
-         * @param keyNode node corresponding to node in the source file
-         * @param value computed value of the key
-         * @param ValueNode node corresponding to value in the source file
+         * @param key - option key
+         * @param keyNode - node corresponding to node in the source file
+         * @param value - computed value of the key
+         * @param ValueNode - node corresponding to value in the source file
          */
         onSetValidOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
         /**
          * Notify when unknown root key value option is being set
-         * @param key option key
-         * @param keyNode node corresponding to node in the source file
-         * @param value computed value of the key
-         * @param ValueNode node corresponding to value in the source file
+         * @param key - option key
+         * @param keyNode - node corresponding to node in the source file
+         * @param value - computed value of the key
+         * @param ValueNode - node corresponding to value in the source file
          */
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
     }
@@ -2364,9 +2364,9 @@ namespace ts {
 
     /**
      * Generate an uncommented, complete tsconfig for use with "--showConfig"
-     * @param configParseResult options to be generated into tsconfig.json
-     * @param configFileName name of the parsed config file - output paths will be generated relative to this
-     * @param host provides current directory and case sensitivity services
+     * @param configParseResult - options to be generated into tsconfig.json
+     * @param configFileName - name of the parsed config file - output paths will be generated relative to this
+     * @param host - provides current directory and case sensitivity services
      */
     /** @internal */
     export function convertToTSConfig(configParseResult: ParsedCommandLine, configFileName: string, host: ConvertToTSConfigHost): TSConfig {
@@ -2521,7 +2521,7 @@ namespace ts {
 
     /**
      * Generate a list of the compiler options whose value is not the default.
-     * @param options compilerOptions to be evaluated.
+     * @param options - compilerOptions to be evaluated.
     /** @internal */
     export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: string): string {
         const compilerOptionsMap = getSerializedCompilerOption(options);
@@ -2554,7 +2554,7 @@ namespace ts {
 
     /**
      * Get the compiler options to be written into the tsconfig.json.
-     * @param options commandlineOptions to be included in the compileOptions.
+     * @param options - commandlineOptions to be included in the compileOptions.
      */
     function getSerializedCompilerOption(options: CompilerOptions): ESMap<string, CompilerOptionsValue> {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
@@ -2562,8 +2562,8 @@ namespace ts {
     }
     /**
      * Generate tsconfig configuration when running command line "--init"
-     * @param options commandlineOptions to be generated into tsconfig.json
-     * @param fileNames array of filenames to be generated into tsconfig.json
+     * @param options - commandlineOptions to be generated into tsconfig.json
+     * @param fileNames - array of filenames to be generated into tsconfig.json
      */
     /* @internal */
     export function generateTSConfig(options: CompilerOptions, fileNames: readonly string[], newLine: string): string {
@@ -2682,9 +2682,9 @@ namespace ts {
 
     /**
      * Parse the contents of a config file (tsconfig.json).
-     * @param json The contents of the config file to parse
-     * @param host Instance of ParseConfigHost used to enumerate files in folder.
-     * @param basePath A root directory to resolve relative path entries in the config
+     * @param json - The contents of the config file to parse
+     * @param host - Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath - A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
@@ -2693,9 +2693,9 @@ namespace ts {
 
     /**
      * Parse the contents of a config file (tsconfig.json).
-     * @param jsonNode The contents of the config file to parse
-     * @param host Instance of ParseConfigHost used to enumerate files in folder.
-     * @param basePath A root directory to resolve relative path entries in the config
+     * @param jsonNode - The contents of the config file to parse
+     * @param host - Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath - A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
     export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
@@ -2727,12 +2727,12 @@ namespace ts {
 
     /**
      * Parse the contents of a config file from json or json source file (tsconfig.json).
-     * @param json The contents of the config file to parse
-     * @param sourceFile sourceFile corresponding to the Json
-     * @param host Instance of ParseConfigHost used to enumerate files in folder.
-     * @param basePath A root directory to resolve relative path entries in the config
+     * @param json - The contents of the config file to parse
+     * @param sourceFile - sourceFile corresponding to the Json
+     * @param host - Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath - A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
-     * @param resolutionStack Only present for backwards-compatibility. Should be empty.
+     * @param resolutionStack - Only present for backwards-compatibility. Should be empty.
      */
     function parseJsonConfigFileContentWorker(
         json: any,
@@ -3352,39 +3352,43 @@ namespace ts {
 
     /**
      * Tests for a path that ends in a recursive directory wildcard.
-     * Matches **, \**, **\, and \**\, but not a**b.
+     * Matches `**`, `\**`, `**\`, and `\**\`, but not `a**b`.
      *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
+     * NOTE: used `\` in place of / above to avoid issues with multiline comments.
      *
      * Breakdown:
+     * ```
      *  (^|\/)      # matches either the beginning of the string or a directory separator.
      *  \*\*        # matches the recursive directory wildcard "**".
      *  \/?$        # matches an optional trailing directory separator at the end of the string.
+     * ```
      */
     const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
 
     /**
      * Matches the portion of a wildcard path that does not contain wildcards.
-     * Matches \a of \a\*, or \a\b\c of \a\b\c\?\d.
+     * Matches `\a` of `\a\*`, or `\a\b\c` of `\a\b\c\?\d`.
      *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
+     * NOTE: used `\` in place of / above to avoid issues with multiline comments.
      *
      * Breakdown:
+     * ```
      *  ^                   # matches the beginning of the string
      *  [^*?]*              # matches any number of non-wildcard characters
      *  (?=\/[^/]*[*?])     # lookahead that matches a directory separator followed by
      *                      # a path component that contains at least one wildcard character (* or ?).
+     * ```
      */
     const wildcardDirectoryPattern = /^[^*?]*(?=\/[^/]*[*?])/;
 
     /**
      * Gets the file names from the provided config file specs that contain, files, include, exclude and
      * other properties needed to resolve the file names
-     * @param configFileSpecs The config file specs extracted with file names to include, wildcards to include/exclude and other details
-     * @param basePath The base path for any relative file specifications.
-     * @param options Compiler options.
-     * @param host The host used to resolve files and directories.
-     * @param extraFileExtensions optionaly file extra file extension information from host
+     * @param configFileSpecs - The config file specs extracted with file names to include, wildcards to include/exclude and other details
+     * @param basePath - The base path for any relative file specifications.
+     * @param options - Compiler options.
+     * @param host - The host used to resolve files and directories.
+     * @param extraFileExtensions - optionaly file extra file extension information from host
      */
     /* @internal */
     export function getFileNamesFromConfigSpecs(
@@ -3654,7 +3658,7 @@ namespace ts {
      * Determines whether a literal or wildcard file has already been included that has a higher
      * extension priority.
      *
-     * @param file The path to the file.
+     * @param file - The path to the file.
      */
     function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
         const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
@@ -3684,7 +3688,7 @@ namespace ts {
      * Removes files included via wildcard expansion with a lower extension priority that have
      * already been included.
      *
-     * @param file The path to the file.
+     * @param file - The path to the file.
      */
     function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
         const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);

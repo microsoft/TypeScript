@@ -73,7 +73,7 @@ namespace ts {
     /**
      * Creates an ES5 compatible literal from an ES6 template literal.
      *
-     * @param node The ES6 template literal.
+     * @param node - The ES6 template literal.
      */
     function getRawLiteral(node: TemplateLiteralLikeNode, currentSourceFile: SourceFile) {
         // Find original source text, since we need to emit the raw strings of the tagged template.

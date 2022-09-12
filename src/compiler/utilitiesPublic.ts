@@ -436,7 +436,7 @@ namespace ts {
     /**
      * Gets a value indicating whether a node originated in the parse tree.
      *
-     * @param node The node to test.
+     * @param node - The node to test.
      */
     export function isParseTreeNode(node: Node): boolean {
         return (node.flags & NodeFlags.Synthesized) === 0;
@@ -445,7 +445,7 @@ namespace ts {
     /**
      * Gets the original parse tree node for a node.
      *
-     * @param node The original node.
+     * @param node - The original node.
      * @returns The original parse tree node if found; otherwise, undefined.
      */
     export function getParseTreeNode(node: Node | undefined): Node | undefined;
@@ -453,8 +453,8 @@ namespace ts {
     /**
      * Gets the original parse tree node for a node.
      *
-     * @param node The original node.
-     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @param node - The original node.
+     * @param nodeTest - A callback used to ensure the correct type of parse tree node is returned.
      * @returns The original parse tree node if found; otherwise, undefined.
      */
     export function getParseTreeNode<T extends Node>(node: T | undefined, nodeTest?: (node: Node) => node is T): T | undefined;
@@ -480,7 +480,7 @@ namespace ts {
     /**
      * Remove extra underscore from escaped identifier text content.
      *
-     * @param identifier The escaped identifier text.
+     * @param identifier - The escaped identifier text.
      * @returns The unescaped identifier text.
      */
     export function unescapeLeadingUnderscores(identifier: __String): string {
@@ -935,9 +935,11 @@ namespace ts {
      *
      * This does *not* return type parameters from a jsdoc reference to a generic type, eg
      *
+     * ```
      * type Id = <T>(x: T) => T
      * /** @type {Id} /
      * function id(x) { return x }
+     * ```
      */
     export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
         if (isJSDocSignature(node)) {

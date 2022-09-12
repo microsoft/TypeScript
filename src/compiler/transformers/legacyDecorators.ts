@@ -118,8 +118,8 @@ namespace ts {
         /**
          * Transforms a non-decorated class declaration.
          *
-         * @param node A ClassDeclaration node.
-         * @param name The name of the class.
+         * @param node - A ClassDeclaration node.
+         * @param name - The name of the class.
          */
         function transformClassDeclarationWithoutClassDecorators(node: ClassDeclaration, name: Identifier | undefined) {
             //  ${modifiers} class ${name} ${heritageClauses} {
@@ -391,7 +391,7 @@ namespace ts {
         /**
          * Transforms all of the decorators for a declaration into an array of expressions.
          *
-         * @param allDecorators An object containing all of the decorators for the declaration.
+         * @param allDecorators - An object containing all of the decorators for the declaration.
          */
         function transformAllDecoratorsOfDeclaration(allDecorators: AllDecorators | undefined) {
             if (!allDecorators) {
@@ -408,8 +408,8 @@ namespace ts {
          * Generates statements used to apply decorators to either the static or instance members
          * of a class.
          *
-         * @param node The class node.
-         * @param isStatic A value indicating whether to generate statements for static or
+         * @param node - The class node.
+         * @param isStatic - A value indicating whether to generate statements for static or
          *                 instance members.
          */
         function addClassElementDecorationStatements(statements: Statement[], node: ClassDeclaration, isStatic: boolean) {
@@ -420,7 +420,7 @@ namespace ts {
          * Determines whether a class member is either a static or an instance member of a class
          * that is decorated, or has parameters that are decorated.
          *
-         * @param member The class member.
+         * @param member - The class member.
          */
         function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
             return nodeOrChildIsDecorated(member, parent)
@@ -431,8 +431,8 @@ namespace ts {
          * Gets either the static or instance members of a class that are decorated, or have
          * parameters that are decorated.
          *
-         * @param node The class containing the member.
-         * @param isStatic A value indicating whether to retrieve static or instance members of
+         * @param node - The class containing the member.
+         * @param isStatic - A value indicating whether to retrieve static or instance members of
          *                 the class.
          */
         function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly ClassElement[] {
@@ -443,8 +443,8 @@ namespace ts {
          * Generates expressions used to apply decorators to either the static or instance members
          * of a class.
          *
-         * @param node The class node.
-         * @param isStatic A value indicating whether to generate expressions for static or
+         * @param node - The class node.
+         * @param isStatic - A value indicating whether to generate expressions for static or
          *                 instance members.
          */
         function generateClassElementDecorationExpressions(node: ClassExpression | ClassDeclaration, isStatic: boolean) {
@@ -459,8 +459,8 @@ namespace ts {
         /**
          * Generates an expression used to evaluate class element decorators at runtime.
          *
-         * @param node The class node that contains the member.
-         * @param member The class member.
+         * @param node - The class node that contains the member.
+         * @param member - The class member.
          */
         function generateClassElementDecorationExpression(node: ClassExpression | ClassDeclaration, member: ClassElement) {
             const allDecorators = getAllDecoratorsOfClassElement(member, node);
@@ -528,7 +528,7 @@ namespace ts {
         /**
          * Generates a __decorate helper call for a class constructor.
          *
-         * @param node The class node.
+         * @param node - The class node.
          */
         function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration) {
             const expression = generateConstructorDecorationExpression(node);
@@ -540,7 +540,7 @@ namespace ts {
         /**
          * Generates a __decorate helper call for a class constructor.
          *
-         * @param node The class node.
+         * @param node - The class node.
          */
         function generateConstructorDecorationExpression(node: ClassExpression | ClassDeclaration) {
             const allDecorators = getAllDecoratorsOfClass(node);
@@ -566,7 +566,7 @@ namespace ts {
         /**
          * Transforms a decorator into an expression.
          *
-         * @param decorator The decorator node.
+         * @param decorator - The decorator node.
          */
         function transformDecorator(decorator: Decorator) {
             return visitNode(decorator.expression, visitor, isExpression);
@@ -575,8 +575,8 @@ namespace ts {
         /**
          * Transforms the decorators of a parameter.
          *
-         * @param decorators The decorators for the parameter at the provided offset.
-         * @param parameterOffset The offset of the parameter.
+         * @param decorators - The decorators for the parameter at the provided offset.
+         * @param parameterOffset - The offset of the parameter.
          */
         function transformDecoratorsOfParameter(decorators: Decorator[], parameterOffset: number) {
             let expressions: Expression[] | undefined;
@@ -599,7 +599,7 @@ namespace ts {
          * Gets an expression that represents a property name (for decorated properties or enums).
          * For a computed property, a name is generated for the node.
          *
-         * @param member The member whose name should be converted into an expression.
+         * @param member - The member whose name should be converted into an expression.
          */
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name!;
@@ -658,8 +658,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to substitute.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);

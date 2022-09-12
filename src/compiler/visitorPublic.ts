@@ -2,20 +2,20 @@ namespace ts {
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
-     * @param node The Node to visit.
-     * @param visitor The callback used to visit the Node.
-     * @param test A callback to execute to verify the Node is valid.
-     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     * @param node - The Node to visit.
+     * @param visitor - The callback used to visit the Node.
+     * @param test - A callback to execute to verify the Node is valid.
+     * @param lift - An optional callback to execute to lift a NodeArray into a valid Node.
      */
     export function visitNode<T extends Node>(node: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
 
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
-     * @param node The Node to visit.
-     * @param visitor The callback used to visit the Node.
-     * @param test A callback to execute to verify the Node is valid.
-     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     * @param node - The Node to visit.
+     * @param visitor - The callback used to visit the Node.
+     * @param test - A callback to execute to verify the Node is valid.
+     * @param lift - An optional callback to execute to lift a NodeArray into a valid Node.
      */
     export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
 
@@ -50,11 +50,11 @@ namespace ts {
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
+     * @param nodes - The NodeArray to visit.
+     * @param visitor - The callback used to visit a Node.
+     * @param test - A node test to execute for each node.
+     * @param start - An optional value indicating the starting offset at which to start visiting.
+     * @param count - An optional value indicating the maximum number of nodes to visit.
      */
     export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
 
@@ -64,22 +64,22 @@ namespace ts {
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
+     * @param nodes - The NodeArray to visit.
+     * @param visitor - The callback used to visit a Node.
+     * @param test - A node test to execute for each node.
+     * @param start - An optional value indicating the starting offset at which to start visiting.
+     * @param count - An optional value indicating the maximum number of nodes to visit.
      */
     export function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
 
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
+     * @param nodes - The NodeArray to visit.
+     * @param visitor - The callback used to visit a Node.
+     * @param test - A node test to execute for each node.
+     * @param start - An optional value indicating the starting offset at which to start visiting.
+     * @param count - An optional value indicating the maximum number of nodes to visit.
      */
     export function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined {
         if (nodes === undefined || visitor === undefined) {
@@ -377,9 +377,9 @@ namespace ts {
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
-     * @param node The Node whose children will be visited.
-     * @param visitor The callback used to visit each child.
-     * @param context A lexical environment context for the visitor.
+     * @param node - The Node whose children will be visited.
+     * @param visitor - The callback used to visit each child.
+     * @param context - A lexical environment context for the visitor.
      */
     export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
     /* @internal */
@@ -387,9 +387,9 @@ namespace ts {
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
-     * @param node The Node whose children will be visited.
-     * @param visitor The callback used to visit each child.
-     * @param context A lexical environment context for the visitor.
+     * @param node - The Node whose children will be visited.
+     * @param visitor - The callback used to visit each child.
+     * @param context - A lexical environment context for the visitor.
      */
     export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
     /* @internal */
@@ -1324,7 +1324,7 @@ namespace ts {
     /**
      * Extracts the single node from a NodeArray.
      *
-     * @param nodes The NodeArray.
+     * @param nodes - The NodeArray.
      */
     function extractSingleNode(nodes: readonly Node[]): Node | undefined {
         Debug.assert(nodes.length <= 1, "Too many nodes written to output.");

@@ -363,7 +363,7 @@ namespace ts.refactor.extractSymbol {
 
         /**
          * Attempt to refine the extraction node (generally, by shrinking it) to produce better results.
-         * @param node The unrefined extraction node.
+         * @param node - The unrefined extraction node.
          */
         function refineNode(node: Node): Node {
             if (isReturnStatement(node)) {

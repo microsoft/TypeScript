@@ -18,7 +18,7 @@ namespace Utils {
         }
     }
 
-    /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
+    /** Splits the given string on `\r\n`, or on only `\n` if that fails, or on only `\r` if *that* fails. */
     export function splitContentByNewlines(content: string) {
         // Split up the input file by line
         // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so

@@ -47,22 +47,26 @@ namespace ts.formatting {
         getIndentationForComment(owningToken: SyntaxKind, tokenIndentation: number, container: Node): number;
         /**
          * Indentation for open and close tokens of the node if it is block or another node that needs special indentation
+         * ```
          * ... {
          * .........<child>
          * ....}
          *  ____ - indentation
          *      ____ - delta
+         * ```
          */
         getIndentation(): number;
         /**
          * Prefered relative indentation for child nodes.
          * Delta is used to carry the indentation info
+         * ```
          * foo(bar({
          *     $
          * }))
+         * ```
          * Both 'foo', 'bar' introduce new indentation with delta = 4, but total indentation in $ is not 8.
-         * foo: { indentation: 0, delta: 4 }
-         * bar: { indentation: foo.indentation + foo.delta = 4, delta: 4} however 'foo' and 'bar' are on the same line
+         * foo: `{ indentation: 0, delta: 4 }`
+         * bar: `{ indentation: foo.indentation + foo.delta = 4, delta: 4}` however 'foo' and 'bar' are on the same line
          * so bar inherits indentation from foo and bar.delta will be 4
          *
          */
@@ -160,7 +164,7 @@ namespace ts.formatting {
 
     /**
      * Validating `expectedTokenKind` ensures the token was typed in the context we expect (eg: not a comment).
-     * @param expectedTokenKind The kind of the last token constituting the desired parent node.
+     * @param expectedTokenKind - The kind of the last token constituting the desired parent node.
      */
     function findImmediatelyPrecedingTokenOfKind(end: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node | undefined {
         const precedingToken = findPrecedingToken(end, sourceFile);
@@ -1171,8 +1175,8 @@ namespace ts.formatting {
         }
 
         /**
-         * @param start The position of the first character in range
-         * @param end The position of the last character in range
+         * @param start - The position of the first character in range
+         * @param end - The position of the last character in range
          */
         function getTrailingWhitespaceStartPosition(start: number, end: number) {
             let pos = end;
@@ -1289,7 +1293,7 @@ namespace ts.formatting {
     const enum LineAction { None, LineAdded, LineRemoved }
 
     /**
-     * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.
+     * @param precedingToken - pass `null` if preceding token was already computed and result was `undefined`.
      */
     export function getRangeOfEnclosingComment(
         sourceFile: SourceFile,

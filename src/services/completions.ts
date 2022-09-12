@@ -147,11 +147,11 @@ namespace ts.Completions {
     }
 
     /**
-     * Map from symbol index in `symbols` -> SymbolOriginInfo.
+     * Map from symbol index in `symbols` to SymbolOriginInfo.
      */
     type SymbolOriginInfoMap = Record<number, SymbolOriginInfo>;
 
-    /** Map from symbol id -> SortText. */
+    /** Map from symbol id to SortText. */
     type SymbolSortTextMap = (SortText | undefined)[];
 
     const enum KeywordCompletionFilters {
@@ -3125,13 +3125,17 @@ namespace ts.Completions {
          * Aggregates relevant symbols for completion in import clauses and export clauses
          * whose declarations have a module specifier; for instance, symbols will be aggregated for
          *
+         * ```
          *      import { | } from "moduleName";
          *      export { a as foo, | } from "moduleName";
+         * ```
          *
          * but not for
          *
+         * ```
          *      export { | };
          *
+         * ```
          * Relevant symbols are stored in the captured 'symbols' variable.
          */
         function tryGetImportOrExportClauseCompletionSymbols(): GlobalsSearch {
@@ -3177,7 +3181,10 @@ namespace ts.Completions {
         /**
          * Adds local declarations for completions in named exports:
          *
+         * ```
          *   export { | };
+         *
+         * ```
          *
          * Does not check for the absence of a module specifier (`export {} from "./other"`)
          * because `tryGetImportOrExportClauseCompletionSymbols` runs first and handles that,
@@ -3982,10 +3989,14 @@ namespace ts.Completions {
         const entries = [];
         /**
          * An `AssertClause` can come after an import declaration:
+         * ```
          *  import * from "foo" |
          *  import "foo" |
+         * ```
          * or after a re-export declaration that has a module specifier:
+         * ```
          *  export { foo } from "foo" |
+         * ```
          * Source: https://tc39.es/proposal-import-assertions/
          */
         if (contextToken) {

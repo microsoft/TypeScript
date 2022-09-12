@@ -16,6 +16,7 @@ namespace ts {
      * At every point where control flow leaves the loop either explicitly (break/continue) or implicitly (at the end of loop body)
      * we copy the value inside the loop to the out parameter holder.
      *
+     * ```
      * for (let x;;) {
      *     let a = 1;
      *     let b = () => a;
@@ -23,9 +24,11 @@ namespace ts {
      *     if (...) break;
      *     ...
      * }
+     * ```
      *
      * will be converted to
      *
+     * ```
      * var out_x;
      * var loop = function(x) {
      *     var a = 1;
@@ -41,6 +44,7 @@ namespace ts {
      *     x = out_x;
      *     if (state === "break") break;
      * }
+     * ```
      *
      * NOTE: values to out parameters are not copies if loop is abrupted with 'return' - in this case this will end the entire enclosing function
      * so nobody can observe this new value.
@@ -324,8 +328,8 @@ namespace ts {
 
         /**
          * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
-         * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
-         * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
+         * @param excludeFacts - The existing `HierarchyFacts` to reset before visiting the subtree.
+         * @param includeFacts - The new `HierarchyFacts` to set before visiting the subtree.
          */
         function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             const ancestorFacts = hierarchyFacts;
@@ -336,9 +340,9 @@ namespace ts {
         /**
          * Restores the `HierarchyFacts` for this node's ancestor after visiting this node's
          * subtree, propagating specific facts from the subtree.
-         * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
-         * @param excludeFacts The existing `HierarchyFacts` of the subtree that should not be propagated.
-         * @param includeFacts The new `HierarchyFacts` of the subtree that should be propagated.
+         * @param ancestorFacts - The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
+         * @param excludeFacts - The existing `HierarchyFacts` of the subtree that should not be propagated.
+         * @param includeFacts - The new `HierarchyFacts` of the subtree that should be propagated.
          */
         function exitSubtree(ancestorFacts: HierarchyFacts, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.SubtreeFactsMask | ancestorFacts;
@@ -711,7 +715,7 @@ namespace ts {
         /**
          * Visits a ClassDeclaration and transforms it into a variable statement.
          *
-         * @param node A ClassDeclaration node.
+         * @param node - A ClassDeclaration node.
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             // [source]
@@ -764,7 +768,7 @@ namespace ts {
         /**
          * Visits a ClassExpression and transforms it into an expression.
          *
-         * @param node A ClassExpression node.
+         * @param node - A ClassExpression node.
          */
         function visitClassExpression(node: ClassExpression): Expression {
             // [source]
@@ -783,7 +787,7 @@ namespace ts {
         /**
          * Transforms a ClassExpression or ClassDeclaration into an expression.
          *
-         * @param node A ClassExpression or ClassDeclaration node.
+         * @param node - A ClassExpression or ClassDeclaration node.
          */
         function transformClassLikeDeclarationToExpression(node: ClassExpression | ClassDeclaration): Expression {
             // [source]
@@ -855,8 +859,8 @@ namespace ts {
         /**
          * Transforms a ClassExpression or ClassDeclaration into a function body.
          *
-         * @param node A ClassExpression or ClassDeclaration node.
-         * @param extendsClauseElement The expression for the class `extends` clause.
+         * @param node - A ClassExpression or ClassDeclaration node.
+         * @param extendsClauseElement - The expression for the class `extends` clause.
          */
         function transformClassBody(node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): Block {
             const statements: Statement[] = [];
@@ -891,9 +895,9 @@ namespace ts {
         /**
          * Adds a call to the `__extends` helper if needed for a class.
          *
-         * @param statements The statements of the class body function.
-         * @param node The ClassExpression or ClassDeclaration node.
-         * @param extendsClauseElement The expression for the class `extends` clause.
+         * @param statements - The statements of the class body function.
+         * @param node - The ClassExpression or ClassDeclaration node.
+         * @param extendsClauseElement - The expression for the class `extends` clause.
          */
         function addExtendsHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): void {
             if (extendsClauseElement) {
@@ -911,9 +915,9 @@ namespace ts {
         /**
          * Adds the constructor of the class to a class body function.
          *
-         * @param statements The statements of the class body function.
-         * @param node The ClassExpression or ClassDeclaration node.
-         * @param extendsClauseElement The expression for the class `extends` clause.
+         * @param statements - The statements of the class body function.
+         * @param node - The ClassExpression or ClassDeclaration node.
+         * @param extendsClauseElement - The expression for the class `extends` clause.
          */
         function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, name: Identifier, extendsClauseElement: ExpressionWithTypeArguments | undefined): void {
             const savedConvertedLoopState = convertedLoopState;
@@ -944,8 +948,8 @@ namespace ts {
         /**
          * Transforms the parameters of the constructor declaration of a class.
          *
-         * @param constructor The constructor for the class.
-         * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
+         * @param constructor - The constructor for the class.
+         * @param hasSynthesizedSuper - A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
         function transformConstructorParameters(constructor: ConstructorDeclaration | undefined, hasSynthesizedSuper: boolean) {
@@ -983,10 +987,10 @@ namespace ts {
         /**
          * Transforms the body of a constructor declaration of a class.
          *
-         * @param constructor The constructor for the class.
-         * @param node The node which contains the constructor.
-         * @param extendsClauseElement The expression for the class `extends` clause.
-         * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
+         * @param constructor - The constructor for the class.
+         * @param node - The node which contains the constructor.
+         * @param extendsClauseElement - The expression for the class `extends` clause.
+         * @param hasSynthesizedSuper - A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
         function transformConstructorBody(constructor: ConstructorDeclaration & { body: FunctionBody } | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments | undefined, hasSynthesizedSuper: boolean) {
@@ -1229,7 +1233,7 @@ namespace ts {
         /**
          * Visits a parameter declaration.
          *
-         * @param node A ParameterDeclaration node.
+         * @param node - A ParameterDeclaration node.
          */
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration | undefined {
             if (node.dotDotDotToken) {
@@ -1285,8 +1289,8 @@ namespace ts {
          * Adds statements to the body of a function-like node if it contains parameters with
          * binding patterns or initializers.
          *
-         * @param statements The statements for the new function body.
-         * @param node A function-like node.
+         * @param statements - The statements for the new function body.
+         * @param node - A function-like node.
          */
         function addDefaultValueAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): boolean {
             if (!some(node.parameters, hasDefaultValueOrBindingPattern)) {
@@ -1317,10 +1321,10 @@ namespace ts {
         /**
          * Adds statements to the body of a function-like node for parameters with binding patterns
          *
-         * @param statements The statements for the new function body.
-         * @param parameter The parameter for the function.
-         * @param name The name of the parameter.
-         * @param initializer The initializer for the parameter.
+         * @param statements - The statements for the new function body.
+         * @param parameter - The parameter for the function.
+         * @param name - The name of the parameter.
+         * @param initializer - The initializer for the parameter.
          */
         function insertDefaultValueAssignmentForBindingPattern(statements: Statement[], parameter: ParameterDeclaration, name: BindingPattern, initializer: Expression | undefined): boolean {
             // In cases where a binding pattern is simply '[]' or '{}',
@@ -1368,10 +1372,10 @@ namespace ts {
         /**
          * Adds statements to the body of a function-like node for parameters with initializers.
          *
-         * @param statements The statements for the new function body.
-         * @param parameter The parameter for the function.
-         * @param name The name of the parameter.
-         * @param initializer The initializer for the parameter.
+         * @param statements - The statements for the new function body.
+         * @param parameter - The parameter for the function.
+         * @param name - The name of the parameter.
+         * @param initializer - The initializer for the parameter.
          */
         function insertDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
             initializer = visitNode(initializer, visitor, isExpression);
@@ -1409,8 +1413,8 @@ namespace ts {
         /**
          * Gets a value indicating whether we need to add statements to handle a rest parameter.
          *
-         * @param node A ParameterDeclaration node.
-         * @param inConstructorWithSynthesizedSuper A value indicating whether the parameter is
+         * @param node - A ParameterDeclaration node.
+         * @param inConstructorWithSynthesizedSuper - A value indicating whether the parameter is
          *                                          part of a constructor declaration with a
          *                                          synthesized call to `super`
          */
@@ -1421,9 +1425,9 @@ namespace ts {
         /**
          * Adds statements to the body of a function-like node if it contains a rest parameter.
          *
-         * @param statements The statements for the new function body.
-         * @param node A function-like node.
-         * @param inConstructorWithSynthesizedSuper A value indicating whether the parameter is
+         * @param statements - The statements for the new function body.
+         * @param node - A function-like node.
+         * @param inConstructorWithSynthesizedSuper - A value indicating whether the parameter is
          *                                          part of a constructor declaration with a
          *                                          synthesized call to `super`
          */
@@ -1533,8 +1537,8 @@ namespace ts {
          * Adds a statement to capture the `this` of a function declaration if it is needed.
          * NOTE: This must be executed *after* the subtree has been visited.
          *
-         * @param statements The statements for the new function body.
-         * @param node A node.
+         * @param statements - The statements for the new function body.
+         * @param node - A node.
          */
         function insertCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): boolean {
             if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
@@ -1547,8 +1551,8 @@ namespace ts {
         /**
          * Assigns the `this` in a constructor to the result of its `super()` call.
          *
-         * @param statements Statements in the constructor body.
-         * @param superExpression Existing `super()` call for the constructor.
+         * @param statements - Statements in the constructor body.
+         * @param superExpression - Existing `super()` call for the constructor.
          */
         function insertSuperThisCaptureThisForNode(statements: Statement[], superExpression: Expression): void {
             enableSubstitutionsForCapturedThis();
@@ -1660,8 +1664,8 @@ namespace ts {
          * Adds statements to the class body function for a class to define the members of the
          * class.
          *
-         * @param statements The statements for the class body function.
-         * @param node The ClassExpression or ClassDeclaration node.
+         * @param statements - The statements for the class body function.
+         * @param node - The ClassExpression or ClassDeclaration node.
          */
         function addClassMembers(statements: Statement[], node: ClassExpression | ClassDeclaration): void {
             for (const member of node.members) {
@@ -1698,7 +1702,7 @@ namespace ts {
         /**
          * Transforms a SemicolonClassElement into a statement for a class body function.
          *
-         * @param member The SemicolonClassElement node.
+         * @param member - The SemicolonClassElement node.
          */
         function transformSemicolonClassElementToStatement(member: SemicolonClassElement) {
             return setTextRange(factory.createEmptyStatement(), member);
@@ -1707,8 +1711,8 @@ namespace ts {
         /**
          * Transforms a MethodDeclaration into a statement for a class body function.
          *
-         * @param receiver The receiver for the member.
-         * @param member The MethodDeclaration node.
+         * @param receiver - The receiver for the member.
+         * @param member - The MethodDeclaration node.
          */
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node) {
             const commentRange = getCommentRange(member);
@@ -1743,8 +1747,8 @@ namespace ts {
         /**
          * Transforms a set of related of get/set accessors into a statement for a class body function.
          *
-         * @param receiver The receiver for the member.
-         * @param accessors The set of related get/set accessors.
+         * @param receiver - The receiver for the member.
+         * @param accessors - The set of related get/set accessors.
          */
         function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations, container: Node): Statement {
             const statement = factory.createExpressionStatement(transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false));
@@ -1760,7 +1764,7 @@ namespace ts {
          * Transforms a set of related get/set accessors into an expression for either a class
          * body function or an ObjectLiteralExpression with computed properties.
          *
-         * @param receiver The receiver for the member.
+         * @param receiver - The receiver for the member.
          */
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations, container: Node, startsOnNewLine: boolean): Expression {
             // To align with source maps in the old emitter, the receiver and property name
@@ -1821,7 +1825,7 @@ namespace ts {
         /**
          * Visits an ArrowFunction and transforms it into a FunctionExpression.
          *
-         * @param node An ArrowFunction node.
+         * @param node - An ArrowFunction node.
          */
         function visitArrowFunction(node: ArrowFunction) {
             if (node.transformFlags & TransformFlags.ContainsLexicalThis && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
@@ -1854,7 +1858,7 @@ namespace ts {
         /**
          * Visits a FunctionExpression node.
          *
-         * @param node a FunctionExpression node.
+         * @param node - a FunctionExpression node.
          */
         function visitFunctionExpression(node: FunctionExpression): Expression {
             const ancestorFacts = getEmitFlags(node) & EmitFlags.AsyncFunctionBody
@@ -1886,7 +1890,7 @@ namespace ts {
         /**
          * Visits a FunctionDeclaration node.
          *
-         * @param node a FunctionDeclaration node.
+         * @param node - a FunctionDeclaration node.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
             const savedConvertedLoopState = convertedLoopState;
@@ -1915,9 +1919,9 @@ namespace ts {
         /**
          * Transforms a function-like node into a FunctionExpression.
          *
-         * @param node The function-like node to transform.
-         * @param location The source-map location for the new FunctionExpression.
-         * @param name The name of the new FunctionExpression.
+         * @param node - The function-like node to transform.
+         * @param location - The source-map location for the new FunctionExpression.
+         * @param name - The name of the new FunctionExpression.
          */
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
             const savedConvertedLoopState = convertedLoopState;
@@ -1953,7 +1957,7 @@ namespace ts {
         /**
          * Transforms the body of a function-like node.
          *
-         * @param node A function-like node.
+         * @param node - A function-like node.
          */
         function transformFunctionBody(node: FunctionLikeDeclaration) {
             let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
@@ -2066,7 +2070,7 @@ namespace ts {
         /**
          * Visits an ExpressionStatement that contains a destructuring assignment.
          *
-         * @param node An ExpressionStatement node.
+         * @param node - An ExpressionStatement node.
          */
         function visitExpressionStatement(node: ExpressionStatement): Statement {
             return visitEachChild(node, visitorWithUnusedExpressionResult, context);
@@ -2075,8 +2079,8 @@ namespace ts {
         /**
          * Visits a ParenthesizedExpression that may contain a destructuring assignment.
          *
-         * @param node A ParenthesizedExpression node.
-         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * @param node - A ParenthesizedExpression node.
+         * @param expressionResultIsUnused - Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
         function visitParenthesizedExpression(node: ParenthesizedExpression, expressionResultIsUnused: boolean): ParenthesizedExpression {
@@ -2086,8 +2090,8 @@ namespace ts {
         /**
          * Visits a BinaryExpression that contains a destructuring assignment.
          *
-         * @param node A BinaryExpression node.
-         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * @param node - A BinaryExpression node.
+         * @param expressionResultIsUnused - Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
         function visitBinaryExpression(node: BinaryExpression, expressionResultIsUnused: boolean): Expression {
@@ -2112,7 +2116,7 @@ namespace ts {
         }
 
         /**
-         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * @param expressionResultIsUnused - Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
         function visitCommaListExpression(node: CommaListExpression, expressionResultIsUnused: boolean): Expression {
@@ -2183,7 +2187,7 @@ namespace ts {
         /**
          * Visits a VariableDeclarationList that is block scoped (e.g. `let` or `const`).
          *
-         * @param node A VariableDeclarationList node.
+         * @param node - A VariableDeclarationList node.
          */
         function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
             if (node.flags & NodeFlags.BlockScoped || node.transformFlags & TransformFlags.ContainsBindingPattern) {
@@ -2227,7 +2231,7 @@ namespace ts {
          * Gets a value indicating whether we should emit an explicit initializer for a variable
          * declaration in a `let` declaration list.
          *
-         * @param node A VariableDeclaration node.
+         * @param node - A VariableDeclaration node.
          */
         function shouldEmitExplicitInitializerForLetDeclaration(node: VariableDeclaration) {
             // Nested let bindings might need to be initialized explicitly to preserve
@@ -2293,7 +2297,7 @@ namespace ts {
         /**
          * Visits a VariableDeclaration in a `let` declaration list.
          *
-         * @param node A VariableDeclaration node.
+         * @param node - A VariableDeclaration node.
          */
         function visitVariableDeclarationInLetDeclarationList(node: VariableDeclaration) {
             // For binding pattern names that lack initializers there is no point to emit
@@ -2314,7 +2318,7 @@ namespace ts {
         /**
          * Visits a VariableDeclaration node with a binding pattern.
          *
-         * @param node A VariableDeclaration node.
+         * @param node - A VariableDeclaration node.
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             const ancestorFacts = enterSubtree(HierarchyFacts.ExportedVariableStatement, HierarchyFacts.None);
@@ -2702,7 +2706,7 @@ namespace ts {
         /**
          * Visits an ObjectLiteralExpression with computed property names.
          *
-         * @param node An ObjectLiteralExpression node.
+         * @param node - An ObjectLiteralExpression node.
          */
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
             const properties = node.properties;
@@ -3467,10 +3471,10 @@ namespace ts {
         /**
          * Adds the members of an object literal to an array of expressions.
          *
-         * @param expressions An array of expressions.
-         * @param node An ObjectLiteralExpression node.
-         * @param receiver The receiver for members of the ObjectLiteralExpression.
-         * @param numInitialNonComputedProperties The number of initial properties without
+         * @param expressions - An array of expressions.
+         * @param node - An ObjectLiteralExpression node.
+         * @param receiver - The receiver for members of the ObjectLiteralExpression.
+         * @param numInitialNonComputedProperties - The number of initial properties without
          *                                        computed property names.
          */
         function addObjectLiteralMembers(expressions: Expression[], node: ObjectLiteralExpression, receiver: Identifier, start: number) {
@@ -3510,9 +3514,9 @@ namespace ts {
         /**
          * Transforms a PropertyAssignment node into an expression.
          *
-         * @param node The ObjectLiteralExpression that contains the PropertyAssignment.
-         * @param property The PropertyAssignment node.
-         * @param receiver The receiver for the assignment.
+         * @param node - The ObjectLiteralExpression that contains the PropertyAssignment.
+         * @param property - The PropertyAssignment node.
+         * @param receiver - The receiver for the assignment.
          */
         function transformPropertyAssignmentToExpression(property: PropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
             const expression = factory.createAssignment(
@@ -3533,9 +3537,9 @@ namespace ts {
         /**
          * Transforms a ShorthandPropertyAssignment node into an expression.
          *
-         * @param node The ObjectLiteralExpression that contains the ShorthandPropertyAssignment.
-         * @param property The ShorthandPropertyAssignment node.
-         * @param receiver The receiver for the assignment.
+         * @param node - The ObjectLiteralExpression that contains the ShorthandPropertyAssignment.
+         * @param property - The ShorthandPropertyAssignment node.
+         * @param receiver - The receiver for the assignment.
          */
         function transformShorthandPropertyAssignmentToExpression(property: ShorthandPropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
             const expression = factory.createAssignment(
@@ -3556,9 +3560,9 @@ namespace ts {
         /**
          * Transforms a MethodDeclaration of an ObjectLiteralExpression into an expression.
          *
-         * @param node The ObjectLiteralExpression that contains the MethodDeclaration.
-         * @param method The MethodDeclaration node.
-         * @param receiver The receiver for the assignment.
+         * @param node - The ObjectLiteralExpression that contains the MethodDeclaration.
+         * @param method - The MethodDeclaration node.
+         * @param receiver - The receiver for the assignment.
          */
         function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, container: Node, startsOnNewLine: boolean) {
             const expression = factory.createAssignment(
@@ -3613,7 +3617,7 @@ namespace ts {
          * Visits a MethodDeclaration of an ObjectLiteralExpression and transforms it into a
          * PropertyAssignment.
          *
-         * @param node A MethodDeclaration node.
+         * @param node - A MethodDeclaration node.
          */
         function visitMethodDeclaration(node: MethodDeclaration): ObjectLiteralElementLike {
             // We should only get here for methods on an object literal with regular identifier names.
@@ -3634,7 +3638,7 @@ namespace ts {
         /**
          * Visits an AccessorDeclaration of an ObjectLiteralExpression.
          *
-         * @param node An AccessorDeclaration node.
+         * @param node - An AccessorDeclaration node.
          */
         function visitAccessorDeclaration(node: AccessorDeclaration): AccessorDeclaration {
             Debug.assert(!isComputedPropertyName(node.name));
@@ -3658,7 +3662,7 @@ namespace ts {
         /**
          * Visits a ShorthandPropertyAssignment and transforms it into a PropertyAssignment.
          *
-         * @param node A ShorthandPropertyAssignment node.
+         * @param node - A ShorthandPropertyAssignment node.
          */
         function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
             return setTextRange(
@@ -3677,7 +3681,7 @@ namespace ts {
         /**
          * Visits a YieldExpression node.
          *
-         * @param node A YieldExpression node.
+         * @param node - A YieldExpression node.
          */
         function visitYieldExpression(node: YieldExpression): Expression {
             // `yield` expressions are transformed using the generators transformer.
@@ -3687,7 +3691,7 @@ namespace ts {
         /**
          * Visits an ArrayLiteralExpression that contains a spread element.
          *
-         * @param node An ArrayLiteralExpression node.
+         * @param node - An ArrayLiteralExpression node.
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression): Expression {
             if (some(node.elements, isSpreadElement)) {
@@ -3700,7 +3704,7 @@ namespace ts {
         /**
          * Visits a CallExpression that contains either a spread element or `super`.
          *
-         * @param node a CallExpression.
+         * @param node - a CallExpression.
          */
         function visitCallExpression(node: CallExpression) {
             if (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) {
@@ -3958,7 +3962,7 @@ namespace ts {
         /**
          * Visits a NewExpression that contains a spread element.
          *
-         * @param node A NewExpression node.
+         * @param node - A NewExpression node.
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
             if (some(node.arguments, isSpreadElement)) {
@@ -3986,11 +3990,11 @@ namespace ts {
         /**
          * Transforms an array of Expression nodes that contains a SpreadExpression.
          *
-         * @param elements The array of Expression nodes.
-         * @param isArgumentList A value indicating whether to ensure that the result is a fresh array.
+         * @param elements - The array of Expression nodes.
+         * @param isArgumentList - A value indicating whether to ensure that the result is a fresh array.
          * This should be `false` when spreading into an `ArrayLiteral`, and `true` when spreading into an
          * argument list.
-         * @param multiLine A value indicating whether the result should be emitted on multiple lines.
+         * @param multiLine - A value indicating whether the result should be emitted on multiple lines.
          */
         function transformAndSpreadElements(elements: NodeArray<Expression>, isArgumentList: boolean, multiLine: boolean, hasTrailingComma: boolean): Expression {
             // When there is no leading SpreadElement:
@@ -4109,7 +4113,7 @@ namespace ts {
         /**
          * Visits a template literal.
          *
-         * @param node A template literal.
+         * @param node - A template literal.
          */
         function visitTemplateLiteral(node: LiteralExpression): LeftHandSideExpression {
             return setTextRange(factory.createStringLiteral(node.text), node);
@@ -4118,7 +4122,7 @@ namespace ts {
         /**
          * Visits a string literal with an extended unicode escape.
          *
-         * @param node A string literal.
+         * @param node - A string literal.
          */
         function visitStringLiteral(node: StringLiteral) {
             if (node.hasExtendedUnicodeEscape) {
@@ -4130,7 +4134,7 @@ namespace ts {
         /**
          * Visits a binary or octal (ES6) numeric literal.
          *
-         * @param node A string literal.
+         * @param node - A string literal.
          */
         function visitNumericLiteral(node: NumericLiteral) {
             if (node.numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
@@ -4142,7 +4146,7 @@ namespace ts {
         /**
          * Visits a TaggedTemplateExpression node.
          *
-         * @param node A TaggedTemplateExpression node.
+         * @param node - A TaggedTemplateExpression node.
          */
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
             return processTaggedTemplateExpression(
@@ -4158,7 +4162,7 @@ namespace ts {
         /**
          * Visits a TemplateExpression node.
          *
-         * @param node A TemplateExpression node.
+         * @param node - A TemplateExpression node.
          */
         function visitTemplateExpression(node: TemplateExpression): Expression {
             let expression: Expression = factory.createStringLiteral(node.head.text);
@@ -4200,9 +4204,9 @@ namespace ts {
         /**
          * Called by the printer just before a node is printed.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to be printed.
-         * @param emitCallback The callback used to emit the node.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to be printed.
+         * @param emitCallback - The callback used to emit the node.
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
@@ -4251,8 +4255,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint The context for the emitter.
-         * @param node The node to substitute.
+         * @param hint - The context for the emitter.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
@@ -4288,7 +4292,7 @@ namespace ts {
          * Determines whether a name is the name of a declaration with a colliding name.
          * NOTE: This function expects to be called with an original source tree node.
          *
-         * @param node An original source tree node.
+         * @param node - An original source tree node.
          */
         function isNameOfDeclarationWithCollidingName(node: Identifier) {
             switch (node.parent.kind) {
@@ -4306,7 +4310,7 @@ namespace ts {
         /**
          * Substitutes an expression.
          *
-         * @param node An Expression node.
+         * @param node - An Expression node.
          */
         function substituteExpression(node: Node) {
             switch (node.kind) {
@@ -4323,7 +4327,7 @@ namespace ts {
         /**
          * Substitutes an expression identifier.
          *
-         * @param node An Identifier node.
+         * @param node - An Identifier node.
          */
         function substituteExpressionIdentifier(node: Identifier): Identifier {
             if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
@@ -4363,7 +4367,7 @@ namespace ts {
         /**
          * Substitutes `this` when contained within an arrow function.
          *
-         * @param node The ThisKeyword node.
+         * @param node - The ThisKeyword node.
          */
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis

@@ -123,9 +123,9 @@ namespace ts.SmartSelectionRange {
      * count too, unless that position belongs to the next node. In effect, makes
      * selections able to snap to preceding tokens when the cursor is on the tail
      * end of them with only whitespace ahead.
-     * @param sourceFile The source file containing the nodes.
-     * @param pos The position to check.
-     * @param node The candidate node to snap to.
+     * @param sourceFile - The source file containing the nodes.
+     * @param pos - The position to check.
+     * @param node - The candidate node to snap to.
      */
     function positionShouldSnapToNode(sourceFile: SourceFile, pos: number, node: Node) {
         // Can’t use 'ts.positionBelongsToNode()' here because it cleverly accounts
@@ -252,10 +252,10 @@ namespace ts.SmartSelectionRange {
      * 3) everything right of the first node matched by `pivotOn`,
      * 4) a trailing semicolon, if `separateTrailingSemicolon` is enabled.
      * The left and right groups, if not empty, will each be grouped into their own containing SyntaxList.
-     * @param children The sibling nodes to split.
-     * @param pivotOn The predicate function to match the node to be the pivot. The first node that matches
+     * @param children - The sibling nodes to split.
+     * @param pivotOn - The predicate function to match the node to be the pivot. The first node that matches
      * the predicate will be used; any others that may match will be included into the right-hand group.
-     * @param separateTrailingSemicolon If the last token is a semicolon, it will be returned as a separate
+     * @param separateTrailingSemicolon - If the last token is a semicolon, it will be returned as a separate
      * child rather than be included in the right-hand group.
      */
     function splitChildren(children: Node[], pivotOn: (child: Node) => boolean, separateTrailingSemicolon = true): Node[] {

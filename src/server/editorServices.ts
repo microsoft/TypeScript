@@ -1548,7 +1548,7 @@ namespace ts.server {
 
         /**
          * Remove this file from the set of open, non-configured files.
-         * @param info The file that has been closed or newly configured
+         * @param info - The file that has been closed or newly configured
          */
         private closeOpenFile(info: ScriptInfo, skipAssignOrphanScriptInfosToInferredProject?: true) {
             // Closing file should trigger re-reading the file content from disk. This is
@@ -3226,8 +3226,8 @@ namespace ts.server {
 
         /**
          * Open file whose contents is managed by the client
-         * @param filename is absolute pathname
-         * @param fileContent is a known version of the file content that is more up to date than the one on disk
+         * @param filename - is absolute pathname
+         * @param fileContent - is a known version of the file content that is more up to date than the one on disk
          */
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
@@ -3660,7 +3660,7 @@ namespace ts.server {
 
         /**
          * Close file whose contents is managed by the client
-         * @param filename is absolute pathname
+         * @param filename - is absolute pathname
          */
         closeClientFile(uncheckedFileName: string): void;
         /*@internal*/

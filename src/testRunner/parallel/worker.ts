@@ -24,8 +24,8 @@ namespace Harness.Parallel.Worker {
 
         /**
          * Mixin helper.
-         * @param base The base class constructor.
-         * @param mixins The mixins to apply to the constructor.
+         * @param base - The base class constructor.
+         * @param mixins - The mixins to apply to the constructor.
          */
         function mixin<T extends new (...args: any[]) => any>(base: T, ...mixins: ((klass: T) => T)[]) {
             for (const mixin of mixins) {
@@ -93,8 +93,8 @@ namespace Harness.Parallel.Worker {
 
         /**
          * Shims a 'bdd'-style test interface to support parallel test execution in a worker.
-         * @param rootSuite The root suite.
-         * @param context The test context (usually the NodeJS `global` object).
+         * @param rootSuite - The root suite.
+         * @param context - The test context (usually the NodeJS `global` object).
          */
         function shimTestInterface(rootSuite: Mocha.Suite, context: Mocha.MochaGlobals) {
             const suites = [rootSuite];

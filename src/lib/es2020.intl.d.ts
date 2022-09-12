@@ -152,7 +152,7 @@ declare namespace Intl {
          *
          * @throws `RangeError` if `unit` was given something other than `unit` possible values
          *
-         * @returns {string} Internationalized relative time message as string
+         * @returns Internationalized relative time message as string
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/format).
          */
@@ -353,7 +353,7 @@ declare namespace Intl {
          * Receives a code and returns a string based on the locale and options provided when instantiating
          * [`Intl.DisplayNames()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames)
          *
-         * @param code The `code` to provide depends on the `type` passed to display name during creation:
+         * @param code - The `code` to provide depends on the `type` passed to display name during creation:
          *  - If the type is `"region"`, code should be either an [ISO-3166 two letters region code](https://www.iso.org/iso-3166-country-codes.html),
          *    or a [three digits UN M49 Geographic Regions](https://unstats.un.org/unsd/methodology/m49/).
          *  - If the type is `"script"`, code should be an [ISO-15924 four letters script code](https://unicode.org/iso15924/iso15924-codes.html).
@@ -384,11 +384,11 @@ declare namespace Intl {
         prototype: DisplayNames;
 
         /**
-         * @param locales A string with a BCP 47 language tag, or an array of such strings.
+         * @param locales - A string with a BCP 47 language tag, or an array of such strings.
          *   For the general form and interpretation of the `locales` argument, see the [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locale_identification_and_negotiation)
          *   page.
          *
-         * @param options An object for setting up a display name.
+         * @param options - An object for setting up a display name.
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/DisplayNames).
          */
@@ -397,11 +397,11 @@ declare namespace Intl {
         /**
          * Returns an array containing those of the provided locales that are supported in display names without having to fall back to the runtime's default locale.
          *
-         * @param locales A string with a BCP 47 language tag, or an array of such strings.
+         * @param locales - A string with a BCP 47 language tag, or an array of such strings.
          *   For the general form and interpretation of the `locales` argument, see the [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locale_identification_and_negotiation)
          *   page.
          *
-         * @param options An object with a locale matcher.
+         * @param options - An object with a locale matcher.
          *
          * @returns An array of strings representing a subset of the given locale tags that are supported in display names without having to fall back to the runtime's default locale.
          *

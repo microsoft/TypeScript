@@ -1648,8 +1648,8 @@ namespace ts {
         /**
          * Generates assignment statements for property initializers.
          *
-         * @param properties An array of property declarations to transform.
-         * @param receiver The receiver on which each property should be assigned.
+         * @param properties - An array of property declarations to transform.
+         * @param receiver - The receiver on which each property should be assigned.
          */
         function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
@@ -1692,8 +1692,8 @@ namespace ts {
         /**
          * Generates assignment expressions for property initializers.
          *
-         * @param propertiesOrClassStaticBlocks An array of property declarations to transform.
-         * @param receiver The receiver on which each property should be assigned.
+         * @param propertiesOrClassStaticBlocks - An array of property declarations to transform.
+         * @param receiver - The receiver on which each property should be assigned.
          */
         function generateInitializedPropertyExpressionsOrClassStaticBlock(propertiesOrClassStaticBlocks: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
@@ -1716,8 +1716,8 @@ namespace ts {
         /**
          * Transforms a property initializer into an assignment statement.
          *
-         * @param property The property declaration.
-         * @param receiver The object receiving the property assignment.
+         * @param property - The property declaration.
+         * @param receiver - The object receiving the property assignment.
          */
         function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             const savedCurrentStaticPropertyDeclarationOrStaticBlock = currentStaticPropertyDeclarationOrStaticBlock;
@@ -1839,9 +1839,9 @@ namespace ts {
         /**
          * Generates brand-check initializer for private methods.
          *
-         * @param statements Statement list that should be used to append new statements.
-         * @param methods An array of method declarations.
-         * @param receiver The receiver on which each method should be assigned.
+         * @param statements - Statement list that should be used to append new statements.
+         * @param methods - An array of method declarations.
+         * @param receiver - The receiver on which each method should be assigned.
          */
         function addMethodStatements(statements: Statement[], methods: readonly (MethodDeclaration | AccessorDeclaration | AutoAccessorPropertyDeclaration)[], receiver: LeftHandSideExpression) {
             if (!shouldTransformPrivateElementsOrClassStaticBlocks || !some(methods)) {
@@ -1934,8 +1934,8 @@ namespace ts {
         /**
          * Hooks node substitutions.
          *
-         * @param hint The context for the emitter.
-         * @param node The node to substitute.
+         * @param hint - The context for the emitter.
+         * @param node - The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
@@ -2005,7 +2005,7 @@ namespace ts {
         /**
          * If the name is a computed property, this function transforms it, then either returns an expression which caches the
          * value of the result or the expression itself if the value is either unused or safe to inline into multiple locations
-         * @param shouldHoist Does the expression need to be reused? (ie, for an initializer or a decorator)
+         * @param shouldHoist - Does the expression need to be reused? (ie, for an initializer or a decorator)
          */
         function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean): Expression | undefined {
             if (isComputedPropertyName(name)) {
@@ -2282,7 +2282,7 @@ namespace ts {
         /**
          * Access an already defined {@link PrivateIdentifier} in the current {@link PrivateIdentifierEnvironment}.
          *
-         * @seealso {@link addPrivateIdentifierToEnvironment}
+         * See also {@link addPrivateIdentifierToEnvironment}.
          */
         function accessPrivateIdentifier(name: PrivateIdentifier) {
             if (isGeneratedPrivateIdentifier(name)) {

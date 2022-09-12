@@ -853,7 +853,7 @@ namespace ts.codefix {
     }
 
     /**
-     * @param forceImportKeyword Indicates that the user has already typed `import`, so the result must start with `import`.
+     * @param forceImportKeyword - Indicates that the user has already typed `import`, so the result must start with `import`.
      * (In other words, do not allow `const x = require("...")` for JS files.)
      */
     export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {

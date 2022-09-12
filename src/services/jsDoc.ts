@@ -333,8 +333,8 @@ namespace ts.JsDoc {
      * - If the keystroke sequence "/\*\*" induced the call, we also check that the next
      * non-whitespace character is '*', which (approximately) indicates whether we added
      * the second '*' to complete an existing (JSDoc) comment.
-     * @param fileName The file in which to perform the check.
-     * @param position The (character-indexed) position in the file where the check should
+     * @param fileName - The file in which to perform the check.
+     * @param position - The (character-indexed) position in the file where the check should
      * be performed.
      */
     export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {

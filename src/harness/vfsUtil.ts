@@ -165,7 +165,7 @@ namespace vfs {
         /**
          * Gets or sets the timestamp (in milliseconds) used for file status, returning the previous timestamp.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/time.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/time.html}
          */
         public time(value?: number): number {
             if (value !== undefined) {
@@ -180,7 +180,7 @@ namespace vfs {
 
         /**
          * Gets the metadata object for a path.
-         * @param path
+         * @param path -
          */
         public filemeta(path: string): collections.Metadata {
             const { node } = this._walk(this._resolve(path));
@@ -199,7 +199,7 @@ namespace vfs {
         /**
          * Get the pathname of the current working directory.
          *
-         * @link - http://pubs.opengroup.org/onlinepubs/9699919799/functions/getcwd.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/getcwd.html}
          */
         public cwd() {
             if (!this._cwd) throw new Error("The current working directory has not been set.");
@@ -212,7 +212,7 @@ namespace vfs {
         /**
          * Changes the current working directory.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chdir.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chdir.html}
          */
         public chdir(path: string) {
             if (this.isReadonly) throw createIOError("EPERM");
@@ -258,9 +258,9 @@ namespace vfs {
 
         /**
          * Scan file system entries along a path. If `path` is a symbolic link, it is dereferenced.
-         * @param path The path at which to start the scan.
-         * @param axis The axis along which to traverse.
-         * @param traversal The traversal scheme to use.
+         * @param path - The path at which to start the scan.
+         * @param axis - The axis along which to traverse.
+         * @param traversal - The traversal scheme to use.
          */
         public scanSync(path: string, axis: Axis, traversal: Traversal) {
             path = this._resolve(path);
@@ -271,9 +271,9 @@ namespace vfs {
 
         /**
          * Scan file system entries along a path.
-         * @param path The path at which to start the scan.
-         * @param axis The axis along which to traverse.
-         * @param traversal The traversal scheme to use.
+         * @param path - The path at which to start the scan.
+         * @param axis - The axis along which to traverse.
+         * @param traversal - The traversal scheme to use.
          */
         public lscanSync(path: string, axis: Axis, traversal: Traversal) {
             path = this._resolve(path);
@@ -317,9 +317,9 @@ namespace vfs {
         /**
          * Mounts a physical or virtual file system at a location in this virtual file system.
          *
-         * @param source The path in the physical (or other virtual) file system.
-         * @param target The path in this virtual file system.
-         * @param resolver An object used to resolve files in `source`.
+         * @param source - The path in the physical (or other virtual) file system.
+         * @param target - The path in this virtual file system.
+         * @param resolver - An object used to resolve files in `source`.
          */
         public mountSync(source: string, target: string, resolver: FileSystemResolver) {
             if (this.isReadonly) throw createIOError("EROFS");
@@ -425,7 +425,7 @@ namespace vfs {
         /**
          * Get file status. If `path` is a symbolic link, it is dereferenced.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/stat.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/stat.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -454,7 +454,7 @@ namespace vfs {
         /**
          * Get file status. If `path` is a symbolic link, it is dereferenced.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/lstat.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/lstat.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -485,7 +485,7 @@ namespace vfs {
         /**
          * Read a directory. If `path` is a symbolic link, it is dereferenced.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/readdir.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/readdir.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -499,7 +499,7 @@ namespace vfs {
         /**
          * Make a directory.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdir.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdir.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -519,7 +519,7 @@ namespace vfs {
         /**
          * Remove a directory.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/rmdir.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/rmdir.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -538,7 +538,7 @@ namespace vfs {
         /**
          * Link one file to another file (also known as a "hard link").
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/link.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/link.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -559,7 +559,7 @@ namespace vfs {
         /**
          * Remove a directory entry.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/unlink.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/unlink.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -577,7 +577,7 @@ namespace vfs {
         /**
          * Rename a file.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -611,7 +611,7 @@ namespace vfs {
         /**
          * Make a symbolic link.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/symlink.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/symlink.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -631,7 +631,7 @@ namespace vfs {
         /**
          * Resolve a pathname.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/realpath.html
+         * {@link http://pubs.opengroup.org/onlinepubs/9699919799/functions/realpath.html}
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
@@ -697,7 +697,7 @@ namespace vfs {
 
         /**
          * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
-         * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
+         * @param base - The base file system. If not provided, this file system's `shadowRoot` is used (if present).
          */
         public diff(base?: FileSystem | undefined, options: DiffOptions = {}) {
             if (!base && !options.baseIsNotShadowRoot) base = this.shadowRoot;
@@ -1025,11 +1025,11 @@ namespace vfs {
         /**
          * Walk a path to its end.
          *
-         * @param path The path to follow.
-         * @param noFollow A value indicating whether to *not* dereference a symbolic link at the
+         * @param path - The path to follow.
+         * @param noFollow - A value indicating whether to *not* dereference a symbolic link at the
          * end of a path.
          *
-         * @link http://man7.org/linux/man-pages/man7/path_resolution.7.html
+         * {@link http://man7.org/linux/man-pages/man7/path_resolution.7.html}
          */
         private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "retry" | "throw"): WalkResult;
         private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "stop" | "retry" | "throw"): WalkResult | undefined;

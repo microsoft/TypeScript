@@ -35,22 +35,22 @@ namespace ts {
          * - Type references to classes (or class-like variables) point to the constructor for the class.
          * - Anything else points to the global "Object" constructor.
          *
-         * @param node The type node to serialize.
+         * @param node - The type node to serialize.
          */
         serializeTypeNode(serializerContext: RuntimeTypeSerializerContext, node: TypeNode): Expression;
         /**
          * Serializes the type of a node for use with decorator type metadata.
-         * @param node The node that should have its type serialized.
+         * @param node - The node that should have its type serialized.
          */
         serializeTypeOfNode(serializerContext: RuntimeTypeSerializerContext, node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration): Expression;
         /**
          * Serializes the types of the parameters of a node for use with decorator type metadata.
-         * @param node The node that should have its parameter types serialized.
+         * @param node - The node that should have its parameter types serialized.
          */
         serializeParameterTypesOfNode(serializerContext: RuntimeTypeSerializerContext, node: Node, container: ClassLikeDeclaration): ArrayLiteralExpression;
         /**
          * Serializes the return type of a node for use with decorator type metadata.
-         * @param node The node that should have its return type serialized.
+         * @param node - The node that should have its return type serialized.
          */
         serializeReturnTypeOfNode(serializerContext: RuntimeTypeSerializerContext, node: Node): SerializedTypeNode;
     }
@@ -99,7 +99,7 @@ namespace ts {
 
         /**
          * Serializes the type of a node for use with decorator type metadata.
-         * @param node The node that should have its type serialized.
+         * @param node - The node that should have its type serialized.
          */
         function serializeTypeOfNode(node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration): SerializedTypeNode {
             switch (node.kind) {
@@ -120,7 +120,7 @@ namespace ts {
 
         /**
          * Serializes the type of a node for use with decorator type metadata.
-         * @param node The node that should have its type serialized.
+         * @param node - The node that should have its type serialized.
          */
         function serializeParameterTypesOfNode(node: Node, container: ClassLikeDeclaration): ArrayLiteralExpression {
             const valueDeclaration =
@@ -163,7 +163,7 @@ namespace ts {
 
         /**
          * Serializes the return type of a node for use with decorator type metadata.
-         * @param node The node that should have its return type serialized.
+         * @param node - The node that should have its return type serialized.
          */
         function serializeReturnTypeOfNode(node: Node): SerializedTypeNode {
             if (isFunctionLike(node) && node.type) {
@@ -192,7 +192,7 @@ namespace ts {
          * - Type references to classes (or class-like variables) point to the constructor for the class.
          * - Anything else points to the global "Object" constructor.
          *
-         * @param node The type node to serialize.
+         * @param node - The type node to serialize.
          */
         function serializeTypeNode(node: TypeNode | undefined): SerializedTypeNode {
             if (node === undefined) {
@@ -420,7 +420,7 @@ namespace ts {
 
         /**
          * Serializes a TypeReferenceNode to an appropriate JS constructor value for use with decorator type metadata.
-         * @param node The type reference node.
+         * @param node - The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
             const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentNameScope ?? currentLexicalScope);
@@ -499,7 +499,7 @@ namespace ts {
 
         /**
          * Serializes an entity name which may not exist at runtime, but whose access shouldn't throw
-         * @param node The entity name to serialize.
+         * @param node - The entity name to serialize.
          */
         function serializeEntityNameAsExpressionFallback(node: EntityName): BinaryExpression {
             if (node.kind === SyntaxKind.Identifier) {
@@ -525,7 +525,7 @@ namespace ts {
 
         /**
          * Serializes an entity name as an expression for decorator type metadata.
-         * @param node The entity name to serialize.
+         * @param node - The entity name to serialize.
          */
         function serializeEntityNameAsExpression(node: EntityName): SerializedEntityName {
             switch (node.kind) {
@@ -544,7 +544,7 @@ namespace ts {
 
         /**
          * Serializes an qualified name as an expression for decorator type metadata.
-         * @param node The qualified name to serialize.
+         * @param node - The qualified name to serialize.
          */
         function serializeQualifiedNameAsExpression(node: QualifiedName): SerializedEntityName {
             return factory.createPropertyAccessExpression(serializeEntityNameAsExpression(node.left), node.right) as PropertyAccessEntityNameExpression;

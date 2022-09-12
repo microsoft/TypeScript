@@ -70,8 +70,10 @@ namespace ts.codefix {
      * This is necessary because `exports.x = 0;` does not declare a local variable.
      * Converting this to `export const x = 0;` would declare a local, so we must be careful to avoid shadowing.
      * If there would be shadowing at either the declaration or at any reference to `exports.x` (now just `x`), we must convert to:
+     * ```
      *     const _x = 0;
      *     export { _x as x };
+     * ```
      * This conversion also must place if the exported name is not a valid identifier, e.g. `exports.class = 0;`.
      */
     type ExportRenames = ReadonlyESMap<string, string>;

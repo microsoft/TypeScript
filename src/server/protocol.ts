@@ -61,7 +61,7 @@ namespace ts.server.protocol {
         NavtoFull = "navto-full",
         NavTree = "navtree",
         NavTreeFull = "navtree-full",
-        /** @deprecated */
+        /** @deprecated Use document highlights. */
         Occurrences = "occurrences",
         DocumentHighlights = "documentHighlights",
         /* @internal */
@@ -1074,16 +1074,16 @@ namespace ts.server.protocol {
     }
 
     /**
-     * @deprecated
      * Get occurrences request; value of command field is
      * "occurrences". Return response giving spans that are relevant
      * in the file at a given line and column.
+     * @deprecated Use document highlights.
      */
     export interface OccurrencesRequest extends FileLocationRequest {
         command: CommandTypes.Occurrences;
     }
 
-    /** @deprecated */
+    /** @deprecated Use document highlights. */
     export interface OccurrencesResponseItem extends FileSpanWithContext {
         /**
          * True if the occurrence is a write location, false otherwise.
@@ -1096,7 +1096,7 @@ namespace ts.server.protocol {
         isInString?: true;
     }
 
-    /** @deprecated */
+    /** @deprecated Use document highlights. */
     export interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
     }
@@ -1340,7 +1340,7 @@ namespace ts.server.protocol {
 
     /**
      * Represents a file in external project.
-     * External project is project whose set of files, compilation options and open\close state
+     * External project is project whose set of files, compilation options and open/close state
      * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
      * External project will exist even if all files in it are closed and should be closed explicitly.
      * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will
@@ -2132,7 +2132,7 @@ namespace ts.server.protocol {
      */
     export interface FormatOnKeyRequestArgs extends FileLocationRequestArgs {
         /**
-         * Key pressed (';', '\n', or '}').
+         * Key pressed (`';'`, `'\n'`, or `'}'`).
          */
         key: string;
 
@@ -2242,9 +2242,9 @@ namespace ts.server.protocol {
         kind: string;
     }
 
-    /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
+    /** A part of a symbol description that links from a jsdoc `@link` tag to a declaration */
     export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
-        /** The location of the declaration that the @link tag links to. */
+        /** The location of the declaration that the `@link` tag links to. */
         target: FileSpan;
     }
 
@@ -2334,7 +2334,7 @@ namespace ts.server.protocol {
     export interface CompletionEntryLabelDetails {
         /**
          * An optional string which is rendered less prominently directly after
-         * {@link CompletionEntry.name name}, without any spacing. Should be
+         * {@link CompletionEntry.name | name}, without any spacing. Should be
          * used for function signatures or type annotations.
          */
         detail?: string;
@@ -3442,7 +3442,7 @@ namespace ts.server.protocol {
          */
         readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
         /**
-         * Indicates whether {@link CompletionEntry.labelDetails completion entry label details} are supported.
+         * Indicates whether {@link CompletionEntry.labelDetails | completion entry label details} are supported.
          * If not, contents of `labelDetails` may be included in the {@link CompletionEntry.name} property.
          */
         readonly useLabelDetailsInCompletionEntries?: boolean;

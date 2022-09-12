@@ -418,7 +418,7 @@ namespace ts {
     /**
      * Determine if the given comment is a triple-slash
      *
-     * @return true if the comment is a triple-slash comment else false
+     * @returns true if the comment is a triple-slash comment else false
      */
     export function isRecognizedTripleSlashComment(text: string, commentPos: number, commentEnd: number) {
         // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
@@ -759,7 +759,7 @@ namespace ts {
 
     /**
      * An effective module (namespace) declaration is either
-     * 1. An actual declaration: namespace X { ... }
+     * 1. An actual declaration: `namespace X { ... }`
      * 2. A Javascript declaration, which is:
      *    An identifier in a nested property access expression: Y in `X.Y.Z = { ... }`
      */
@@ -1477,7 +1477,7 @@ namespace ts {
      * Gets the most likely element type for a TypeNode. This is not an exhaustive test
      * as it assumes a rest argument can only be an array type (either T[], or Array<T>).
      *
-     * @param node The type node.
+     * @param node - The type node.
      */
     export function getRestParameterElementType(node: TypeNode | undefined) {
         if (node && node.kind === SyntaxKind.ArrayType) {
@@ -2276,11 +2276,11 @@ namespace ts {
 
     /**
      * Recognized expando initializers are:
-     * 1. (function() {})() -- IIFEs
-     * 2. function() { } -- Function expressions
-     * 3. class { } -- Class expressions
-     * 4. {} -- Empty object literals
-     * 5. { ... } -- Non-empty object literals, when used to initialize a prototype, like `C.prototype = { m() { } }`
+     * 1. `(function() {})()` -- IIFEs
+     * 2. `function() { }` -- Function expressions
+     * 3. `class { }` -- Class expressions
+     * 4. `{}` -- Empty object literals
+     * 5. `{ ... }` -- Non-empty object literals, when used to initialize a prototype, like `C.prototype = { m() { } }`
      *
      * This function returns the provided initializer, or undefined if it is not valid.
      */
@@ -2338,12 +2338,14 @@ namespace ts {
 
     /**
      * Is the 'declared' name the same as the one in the initializer?
-     * @return true for identical entity names, as well as ones where the initializer is prefixed with
+     * @returns true for identical entity names, as well as ones where the initializer is prefixed with
      * 'window', 'self' or 'global'. For example:
      *
+     * ```
      * var my = my || {}
      * var min = window.min || {}
      * my.app = self.my.app || class { }
+     * ```
      */
     export function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
@@ -4090,7 +4092,7 @@ namespace ts {
     /**
      * Strip off existed surrounding single quotes, double quotes, or backticks from a given string
      *
-     * @return non-quoted string
+     * @returns non-quoted string
      */
     export function stripQuotes(name: string) {
         const length = name.length;
@@ -4429,8 +4431,8 @@ namespace ts {
      * Originally part of `forEachExpectedEmitFile`, this functionality was extracted to support
      * transformations.
      *
-     * @param host An EmitHost.
-     * @param targetSourceFile An optional target source file to emit.
+     * @param host - An EmitHost.
+     * @param targetSourceFile - An optional target source file to emit.
      */
     export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile, forceDtsEmit?: boolean): readonly SourceFile[] {
         const options = host.getCompilerOptions();
@@ -5402,8 +5404,8 @@ namespace ts {
     /**
      * Creates a new TextRange from the provided pos and end.
      *
-     * @param pos The start position.
-     * @param end The end position.
+     * @param pos - The start position.
+     * @param end - The end position.
      */
     export function createRange(pos: number, end: number = pos): TextRange {
         Debug.assert(end >= pos || end === -1);
@@ -5413,8 +5415,8 @@ namespace ts {
     /**
      * Creates a new TextRange from a provided range with a new end position.
      *
-     * @param range A TextRange.
-     * @param end The new end position.
+     * @param range - A TextRange.
+     * @param end - The new end position.
      */
     export function moveRangeEnd(range: TextRange, end: number): TextRange {
         return createRange(range.pos, end);
@@ -5423,8 +5425,8 @@ namespace ts {
     /**
      * Creates a new TextRange from a provided range with a new start position.
      *
-     * @param range A TextRange.
-     * @param pos The new Start position.
+     * @param range - A TextRange.
+     * @param pos - The new Start position.
      */
     export function moveRangePos(range: TextRange, pos: number): TextRange {
         return createRange(pos, range.end);
@@ -5453,7 +5455,7 @@ namespace ts {
     /**
      * Determines whether a TextRange has the same start and end positions.
      *
-     * @param range A TextRange.
+     * @param range - A TextRange.
      */
     export function isCollapsedRange(range: TextRange) {
         return range.pos === range.end;
@@ -5462,8 +5464,8 @@ namespace ts {
     /**
      * Creates a new TextRange for a token at the provides start position.
      *
-     * @param pos The start position.
-     * @param token The token.
+     * @param pos - The start position.
+     * @param token - The token.
      */
     export function createTokenRange(pos: number, token: SyntaxKind): TextRange {
         return createRange(pos, pos + tokenToString(token)!.length);
@@ -6833,7 +6835,7 @@ namespace ts {
         basePaths: readonly string[];
     }
 
-    /** @param path directory of the tsconfig.json */
+    /** @param path - directory of the tsconfig.json */
     export function getFileMatcherPatterns(path: string, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
@@ -6852,7 +6854,7 @@ namespace ts {
         return new RegExp(pattern, useCaseSensitiveFileNames ? "" : "i");
     }
 
-    /** @param path directory of the tsconfig.json */
+    /** @param path - directory of the tsconfig.json */
     export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
@@ -6991,7 +6993,7 @@ namespace ts {
     }
 
     /**
-     *  Groups of supported extensions in order of file resolution precedence. (eg, TS > TSX > DTS and seperately, CTS > DCTS)
+     *  Groups of supported extensions in order of file resolution precedence. (eg, TS \> TSX \> DTS and seperately, CTS \> DCTS)
      */
     export const supportedTSExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts], [Extension.Cts, Extension.Dcts], [Extension.Mts, Extension.Dmts]];
     export const supportedTSExtensionsFlat: readonly Extension[] = flatten(supportedTSExtensions);
@@ -7451,8 +7453,8 @@ namespace ts {
 
     /**
      * Bypasses immutability and directly sets the `parent` property of each `Node` recursively.
-     * @param rootNode The root node from which to start the recursion.
-     * @param incremental When `true`, only recursively descends through nodes whose `parent` pointers are incorrect.
+     * @param rootNode - The root node from which to start the recursion.
+     * @param incremental - When `true`, only recursively descends through nodes whose `parent` pointers are incorrect.
      * This allows us to quickly bail out of setting `parent` for subtrees during incremental parsing.
      */
     /* @internal */
