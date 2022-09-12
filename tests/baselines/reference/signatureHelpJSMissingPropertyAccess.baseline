@@ -96,7 +96,7 @@
               "name": "predicate",
               "documentation": [
                 {
-                  "text": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
+                  "text": "- A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
                   "kind": "text"
                 }
               ],
@@ -241,7 +241,7 @@
               "name": "thisArg",
               "documentation": [
                 {
-                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
+                  "text": "- An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
                   "kind": "text"
                 }
               ],
@@ -290,7 +290,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
+                  "text": "- A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
                   "kind": "text"
                 }
               ]
@@ -307,7 +307,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
+                  "text": "- An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
                   "kind": "text"
                 }
               ]
@@ -375,7 +375,7 @@
               "name": "predicate",
               "documentation": [
                 {
-                  "text": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
+                  "text": "- A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
                   "kind": "text"
                 }
               ],
@@ -504,7 +504,7 @@
               "name": "thisArg",
               "documentation": [
                 {
-                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
+                  "text": "- An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
                   "kind": "text"
                 }
               ],
@@ -553,7 +553,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
+                  "text": "- A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
                   "kind": "text"
                 }
               ]
@@ -570,7 +570,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
+                  "text": "- An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
                   "kind": "text"
                 }
               ]

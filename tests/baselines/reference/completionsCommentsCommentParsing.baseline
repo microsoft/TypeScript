@@ -2993,7 +2993,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "- A value representing an encoded URI.",
                   "kind": "text"
                 }
               ]
@@ -3074,7 +3074,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "- A value representing an encoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -3203,7 +3203,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI.",
+                  "text": "- A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -3316,7 +3316,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI component.",
+                  "text": "- A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -3458,7 +3458,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]
@@ -4131,7 +4131,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Any numeric value.",
+                  "text": "- Any numeric value.",
                   "kind": "text"
                 }
               ]
@@ -4212,7 +4212,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A numeric value.",
+                  "text": "- A numeric value.",
                   "kind": "text"
                 }
               ]
@@ -4590,7 +4590,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string that contains a floating-point number.",
+                  "text": "- A string that contains a floating-point number.",
                   "kind": "text"
                 }
               ]
@@ -4699,7 +4699,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to convert into a number.",
+                  "text": "- A string to convert into a number.",
                   "kind": "text"
                 }
               ]
@@ -4716,7 +4716,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "- A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -5571,7 +5571,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -5661,7 +5661,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -8666,7 +8666,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "- A value representing an encoded URI.",
                   "kind": "text"
                 }
               ]
@@ -8747,7 +8747,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "- A value representing an encoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -8876,7 +8876,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI.",
+                  "text": "- A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -8989,7 +8989,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI component.",
+                  "text": "- A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -9179,7 +9179,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]
@@ -9984,7 +9984,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Any numeric value.",
+                  "text": "- Any numeric value.",
                   "kind": "text"
                 }
               ]
@@ -10065,7 +10065,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A numeric value.",
+                  "text": "- A numeric value.",
                   "kind": "text"
                 }
               ]
@@ -10542,7 +10542,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string that contains a floating-point number.",
+                  "text": "- A string that contains a floating-point number.",
                   "kind": "text"
                 }
               ]
@@ -10651,7 +10651,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to convert into a number.",
+                  "text": "- A string to convert into a number.",
                   "kind": "text"
                 }
               ]
@@ -10668,7 +10668,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "- A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -12039,7 +12039,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -12129,7 +12129,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -15109,7 +15109,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "- A value representing an encoded URI.",
                   "kind": "text"
                 }
               ]
@@ -15190,7 +15190,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "- A value representing an encoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -15319,7 +15319,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI.",
+                  "text": "- A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -15432,7 +15432,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI component.",
+                  "text": "- A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -15574,7 +15574,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]
@@ -16247,7 +16247,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Any numeric value.",
+                  "text": "- Any numeric value.",
                   "kind": "text"
                 }
               ]
@@ -16328,7 +16328,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A numeric value.",
+                  "text": "- A numeric value.",
                   "kind": "text"
                 }
               ]
@@ -16706,7 +16706,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string that contains a floating-point number.",
+                  "text": "- A string that contains a floating-point number.",
                   "kind": "text"
                 }
               ]
@@ -16815,7 +16815,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to convert into a number.",
+                  "text": "- A string to convert into a number.",
                   "kind": "text"
                 }
               ]
@@ -16832,7 +16832,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "- A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -17687,7 +17687,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -17777,7 +17777,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -20678,7 +20678,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "- A value representing an encoded URI.",
                   "kind": "text"
                 }
               ]
@@ -20759,7 +20759,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "- A value representing an encoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -20888,7 +20888,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI.",
+                  "text": "- A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -21001,7 +21001,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI component.",
+                  "text": "- A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -21143,7 +21143,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]
@@ -21828,7 +21828,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Any numeric value.",
+                  "text": "- Any numeric value.",
                   "kind": "text"
                 }
               ]
@@ -21909,7 +21909,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A numeric value.",
+                  "text": "- A numeric value.",
                   "kind": "text"
                 }
               ]
@@ -22359,7 +22359,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string that contains a floating-point number.",
+                  "text": "- A string that contains a floating-point number.",
                   "kind": "text"
                 }
               ]
@@ -22468,7 +22468,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to convert into a number.",
+                  "text": "- A string to convert into a number.",
                   "kind": "text"
                 }
               ]
@@ -22485,7 +22485,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "- A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -23400,7 +23400,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -23490,7 +23490,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -26589,7 +26589,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "- A value representing an encoded URI.",
                   "kind": "text"
                 }
               ]
@@ -26670,7 +26670,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "- A value representing an encoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -26799,7 +26799,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI.",
+                  "text": "- A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -26912,7 +26912,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI component.",
+                  "text": "- A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -27054,7 +27054,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]
@@ -27727,7 +27727,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Any numeric value.",
+                  "text": "- Any numeric value.",
                   "kind": "text"
                 }
               ]
@@ -27808,7 +27808,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A numeric value.",
+                  "text": "- A numeric value.",
                   "kind": "text"
                 }
               ]
@@ -28186,7 +28186,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string that contains a floating-point number.",
+                  "text": "- A string that contains a floating-point number.",
                   "kind": "text"
                 }
               ]
@@ -28295,7 +28295,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to convert into a number.",
+                  "text": "- A string to convert into a number.",
                   "kind": "text"
                 }
               ]
@@ -28312,7 +28312,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "- A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -29167,7 +29167,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -29257,7 +29257,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -32262,7 +32262,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "- A value representing an encoded URI.",
                   "kind": "text"
                 }
               ]
@@ -32343,7 +32343,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "- A value representing an encoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -32472,7 +32472,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI.",
+                  "text": "- A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -32585,7 +32585,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI component.",
+                  "text": "- A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -32775,7 +32775,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]
@@ -33580,7 +33580,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Any numeric value.",
+                  "text": "- Any numeric value.",
                   "kind": "text"
                 }
               ]
@@ -33661,7 +33661,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A numeric value.",
+                  "text": "- A numeric value.",
                   "kind": "text"
                 }
               ]
@@ -34138,7 +34138,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string that contains a floating-point number.",
+                  "text": "- A string that contains a floating-point number.",
                   "kind": "text"
                 }
               ]
@@ -34247,7 +34247,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to convert into a number.",
+                  "text": "- A string to convert into a number.",
                   "kind": "text"
                 }
               ]
@@ -34264,7 +34264,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "- A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -35635,7 +35635,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -35725,7 +35725,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -38626,7 +38626,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "- A value representing an encoded URI.",
                   "kind": "text"
                 }
               ]
@@ -38707,7 +38707,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "- A value representing an encoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -38836,7 +38836,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI.",
+                  "text": "- A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -38949,7 +38949,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an unencoded URI component.",
+                  "text": "- A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -39091,7 +39091,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]
@@ -39776,7 +39776,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Any numeric value.",
+                  "text": "- Any numeric value.",
                   "kind": "text"
                 }
               ]
@@ -39857,7 +39857,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A numeric value.",
+                  "text": "- A numeric value.",
                   "kind": "text"
                 }
               ]
@@ -40307,7 +40307,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string that contains a floating-point number.",
+                  "text": "- A string that contains a floating-point number.",
                   "kind": "text"
                 }
               ]
@@ -40416,7 +40416,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to convert into a number.",
+                  "text": "- A string to convert into a number.",
                   "kind": "text"
                 }
               ]
@@ -40433,7 +40433,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "- A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -41348,7 +41348,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]
@@ -41438,7 +41438,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "- A string value",
                   "kind": "text"
                 }
               ]

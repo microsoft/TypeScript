@@ -2201,7 +2201,7 @@ declare namespace ts {
         readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
         /**
          * Gets a value indicating whether the specified path exists and is a file.
-         * @param path The path to test.
+         * @param path - The path to test.
          */
         fileExists(path: string): boolean;
         readFile(path: string): string | undefined;
@@ -2391,7 +2391,7 @@ declare namespace ts {
         /**
          * returns unknownSignature in the case of an error.
          * returns undefined if the node is not valid.
-         * @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
+         * @param argumentCount - Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
@@ -2479,7 +2479,7 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        /** @deprecated */ WriteOwnNameForAnyLike = 0,
+        /** @deprecated Unused. */ WriteOwnNameForAnyLike = 0,
         NodeBuilderFlagsMask = 848330091
     }
     export enum SymbolFormatFlags {
@@ -3407,17 +3407,17 @@ declare namespace ts {
         createIdentifier(text: string): Identifier;
         /**
          * Create a unique temporary variable.
-         * @param recordTempVariable An optional callback used to record the temporary variable name. This
+         * @param recordTempVariable - An optional callback used to record the temporary variable name. This
          * should usually be a reference to `hoistVariableDeclaration` from a `TransformationContext`, but
          * can be `undefined` if you plan to record the temporary variable manually.
-         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * @param reservedInNestedScopes - When `true`, reserves the temporary variable name in all nested scopes
          * during emit so that the variable can be referenced in a nested function body. This is an alternative to
          * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
          */
         createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier;
         /**
          * Create a unique temporary variable for use in a loop.
-         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * @param reservedInNestedScopes - When `true`, reserves the temporary variable name in all nested scopes
          * during emit so that the variable can be referenced in a nested function body. This is an alternative to
          * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
          */
@@ -3923,22 +3923,22 @@ declare namespace ts {
         /**
          * Gets a substitute for a node, if one is available; otherwise, returns the original node.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to substitute.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to substitute.
          */
         substituteNode(hint: EmitHint, node: Node): Node;
         /**
          * Emits a node with possible notification.
          *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emitCallback A callback used to emit the node.
+         * @param hint - A hint as to the intended usage of the node.
+         * @param node - The node to emit.
+         * @param emitCallback - A callback used to emit the node.
          */
         emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         /**
          * Indicates if a given node needs an emit notification
          *
-         * @param node The node to emit.
+         * @param node - The node to emit.
          */
         isEmitNotificationEnabled?(node: Node): boolean;
         /**
@@ -3971,13 +3971,13 @@ declare namespace ts {
     export interface Printer {
         /**
          * Print a node and its subtree as-is, without any emit transformations.
-         * @param hint A value indicating the purpose of a node. This is primarily used to
+         * @param hint - A value indicating the purpose of a node. This is primarily used to
          * distinguish between an `Identifier` used in an expression position, versus an
          * `Identifier` used as an `IdentifierName` as part of a declaration. For most nodes you
          * should just pass `Unspecified`.
-         * @param node The node to print. The node and its subtree are printed as-is, without any
+         * @param node - The node to print. The node and its subtree are printed as-is, without any
          * emit transformations.
-         * @param sourceFile A source file that provides context for the node. The source text of
+         * @param sourceFile - A source file that provides context for the node. The source text of
          * the file is used to emit the original source content for literals and identifiers, while
          * the identifiers of the source file are used when generating unique names to avoid
          * collisions.
@@ -4006,9 +4006,9 @@ declare namespace ts {
          * A hook used by the Printer to provide notifications prior to emitting a node. A
          * compatible implementation **must** invoke `emitCallback` with the provided `hint` and
          * `node` values.
-         * @param hint A hint indicating the intended purpose of the node.
-         * @param node The node to emit.
-         * @param emitCallback A callback that, when invoked, will emit the node.
+         * @param hint - A hint indicating the intended purpose of the node.
+         * @param node - The node to emit.
+         * @param emitCallback - A callback that, when invoked, will emit the node.
          * @example
          * ```ts
          * var printer = createPrinter(printerOptions, {
@@ -4023,15 +4023,15 @@ declare namespace ts {
         onEmitNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         /**
          * A hook used to check if an emit notification is required for a node.
-         * @param node The node to emit.
+         * @param node - The node to emit.
          */
         isEmitNotificationEnabled?(node: Node): boolean;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
          * such as replacing `myExportedVar` with `exports.myExportedVar`.
-         * @param hint A hint indicating the intended purpose of the node.
-         * @param node The node to emit.
+         * @param hint - A hint indicating the intended purpose of the node.
+         * @param node - The node to emit.
          * @example
          * ```ts
          * var printer = createPrinter(printerOptions, {
@@ -4195,7 +4195,7 @@ declare namespace ts {
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
-         * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
+         * @param pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
          */
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
@@ -4362,21 +4362,21 @@ declare namespace ts {
     /**
      * Gets a value indicating whether a node originated in the parse tree.
      *
-     * @param node The node to test.
+     * @param node - The node to test.
      */
     function isParseTreeNode(node: Node): boolean;
     /**
      * Gets the original parse tree node for a node.
      *
-     * @param node The original node.
+     * @param node - The original node.
      * @returns The original parse tree node if found; otherwise, undefined.
      */
     function getParseTreeNode(node: Node | undefined): Node | undefined;
     /**
      * Gets the original parse tree node for a node.
      *
-     * @param node The original node.
-     * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+     * @param node - The original node.
+     * @param nodeTest - A callback used to ensure the correct type of parse tree node is returned.
      * @returns The original parse tree node if found; otherwise, undefined.
      */
     function getParseTreeNode<T extends Node>(node: T | undefined, nodeTest?: (node: Node) => node is T): T | undefined;
@@ -4385,7 +4385,7 @@ declare namespace ts {
     /**
      * Remove extra underscore from escaped identifier text content.
      *
-     * @param identifier The escaped identifier text.
+     * @param identifier - The escaped identifier text.
      * @returns The unescaped identifier text.
      */
     function unescapeLeadingUnderscores(identifier: __String): string;
@@ -4486,9 +4486,11 @@ declare namespace ts {
      *
      * This does *not* return type parameters from a jsdoc reference to a generic type, eg
      *
+     * ```
      * type Id = <T>(x: T) => T
      * /** @type {Id} /
      * function id(x) { return x }
+     * ```
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[];
     function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
@@ -4584,7 +4586,7 @@ declare namespace ts {
 declare namespace ts {
     /**
      * Clears any `EmitNode` entries from parse-tree nodes.
-     * @param sourceFile A source file.
+     * @param sourceFile - A source file.
      */
     function disposeEmitNodes(sourceFile: SourceFile | undefined): void;
     /**
@@ -4865,9 +4867,9 @@ declare namespace ts {
      * embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
      * a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
      *
-     * @param node a given node to visit its children
-     * @param cbNode a callback to be invoked for all child nodes
-     * @param cbNodes a callback to be invoked for embedded array
+     * @param node - a given node to visit its children
+     * @param cbNode - a callback to be invoked for all child nodes
+     * @param cbNodes - a callback to be invoked for embedded array
      *
      * @remarks `forEachChild` must visit the children of a node in the order
      * that they appear in the source code. The language service depends on this property to locate nodes by position.
@@ -4892,8 +4894,8 @@ declare namespace ts {
     export function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName | undefined;
     /**
      * Parse json text into SyntaxTree and return node and parse errors if any
-     * @param fileName
-     * @param sourceText
+     * @param fileName -
+     * @param sourceText -
      */
     export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile;
     export function isExternalModule(file: SourceFile): boolean;
@@ -4924,7 +4926,7 @@ declare namespace ts {
     export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
     /**
      * Read tsconfig.json file
-     * @param fileName The path to the config file
+     * @param fileName - The path to the config file
      */
     export function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): {
         config?: any;
@@ -4932,8 +4934,8 @@ declare namespace ts {
     };
     /**
      * Parse the text of the tsconfig.json file
-     * @param fileName The path to the config file
-     * @param jsonText The text of the config file
+     * @param fileName - The path to the config file
+     * @param jsonText - The text of the config file
      */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): {
         config?: any;
@@ -4941,7 +4943,7 @@ declare namespace ts {
     };
     /**
      * Read tsconfig.json file
-     * @param fileName The path to the config file
+     * @param fileName - The path to the config file
      */
     export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile;
     /**
@@ -4950,17 +4952,17 @@ declare namespace ts {
     export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any;
     /**
      * Parse the contents of a config file (tsconfig.json).
-     * @param json The contents of the config file to parse
-     * @param host Instance of ParseConfigHost used to enumerate files in folder.
-     * @param basePath A root directory to resolve relative path entries in the config
+     * @param json - The contents of the config file to parse
+     * @param host - Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath - A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
     /**
      * Parse the contents of a config file (tsconfig.json).
-     * @param jsonNode The contents of the config file to parse
-     * @param host Instance of ParseConfigHost used to enumerate files in folder.
-     * @param basePath A root directory to resolve relative path entries in the config
+     * @param jsonNode - The contents of the config file to parse
+     * @param host - Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath - A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
     export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
@@ -4991,7 +4993,7 @@ declare namespace ts {
 declare namespace ts {
     export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined;
     /**
-     * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
+     * @param containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
      * is assumed to be the same as root directory of the project.
      */
@@ -5032,7 +5034,7 @@ declare namespace ts {
         getPackageJsonInfoCache(): PackageJsonInfoCache;
     }
     /**
-     * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
+     * Stored map from non-relative module name to a table: directory to result of module lookup in this directory
      * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
      */
     export interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCache {
@@ -5057,39 +5059,39 @@ declare namespace ts {
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
-     * @param node The Node to visit.
-     * @param visitor The callback used to visit the Node.
-     * @param test A callback to execute to verify the Node is valid.
-     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     * @param node - The Node to visit.
+     * @param visitor - The callback used to visit the Node.
+     * @param test - A callback to execute to verify the Node is valid.
+     * @param lift - An optional callback to execute to lift a NodeArray into a valid Node.
      */
     function visitNode<T extends Node>(node: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
-     * @param node The Node to visit.
-     * @param visitor The callback used to visit the Node.
-     * @param test A callback to execute to verify the Node is valid.
-     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     * @param node - The Node to visit.
+     * @param visitor - The callback used to visit the Node.
+     * @param test - A callback to execute to verify the Node is valid.
+     * @param lift - An optional callback to execute to lift a NodeArray into a valid Node.
      */
     function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
+     * @param nodes - The NodeArray to visit.
+     * @param visitor - The callback used to visit a Node.
+     * @param test - A node test to execute for each node.
+     * @param start - An optional value indicating the starting offset at which to start visiting.
+     * @param count - An optional value indicating the maximum number of nodes to visit.
      */
     function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
+     * @param nodes - The NodeArray to visit.
+     * @param visitor - The callback used to visit a Node.
+     * @param test - A node test to execute for each node.
+     * @param start - An optional value indicating the starting offset at which to start visiting.
+     * @param count - An optional value indicating the maximum number of nodes to visit.
      */
     function visitNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
     /**
@@ -5125,17 +5127,17 @@ declare namespace ts {
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
-     * @param node The Node whose children will be visited.
-     * @param visitor The callback used to visit each child.
-     * @param context A lexical environment context for the visitor.
+     * @param node - The Node whose children will be visited.
+     * @param visitor - The callback used to visit each child.
+     * @param context - A lexical environment context for the visitor.
      */
     function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
-     * @param node The Node whose children will be visited.
-     * @param visitor The callback used to visit each child.
-     * @param context A lexical environment context for the visitor.
+     * @param node - The Node whose children will be visited.
+     * @param visitor - The callback used to visit each child.
+     * @param context - A lexical environment context for the visitor.
      */
     function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 }
@@ -5167,8 +5169,8 @@ declare namespace ts {
      * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
      * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
      * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
-     * @param file File to fetch the resolution mode within
-     * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+     * @param file - File to fetch the resolution mode within
+     * @param index - Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
      */
     export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     /**
@@ -5176,8 +5178,8 @@ declare namespace ts {
      * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
      * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
      * `moduleResolution` is `node16`+.
-     * @param file The file the import or import-like reference is contained within
-     * @param usage The module reference string
+     * @param file - The file the import or import-like reference is contained within
+     * @param usage - The module reference string
      * @returns The final resolution mode of the import
      */
     export function getModeForUsageLocation(file: {
@@ -5188,10 +5190,10 @@ declare namespace ts {
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
      * `options` parameter.
      *
-     * @param fileName The normalized absolute path to check the format of (it need not exist on disk)
-     * @param [packageJsonInfoCache] A cache for package file lookups - it's best to have a cache when this function is called often
-     * @param host The ModuleResolutionHost which can perform the filesystem lookups for package json data
-     * @param options The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`
+     * @param fileName - The normalized absolute path to check the format of (it need not exist on disk)
+     * @param packageJsonInfoCache - A cache for package file lookups - it's best to have a cache when this function is called often
+     * @param host - The ModuleResolutionHost which can perform the filesystem lookups for package json data
+     * @param options - The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`
      * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
      */
     export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
@@ -5200,7 +5202,7 @@ declare namespace ts {
      * that represent a compilation unit.
      *
      * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
-     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     * triple-slash-reference-path directives transitively. `@types` and triple-slash-reference-types are also pulled in.
      *
      * @param createProgramOptions - The options for creating a program.
      * @returns A 'Program' object.
@@ -5211,7 +5213,7 @@ declare namespace ts {
      * that represent a compilation unit.
      *
      * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
-     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     * triple-slash-reference-path directives transitively. `@types` and triple-slash-reference-types are also pulled in.
      *
      * @param rootNames - A set of root files.
      * @param options - The compiler options which should be used.
@@ -5221,7 +5223,7 @@ declare namespace ts {
      * @returns A 'Program' object.
      */
     export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
-    /** @deprecated */ export interface ResolveProjectReferencePathHost {
+    /** @deprecated For backward compatibility */ export interface ResolveProjectReferencePathHost {
         fileExists(fileName: string): boolean;
     }
     /**
@@ -5229,7 +5231,7 @@ declare namespace ts {
      * Note: The file might not exist.
      */
     export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
-    /** @deprecated */ export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
+    /** @deprecated For backward compatibility */ export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
     export {};
 }
 declare namespace ts {
@@ -5877,7 +5879,7 @@ declare namespace ts {
          * While these represent the majority of syntax-related diagnostics, there are some
          * that require the type system, which will be present in `getSemanticDiagnostics`.
          *
-         * @param fileName A path to the file you want syntactic diagnostics for
+         * @param fileName - A path to the file you want syntactic diagnostics for
          */
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
         /**
@@ -5893,7 +5895,7 @@ declare namespace ts {
          * sentence: "The sun is green." is syntactically correct; those are real English words with
          * correct sentence structure. However, it is semantically invalid, because it is not true.
          *
-         * @param fileName A path to the file you want semantic diagnostics for
+         * @param fileName - A path to the file you want semantic diagnostics for
          */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         /**
@@ -5901,7 +5903,7 @@ declare namespace ts {
          * proactively suggest refactors, as opposed to diagnostics that indicate
          * potentially incorrect runtime behavior.
          *
-         * @param fileName A path to the file you want semantic diagnostics for
+         * @param fileName - A path to the file you want semantic diagnostics for
          */
         getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
         /**
@@ -5920,32 +5922,32 @@ declare namespace ts {
          * Gets semantic highlights information for a particular file. Has two formats, an older
          * version used by VS and a format used by VS Code.
          *
-         * @param fileName The path to the file
-         * @param position A text span to return results within
-         * @param format Which format to use, defaults to "original"
+         * @param fileName - The path to the file
+         * @param position - A text span to return results within
+         * @param format - Which format to use, defaults to "original"
          * @returns a number array encoded as triples of [start, length, ClassificationType, ...].
          */
         getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications;
         /**
          * Gets completion entries at a particular position in a file.
          *
-         * @param fileName The path to the file
-         * @param position A zero-based index of the character where you want the entries
-         * @param options An object describing how the request was triggered and what kinds
+         * @param fileName - The path to the file
+         * @param position - A zero-based index of the character where you want the entries
+         * @param options - An object describing how the request was triggered and what kinds
          * of code actions can be returned with the completions.
-         * @param formattingSettings settings needed for calling formatting functions.
+         * @param formattingSettings - settings needed for calling formatting functions.
          */
         getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfo> | undefined;
         /**
          * Gets the extended details for a completion entry retrieved from `getCompletionsAtPosition`.
          *
-         * @param fileName The path to the file
-         * @param position A zero based index of the character where you want the entries
-         * @param entryName The `name` from an existing completion which came from `getCompletionsAtPosition`
-         * @param formatOptions How should code samples in the completions be formatted, can be undefined for backwards compatibility
-         * @param source `source` property from the completion entry
-         * @param preferences User settings, can be undefined for backwards compatibility
-         * @param data `data` property from the completion entry
+         * @param fileName - The path to the file
+         * @param position - A zero based index of the character where you want the entries
+         * @param entryName - The `name` from an existing completion which came from `getCompletionsAtPosition`
+         * @param formatOptions - How should code samples in the completions be formatted, can be undefined for backwards compatibility
+         * @param source - `source` property from the completion entry
+         * @param preferences - User settings, can be undefined for backwards compatibility
+         * @param data - `data` property from the completion entry
          */
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): CompletionEntryDetails | undefined;
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
@@ -5953,8 +5955,8 @@ declare namespace ts {
          * Gets semantic information about the identifier at a particular position in a
          * file. Quick info is what you typically see when you hover in an editor.
          *
-         * @param fileName The path to the file
-         * @param position A zero-based index of the character where you want the quick info
+         * @param fileName - The path to the file
+         * @param position - A zero-based index of the character where you want the quick info
          */
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
@@ -5973,7 +5975,7 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
-        /** @deprecated */
+        /** @deprecated Use document highlights. */
         getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -6547,7 +6549,7 @@ declare namespace ts {
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
-         * In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
          * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
          * must be used to commit that completion entry.
          */
@@ -6702,9 +6704,9 @@ declare namespace ts {
          * syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
          * lexical, syntactic, and semantic classifiers may issue the best user experience.
          *
-         * @param text                      The text of a line to classify.
-         * @param lexState                  The state of the lexical classifier at the end of the previous line.
-         * @param syntacticClassifierAbsent Whether the client is *not* using a syntactic classifier.
+         * @param text - The text of a line to classify.
+         * @param lexState - The state of the lexical classifier at the end of the previous line.
+         * @param syntacticClassifierAbsent - Whether the client is *not* using a syntactic classifier.
          *                                  If there is no syntactic classifier (syntacticClassifierAbsent=true),
          *                                  certain heuristics may be used in its place; however, if there is a
          *                                  syntactic classifier (syntacticClassifierAbsent=false), certain
@@ -6723,57 +6725,122 @@ declare namespace ts {
         keyword = "keyword",
         /** top level script node */
         scriptElement = "script",
-        /** module foo {} */
+        /**
+         * ```
+         * module foo {}
+         * ```
+         */
         moduleElement = "module",
-        /** class X {} */
+        /**
+         * ```
+         * class X {}
+         * ```
+         */
         classElement = "class",
-        /** var x = class X {} */
+        /**
+         * ```
+         * var x = class X {}
+         * ```
+         */
         localClassElement = "local class",
-        /** interface Y {} */
+        /**
+         * ```
+         * interface Y {}
+         * ```
+         */
         interfaceElement = "interface",
-        /** type T = ... */
+        /**
+         * ```
+         * type T = ...
+         * ```
+         */
         typeElement = "type",
-        /** enum E */
+        /**
+         * ```
+         * enum E
+         * ```
+         */
         enumElement = "enum",
         enumMemberElement = "enum member",
         /**
          * Inside module and script only
+         * ```
          * const v = ..
+         * ```
          */
         variableElement = "var",
         /** Inside function */
         localVariableElement = "local var",
         /**
          * Inside module and script only
+         * ```
          * function f() { }
+         * ```
          */
         functionElement = "function",
         /** Inside function */
         localFunctionElement = "local function",
-        /** class X { [public|private]* foo() {} } */
+        /**
+         * ```
+         * class X { [public|private]* foo() {} }
+         * ```
+         */
         memberFunctionElement = "method",
-        /** class X { [public|private]* [get|set] foo:number; } */
+        /**
+         * ```
+         * class X { [public|private]* get foo:number; }
+         * ```
+         */
         memberGetAccessorElement = "getter",
+        /**
+         * ```
+         * class X { [public|private]* set foo:number; }
+         * ```
+         */
         memberSetAccessorElement = "setter",
         /**
+         * ```
          * class X { [public|private]* foo:number; }
          * interface Y { foo:number; }
+         * ```
          */
         memberVariableElement = "property",
-        /** class X { [public|private]* accessor foo: number; } */
+        /**
+         * ```
+         * class X { [public|private]* accessor foo: number; }
+         * ```
+         */
         memberAccessorVariableElement = "accessor",
         /**
+         * ```
          * class X { constructor() { } }
          * class X { static { } }
+         * ```
          */
         constructorImplementationElement = "constructor",
-        /** interface Y { ():number; } */
+        /**
+         * ```
+         * interface Y { ():number; }
+         * ```
+         */
         callSignatureElement = "call",
-        /** interface Y { []:number; } */
+        /**
+         * ```
+         * interface Y { []:number; }
+         * ```
+         */
         indexSignatureElement = "index",
-        /** interface Y { new():Y; } */
+        /**
+         * ```
+         * interface Y { new():Y; }
+         * ```
+         */
         constructSignatureElement = "construct",
-        /** function foo(*Y*: string) */
+        /**
+         * ```
+         * function foo(*Y*: string)
+         * ```
+         */
         parameterElement = "parameter",
         typeParameterElement = "type parameter",
         primitiveType = "primitive type",
@@ -6784,17 +6851,19 @@ declare namespace ts {
         directory = "directory",
         externalModuleName = "external module name",
         /**
+         * ```jsx
          * <JsxTagName attribute1 attribute2={0} />
-         * @deprecated
+         * ```
+         * @deprecated No longer returned by any API.
          */
         jsxAttribute = "JSX attribute",
         /** String literal */
         string = "string",
-        /** Jsdoc @link: in `{@link C link text}`, the before and after text "{@link " and "}" */
+        /** Jsdoc `@link`: in `{@link C link text}`, the before and after text "{@link " and "}" */
         link = "link",
-        /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
+        /** Jsdoc `@link`: in `{@link C link text}`, the entity name "C" */
         linkName = "link name",
-        /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
+        /** Jsdoc `@link`: in `{@link C link text}`, the link text "link text" */
         linkText = "link text"
     }
     enum ScriptElementKindModifier {
@@ -6915,16 +6984,16 @@ declare namespace ts {
          * The first call to acquire will call createLanguageServiceSourceFile to generate
          * the SourceFile if was not found in the registry.
          *
-         * @param fileName The name of the file requested
-         * @param compilationSettingsOrHost Some compilation settings like target affects the
+         * @param fileName - The name of the file requested
+         * @param compilationSettingsOrHost - Some compilation settings like target affects the
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
          * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
-         * @param scriptSnapshot Text of the file. Only used if the file was not found
+         * @param scriptSnapshot - Text of the file. Only used if the file was not found
          * in the registry and a new one was created.
-         * @param version Current version of the file. Only used if the file was not found
+         * @param version - Current version of the file. Only used if the file was not found
          * in the registry and a new one was created.
          */
         acquireDocument(fileName: string, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, sourceFileOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile;
@@ -6934,15 +7003,15 @@ declare namespace ts {
          * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
          * to get an updated SourceFile.
          *
-         * @param fileName The name of the file requested
-         * @param compilationSettingsOrHost Some compilation settings like target affects the
+         * @param fileName - The name of the file requested
+         * @param compilationSettingsOrHost - Some compilation settings like target affects the
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
          * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
-         * @param scriptSnapshot Text of the file.
-         * @param version Current version of the file.
+         * @param scriptSnapshot - Text of the file.
+         * @param version - Current version of the file.
          */
         updateDocument(fileName: string, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, sourceFileOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile;
         updateDocumentWithKey(fileName: string, path: Path, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, sourceFileOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile;
@@ -6953,9 +7022,9 @@ declare namespace ts {
          * Note: It is not allowed to call release on a SourceFile that was not acquired from
          * this registry originally.
          *
-         * @param fileName The name of the file to be released
-         * @param compilationSettings The compilation settings used to acquire the file
-         * @param scriptKind The script kind of the file to be released
+         * @param fileName - The name of the file to be released
+         * @param compilationSettings - The compilation settings used to acquire the file
+         * @param scriptKind - The script kind of the file to be released
          */
         /**@deprecated pass scriptKind and impliedNodeFormat for correctness */
         releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind): void;
@@ -6965,10 +7034,10 @@ declare namespace ts {
          * Note: It is not allowed to call release on a SourceFile that was not acquired from
          * this registry originally.
          *
-         * @param fileName The name of the file to be released
-         * @param compilationSettings The compilation settings used to acquire the file
-         * @param scriptKind The script kind of the file to be released
-         * @param impliedNodeFormat The implied source file format of the file to be released
+         * @param fileName - The name of the file to be released
+         * @param compilationSettings - The compilation settings used to acquire the file
+         * @param scriptKind - The script kind of the file to be released
+         * @param impliedNodeFormat - The implied source file format of the file to be released
          */
         releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void;
         /**
@@ -7022,9 +7091,9 @@ declare namespace ts {
 declare namespace ts {
     /**
      * Transform one or more nodes using the supplied transformers.
-     * @param source A single `Node` or an array of `Node` objects.
-     * @param transformers An array of `TransformerFactory` callbacks used to process the transformation.
-     * @param compilerOptions Optional compiler options.
+     * @param source - A single `Node` or an array of `Node` objects.
+     * @param transformers - An array of `TransformerFactory` callbacks used to process the transformation.
+     * @param compilerOptions - Optional compiler options.
      */
     function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
 }

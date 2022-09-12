@@ -52,7 +52,7 @@
               "name": "x",
               "documentation": [
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ],
@@ -97,7 +97,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A String value that contains valid JavaScript code.",
+                  "text": "- A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]

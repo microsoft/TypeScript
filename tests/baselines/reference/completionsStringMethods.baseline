@@ -101,7 +101,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The zero-based index of the desired character.",
+                  "text": "- The zero-based index of the desired character.",
                   "kind": "text"
                 }
               ]
@@ -198,7 +198,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.",
+                  "text": "- The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.",
                   "kind": "text"
                 }
               ]
@@ -307,7 +307,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The strings to append to the end of the string.",
+                  "text": "- The strings to append to the end of the string.",
                   "kind": "text"
                 }
               ]
@@ -432,7 +432,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The substring to search for in the string",
+                  "text": "- The substring to search for in the string",
                   "kind": "text"
                 }
               ]
@@ -449,7 +449,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index at which to begin searching the String object. If omitted, search starts at the beginning of the string.",
+                  "text": "- The index at which to begin searching the String object. If omitted, search starts at the beginning of the string.",
                   "kind": "text"
                 }
               ]
@@ -574,7 +574,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The substring to search for.",
+                  "text": "- The substring to search for.",
                   "kind": "text"
                 }
               ]
@@ -591,7 +591,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index at which to begin searching. If omitted, the search begins at the end of the string.",
+                  "text": "- The index at which to begin searching. If omitted, the search begins at the end of the string.",
                   "kind": "text"
                 }
               ]
@@ -770,7 +770,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "String to compare to target string",
+                  "text": "- String to compare to target string",
                   "kind": "text"
                 }
               ]
@@ -883,7 +883,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A variable name or string literal containing the regular expression pattern and flags.",
+                  "text": "- A variable name or string literal containing the regular expression pattern and flags.",
                   "kind": "text"
                 }
               ]
@@ -1048,7 +1048,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string to search for.",
+                  "text": "- A string to search for.",
                   "kind": "text"
                 }
               ]
@@ -1065,7 +1065,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string containing the text to replace for every successful match of searchValue in this string.",
+                  "text": "- A string containing the text to replace for every successful match of searchValue in this string.",
                   "kind": "text"
                 }
               ]
@@ -1178,7 +1178,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The regular expression pattern and applicable flags.",
+                  "text": "- The regular expression pattern and applicable flags.",
                   "kind": "text"
                 }
               ]
@@ -1307,7 +1307,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index to the beginning of the specified portion of stringObj.",
+                  "text": "- The index to the beginning of the specified portion of stringObj.",
                   "kind": "text"
                 }
               ]
@@ -1324,7 +1324,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf this value is not specified, the substring continues to the end of stringObj.",
+                  "text": "- The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf this value is not specified, the substring continues to the end of stringObj.",
                   "kind": "text"
                 }
               ]
@@ -1473,7 +1473,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.",
+                  "text": "- A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.",
                   "kind": "text"
                 }
               ]
@@ -1490,7 +1490,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value used to limit the number of elements returned in the array.",
+                  "text": "- A value used to limit the number of elements returned in the array.",
                   "kind": "text"
                 }
               ]
@@ -1615,7 +1615,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The zero-based index number indicating the beginning of the substring.",
+                  "text": "- The zero-based index number indicating the beginning of the substring.",
                   "kind": "text"
                 }
               ]
@@ -1632,7 +1632,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf end is omitted, the characters from start through the end of the original string are returned.",
+                  "text": "- Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf end is omitted, the characters from start through the end of the original string are returned.",
                   "kind": "text"
                 }
               ]
@@ -2288,7 +2288,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The starting position of the desired substring. The index of the first character in the string is zero.",
+                  "text": "- The starting position of the desired substring. The index of the first character in the string is zero.",
                   "kind": "text"
                 }
               ]
@@ -2305,7 +2305,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The number of characters to include in the returned substring.",
+                  "text": "- The number of characters to include in the returned substring.",
                   "kind": "text"
                 }
               ]
