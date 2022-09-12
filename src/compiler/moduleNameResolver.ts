@@ -13,7 +13,7 @@ namespace ts {
     function withPackageId(packageInfo: PackageJsonInfo | undefined, r: PathAndExtension | undefined): Resolved | undefined {
         let packageId: PackageId | undefined;
         if (r && packageInfo) {
-            const packageJsonContent = packageInfo.packageJsonContent as PackageJson;
+            const packageJsonContent = packageInfo.contents.packageJsonContent as PackageJson;
             if (typeof packageJsonContent.name === "string" && typeof packageJsonContent.version === "string") {
                 packageId = {
                     name: packageJsonContent.name,
@@ -1679,8 +1679,8 @@ namespace ts {
 
     function loadNodeModuleFromDirectory(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson = true) {
         const packageInfo = considerPackageJson ? getPackageJsonInfo(candidate, onlyRecordFailures, state) : undefined;
-        const packageJsonContent = packageInfo && packageInfo.packageJsonContent;
-        const versionPaths = packageInfo && packageInfo.versionPaths;
+        const packageJsonContent = packageInfo && packageInfo.contents.packageJsonContent;
+        const versionPaths = packageInfo && packageInfo.contents.versionPaths;
         return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
     }
 
@@ -1692,10 +1692,10 @@ namespace ts {
         cache: ModuleResolutionCache | undefined,
         resolveJs?: boolean,
     ): string[] | false {
-        if (!resolveJs && packageJsonInfo.resolvedEntrypoints !== undefined) {
+        if (!resolveJs && packageJsonInfo.contents.resolvedEntrypoints !== undefined) {
             // Cached value excludes resolutions to JS files - those could be
             // cached separately, but they're used rarely.
-            return packageJsonInfo.resolvedEntrypoints;
+            return packageJsonInfo.contents.resolvedEntrypoints;
         }
 
         let entrypoints: string[] | undefined;
@@ -1709,16 +1709,16 @@ namespace ts {
             packageJsonInfo.packageDirectory,
             /*onlyRecordFailures*/ false,
             requireState,
-            packageJsonInfo.packageJsonContent,
-            packageJsonInfo.versionPaths);
+            packageJsonInfo.contents.packageJsonContent,
+            packageJsonInfo.contents.versionPaths);
         entrypoints = append(entrypoints, requireResolution?.path);
 
-        if (features & NodeResolutionFeatures.Exports && packageJsonInfo.packageJsonContent.exports) {
+        if (features & NodeResolutionFeatures.Exports && packageJsonInfo.contents.packageJsonContent.exports) {
             for (const conditions of [["node", "import", "types"], ["node", "require", "types"]]) {
                 const exportState = { ...requireState, failedLookupLocations: [], conditions };
                 const exportResolutions = loadEntrypointsFromExportMap(
                     packageJsonInfo,
-                    packageJsonInfo.packageJsonContent.exports,
+                    packageJsonInfo.contents.packageJsonContent.exports,
                     exportState,
                     extensions);
                 if (exportResolutions) {
@@ -1729,7 +1729,7 @@ namespace ts {
             }
         }
 
-        return packageJsonInfo.resolvedEntrypoints = entrypoints || false;
+        return packageJsonInfo.contents.resolvedEntrypoints = entrypoints || false;
     }
 
     function loadEntrypointsFromExportMap(
@@ -1808,6 +1808,10 @@ namespace ts {
     /*@internal*/
     export interface PackageJsonInfo {
         packageDirectory: string;
+        contents: PackageJsonInfoContents;
+    }
+    /*@internal*/
+    export interface PackageJsonInfoContents {
         packageJsonContent: PackageJsonPathFields;
         versionPaths: VersionPaths | undefined;
         /** false: resolved to nothing. undefined: not yet resolved */
@@ -1818,7 +1822,7 @@ namespace ts {
      * A function for locating the package.json scope for a given path
      */
     /*@internal*/
-     export function getPackageScopeForPath(fileName: Path, state: ModuleResolutionState): PackageJsonInfo | undefined {
+     export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
         const parts = getPathComponents(fileName);
         parts.pop();
         while (parts.length > 0) {
@@ -1845,7 +1849,9 @@ namespace ts {
             if (typeof existing !== "boolean") {
                 if (traceEnabled) trace(host, Diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath);
                 state.affectingLocations.push(packageJsonPath);
-                return existing;
+                return existing.packageDirectory === packageDirectory ?
+                    existing :
+                    { packageDirectory, contents: existing.contents };
             }
             else {
                 if (existing && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
@@ -1860,7 +1866,7 @@ namespace ts {
                 trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
             const versionPaths = readPackageJsonTypesVersionPaths(packageJsonContent, state);
-            const result = { packageDirectory, packageJsonContent, versionPaths, resolvedEntrypoints: undefined };
+            const result: PackageJsonInfo = { packageDirectory, contents: { packageJsonContent, versionPaths, resolvedEntrypoints: undefined } };
             state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
             state.affectingLocations.push(packageJsonPath);
             return result;
@@ -1994,17 +2000,16 @@ namespace ts {
     }
 
     function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-        const useCaseSensitiveFileNames = typeof state.host.useCaseSensitiveFileNames === "function" ? state.host.useCaseSensitiveFileNames() : state.host.useCaseSensitiveFileNames;
-        const directoryPath = toPath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.(), createGetCanonicalFileName(useCaseSensitiveFileNames === undefined ? true : useCaseSensitiveFileNames));
+        const directoryPath = getNormalizedAbsolutePath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.());
         const scope = getPackageScopeForPath(directoryPath, state);
-        if (!scope || !scope.packageJsonContent.exports) {
+        if (!scope || !scope.contents.packageJsonContent.exports) {
             return undefined;
         }
-        if (typeof scope.packageJsonContent.name !== "string") {
+        if (typeof scope.contents.packageJsonContent.name !== "string") {
             return undefined;
         }
         const parts = getPathComponents(moduleName); // unrooted paths should have `""` as their 0th entry
-        const nameParts = getPathComponents(scope.packageJsonContent.name);
+        const nameParts = getPathComponents(scope.contents.packageJsonContent.name);
         if (!every(nameParts, (p, i) => parts[i] === p)) {
             return undefined;
         }
@@ -2013,31 +2018,31 @@ namespace ts {
     }
 
     function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, subpath: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-        if (!scope.packageJsonContent.exports) {
+        if (!scope.contents.packageJsonContent.exports) {
             return undefined;
         }
 
         if (subpath === ".") {
             let mainExport;
-            if (typeof scope.packageJsonContent.exports === "string" || Array.isArray(scope.packageJsonContent.exports) || (typeof scope.packageJsonContent.exports === "object" && noKeyStartsWithDot(scope.packageJsonContent.exports as MapLike<unknown>))) {
-                mainExport = scope.packageJsonContent.exports;
+            if (typeof scope.contents.packageJsonContent.exports === "string" || Array.isArray(scope.contents.packageJsonContent.exports) || (typeof scope.contents.packageJsonContent.exports === "object" && noKeyStartsWithDot(scope.contents.packageJsonContent.exports as MapLike<unknown>))) {
+                mainExport = scope.contents.packageJsonContent.exports;
             }
-            else if (hasProperty(scope.packageJsonContent.exports as MapLike<unknown>, ".")) {
-                mainExport = (scope.packageJsonContent.exports as MapLike<unknown>)["."];
+            else if (hasProperty(scope.contents.packageJsonContent.exports as MapLike<unknown>, ".")) {
+                mainExport = (scope.contents.packageJsonContent.exports as MapLike<unknown>)["."];
             }
             if (mainExport) {
                 const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, subpath, scope, /*isImports*/ false);
                 return loadModuleFromTargetImportOrExport(mainExport, "", /*pattern*/ false);
             }
         }
-        else if (allKeysStartWithDot(scope.packageJsonContent.exports as MapLike<unknown>)) {
-            if (typeof scope.packageJsonContent.exports !== "object") {
+        else if (allKeysStartWithDot(scope.contents.packageJsonContent.exports as MapLike<unknown>)) {
+            if (typeof scope.contents.packageJsonContent.exports !== "object") {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Export_specifier_0_does_not_exist_in_package_json_scope_at_path_1, subpath, scope.packageDirectory);
                 }
                 return toSearchResult(/*value*/ undefined);
             }
-            const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, subpath, scope.packageJsonContent.exports, scope, /*isImports*/ false);
+            const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, subpath, scope.contents.packageJsonContent.exports, scope, /*isImports*/ false);
             if (result) {
                 return result;
             }
@@ -2056,8 +2061,7 @@ namespace ts {
             }
             return toSearchResult(/*value*/ undefined);
         }
-        const useCaseSensitiveFileNames = typeof state.host.useCaseSensitiveFileNames === "function" ? state.host.useCaseSensitiveFileNames() : state.host.useCaseSensitiveFileNames;
-        const directoryPath = toPath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.(), createGetCanonicalFileName(useCaseSensitiveFileNames === undefined ? true : useCaseSensitiveFileNames));
+        const directoryPath = getNormalizedAbsolutePath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.());
         const scope = getPackageScopeForPath(directoryPath, state);
         if (!scope) {
             if (state.traceEnabled) {
@@ -2065,14 +2069,14 @@ namespace ts {
             }
             return toSearchResult(/*value*/ undefined);
         }
-        if (!scope.packageJsonContent.imports) {
+        if (!scope.contents.packageJsonContent.imports) {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_scope_0_has_no_imports_defined, scope.packageDirectory);
             }
             return toSearchResult(/*value*/ undefined);
         }
 
-        const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, moduleName, scope.packageJsonContent.imports, scope, /*isImports*/ true);
+        const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, moduleName, scope.contents.packageJsonContent.imports, scope, /*isImports*/ true);
         if (result) {
             return result;
         }
@@ -2426,8 +2430,8 @@ namespace ts {
                     candidate,
                     !nodeModulesDirectoryExists,
                     state,
-                    packageInfo.packageJsonContent,
-                    packageInfo.versionPaths
+                    packageInfo.contents.packageJsonContent,
+                    packageInfo.contents.versionPaths
                 );
                 return withPackageId(packageInfo, fromDirectory);
             }
@@ -2436,7 +2440,7 @@ namespace ts {
         const { packageName, rest } = parsePackageName(moduleName);
         const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
             // package exports are higher priority than file/directory lookups (and, if there's exports present, blocks them)
-            if (packageInfo && packageInfo.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
+            if (packageInfo && packageInfo.contents.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
                 return loadModuleFromExports(packageInfo, extensions, combinePaths(".", rest), state, cache, redirectedReference)?.value;
             }
             let pathAndExtension =
@@ -2446,13 +2450,13 @@ namespace ts {
                     candidate,
                     onlyRecordFailures,
                     state,
-                    packageInfo && packageInfo.packageJsonContent,
-                    packageInfo && packageInfo.versionPaths
+                    packageInfo && packageInfo.contents.packageJsonContent,
+                    packageInfo && packageInfo.contents.versionPaths
                 );
             if (
                 !pathAndExtension && packageInfo
                 // eslint-disable-next-line no-null/no-null
-                && (packageInfo.packageJsonContent.exports === undefined || packageInfo.packageJsonContent.exports === null)
+                && (packageInfo.contents.packageJsonContent.exports === undefined || packageInfo.contents.packageJsonContent.exports === null)
                 && state.features & NodeResolutionFeatures.EsmMode
             ) {
                 // EsmMode disables index lookup in `loadNodeModuleFromDirectoryWorker` generally, however non-relative package resolutions still assume
@@ -2467,12 +2471,12 @@ namespace ts {
 
             // Don't use a "types" or "main" from here because we're not loading the root, but a subdirectory -- just here for the packageId and path mappings.
             packageInfo = getPackageJsonInfo(packageDirectory, !nodeModulesDirectoryExists, state);
-            if (packageInfo && packageInfo.versionPaths) {
+            if (packageInfo && packageInfo.contents.versionPaths) {
                 if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, packageInfo.versionPaths.version, version, rest);
+                    trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, packageInfo.contents.versionPaths.version, version, rest);
                 }
                 const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
-                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
+                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.contents.versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
                 if (fromPaths) {
                     return fromPaths.value;
                 }
