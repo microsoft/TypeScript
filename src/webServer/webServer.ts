@@ -1,8 +1,6 @@
 /// <reference lib="dom" />
 /// <reference lib="webworker.importscripts" />
 
-import * as server from "./_namespaces/ts.server";
-
 import {
     indent, Logger, LogLevel, ModuleImportResult, Msg, nowString, nullTypingsInstaller, protocol,
     ServerCancellationToken, ServerHost, Session, SessionOptions,
@@ -127,16 +125,11 @@ export class MainProcessLogger extends BaseLogger {
     }
 }
 
-// Attempt to load `dynamicImport`
-if (typeof importScripts === "function") {
-    try {
-        // NOTE: importScripts is synchronous
-        importScripts("dynamicImportCompat.js");
-    }
-    catch {
-        // ignored
-    }
-}
+/** @internal */
+// eslint-disable-next-line prefer-const
+export let dynamicImport = async (_id: string): Promise<any> => {
+    throw new Error("Dynamic import not implemented");
+};
 
 /** @internal */
 export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ServerHost {
@@ -144,16 +137,6 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
     const getExecutingDirectoryPath = memoize(() => memoize(() => ensureTrailingDirectorySeparator(getDirectoryPath(getExecutingFilePath()))));
     // Later we could map ^memfs:/ to do something special if we want to enable more functionality like module resolution or something like that
     const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, getExecutingDirectoryPath()) : undefined;
-
-    const dynamicImport = async (id: string): Promise<any> => {
-        const serverDynamicImport: ((id: string) => Promise<any>) | undefined = (server as any).dynamicImport;
-        // Use syntactic dynamic import first, if available
-        if (serverDynamicImport) {
-            return serverDynamicImport(id);
-        }
-
-        throw new Error("Dynamic import not implemented");
-    };
 
     return {
         args,

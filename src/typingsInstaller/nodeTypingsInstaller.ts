@@ -11,7 +11,7 @@ import {
 } from "./_namespaces/ts.server";
 import {
     combinePaths, createGetCanonicalFileName, Debug, ESMap, forEachAncestorDirectory, getDirectoryPath, getEntries, Map,
-    MapLike, normalizeSlashes, stringContains, sys, toPath, version,
+    MapLike, normalizePath, normalizeSlashes, stringContains, sys, toPath, version,
 } from "./_namespaces/ts";
 
 class FileLog implements Log {
@@ -89,11 +89,12 @@ export class NodeTypingsInstaller extends TypingsInstaller {
     private delayedInitializationError: InitializationFailedResponse | undefined;
 
     constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, validateDefaultNpmLocation: boolean, throttleLimit: number, log: Log) {
+        const libDirectory = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         super(
             sys,
             globalTypingsCacheLocation,
-            typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-            typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+            typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+            typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             throttleLimit,
             log);
         this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);

@@ -136,7 +136,6 @@
         "transform.ts",
         "shims.ts",
         "globalThisShim.ts",
-        "exportAsModule.ts",
         "_namespaces/ts.BreakpointResolver.ts",
         "_namespaces/ts.ts",
         "_namespaces/ts.CallHierarchy.ts",

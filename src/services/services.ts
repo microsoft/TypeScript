@@ -484,9 +484,9 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
 }
 IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public kind!: SyntaxKind.PrivateIdentifier;
+    public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
-    public symbol!: Symbol;
+    // public symbol!: Symbol;
     _primaryExpressionBrand: any;
     _memberExpressionBrand: any;
     _leftHandSideExpressionBrand: any;
@@ -2922,18 +2922,14 @@ function isArgumentOfElementAccessExpression(node: Node) {
         (node.parent as ElementAccessExpression).argumentExpression === node;
 }
 
-/// getDefaultLibraryFilePath
-declare const __dirname: string;
-
 /**
  * Get the path of the default library files (lib.d.ts) as distributed with the typescript
  * node package.
  * The functionality is not supported if the ts module is consumed outside of a node module.
  */
 export function getDefaultLibFilePath(options: CompilerOptions): string {
-    // Check __dirname is defined and that we are on a node.js system.
-    if (typeof __dirname !== "undefined") {
-        return combinePaths(__dirname, getDefaultLibFileName(options));
+    if (ts.sys) {
+        return combinePaths(getDirectoryPath(normalizePath(ts.sys.getExecutingFilePath())), getDefaultLibFileName(options));
     }
 
     throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");

@@ -1463,6 +1463,13 @@ export let sys: System = (() => {
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
         const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
 
+        // If our filename is "sys.js", then we are executing unbundled on the raw tsc output.
+        // In that case, simulate a faked path in the directory where a bundle would normally
+        // appear (e.g. the directory containing lib.*.d.ts files).
+        //
+        // Note that if we ever emit as files like cjs/mjs, this check will be wrong.
+        const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
+
         const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
         const getCurrentDirectory = memoize(() => process.cwd());
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
@@ -1521,14 +1528,7 @@ export let sys: System = (() => {
                 }
             },
             getExecutingFilePath() {
-                // This function previously returned a path like `built/local/tsc.js`.
-                // Now, with a module output, this file is now `built/local/compiler/sys.js`.
-                // We want to return a file that looks like the old one, so that callers
-                // can locate other assets like the lib.d.ts files.
-                //
-                // TODO(jakebailey): replace this function with one that returns the path
-                // to the lib folder (or package path)?.
-                return _path.join(_path.dirname(__dirname), "fake.js");
+                return executingFilePath;
             },
             getCurrentDirectory,
             getDirectories,
@@ -1567,7 +1567,10 @@ export let sys: System = (() => {
             debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
             tryEnableSourceMapsForHost() {
                 try {
-                    require("source-map-support").install();
+                    // Trick esbuild into not eagerly resolving a path to a JS file.
+                    // See: https://github.com/evanw/esbuild/issues/1958
+                    const moduleName = "source-map-support" as const;
+                    (require(moduleName) as typeof import("source-map-support")).install();
                 }
                 catch {
                     // Could not enable source maps.
@@ -1642,7 +1645,7 @@ export let sys: System = (() => {
         function cleanupPaths(profile: import("inspector").Profiler.Profile) {
             let externalFileCounter = 0;
             const remappedPaths = new Map<string, string>();
-            const normalizedDir = normalizeSlashes(__dirname);
+            const normalizedDir = normalizeSlashes(_path.dirname(executingFilePath));
             // Windows rooted dir names need an extra `/` prepended to be valid file:/// urls
             const fileUrlRoot = `file://${getRootLength(normalizedDir) === 1 ? "" : "/"}${normalizedDir}`;
             for (const node of profile.nodes) {
