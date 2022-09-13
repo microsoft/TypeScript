@@ -34796,7 +34796,9 @@ namespace ts {
                 // We strip literal freshness when an appropriate contextual type is present such that contextually typed
                 // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
                 // here would be to not mark contextually typed literals as fresh in the first place.
-                const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
+                const result = maybeTypeOfKind(type, TypeFlags.Literal) && (
+                    isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ||
+                    isLiteralOfContextualType(type, contextualType)) ?
                     getRegularTypeOfLiteralType(type) : type;
                 return result;
             }
