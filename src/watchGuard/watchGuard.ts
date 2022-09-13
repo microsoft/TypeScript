@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-import * as fs from "fs";
+import fs = require("fs");
 
 if (process.argv.length < 3) {
     process.exit(1);

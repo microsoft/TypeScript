@@ -1,1 +1,0 @@
-export const dynamicImport = (id: string) => import(id);

@@ -1,12 +1,13 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
+        "outDir": "../../built/local",
+        "tsBuildInfoFile": "../../built/local/debug.tsbuildinfo",
+        "rootDir": ".",
         "target": "es2019",
         "lib": ["es2019"],
-        "outDir": "../../built/local/debug"
     },
     "files": [
-        "dbg.ts",
-        "_namespaces/Debug.ts"
+        "compilerDebug.ts",
     ]
 }

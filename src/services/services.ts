@@ -484,9 +484,9 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
 }
 IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public kind!: SyntaxKind.PrivateIdentifier;
+    public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
-    public symbol!: Symbol;
+    // public symbol!: Symbol;
     _primaryExpressionBrand: any;
     _memberExpressionBrand: any;
     _leftHandSideExpressionBrand: any;
