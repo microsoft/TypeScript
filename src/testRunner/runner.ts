@@ -293,4 +293,11 @@ function startTestEnvironment() {
 startTestEnvironment();
 
 // This brings in all of the unittests.
-import "./_namespaces/tests";
+// NOTE: if emitting CJS, uncomment this, and comment out the one in Harness.ts.
+// import "./_namespaces/tests";
+
+// If running as emitted CJS, we want to start the tests here after startTestEnvironment.
+// If running bundled, we will do this in Harness.ts.
+if (__filename.endsWith("runner.js")) {
+    require("./_namespaces/tests");
+}

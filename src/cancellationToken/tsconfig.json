@@ -1,7 +1,9 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local/cancellationToken",
+        "outDir": "../../built/local",
+        "tsBuildInfoFile": "../../built/local/cancellationToken.tsbuildinfo",
+        "rootDir": ".",
         "module": "commonjs",
         "types": [
             "node"

@@ -6,7 +6,6 @@
         { "path": "./compiler" },
         { "path": "./debug" },
         { "path": "./deprecatedCompat" },
-        { "path": "./dynamicImportCompat" },
         { "path": "./executeCommandLine" },
         { "path": "./harness" },
         { "path": "./jsTyping" },

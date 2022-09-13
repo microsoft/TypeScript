@@ -526,8 +526,8 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                 }
             }
 
-            // TODO(jakebailey): fix this for module transform
-            this.installer = childProcess.fork(combinePaths(__dirname, "..", "typingsInstaller", "nodeTypingsInstaller.js"), args, { execArgv });
+            const typingsInstaller = combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typingsInstaller.js");
+            this.installer = childProcess.fork(typingsInstaller, args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
 
             // We have to schedule this event to the next tick
