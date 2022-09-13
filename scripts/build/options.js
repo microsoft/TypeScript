@@ -6,7 +6,7 @@ const ci = ["1", "true"].includes(process.env.CI);
 
 /** @type {CommandLineOptions} */
 module.exports = minimist(process.argv.slice(2), {
-    boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci"],
+    boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci", "bundle"],
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         /* eslint-disable quote-props */
@@ -41,6 +41,7 @@ module.exports = minimist(process.argv.slice(2), {
         dirty: false,
         built: false,
         ci,
+        bundle: true
     }
 });
 
@@ -69,6 +70,7 @@ if (module.exports.built) {
  * @property {boolean} failed
  * @property {boolean} keepFailed
  * @property {boolean} ci
+ * @property {boolean} bundle
  *
  * @typedef {import("minimist").ParsedArgs & TypedOptions} CommandLineOptions
  */

@@ -17,6 +17,8 @@ export * from "../transpile";
 export * from "../services";
 export * from "../transform";
 export * from "../shims";
+export * from "../globalThisShim";
+export * from "../exportAsModule";
 import * as BreakpointResolver from "./ts.BreakpointResolver";
 export { BreakpointResolver };
 import * as CallHierarchy from "./ts.CallHierarchy";

@@ -1,7 +1,3 @@
-import * as Debug from "./_namespaces/Debug";
-
-/// <reference lib="es2019" />
-
 interface Node {
     kind: number;
 }
@@ -509,10 +505,4 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
         }
         return s;
     }
-}
-
-// Export as a module. NOTE: Can't use module exports as this is built using --outFile
-declare const module: { exports: {} };
-if (typeof module !== "undefined" && module.exports) {
-    module.exports = Debug;
 }

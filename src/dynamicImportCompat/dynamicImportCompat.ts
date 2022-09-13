@@ -1,1 +1,1 @@
-export const dynamicImport = (id: string) => import(id);
+(globalThis as any).dynamicImport = (id: string) => import(id);

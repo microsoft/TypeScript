@@ -1,4 +1,3 @@
-import * as server from "./_namespaces/ts.server";
 import {
     indent, Logger, LogLevel, ModuleImportResult, Msg, nowString, nullTypingsInstaller, protocol,
     ServerCancellationToken, ServerHost, Session, SessionOptions,
@@ -126,11 +125,21 @@ export class MainProcessLogger extends BaseLogger {
     }
 }
 
+let dynamicImport = async (_id: string): Promise<any> => {
+    throw new Error("Dynamic import not implemented");
+};
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+declare const __import__: (_id: string) => Promise<any>;
+
 // Attempt to load `dynamicImport`
 if (typeof importScripts === "function") {
     try {
         // NOTE: importScripts is synchronous
-        importScripts("dynamicImportCompat.js");
+        // importScripts("dynamicImportCompat.js");
+        // dynamicImport = (globalThis as any).dynamicImport;
+        // delete (globalThis as any).dynamicImport;
+        dynamicImport = __import__;
     }
     catch {
         // ignored
@@ -143,16 +152,6 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
     const getExecutingDirectoryPath = memoize(() => memoize(() => ensureTrailingDirectorySeparator(getDirectoryPath(getExecutingFilePath()))));
     // Later we could map ^memfs:/ to do something special if we want to enable more functionality like module resolution or something like that
     const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, getExecutingDirectoryPath()) : undefined;
-
-    const dynamicImport = async (id: string): Promise<any> => {
-        const serverDynamicImport: ((id: string) => Promise<any>) | undefined = (server as any).dynamicImport;
-        // Use syntactic dynamic import first, if available
-        if (serverDynamicImport) {
-            return serverDynamicImport(id);
-        }
-
-        throw new Error("Dynamic import not implemented");
-    };
 
     return {
         args,

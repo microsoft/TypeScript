@@ -721,7 +721,7 @@ export namespace Debug {
         try {
             if (sys && sys.require) {
                 const basePath = getDirectoryPath(resolvePath(sys.getExecutingFilePath()));
-                const result = sys.require(basePath, "./compiler-debug") as RequireResult<ExtendedDebugModule>;
+                const result = sys.require(basePath, "./compilerDebug") as RequireResult<ExtendedDebugModule>;
                 if (!result.error) {
                     result.module.init(ts);
                     extendedDebugModule = result.module;

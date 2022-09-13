@@ -13,15 +13,43 @@ const { append, transform } = require("gulp-insert");
 const { prependFile } = require("./scripts/build/prepend");
 const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
 const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
-const { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
+const { buildProject: realBuildProject, cleanProject, watchProject } = require("./scripts/build/projects");
 const cmdLineOptions = require("./scripts/build/options");
+const esbuild = require("esbuild");
 
 const copyright = "CopyrightNotice.txt";
 const cleanTasks = [];
 
-const testRunner = "./built/local/testRunner/runner.js";
 
-const buildScripts = () => buildProject("scripts");
+// TODO(jakebailey): This is really gross. Waiting on: https://github.com/microsoft/TypeScript/issues/25613
+let currentlyBuilding = 0;
+let oldTsconfigBase;
+
+/** @type {typeof realBuildProject} */
+const buildProjectWithEmit = async (...args) => {
+    const tsconfigBasePath = "./src/tsconfig-base.json";
+
+    if (currentlyBuilding === 0) {
+        oldTsconfigBase = fs.readFileSync(tsconfigBasePath, "utf-8");
+        fs.writeFileSync(tsconfigBasePath, oldTsconfigBase.replace(`"emitDeclarationOnly": true`, `"emitDeclarationOnly": false`));;
+    }
+
+    currentlyBuilding++;
+
+    await realBuildProject(...args);
+
+    currentlyBuilding--;
+
+    if (currentlyBuilding === 0) {
+        fs.writeFileSync(tsconfigBasePath, oldTsconfigBase);
+    }
+};
+
+
+const buildProject = cmdLineOptions.bundle ? realBuildProject : buildProjectWithEmit;
+
+
+const buildScripts = () => buildProject("scripts", cmdLineOptions);
 task("scripts", buildScripts);
 task("scripts").description = "Builds files in the 'scripts' folder.";
 
@@ -94,9 +122,12 @@ const localize = async () => {
     }
 };
 
-const buildAll = () => buildProject("src");
+const preSrc = parallel(generateLibs, series(buildScripts, generateDiagnostics, localize));
+const buildSrc = () => buildProject("src");
 
-task("moduleBuild", parallel(generateLibs, series(buildScripts, localize, buildAll)));
+// TODO(jakebailey): when should we run this? it's nice to have tests run quickly, but we also want to know if the code is broken.
+// But, if we are bundling, we are running only d.ts emit, so maybe this is fast?
+task("buildSrc", series(preSrc, buildSrc));
 
 const apiExtractor = async () => {
     async function runApiExtractor(configPath) {
@@ -114,25 +145,94 @@ const apiExtractor = async () => {
     await runApiExtractor("./src/tsserverlibrary/api-extractor.json");
 };
 
-task("api-extractor", series(task("moduleBuild"), apiExtractor));
+// TODO(jakebailey): Some tests depend on the extracted output.
+task("api-extractor", series(preSrc, buildSrc, apiExtractor));
 
-const buildDebugTools = () => buildProject("src/debug");
-const cleanDebugTools = () => cleanProject("src/debug");
+/** @type {string | undefined} */
+let copyrightHeader;
+function getCopyrightHeader() {
+    if (copyrightHeader === undefined) {
+        copyrightHeader = fs.readFileSync(copyright, "utf-8");
+    }
+    return copyrightHeader;
+}
+
+/**
+ * @param {string} entrypoint
+ * @param {string} outfile
+ */
+function esbuildTask(entrypoint, outfile) {
+    /** @type {esbuild.BuildOptions} */
+    const options = {
+        entryPoints: [entrypoint],
+        banner: { js: getCopyrightHeader() },
+        bundle: true,
+        outfile,
+        platform: "node",
+        // TODO: also specify minimal browser targets
+        target: "node10", // Node 10 is the oldest benchmarker.
+        // format: "iife", // TODO(jakebailey): figure out how to conditionally use module.exports
+        sourcemap: true,
+        external: ["./node_modules/*"], // TODO(jakebailey): does the test runner import relatively from scripts?
+        conditions: ["require"],
+        supported: {
+            // "const-and-let": false, // Unfortunately, no: https://github.com/evanw/esbuild/issues/297
+            "object-rest-spread": false, // See: https://github.com/evanw/esbuild/releases/tag/v0.14.46
+        },
+        // legalComments: "none", // TODO(jakebailey): enable once we add copyright headers to our source files.
+        // logLevel: "info",
+    };
+
+    // TODO: these need to have better function names, for gulp.
+    return {
+        build: () => esbuild.build(options),
+        clean: () => del([outfile, `${outfile}.map`]),
+        watch: () => esbuild.build({ ...options, watch: true }),
+    };
+}
+
+// TODO(jakebailey): Add this function to the non-bundle paths which
+// don't output to the correct location. (e.g., not dynamicImportCompat).
+
+/**
+ * Creates a function that writes a CJS module that reexports another CJS file via
+ * `module.exports = require("...")`.
+ *
+ * @param {string} infile Relative path from the repo root to the file to be required.
+ * @param {string} outfile Relative path from the repo root to the output file.
+ * @returns {(done: () => void) => void} A function that can be passed to gulp.
+ */
+ function writeCJSReexport(infile, outfile) {
+    return (done) => {
+        const inRelativeToOut = infile = path.relative(path.dirname(outfile), infile);
+        fs.writeFileSync(outfile, `module.exports = require("./${inRelativeToOut}")`);
+        done();
+    };
+};
+
+const esbuildDebugTools = esbuildTask("./src/debug/compilerDebug.ts", "./built/local/compilerDebug.js");
+
+const buildDebugTools = () => cmdLineOptions.bundle ? esbuildDebugTools.build() : buildProject("src/debug", cmdLineOptions);
+const cleanDebugTools = () => cmdLineOptions.bundle ? esbuildDebugTools.build() : cleanProject("src/debug");
 cleanTasks.push(cleanDebugTools);
 
 // Pre-build steps when targeting the LKG compiler
 const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildDebugTools));
 
-const buildTsc = () => buildProject("src/tsc");
+
+const esbuildTsc = esbuildTask("./src/tsc/tsc.ts", "./built/local/tsc.js");
+
+
+const buildTsc = () => cmdLineOptions.bundle ? esbuildTsc.build() : buildProject("src/tsc", cmdLineOptions);
 task("tsc", series(lkgPreBuild, buildTsc));
 task("tsc").description = "Builds the command-line compiler";
 
-const cleanTsc = () => cleanProject("src/tsc");
+const cleanTsc = () => cmdLineOptions.bundle ? esbuildTsc.clean() : cleanProject("src/tsc");
 cleanTasks.push(cleanTsc);
 task("clean-tsc", cleanTsc);
 task("clean-tsc").description = "Cleans outputs for the command-line compiler";
 
-const watchTsc = () => watchProject("src/tsc");
+const watchTsc = () => cmdLineOptions.bundle ? esbuildTsc.watch() : watchProject("src/tsc");
 task("watch-tsc", series(lkgPreBuild, parallel(watchLib, watchDiagnostics, watchTsc)));
 task("watch-tsc").description = "Watch for changes and rebuild the command-line compiler only.";
 
@@ -142,96 +242,24 @@ const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagno
 // Pre-build steps to use based on supplied options.
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
 
-const buildServices = (() => {
-    // TODO(jakebailey): fix this for modules
-    return cb => {
-        console.log("!!!TODO!!! buildServices");
-        cb();
-    };
+const esbuildServices = esbuildTask("./src/typescript/typescript.ts", "./built/local/typescript.js");
 
-    // build typescriptServices.out.js
-    const buildTypescriptServicesOut = () => buildProject("src/typescriptServices/tsconfig.json", cmdLineOptions);
+const buildServices = () => cmdLineOptions.bundle ? esbuildServices.build() : buildProject("src/typescript", cmdLineOptions);
 
-    // create typescriptServices.js
-    const createTypescriptServicesJs = () => src("built/local/typescriptServices.out.js")
-        .pipe(newer("built/local/typescriptServices.js"))
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(prependFile(copyright))
-        .pipe(rename("typescriptServices.js"))
-        .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
-        .pipe(dest("built/local"));
-
-    // create typescriptServices.d.ts
-    const createTypescriptServicesDts = () => src("built/local/typescriptServices.out.d.ts")
-        .pipe(newer("built/local/typescriptServices.d.ts"))
-        .pipe(prependFile(copyright))
-        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
-        .pipe(rename("typescriptServices.d.ts"))
-        .pipe(dest("built/local"));
-
-    // create typescript.js
-    const createTypescriptJs = () => src("built/local/typescriptServices.js")
-        .pipe(newer("built/local/typescript.js"))
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(rename("typescript.js"))
-        .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
-        .pipe(dest("built/local"));
-
-    // create typescript.d.ts
-    const createTypescriptDts = () => src("built/local/typescriptServices.d.ts")
-        .pipe(newer("built/local/typescript.d.ts"))
-        .pipe(append("\nexport = ts;"))
-        .pipe(rename("typescript.d.ts"))
-        .pipe(dest("built/local"));
-
-    // // create typescript_standalone.d.ts
-    // const createTypescriptStandaloneDts = () => src("built/local/typescriptServices.d.ts")
-    //     .pipe(newer("built/local/typescript_standalone.d.ts"))
-    //     .pipe(transform(content => content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"')))
-    //     .pipe(rename("typescript_standalone.d.ts"))
-    //     .pipe(dest("built/local"));
-
-    return series(
-        buildTypescriptServicesOut,
-        createTypescriptServicesJs,
-        createTypescriptServicesDts,
-        createTypescriptJs,
-        createTypescriptDts,
-        // createTypescriptStandaloneDts,
-    );
-})();
 task("services", series(preBuild, buildServices));
 task("services").description = "Builds the language service";
 task("services").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const cleanServices = async () => {
-    if (fs.existsSync("built/local/typescriptServices.tsconfig.json")) {
-        await cleanProject("built/local/typescriptServices.tsconfig.json");
-    }
-    await del([
-        "built/local/typescriptServices.out.js",
-        "built/local/typescriptServices.out.d.ts",
-        "built/local/typescriptServices.out.tsbuildinfo",
-        "built/local/typescriptServices.js",
-        "built/local/typescript.js",
-        "built/local/typescript.d.ts",
-        "built/local/typescript_standalone.d.ts"
-    ]);
-};
+const cleanServices = () => cmdLineOptions.bundle ? esbuildServices.clean() : cleanProject("src/typescript");
+
 cleanTasks.push(cleanServices);
 task("clean-services", cleanServices);
 task("clean-services").description = "Cleans outputs for the language service";
 
-const watchServices = () => watch([
-    "src/compiler/tsconfig.json",
-    "src/compiler/**/*.ts",
-    "src/jsTyping/tsconfig.json",
-    "src/jsTyping/**/*.ts",
-    "src/services/tsconfig.json",
-    "src/services/**/*.ts",
-], series(preBuild, buildServices));
+// TODO(jakebailey): this is probably wrong.
+const watchServices = () => cmdLineOptions.bundle ? esbuildServices.watch() : watchProject("src/typescript");
 task("watch-services", series(preBuild, parallel(watchLib, watchDiagnostics, watchServices)));
 task("watch-services").description = "Watches for changes and rebuild language service only";
 task("watch-services").flags = {
@@ -241,7 +269,13 @@ task("watch-services").flags = {
 const buildDynamicImportCompat = () => buildProject("src/dynamicImportCompat", cmdLineOptions);
 task("dynamicImportCompat", buildDynamicImportCompat);
 
-const buildServerMain = () => buildProject("src/tsserver", cmdLineOptions);
+const cleanDynamicImportCompat = () => cleanProject("src/dynamicImportCompat");
+const watchDynamicImportCompat = () => watchProject("src/dynamicImportCompat", cmdLineOptions);
+
+
+const esbuildServer = esbuildTask("./src/tsserver/server.ts", "./built/local/tsserver.js");
+
+const buildServerMain = () => cmdLineOptions.bundle ? esbuildServer.build() : buildProject("src/tsserver", cmdLineOptions);
 const buildServer = series(buildDynamicImportCompat, buildServerMain);
 buildServer.displayName = "buildServer";
 task("tsserver", series(preBuild, buildServer));
@@ -250,16 +284,14 @@ task("tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const cleanDynamicImportCompat = () => cleanProject("src/dynamicImportCompat");
-const cleanServerMain = () => cleanProject("src/tsserver");
+const cleanServerMain = () => cmdLineOptions.bundle ? esbuildServer.clean() : cleanProject("src/tsserver");
 const cleanServer = series(cleanDynamicImportCompat, cleanServerMain);
 cleanServer.displayName = "cleanServer";
 cleanTasks.push(cleanServer);
 task("clean-tsserver", cleanServer);
 task("clean-tsserver").description = "Cleans outputs for the language server";
 
-const watchDynamicImportCompat = () => watchProject("src/dynamicImportCompat", cmdLineOptions);
-const watchServer = () => watchProject("src/tsserver", cmdLineOptions);
+const watchServer = () => cmdLineOptions.bundle ? esbuildServer.watch() : watchProject("src/tsserver", cmdLineOptions);
 task("watch-tsserver", series(preBuild, parallel(watchLib, watchDiagnostics, watchDynamicImportCompat, watchServer)));
 task("watch-tsserver").description = "Watch for changes and rebuild the language server only";
 task("watch-tsserver").flags = {
@@ -281,97 +313,47 @@ task("watch-min").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const buildLssl = (() => {
-    // TODO(jakebailey): fix this for modules
-    return cb => {
-        console.log("!!!TODO!!! buildLssl");
-        cb();
-    };
+const esbuildLssl = esbuildTask("./src/tsserverlibrary/tsserverlibrary.ts", "./built/local/tsserverlibrary.js");
 
-    // build tsserverlibrary.out.js
-    const buildServerLibraryOut = () => buildProject("src/tsserverlibrary/tsconfig.json", cmdLineOptions);
-
-    // create tsserverlibrary.js
-    const createServerLibraryJs = () => src("built/local/tsserverlibrary.out.js")
-        .pipe(newer("built/local/tsserverlibrary.js"))
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(prependFile(copyright))
-        .pipe(rename("tsserverlibrary.js"))
-        .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
-        .pipe(dest("built/local"));
-
-    // create tsserverlibrary.d.ts
-    const createServerLibraryDts = () => src("built/local/tsserverlibrary.out.d.ts")
-        .pipe(newer("built/local/tsserverlibrary.d.ts"))
-        .pipe(prependFile(copyright))
-        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
-        .pipe(append("\nexport = ts;\nexport as namespace ts;"))
-        .pipe(rename("tsserverlibrary.d.ts"))
-        .pipe(dest("built/local"));
-
-    return series(
-        buildServerLibraryOut,
-        createServerLibraryJs,
-        createServerLibraryDts,
-    );
-})();
+const buildLssl = () => cmdLineOptions.bundle ? esbuildLssl.build() : buildProject("src/tsserverlibrary", cmdLineOptions);
 task("lssl", series(preBuild, buildLssl));
 task("lssl").description = "Builds language service server library";
 task("lssl").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const cleanLssl = async () => {
-    if (fs.existsSync("built/local/tsserverlibrary.tsconfig.json")) {
-        await cleanProject("built/local/tsserverlibrary.tsconfig.json");
-    }
-    await del([
-        "built/local/tsserverlibrary.out.js",
-        "built/local/tsserverlibrary.out.d.ts",
-        "built/local/tsserverlibrary.out.tsbuildinfo",
-        "built/local/tsserverlibrary.js",
-        "built/local/tsserverlibrary.d.ts",
-    ]);
-};
+const cleanLssl = () => cmdLineOptions.bundle ? esbuildLssl.clean() : cleanProject("src/tsserverlibrary");
 cleanTasks.push(cleanLssl);
 task("clean-lssl", cleanLssl);
 task("clean-lssl").description = "Clean outputs for the language service server library";
 
-const watchLssl = () => watch([
-    "src/compiler/tsconfig.json",
-    "src/compiler/**/*.ts",
-    "src/jsTyping/tsconfig.json",
-    "src/jsTyping/**/*.ts",
-    "src/services/tsconfig.json",
-    "src/services/**/*.ts",
-    "src/server/tsconfig.json",
-    "src/server/**/*.ts",
-    "src/webServer/tsconfig.json",
-    "src/webServer/**/*.ts",
-    "src/tsserver/tsconfig.json",
-    "src/tsserver/**/*.ts",
-], buildLssl);
+// TODO(jakebailey): this is probably wrong.
+const watchLssl = () => cmdLineOptions.bundle ? esbuildLssl.watch() : watchProject("src/tsserverlibrary");
+
 task("watch-lssl", series(preBuild, parallel(watchLib, watchDiagnostics, watchLssl)));
 task("watch-lssl").description = "Watch for changes and rebuild tsserverlibrary only";
 task("watch-lssl").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const buildTests = () => buildProject("src/testRunner");
+const testRunner = cmdLineOptions.bundle ? "./built/local/run.js" : "./built/local/testRunner/runner.js";
+const esbuildTests = esbuildTask("./src/testRunner/_namespaces/Harness.ts", testRunner);
+
+const buildTests = () => cmdLineOptions.bundle ? esbuildTests.build() : buildProject("src/testRunner", cmdLineOptions);
 task("tests", series(preBuild, parallel(buildLssl, buildTests)));
 task("tests").description = "Builds the test infrastructure";
 task("tests").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const cleanTests = () => cleanProject("src/testRunner");
+const cleanTests = () => cmdLineOptions.bundle ? esbuildTests.clean() : cleanProject("src/testRunner");
 cleanTasks.push(cleanTests);
 task("clean-tests", cleanTests);
 task("clean-tests").description = "Cleans the outputs for the test infrastructure";
 
-const watchTests = () => watchProject("src/testRunner", cmdLineOptions);
+const watchTests = () => cmdLineOptions.bundle ? esbuildTests.watch() : watchProject("src/testRunner", cmdLineOptions);
 
-const buildEslintRules = () => buildProject("scripts/eslint");
+const buildEslintRules = () => buildProject("scripts/eslint", cmdLineOptions);
 task("build-eslint-rules", buildEslintRules);
 task("build-eslint-rules").description = "Compiles eslint rules to js";
 
@@ -409,16 +391,23 @@ lint.displayName = "lint";
 task("lint", lint);
 task("lint").description = "Runs eslint on the compiler and scripts sources.";
 
-const buildCancellationToken = () => buildProject("src/cancellationToken");
-const cleanCancellationToken = () => cleanProject("src/cancellationToken");
+
+const esbuildCancellationToken = esbuildTask("./src/cancellationToken/cancellationToken.ts", "./built/local/cancellationToken.js");
+
+const buildCancellationToken = () => cmdLineOptions.bundle ? esbuildCancellationToken.build() : buildProject("src/cancellationToken", cmdLineOptions);
+const cleanCancellationToken = () => cmdLineOptions.bundle ? esbuildCancellationToken.clean() : cleanProject("src/cancellationToken");
 cleanTasks.push(cleanCancellationToken);
 
-const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
-const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
+const esbuildTypingsInstaller = esbuildTask("./src/typingsInstaller/nodeTypingsInstaller.ts", "./built/local/typingsInstaller.js");
+
+const buildTypingsInstaller = () => cmdLineOptions.bundle ? esbuildTypingsInstaller.build() : buildProject("src/typingsInstaller", cmdLineOptions);
+const cleanTypingsInstaller = () => cmdLineOptions.bundle ? esbuildTypingsInstaller.clean() : cleanProject("src/typingsInstaller");
 cleanTasks.push(cleanTypingsInstaller);
 
-const buildWatchGuard = () => buildProject("src/watchGuard");
-const cleanWatchGuard = () => cleanProject("src/watchGuard");
+const esbuildWatchGuard = esbuildTask("./src/typingsInstaller/nodeTypingsInstaller.ts", "./built/local/typingsInstaller.js");
+
+const buildWatchGuard = () => cmdLineOptions.bundle ? esbuildWatchGuard.build() : buildProject("src/watchGuard", cmdLineOptions);
+const cleanWatchGuard = () => cmdLineOptions.bundle ? esbuildWatchGuard.clean() : cleanProject("src/watchGuard");
 cleanTasks.push(cleanWatchGuard);
 
 const generateTypesMap = () => src("src/server/typesMap.json")
@@ -461,7 +450,7 @@ const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
 const runTests = () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("runtests", series(/*preBuild, preTest,*/ task("moduleBuild"), runTests)); // TODO(jakebailey): fix this for modules
+task("runtests", series(preBuild, preTest, runTests));
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
     "-t --tests=<regex>": "Pattern for tests to run.",
@@ -480,7 +469,7 @@ task("runtests").flags = {
 };
 
 const runTestsParallel = () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
-task("runtests-parallel", series(/*preBuild, preTest,*/ task("moduleBuild"), runTestsParallel)); // TODO(jakebailey): fix this for modules
+task("runtests-parallel", series(preBuild, preTest, runTestsParallel));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
@@ -522,11 +511,13 @@ task("baseline-accept").description = "Makes the most recent test results the ne
 task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
 
-const buildLoggedIO = () => buildProject("src/loggedIO/tsconfig-tsc-instrumented.json");
+// TODO(jakebailey): figure out what tsc-instrumented and such are for and what do to with them.
+
+const buildLoggedIO = () => buildProject("src/loggedIO/tsconfig-tsc-instrumented.json", cmdLineOptions);
 const cleanLoggedIO = () => del("built/local/loggedIO.js");
 cleanTasks.push(cleanLoggedIO);
 
-const buildInstrumenter = () => buildProject("src/instrumenter");
+const buildInstrumenter = () => buildProject("src/instrumenter", cmdLineOptions);
 const cleanInstrumenter = () => cleanProject("src/instrumenter");
 cleanTasks.push(cleanInstrumenter);
 
@@ -544,7 +535,7 @@ const updateSublime = () => src(["built/local/tsserver.js", "built/local/tsserve
 task("update-sublime", updateSublime);
 task("update-sublime").description = "Updates the sublime plugin's tsserver";
 
-const buildImportDefinitelyTypedTests = () => buildProject("scripts/importDefinitelyTypedTests");
+const buildImportDefinitelyTypedTests = () => buildProject("scripts/importDefinitelyTypedTests", cmdLineOptions);
 const cleanImportDefinitelyTypedTests = () => cleanProject("scripts/importDefinitelyTypedTests");
 cleanTasks.push(cleanImportDefinitelyTypedTests);
 
@@ -552,6 +543,9 @@ cleanTasks.push(cleanImportDefinitelyTypedTests);
 const importDefinitelyTypedTests = () => exec(process.execPath, ["scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js", "./", "../DefinitelyTyped"]);
 task("importDefinitelyTypedTests", series(buildImportDefinitelyTypedTests, importDefinitelyTypedTests));
 task("importDefinitelyTypedTests").description = "Runs the importDefinitelyTypedTests script to copy DT's tests to the TS-internal RWC tests";
+
+// TODO(jakebailey): There isn't a release build anymore; figure out what to do here.
+// Probably just use tsc.js.
 
 const buildReleaseTsc = () => buildProject("src/tsc/tsconfig.release.json");
 const cleanReleaseTsc = () => cleanProject("src/tsc/tsconfig.release.json");
@@ -600,6 +594,8 @@ task("generate-spec").description = "Generates a Markdown version of the Languag
 
 task("clean", series(parallel(cleanTasks), cleanBuilt));
 task("clean").description = "Cleans build outputs";
+
+// TODO(jakebailey): Figure out what needs to change below.
 
 const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-nightly", series(buildScripts, configureNightly));
