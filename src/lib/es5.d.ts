@@ -916,14 +916,7 @@ interface DateConstructor {
 
 declare var Date: DateConstructor;
 
-interface BaseRegExpArray extends Array<string> {
-    /**
-     * The first match. This will always be present because `null` will be returned if there are no matches.
-     */
-    0: string;
-}
-
-interface RegExpMatchArray extends BaseRegExpArray {
+interface RegExpMatchArray extends Array<string> {
     /**
      * The index of the search at which the result was found.
      */
@@ -932,9 +925,13 @@ interface RegExpMatchArray extends BaseRegExpArray {
      * A copy of the search string.
      */
     input?: string;
+    /**
+     * The first match. This will always be present because `null` will be returned if there are no matches.
+     */
+    0: string;
 }
 
-interface RegExpExecArray extends BaseRegExpArray {
+interface RegExpExecArray extends Array<string> {
     /**
      * The index of the search at which the result was found.
      */
@@ -943,6 +940,10 @@ interface RegExpExecArray extends BaseRegExpArray {
      * A copy of the search string.
      */
     input: string;
+    /**
+     * The first match. This will always be present because `null` will be returned if there are no matches.
+     */
+    0: string;
 }
 
 interface RegExp {
