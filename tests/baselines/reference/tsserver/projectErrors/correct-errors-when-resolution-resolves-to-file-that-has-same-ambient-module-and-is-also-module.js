@@ -128,6 +128,24 @@ Info 26   [00:01:05.000] response:
     {
       "responseRequired": false
     }
+Checking timeout queue length: 0
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
 Info 27   [00:01:06.000] request:
     {
       "command": "geterr",
@@ -350,6 +368,24 @@ Info 34   [00:01:13.000] response:
     {
       "responseRequired": false
     }
+Checking timeout queue length: 0
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
 Info 35   [00:01:14.000] request:
     {
       "command": "geterr",

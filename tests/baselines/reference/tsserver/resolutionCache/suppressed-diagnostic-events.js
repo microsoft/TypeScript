@@ -56,6 +56,16 @@ Info 11   [00:00:22.000] response:
     {
       "responseRequired": false
     }
+Checking timeout queue length: 0
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 12   [00:00:23.000] request:
     {
       "command": "geterr",
@@ -94,6 +104,16 @@ Info 14   [00:00:25.000] response:
     {
       "responseRequired": false
     }
+Checking timeout queue length: 0
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 15   [00:00:26.000] request:
     {
       "command": "geterr",

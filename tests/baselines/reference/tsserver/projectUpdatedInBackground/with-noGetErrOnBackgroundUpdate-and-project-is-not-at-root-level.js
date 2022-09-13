@@ -204,6 +204,30 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project:
   {}
 
+Checking timeout queue length: 0
+
+PolledWatches::
+/user/username/rootfolder/otherfolder/a/b/project/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
+  {}
+/user/username/rootfolder/otherfolder/a/b/project/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/rootfolder/otherfolder/a/b/project:
+  {}
+
 Info 43   [00:01:36.000] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info 44   [00:01:37.000] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
 Info 45   [00:01:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -339,6 +363,26 @@ Info 70   [00:02:17.000] got projects updated in background, updating diagnostic
 Info 71   [00:02:18.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/rootfolder/otherfolder/a/b/project/file1.ts"]}}
 After running timeout callbacks
+
+PolledWatches::
+/user/username/rootfolder/otherfolder/a/b/project/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
+  {}
+/user/username/rootfolder/otherfolder/a/b/project/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/rootfolder/otherfolder/a/b/project:
+  {}
+/user/username/rootfolder/otherfolder/a/b/node_modules:
+  {}
+
+Checking timeout queue length: 0
 
 PolledWatches::
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:

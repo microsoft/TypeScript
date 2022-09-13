@@ -342,6 +342,41 @@ namespace ts.projectSystem {
         }
     }
 
+    function patchHostTimeouts(host: TestFSWithWatch.TestServerHostTrackingWrittenFiles, session: TestSession | TestProjectService) {
+        const originalCheckTimeoutQueueLength = host.checkTimeoutQueueLength;
+        const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
+        const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
+
+        host.checkTimeoutQueueLengthAndRun = checkTimeoutQueueLengthAndRun;
+        host.checkTimeoutQueueLength = checkTimeoutQueueLength;
+        host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
+        host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
+
+        function checkTimeoutQueueLengthAndRun(expected: number) {
+            session.baselineHost(`Before checking timeout queue length (${expected}) and running`);
+            originalCheckTimeoutQueueLength.call(host, expected);
+            originalRunQueuedTimeoutCallbacks.call(host);
+            session.baselineHost(`After checking timeout queue length (${expected}) and running`);
+        }
+
+        function checkTimeoutQueueLength(expected: number) {
+            session.baselineHost(`Checking timeout queue length: ${expected}`);
+            originalCheckTimeoutQueueLength.call(host, expected);
+        }
+
+        function runQueuedTimeoutCallbacks(timeoutId?: number) {
+            session.baselineHost(`Before running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
+            originalRunQueuedTimeoutCallbacks.call(host, timeoutId);
+            session.baselineHost(`After running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
+        }
+
+        function runQueuedImmediateCallbacks(checkCount?: number) {
+            session.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
+            originalRunQueuedImmediateCallbacks.call(host, checkCount);
+            session.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
+        }
+    }
+
     export interface TestSessionOptions extends server.SessionOptions {
         logger: Logger;
     }
@@ -357,6 +392,7 @@ namespace ts.projectSystem {
             super(opts);
             this.logger = opts.logger;
             this.testhost = TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost);
+            patchHostTimeouts(this.testhost, this);
         }
 
         getProjectService() {
@@ -407,29 +443,6 @@ namespace ts.projectSystem {
             this.testhost.serializeWatches(this.logger.logs);
             this.hostDiff = this.testhost.snap();
             this.testhost.writtenFiles.clear();
-        }
-
-        checkTimeoutQueueLengthAndRun(expected: number) {
-            this.baselineHost(`Before checking timeout queue length (${expected}) and running`);
-            this.testhost.checkTimeoutQueueLengthAndRun(expected);
-            this.baselineHost(`After checking timeout queue length (${expected}) and running`);
-        }
-
-        checkTimeoutQueueLength(expected: number) {
-            this.baselineHost(`Checking timeout queue length: ${expected}`);
-            this.testhost.checkTimeoutQueueLength(expected);
-        }
-
-        runQueuedTimeoutCallbacks(timeoutId?: number) {
-            this.baselineHost(`Before running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
-            this.testhost.runQueuedTimeoutCallbacks(timeoutId);
-            this.baselineHost(`After running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
-        }
-
-        runQueuedImmediateCallbacks(checkCount?: number) {
-            this.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
-            this.testhost.runQueuedImmediateCallbacks(checkCount);
-            this.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
         }
     }
 
@@ -513,6 +526,7 @@ namespace ts.projectSystem {
                 ...opts
             });
             this.testhost = TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost);
+            patchHostTimeouts(this.testhost, this);
             this.baselineHost("Creating project service");
         }
 
@@ -527,29 +541,6 @@ namespace ts.projectSystem {
             this.testhost.serializeWatches(this.logger.logs);
             this.hostDiff = this.testhost.snap();
             this.testhost.writtenFiles.clear();
-        }
-
-        checkTimeoutQueueLengthAndRun(expected: number) {
-            this.baselineHost(`Before checking timeout queue length (${expected}) and running`);
-            this.testhost.checkTimeoutQueueLengthAndRun(expected);
-            this.baselineHost(`After checking timeout queue length (${expected}) and running`);
-        }
-
-        checkTimeoutQueueLength(expected: number) {
-            this.baselineHost(`Checking timeout queue length: ${expected}`);
-            this.testhost.checkTimeoutQueueLength(expected);
-        }
-
-        runQueuedTimeoutCallbacks(timeoutId?: number) {
-            this.baselineHost(`Before running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
-            this.testhost.runQueuedTimeoutCallbacks(timeoutId);
-            this.baselineHost(`After running timeout callback${timeoutId === undefined ? "s" : timeoutId}`);
-        }
-
-        runQueuedImmediateCallbacks(checkCount?: number) {
-            this.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
-            this.testhost.runQueuedImmediateCallbacks(checkCount);
-            this.baselineHost(`Before running immediate callbacks${checkCount === undefined ? "" : ` and checking length (${checkCount})`}`);
         }
     }
 
@@ -854,14 +845,14 @@ namespace ts.projectSystem {
         Debug.assert(session.logger.logs.length);
         for (let i = 0; i < files.length; i++) {
             if (existingTimeouts !== undefined) {
-                session.checkTimeoutQueueLength(existingTimeouts + 1);
-                session.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
+                host.checkTimeoutQueueLength(existingTimeouts + 1);
+                host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
             }
             else {
-                session.checkTimeoutQueueLengthAndRun(1);
+                host.checkTimeoutQueueLengthAndRun(1);
             }
-            if (!skip?.[i]?.semantic) session.runQueuedImmediateCallbacks(1);
-            if (!skip?.[i]?.suggestion) session.runQueuedImmediateCallbacks(1);
+            if (!skip?.[i]?.semantic) host.runQueuedImmediateCallbacks(1);
+            if (!skip?.[i]?.suggestion) host.runQueuedImmediateCallbacks(1);
         }
     }
 

@@ -60,6 +60,20 @@ Info 11   [00:00:22.000] response:
     {
       "responseRequired": false
     }
+Checking timeout queue length: 0
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/bower_components:
+  {"pollingInterval":500}
+/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 12   [00:00:23.000] request:
     {
       "command": "geterr",

@@ -490,6 +490,22 @@ Info 61   [00:02:20.000] response:
     {
       "responseRequired": false
     }
+Checking timeout queue length: 2
+
+PolledWatches::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project:
+  {}
+
 Info 62   [00:02:21.000] request:
     {
       "seq": 0,

@@ -16,18 +16,18 @@ namespace ts.projectSystem {
 
             // local edit in ts file
             host.appendFile(logicIndex.path, `function foo() {}`);
-            service.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(2);
 
             // non local edit in ts file
             host.appendFile(logicIndex.path, `export function gfoo() {}`);
-            service.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(2);
 
             // change in project reference config file
             host.writeFile(logicConfig.path, JSON.stringify({
                 compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                 references: [{ path: "../core" }]
             }));
-            service.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("projectsWithReferences", "sample project", service);
         });
 
@@ -89,7 +89,7 @@ export class A {}`
 
                 // non local edit
                 host.appendFile(bTs.path, `export function gFoo() { }`);
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectsWithReferences", "transitive references with non local edit", service);
             });
 
@@ -103,11 +103,11 @@ export class A {}`
                 host.ensureFileOrFolder(nRefsTs);
                 cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
                 host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
 
                 // revert the edit on config file
                 host.writeFile(cConfig.path, cConfig.content);
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectsWithReferences", "transitive references with edit on config file", service);
             });
 
@@ -121,33 +121,33 @@ export class A {}`
                 host.ensureFileOrFolder(nRefsTs);
                 bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
                 host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
 
                 // revert the edit on config file
                 host.writeFile(bConfig.path, bConfig.content);
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectsWithReferences", "transitive references with edit in referenced config file", service);
             });
 
             it("deleting referenced config file", () => {
                 const { host, service, bConfig } = createService();
                 host.deleteFile(bConfig.path);
-                service.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
+                host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
 
                 // revert
                 host.writeFile(bConfig.path, bConfig.content);
-                service.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
+                host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
                 baselineTsserverLogs("projectsWithReferences", "transitive references with deleting referenced config file", service);
             });
 
             it("deleting transitively referenced config file", () => {
                 const { host, service, aConfig } = createService();
                 host.deleteFile(aConfig.path);
-                service.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
+                host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
 
                 // revert
                 host.writeFile(aConfig.path, aConfig.content);
-                service.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
+                host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
                 baselineTsserverLogs("projectsWithReferences", "transitive references with deleting transitively referenced config file", service);
             });
         });
@@ -204,7 +204,7 @@ export class A {}`
 
                 // non local edit
                 host.appendFile(bTs.path, `export function gFoo() { }`);
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectsWithReferences", "trasitive references without files with non local edit", service);
             });
 
@@ -218,11 +218,11 @@ export class A {}`
                 host.ensureFileOrFolder(nRefsTs);
                 cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
                 host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
 
                 // revert the edit on config file
                 host.writeFile(cConfig.path, cConfig.content);
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit on config file", service);
             });
 
@@ -236,33 +236,33 @@ export class A {}`
                 host.ensureFileOrFolder(nRefsTs);
                 bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
                 host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
 
                 // revert the edit on config file
                 host.writeFile(bConfig.path, bConfig.content);
-                service.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit in referenced config file", service);
             });
 
             it("deleting referenced config file", () => {
                 const { host, service, bConfig } = createService();
                 host.deleteFile(bConfig.path);
-                service.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
+                host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
 
                 // revert
                 host.writeFile(bConfig.path, bConfig.content);
-                service.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
+                host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
                 baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting referenced config file", service);
             });
 
             it("deleting transitively referenced config file", () => {
                 const { host, service, aConfig } = createService();
                 host.deleteFile(aConfig.path);
-                service.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
+                host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
 
                 // revert
                 host.writeFile(aConfig.path, aConfig.content);
-                service.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
+                host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
                 baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting transitively referenced config file", service);
             });
         });

@@ -180,6 +180,24 @@ FsWatchesRecursive::
 /a/b/project:
   {}
 
+Checking timeout queue length: 1
+
+PolledWatches::
+/a/b/project/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/project/tsconfig.json:
+  {}
+/a/b/project/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/project:
+  {}
+
 Before running timeout callbacks
 //// [/a/b/node_modules/file2.d.ts]
 export class a { }
