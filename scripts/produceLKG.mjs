@@ -3,6 +3,7 @@ import path from "path";
 import glob from "glob";
 import url from "url";
 import del from "del";
+import { localizationDirectories } from "./build/localization.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -29,15 +30,9 @@ async function copyLibFiles() {
 }
 
 async function copyLocalizedDiagnostics() {
-    const dir = await fs.readdir(source);
-    const ignoredFolders = ["enu"];
-
-    for (const d of dir) {
+    for (const d of localizationDirectories) {
         const fileName = path.join(source, d);
-        if (
-            fs.statSync(fileName).isDirectory() &&
-            ignoredFolders.indexOf(d) < 0
-        ) {
+        if (fs.statSync(fileName).isDirectory()) {
             await fs.copy(fileName, path.join(dest, d));
         }
     }
@@ -48,21 +43,18 @@ async function copyTypesMap() {
 }
 
 async function copyScriptOutputs() {
-    await copyWithCopyright("cancellationToken.js");
-    await copyWithCopyright("tsc.release.js", "tsc.js");
-    await copyWithCopyright("tsserver.js");
-    await copyWithCopyright("dynamicImportCompat.js");
-    await copyFromBuiltLocal("tsserverlibrary.js"); // copyright added by build
-    await copyFromBuiltLocal("typescript.js"); // copyright added by build
-    await copyFromBuiltLocal("typescriptServices.js"); // copyright added by build
-    await copyWithCopyright("typingsInstaller.js");
-    await copyWithCopyright("watchGuard.js");
+    await copyFromBuiltLocal("cancellationToken.js");
+    await copyFromBuiltLocal("tsc.js");
+    await copyFromBuiltLocal("tsserver.js");
+    await copyFromBuiltLocal("tsserverlibrary.js");
+    await copyFromBuiltLocal("typescript.js");
+    await copyFromBuiltLocal("typingsInstaller.js");
+    await copyFromBuiltLocal("watchGuard.js");
 }
 
 async function copyDeclarationOutputs() {
-    await copyFromBuiltLocal("tsserverlibrary.d.ts"); // copyright added by build
-    await copyFromBuiltLocal("typescript.d.ts"); // copyright added by build
-    await copyFromBuiltLocal("typescriptServices.d.ts"); // copyright added by build
+    await copyWithCopyright("tsserverlibrary.d.ts");
+    await copyWithCopyright("typescript.d.ts");
 }
 
 async function writeGitAttributes() {

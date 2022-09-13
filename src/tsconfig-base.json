@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "../built/local",
+
         "pretty": true,
         "lib": ["es2018"],
         "target": "es2018",
@@ -11,6 +14,7 @@
         "sourceMap": true,
         "composite": true,
         "noEmitOnError": true,
+        "emitDeclarationOnly": true,
 
         "strictNullChecks": true,
         "noImplicitAny": true,

@@ -13,7 +13,7 @@ import {
 import {
     ApplyCodeActionCommandResult, assertType, CharacterCodes, combinePaths, createQueue, Debug, directorySeparator,
     DirectoryWatcherCallback, ESMap, FileWatcher, getDirectoryPath, getEntries, getNodeMajorVersion, getRootLength,
-    JsTyping, LanguageServiceMode, Map, MapLike, noop, noopFileWatcher, normalizeSlashes, resolveJSModule,
+    JsTyping, LanguageServiceMode, Map, MapLike, noop, noopFileWatcher, normalizePath, normalizeSlashes, resolveJSModule,
     SortedReadonlyArray, startTracing, stripQuotes, sys, toFileNameLowerCase, tracing, TypeAcquisition,
     validateLocaleAndSetLanguage, versionMajorMinor, WatchOptions,
 } from "./_namespaces/ts";
@@ -193,6 +193,8 @@ export function initializeNodeSystem(): StartInput {
         }
     }
 
+    const libDirectory = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
+
     const nodeVersion = getNodeMajorVersion();
     // use watchGuard process on Windows when node version is 4 or later
     const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
@@ -227,7 +229,7 @@ export function initializeNodeSystem(): StartInput {
                     logger.info(`${cacheKey} for path ${path} not found in cache...`);
                 }
                 try {
-                    const args = [combinePaths(__dirname, "watchGuard.js"), path];
+                    const args = [combinePaths(libDirectory, "watchGuard.js"), path];
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
@@ -326,7 +328,7 @@ export function initializeNodeSystem(): StartInput {
         const unsubstitutedLogFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
-                ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
+                ? envLogOptions.file || (libDirectory + "/.log" + process.pid.toString())
                 : undefined;
 
         const substitutedLogFileName = unsubstitutedLogFileName
@@ -526,8 +528,8 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                 }
             }
 
-            // TODO(jakebailey): fix this for module transform
-            this.installer = childProcess.fork(combinePaths(__dirname, "..", "typingsInstaller", "nodeTypingsInstaller.js"), args, { execArgv });
+            const typingsInstaller = combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typingsInstaller.js");
+            this.installer = childProcess.fork(typingsInstaller, args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
 
             // We have to schedule this event to the next tick

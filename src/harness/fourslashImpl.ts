@@ -4069,7 +4069,7 @@ export function runFourSlashTestContent(basePath: string, testType: FourSlashTes
 function runCode(code: string, state: TestState, fileName: string): void {
     // Compile and execute the test
     const generatedFile = ts.changeExtension(fileName, ".js");
-    const wrappedCode = `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
+    const wrappedCode = `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
 
     type SourceMapSupportModule = typeof import("source-map-support") & {
         // TODO(rbuckton): This is missing from the DT definitions and needs to be added.
@@ -4103,8 +4103,8 @@ function runCode(code: string, state: TestState, fileName: string): void {
         const format = new FourSlashInterface.Format(state);
         const cancellation = new FourSlashInterface.Cancellation(state);
         // eslint-disable-next-line no-eval
-        const f = eval(wrappedCode);
-        f(test, goTo, config, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
+        const f = (0, eval)(wrappedCode);
+        f(ts, test, goTo, config, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled, ignoreInterpolations);
     }
     catch (err) {
         // ensure 'source-map-support' is triggered while we still have the handler attached by accessing `error.stack`.

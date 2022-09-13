@@ -3,7 +3,6 @@
     "compilerOptions": {
         "target": "es2019",
         "lib": ["es2019"],
-        "outDir": "../../built/local/debug"
     },
     "include": ["**/*"]
 }
