@@ -1,6 +1,38 @@
 import { noop } from "./_namespaces/ts";
 
-type PerfLogger = typeof import("@microsoft/typescript-etw");
+/** @internal */
+interface PerfLogger {
+    logEvent(msg: string): void;
+    logErrEvent(msg: string): void;
+    logPerfEvent(msg: string): void;
+    logInfoEvent(msg: string): void;
+    logStartCommand(command: string, msg: string): void;
+    logStopCommand(command: string, msg: string): void;
+    logStartUpdateProgram(msg: string): void;
+    logStopUpdateProgram(msg: string): void;
+    logStartUpdateGraph(): void;
+    logStopUpdateGraph(): void;
+    logStartResolveModule(name: string): void;
+    logStopResolveModule(success: string): void;
+    logStartParseSourceFile(filename: string): void;
+    logStopParseSourceFile(): void;
+    logStartReadFile(filename: string): void;
+    logStopReadFile(): void;
+    logStartBindFile(filename: string): void;
+    logStopBindFile(): void;
+    logStartScheduledOperation(operationId: string): void;
+    logStopScheduledOperation(): void;
+}
+
+type ImportedPerfLogger = typeof import("@microsoft/typescript-etw");
+
+// Assert that our PerfLogger type is compatible with the library.
+// TODO(jakebailey): remove this workaround for an api-extractor bug.
+const _perfLoggerCorrectType: PerfLogger extends ImportedPerfLogger ? true : false = true;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+_perfLoggerCorrectType;
+
 const nullLogger: PerfLogger = {
     logEvent: noop,
     logErrEvent: noop,
