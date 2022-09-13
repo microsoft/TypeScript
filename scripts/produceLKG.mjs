@@ -1,8 +1,8 @@
-import childProcess from "child_process";
 import fs from "fs-extra";
 import path from "path";
 import glob from "glob";
 import url from "url";
+import del from "del";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -14,12 +14,13 @@ const copyright = fs.readFileSync(path.join(__dirname, "../CopyrightNotice.txt")
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
+    await del(`${dest.replace(/\\/g, "/")}/**`, { ignore: ["**/README.md"] });
+    await fs.mkdirp(dest);
     await copyLibFiles();
     await copyLocalizedDiagnostics();
     await copyTypesMap();
     await copyScriptOutputs();
     await copyDeclarationOutputs();
-    await buildProtocol();
     await writeGitAttributes();
 }
 
@@ -44,20 +45,6 @@ async function copyLocalizedDiagnostics() {
 
 async function copyTypesMap() {
     await copyFromBuiltLocal("typesMap.json"); // Cannot accommodate copyright header
-}
-
-async function buildProtocol() {
-    const protocolScript = path.join(__dirname, "buildProtocol.mjs");
-    if (!fs.existsSync(protocolScript)) {
-        throw new Error(`Expected protocol script ${protocolScript} to exist`);
-    }
-
-    const protocolInput = path.join(__dirname, "../src/server/protocol.ts");
-    const protocolServices = path.join(source, "typescriptServices.d.ts");
-    const protocolOutput = path.join(dest, "protocol.d.ts");
-
-    console.log(`Building ${protocolOutput}...`);
-    await exec(protocolScript, [protocolInput, protocolServices, protocolOutput]);
 }
 
 async function copyScriptOutputs() {
@@ -107,16 +94,6 @@ async function copyFilesWithGlob(pattern) {
         await copyFromBuiltLocal(f);
     }
     console.log(`Copied ${files.length} files matching pattern ${pattern}`);
-}
-
-/**
- * @param {string} path
- * @param {string[]} args
- */
-async function exec(path, args = []) {
-    const cmdLine = ["node", path, ...args].join(" ");
-    console.log(cmdLine);
-    childProcess.execSync(cmdLine);
 }
 
 process.on("unhandledRejection", err => {

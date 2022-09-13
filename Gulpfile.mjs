@@ -153,20 +153,12 @@ const buildServices = (() => {
         .pipe(rename("typescript.d.ts"))
         .pipe(dest("built/local"));
 
-    // create typescript_standalone.d.ts
-    const createTypescriptStandaloneDts = () => src("built/local/typescriptServices.d.ts")
-        .pipe(newer("built/local/typescript_standalone.d.ts"))
-        .pipe(transform(content => content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"')))
-        .pipe(rename("typescript_standalone.d.ts"))
-        .pipe(dest("built/local"));
-
     return series(
         buildTypescriptServicesOut,
         createTypescriptServicesJs,
         createTypescriptServicesDts,
         createTypescriptJs,
         createTypescriptDts,
-        createTypescriptStandaloneDts,
     );
 })();
 task("services", series(preBuild, buildServices));
@@ -186,7 +178,6 @@ const cleanServices = async () => {
         "built/local/typescriptServices.js",
         "built/local/typescript.js",
         "built/local/typescript.d.ts",
-        "built/local/typescript_standalone.d.ts"
     ]);
 };
 cleanTasks.push(cleanServices);
