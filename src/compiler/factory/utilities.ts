@@ -2,11 +2,12 @@ import {
     AccessorDeclaration, addEmitFlags, AdditiveOperator, AdditiveOperatorOrHigher, AssertionLevel,
     AssignmentOperatorOrHigher, BinaryExpression, BinaryOperator, BinaryOperatorToken, BindingOrAssignmentElement,
     BindingOrAssignmentElementRestIndicator, BindingOrAssignmentElementTarget, BindingOrAssignmentPattern,
-    BitwiseOperator, BitwiseOperatorOrHigher, BooleanLiteral, CharacterCodes, CommaListExpression,
+    BitwiseOperator, BitwiseOperatorOrHigher, Block, BooleanLiteral, CharacterCodes, CommaListExpression,
     compareStringsCaseSensitive, CompilerOptions, Debug, Declaration, EmitFlags, EmitHelperFactory, EmitHost,
     EmitResolver, EntityName, EqualityOperator, EqualityOperatorOrHigher, ExclamationToken, ExponentiationOperator,
     ExportDeclaration, Expression, ExpressionStatement, externalHelpersModuleNameText, first, firstOrUndefined,
     ForInitializer, GeneratedIdentifier, GeneratedIdentifierFlags, GeneratedNamePart, GeneratedPrivateIdentifier,
+    GetAccessorDeclaration,
     getAllAccessorDeclarations, getEmitFlags, getEmitHelpers, getEmitModuleKind, getESModuleInterop,
     getExternalModuleName, getExternalModuleNameFromPath, getJSDocType, getJSDocTypeTag, getModifiers,
     getNamespaceDeclarationNode, getOrCreateEmitNode, getOriginalNode, getParseTreeNode,
@@ -26,7 +27,7 @@ import {
     NumericLiteral, ObjectLiteralElementLike, ObjectLiteralExpression, or, OuterExpression, OuterExpressionKinds,
     outFile, parseNodeFactory, PlusToken, PostfixUnaryExpression, PrefixUnaryExpression, PrivateIdentifier,
     PropertyAssignment, PropertyDeclaration, PropertyName, pushIfUnique, QuestionToken, ReadonlyKeyword,
-    RelationalOperator, RelationalOperatorOrHigher, setOriginalNode, setParent, setStartsOnNewLine, setTextRange,
+    RelationalOperator, RelationalOperatorOrHigher, SetAccessorDeclaration, setOriginalNode, setParent, setStartsOnNewLine, setTextRange,
     ShiftOperator, ShiftOperatorOrHigher, ShorthandPropertyAssignment, some, SourceFile, Statement, StringLiteral,
     SyntaxKind, TextRange, ThisTypeNode, Token, TypeNode, TypeParameterDeclaration,
 } from "../_namespaces/ts";
@@ -185,7 +186,7 @@ export function createForOfBindingStatement(factory: NodeFactory, node: ForIniti
 }
 
 /** @internal */
-export function insertLeadingStatement(factory: NodeFactory, dest: Statement, source: Statement) {
+export function insertLeadingStatement(factory: NodeFactory, dest: Statement, source: Statement): Block {
     if (isBlock(dest)) {
         return factory.updateBlock(dest, setTextRange(factory.createNodeArray([source, ...dest.statements]), dest.statements));
     }
@@ -1456,7 +1457,7 @@ export function createAccessorPropertyBackingField(factory: NodeFactory, node: P
  *
  * @internal
  */
-export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
+export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName): GetAccessorDeclaration {
     return factory.createGetAccessorDeclaration(
         modifiers,
         name,
@@ -1478,7 +1479,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName): SetAccessorDeclaration {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,

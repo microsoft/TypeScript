@@ -1,5 +1,6 @@
 import {
     addEmitFlags, addEmitHelper, addEmitHelpers, addRange, append, ArrowFunction, BinaryExpression, BindingElement,
+    Bundle,
     CallExpression, chainBundle, ClassDeclaration, collectExternalModuleInfo, Debug, Declaration,
     DestructuringAssignment, EmitFlags, EmitHelper, EmitHint, emptyArray, EndOfDeclarationMarker, ExportAssignment,
     ExportDeclaration, Expression, ExpressionStatement, ExternalModuleInfo, firstOrUndefined,
@@ -27,7 +28,7 @@ import {
 } from "../../_namespaces/ts";
 
 /** @internal */
-export function transformModule(context: TransformationContext) {
+export function transformModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     interface AsynchronousDependencies {
         aliasedModuleNames: Expression[];
         unaliasedModuleNames: Expression[];

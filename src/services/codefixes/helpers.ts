@@ -8,7 +8,7 @@ import {
     isAutoAccessorPropertyDeclaration, isFunctionDeclaration, isFunctionExpression, isGetAccessorDeclaration,
     isIdentifier, isImportTypeNode, isInJSFile, isLiteralImportTypeNode, isMethodDeclaration, isObjectLiteralExpression,
     isPropertyAccessExpression, isPropertyAssignment, isSetAccessorDeclaration, isStringLiteral, isYieldExpression,
-    LanguageServiceHost, length, map, Map, MethodDeclaration, Modifier, ModifierFlags, Node, NodeArray,
+    LanguageServiceHost, length, map, Map, MethodDeclaration, MethodSignature, Modifier, ModifierFlags, Node, NodeArray,
     NodeBuilderFlags, NodeFlags, nullTransformationContext, ObjectFlags, ObjectLiteralExpression, ObjectType,
     ParameterDeclaration, Program, PropertyAssignment, PropertyDeclaration, PropertyName, QuotePreference, sameMap,
     ScriptTarget, Set, SetAccessorDeclaration, setTextRange, Signature, SignatureDeclaration, signatureHasRestParameter,
@@ -352,7 +352,7 @@ export function createSignatureDeclarationFromCallExpression(
     name: Identifier | string,
     modifierFlags: ModifierFlags,
     contextNode: Node
-) {
+): MethodDeclaration | MethodSignature | FunctionDeclaration {
     const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
     const tracker = getNoopSymbolTrackerWithResolver(context);

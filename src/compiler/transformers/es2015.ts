@@ -33,7 +33,7 @@ import {
     SyntaxKind, TaggedTemplateExpression, takeWhile, TemplateExpression, TextRange, TokenFlags, TransformationContext,
     TransformFlags, tryCast, unescapeLeadingUnderscores, unwrapInnermostStatementOfLabel, VariableDeclaration,
     VariableDeclarationList, VariableStatement, visitEachChild, visitNode, visitNodes, visitParameterList, VisitResult,
-    VoidExpression, WhileStatement, YieldExpression,
+    VoidExpression, WhileStatement, YieldExpression, Bundle,
 } from "../_namespaces/ts";
 
 const enum ES2015SubstitutionFlags {
@@ -299,7 +299,7 @@ function createSpreadSegment(kind: SpreadSegmentKind, expression: Expression): S
 }
 
 /** @internal */
-export function transformES2015(context: TransformationContext) {
+export function transformES2015(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
