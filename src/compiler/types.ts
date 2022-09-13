@@ -5080,6 +5080,7 @@ namespace ts {
         MethodExcludes = Value & ~Method,
         GetAccessorExcludes = Value & ~SetAccessor,
         SetAccessorExcludes = Value & ~GetAccessor,
+        AccesorExcludes = Value & ~Accessor,
         TypeParameterExcludes = Type & ~TypeParameter,
         TypeAliasExcludes = Type,
         AliasExcludes = Alias,
