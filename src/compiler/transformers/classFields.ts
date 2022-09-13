@@ -33,7 +33,7 @@ import {
     startOnNewLine, Statement, SuperProperty, SyntaxKind, TaggedTemplateExpression, ThisExpression,
     TransformationContext, TransformFlags, tryGetTextOfPropertyName, UnderscoreEscapedMap, unescapeLeadingUnderscores,
     VariableStatement, visitArray, visitEachChild, visitFunctionBody, visitIterationBody, visitNode, visitNodes,
-    visitParameterList, VisitResult,
+    visitParameterList, VisitResult, Bundle,
 } from "../_namespaces/ts";
 
 const enum ClassPropertySubstitutionFlags {
@@ -168,7 +168,7 @@ const enum ClassFacts {
  *
  * @internal
  */
-export function transformClassFields(context: TransformationContext) {
+export function transformClassFields(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         hoistVariableDeclaration,

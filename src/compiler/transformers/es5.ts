@@ -1,4 +1,5 @@
 import {
+    Bundle,
     chainBundle, EmitHint, Expression, getOriginalNodeId, Identifier, idText, isIdentifier, isPrivateIdentifier,
     isPropertyAccessExpression, isPropertyAssignment, JsxClosingElement, JsxEmit, JsxOpeningElement,
     JsxSelfClosingElement, Node, nodeIsSynthesized, PropertyAccessExpression, PropertyAssignment, setTextRange,
@@ -12,7 +13,7 @@ import {
  *
  * @internal
  */
-export function transformES5(context: TransformationContext) {
+export function transformES5(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const { factory } = context;
     const compilerOptions = context.getCompilerOptions();
 

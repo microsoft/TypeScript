@@ -1,5 +1,5 @@
 import {
-    AccessExpression, addEmitFlags, BinaryExpression, CallExpression, cast, chainBundle, Debug, DeleteExpression,
+    AccessExpression, addEmitFlags, BinaryExpression, Bundle, CallExpression, cast, chainBundle, Debug, DeleteExpression,
     EmitFlags, Expression, isCallChain, isExpression, isGeneratedIdentifier, isIdentifier, isNonNullChain,
     isOptionalChain, isParenthesizedExpression, isSimpleCopiableExpression, isSyntheticReference,
     isTaggedTemplateExpression, Node, OptionalChain, OuterExpressionKinds, ParenthesizedExpression, setOriginalNode,
@@ -8,7 +8,7 @@ import {
 } from "../_namespaces/ts";
 
 /** @internal */
-export function transformES2020(context: TransformationContext) {
+export function transformES2020(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         hoistVariableDeclaration,

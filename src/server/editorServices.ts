@@ -28,7 +28,7 @@ import {
     parsePackageName, Path, PerformanceEvent, PluginImport, PollingInterval, ProjectPackageJsonInfo, ProjectReference,
     ReadMapFile, ReadonlyCollection, removeFileExtension, removeIgnoredPath, removeMinAndVersionNumbers,
     ResolvedProjectReference, resolveProjectReferencePath, returnNoopFileWatcher, returnTrue, ScriptKind, Set,
-    SharedExtendedConfigFileWatcher, some, SourceFile, startsWith, Ternary, TextChange, toFileNameLowerCase, toPath,
+    SharedExtendedConfigFileWatcher, some, SourceFile, SourceFileLike, startsWith, Ternary, TextChange, toFileNameLowerCase, toPath,
     tracing, tryAddToSet, tryReadFile, TsConfigSourceFile, TypeAcquisition, typeAcquisitionDeclarations,
     unorderedRemoveItem, updateSharedExtendedConfigFileWatcher, updateWatchingWildcardDirectories, UserPreferences,
     version, WatchDirectoryFlags, WatchFactory, WatchLogLevel, WatchOptions, WatchType, WildcardDirectoryWatcher,
@@ -2981,7 +2981,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    getSourceFileLike(fileName: string, projectNameOrProject: string | Project, declarationInfo?: ScriptInfo) {
+    getSourceFileLike(fileName: string, projectNameOrProject: string | Project, declarationInfo?: ScriptInfo): SourceFileLike | undefined {
         const project = (projectNameOrProject as Project).projectName ? projectNameOrProject as Project : this.findProject(projectNameOrProject as string);
         if (project) {
             const path = project.toPath(fileName);

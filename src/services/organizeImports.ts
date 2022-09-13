@@ -1,6 +1,7 @@
 import {
     AnyImportOrRequireStatement, arrayIsSorted, binarySearch, compareBooleans, compareStringsCaseInsensitive,
-    compareValues, createScanner, emptyArray, ExportDeclaration, ExportSpecifier, Expression, factory,
+    compareValues, Comparison, createScanner, emptyArray, ExportDeclaration, ExportSpecifier, Expression, factory,
+    FileTextChanges,
     FindAllReferences, flatMap, formatting, getNewLineOrDefaultFromHost, group, Identifier, identity, ImportDeclaration,
     ImportOrExportSpecifier, ImportSpecifier, isAmbientModule, isExportDeclaration, isExternalModuleNameRelative,
     isExternalModuleReference, isImportDeclaration, isNamedExports, isNamedImports, isNamespaceImport, isString,
@@ -24,7 +25,7 @@ export function organizeImports(
     program: Program,
     preferences: UserPreferences,
     skipDestructiveCodeActions?: boolean
-) {
+): FileTextChanges[] {
     const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
     const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
@@ -468,7 +469,7 @@ function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly 
 }
 
 /** @internal */
-export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T) {
+export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T): Comparison {
     return compareBooleans(s1.isTypeOnly, s2.isTypeOnly)
         || compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
         || compareIdentifiers(s1.name, s2.name);
@@ -525,7 +526,7 @@ export function getImportSpecifierInsertionIndex(sortedImports: SortedReadonlyAr
 }
 
 /** @internal */
-export function compareImportsOrRequireStatements(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement) {
+export function compareImportsOrRequireStatements(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement): Comparison {
     return compareModuleSpecifiers(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2)) || compareImportKind(s1, s2);
 }
 
