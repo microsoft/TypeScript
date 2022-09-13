@@ -34158,12 +34158,12 @@ namespace ts {
                     setLastResult(state, /*type*/ undefined);
                     const operator = operatorToken.kind;
                     if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
-                        if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                            let parent = node.parent;
-                            while (parent.kind === SyntaxKind.ParenthesizedExpression
-                                || isBinaryExpression(parent) && (parent.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || parent.operatorToken.kind === SyntaxKind.BarBarToken)) {
-                                parent = parent.parent;
-                            }
+                        let parent = node.parent;
+                        while (parent.kind === SyntaxKind.ParenthesizedExpression
+                            || isBinaryExpression(parent) && (parent.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || parent.operatorToken.kind === SyntaxKind.BarBarToken)) {
+                            parent = parent.parent;
+                        }
+                        if (operator === SyntaxKind.AmpersandAmpersandToken || isIfStatement(parent)) {
                             checkTestingKnownTruthyCallableOrAwaitableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
                         }
                         checkTruthinessOfType(leftType, node.left);
@@ -38460,10 +38460,10 @@ namespace ts {
 
         function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, condType: Type, body?: Statement | Expression) {
             if (!strictNullChecks) return;
-
+            condExpr = skipParentheses(condExpr);
             helper(condExpr, body);
             while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
-                condExpr = condExpr.left;
+                condExpr = skipParentheses(condExpr.left);
                 helper(condExpr, body);
             }
 

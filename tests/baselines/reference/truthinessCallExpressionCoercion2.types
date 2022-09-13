@@ -186,6 +186,20 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1() : boolean
 >required1 : () => boolean
     }
+
+    // error, extra parens are on purpose here
+    if ((required1)) {}
+>(required1) : () => boolean
+>required1 : () => boolean
+
+    // error
+    if (b && (required1 || required2)) {}
+>b && (required1 || required2) : false | (() => boolean)
+>b : boolean
+>(required1 || required2) : () => boolean
+>required1 || required2 : () => boolean
+>required1 : () => boolean
+>required2 : () => boolean
 }
 
 function checksConsole() {

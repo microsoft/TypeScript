@@ -58,6 +58,12 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     if (((required1 && b))) {
         required1();
     }
+
+    // error, extra parens are on purpose here
+    if ((required1)) {}
+
+    // error
+    if (b && (required1 || required2)) {}
 }
 
 function checksConsole() {
@@ -162,6 +168,10 @@ function test(required1, required2, b, optional) {
     if (((required1 && b))) {
         required1();
     }
+    // error, extra parens are on purpose here
+    if ((required1)) { }
+    // error
+    if (b && (required1 || required2)) { }
 }
 function checksConsole() {
     // error
