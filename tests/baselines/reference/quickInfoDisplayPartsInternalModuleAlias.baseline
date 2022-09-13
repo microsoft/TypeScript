@@ -38,7 +38,15 @@
           "kind": "space"
         },
         {
-          "text": "a1",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a3",
           "kind": "aliasName"
         },
         {
@@ -54,7 +62,15 @@
           "kind": "space"
         },
         {
-          "text": "a1",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a3",
           "kind": "aliasName"
         },
         {
@@ -116,7 +132,15 @@
           "kind": "space"
         },
         {
-          "text": "a1",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a3",
           "kind": "aliasName"
         },
         {
@@ -132,7 +156,15 @@
           "kind": "space"
         },
         {
-          "text": "a1",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a3",
           "kind": "aliasName"
         },
         {
@@ -194,7 +226,15 @@
           "kind": "space"
         },
         {
-          "text": "a2",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a4",
           "kind": "aliasName"
         },
         {
@@ -210,7 +250,15 @@
           "kind": "space"
         },
         {
-          "text": "a2",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a4",
           "kind": "aliasName"
         },
         {
@@ -280,7 +328,15 @@
           "kind": "space"
         },
         {
-          "text": "a2",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a4",
           "kind": "aliasName"
         },
         {
@@ -296,7 +352,15 @@
           "kind": "space"
         },
         {
-          "text": "a2",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a4",
           "kind": "aliasName"
         },
         {

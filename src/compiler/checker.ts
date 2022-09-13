@@ -4159,9 +4159,9 @@ namespace ts {
                     if (hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
                         return getSymbolOfNode(d.parent);
                     }
-                    // export ='d member of an ambient module
-                    if (isModuleBlock(d.parent) && d.parent.parent && resolveExternalModuleSymbol(getSymbolOfNode(d.parent.parent)) === symbol) {
-                        return getSymbolOfNode(d.parent.parent);
+                    // members of ambient modules
+                    if (isModuleBlock(d.parent) && d.parent.parent && !isGlobalScopeAugmentation(d.parent.parent)) {
+                      return getSymbolOfNode(d.parent.parent);
                     }
                 }
                 if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
