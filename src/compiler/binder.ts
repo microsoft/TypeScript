@@ -463,7 +463,7 @@ namespace ts {
                     return symbol;
                 }
                 else if (symbol.flags & excludes) {
-                    if (symbol.isReplaceableByMethod && !(symbol.flags & SymbolFlags.Accessor)) {
+                    if (symbol.isReplaceableByMethod && !(symbol.flags & SymbolFlags.AccesorExcludes)) {
                         // Javascript constructor-declared symbols can be discarded in favor of
                         // prototype symbols like methods.
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
@@ -2924,7 +2924,7 @@ namespace ts {
                         bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol, symbolTable);
                     }
                     else {
-                        declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor, SymbolFlags.None, /*isReplaceableByMethod*/ true);
+                        declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.AccesorExcludes, /*isReplaceableByMethod*/ true);
                     }
                     break;
                 case SyntaxKind.SourceFile:
