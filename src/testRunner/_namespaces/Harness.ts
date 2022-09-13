@@ -11,3 +11,8 @@ export * from "../compilerRunner";
 export * from "../externalCompileRunner";
 export * from "../test262Runner";
 export * from "../runner";
+
+
+// Must be after runner.
+// NOTE: if emitting CJS, comment this out, and uncomment the one in runner.ts.
+import "./tests";

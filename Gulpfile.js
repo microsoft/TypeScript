@@ -19,7 +19,7 @@ const cmdLineOptions = require("./scripts/build/options");
 const copyright = "CopyrightNotice.txt";
 const cleanTasks = [];
 
-const testRunner = "./built/local/testRunner/runner.js";
+const testRunner = "./built/local/testRunner.js";
 
 const buildScripts = () => buildProject("scripts");
 task("scripts", buildScripts);
@@ -57,9 +57,7 @@ const diagnosticInformationMapTs = "src/compiler/diagnosticInformationMap.genera
 const diagnosticMessagesJson = "src/compiler/diagnosticMessages.json";
 const diagnosticMessagesGeneratedJson = "src/compiler/diagnosticMessages.generated.json";
 const generateDiagnostics = async () => {
-    if (needsUpdate(diagnosticMessagesJson, [diagnosticMessagesGeneratedJson, diagnosticInformationMapTs])) {
-        await exec(process.execPath, ["scripts/processDiagnosticMessages.js", diagnosticMessagesJson]);
-    }
+    await exec(process.execPath, ["scripts/processDiagnosticMessages.js", diagnosticMessagesJson]);
 };
 task("generate-diagnostics", series(buildScripts, generateDiagnostics));
 task("generate-diagnostics").description = "Generates a diagnostic file in TypeScript based on an input JSON file";
@@ -89,14 +87,66 @@ const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt
     .concat(generatedLCGFile);
 
 const localize = async () => {
-    if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-        return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.js", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
-    }
+    return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.js", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
 };
 
-const buildAll = () => buildProject("src");
+/**
+ * @param {string} entrypoint
+ * @param {string} outfile
+ */
+async function esbuild(entrypoint, outfile) {
+    await exec("node_modules/esbuild/bin/esbuild", [
+        entrypoint,
+        "--bundle",
+        `--outfile=${outfile}`,
+        "--platform=node",
+        "--target=node10", // Node 10; oldest benchmarker.
+        "--sourcemap",
+        "--external:./node_modules/*",
+        "--conditions=require",
+        // "--supported:const-and-let=false", // Unfortunately, no: https://github.com/evanw/esbuild/issues/297
+        "--supported:object-rest-spread=false", // See: https://github.com/evanw/esbuild/releases/tag/v0.14.46
+    ]);
+}
 
-task("moduleBuild", parallel(generateLibs, series(buildScripts, localize, buildAll)));
+const buildSrc = () => buildProject("src");
+
+/** @type {(infile: string, outfile: string) => (done: () => void) => void} */
+const writeHackyCJSShim = (infile, outfile) => {
+    return (done) => {
+        const inRelativeToOut = infile = path.relative(path.dirname(outfile), infile);
+        fs.writeFileSync(outfile, `module.exports = require("./${inRelativeToOut}")`);
+        done();
+    };
+};
+
+const preBundleFromSrc = parallel(generateLibs, series(buildScripts, generateDiagnostics, localize));
+const preBuildSrc = preBundleFromSrc;
+const preBundleFromEmit = series(preBundleFromSrc, buildSrc);
+
+const bundleTscFromEmit = () => esbuild("./built/local/tsc/tsc.js", "./built/local/tsc.js");
+const bundleTypescriptFromEmit = () => esbuild("./built/local/typescript/typescript.js", "./built/local/typescript.js");
+const bundleServerFromEmit = () => esbuild("./built/local/tsserver/server.js", "./built/local/tsserver.js");
+const bundleServerLibraryFromEmit = () => esbuild("./built/local/tsserverlibrary/tsserverlibrary.js", "./built/local/tsserverlibrary.js");
+const bundleTestsFromEmit = () => esbuild("./built/local/testRunner/_namespaces/Harness.js", testRunner);
+
+const bundleTscFromSrc = () => esbuild("./src/tsc/tsc.ts", "./built/local/tsc.js");
+const bundleTypescriptFromSrc = () => esbuild("./src/typescript/typescript.ts", "./built/local/typescript.js");
+const bundleServerFromSrc = () => esbuild("./src/tsserver/server.ts", "./built/local/tsserver.js");
+const bundleServerLibraryFromSrc = () => esbuild("./src/tsserverlibrary/tsserverlibrary.ts", "./built/local/tsserverlibrary.js");
+const bundleTestsFromSrc = () => esbuild("./src/testRunner/_namespaces/Harness.ts", testRunner);
+
+const bundleAllFromSrc = series([
+    bundleTscFromSrc,
+    bundleTypescriptFromSrc,
+    bundleServerFromSrc,
+    bundleServerLibraryFromSrc,
+    bundleTestsFromSrc,
+]);
+task("bundle-src", series(preBundleFromSrc, bundleAllFromSrc));
+
+
+task("buildSrc", preBundleFromEmit);
 
 const apiExtractor = async () => {
     async function runApiExtractor(configPath) {
@@ -114,17 +164,20 @@ const apiExtractor = async () => {
     await runApiExtractor("./src/tsserverlibrary/api-extractor.json");
 };
 
-task("api-extractor", series(task("moduleBuild"), apiExtractor));
+task("api-extractor", series(buildSrc, apiExtractor));
 
 const buildDebugTools = () => buildProject("src/debug");
 const cleanDebugTools = () => cleanProject("src/debug");
 cleanTasks.push(cleanDebugTools);
 
 // Pre-build steps when targeting the LKG compiler
-const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildDebugTools));
+const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics /** , buildDebugTools */));
 
 const buildTsc = () => buildProject("src/tsc");
-task("tsc", series(lkgPreBuild, buildTsc));
+
+// task("tsc", series(preBundleFromSrc, bundleTscFromSrc)); // esbuild on ./src
+// task("tsc", series(preBundleFromEmit, bundleTscFromEmit)); // esbuild on emitted ./built/local
+task("tsc", series(preBuildSrc, buildSrc, writeHackyCJSShim("./built/local/tsc/tsc.js", "./built/local/tsc.js"))); // CJS
 task("tsc").description = "Builds the command-line compiler";
 
 const cleanTsc = () => cleanProject("src/tsc");
@@ -244,7 +297,11 @@ task("dynamicImportCompat", buildDynamicImportCompat);
 const buildServerMain = () => buildProject("src/tsserver", cmdLineOptions);
 const buildServer = series(buildDynamicImportCompat, buildServerMain);
 buildServer.displayName = "buildServer";
-task("tsserver", series(preBuild, buildServer));
+
+// task("tsserver", series(preBundleFromSrc, bundleServerFromSrc)); // esbuild on ./src
+// task("tsserver", series(preBundleFromEmit, bundleServerFromEmit)); // esbuild on emitted ./built/local
+
+task("tsserver", series(preBuildSrc, buildSrc, writeHackyCJSShim("./built/local/tsserver/server.js", "./built/local/tsserver.js"))); // CJS
 task("tsserver").description = "Builds the language server";
 task("tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -461,7 +518,7 @@ const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
 const runTests = () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("runtests", series(/*preBuild, preTest,*/ task("moduleBuild"), runTests)); // TODO(jakebailey): fix this for modules
+task("runtests", series(/*preBuild, preTest,*/ preBundleFromSrc, bundleTestsFromSrc, runTests)); // TODO(jakebailey): fix this for modules
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
     "-t --tests=<regex>": "Pattern for tests to run.",
@@ -480,7 +537,7 @@ task("runtests").flags = {
 };
 
 const runTestsParallel = () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
-task("runtests-parallel", series(/*preBuild, preTest,*/ task("moduleBuild"), runTestsParallel)); // TODO(jakebailey): fix this for modules
+task("runtests-parallel", series(/*preBuild, preTest,*/ preBundleFromSrc, bundleTestsFromSrc, runTestsParallel)); // TODO(jakebailey): fix this for modules
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",

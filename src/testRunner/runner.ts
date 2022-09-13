@@ -293,4 +293,5 @@ function startTestEnvironment() {
 startTestEnvironment();
 
 // This brings in all of the unittests.
-import "./_namespaces/tests";
+// NOTE: if emitting CJS, uncomment this, and comment out the one in Harness.ts.
+// import "./_namespaces/tests";

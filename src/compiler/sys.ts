@@ -1532,7 +1532,14 @@ export let sys: System = (() => {
                 //
                 // TODO(jakebailey): replace this function with one that returns the path
                 // to the lib folder (or package path)?.
-                return _path.join(_path.dirname(__dirname), "fake.js");
+                // return _path.join(_path.dirname(__dirname), "fake.js");
+
+                // HACK: detect if we are bundled or not for sake of perf testing. This is not
+                // how I'd do it for real.
+                if (__filename.endsWith("sys.js")) {
+                    return _path.join(_path.dirname(__dirname), "fake.js");
+                }
+                return __filename;
             },
             getCurrentDirectory,
             getDirectories,
@@ -1571,7 +1578,10 @@ export let sys: System = (() => {
             debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
             tryEnableSourceMapsForHost() {
                 try {
-                    require("source-map-support").install();
+                    // Trick esbuild into not eagerly resolving a path to a JS file.
+                    // See: https://github.com/evanw/esbuild/issues/1958
+                    const moduleName = "source-map-support" as const;
+                    (require(moduleName) as typeof import("source-map-support")).install();
                 }
                 catch {
                     // Could not enable source maps.
