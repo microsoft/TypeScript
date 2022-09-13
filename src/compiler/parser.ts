@@ -662,6 +662,7 @@ namespace ts {
             case SyntaxKind.JSDocProtectedTag:
             case SyntaxKind.JSDocReadonlyTag:
             case SyntaxKind.JSDocDeprecatedTag:
+            case SyntaxKind.JSDocOverrideTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName)
                  || (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.PartiallyEmittedExpression:
