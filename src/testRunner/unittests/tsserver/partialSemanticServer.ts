@@ -29,7 +29,7 @@ import { something } from "something";
             const session = createSession(host, {
                 serverMode: LanguageServiceMode.PartialSemantic,
                 useSingleInferredProject: true,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             return { host, session, file1, file2, file3, something, configFile };
         }
@@ -98,7 +98,7 @@ import { something } from "something";
             const session = createSession(host, {
                 serverMode: LanguageServiceMode.PartialSemantic,
                 useSingleInferredProject: true,
-                logger: createLoggerWithInMemoryLogs()
+                logger: createLoggerWithInMemoryLogs(host)
             });
 
             const service = session.getProjectService();
@@ -163,7 +163,7 @@ function fooB() { }`
             const session = createSession(host, {
                 serverMode: LanguageServiceMode.PartialSemantic,
                 useSingleInferredProject: true,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             openFilesForSession([file1], session);
             baselineTsserverLogs("partialSemanticServer", "should not include referenced files from unopened files", session);

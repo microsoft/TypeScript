@@ -197,7 +197,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface PackageJsonInfo {
+    export interface ProjectPackageJsonInfo {
         fileName: string;
         parseable: boolean;
         dependencies?: ESMap<string, string>;
@@ -311,9 +311,9 @@ namespace ts {
 
         /* @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
         /* @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
-        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly ProjectPackageJsonInfo[];
         /* @internal */ getCachedExportInfoMap?(): ExportInfoMap;
         /* @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
         /* @internal */ setCompilerHost?(host: CompilerHost): void;
@@ -551,6 +551,7 @@ namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
         getProgram(): Program | undefined;
+        /*@internal*/ getCurrentProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
         /* @internal */ getAutoImportProvider(): Program | undefined;
@@ -1045,7 +1046,12 @@ namespace ts {
         containerKind: ScriptElementKind;
         containerName: string;
         unverified?: boolean;
-        /* @internal */ isLocal?: boolean;
+        /** @internal
+         * Initially, this value is determined syntactically, but it is updated by the checker to cover
+         * cases like declarations that are exported in subsequent statements.  As a result, the value
+         * may be "incomplete" if this span has yet to be checked.
+         */
+        isLocal?: boolean;
         /* @internal */ isAmbient?: boolean;
         /* @internal */ failedAliasResolution?: boolean;
     }
@@ -1208,7 +1214,7 @@ namespace ts {
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
-         * In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
          * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
          * must be used to commit that completion entry.
          */
@@ -1460,6 +1466,9 @@ namespace ts {
          * interface Y { foo:number; }
          */
         memberVariableElement = "property",
+
+        /** class X { [public|private]* accessor foo: number; } */
+        memberAccessorVariableElement = "accessor",
 
         /**
          * class X { constructor() { } }

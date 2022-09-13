@@ -6,7 +6,7 @@ tests/cases/compiler/operationsAvailableOnPromisedType.ts(13,5): error TS2365: O
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(14,5): error TS2365: Operator '>' cannot be applied to types 'number' and 'Promise<number>'.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(15,5): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(16,7): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/operationsAvailableOnPromisedType.ts(17,5): error TS2367: This condition will always return 'false' since the types 'number' and 'Promise<number>' have no overlap.
+tests/cases/compiler/operationsAvailableOnPromisedType.ts(17,5): error TS2367: This comparison appears to be unintentional because the types 'number' and 'Promise<number>' have no overlap.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(18,9): error TS2461: Type 'Promise<string[]>' is not an array type.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(19,21): error TS2495: Type 'Promise<string[]>' is not an array type or a string type.
 tests/cases/compiler/operationsAvailableOnPromisedType.ts(20,12): error TS2345: Argument of type 'Promise<number>' is not assignable to parameter of type 'number'.
@@ -61,7 +61,7 @@ tests/cases/compiler/operationsAvailableOnPromisedType.ts(27,5): error TS2349: T
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
         a === b;
         ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'number' and 'Promise<number>' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'Promise<number>' have no overlap.
 !!! related TS2773 tests/cases/compiler/operationsAvailableOnPromisedType.ts:17:5: Did you forget to use 'await'?
         [...c];
             ~

@@ -93,63 +93,63 @@ function f12({ a: string = "" }) { return "a"; }
 
 
 //// [renamingDestructuredPropertyInFunctionType.d.ts]
-declare type O = {
+type O = {
     a?: string;
     b: number;
     c: number;
 };
-declare type F1 = (arg: number) => any;
-declare type F2 = ({ a }: O) => any;
-declare type F3 = ({ a, b, c }: O) => any;
-declare type F4 = ({ a }: O) => any;
-declare type F5 = ({ a, b, c }: O) => any;
-declare type F6 = ({ a: string }: {
+type F1 = (arg: number) => any;
+type F2 = ({ a }: O) => any;
+type F3 = ({ a, b, c }: O) => any;
+type F4 = ({ a }: O) => any;
+type F5 = ({ a, b, c }: O) => any;
+type F6 = ({ a: string }: {
     a: any;
 }) => typeof string;
-declare type F7 = ({ a, b: number }: {
+type F7 = ({ a, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
-declare type F8 = ({ a, b: number }: {
+type F8 = ({ a, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
-declare type F9 = ([a, b, c]: [any, any, any]) => void;
-declare type G1 = new (arg: number) => any;
-declare type G2 = new ({ a }: O) => any;
-declare type G3 = new ({ a, b, c }: O) => any;
-declare type G4 = new ({ a }: O) => any;
-declare type G5 = new ({ a, b, c }: O) => any;
-declare type G6 = new ({ a: string }: {
+type F9 = ([a, b, c]: [any, any, any]) => void;
+type G1 = new (arg: number) => any;
+type G2 = new ({ a }: O) => any;
+type G3 = new ({ a, b, c }: O) => any;
+type G4 = new ({ a }: O) => any;
+type G5 = new ({ a, b, c }: O) => any;
+type G6 = new ({ a: string }: {
     a: any;
 }) => typeof string;
-declare type G7 = new ({ a, b: number }: {
+type G7 = new ({ a, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
-declare type G8 = new ({ a, b: number }: {
+type G8 = new ({ a, b: number }: {
     a: any;
     b: any;
 }) => typeof number;
-declare type G9 = new ([a, b, c]: [any, any, any]) => void;
-declare type F10 = ({ "a": string }: {
+type G9 = new ([a, b, c]: [any, any, any]) => void;
+type F10 = ({ "a": string }: {
     a: any;
 }) => void;
-declare type F11 = ({ 2: string }: {
+type F11 = ({ 2: string }: {
     2: any;
 }) => void;
-declare type F12 = ({ ["a"]: string }: O) => void;
-declare type F13 = ({ [2]: string }: {
+type F12 = ({ ["a"]: string }: O) => void;
+type F13 = ({ [2]: string }: {
     2: any;
 }) => void;
-declare type G10 = new ({ "a": string }: {
+type G10 = new ({ "a": string }: {
     a: any;
 }) => void;
-declare type G11 = new ({ 2: string }: {
+type G11 = new ({ 2: string }: {
     2: any;
 }) => void;
-declare type G12 = new ({ ["a"]: string }: O) => void;
-declare type G13 = new ({ [2]: string }: {
+type G12 = new ({ ["a"]: string }: O) => void;
+type G13 = new ({ [2]: string }: {
     2: any;
 }) => void;
 interface I {

@@ -16,6 +16,7 @@ namespace ts {
          */
         OutOfDateWithPrepend,
         OutputMissing,
+        ErrorReadingFile,
         OutOfDateWithSelf,
         OutOfDateWithUpstream,
         OutOfDateBuildInfo,
@@ -37,6 +38,7 @@ namespace ts {
         | Status.UpToDate
         | Status.OutOfDateWithPrepend
         | Status.OutputMissing
+        | Status.ErrorReadingFile
         | Status.OutOfDateWithSelf
         | Status.OutOfDateWithUpstream
         | Status.OutOfDateBuildInfo
@@ -93,6 +95,12 @@ namespace ts {
              * The name of the first output file that didn't exist
              */
             missingOutputFileName: string;
+        }
+
+        /** Error reading file */
+        export interface ErrorReadingFile {
+            type: UpToDateStatusType.ErrorReadingFile;
+            fileName: string;
         }
 
         /**

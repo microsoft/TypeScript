@@ -279,7 +279,7 @@ namespace ts.server {
 
     /*@internal*/
     export interface DocumentRegistrySourceFileCache {
-        key: DocumentRegistryBucketKey;
+        key: DocumentRegistryBucketKeyWithMode;
         sourceFile: SourceFile;
     }
 
