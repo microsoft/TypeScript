@@ -10,6 +10,7 @@
         "sourceMap": true,
         "composite": true,
         "noEmitOnError": true,
+        "emitDeclarationOnly": true,
 
         "strictNullChecks": true,
         "noImplicitAny": true,

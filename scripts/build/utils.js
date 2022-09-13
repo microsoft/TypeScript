@@ -7,7 +7,6 @@
 const fs = require("fs");
 const path = require("path");
 const log = require("fancy-log");
-const mkdirp = require("mkdirp");
 const del = require("del");
 const File = require("vinyl");
 const ts = require("../../lib/typescript");
@@ -224,90 +223,6 @@ function getDirSize(root) {
         .reduce((acc, num) => acc + num, 0);
 }
 exports.getDirSize = getDirSize;
-
-/**
- * Flattens a project with project references into a single project.
- * @param {string} projectSpec The path to a tsconfig.json file or its containing directory.
- * @param {string} flattenedProjectSpec The output path for the flattened tsconfig.json file.
- * @param {FlattenOptions} [options] Options used to flatten a project hierarchy.
- *
- * @typedef FlattenOptions
- * @property {string} [cwd] The path to use for the current working directory. Defaults to `process.cwd()`.
- * @property {import("../../lib/typescript").CompilerOptions} [compilerOptions] Compiler option overrides.
- * @property {boolean} [force] Forces creation of the output project.
- * @property {string[]} [exclude] Files to exclude (relative to `cwd`)
- */
-function flatten(projectSpec, flattenedProjectSpec, options = {}) {
-    const cwd = normalizeSlashes(options.cwd ? path.resolve(options.cwd) : process.cwd());
-    const files = [];
-    const resolvedOutputSpec = path.resolve(cwd, flattenedProjectSpec);
-    const resolvedOutputDirectory = path.dirname(resolvedOutputSpec);
-    const resolvedProjectSpec = resolveProjectSpec(projectSpec, cwd, /*referrer*/ undefined);
-    const project = readJson(resolvedProjectSpec);
-    const skipProjects = /**@type {Set<string>}*/(new Set());
-    const skipFiles = new Set(options && options.exclude && options.exclude.map(file => normalizeSlashes(path.resolve(cwd, file))));
-    recur(resolvedProjectSpec, project);
-
-    if (options.force || needsUpdate(files, resolvedOutputSpec)) {
-        const config = {
-            extends: normalizeSlashes(path.relative(resolvedOutputDirectory, resolvedProjectSpec)),
-            compilerOptions: options.compilerOptions || {},
-            files: files.map(file => normalizeSlashes(path.relative(resolvedOutputDirectory, file)))
-        };
-        mkdirp.sync(resolvedOutputDirectory);
-        fs.writeFileSync(resolvedOutputSpec, JSON.stringify(config, undefined, 2), "utf8");
-    }
-
-    /**
-     * @param {string} projectSpec
-     * @param {object} project
-     */
-    function recur(projectSpec, project) {
-        if (skipProjects.has(projectSpec)) return;
-        skipProjects.add(project);
-        if (project.references) {
-            for (const ref of project.references) {
-                const referencedSpec = resolveProjectSpec(ref.path, cwd, projectSpec);
-                const referencedProject = readJson(referencedSpec);
-                recur(referencedSpec, referencedProject);
-            }
-        }
-        if (project.include) {
-            throw new Error("Flattened project may not have an 'include' list.");
-        }
-        if (!project.files) {
-            throw new Error("Flattened project must have an explicit 'files' list.");
-        }
-        const projectDirectory = path.dirname(projectSpec);
-        for (let file of project.files) {
-            file = normalizeSlashes(path.resolve(projectDirectory, file));
-            if (skipFiles.has(file)) continue;
-            skipFiles.add(file);
-            files.push(file);
-        }
-    }
-}
-exports.flatten = flatten;
-
-/**
- * @param {string} file
- */
-function normalizeSlashes(file) {
-    return file.replace(/\\/g, "/");
-}
-
-/**
- * @param {string} projectSpec
- * @param {string} cwd
- * @param {string | undefined} referrer
- * @returns {string}
- */
-function resolveProjectSpec(projectSpec, cwd, referrer) {
-    const projectPath = normalizeSlashes(path.resolve(cwd, referrer ? path.dirname(referrer) : "", projectSpec));
-    const stats = fs.statSync(projectPath);
-    if (stats.isFile()) return normalizeSlashes(projectPath);
-    return normalizeSlashes(path.resolve(cwd, projectPath, "tsconfig.json"));
-}
 
 /**
  * @param {string | ((file: File) => string) | { cwd?: string }} [dest]

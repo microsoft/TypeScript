@@ -255,15 +255,15 @@ class TextChange {
 
 /** @internal */
 export class ScriptVersionCache {
+    private static readonly changeNumberThreshold = 8;
+    private static readonly changeLengthThreshold = 256;
+    private static readonly maxVersions = 8;
+
     private changes: TextChange[] = [];
     private readonly versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
     private minVersion = 0; // no versions earlier than min version will maintain change history
 
     private currentVersion = 0;
-
-    private static readonly changeNumberThreshold = 8;
-    private static readonly changeLengthThreshold = 256;
-    private static readonly maxVersions = 8;
 
     private versionToIndex(version: number) {
         if (version < this.minVersion || version > this.currentVersion) {

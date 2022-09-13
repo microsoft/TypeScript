@@ -1,6 +1,5 @@
 /// <reference types="node" />
 
-import * as childProcess from "child_process";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as glob from "glob";
@@ -28,6 +27,27 @@ async function copyLocalizedDiagnostics() {
     const dir = await fs.readdir(source);
     const ignoredFolders = ["enu"];
 
+    // TODO(jakebailey): Instead of ignoring folders, we should keep a list of
+    // the localizationTargets somewhere that can be used by multiple modules.
+    ignoredFolders.push(
+        "compiler",
+        "deprecatedCompat",
+        "executeCommandLine",
+        "harness",
+        "jsTyping",
+        "loggedIO",
+        "server",
+        "services",
+        "testRunner",
+        "tsc",
+        "tsserver",
+        "tsserverlibrary",
+        "typescript",
+        "typingsInstaller",
+        "typingsInstallerCore",
+        "webServer",
+    );
+
     for (const d of dir) {
         const fileName = path.join(source, d);
         if (
@@ -44,21 +64,18 @@ async function copyTypesMap() {
 }
 
 async function copyScriptOutputs() {
-    await copyWithCopyright("cancellationToken.js");
-    await copyWithCopyright("tsc.release.js", "tsc.js");
-    await copyWithCopyright("tsserver.js");
-    await copyWithCopyright("dynamicImportCompat.js");
-    await copyFromBuiltLocal("tsserverlibrary.js"); // copyright added by build
-    await copyFromBuiltLocal("typescript.js"); // copyright added by build
-    await copyFromBuiltLocal("typescriptServices.js"); // copyright added by build
-    await copyWithCopyright("typingsInstaller.js");
-    await copyWithCopyright("watchGuard.js");
+    await copyFromBuiltLocal("cancellationToken.js");
+    await copyFromBuiltLocal("tsc.js");
+    await copyFromBuiltLocal("tsserver.js");
+    await copyFromBuiltLocal("tsserverlibrary.js");
+    await copyFromBuiltLocal("typescript.js");
+    await copyFromBuiltLocal("typingsInstaller.js");
+    await copyFromBuiltLocal("watchGuard.js");
 }
 
 async function copyDeclarationOutputs() {
-    await copyFromBuiltLocal("tsserverlibrary.d.ts"); // copyright added by build
-    await copyFromBuiltLocal("typescript.d.ts"); // copyright added by build
-    await copyFromBuiltLocal("typescriptServices.d.ts"); // copyright added by build
+    await copyWithCopyright("tsserverlibrary.d.ts");
+    await copyWithCopyright("typescript.d.ts");
 }
 
 async function writeGitAttributes() {
@@ -80,12 +97,6 @@ async function copyFilesWithGlob(pattern: string) {
         await copyFromBuiltLocal(f);
     }
     console.log(`Copied ${files.length} files matching pattern ${pattern}`);
-}
-
-async function exec(path: string, args: string[] = []) {
-    const cmdLine = ["node", path, ...args].join(" ");
-    console.log(cmdLine);
-    childProcess.execSync(cmdLine);
 }
 
 process.on("unhandledRejection", err => {
