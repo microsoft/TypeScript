@@ -317,6 +317,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
+Custom:: onConfigurationChanged:: {"extraData":"myData"}
 Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configurePlugin","request_seq":5,"success":true,"performanceData":{"updateGraphDurationMs":*}}
 Info seq  [hh:mm:ss:mss] response:
@@ -339,6 +340,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
+Custom:: myplugin2onConfigurationChanged:: {"extraData":"myData"}
 Info seq  [hh:mm:ss:mss] response:
     {"seq":0,"type":"response","command":"configurePlugin","request_seq":6,"success":true,"performanceData":{"updateGraphDurationMs":*}}
 Info seq  [hh:mm:ss:mss] response:

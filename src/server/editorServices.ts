@@ -809,6 +809,10 @@ function setProjectOptionsUsed(project: ConfiguredProject | ExternalProject) {
     }
 }
 
+function onWachOptionsFactoryConfigurationChanged(watchOptions: WatchOptions, pluginName: string, configuration: any) {
+    if (watchOptions.watchFactory === pluginName) watchOptions.getResolvedWatchFactory?.()?.onConfigurationChanged?.(configuration);
+}
+
 /** @internal */
 export interface OpenFileArguments {
     fileName: string;
@@ -4392,6 +4396,9 @@ export class ProjectService {
     configurePlugin(args: protocol.ConfigurePluginRequestArguments) {
         // For any projects that already have the plugin loaded, configure the plugin
         this.forEachEnabledProject(project => project.onPluginConfigurationChanged(args.pluginName, args.configuration));
+        this.projectWatchOptions.forEach(options =>
+            onWachOptionsFactoryConfigurationChanged(options, args.pluginName, args.configuration));
+        if (this.hostConfiguration.watchOptions) onWachOptionsFactoryConfigurationChanged(this.hostConfiguration.watchOptions, args.pluginName, args.configuration);
 
         // Also save the current configuration to pass on to any projects that are yet to be loaded.
         // If a plugin is configured twice, only the latest configuration will be remembered.
