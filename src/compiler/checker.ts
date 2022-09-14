@@ -6653,23 +6653,23 @@ namespace ts {
             }
 
             function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
+                const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
                 const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
-                const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote);
+                const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote, stringNamed);
                 if (fromNameType) {
                     return fromNameType;
                 }
                 const rawName = unescapeLeadingUnderscores(symbol.escapedName);
-                const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
                 return createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed);
             }
 
             // See getNameForSymbolFromNameType for a stringy equivalent
-            function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext, singleQuote?: boolean) {
+            function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext, singleQuote?: boolean, stringNamed?: boolean) {
                 const nameType = getSymbolLinks(symbol).nameType;
                 if (nameType) {
                     if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                         const name = "" + (nameType as StringLiteralType | NumberLiteralType).value;
-                        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && !isNumericLiteralName(name)) {
+                        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && (stringNamed || !isNumericLiteralName(name))) {
                             return factory.createStringLiteral(name, !!singleQuote);
                         }
                         if (isNumericLiteralName(name) && startsWith(name, "-")) {
