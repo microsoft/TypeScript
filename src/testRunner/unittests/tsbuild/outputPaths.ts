@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: ts.TestTscEdit = {
         modifyFs: ts.noop,
@@ -103,4 +105,3 @@ describe("unittests:: tsbuild - output file paths", () => {
         edits,
     }, ["/src/dist/index.js", "/src/dist/index.d.ts"]);
 });
-}

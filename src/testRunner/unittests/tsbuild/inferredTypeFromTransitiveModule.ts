@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
     let projFs: vfs.FileSystem;
     before(() => {
@@ -85,5 +87,4 @@ function changeBarParam(fs: vfs.FileSystem) {
 
 function changeBarParamBack(fs: vfs.FileSystem) {
     ts.replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
-}
 }

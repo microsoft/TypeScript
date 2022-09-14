@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
     ts.tscWatch.verifyTscWatch({
         scenario: "reexport",
@@ -38,4 +39,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
         ]
     });
 });
-}

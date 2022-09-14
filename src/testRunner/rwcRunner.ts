@@ -1,5 +1,10 @@
+import * as Playback from "./_namespaces/Playback";
+import * as Harness from "./_namespaces/Harness";
+import * as compiler from "./_namespaces/compiler";
+import * as ts from "./_namespaces/ts";
+import * as vpath from "./_namespaces/vpath";
+
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
-namespace RWC {
 function runWithIOLog(ioLog: Playback.IoLog, fn: (oldIO: Harness.IO) => void) {
     const oldIO = Harness.IO;
 
@@ -231,5 +236,4 @@ export class RWCRunner extends Harness.RunnerBase {
     private runTest(jsonFileName: string) {
         runRWCTest(jsonFileName);
     }
-}
 }

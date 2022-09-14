@@ -1,10 +1,12 @@
-/* @internal */
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function getOriginalNodeId(node: ts.Node) {
     node = ts.getOriginalNode(node);
     return node ? ts.getNodeId(node) : 0;
 }
 
+/** @internal */
 export interface ExternalModuleInfo {
     externalImports: (ts.ImportDeclaration | ts.ImportEqualsDeclaration | ts.ExportDeclaration)[]; // imports of other external modules
     externalHelpersImportDeclaration: ts.ImportDeclaration | undefined; // import of external helpers
@@ -25,6 +27,7 @@ function isNamedDefaultReference(e: ts.ImportSpecifier): boolean {
     return e.propertyName !== undefined && e.propertyName.escapedText === ts.InternalSymbolName.Default;
 }
 
+/** @internal */
 export function chainBundle(context: ts.CoreTransformationContext, transformSourceFile: (x: ts.SourceFile) => ts.SourceFile): (x: ts.SourceFile | ts.Bundle) => ts.SourceFile | ts.Bundle {
     return transformSourceFileOrBundle;
 
@@ -37,10 +40,12 @@ export function chainBundle(context: ts.CoreTransformationContext, transformSour
     }
 }
 
+/** @internal */
 export function getExportNeedsImportStarHelper(node: ts.ExportDeclaration): boolean {
     return !!ts.getNamespaceDeclarationNode(node);
 }
 
+/** @internal */
 export function getImportNeedsImportStarHelper(node: ts.ImportDeclaration): boolean {
     if (!!ts.getNamespaceDeclarationNode(node)) {
         return true;
@@ -60,11 +65,13 @@ export function getImportNeedsImportStarHelper(node: ts.ImportDeclaration): bool
     return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) || (!!(bindings.elements.length - defaultRefCount) && ts.isDefaultImport(node));
 }
 
+/** @internal */
 export function getImportNeedsImportDefaultHelper(node: ts.ImportDeclaration): boolean {
     // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
     return !getImportNeedsImportStarHelper(node) && (ts.isDefaultImport(node) || (!!node.importClause && ts.isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
 }
 
+/** @internal */
 export function collectExternalModuleInfo(context: ts.TransformationContext, sourceFile: ts.SourceFile, resolver: ts.EmitResolver, compilerOptions: ts.CompilerOptions): ExternalModuleInfo {
     const externalImports: (ts.ImportDeclaration | ts.ImportEqualsDeclaration | ts.ExportDeclaration)[] = [];
     const exportSpecifiers = ts.createMultiMap<ts.ExportSpecifier>();
@@ -251,6 +258,7 @@ function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
     return values;
 }
 
+/** @internal */
 /**
  * Used in the module transformer to check if an expression is reasonably without sideeffect,
  *  and thus better to copy into multiple places rather than to cache in a temporary variable
@@ -263,6 +271,7 @@ export function isSimpleCopiableExpression(expression: ts.Expression) {
         ts.isIdentifier(expression);
 }
 
+/** @internal */
 /**
  * A simple inlinable expression is an expression which can be copied into multiple locations
  * without risk of repeating any sideeffects and whose value could not possibly change between
@@ -272,11 +281,13 @@ export function isSimpleInlineableExpression(expression: ts.Expression) {
     return !ts.isIdentifier(expression) && isSimpleCopiableExpression(expression);
 }
 
+/** @internal */
 export function isCompoundAssignment(kind: ts.BinaryOperator): kind is ts.CompoundAssignmentOperator {
     return kind >= ts.SyntaxKind.FirstCompoundAssignment
         && kind <= ts.SyntaxKind.LastCompoundAssignment;
 }
 
+/** @internal */
 export function getNonAssignmentOperatorForCompoundAssignment(kind: ts.CompoundAssignmentOperator): ts.LogicalOperatorOrHigher | ts.SyntaxKind.QuestionQuestionToken {
     switch (kind) {
         case ts.SyntaxKind.PlusEqualsToken: return ts.SyntaxKind.PlusToken;
@@ -298,6 +309,7 @@ export function getNonAssignmentOperatorForCompoundAssignment(kind: ts.CompoundA
     }
 }
 
+/** @internal */
 /**
  * @returns Contained super() call from descending into the statement ignoring parentheses, if that call exists.
  */
@@ -312,6 +324,7 @@ export function getSuperCallFromStatement(statement: ts.Statement) {
         : undefined;
 }
 
+/** @internal */
 /**
  * @returns The index (after prologue statements) of a super call, or -1 if not found.
  */
@@ -327,6 +340,7 @@ export function findSuperStatementIndex(statements: ts.NodeArray<ts.Statement>, 
     return -1;
 }
 
+/** @internal */
 /**
  * Gets all the static or all the instance property declarations of a class
  *
@@ -334,7 +348,9 @@ export function findSuperStatementIndex(statements: ts.NodeArray<ts.Statement>, 
  * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
  */
 export function getProperties(node: ts.ClassExpression | ts.ClassDeclaration, requireInitializer: true, isStatic: boolean): readonly ts.InitializedPropertyDeclaration[];
+/** @internal */
 export function getProperties(node: ts.ClassExpression | ts.ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly ts.PropertyDeclaration[];
+/** @internal */
 export function getProperties(node: ts.ClassExpression | ts.ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly ts.PropertyDeclaration[] {
     return ts.filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as ts.PropertyDeclaration[];
 }
@@ -343,8 +359,11 @@ function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(element: ts.Cl
     return isStaticPropertyDeclaration(element) || ts.isClassStaticBlockDeclaration(element);
 }
 
+/** @internal */
 export function getStaticPropertiesAndClassStaticBlock(node: ts.ClassExpression | ts.ClassDeclaration): readonly (ts.PropertyDeclaration | ts.ClassStaticBlockDeclaration)[];
+/** @internal */
 export function getStaticPropertiesAndClassStaticBlock(node: ts.ClassExpression | ts.ClassDeclaration): readonly (ts.PropertyDeclaration | ts.ClassStaticBlockDeclaration)[];
+/** @internal */
 export function getStaticPropertiesAndClassStaticBlock(node: ts.ClassExpression | ts.ClassDeclaration): readonly (ts.PropertyDeclaration | ts.ClassStaticBlockDeclaration)[] {
     return ts.filter(node.members, isStaticPropertyDeclarationOrClassStaticBlockDeclaration);
 }
@@ -365,6 +384,7 @@ function isStaticPropertyDeclaration(member: ts.ClassElement) {
     return ts.isPropertyDeclaration(member) && ts.hasStaticModifier(member);
 }
 
+/** @internal */
 /**
  * Gets a value indicating whether a class element is either a static or an instance property declaration with an initializer.
  *
@@ -376,6 +396,7 @@ export function isInitializedProperty(member: ts.ClassElement): member is ts.Pro
         && (member as ts.PropertyDeclaration).initializer !== undefined;
 }
 
+/** @internal */
 /**
  * Gets a value indicating whether a class element is a private instance method or accessor.
  *
@@ -413,6 +434,7 @@ function getDecoratorsOfParameters(node: ts.FunctionLikeDeclaration | undefined)
     return decorators;
 }
 
+/** @internal */
 /**
  * Gets an AllDecorators object containing the decorators for the class and the decorators for the
  * parameters of the constructor of the class.
@@ -432,6 +454,7 @@ export function getAllDecoratorsOfClass(node: ts.ClassLikeDeclaration): ts.AllDe
     };
 }
 
+/** @internal */
 /**
  * Gets an AllDecorators object containing the decorators for the member and its parameters.
  *
@@ -522,6 +545,4 @@ function getAllDecoratorsOfProperty(property: ts.PropertyDeclaration): ts.AllDec
     }
 
     return { decorators };
-}
-
 }

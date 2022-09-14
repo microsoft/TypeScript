@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: import helpers", () => {
     it("should not crash in tsserver", () => {
         const f1 = {
@@ -15,4 +16,3 @@ describe("unittests:: tsserver:: import helpers", () => {
         service.checkNumberOfProjects({ externalProjects: 1 });
     });
 });
-}

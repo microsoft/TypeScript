@@ -1,9 +1,11 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export interface SourceMapGeneratorOptions {
     extendedDiagnostics?: boolean;
 }
 
+/** @internal */
 export function createSourceMapGenerator(host: ts.EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): ts.SourceMapGenerator {
     const { enter, exit } = generatorOptions.extendedDiagnostics
         ? ts.performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
@@ -326,11 +328,13 @@ const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
 
 const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
 
+/** @internal */
 export interface LineInfo {
     getLineCount(): number;
     getLineText(line: number): string;
 }
 
+/** @internal */
 export function getLineInfo(text: string, lineStarts: readonly number[]): LineInfo {
     return {
         getLineCount: () => lineStarts.length,
@@ -338,6 +342,7 @@ export function getLineInfo(text: string, lineStarts: readonly number[]): LineIn
     };
 }
 
+/** @internal */
 /**
  * Tries to find the sourceMappingURL comment at the end of a file.
  */
@@ -360,6 +365,7 @@ function isStringOrNull(x: any) {
     return typeof x === "string" || x === null;
 }
 
+/** @internal */
 export function isRawSourceMap(x: any): x is ts.RawSourceMap {
     return x !== null
         && typeof x === "object"
@@ -373,6 +379,7 @@ export function isRawSourceMap(x: any): x is ts.RawSourceMap {
 }
 /* eslint-enable no-null/no-null */
 
+/** @internal */
 export function tryParseRawSourceMap(text: string) {
     try {
         const parsed = JSON.parse(text);
@@ -387,12 +394,14 @@ export function tryParseRawSourceMap(text: string) {
     return undefined;
 }
 
+/** @internal */
 export interface MappingsDecoder extends ts.Iterator<Mapping> {
     readonly pos: number;
     readonly error: string | undefined;
     readonly state: Required<Mapping>;
 }
 
+/** @internal */
 export interface Mapping {
     generatedLine: number;
     generatedCharacter: number;
@@ -402,12 +411,14 @@ export interface Mapping {
     nameIndex?: number;
 }
 
+/** @internal */
 export interface SourceMapping extends Mapping {
     sourceIndex: number;
     sourceLine: number;
     sourceCharacter: number;
 }
 
+/** @internal */
 export function decodeMappings(mappings: string): MappingsDecoder {
     let done = false;
     let pos = 0;
@@ -555,6 +566,7 @@ export function decodeMappings(mappings: string): MappingsDecoder {
     }
 }
 
+/** @internal */
 export function sameMapping<T extends Mapping>(left: T, right: T) {
     return left === right
         || left.generatedLine === right.generatedLine
@@ -565,6 +577,7 @@ export function sameMapping<T extends Mapping>(left: T, right: T) {
         && left.nameIndex === right.nameIndex;
 }
 
+/** @internal */
 export function isSourceMapping(mapping: Mapping): mapping is SourceMapping {
     return mapping.sourceIndex !== undefined
         && mapping.sourceLine !== undefined
@@ -633,6 +646,7 @@ function getGeneratedPositionOfMapping(value: MappedPosition) {
     return value.generatedPosition;
 }
 
+/** @internal */
 export function createDocumentPositionMapper(host: ts.DocumentPositionMapperHost, map: ts.RawSourceMap, mapPath: string): ts.DocumentPositionMapper {
     const mapDirectory = ts.getDirectoryPath(mapPath);
     const sourceRoot = map.sourceRoot ? ts.getNormalizedAbsolutePath(map.sourceRoot, mapDirectory) : mapDirectory;
@@ -753,8 +767,8 @@ export function createDocumentPositionMapper(host: ts.DocumentPositionMapperHost
     }
 }
 
+/** @internal */
 export const identitySourceMapConsumer: ts.DocumentPositionMapper = {
     getSourcePosition: ts.identity,
     getGeneratedPosition: ts.identity
 };
-}

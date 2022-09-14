@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 describe("unittests:: builder", () => {
     it("emits dependent files", () => {
         const files: ts.NamedSourceText[] = [
@@ -126,5 +127,4 @@ function updateProgramFile(program: ts.ProgramWithSourceTexts, fileName: string,
     return ts.updateProgram(program, program.getRootFileNames(), program.getCompilerOptions(), files => {
         ts.updateProgramText(files, fileName, fileContent);
     });
-}
 }

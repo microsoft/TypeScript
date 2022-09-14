@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixNoPropertyAccessFromIndexSignature";
 const errorCodes = [
     ts.Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0.code
@@ -32,5 +32,4 @@ function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFi
 
 function getPropertyAccessExpression(sourceFile: ts.SourceFile, pos: number): ts.PropertyAccessExpression {
     return ts.cast(ts.getTokenAtPosition(sourceFile, pos).parent, ts.isPropertyAccessExpression);
-}
 }

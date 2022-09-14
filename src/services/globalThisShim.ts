@@ -1,3 +1,5 @@
+import * as ts from "./_namespaces/ts";
+
 // We polyfill `globalThis` here so re can reliably patch the global scope
 // in the contexts we want to in the same way across script and module formats
 
@@ -6,7 +8,11 @@
 // #region The polyfill starts here.
 /* eslint-disable no-var */
 /* @internal */
-declare var window: {};
+declare global {
+    // Module transform: converted from ambient declaration
+    /** @internal */
+    var window: {};
+}
 /* eslint-enable no-var */
 ((() => {
     if (typeof globalThis === "object") return;

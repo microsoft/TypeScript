@@ -1,7 +1,7 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        "outFile": "../../built/local/compiler.release.js",
+        "outDir": "../../built/local/release",
         "removeComments": true,
         "preserveConstEnums": false
     },

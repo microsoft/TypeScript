@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsc:: redirect::", () => {
     ts.verifyTsc({
         scenario: "redirect",
@@ -31,4 +32,3 @@ describe("unittests:: tsc:: redirect::", () => {
         commandLineArgs: ["-p", "src/project"],
     });
 });
-}

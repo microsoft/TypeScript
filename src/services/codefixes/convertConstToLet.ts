@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixConvertConstToLet";
 const errorCodes = [ts.Diagnostics.Cannot_assign_to_0_because_it_is_a_constant.code];
 
@@ -53,5 +53,4 @@ function getInfo(sourceFile: ts.SourceFile, pos: number, program: ts.Program): I
 
 function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, token: ts.Token<ts.SyntaxKind.ConstKeyword>) {
     changes.replaceNode(sourceFile, token, ts.factory.createToken(ts.SyntaxKind.LetKeyword));
-}
 }

@@ -1,217 +1,236 @@
+import * as ts from "../_namespaces/ts";
+
 // DEPRECATION: Deprecate passing `decorators` separate from `modifiers`
 // DEPRECATION PLAN:
 //     - soft: 4.8
 //     - warn: 4.9
 //     - error: 5.0
-namespace ts {
-export interface Node {
-    /**
-     * @deprecated `decorators` has been removed from `Node` and merged with `modifiers` on the `Node` subtypes that support them.
-     * Use `ts.canHaveDecorators()` to test whether a `Node` can have decorators.
-     * Use `ts.getDecorators()` to get the decorators of a `Node`.
-     *
-     * For example:
-     * ```ts
-     * const decorators = ts.canHaveDecorators(node) ? ts.getDecorators(node) : undefined;
-     * ```
-     */
-    readonly decorators?: undefined;
+declare module "../../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface Node {
+        /**
+         * @deprecated `decorators` has been removed from `Node` and merged with `modifiers` on the `Node` subtypes that support them.
+         * Use `ts.canHaveDecorators()` to test whether a `Node` can have decorators.
+         * Use `ts.getDecorators()` to get the decorators of a `Node`.
+         *
+         * For example:
+         * ```ts
+         * const decorators = ts.canHaveDecorators(node) ? ts.getDecorators(node) : undefined;
+         * ```
+         */
+        readonly decorators?: undefined;
 
-    /**
-     * @deprecated `modifiers` has been removed from `Node` and moved to the `Node` subtypes that support them.
-     * Use `ts.canHaveModifiers()` to test whether a `Node` can have modifiers.
-     * Use `ts.getModifiers()` to get the modifiers of a `Node`.
-     *
-     * For example:
-     * ```ts
-     * const modifiers = ts.canHaveModifiers(node) ? ts.getModifiers(node) : undefined;
-     * ```
-     */
-    readonly modifiers?: ts.NodeArray<ts.ModifierLike> | undefined;
+        /**
+         * @deprecated `modifiers` has been removed from `Node` and moved to the `Node` subtypes that support them.
+         * Use `ts.canHaveModifiers()` to test whether a `Node` can have modifiers.
+         * Use `ts.getModifiers()` to get the modifiers of a `Node`.
+         *
+         * For example:
+         * ```ts
+         * const modifiers = ts.canHaveModifiers(node) ? ts.getModifiers(node) : undefined;
+         * ```
+         */
+        readonly modifiers?: ts.NodeArray<ts.ModifierLike> | undefined;
+    }
 }
 
-export interface PropertySignature {
-    /** @deprecated A property signature cannot have an initializer */
-    readonly initializer?: ts.Expression | undefined;
+declare module "../../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface PropertySignature {
+        /** @deprecated A property signature cannot have an initializer */
+        readonly initializer?: ts.Expression | undefined;
+    }
 }
 
-export interface PropertyAssignment {
-    /** @deprecated A property assignment cannot have a question token */
-    readonly questionToken?: ts.QuestionToken | undefined;
+declare module "../../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface PropertyAssignment {
+        /** @deprecated A property assignment cannot have a question token */
+        readonly questionToken?: ts.QuestionToken | undefined;
 
-    /** @deprecated A property assignment cannot have an exclamation token */
-    readonly exclamationToken?: ts.ExclamationToken | undefined;
+        /** @deprecated A property assignment cannot have an exclamation token */
+        readonly exclamationToken?: ts.ExclamationToken | undefined;
+    }
 }
 
-export interface ShorthandPropertyAssignment {
-    /** @deprecated A shorthand property assignment cannot have modifiers */
-    readonly modifiers?: ts.NodeArray<ts.Modifier> | undefined;
+declare module "../../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface ShorthandPropertyAssignment {
+        /** @deprecated A shorthand property assignment cannot have modifiers */
+        readonly modifiers?: ts.NodeArray<ts.Modifier> | undefined;
 
-    /** @deprecated A shorthand property assignment cannot have a question token */
-    readonly questionToken?: ts.QuestionToken | undefined;
+        /** @deprecated A shorthand property assignment cannot have a question token */
+        readonly questionToken?: ts.QuestionToken | undefined;
 
-    /** @deprecated A shorthand property assignment cannot have an exclamation token */
-    readonly exclamationToken?: ts.ExclamationToken | undefined;
+        /** @deprecated A shorthand property assignment cannot have an exclamation token */
+        readonly exclamationToken?: ts.ExclamationToken | undefined;
+    }
 }
 
-export interface FunctionTypeNode {
-    /** @deprecated A function type cannot have modifiers */
-    readonly modifiers?: ts.NodeArray<ts.Modifier> | undefined;
+declare module "../../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface FunctionTypeNode {
+        /** @deprecated A function type cannot have modifiers */
+        readonly modifiers?: ts.NodeArray<ts.Modifier> | undefined;
+    }
 }
 
-export interface NodeFactory {
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createParameterDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, dotDotDotToken: ts.DotDotDotToken | undefined, name: string | ts.BindingName, questionToken?: ts.QuestionToken, type?: ts.TypeNode, initializer?: ts.Expression): ts.ParameterDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateParameterDeclaration(node: ts.ParameterDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, dotDotDotToken: ts.DotDotDotToken | undefined, name: string | ts.BindingName, questionToken: ts.QuestionToken | undefined, type: ts.TypeNode | undefined, initializer: ts.Expression | undefined): ts.ParameterDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createPropertyDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.PropertyName, questionOrExclamationToken: ts.QuestionToken | ts.ExclamationToken | undefined, type: ts.TypeNode | undefined, initializer: ts.Expression | undefined): ts.PropertyDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updatePropertyDeclaration(node: ts.PropertyDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.PropertyName, questionOrExclamationToken: ts.QuestionToken | ts.ExclamationToken | undefined, type: ts.TypeNode | undefined, initializer: ts.Expression | undefined): ts.PropertyDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createMethodDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, asteriskToken: ts.AsteriskToken | undefined, name: string | ts.PropertyName, questionToken: ts.QuestionToken | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.MethodDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateMethodDeclaration(node: ts.MethodDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, asteriskToken: ts.AsteriskToken | undefined, name: ts.PropertyName, questionToken: ts.QuestionToken | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.MethodDeclaration;
-    /**
-     * @deprecated This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createConstructorDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, parameters: readonly ts.ParameterDeclaration[], body: ts.Block | undefined): ts.ConstructorDeclaration;
-    /**
-     * @deprecated This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateConstructorDeclaration(node: ts.ConstructorDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, parameters: readonly ts.ParameterDeclaration[], body: ts.Block | undefined): ts.ConstructorDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createGetAccessorDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.PropertyName, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.GetAccessorDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateGetAccessorDeclaration(node: ts.GetAccessorDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.PropertyName, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.GetAccessorDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createSetAccessorDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.PropertyName, parameters: readonly ts.ParameterDeclaration[], body: ts.Block | undefined): ts.SetAccessorDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateSetAccessorDeclaration(node: ts.SetAccessorDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.PropertyName, parameters: readonly ts.ParameterDeclaration[], body: ts.Block | undefined): ts.SetAccessorDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createIndexSignature(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode): ts.IndexSignatureDeclaration;
-    /**
-     * @deprecated Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.
-     */
-    updateIndexSignature(node: ts.IndexSignatureDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode): ts.IndexSignatureDeclaration;
-    /**
-     * @deprecated Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.
-     */
-    createClassStaticBlockDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, body: ts.Block): ts.ClassStaticBlockDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, body: ts.Block): ts.ClassStaticBlockDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createClassExpression(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.ClassElement[]): ts.ClassExpression;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateClassExpression(node: ts.ClassExpression, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.ClassElement[]): ts.ClassExpression;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createFunctionDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, asteriskToken: ts.AsteriskToken | undefined, name: string | ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.FunctionDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateFunctionDeclaration(node: ts.FunctionDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, asteriskToken: ts.AsteriskToken | undefined, name: ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.FunctionDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createClassDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.ClassElement[]): ts.ClassDeclaration;
-    /**
-     * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateClassDeclaration(node: ts.ClassDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.ClassElement[]): ts.ClassDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createInterfaceDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.TypeElement[]): ts.InterfaceDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateInterfaceDeclaration(node: ts.InterfaceDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.TypeElement[]): ts.InterfaceDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createTypeAliasDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, type: ts.TypeNode): ts.TypeAliasDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateTypeAliasDeclaration(node: ts.TypeAliasDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, type: ts.TypeNode): ts.TypeAliasDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createEnumDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier, members: readonly ts.EnumMember[]): ts.EnumDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateEnumDeclaration(node: ts.EnumDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier, members: readonly ts.EnumMember[]): ts.EnumDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createModuleDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.ModuleName, body: ts.ModuleBody | undefined, flags?: ts.NodeFlags): ts.ModuleDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateModuleDeclaration(node: ts.ModuleDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.ModuleName, body: ts.ModuleBody | undefined): ts.ModuleDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createImportEqualsDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isTypeOnly: boolean, name: string | ts.Identifier, moduleReference: ts.ModuleReference): ts.ImportEqualsDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateImportEqualsDeclaration(node: ts.ImportEqualsDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isTypeOnly: boolean, name: ts.Identifier, moduleReference: ts.ModuleReference): ts.ImportEqualsDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createImportDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, importClause: ts.ImportClause | undefined, moduleSpecifier: ts.Expression, assertClause?: ts.AssertClause): ts.ImportDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateImportDeclaration(node: ts.ImportDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, importClause: ts.ImportClause | undefined, moduleSpecifier: ts.Expression, assertClause: ts.AssertClause | undefined): ts.ImportDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createExportAssignment(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isExportEquals: boolean | undefined, expression: ts.Expression): ts.ExportAssignment;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateExportAssignment(node: ts.ExportAssignment, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, expression: ts.Expression): ts.ExportAssignment;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    createExportDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isTypeOnly: boolean, exportClause: ts.NamedExportBindings | undefined, moduleSpecifier?: ts.Expression, assertClause?: ts.AssertClause): ts.ExportDeclaration;
-    /**
-     * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
-     */
-    updateExportDeclaration(node: ts.ExportDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isTypeOnly: boolean, exportClause: ts.NamedExportBindings | undefined, moduleSpecifier: ts.Expression | undefined, assertClause: ts.AssertClause | undefined): ts.ExportDeclaration;
+declare module "../../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface NodeFactory {
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createParameterDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, dotDotDotToken: ts.DotDotDotToken | undefined, name: string | ts.BindingName, questionToken?: ts.QuestionToken, type?: ts.TypeNode, initializer?: ts.Expression): ts.ParameterDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateParameterDeclaration(node: ts.ParameterDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, dotDotDotToken: ts.DotDotDotToken | undefined, name: string | ts.BindingName, questionToken: ts.QuestionToken | undefined, type: ts.TypeNode | undefined, initializer: ts.Expression | undefined): ts.ParameterDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createPropertyDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.PropertyName, questionOrExclamationToken: ts.QuestionToken | ts.ExclamationToken | undefined, type: ts.TypeNode | undefined, initializer: ts.Expression | undefined): ts.PropertyDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updatePropertyDeclaration(node: ts.PropertyDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.PropertyName, questionOrExclamationToken: ts.QuestionToken | ts.ExclamationToken | undefined, type: ts.TypeNode | undefined, initializer: ts.Expression | undefined): ts.PropertyDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createMethodDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, asteriskToken: ts.AsteriskToken | undefined, name: string | ts.PropertyName, questionToken: ts.QuestionToken | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.MethodDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateMethodDeclaration(node: ts.MethodDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, asteriskToken: ts.AsteriskToken | undefined, name: ts.PropertyName, questionToken: ts.QuestionToken | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.MethodDeclaration;
+        /**
+         * @deprecated This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createConstructorDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, parameters: readonly ts.ParameterDeclaration[], body: ts.Block | undefined): ts.ConstructorDeclaration;
+        /**
+         * @deprecated This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateConstructorDeclaration(node: ts.ConstructorDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, parameters: readonly ts.ParameterDeclaration[], body: ts.Block | undefined): ts.ConstructorDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createGetAccessorDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.PropertyName, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.GetAccessorDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateGetAccessorDeclaration(node: ts.GetAccessorDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.PropertyName, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.GetAccessorDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createSetAccessorDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.PropertyName, parameters: readonly ts.ParameterDeclaration[], body: ts.Block | undefined): ts.SetAccessorDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateSetAccessorDeclaration(node: ts.SetAccessorDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.PropertyName, parameters: readonly ts.ParameterDeclaration[], body: ts.Block | undefined): ts.SetAccessorDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createIndexSignature(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode): ts.IndexSignatureDeclaration;
+        /**
+         * @deprecated Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.
+         */
+        updateIndexSignature(node: ts.IndexSignatureDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode): ts.IndexSignatureDeclaration;
+        /**
+         * @deprecated Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.
+         */
+        createClassStaticBlockDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, body: ts.Block): ts.ClassStaticBlockDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateClassStaticBlockDeclaration(node: ts.ClassStaticBlockDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, body: ts.Block): ts.ClassStaticBlockDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createClassExpression(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.ClassElement[]): ts.ClassExpression;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateClassExpression(node: ts.ClassExpression, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.ClassElement[]): ts.ClassExpression;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createFunctionDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, asteriskToken: ts.AsteriskToken | undefined, name: string | ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.FunctionDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateFunctionDeclaration(node: ts.FunctionDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, asteriskToken: ts.AsteriskToken | undefined, name: ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode | undefined, body: ts.Block | undefined): ts.FunctionDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createClassDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.ClassElement[]): ts.ClassDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateClassDeclaration(node: ts.ClassDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.ClassElement[]): ts.ClassDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createInterfaceDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.TypeElement[]): ts.InterfaceDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateInterfaceDeclaration(node: ts.InterfaceDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, heritageClauses: readonly ts.HeritageClause[] | undefined, members: readonly ts.TypeElement[]): ts.InterfaceDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createTypeAliasDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, type: ts.TypeNode): ts.TypeAliasDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateTypeAliasDeclaration(node: ts.TypeAliasDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, type: ts.TypeNode): ts.TypeAliasDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createEnumDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: string | ts.Identifier, members: readonly ts.EnumMember[]): ts.EnumDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateEnumDeclaration(node: ts.EnumDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.Identifier, members: readonly ts.EnumMember[]): ts.EnumDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createModuleDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.ModuleName, body: ts.ModuleBody | undefined, flags?: ts.NodeFlags): ts.ModuleDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateModuleDeclaration(node: ts.ModuleDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, name: ts.ModuleName, body: ts.ModuleBody | undefined): ts.ModuleDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createImportEqualsDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isTypeOnly: boolean, name: string | ts.Identifier, moduleReference: ts.ModuleReference): ts.ImportEqualsDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateImportEqualsDeclaration(node: ts.ImportEqualsDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isTypeOnly: boolean, name: ts.Identifier, moduleReference: ts.ModuleReference): ts.ImportEqualsDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createImportDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, importClause: ts.ImportClause | undefined, moduleSpecifier: ts.Expression, assertClause?: ts.AssertClause): ts.ImportDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateImportDeclaration(node: ts.ImportDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, importClause: ts.ImportClause | undefined, moduleSpecifier: ts.Expression, assertClause: ts.AssertClause | undefined): ts.ImportDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createExportAssignment(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isExportEquals: boolean | undefined, expression: ts.Expression): ts.ExportAssignment;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateExportAssignment(node: ts.ExportAssignment, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, expression: ts.Expression): ts.ExportAssignment;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createExportDeclaration(decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isTypeOnly: boolean, exportClause: ts.NamedExportBindings | undefined, moduleSpecifier?: ts.Expression, assertClause?: ts.AssertClause): ts.ExportDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateExportDeclaration(node: ts.ExportDeclaration, decorators: readonly ts.Decorator[] | undefined, modifiers: readonly ts.Modifier[] | undefined, isTypeOnly: boolean, exportClause: ts.NamedExportBindings | undefined, moduleSpecifier: ts.Expression | undefined, assertClause: ts.AssertClause | undefined): ts.ExportDeclaration;
+    }
 }
 
 const MUST_MERGE: ts.DeprecationOptions = { since: "4.8", warnAfter: "4.9.0-0", message: "Decorators have been combined with modifiers. Callers should switch to an overload that does not accept a 'decorators' parameter." };
@@ -1401,4 +1420,3 @@ ts.addNodeFactoryPatcher(patchNodeFactory);
 
 // Patch `ts.factory` because its public
 patchNodeFactory(ts.factory);
-}

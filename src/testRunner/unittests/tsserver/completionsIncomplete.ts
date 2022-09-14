@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 function createExportingModuleFile(path: string, exportPrefix: string, exportCount: number): ts.projectSystem.File {
     return {
         path,
@@ -258,5 +259,4 @@ function setup(files: ts.projectSystem.File[]) {
         assert(details[0].codeActions[0].changes[0].textChanges[0].newText.includes(`"${(entry.data as any).moduleSpecifier}"`));
         return details;
     }
-}
 }

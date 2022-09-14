@@ -1,4 +1,7 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as Harness from "../../_namespaces/Harness";
+
 export const projects = `/user/username/projects`;
 export const projectRoot = `${projects}/myproject`;
 export import WatchedSystem = ts.TestFSWithWatch.TestServerHost;
@@ -434,5 +437,4 @@ export function solutionBuildWithBaseline(sys: WatchedSystem, solutionRoots: rea
 
 export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: ts.TestFSWithWatch.FileOrFolderOrSymLinkMap | readonly ts.TestFSWithWatch.FileOrFolderOrSymLink[], params?: ts.TestFSWithWatch.TestServerHostCreationParameters) {
     return solutionBuildWithBaseline(createWatchedSystem(files, params), solutionRoots);
-}
 }

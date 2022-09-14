@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: config:: initTSConfig", () => {
     function initTSConfigCorrectly(name: string, commandLinesArgs: string[]) {
         describe(name, () => {
@@ -34,4 +36,3 @@ describe("unittests:: config:: initTSConfig", () => {
 
     initTSConfigCorrectly("Initialized TSConfig with --watch", ["--init", "--watch"]);
 });
-}

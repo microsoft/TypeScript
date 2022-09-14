@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 /* @internal */
 export const compileOnSaveCommandLineOption: ts.CommandLineOption = {
     name: "compileOnSave",
@@ -3760,5 +3761,4 @@ function getDefaultValueForOption(option: ts.CommandLineOption) {
             if (!iterResult.done) return iterResult.value;
             return ts.Debug.fail("Expected 'option.type' to have entries.");
     }
-}
 }

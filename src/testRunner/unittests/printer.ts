@@ -1,4 +1,8 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness";
+import * as fakes from "../_namespaces/fakes";
+import * as vfs from "../_namespaces/vfs";
+
 describe("unittests:: PrinterAPI", () => {
     function makePrintsCorrectly(prefix: string) {
         return function printsCorrectly(name: string, options: ts.PrinterOptions, printCallback: (printer: ts.Printer) => string) {
@@ -311,4 +315,3 @@ describe("unittests:: PrinterAPI", () => {
         ));
     });
 });
-}

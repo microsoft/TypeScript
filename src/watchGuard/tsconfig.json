@@ -3,7 +3,7 @@
     "compilerOptions": {
         "removeComments": true,
         "incremental":  false,
-        "outFile": "../../built/local/watchGuard.js",
+        "outDir": "../../built/local",
         "types": [
             "node"
         ],

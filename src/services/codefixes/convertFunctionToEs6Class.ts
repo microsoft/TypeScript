@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "convertFunctionToEs6Class";
 const errorCodes = [ts.Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration.code];
 ts.codefix.registerCodeFix({
@@ -274,5 +274,4 @@ function tryGetPropertyName(node: ts.AccessExpression, compilerOptions: ts.Compi
     }
 
     return undefined;
-}
 }

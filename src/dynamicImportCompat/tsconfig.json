@@ -12,5 +12,7 @@
     },
     "files": [
         "dynamicImportCompat.ts",
+        "_namespaces/ts.server.ts",
+        "_namespaces/ts.ts"
     ]
 }

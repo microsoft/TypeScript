@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../../_namespaces/ts";
+import * as Harness from "../../../_namespaces/Harness";
+
 interface Range {
     pos: number;
     end: number;
@@ -175,5 +177,4 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
         const infos = ts.refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
         assert.isUndefined(ts.find(infos, info => info.description === description.message));
     });
-}
 }

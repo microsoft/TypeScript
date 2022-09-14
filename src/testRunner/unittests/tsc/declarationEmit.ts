@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsc:: declarationEmit::", () => {
     interface VerifyDeclarationEmitInput {
         subScenario: string;
@@ -247,4 +249,3 @@ ${pluginOneAction()}`
         changeCaseFileTestPath: str => ts.stringContains(str, "/pkg1"),
     });
 });
-}

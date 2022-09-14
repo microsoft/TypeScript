@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "extendsInterfaceBecomesImplements";
 const errorCodes = [ts.Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];
 ts.codefix.registerCodeFix({
@@ -48,5 +48,4 @@ function doChanges(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceF
 
         changes.deleteRange(sourceFile, { pos: implementsToken.getStart(), end });
     }
-}
 }

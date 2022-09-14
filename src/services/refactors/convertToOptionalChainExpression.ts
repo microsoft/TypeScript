@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.refactor.convertToOptionalChainExpression {
+import * as ts from "../_namespaces/ts";
+
 const refactorName = "Convert to optional chain expression";
 const convertToOptionalChainExpressionMessage = ts.getLocaleSpecificMessage(ts.Diagnostics.Convert_to_optional_chain_expression);
 
@@ -296,5 +296,4 @@ function doChange(sourceFile: ts.SourceFile, checker: ts.TypeChecker, changes: t
             );
         }
     }
-}
 }

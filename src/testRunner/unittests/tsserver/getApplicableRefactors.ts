@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: getApplicableRefactors", () => {
     it("works when taking position", () => {
         const aTs: ts.projectSystem.File = { path: "/a.ts", content: "" };
@@ -9,4 +10,3 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
         assert.deepEqual<readonly ts.projectSystem.protocol.ApplicableRefactorInfo[] | undefined>(response, []);
     });
 });
-}

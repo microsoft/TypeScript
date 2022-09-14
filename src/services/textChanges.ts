@@ -1,5 +1,4 @@
-/* @internal */
-namespace ts.textChanges {
+import * as ts from "./_namespaces/ts";
 
 /**
  * Currently for simplicity we store recovered positions on the node itself.
@@ -27,13 +26,16 @@ function setEnd(n: ts.TextRange, end: number): void {
     (n as any).__end = end;
 }
 
+/** @internal */
 export interface ConfigurableStart {
     leadingTriviaOption?: LeadingTriviaOption;
 }
+/** @internal */
 export interface ConfigurableEnd {
     trailingTriviaOption?: TrailingTriviaOption;
 }
 
+/** @internal */
 export enum LeadingTriviaOption {
     /** Exclude all leading trivia (use getStart()) */
     Exclude,
@@ -53,6 +55,7 @@ export enum LeadingTriviaOption {
     StartLine,
 }
 
+/** @internal */
 export enum TrailingTriviaOption {
     /** Exclude all trailing trivia (use getEnd()) */
     Exclude,
@@ -79,6 +82,7 @@ function hasCommentsBeforeLineBreak(text: string, start: number) {
     return false;
 }
 
+/** @internal */
 /**
  * Usually node.pos points to a position immediately after the previous token.
  * If this position is used as a beginning of the span to remove - it might lead to removing the trailing trivia of the previous node, i.e:
@@ -99,6 +103,7 @@ const useNonAdjustedPositions: ConfigurableStartEnd = {
     trailingTriviaOption: TrailingTriviaOption.Exclude,
 };
 
+/** @internal */
 export interface InsertNodeOptions {
     /**
      * Text to be inserted before the new node
@@ -118,6 +123,7 @@ export interface InsertNodeOptions {
     delta?: number;
 }
 
+/** @internal */
 export interface ReplaceWithMultipleNodesOptions extends InsertNodeOptions {
     readonly joiner?: string;
 }
@@ -136,6 +142,7 @@ interface BaseChange {
     readonly range: ts.TextRange;
 }
 
+/** @internal */
 export interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {}
 interface ReplaceWithSingleNode extends BaseChange {
     readonly kind: ChangeKind.ReplaceWithSingleNode;
@@ -282,20 +289,25 @@ function isSeparator(node: ts.Node, candidate: ts.Node | undefined): candidate i
     return !!candidate && !!node.parent && (candidate.kind === ts.SyntaxKind.CommaToken || (candidate.kind === ts.SyntaxKind.SemicolonToken && node.parent.kind === ts.SyntaxKind.ObjectLiteralExpression));
 }
 
+/** @internal */
 export interface TextChangesContext {
     host: ts.LanguageServiceHost;
     formatContext: ts.formatting.FormatContext;
     preferences: ts.UserPreferences;
 }
 
+/** @internal */
 export type TypeAnnotatable = ts.SignatureDeclaration | ts.VariableDeclaration | ts.ParameterDeclaration | ts.PropertyDeclaration | ts.PropertySignature;
 
+/** @internal */
 export type ThisTypeAnnotatable = ts.FunctionDeclaration | ts.FunctionExpression;
 
+/** @internal */
 export function isThisTypeAnnotatable(containingFunction: ts.SignatureDeclaration): containingFunction is ThisTypeAnnotatable {
     return ts.isFunctionExpression(containingFunction) || ts.isFunctionDeclaration(containingFunction);
 }
 
+/** @internal */
 export class ChangeTracker {
     private readonly changes: Change[] = [];
     private readonly newFiles: { readonly oldFile: ts.SourceFile | undefined, readonly fileName: string, readonly statements: readonly (ts.Statement | ts.SyntaxKind.NewLineTrivia)[] }[] = [];
@@ -1002,8 +1014,10 @@ function getMembersOrProperties(node: ts.ClassLikeDeclaration | ts.InterfaceDecl
     return ts.isObjectLiteralExpression(node) ? node.properties : node.members;
 }
 
+/** @internal */
 export type ValidateNonFormattedText = (node: ts.Node, text: string) => void;
 
+/** @internal */
 export function getNewFileText(statements: readonly ts.Statement[], scriptKind: ts.ScriptKind, newLineCharacter: string, formatContext: ts.formatting.FormatContext): string {
     return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext);
 }
@@ -1107,6 +1121,7 @@ namespace changesToText {
     }
 }
 
+/** @internal */
 export function applyChanges(text: string, changes: readonly ts.TextChange[]): string {
     for (let i = changes.length - 1; i >= 0; i--) {
         const { span, newText } = changes[i];
@@ -1128,6 +1143,7 @@ const textChangesTransformationContext: ts.TransformationContext = {
         ts.nullTransformationContext.factory.baseFactory),
 };
 
+/** @internal */
 export function assignPositionsToNode(node: ts.Node): ts.Node {
     const visited = ts.visitEachChild(node, assignPositionsToNode, textChangesTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
     // create proxy node for non synthesized nodes
@@ -1149,6 +1165,7 @@ function assignPositionsToNodeArray(nodes: ts.NodeArray<any>, visitor: ts.Visito
 
 interface TextChangesWriter extends ts.EmitTextWriter, ts.PrintHandlers {}
 
+/** @internal */
 export function createWriter(newLine: string): TextChangesWriter {
     let lastNonTriviaPosition = 0;
 
@@ -1396,6 +1413,7 @@ function getInsertionPositionAtSourceFileTop(sourceFile: ts.SourceFile): number 
     }
 }
 
+/** @internal */
 export function isValidLocationToAddComment(sourceFile: ts.SourceFile, position: number) {
     return !ts.isInComment(sourceFile, position) && !ts.isInString(sourceFile, position) && !ts.isInTemplateString(sourceFile, position) && !ts.isInJSXText(sourceFile, position);
 }
@@ -1568,6 +1586,7 @@ namespace deleteDeclaration {
     }
 }
 
+/** @internal */
 /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
 // Exported for tests only! (TODO: improve tests to not need this)
 export function deleteNode(changes: ChangeTracker, sourceFile: ts.SourceFile, node: ts.Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
@@ -1593,5 +1612,4 @@ function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: ts.Set<ts
         pos: startPositionToDeleteNodeInList(sourceFile, node),
         end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
     });
-}
 }

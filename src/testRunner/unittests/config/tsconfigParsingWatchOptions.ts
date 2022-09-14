@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+import * as fakes from "../../_namespaces/fakes";
+
 describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileTextToJson", () => {
     function createParseConfigHost(additionalFiles?: vfs.FileSet) {
         return new fakes.ParseConfigHost(
@@ -228,4 +231,3 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
         ]);
     });
 });
-}

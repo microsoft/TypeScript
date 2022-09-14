@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../../_namespaces/ts";
+
 describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
     const aTs: ts.projectSystem.File = {
         path: `${ts.tscWatch.projects}/a/a.ts`,
@@ -229,4 +230,3 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
         });
     });
 });
-}

@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 // https://github.com/microsoft/TypeScript/issues/33849
 describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
     ts.verifyTsc({
@@ -8,4 +9,3 @@ describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
         commandLineArgs: ["-b", "bogus.json"]
     });
 });
-}

@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export interface ReadBuildProgramHost {
     useCaseSensitiveFileNames(): boolean;
     getCurrentDirectory(): string;
@@ -1039,5 +1040,4 @@ export function createWatchProgram<T extends ts.BuilderProgram>(host: WatchCompi
             ts.WatchType.ExtendedConfigOfReferencedProject
         );
     }
-}
 }

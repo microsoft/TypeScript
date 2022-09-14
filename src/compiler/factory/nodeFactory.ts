@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 let nextAutoGenerateId = 0;
 
 /* @internal */
@@ -6904,5 +6905,4 @@ function mergeTokenSourceMapRanges(sourceRanges: (ts.TextRange | undefined)[], d
         destRanges[key] = sourceRanges[key];
     }
     return destRanges;
-}
 }

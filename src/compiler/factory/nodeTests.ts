@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 // Literals
 
 export function isNumericLiteral(node: ts.Node): node is ts.NumericLiteral {
@@ -956,5 +957,4 @@ export function isJSDocImplementsTag(node: ts.Node): node is ts.JSDocImplementsT
 /* @internal */
 export function isSyntaxList(n: ts.Node): n is ts.SyntaxList {
     return n.kind === ts.SyntaxKind.SyntaxList;
-}
 }

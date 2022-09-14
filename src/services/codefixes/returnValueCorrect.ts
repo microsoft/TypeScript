@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "returnValueCorrect";
 const fixIdAddReturnStatement = "fixAddReturnStatement";
 const fixRemoveBracesFromArrowFunctionBody = "fixRemoveBracesFromArrowFunctionBody";
@@ -239,5 +239,4 @@ function getActionForFixRemoveBracesFromArrowFunctionBody(context: ts.CodeFixCon
 function getActionForfixWrapTheBlockWithParen(context: ts.CodeFixContext, declaration: ts.ArrowFunction, expression: ts.Expression) {
     const changes = ts.textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
     return ts.codefix.createCodeFixAction(fixId, changes, ts.Diagnostics.Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal, fixIdWrapTheBlockWithParen, ts.Diagnostics.Wrap_all_object_literal_with_parentheses);
-}
 }

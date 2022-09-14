@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.formatting {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function getFormatContext(options: ts.FormatCodeSettings, host: ts.FormattingHost): ts.formatting.FormatContext {
     return { options, getRules: getRulesMap(), host };
 }
@@ -34,6 +35,7 @@ function getRuleActionExclusion(ruleAction: ts.formatting.RuleAction): ts.format
     return mask;
 }
 
+/** @internal */
 export type RulesMap = (context: ts.formatting.FormattingContext) => readonly ts.formatting.Rule[] | undefined;
 function createRulesMap(rules: readonly ts.formatting.RuleSpec[]): RulesMap {
     const map = buildMap(rules);
@@ -136,5 +138,4 @@ function increaseInsertionIndex(indexBitmap: number, maskPosition: RulesPosition
     const value = ((indexBitmap >> maskPosition) & mask) + 1;
     ts.Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
     return (indexBitmap & ~(mask << maskPosition)) | (value << maskPosition);
-}
 }

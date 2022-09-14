@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 const _chai: typeof import("chai") = require("chai");
 const expect: typeof _chai.expect = _chai.expect;
 describe("unittests:: services:: languageService", () => {
@@ -271,4 +272,3 @@ export function Component(x: Config): any;`
         });
     });
 });
-}

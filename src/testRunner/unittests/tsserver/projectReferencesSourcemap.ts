@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: with project references and tsbuild source map", () => {
     const dependecyLocation = `${ts.tscWatch.projectRoot}/dependency`;
     const dependecyDeclsLocation = `${ts.tscWatch.projectRoot}/decls`;
@@ -3038,4 +3039,3 @@ ${dependencyTs.content}`);
         });
     });
 });
-}

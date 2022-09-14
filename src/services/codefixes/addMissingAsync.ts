@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 type ContextualTrackChangesFunction = (cb: (changeTracker: ts.textChanges.ChangeTracker) => void) => ts.FileTextChanges[];
 const fixId = "addMissingAsync";
 const errorCodes = [
@@ -83,5 +83,4 @@ function getIsMatchingAsyncError(span: ts.TextSpan, errorCode: number) {
         code === errorCode &&
         !!relatedInformation &&
         ts.some(relatedInformation, related => related.code === ts.Diagnostics.Did_you_mean_to_mark_this_function_as_async.code);
-}
 }

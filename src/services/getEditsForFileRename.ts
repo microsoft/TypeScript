@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export function getEditsForFileRename(
     program: ts.Program,
     oldFileOrDirPath: string,
@@ -22,6 +23,7 @@ export function getEditsForFileRename(
 /** If 'path' refers to an old directory, returns path in the new directory. */
 type PathUpdater = (path: string) => string | undefined;
 // exported for tests
+/** @internal */
 export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: ts.GetCanonicalFileName, sourceMapper: ts.SourceMapper | undefined): PathUpdater {
     const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
     return path => {
@@ -257,5 +259,4 @@ function forEachProperty(objectLiteral: ts.Expression, cb: (property: ts.Propert
             cb(property, property.name.text);
         }
     }
-}
 }

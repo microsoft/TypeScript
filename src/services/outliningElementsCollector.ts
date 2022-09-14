@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts.OutliningElementsCollector {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export function collectElements(sourceFile: ts.SourceFile, cancellationToken: ts.CancellationToken): ts.OutliningSpan[] {
     const res: ts.OutliningSpan[] = [];
     addNodeOutliningSpans(sourceFile, cancellationToken, res);
@@ -340,5 +341,4 @@ function tryGetFunctionOpenToken(node: ts.SignatureDeclaration, body: ts.Block, 
         }
     }
     return ts.findChildOfKind(body, ts.SyntaxKind.OpenBraceToken, sourceFile);
-}
 }

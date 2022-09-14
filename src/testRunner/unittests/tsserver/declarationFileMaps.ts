@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: ts.projectSystem.DocumentSpanFromSubstring): ts.DocumentSpan {
     const contextSpan = contextText !== undefined ? documentSpanFromSubstring({ file, text: contextText, options: contextOptions }) : undefined;
     return {
@@ -768,4 +769,3 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         verifySingleInferredProject(session);
     });
 });
-}

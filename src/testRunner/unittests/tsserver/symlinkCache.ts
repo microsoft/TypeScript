@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 const appTsconfigJson: ts.projectSystem.File = {
     path: "/packages/app/tsconfig.json",
     content: `
@@ -88,5 +89,4 @@ function setup() {
         projectService,
         session,
     };
-}
 }

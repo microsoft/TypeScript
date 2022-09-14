@@ -1,5 +1,5 @@
-/*@internal*/
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 declare const addEventListener: any;
 declare const postMessage: any;
 declare const close: any;
@@ -32,6 +32,7 @@ function parseServerMode(): ts.LanguageServiceMode | string | undefined {
     }
 }
 
+/** @internal */
 export function initializeWebSystem(args: string[]): ts.server.StartInput {
     createWebSystem(args);
     const modeOrUnknown = parseServerMode();
@@ -139,5 +140,4 @@ function startWebSession(options: ts.server.StartSessionOptions, logger: ts.serv
 
     // Start listening
     session.listen();
-}
 }

@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 describe("unittests:: FactoryAPI", () => {
     function assertSyntaxKind(node: ts.Node, expected: ts.SyntaxKind) {
         assert.strictEqual(node.kind, expected, `Actual: ${ts.Debug.formatSyntaxKind(node.kind)} Expected: ${ts.Debug.formatSyntaxKind(expected)}`);
@@ -117,4 +118,3 @@ describe("unittests:: FactoryAPI", () => {
     });
 
 });
-}

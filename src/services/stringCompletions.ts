@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.Completions.StringCompletions {
+import * as ts from "./_namespaces/ts";
+
 interface NameAndKindSet {
     add(value: NameAndKind): void;
     has(name: string): boolean;
@@ -25,6 +25,7 @@ function createNameAndKindSet(): NameAndKindSet {
     };
 }
 
+/** @internal */
 export function getStringLiteralCompletions(
     sourceFile: ts.SourceFile,
     position: number,
@@ -98,6 +99,7 @@ function convertStringLiteralCompletions(
     }
 }
 
+/** @internal */
 export function getStringLiteralCompletionDetails(name: string, sourceFile: ts.SourceFile, position: number, contextToken: ts.Node | undefined, checker: ts.TypeChecker, options: ts.CompilerOptions, host: ts.LanguageServiceHost, cancellationToken: ts.CancellationToken, preferences: ts.UserPreferences) {
     if (!contextToken || !ts.isStringLiteralLike(contextToken)) return undefined;
     const completions = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host, preferences);
@@ -991,5 +993,4 @@ function containsSlash(fragment: string) {
 function isRequireCallArgument(node: ts.Node) {
     return ts.isCallExpression(node.parent) && ts.firstOrUndefined(node.parent.arguments) === node
         && ts.isIdentifier(node.parent.expression) && node.parent.expression.escapedText === "require";
-}
 }

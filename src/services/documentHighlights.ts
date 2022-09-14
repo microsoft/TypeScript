@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 export interface DocumentHighlights {
     fileName: string;
     highlightSpans: ts.HighlightSpan[];
@@ -517,5 +518,4 @@ export namespace DocumentHighlights {
     function isLabeledBy(node: ts.Node, labelName: ts.__String): boolean {
         return !!ts.findAncestor(node.parent, owner => !ts.isLabeledStatement(owner) ? "quit" : owner.label.escapedText === labelName);
     }
-}
 }

@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     function assertParseResult(commandLine: string[], expectedParsedCommandLine: ts.ParsedCommandLine, workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
@@ -1056,4 +1057,3 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
     });
 });
-}

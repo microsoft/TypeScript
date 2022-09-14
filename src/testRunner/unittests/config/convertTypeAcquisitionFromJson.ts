@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as vfs from "../../_namespaces/vfs";
+
 interface ExpectedResult { typeAcquisition: ts.TypeAcquisition; errors: ts.Diagnostic[]; }
 describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     function assertTypeAcquisition(json: any, configFileName: string, expectedResult: ExpectedResult) {
@@ -236,4 +239,3 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
             });
     });
 });
-}

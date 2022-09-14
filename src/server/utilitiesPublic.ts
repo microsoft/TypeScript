@@ -1,4 +1,5 @@
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
+
 export enum LogLevel {
     terse,
     normal,
@@ -129,5 +130,4 @@ export function makeAuxiliaryProjectName(counter: number): string {
 
 export function createSortedArray<T>(): ts.SortedArray<T> {
     return [] as any as ts.SortedArray<T>; // TODO: GH#19873
-}
 }

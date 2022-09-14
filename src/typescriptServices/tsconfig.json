@@ -1,15 +1,16 @@
 {
     "extends": "../tsconfig-library-base",
     "compilerOptions": {
-        "outFile": "../../built/local/typescriptServices.out.js"
+        "outDir": "../../built/local"
     },
     "files": [
-        "typescriptServices.ts"
+        "typescriptServices.ts",
+        "_namespaces/ts.ts"
     ],
     "references": [
-        { "path": "../compiler", "prepend": true },
-        { "path": "../jsTyping", "prepend": true },
-        { "path": "../services", "prepend": true },
-        { "path": "../deprecatedCompat", "prepend": true }
+        { "path": "../compiler" },
+        { "path": "../jsTyping" },
+        { "path": "../services" },
+        { "path": "../deprecatedCompat" }
     ]
 }

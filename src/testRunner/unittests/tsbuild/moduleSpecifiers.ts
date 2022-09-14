@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 // https://github.com/microsoft/TypeScript/issues/31696
 describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
     ts.verifyTsc({
@@ -185,4 +187,3 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
         commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"]
     });
 });
-}
