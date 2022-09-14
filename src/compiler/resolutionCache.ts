@@ -14,7 +14,7 @@ namespace ts {
         removeResolutionsOfFile(filePath: Path): void;
         removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
         setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ESMap<Path, readonly string[]>): void;
-        createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
+        createHasInvalidatedResolution(userProvidedHasInvalidatedResolution?: HasInvalidatedResolution): HasInvalidatedResolution;
         hasChangedAutomaticTypeDirectiveNames(): boolean;
         isFileWithInvalidatedNonRelativeUnresolvedImports(path: Path): boolean;
 
@@ -300,17 +300,13 @@ namespace ts {
             return !!value && !!value.length;
         }
 
-        function createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution {
+        function createHasInvalidatedResolution(userProvidedHasInvalidatedResolution?: HasInvalidatedResolution): HasInvalidatedResolution {
             // Ensure pending resolutions are applied
             invalidateResolutionsOfFailedLookupLocations();
-            if (forceAllFilesAsInvalidated) {
-                // Any file asked would have invalidated resolution
-                filesWithInvalidatedResolutions = undefined;
-                return returnTrue;
-            }
             const collected = filesWithInvalidatedResolutions;
             filesWithInvalidatedResolutions = undefined;
-            return path => (!!collected && collected.has(path)) ||
+            return path => userProvidedHasInvalidatedResolution?.(path) ||
+                !!collected?.has(path) ||
                 isFileWithInvalidatedNonRelativeUnresolvedImports(path);
         }
 

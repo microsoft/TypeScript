@@ -106,20 +106,13 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file type 'TypeScript'.
-File '/user/username/projects/myproject/other.ts' does not exist.
-File '/user/username/projects/myproject/other.tsx' does not exist.
-File '/user/username/projects/myproject/other.d.ts' exist - use it as a name resolution result.
-======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.d.ts'. ========
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/main.ts"]
 Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: SafeModules
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/other.d.ts
@@ -165,20 +158,13 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file type 'TypeScript'.
-File '/user/username/projects/myproject/other.ts' does not exist.
-File '/user/username/projects/myproject/other.tsx' does not exist.
-File '/user/username/projects/myproject/other.d.ts' exist - use it as a name resolution result.
-======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.d.ts'. ========
 [[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/main.ts"]
 Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: SafeModules
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/other.d.ts
