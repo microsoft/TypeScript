@@ -1,4 +1,4 @@
-import * as ts from "../../../_namespaces/ts";
+import * as ts from "../../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
     it("language service disabled events are triggered", () => {

@@ -1,14 +1,14 @@
 import {
     addNodeFactoryPatcher, buildOverload, EntityName, factory, ImportTypeAssertionContainer, ImportTypeNode, isArray,
     isEntityName, isImportTypeAssertionContainer, NodeFactory, TypeNode,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // DEPRECATION: Overloads to createImportTypeNode/updateImportTypeNode that do not accept `assertions`
 // DEPRECATION PLAN:
 //     - soft: 4.6
 //     - warn: 4.7
 //     - error: 5.0
-declare module "../../compiler/types" {
+declare module "../../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface NodeFactory {
         // NOTE: The following overload is not deprecated, but exists to ensure we don't mark `createImportTypeNode(argument)` as deprecated due to optional parameters.

@@ -1,7 +1,7 @@
 import {
     Diagnostics, getTokenAtPosition, isIdentifier, Node, Set, SourceFile, SyntaxKind, textChanges, tryAddToSet,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "addMissingDeclareProperty";
 const errorCodes = [

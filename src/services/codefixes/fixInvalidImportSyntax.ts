@@ -3,8 +3,8 @@ import {
     getNamespaceDeclarationNode, getQuotePreference, getSourceFileOfNode, getTokenAtPosition, ImportDeclaration,
     isExpression, isImportCall, isNamedDeclaration, makeImport, ModuleKind, NamespaceImport, NewExpression, Node,
     SourceFile, SyntaxKind, textChanges, TransientSymbol,
-} from "../_namespaces/ts";
-import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixName = "invalidImportSyntax";
 

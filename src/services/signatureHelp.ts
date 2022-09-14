@@ -12,7 +12,7 @@ import {
     SignatureHelpItem, SignatureHelpItems, SignatureHelpParameter, SignatureHelpTriggerReason, skipTrivia, SourceFile,
     spacePart, Symbol, SymbolDisplayPart, symbolToDisplayParts, SyntaxKind, TaggedTemplateExpression,
     TemplateExpression, TextSpan, TransientSymbol, Type, TypeChecker, TypeParameter,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const enum InvocationKind { Call, TypeArgs, Contextual }
 interface CallInvocation { readonly kind: InvocationKind.Call; readonly node: CallLikeExpression; }

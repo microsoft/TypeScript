@@ -4,7 +4,7 @@ import {
     isPropertyAccessExpression, isSimpleCopiableExpression, LogicalOrCoalescingAssignmentOperator, Node,
     skipParentheses, SourceFile, SyntaxKind, Token, TransformationContext, TransformFlags, visitEachChild, visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformES2021(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

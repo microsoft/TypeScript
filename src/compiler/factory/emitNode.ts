@@ -2,7 +2,7 @@ import {
     AccessExpression, append, appendIfUnique, Debug, EmitFlags, EmitHelper, EmitNode, getParseTreeNode,
     getSourceFileOfNode, isParseTreeNode, Node, orderedRemoveItem, SnippetElement, some, SourceFile, SourceMapRange,
     SyntaxKind, SynthesizedComment, TextRange, TypeNode,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Associates a node with the current transformation, initializing

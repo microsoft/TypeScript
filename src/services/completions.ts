@@ -58,8 +58,8 @@ import {
     tokenToString, tryCast, tryGetImportFromModuleSpecifier, Type, TypeChecker, TypeElement, TypeFlags,
     typeHasCallOrConstructSignatures, TypeLiteralNode, TypeOnlyAliasDeclaration, unescapeLeadingUnderscores,
     UnionReduction, UnionType, UserPreferences, VariableDeclaration, walkUpParenthesizedExpressions,
-} from "./_namespaces/ts";
-import { StringCompletions } from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.js";
+import { StringCompletions } from "./_namespaces/ts.Completions.js";
 
 // Exported only for tests
 /** @internal */

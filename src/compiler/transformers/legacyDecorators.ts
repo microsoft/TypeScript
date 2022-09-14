@@ -11,7 +11,7 @@ import {
     ScriptTarget, SetAccessorDeclaration, setCommentRange, setEmitFlags, setOriginalNode, setSourceMapRange,
     setTextRange, singleOrMany, some, SourceFile, Statement, SyntaxKind, TransformationContext, TransformFlags,
     visitEachChild, visitNode, visitNodes, VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformLegacyDecorators(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

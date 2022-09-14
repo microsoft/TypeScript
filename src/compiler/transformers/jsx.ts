@@ -11,7 +11,7 @@ import {
     setParentRecursive, setTextRange, singleOrUndefined, SourceFile, spanMap, SpreadAssignment, startOnNewLine,
     Statement, StringLiteral, SyntaxKind, TextRange, TransformationContext, TransformFlags, utf16EncodeAsString,
     VariableDeclaration, visitEachChild, visitNode, VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformJsx(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

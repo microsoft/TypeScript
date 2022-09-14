@@ -12,7 +12,7 @@ import {
     PropertyDeclaration, Signature, skipParentheses, some, Symbol, SymbolFlags, SyntaxKind, textSpanIntersectsWith,
     Type, TypeFormatFlags, unescapeLeadingUnderscores, UserPreferences, usingSingleLineStringWriter,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const maxHintsLength = 30;
 

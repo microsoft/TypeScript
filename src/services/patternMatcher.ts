@@ -1,7 +1,7 @@
 import {
     CharacterCodes, compareBooleans, compareValues, Comparison, createTextSpan, ESMap, isUnicodeIdentifierStart, last,
     Map, min, ScriptTarget, startsWith, TextSpan,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
 /** @internal */

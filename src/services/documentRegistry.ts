@@ -4,7 +4,7 @@ import {
     getImpliedNodeFormatForFile, getOrUpdate, getSetExternalModuleIndicator, hasProperty, identity, isArray,
     IScriptSnapshot, isDeclarationFileName, map, Map, MinimalResolutionCacheHost, ModuleKind, Path, ScriptKind,
     ScriptTarget, SourceFile, sourceFileAffectingCompilerOptions, toPath, tracing, updateLanguageServiceSourceFile,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * The document registry represents a store of SourceFile objects that can be shared between

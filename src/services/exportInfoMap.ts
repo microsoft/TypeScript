@@ -10,7 +10,7 @@ import {
     nodeModulesPathPart, PackageJsonImportFilter, Path, Program, skipAlias, skipOuterExpressions, SourceFile,
     startsWith, Statement, stringContains, stripQuotes, Symbol, SymbolFlags, timestamp, tryCast, TypeChecker,
     unescapeLeadingUnderscores, unmangleScopedPackageName, UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const enum ImportKind {

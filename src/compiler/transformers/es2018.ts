@@ -18,7 +18,7 @@ import {
     TransformationContext, TransformFlags, unwrapInnermostStatementOfLabel, VariableDeclaration, VariableStatement,
     visitEachChild, visitIterationBody, visitLexicalEnvironment, visitNode, visitNodes, visitParameterList, VisitResult,
     VoidExpression, YieldExpression, Bundle,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 const enum ESNextSubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */

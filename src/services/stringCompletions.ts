@@ -23,11 +23,11 @@ import {
     tryFileExists, tryGetDirectories, tryGetExtensionFromPath, tryParsePattern, tryReadDirectory,
     tryRemoveDirectoryPrefix, tryRemovePrefix, Type, TypeChecker, TypeFlags, UnionTypeNode, unmangleScopedPackageName,
     UserPreferences, walkUpParenthesizedExpressions, walkUpParenthesizedTypes,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     CompletionKind, createCompletionDetails, createCompletionDetailsForSymbol, getCompletionEntriesFromSymbols,
     getPropertiesForObjectExpression, Log, SortText,
-} from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.Completions.js";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;

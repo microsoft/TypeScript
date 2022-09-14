@@ -1,8 +1,11 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 import {
     emptyArray, findArgument, hasArgument, initializeNodeSystem, initializeWebSystem, Logger, LogLevel, Msg,
     ServerCancellationToken, StartSessionOptions,
-} from "./_namespaces/ts.server";
-import { Debug, getNodeMajorVersion, LanguageServiceMode, setStackTraceLimit, sys, version } from "./_namespaces/ts";
+} from "./_namespaces/ts.server.js";
+import { Debug, getNodeMajorVersion, LanguageServiceMode, setStackTraceLimit, sys, version } from "./_namespaces/ts.js";
 
 declare const addEventListener: any;
 declare const removeEventListener: any;

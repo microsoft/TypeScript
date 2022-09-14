@@ -12,7 +12,7 @@ import {
     SignatureDeclaration, skipTypeParentheses, SourceFile, SyntaxKind, TransformationContext, TypeNode,
     TypeOperatorNode, TypePredicateNode, TypeReferenceNode, TypeReferenceSerializationKind, UnionOrIntersectionTypeNode,
     VoidExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 type SerializedEntityName =
     | Identifier // Globals (i.e., `String`, `Number`, etc.)

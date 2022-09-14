@@ -1,9 +1,9 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 import {
     ErrorInfo, ParallelClientMessage, ParallelHostMessage, RunnerTask, shimNoopTestInterface, Task, TaskResult,
     TestInfo, UnitTestTask,
-} from "../_namespaces/Harness.Parallel";
-import { createRunner, globalTimeout, RunnerBase, runUnitTests } from "../_namespaces/Harness";
+} from "../_namespaces/Harness.Parallel.js";
+import { createRunner, globalTimeout, RunnerBase, runUnitTests } from "../_namespaces/Harness.js";
 
 export function start() {
     function hookUncaughtExceptions() {

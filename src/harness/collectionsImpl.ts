@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 export interface SortOptions<T> {
     comparer: (a: T, b: T) => number;

@@ -1,5 +1,5 @@
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 
 function withChange(text: ts.IScriptSnapshot, start: number, length: number, newText: string): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
     const contents = ts.getSnapshotText(text);

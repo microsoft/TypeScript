@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts.js";
+import * as Harness from "../../_namespaces/Harness.js";
 
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";

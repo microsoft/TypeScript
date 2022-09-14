@@ -1,4 +1,4 @@
-import * as Debug from "./_namespaces/Debug";
+import * as Debug from "./_namespaces/Debug.js";
 
 /// <reference lib="es2019" />
 

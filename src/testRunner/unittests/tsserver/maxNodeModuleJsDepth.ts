@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", () => {
     it("should be set to 2 if the project has js root files", () => {

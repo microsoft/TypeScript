@@ -38,7 +38,7 @@ import {
     TransformationContext, transformNodes, tryCast, TypeAliasDeclaration, TypeNode, TypeParameterDeclaration,
     TypeReferenceNode, unescapeLeadingUnderscores, UnparsedSource, VariableDeclaration, VariableStatement, visitArray,
     visitEachChild, visitNode, visitNodes, VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {

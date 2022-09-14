@@ -1,6 +1,6 @@
 import {
     createCodeFixActionWithoutFixAll, moduleSpecifierToValidIdentifier, registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.codefix.js";
 import {
     __String, arrayFrom, ArrowFunction, BinaryExpression, BindingElement, BindingName, ClassDeclaration,
     ClassExpression, concatenate, copyEntries, createMultiMap, createRange, Debug, Diagnostics, emptyMap, ESMap,
@@ -15,7 +15,7 @@ import {
     ObjectLiteralExpression, PropertyAccessExpression, QuotePreference, rangeContainsRange, ReadonlyCollection,
     ReadonlyESMap, ScriptTarget, Set, some, SourceFile, Statement, StringLiteralLike, SymbolFlags, SyntaxKind,
     textChanges, TypeChecker, VariableStatement,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 registerCodeFix({
     errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],

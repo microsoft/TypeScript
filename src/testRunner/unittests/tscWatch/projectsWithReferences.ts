@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
     ts.tscWatch.verifyTscWatch({

@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: searching for config file", () => {
     it("should stop at projectRootPath if given", () => {

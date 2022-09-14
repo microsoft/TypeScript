@@ -2,7 +2,7 @@ import {
     clear, EntityNameOrEntityNameExpression, forEach, getOwnValues, getSymbolId, Identifier, IndexedAccessType,
     IndexType, InterfaceType, MappedType, Node, ObjectFlags, ObjectType, ResolvedType, Signature, Symbol, SymbolWalker,
     SyntaxKind, Type, TypeFlags, TypeParameter, TypePredicate, TypeQueryNode, TypeReference, UnionOrIntersectionType,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 

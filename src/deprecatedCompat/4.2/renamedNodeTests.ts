@@ -1,4 +1,4 @@
-import { Debug, isMemberName, MemberName, Node } from "../_namespaces/ts";
+import { Debug, isMemberName, MemberName, Node } from "../_namespaces/ts.js";
 
 // DEPRECATION: Renamed node tests
 // DEPRECATION PLAN:

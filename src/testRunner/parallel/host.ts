@@ -1,12 +1,12 @@
-import * as Utils from "../_namespaces/Utils";
-import * as ts from "../_namespaces/ts";
+import * as Utils from "../_namespaces/Utils.js";
+import * as ts from "../_namespaces/ts.js";
 import {
     configOption, globalTimeout, IO, keepFailed, lightMode, noColors, runners, runUnitTests, stackTraceLimit,
     taskConfigsFolder, TestConfig, TestRunnerKind, workerCount,
-} from "../_namespaces/Harness";
+} from "../_namespaces/Harness.js";
 import {
     ErrorInfo, ParallelClientMessage, ParallelHostMessage, shimNoopTestInterface, Task, TaskTimeout, TestInfo,
-} from "../_namespaces/Harness.Parallel";
+} from "../_namespaces/Harness.Parallel.js";
 
 export function start() {
     const Mocha = require("mocha") as typeof import("mocha");
@@ -23,7 +23,7 @@ export function start() {
     const { statSync } = require("fs") as typeof import("fs");
 
     // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-    const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.js")) as typeof import("../../../scripts/failed-tests");
+    const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.js")) as typeof import("../../../scripts/failed-tests.js");
 
     const perfdataFileNameFragment = ".parallelperf";
     const perfData = readSavedPerfData(configOption);
@@ -543,7 +543,7 @@ export function start() {
             patchStats(consoleReporter.stats);
 
             let xunitReporter: import("mocha").reporters.XUnit | undefined;
-            let failedTestReporter: import("../../../scripts/failed-tests") | undefined;
+            let failedTestReporter: import("../../../scripts/failed-tests.js") | undefined;
             if (process.env.CI === "true") {
                 xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
                     reporterOptions: {

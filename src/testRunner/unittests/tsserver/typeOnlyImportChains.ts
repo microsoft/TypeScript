@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: typeOnlyImportChains", () => {
     it("named export -> type-only namespace import -> named export -> named import", () => {

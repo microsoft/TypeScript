@@ -13,7 +13,7 @@ import {
     Node, nodeSeenTracker, Program, ReadonlySet, some, SourceFile, Statement, StringLiteral, StringLiteralLike, Symbol,
     symbolEscapedNameNoDefault, SymbolFlags, symbolName, SyntaxKind, TypeChecker, ValidImportTypeNode,
     VariableDeclaration, walkUpBindingElementsAndPatterns,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
 

@@ -11,7 +11,7 @@ import {
     ModuleInstanceState, Node, nodeIsMissing, ParameterDeclaration, parseIsolatedJSDocComment, Push, ReadonlySet,
     Scanner, ScriptTarget, SemanticMeaning, setParent, some, SourceFile, Symbol, SymbolFlags, SyntaxKind, TextSpan,
     textSpanIntersectsWith, TokenClass, TypeChecker, TypeParameterDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** The classifier is used for syntactic highlighting in editors via the TSServer */
 export function createClassifier(): Classifier {

@@ -3,10 +3,10 @@ import {
     FunctionDeclaration, FunctionExpression, getLocaleSpecificMessage, getTokenAtPosition, isArrowFunction, isBlock,
     isInJSFile, mapDefined, MethodDeclaration, Node, NodeBuilderFlags, RefactorContext, RefactorEditInfo, SourceFile,
     SyntaxKind, textChanges, Type, TypeChecker, TypeNode,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo, RefactorErrorInfo, refactorKindBeginsWith, registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Infer function return type";
 const refactorDescription = Diagnostics.Infer_function_return_type.message;

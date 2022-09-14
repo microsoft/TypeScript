@@ -1,4 +1,4 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: debugDeprecation", () => {
     let loggingHost: ts.LoggingHost | undefined;

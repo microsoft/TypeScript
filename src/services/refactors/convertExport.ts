@@ -7,8 +7,8 @@ import {
     isSourceFile, isStringLiteral, makeImport, ModifierFlags, NamespaceDeclaration, Node, NodeFlags, Program,
     PropertyAccessExpression, QuotePreference, quotePreferenceFromString, RefactorContext, RefactorEditInfo, SourceFile,
     Symbol, SyntaxKind, textChanges, TypeAliasDeclaration, TypeChecker, VariableStatement,
-} from "../_namespaces/ts";
-import { isRefactorErrorInfo, RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.js";
+import { isRefactorErrorInfo, RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Convert export";
 

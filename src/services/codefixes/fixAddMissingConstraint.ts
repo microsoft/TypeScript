@@ -3,11 +3,11 @@ import {
     getEmitScriptTarget, getNodeId, getTokenAtPosition, isExpression, isIdentifier, isMappedTypeNode, isString,
     isTypeNode, isTypeParameterDeclaration, LanguageServiceHost, Map, Node, Program, SourceFile, textChanges, TextSpan,
     textSpanEnd, Type, TypeChecker, TypeParameterDeclaration, UserPreferences,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     createCodeFixAction, createCombinedCodeActions, createImportAdder, eachDiagnostic, getNoopSymbolTrackerWithResolver,
     registerCodeFix, typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.codefix.js";
 
 const fixId = "addMissingConstraint";
 const errorCodes = [

@@ -1,4 +1,4 @@
-import { BuildInfo, Diagnostic } from "./_namespaces/ts";
+import { BuildInfo, Diagnostic } from "./_namespaces/ts.js";
 
 export interface EmitOutput {
     outputFiles: OutputFile[];

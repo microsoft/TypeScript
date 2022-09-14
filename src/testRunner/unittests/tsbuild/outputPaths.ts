@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import * as fakes from "../../_namespaces/fakes";
+import * as ts from "../../_namespaces/ts.js";
+import * as fakes from "../../_namespaces/fakes.js";
 
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: ts.TestTscEdit = {

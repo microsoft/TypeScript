@@ -2,7 +2,7 @@ import {
     Bundle,
     CatchClause, chainBundle, isBlock, Node, SourceFile, SyntaxKind, TransformationContext, TransformFlags,
     visitEachChild, visitNode, VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformES2019(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

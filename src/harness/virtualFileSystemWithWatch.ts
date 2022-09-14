@@ -1,4 +1,4 @@
-import * as Harness from "./_namespaces/Harness";
+import * as Harness from "./_namespaces/Harness.js";
 import {
     arrayFrom, arrayToMap, clear, clone, combinePaths, compareStringsCaseSensitive, createGetCanonicalFileName,
     createMultiMap, createSystemWatchFunctions, Debug, directorySeparator, ESMap, FileSystemEntryKind, FileWatcher,
@@ -8,8 +8,8 @@ import {
     isNumber, isString, Map, mapDefined, matchFiles, ModuleResolutionHost, MultiMap, noop,
     patchWriteFileEnsuringDirectory, Path, PollingInterval, ReadonlyESMap, RequireResult, Set, SortedArray, sys, toPath,
     WatchFileKind,
-} from "./_namespaces/ts";
-import { ServerHost } from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { ServerHost } from "./_namespaces/ts.server.js";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",

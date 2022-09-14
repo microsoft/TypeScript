@@ -1,13 +1,13 @@
 import {
     anyContext, ContextPredicate, FormattingContext, FormattingRequestKind, Rule, RuleAction, RuleFlags,
     TextRangeWithKind, TokenRange,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.formatting.js";
 import {
     BinaryExpression, contains, findAncestor, findNextToken, FormatCodeSettings, hasDecorators, isArray,
     isExpressionNode, isFunctionLikeKind, isNumericLiteral, isPropertyAccessExpression, isPropertyDeclaration,
     isPropertySignature, isTrivia, Node, positionIsASICandidate, SemicolonPreference, SyntaxKind, typeKeywords,
     YieldExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export interface RuleSpec {

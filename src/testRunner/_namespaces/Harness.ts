@@ -1,16 +1,16 @@
 /* Generated file to emulate the Harness namespace. */
 
-export * from "../../harness/_namespaces/Harness";
-export * from "../../loggedIO/_namespaces/Harness";
+export * from "../../harness/_namespaces/Harness.js";
+export * from "../../loggedIO/_namespaces/Harness.js";
 
-import * as Parallel from "./Harness.Parallel";
+import * as Parallel from "./Harness.Parallel.js";
 export { Parallel };
 
-export * from "../fourslashRunner";
-export * from "../compilerRunner";
-export * from "../externalCompileRunner";
-export * from "../test262Runner";
-export * from "../runner";
+export * from "../fourslashRunner.js";
+export * from "../compilerRunner.js";
+export * from "../externalCompileRunner.js";
+export * from "../test262Runner.js";
+export * from "../runner.js";
 
 
 // Must be after runner.

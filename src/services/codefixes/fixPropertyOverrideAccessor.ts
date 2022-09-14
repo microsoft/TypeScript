@@ -1,10 +1,10 @@
 import {
     CodeFixAllContext, CodeFixContext, Debug, Diagnostics, getSourceFileOfNode, getTextOfPropertyName,
     getTokenAtPosition, isAccessor, isClassLike, singleOrUndefined, SourceFile, unescapeLeadingUnderscores,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     codeFixAll, createCodeFixAction, generateAccessorFromProperty, getAllSupers, registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.codefix.js";
 
 const errorCodes = [
     Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code,

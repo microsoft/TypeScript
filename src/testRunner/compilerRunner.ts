@@ -1,11 +1,11 @@
-import * as vpath from "./_namespaces/vpath";
-import * as ts from "./_namespaces/ts";
-import * as compiler from "./_namespaces/compiler";
-import * as Utils from "./_namespaces/Utils";
+import * as vpath from "./_namespaces/vpath.js";
+import * as ts from "./_namespaces/ts.js";
+import * as compiler from "./_namespaces/compiler.js";
+import * as Utils from "./_namespaces/Utils.js";
 import {
     Baseline, Compiler, FileBasedTest, FileBasedTestConfiguration, getFileBasedTestConfigurationDescription,
     getFileBasedTestConfigurations, IO, RunnerBase, TestCaseParser, TestRunnerKind,
-} from "./_namespaces/Harness";
+} from "./_namespaces/Harness.js";
 
 export const enum CompilerTestType {
     Conformance,

@@ -14,7 +14,7 @@ import {
     parameterIsThisKeyword, PrivateIdentifierAccessorDeclaration, PrivateIdentifierAutoAccessorPropertyDeclaration,
     PrivateIdentifierMethodDeclaration, PropertyDeclaration, skipParentheses, some, SourceFile, Statement, SuperCall, SyntaxKind,
     TransformationContext, VariableDeclaration, VariableStatement,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function getOriginalNodeId(node: Node) {

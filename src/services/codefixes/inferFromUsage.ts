@@ -15,11 +15,11 @@ import {
     SignatureDeclaration, SignatureFlags, SignatureKind, singleOrUndefined, SourceFile, Symbol, SymbolFlags,
     SymbolLinks, SyntaxKind, textChanges, Token, TransientSymbol, tryCast, Type, TypeFlags, TypeNode, TypeReference,
     UnderscoreEscapedMap, UnionOrIntersectionType, UnionReduction, UserPreferences, VariableDeclaration,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     codeFixAll, createCodeFixAction, createImportAdder, ImportAdder, registerCodeFix,
     tryGetAutoImportableReferenceFromTypeNode,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.codefix.js";
 
 const fixId = "inferFromUsage";
 const errorCodes = [

@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import { createHostWithSolutionBuild } from "./helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { createHostWithSolutionBuild } from "./helpers.js";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {

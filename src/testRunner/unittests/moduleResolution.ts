@@ -1,6 +1,6 @@
-import * as ts from "../_namespaces/ts";
-import * as Harness from "../_namespaces/Harness";
-import { checkResolvedModule, checkResolvedModuleWithFailedLookupLocations, createResolvedModule } from "./helpers";
+import * as ts from "../_namespaces/ts.js";
+import * as Harness from "../_namespaces/Harness.js";
+import { checkResolvedModule, checkResolvedModuleWithFailedLookupLocations, createResolvedModule } from "./helpers.js";
 
 interface File {
     name: string;

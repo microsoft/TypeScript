@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
     const projectLocation = `${ts.TestFSWithWatch.tsbuildProjectsLocation}/demo`;

@@ -4,7 +4,7 @@ import {
     isExternalModule, isNoSubstitutionTemplateLiteral, NoSubstitutionTemplateLiteral, setTextRange, SourceFile,
     SyntaxKind, TaggedTemplateExpression, TemplateHead, TemplateLiteralLikeNode, TemplateMiddle, TemplateTail,
     TransformationContext, visitEachChild, visitNode, Visitor,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export enum ProcessLevel {

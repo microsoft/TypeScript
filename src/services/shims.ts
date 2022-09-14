@@ -11,7 +11,7 @@ import {
     ResolvedTypeReferenceDirective, resolveModuleName, resolveTypeReferenceDirective, ScriptKind,
     SemanticClassificationFormat, servicesVersion, SignatureHelpItemsOptions, TextChangeRange, TextRange, TextSpan,
     ThrottledCancellationToken, timestamp, toFileNameLowerCase, toPath, TypeAcquisition, UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.

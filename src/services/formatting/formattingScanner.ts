@@ -1,10 +1,10 @@
 import {
     append, createScanner, Debug, isJsxAttribute, isJsxText, isKeyword, isToken, isTrivia, LanguageVariant, last, Node,
     NodeArray, ScriptTarget, SyntaxKind,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     createTextRangeWithKind, TextRangeWithKind, TextRangeWithTriviaKind, TokenInfo,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.formatting.js";
 
 const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
 const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);

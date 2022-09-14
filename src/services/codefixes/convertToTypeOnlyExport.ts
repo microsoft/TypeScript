@@ -2,8 +2,8 @@ import {
     addToSeen, CodeFixContextBase, contains, createTextSpanFromNode, Diagnostics, ExportSpecifier, factory, filter,
     findDiagnosticForNode, getDiagnosticsWithinSpan, getNodeId, getTokenAtPosition, isExportSpecifier, Map, SourceFile,
     SyntaxKind, textChanges, TextSpan, tryCast,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const errorCodes = [Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";

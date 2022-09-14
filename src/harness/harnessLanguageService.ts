@@ -1,10 +1,10 @@
-import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vfs from "./_namespaces/vfs";
-import * as collections from "./_namespaces/collections";
-import * as vpath from "./_namespaces/vpath";
-import * as Utils from "./_namespaces/Utils";
-import { Compiler, harnessNewLine, mockHash, virtualFileSystemRoot } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as collections from "./_namespaces/collections.js";
+import * as vpath from "./_namespaces/vpath.js";
+import * as Utils from "./_namespaces/Utils.js";
+import { Compiler, harnessNewLine, mockHash, virtualFileSystemRoot } from "./_namespaces/Harness.js";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null

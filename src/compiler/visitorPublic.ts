@@ -17,7 +17,7 @@ import {
     LexicalEnvironmentFlags, Node, NodeArray, NodesVisitor, NodeVisitor, ParameterDeclaration, ScriptTarget,
     setEmitFlags, setTextRange, setTextRangePosEnd, singleOrUndefined, some, Statement, SyntaxKind,
     TransformationContext, VisitEachChildNodes, Visitor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Visits a Node using the supplied visitor, possibly returning a new Node in its place.

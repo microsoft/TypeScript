@@ -4,8 +4,8 @@ import {
     IndexSignatureDeclaration, MappedTypeNode, MethodDeclaration, MethodSignature, Node, ParameterDeclaration,
     PropertyDeclaration, PropertySignature, SetAccessorDeclaration, SourceFile, SyntaxKind, textChanges, Type,
     TypeAliasDeclaration, TypeAssertion, TypeChecker, TypeFlags, TypeNode, VariableDeclaration,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixIdPlain = "fixJSDocTypes_plain";
 const fixIdNullable = "fixJSDocTypes_nullable";

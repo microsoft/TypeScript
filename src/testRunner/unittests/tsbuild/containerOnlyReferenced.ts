@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
     ts.verifyTscWithEdits({

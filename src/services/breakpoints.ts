@@ -11,7 +11,7 @@ import {
     ObjectLiteralExpression, ParameterDeclaration, PropertyAssignment, PropertyDeclaration, PropertySignature,
     ReturnStatement, skipTrivia, SourceFile, SwitchStatement, SyntaxKind, TextSpan, ThrowStatement, TryStatement,
     TypeAssertion, VariableDeclaration, VariableDeclarationList, VariableStatement, WhileStatement, WithStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Get the breakpoint span in given sourceFile

@@ -4,8 +4,8 @@ import {
     hasSyntacticModifier, isIdentifier, isInJSFile, isPropertyDeclaration, isUnionTypeNode, ModifierFlags,
     PropertyDeclaration, SourceFile, suppressLeadingAndTrailingTrivia, SyntaxKind, textChanges, Type, TypeChecker,
     TypeFlags, TypeNode,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixName = "strictClassInitialization";
 const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";

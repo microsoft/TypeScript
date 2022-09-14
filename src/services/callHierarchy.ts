@@ -18,7 +18,7 @@ import {
     NewExpression, Node, NodeFlags, ParameterDeclaration, Program, PropertyAccessExpression, SatisfiesExpression,
     SetAccessorDeclaration, skipTrivia, SourceFile, SymbolFlags, SyntaxKind, TaggedTemplateExpression, TextRange,
     TextSpan, TypeAssertion, TypeChecker, usingSingleLineStringWriter, VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export type NamedExpression =

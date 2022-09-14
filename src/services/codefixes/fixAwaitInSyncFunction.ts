@@ -2,8 +2,8 @@ import {
     addToSeen, ArrowFunction, Diagnostics, factory, findChildOfKind, first, FunctionDeclaration, FunctionExpression,
     getContainingFunction, getEntityNameFromTypeNode, getNodeId, getTokenAtPosition, isFunctionTypeNode,
     isVariableDeclaration, Map, MethodDeclaration, Node, SourceFile, SyntaxKind, textChanges, TypeNode,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "fixAwaitInSyncFunction";
 const errorCodes = [

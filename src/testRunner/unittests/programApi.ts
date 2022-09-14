@@ -1,8 +1,8 @@
-import * as ts from "../_namespaces/ts";
-import * as documents from "../_namespaces/documents";
-import * as fakes from "../_namespaces/fakes";
-import * as vfs from "../_namespaces/vfs";
-import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts.js";
+import * as documents from "../_namespaces/documents.js";
+import * as fakes from "../_namespaces/fakes.js";
+import * as vfs from "../_namespaces/vfs.js";
+import * as Harness from "../_namespaces/Harness.js";
 
 function verifyMissingFilePaths(missingPaths: readonly ts.Path[], expected: readonly string[]) {
     assert.isDefined(missingPaths);

@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     __String, AccessExpression, AccessFlags, AccessorDeclaration, addRange, addRelatedInfo, addSyntheticLeadingComment,
     AllAccessorDeclarations, and, AnonymousType, AnyImportOrReExport, AnyImportSyntax, append, appendIfUnique,
@@ -197,7 +197,7 @@ import {
     VariableStatement, VarianceFlags, visitEachChild, visitNode, visitNodes, Visitor, VisitResult, VoidExpression,
     walkUpBindingElementsAndPatterns, walkUpParenthesizedExpressions, walkUpParenthesizedTypes,
     walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;

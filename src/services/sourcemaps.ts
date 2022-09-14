@@ -1,11 +1,11 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     base64decode, computeLineAndCharacterOfPosition, createDocumentPositionMapper, createGetCanonicalFileName,
     DocumentPosition, DocumentPositionMapper, DocumentPositionMapperHost, Extension,
     getDeclarationEmitOutputFilePathWorker, getDirectoryPath, getLineInfo, getLineStarts, getNormalizedAbsolutePath,
     identitySourceMapConsumer, isDeclarationFileName, isString, LineAndCharacter, LineInfo, Map, outFile, Program,
     removeFileExtension, SourceFileLike, sys, tryGetSourceMappingURL, tryParseRawSourceMap,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
 

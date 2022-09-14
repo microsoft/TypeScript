@@ -2,8 +2,8 @@ import {
     ANONYMOUS, Debug, DiagnosticAndArguments, Diagnostics, emptyArray, factory, FindAllReferences, findChildOfKind,
     getThisContainer, getTokenAtPosition, isFunctionDeclaration, isFunctionExpression, isSourceFile, isThis, SourceFile,
     SyntaxKind, textChanges, TypeChecker,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "fixImplicitThis";
 const errorCodes = [Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];

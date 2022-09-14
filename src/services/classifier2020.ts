@@ -6,7 +6,7 @@ import {
     isPropertyAccessExpression, isQualifiedName, isSourceFile, isVariableDeclaration, Map, ModifierFlags,
     NamedDeclaration, Node, NodeFlags, ParameterDeclaration, Program, SemanticMeaning, SourceFile, Symbol, SymbolFlags,
     SyntaxKind, TextSpan, textSpanIntersectsWith, Type, TypeChecker, VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 

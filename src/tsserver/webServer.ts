@@ -1,12 +1,12 @@
-import * as ts from "./_namespaces/ts";
-import * as server from "./_namespaces/ts.server";
+import * as ts from "./_namespaces/ts.js";
+import * as server from "./_namespaces/ts.server.js";
 import {
     findArgument, getLogLevel, Logger, MainProcessLogger, Msg, nullCancellationToken, ServerCancellationToken,
     ServerHost, StartInput, StartSessionOptions, WebHost,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 import {
     Debug, LanguageServiceMode, LogLevel, noop, returnFalse, returnUndefined, setSys, sys, validateLocaleAndSetLanguage,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 declare const addEventListener: any;
 declare const postMessage: any;

@@ -5,7 +5,7 @@ import {
     isModuleWithStringLiteralName, isStringLiteral, Iterator, Map, mapDefined, mapDefinedIterator, ModuleDeclaration,
     ModuleKind, outFile, OutputFile, Path, Program, ReadonlySet, Set, some, SourceFile, StringLiteralLike, Symbol,
     toPath, TypeChecker,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,

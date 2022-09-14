@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import { FileBasedTest, IO, userSpecifiedRoot } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts.js";
+import { FileBasedTest, IO, userSpecifiedRoot } from "./_namespaces/Harness.js";
 
 export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user" | "dt" | "docker";
 export type CompilerTestKind = "conformance" | "compiler";

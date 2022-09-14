@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: with skipLibCheck", () => {
     it("should be turned on for js-only inferred projects", () => {

@@ -37,7 +37,7 @@ import {
     TypePredicateNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode, UnparsedPrepend, UnparsedSource,
     VariableDeclaration, VariableDeclarationList, VariableStatement, VoidExpression, WhileStatement, WithStatement,
     YieldExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // Literals
 

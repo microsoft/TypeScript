@@ -17,7 +17,7 @@ import {
     PropertyAccessExpression, removeFileExtension, removeSuffix, resolvePath, ScriptKind, some, SourceFile, startsWith,
     startsWithDirectory, stringContains, StringLiteral, Symbol, SymbolFlags, toPath, tryGetExtensionFromPath,
     tryParsePatterns, TypeChecker, UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 

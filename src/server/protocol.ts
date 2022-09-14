@@ -1,9 +1,9 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     CompilerOptionsValue, EndOfLineState, FileExtensionInfo, HighlightSpanKind, MapLike, OutliningSpanKind, OutputFile,
     PluginImport, ProjectReference, RenameLocation, ScriptElementKind, ScriptKind, TextChange, TextInsertion,
     TodoComment, TodoCommentDescriptor, TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
 

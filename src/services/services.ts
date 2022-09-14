@@ -1,6 +1,6 @@
-import * as ts from "./_namespaces/ts";
-import * as NavigateTo from "./_namespaces/ts.NavigateTo";
-import * as NavigationBar from "./_namespaces/ts.NavigationBar";
+import * as ts from "./_namespaces/ts.js";
+import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
+import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
 import {
     __String, ApplicableRefactorInfo, ApplyCodeActionCommandResult, AssignmentDeclarationKind, BaseType,
     BinaryExpression, BreakpointResolver, CallHierarchy, CallHierarchyIncomingCall, CallHierarchyItem,
@@ -55,7 +55,7 @@ import {
     TransientSymbol, Type, TypeChecker, TypeFlags, TypeNode, TypeParameter, TypePredicate, TypeReference,
     typeToDisplayParts, UnderscoreEscapedMap, UnionOrIntersectionType, UnionType, updateSourceFile, UserPreferences,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";

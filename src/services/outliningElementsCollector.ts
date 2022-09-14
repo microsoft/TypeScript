@@ -8,7 +8,7 @@ import {
     JsxFragment, JsxOpeningLikeElement, Node, NodeArray, NoSubstitutionTemplateLiteral, OutliningSpan,
     OutliningSpanKind, ParenthesizedExpression, positionsAreOnSameLine, Push, SignatureDeclaration, SourceFile,
     startsWith, SyntaxKind, TemplateExpression, TextSpan, trimString, trimStringStart, TryStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {

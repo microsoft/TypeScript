@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: navigate-to for javascript project", () => {
     function findNavToItem(items: ts.projectSystem.protocol.NavtoItem[], itemName: string, itemKind: string) {

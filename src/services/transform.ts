@@ -2,7 +2,7 @@ import {
     CompilerOptions, concatenate, DiagnosticWithLocation, factory, fixupCompilerOptions, isArray, Node,
     TransformationResult,
     TransformerFactory, transformNodes,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Transform one or more nodes using the supplied transformers.

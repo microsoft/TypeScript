@@ -3,7 +3,7 @@ import {
     CommentRange, compareValues, Debug, DiagnosticMessage, Diagnostics, ESMap, getEntries, identity, JSDocSyntaxKind,
     JsxTokenSyntaxKind, KeywordSyntaxKind, LanguageVariant, LineAndCharacter, Map, MapLike, parsePseudoBigInt,
     positionIsSynthesized, ScriptTarget, SourceFileLike, SyntaxKind, TokenFlags, trimStringStart,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 

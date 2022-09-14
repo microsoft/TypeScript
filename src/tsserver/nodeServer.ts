@@ -1,4 +1,11 @@
-import * as ts from "./_namespaces/ts";
+import { createRequire } from "module";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(new URL(import.meta.url));
+const __dirname = dirname(__filename);
+
+import * as ts from "./_namespaces/ts.js";
 import {
     ActionInvalidate, ActionPackageInstalled, ActionSet, Arguments, BaseLogger, BeginInstallTypes,
     createInstallTypingsRequest, EndInstallTypes, Event, EventBeginInstallTypes, EventEndInstallTypes,
@@ -8,14 +15,14 @@ import {
     PackageInstalledResponse, Project, ProjectService, protocol, ServerCancellationToken, ServerHost, Session,
     SetTypings, StartInput, StartSessionOptions, stringifyIndented, toEvent, TypesRegistryResponse,
     TypingInstallerRequestUnion,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 import {
     ApplyCodeActionCommandResult, assertType, CharacterCodes, combinePaths, createQueue, Debug, directorySeparator,
     DirectoryWatcherCallback, ESMap, FileWatcher, getDirectoryPath, getEntries, getNodeMajorVersion, getRootLength,
     JsTyping, LanguageServiceMode, Map, MapLike, noop, noopFileWatcher, normalizeSlashes, resolveJSModule,
     SortedReadonlyArray, startTracing, stripQuotes, sys, toFileNameLowerCase, tracing, TypeAcquisition,
     validateLocaleAndSetLanguage, versionMajorMinor, WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 interface LogOptions {
     file?: string;

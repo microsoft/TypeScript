@@ -1,10 +1,10 @@
 import {
     createCodeFixActionWithoutFixAll, registerCodeFix, setJsonCompilerOptionValue, setJsonCompilerOptionValues,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.codefix.js";
 import {
     CodeFixAction, Diagnostics, Expression, factory, getEmitModuleKind, getEmitScriptTarget,
     getTsConfigObjectLiteralExpression, ModuleKind, ScriptTarget, textChanges,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 registerCodeFix({
     errorCodes: [

@@ -11,14 +11,14 @@ import {
     ModuleBody, ModuleDeclaration, ModuleName, ModuleReference, NamedExportBindings, NodeFactory, NodeFlags,
     ParameterDeclaration, PropertyDeclaration, PropertyName, QuestionToken, SetAccessorDeclaration, some,
     TypeAliasDeclaration, TypeElement, TypeNode, TypeParameterDeclaration,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // DEPRECATION: Deprecate passing `decorators` separate from `modifiers`
 // DEPRECATION PLAN:
 //     - soft: 4.8
 //     - warn: 4.9
 //     - error: 5.0
-declare module "../../compiler/types" {
+declare module "../../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Node {
         /**
@@ -47,7 +47,7 @@ declare module "../../compiler/types" {
     }
 }
 
-declare module "../../compiler/types" {
+declare module "../../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface PropertySignature {
         /** @deprecated A property signature cannot have an initializer */
@@ -55,7 +55,7 @@ declare module "../../compiler/types" {
     }
 }
 
-declare module "../../compiler/types" {
+declare module "../../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface PropertyAssignment {
         /** @deprecated A property assignment cannot have a question token */
@@ -66,7 +66,7 @@ declare module "../../compiler/types" {
     }
 }
 
-declare module "../../compiler/types" {
+declare module "../../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface ShorthandPropertyAssignment {
         /** @deprecated A shorthand property assignment cannot have modifiers */
@@ -80,7 +80,7 @@ declare module "../../compiler/types" {
     }
 }
 
-declare module "../../compiler/types" {
+declare module "../../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface FunctionTypeNode {
         /** @deprecated A function type cannot have modifiers */
@@ -88,7 +88,7 @@ declare module "../../compiler/types" {
     }
 }
 
-declare module "../../compiler/types" {
+declare module "../../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface NodeFactory {
         /**

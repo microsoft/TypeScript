@@ -9,7 +9,7 @@ import {
     nodeOverlapsWithStartEnd, ObjectLiteralExpression, ParameterPropertyDeclaration, Program, PropertyAssignment,
     PropertyDeclaration, refactor, SourceFile, startsWithUnderscore, StringLiteral, suppressLeadingAndTrailingTrivia,
     SymbolFlags, SyntaxKind, textChanges, TypeChecker, TypeNode,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 type AcceptedDeclaration = ParameterPropertyDeclaration | PropertyDeclaration | PropertyAssignment;
 type AcceptedNameType = Identifier | StringLiteral;

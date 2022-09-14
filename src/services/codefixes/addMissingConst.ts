@@ -2,8 +2,8 @@ import {
     Diagnostics, every, Expression, findAncestor, getTokenAtPosition, isArrayLiteralExpression, isAssignmentExpression,
     isBinaryExpression, isExpressionStatement, isForInOrOfStatement, isIdentifier, Node, Program, Set, SourceFile,
     SyntaxKind, textChanges, tryAddToSet, TypeChecker,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "addMissingConst";
 const errorCodes = [

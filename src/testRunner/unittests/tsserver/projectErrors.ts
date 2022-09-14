@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: Project Errors", () => {
     function checkProjectErrors(projectFiles: ts.server.ProjectFilesWithTSDiagnostics, expectedErrors: readonly string[]): void {
@@ -769,7 +769,7 @@ describe("unittests:: tsserver:: Project Errors with resolveJsonModule", () => {
     function createSessionForTest({ include }: { include: readonly string[]; }) {
         const test: ts.projectSystem.File = {
             path: `${ts.tscWatch.projectRoot}/src/test.ts`,
-            content: `import * as blabla from "./blabla.json";
+            content: `import * as blabla from "./blabla.json.js";
 declare var console: any;
 console.log(blabla);`
         };

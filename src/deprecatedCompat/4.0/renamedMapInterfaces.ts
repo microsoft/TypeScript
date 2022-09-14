@@ -3,7 +3,7 @@
 //     - soft: 4.0
 //     - remove: TBD (will remove for at least one release before replacing with `ESMap`/`ReadonlyESMap`)
 //     - replace: TBD (will eventually replace with `ESMap`/`ReadonlyESMap`)
-declare module "../../compiler/corePublic" {
+declare module "../../compiler/corePublic.js" {
     // Module transform: converted from interface augmentation
     /**
      * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
@@ -12,7 +12,7 @@ declare module "../../compiler/corePublic" {
     }
 }
 
-declare module "../../compiler/corePublic" {
+declare module "../../compiler/corePublic.js" {
     // Module transform: converted from interface augmentation
     /**
      * @deprecated Use `ts.ESMap<K, V>` instead.

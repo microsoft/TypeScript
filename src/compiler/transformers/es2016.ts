@@ -2,7 +2,7 @@ import {
     BinaryExpression, Bundle, chainBundle, Expression, isElementAccessExpression, isExpression, isPropertyAccessExpression,
     Node, setTextRange, SourceFile, SyntaxKind, TransformationContext, TransformFlags, visitEachChild, visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformES2016(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

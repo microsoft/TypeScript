@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     __String, addEmitFlags, addRange, append, arrayFrom, arrayIsEqualTo, AsExpression, AssertClause, BuilderProgram,
     CancellationToken, canHaveModifiers, chainDiagnosticMessages, changeExtension, changesAffectingProgramStructure,
@@ -58,7 +58,7 @@ import {
     TypeChecker, typeDirectiveIsEqualTo, TypeReferenceDirectiveResolutionCache, UnparsedSource, VariableDeclaration,
     VariableStatement, walkUpParenthesizedExpressions, WriteFileCallback, WriteFileCallbackData,
     writeFileEnsuringDirectories, zipToModeAwareCache,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return forEachAncestorDirectory(searchPath, ancestor => {

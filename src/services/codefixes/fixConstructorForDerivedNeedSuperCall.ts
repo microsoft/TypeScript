@@ -1,8 +1,8 @@
 import {
     ConstructorDeclaration, Debug, Diagnostics, emptyArray, factory, getTokenAtPosition, isConstructorDeclaration,
     SourceFile, textChanges,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "constructorForDerivedNeedSuperCall";
 const errorCodes = [Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call.code];

@@ -34,7 +34,7 @@ import {
     SyntaxKind, TaggedTemplateExpression, TextRange, TransformationContext, TransformFlags, UnderscoreEscapedMap,
     VariableDeclaration, VariableStatement, visitArray, visitEachChild, visitFunctionBody, visitLexicalEnvironment,
     visitNode, visitNodes, visitParameterList, VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Indicates whether to emit type metadata in the new format.

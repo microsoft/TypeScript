@@ -4,7 +4,7 @@ import {
     getTextOfIdentifierOrLiteral, Identifier, ImportClause, ImportEqualsDeclaration, ImportSpecifier,
     isPropertyAccessExpression, isPropertyNameLiteral, NavigateToItem, Node, PatternMatcher, PatternMatchKind, Push,
     ScriptElementKind, SourceFile, SyntaxKind, TypeChecker,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 interface RawNavigateToItem {
     readonly name: string;

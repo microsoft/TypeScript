@@ -11,8 +11,8 @@ import {
     RenameInfoFailure, RenameInfoSuccess, RenameLocation, ScriptElementKind, SemanticClassificationFormat, Set,
     SignatureHelpItem, SignatureHelpItems, SourceFile, Symbol, TextChange, TextInsertion, textPart, TextRange, TextSpan,
     TodoComment, TodoCommentDescriptor, UserPreferences,
-} from "./_namespaces/ts";
-import { CommandNames, protocol } from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { CommandNames, protocol } from "./_namespaces/ts.server.js";
 
 export interface SessionClientHost extends LanguageServiceHost {
     writeMessage(message: string): void;

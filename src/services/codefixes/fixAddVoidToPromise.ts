@@ -3,8 +3,8 @@ import {
     isIdentifier, isInJSFile, isNewExpression, isParameter, isParenthesizedExpression, isParenthesizedTypeNode,
     isTypeReferenceNode, isUnionTypeNode, NewExpression, ParameterDeclaration, Program, Set, skipTrivia, some,
     SourceFile, SyntaxKind, textChanges, TextSpan, TypeFlags,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixName = "addVoidToPromise";
 const fixId = "addVoidToPromise";

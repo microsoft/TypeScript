@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 import projectsLocation = ts.TestFSWithWatch.tsbuildProjectsLocation;
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
@@ -300,7 +300,7 @@ export function createSomeObject(): SomeObject
                 const subProjectApp = `${projectsLocation}/sample1/App`;
                 const appTs: ts.tscWatch.File = {
                     path: `${subProjectApp}/app.ts`,
-                    content: `import { createSomeObject } from "../Library/library";
+                    content: `import { createSomeObject } from "../Library/library.js";
 createSomeObject().message;`
                 };
                 const appTsconfig: ts.tscWatch.File = {

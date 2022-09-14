@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     BuilderProgram, BuildInfo, canJsonReportNoInputFiles, changeCompilerHostLikeToUseCache,
     changesAffectModuleResolution, cleanExtendedConfigCache, clearMap, clearSharedExtendedConfigFileWatcher,
@@ -19,7 +19,7 @@ import {
     SharedExtendedConfigFileWatcher, SourceFile, sys, System, toPath, updateErrorForNoInputFiles,
     updateMissingFilePathsWatch, updateSharedExtendedConfigFileWatcher, updateWatchingWildcardDirectories, version,
     WatchDirectoryFlags, WatchOptions, WatchType, WatchTypeRegistry, WildcardDirectoryWatcher,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface ReadBuildProgramHost {
     useCaseSensitiveFileNames(): boolean;

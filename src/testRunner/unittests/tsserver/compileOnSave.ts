@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 import CommandNames = ts.server.CommandNames;
 function createTestTypingsInstaller(host: ts.server.ServerHost) {

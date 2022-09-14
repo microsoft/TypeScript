@@ -6,7 +6,7 @@ import {
     isTemplateMiddleOrTemplateTail, isTemplateSpan, isTemplateTail, isVariableDeclaration, isVariableDeclarationList,
     isVariableStatement, last, Node, or, parseNodeFactory, positionsAreOnSameLine, SelectionRange, setTextRangePosEnd,
     singleOrUndefined, SourceFile, SyntaxKind, SyntaxList, textSpanIntersectsWithPosition, textSpansEqual,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {

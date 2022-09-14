@@ -1,13 +1,13 @@
-import * as vpath from "./_namespaces/vpath";
-import * as ts from "./_namespaces/ts";
-import * as FourSlash from "./_namespaces/FourSlash";
-import * as project from "./_namespaces/project";
-import * as RWC from "./_namespaces/RWC";
+import * as vpath from "./_namespaces/vpath.js";
+import * as ts from "./_namespaces/ts.js";
+import * as FourSlash from "./_namespaces/FourSlash.js";
+import * as project from "./_namespaces/project.js";
+import * as RWC from "./_namespaces/RWC.js";
 import {
     CompilerBaselineRunner, CompilerTestType, DefinitelyTypedRunner, DockerfileRunner, FourSlashRunner,
     GeneratedFourslashRunner, IO, Parallel, RunnerBase, setLightMode, setShardId, setShards, Test262BaselineRunner,
     TestRunnerKind, UserCodeRunner,
-} from "./_namespaces/Harness";
+} from "./_namespaces/Harness.js";
 
 /* eslint-disable prefer-const */
 export let runners: RunnerBase[] = [];

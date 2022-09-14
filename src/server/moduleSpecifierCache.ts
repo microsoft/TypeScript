@@ -1,7 +1,7 @@
 import {
     Debug, ESMap, FileWatcher, Map, ModulePath, ModuleSpecifierCache, ModuleSpecifierOptions, nodeModulesPathPart, Path,
     ResolvedModuleSpecifierInfo, UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface ModuleSpecifierResolutionCacheHost {

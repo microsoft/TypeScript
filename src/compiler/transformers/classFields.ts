@@ -34,7 +34,7 @@ import {
     TransformationContext, TransformFlags, tryGetTextOfPropertyName, UnderscoreEscapedMap, unescapeLeadingUnderscores,
     VariableStatement, visitArray, visitEachChild, visitFunctionBody, visitIterationBody, visitNode, visitNodes,
     visitParameterList, VisitResult, Bundle,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 const enum ClassPropertySubstitutionFlags {
     /**

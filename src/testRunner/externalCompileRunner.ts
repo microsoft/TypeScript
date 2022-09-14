@@ -2,8 +2,8 @@ import * as del from "del";
 import * as fs from "fs";
 import * as path from "path";
 
-import * as ts from "./_namespaces/ts";
-import { Baseline, IO, isWorker, RunnerBase, TestRunnerKind } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts.js";
+import { Baseline, IO, isWorker, RunnerBase, TestRunnerKind } from "./_namespaces/Harness.js";
 
 interface ExecResult {
     stdout: Buffer;

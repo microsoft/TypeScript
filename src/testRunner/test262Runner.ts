@@ -1,7 +1,7 @@
-import * as ts from "./_namespaces/ts";
-import * as compiler from "./_namespaces/compiler";
-import * as Utils from "./_namespaces/Utils";
-import { Baseline, Compiler, IO, RunnerBase, TestCaseParser, TestRunnerKind } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts.js";
+import * as compiler from "./_namespaces/compiler.js";
+import * as Utils from "./_namespaces/Utils.js";
+import { Baseline, Compiler, IO, RunnerBase, TestCaseParser, TestRunnerKind } from "./_namespaces/Harness.js";
 
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 export class Test262BaselineRunner extends RunnerBase {

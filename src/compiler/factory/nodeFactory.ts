@@ -78,7 +78,7 @@ import {
     UnparsedSource, UnparsedSourceText, UnparsedSyntheticReference, UnparsedTextLike, UnscopedEmitHelper,
     VariableDeclaration, VariableDeclarationList, VariableStatement, visitNode, VisitResult, VoidExpression,
     WhileStatement, WithStatement, YieldExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 let nextAutoGenerateId = 0;
 

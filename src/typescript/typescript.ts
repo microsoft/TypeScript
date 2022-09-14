@@ -1,4 +1,4 @@
-import { Debug, LogLevel } from "./_namespaces/ts";
+import { Debug, LogLevel } from "./_namespaces/ts.js";
 
 // enable deprecation logging
 declare const console: any;
@@ -15,4 +15,4 @@ if (typeof console !== "undefined") {
     };
 }
 
-export * from "./_namespaces/ts";
+export * from "./_namespaces/ts.js";

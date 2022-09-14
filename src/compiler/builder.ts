@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     addRange, AffectedFileResult, arrayFrom, arrayToMap, BuilderProgram, BuilderProgramHost, BuilderState,
     CancellationToken, CommandLineOption, compareStringsCaseSensitive, compareValues, CompilerHost, CompilerOptions,
@@ -13,7 +13,7 @@ import {
     notImplemented, outFile, Path, Program, ProjectReference, ReadBuildProgramHost, ReadonlyCollection, ReadonlySet,
     returnFalse, returnUndefined, SemanticDiagnosticsBuilderProgram, Set, skipTypeChecking, SourceFile,
     sourceFileMayBeEmitted, SourceMapEmitResult, toPath, tryAddToSet, WriteFileCallback, WriteFileCallbackData,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {

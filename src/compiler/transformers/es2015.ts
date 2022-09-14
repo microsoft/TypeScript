@@ -34,7 +34,7 @@ import {
     TransformFlags, tryCast, unescapeLeadingUnderscores, unwrapInnermostStatementOfLabel, VariableDeclaration,
     VariableDeclarationList, VariableStatement, visitEachChild, visitNode, visitNodes, visitParameterList, VisitResult,
     VoidExpression, WhileStatement, YieldExpression, Bundle,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 const enum ES2015SubstitutionFlags {
     /** Enables substitutions for captured `this` */

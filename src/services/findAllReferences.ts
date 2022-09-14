@@ -44,11 +44,11 @@ import {
     SymbolDisplayPart, SymbolDisplayPartKind, SymbolFlags, SymbolId, symbolName, SyntaxKind, textPart, TextSpan,
     tokenToString, tryAddToSet, tryCast, tryGetClassExtendingExpressionWithTypeArguments,
     tryGetImportFromModuleSpecifier, TypeChecker, VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     createImportTracker, ExportInfo, ExportKind, findModuleReferences, getExportInfo, getImportOrExportSymbol,
     ImportExport, ImportsResult, ImportTracker, ModuleReference,
-} from "./_namespaces/ts.FindAllReferences";
+} from "./_namespaces/ts.FindAllReferences.js";
 
 /** @internal */
 export interface SymbolAndEntries {

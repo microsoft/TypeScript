@@ -3,7 +3,8 @@
         "pretty": true,
         "lib": ["es2015.iterable", "es2015.generator", "es5"],
         "target": "es5",
-        "moduleResolution": "node",
+        "module": "Node16",
+        "moduleResolution": "Node16",
 
         "declaration": true,
         "declarationMap": true,

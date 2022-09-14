@@ -1,7 +1,7 @@
 import {
     FileReference, isKeyword, lastOrUndefined, length, noop, PragmaContext, PreProcessedFileInfo, processCommentPragmas,
     processPragmasIntoFields, scanner, ScriptTarget, SyntaxKind,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
     const pragmaContext: PragmaContext = {

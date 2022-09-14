@@ -1,4 +1,4 @@
-import { TypeScriptServicesFactory, versionMajorMinor } from "./_namespaces/ts";
+import { TypeScriptServicesFactory, versionMajorMinor } from "./_namespaces/ts.js";
 
 // We polyfill `globalThis` here so re can reliably patch the global scope
 // in the contexts we want to in the same way across script and module formats

@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 const angularFormsDts: ts.projectSystem.File = {
     path: "/node_modules/@angular/forms/forms.d.ts",

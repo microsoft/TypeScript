@@ -9,7 +9,7 @@ import {
     PropertyName, PropertySignature, PseudoBigInt, QuestionToken, setParent, setTextRange, setTextRangePosEnd,
     StringLiteral, SyntaxKind, TaggedTemplateExpression, TemplateLiteral, ThisTypeNode, Token, TypeNode,
     TypeOperatorNode, TypeParameterDeclaration, TypePredicateNode, VariableDeclaration, YieldExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // DEPRECATION: Node factory top-level exports
 // DEPRECATION PLAN:

@@ -1,3 +1,3 @@
 /* Generated file to emulate the vpath namespace. */
 
-export * from "../vpathUtil";
+export * from "../vpathUtil.js";

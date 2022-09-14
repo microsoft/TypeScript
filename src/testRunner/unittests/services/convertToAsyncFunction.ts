@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts.js";
+import * as Harness from "../../_namespaces/Harness.js";
 
 const libFile: ts.TestFSWithWatch.File = {
     path: "/a/lib/lib.d.ts",
@@ -1724,7 +1724,7 @@ function [#|f|]() {
 `);
 
     _testConvertToAsyncFunctionWithModule("convertToAsyncFunction_importedFunction", `
-import { fn } from "./module";
+import { fn } from "./module.js";
 function [#|f|]() {
     return Promise.resolve(0).then(fn);
 }

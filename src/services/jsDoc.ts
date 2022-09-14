@@ -13,7 +13,7 @@ import {
     PropertyAssignment, PropertyDeclaration, propertyNamePart, punctuationPart, ScriptElementKind, SourceFile,
     spacePart, startsWith, SymbolDisplayPart, SyntaxKind, TextInsertion, textPart, typeAliasNamePart, TypeChecker,
     typeParameterNamePart, VariableStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const jsDocTagNames = [
     "abstract",

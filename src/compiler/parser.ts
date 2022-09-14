@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AccessorDeclaration, addRange, addRelatedInfo, AmdDependency, append, ArrayBindingElement, ArrayBindingPattern,
     ArrayLiteralExpression, ArrayTypeNode, ArrowFunction, AsExpression, AssertClause, AssertEntry, AssertionLevel,
@@ -64,7 +64,7 @@ import {
     TypeOperatorNode, TypeParameterDeclaration, TypePredicateNode, TypeQueryNode, TypeReferenceNode, UnaryExpression,
     UnionOrIntersectionTypeNode, UnionTypeNode, UpdateExpression, VariableDeclaration, VariableDeclarationList,
     VariableStatement, VoidExpression, WhileStatement, WithStatement, YieldExpression,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const enum SignatureFlags {
     None = 0,

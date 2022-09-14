@@ -1,8 +1,8 @@
 import {
     combinePaths, createPackageJsonInfo, Debug, forEachAncestorDirectory, getDirectoryPath, Map, Path,
     ProjectPackageJsonInfo, Ternary, tryFileExists,
-} from "./_namespaces/ts";
-import { ProjectService } from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { ProjectService } from "./_namespaces/ts.server.js";
 
 /** @internal */
 export interface PackageJsonCache {

@@ -1,4 +1,4 @@
-import { Debug, Node, SyntaxKind, TypeAssertion } from "../_namespaces/ts";
+import { Debug, Node, SyntaxKind, TypeAssertion } from "../_namespaces/ts.js";
 
 // DEPRECATION: Renamed node tests
 // DEPRECATION PLAN:

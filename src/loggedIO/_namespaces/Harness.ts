@@ -1,4 +1,4 @@
 /* Generated file to emulate the Harness namespace. */
 
-export * from "../../harness/_namespaces/Harness";
-export * from "../loggedIO";
+export * from "../../harness/_namespaces/Harness.js";
+export * from "../loggedIO.js";

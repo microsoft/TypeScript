@@ -12,7 +12,7 @@ import {
     map, Node, NodeFactory, nodeIsSynthesized, ObjectBindingOrAssignmentPattern, ParameterDeclaration, PropertyName,
     setTextRange, some, TextRange, TransformationContext, TransformFlags,
     tryGetPropertyNameOfBindingOrAssignmentElement, VariableDeclaration, visitNode, VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 interface FlattenContext {
     context: TransformationContext;

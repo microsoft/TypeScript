@@ -2,7 +2,7 @@ import {
     CharacterCodes, compareStringsCaseInsensitive, compareStringsCaseSensitive, compareValues, Comparison, Debug,
     endsWith, equateStringsCaseInsensitive, equateStringsCaseSensitive, GetCanonicalFileName, getStringComparer,
     identity, lastOrUndefined, Path, some, startsWith, stringContains,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Internally, we represent paths as strings with '/' as the directory separator.

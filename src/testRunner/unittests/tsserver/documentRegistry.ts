@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;

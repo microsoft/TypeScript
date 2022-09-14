@@ -7,7 +7,7 @@ import {
     isExternalModuleIndicator, isIdentifier, isNamespaceExport, isSourceFile, isStatement, Map, ModifierFlags,
     ModuleKind, Node, NodeFlags, ScriptTarget, setOriginalNode, setTextRange, singleOrMany, some, SourceFile, Statement,
     SyntaxKind, TransformationContext, VariableStatement, visitEachChild, visitNodes, VisitResult,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformECMAScriptModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

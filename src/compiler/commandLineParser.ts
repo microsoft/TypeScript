@@ -19,7 +19,7 @@ import {
     Push, removeTrailingDirectorySeparator, returnTrue, ScriptTarget, startsWith, StringLiteral, SyntaxKind, sys,
     toFileNameLowerCase, toPath, tracing, trimString, TsConfigOnlyOption, TsConfigSourceFile, TypeAcquisition,
     unescapeLeadingUnderscores, WatchDirectoryFlags, WatchDirectoryKind, WatchFileKind, WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {

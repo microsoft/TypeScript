@@ -1,6 +1,6 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
-import * as vfs from "../../_namespaces/vfs";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
+import * as vfs from "../../_namespaces/vfs.js";
 
 describe("unittests:: tsc:: incremental::", () => {
     ts.verifyTscWithEdits({

@@ -14,8 +14,8 @@ import {
     ScriptTarget, Set, SetAccessorDeclaration, setTextRange, Signature, SignatureDeclaration, signatureHasRestParameter,
     some, SourceFile, Symbol, SymbolFlags, SymbolTracker, SyntaxKind, textChanges, tryCast, TsConfigSourceFile, Type,
     TypeChecker, TypeFlags, TypeNode, TypeParameterDeclaration, UnionType, UserPreferences, visitEachChild, visitNode,
-} from "../_namespaces/ts";
-import { ImportAdder } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { ImportAdder } from "../_namespaces/ts.codefix.js";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl

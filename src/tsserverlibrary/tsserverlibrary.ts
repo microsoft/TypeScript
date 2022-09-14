@@ -1,1 +1,1 @@
-export * from "./_namespaces/ts";
+export * from "./_namespaces/ts.js";

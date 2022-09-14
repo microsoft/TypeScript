@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     arrayFrom, BuilderProgram, BuildOptions, buildOpts, changeCompilerHostLikeToUseCache, CharacterCodes, combinePaths,
     CommandLineOption, compareStringsCaseInsensitive, CompilerOptions, contains, convertToOptionsWithAbsolutePaths,
@@ -17,7 +17,7 @@ import {
     ReportEmitErrorSummary, SolutionBuilder, SolutionBuilderHostBase, sort, SourceFile, startsWith, startTracing,
     stringContains, supportedJSExtensionsFlat, supportedTSExtensionsFlat, sys, System, toPath, tracing,
     validateLocaleAndSetLanguage, version, WatchCompilerHost, WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 interface Statistic {
     name: string;

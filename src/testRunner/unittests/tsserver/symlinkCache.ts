@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 const appTsconfigJson: ts.projectSystem.File = {
     path: "/packages/app/tsconfig.json",

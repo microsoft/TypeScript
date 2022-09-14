@@ -2,7 +2,7 @@ import {
     AbsolutePositionAndLineText, ConfiguredProject, Errors, ExternalProject, InferredProject, isConfiguredProject,
     isExternalProject, isInferredProject, maxFileSize, NormalizedPath, Project, ProjectKind, protocol,
     ScriptVersionCache, ServerHost,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 import {
     assign, clear, closeFileWatcherOf, computeLineAndCharacterOfPosition, computeLineStarts,
     computePositionOfLineAndCharacter, contains, createTextSpanFromBounds, Debug, directorySeparator,
@@ -10,7 +10,7 @@ import {
     FormatCodeSettings, getBaseFileName, getDefaultFormatCodeSettings, getLineInfo, getScriptKindFromFileName,
     getSnapshotText, hasTSFileExtension, IScriptSnapshot, isString, LineInfo, Path, ScriptKind, ScriptSnapshot, Set,
     some, SourceFile, SourceFileLike, stringContains, TextSpan, unorderedRemoveItem,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface ScriptInfoVersion {
     svc: number;

@@ -4,10 +4,10 @@ import {
     getLocaleSpecificMessage, getTokenAtPosition, isArrowFunction, isBlock, isExpression, isReturnStatement,
     needsParentheses, rangeContainsRange, RefactorContext, RefactorEditInfo, ReturnStatement, SourceFile, SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo, RefactorErrorInfo, refactorKindBeginsWith, registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Add or remove braces in an arrow function";
 const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;

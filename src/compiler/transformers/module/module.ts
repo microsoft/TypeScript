@@ -25,7 +25,7 @@ import {
     startOnNewLine, Statement, SyntaxKind, TaggedTemplateExpression, TextRange, TransformationContext, TransformFlags,
     tryGetModuleNameFromFile, VariableDeclaration, VariableStatement, visitEachChild, visitIterationBody, visitNode,
     visitNodes, VisitResult,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

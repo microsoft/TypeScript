@@ -57,7 +57,7 @@ import {
     SyntaxKind, TextRange, ThrowStatement, TokenFlags, tokenToString, tracing, TracingNode, tryCast, tryParsePattern,
     TryStatement, TypeLiteralNode, TypeOfExpression, TypeParameterDeclaration, unescapeLeadingUnderscores,
     unreachableCodeIsError, unusedLabelIsError, VariableDeclaration, WhileStatement, WithStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const enum ModuleInstanceState {

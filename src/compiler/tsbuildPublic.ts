@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AffectedFileResult, arrayToMap, assertType, BuilderProgram, BuildInfo, CancellationToken, canJsonReportNoInputFiles,
     changeCompilerHostLikeToUseCache, clearMap, closeFileWatcher, closeFileWatcherOf, commonOptionsWithBuild,
@@ -27,7 +27,7 @@ import {
     updateSharedExtendedConfigFileWatcher, updateWatchingWildcardDirectories, UpToDateStatus, UpToDateStatusType,
     version, WatchFactory, WatchHost, WatchOptions, WatchStatusReporter, WatchType, WildcardDirectoryWatcher, writeFile,
     WriteFileCallback,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const minimumDate = new Date(-8640000000000000);
 const maximumDate = new Date(8640000000000000);

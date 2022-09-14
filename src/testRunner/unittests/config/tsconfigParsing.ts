@@ -1,6 +1,6 @@
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import * as fakes from "../../_namespaces/fakes";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import * as fakes from "../../_namespaces/fakes.js";
 
 describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
     function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: ts.Diagnostic[] }) {

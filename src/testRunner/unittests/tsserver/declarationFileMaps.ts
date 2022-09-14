@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: ts.projectSystem.DocumentSpanFromSubstring): ts.DocumentSpan {
     const contextSpan = contextText !== undefined ? documentSpanFromSubstring({ file, text: contextText, options: contextOptions }) : undefined;

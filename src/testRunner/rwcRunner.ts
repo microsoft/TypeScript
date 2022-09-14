@@ -1,8 +1,8 @@
-import * as Playback from "./_namespaces/Playback";
-import * as Harness from "./_namespaces/Harness";
-import * as compiler from "./_namespaces/compiler";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
+import * as Playback from "./_namespaces/Playback.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as compiler from "./_namespaces/compiler.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 function runWithIOLog(ioLog: Playback.IoLog, fn: (oldIO: Harness.IO) => void) {

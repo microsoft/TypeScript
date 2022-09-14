@@ -2,7 +2,7 @@ import {
     __String, CharacterCodes, Comparer, Comparison, Debug, EqualityComparer, ESMap, isWhiteSpaceLike, Iterator, Map,
     MapLike, Push, Queue, ReadonlyESMap, ReadonlySet, Set, SortedArray, SortedReadonlyArray, TextSpan,
     UnderscoreEscapedMap,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<

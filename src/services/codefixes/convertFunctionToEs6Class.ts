@@ -9,8 +9,8 @@ import {
     isVariableDeclarationList, Modifier, Node, ObjectLiteralElementLike, ObjectLiteralExpression,
     PropertyAccessExpression, PropertyName, QuotePreference, some, SourceFile, Symbol, SymbolFlags, symbolName,
     SyntaxKind, textChanges, TypeChecker, UserPreferences, VariableDeclaration,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "convertFunctionToEs6Class";
 const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration.code];

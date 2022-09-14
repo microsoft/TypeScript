@@ -8,7 +8,7 @@ import {
     Map, NamedTupleMember, NewExpression, NodeArray, NodeFactory, OperatorPrecedence, OuterExpressionKinds,
     ParenthesizerRules, sameMap, setTextRange, skipPartiallyEmittedExpressions, some, SyntaxKind, TypeNode,
     UnaryExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRules {

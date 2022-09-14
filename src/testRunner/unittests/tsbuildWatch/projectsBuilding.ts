@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
     function pkgs<T>(cb: (index: number) => T, count: number, startIndex?: number): T[] {

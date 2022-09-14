@@ -7,7 +7,7 @@ import {
     normalizedPathToPath, nullTypingsInstaller, PackageInstalledResponse, PackageJsonCache, Project,
     ProjectFilesWithTSDiagnostics, ProjectKind, ProjectOptions, protocol, ScriptInfo, ScriptInfoVersion, ServerHost,
     Session, SetTypings, ThrottledOperations, toNormalizedPath, TypingsCache,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 import {
     addToSeen, arrayFrom, arrayToMap, AssertionLevel, CachedDirectoryStructureHost, canJsonReportNoInputFiles,
     canWatchDirectoryOrFile, cleanExtendedConfigCache, clearMap, clearSharedExtendedConfigFileWatcher,
@@ -32,7 +32,7 @@ import {
     tracing, tryAddToSet, tryReadFile, TsConfigSourceFile, TypeAcquisition, typeAcquisitionDeclarations,
     unorderedRemoveItem, updateSharedExtendedConfigFileWatcher, updateWatchingWildcardDirectories, UserPreferences,
     version, WatchDirectoryFlags, WatchFactory, WatchLogLevel, WatchOptions, WatchType, WildcardDirectoryWatcher,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /** @internal */

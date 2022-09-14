@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 const scenario = "emit";
 describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {

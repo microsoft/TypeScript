@@ -1,9 +1,12 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 import {
     combinePaths, ConditionalType, Debug, EvolvingArrayType, getLineAndCharacterOfPosition, getSourceFileOfNode,
     IndexedAccessType, IndexType, IntersectionType, LineAndCharacter, Map, Node, ObjectFlags, Path, performance,
     ReverseMappedType, SubstitutionType, timestamp, Type, TypeFlags, TypeReference, unescapeLeadingUnderscores,
     UnionType,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /* Tracing events for the compiler. */
 

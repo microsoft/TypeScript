@@ -1,4 +1,4 @@
-import { DirectoryWatcherCallback, FileWatcher, FileWatcherCallback, System, WatchOptions } from "./_namespaces/ts";
+import { DirectoryWatcherCallback, FileWatcher, FileWatcherCallback, System, WatchOptions } from "./_namespaces/ts.js";
 
 export interface CompressedData {
     length: number;

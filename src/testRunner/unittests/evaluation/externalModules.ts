@@ -1,4 +1,4 @@
-import * as evaluator from "../../_namespaces/evaluator";
+import * as evaluator from "../../_namespaces/evaluator.js";
 
 describe("unittests:: evaluation:: externalModules", () => {
     // https://github.com/microsoft/TypeScript/issues/35420
@@ -9,7 +9,7 @@ describe("unittests:: evaluation:: externalModules", () => {
                     export const output: any[] = [];
                 `,
                 "/.src/other.ts": `
-                    import { output } from "./output";
+                    import { output } from "./output.js";
                     export function f(this: any, expected) {
                         output.push(this === expected);
                     }
@@ -18,10 +18,10 @@ describe("unittests:: evaluation:: externalModules", () => {
                     f(undefined);
                 `,
                 "/.src/main.ts": `
-                    export { output } from "./output";
-                    import { output } from "./output";
-                    import { f } from "./other";
-                    import * as other from "./other";
+                    export { output } from "./output.js";
+                    import { output } from "./output.js";
+                    import { f } from "./other.js";
+                    import * as other from "./other.js";
 
                     // 1
                     f(undefined);
@@ -50,7 +50,7 @@ describe("unittests:: evaluation:: externalModules", () => {
                     export const output: any[] = [];
                 `,
                 "/.src/other.ts": `
-                    import { output } from "./output";
+                    import { output } from "./output.js";
                     export const f = function(this: any, expected) {
                         output.push(this === expected);
                     }
@@ -59,10 +59,10 @@ describe("unittests:: evaluation:: externalModules", () => {
                     f(undefined);
                 `,
                 "/.src/main.ts": `
-                    export { output } from "./output";
-                    import { output } from "./output";
-                    import { f } from "./other";
-                    import * as other from "./other";
+                    export { output } from "./output.js";
+                    import { output } from "./output.js";
+                    import { f } from "./other.js";
+                    import * as other from "./other.js";
 
                     // 1
                     f(undefined);

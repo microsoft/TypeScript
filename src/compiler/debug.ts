@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AnyFunction, AssertionLevel, BigIntLiteralType, CheckMode, compareValues, EmitFlags, every, FlowFlags, FlowNode,
     FlowNodeBase, formatStringFromArgs, getDirectoryPath, getEffectiveModifierFlagsNoCache, getEmitFlags, getOwnKeys,
@@ -15,7 +15,7 @@ import {
     SignatureFlags, SnippetKind, SortedReadonlyArray, stableSort, Symbol, SymbolFlags, symbolName, SyntaxKind, sys,
     TransformFlags, Type, TypeFacts, TypeFlags, TypeMapKind, TypeMapper, unescapeLeadingUnderscores, VarianceFlags,
     version, Version, zipWith,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export enum LogLevel {

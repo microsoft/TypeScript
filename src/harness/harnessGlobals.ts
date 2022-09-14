@@ -1,6 +1,6 @@
 import * as chai from "chai";
 
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 // this will work in the browser via browserify
 declare global {

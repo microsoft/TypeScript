@@ -1,7 +1,7 @@
-import { Diagnostics, factory, textChanges, TsConfigSourceFile } from "../_namespaces/ts";
+import { Diagnostics, factory, textChanges, TsConfigSourceFile } from "../_namespaces/ts.js";
 import {
     codeFixAll, createCodeFixActionWithoutFixAll, registerCodeFix, setJsonCompilerOptionValue,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.codefix.js";
 
 const fixId = "enableExperimentalDecorators";
 const errorCodes = [

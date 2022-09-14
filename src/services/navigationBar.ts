@@ -19,7 +19,7 @@ import {
     PropertyAssignment, PropertyDeclaration, PropertyNameLiteral, removeFileExtension, setTextRange,
     ShorthandPropertyAssignment, SourceFile, SpreadAssignment, SyntaxKind, TextSpan, TypeElement,
     unescapeLeadingUnderscores, VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Matches all whitespace characters in a string. Eg:

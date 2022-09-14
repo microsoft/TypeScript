@@ -1,10 +1,10 @@
-import * as FourSlashInterface from "./_namespaces/FourSlashInterface";
-import * as Harness from "./_namespaces/Harness";
-import * as vfs from "./_namespaces/vfs";
-import * as ts from "./_namespaces/ts";
-import * as fakes from "./_namespaces/fakes";
-import * as vpath from "./_namespaces/vpath";
-import * as Utils from "./_namespaces/Utils";
+import * as FourSlashInterface from "./_namespaces/FourSlashInterface.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as ts from "./_namespaces/ts.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as vpath from "./_namespaces/vpath.js";
+import * as Utils from "./_namespaces/Utils.js";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 

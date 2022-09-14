@@ -8,7 +8,7 @@ import {
     isStringLiteral, isStringLiteralLike, jsxModeNeedsExplicitImport, LanguageServiceHost, length, map,
     NamedImportBindings, NamedImports, NamespaceImport, Program, Scanner, some, SortedReadonlyArray, SourceFile,
     stableSort, suppressLeadingTrivia, SyntaxKind, textChanges, TransformFlags, tryCast, UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Organize imports by:

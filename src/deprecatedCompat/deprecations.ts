@@ -1,4 +1,4 @@
-import { Debug, DeprecationOptions, hasProperty } from "./_namespaces/ts";
+import { Debug, DeprecationOptions, hasProperty } from "./_namespaces/ts.js";
 
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using

@@ -1,18 +1,26 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { createRequire } from "module";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(new URL(import.meta.url));
+const __dirname = dirname(__filename);
+
+
 import {
     installNpmPackages, Log, RequestCompletedAction, TypingsInstaller,
-} from "./_namespaces/ts.server.typingsInstaller";
+} from "./_namespaces/ts.server.typingsInstaller.js";
 import {
     ActionPackageInstalled, Arguments, EventTypesRegistry, findArgument, hasArgument, InitializationFailedResponse,
     InstallTypingHost, nowString, PackageInstalledResponse, TypesRegistryResponse, TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 import {
     combinePaths, createGetCanonicalFileName, Debug, ESMap, forEachAncestorDirectory, getDirectoryPath, getEntries, Map,
     MapLike, normalizeSlashes, stringContains, sys, toPath, version,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 class FileLog implements Log {
     constructor(private logFile: string | undefined) {

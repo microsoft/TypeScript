@@ -4,8 +4,8 @@ import {
     isPropertyAssignment, isPropertyDeclaration, isPropertySignature, isShorthandPropertyAssignment,
     isVariableDeclaration, Node, PropertyAccessExpression, SignatureDeclaration, SourceFile, Symbol, SyntaxKind,
     textChanges, TextSpan, TypeChecker, UnionTypeNode,
-} from "../_namespaces/ts";
-import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 

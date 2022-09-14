@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
     ts.tscWatch.verifyTscWatch({

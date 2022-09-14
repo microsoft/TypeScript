@@ -2,8 +2,8 @@ import {
     addToSeen, CallExpression, ConstructorDeclaration, Diagnostics, ExpressionStatement, forEachChild,
     getContainingFunction, getNodeId, getTokenAtPosition, isExpressionStatement, isFunctionLike,
     isPropertyAccessExpression, isSuperCall, Map, Node, SourceFile, SyntaxKind, textChanges,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "classSuperMustPrecedeThisAccess";
 const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];

@@ -4,7 +4,7 @@ import {
     isPropertyAccessExpression, isPropertyAssignment, JsxClosingElement, JsxEmit, JsxOpeningElement,
     JsxSelfClosingElement, Node, nodeIsSynthesized, PropertyAccessExpression, PropertyAssignment, setTextRange,
     SourceFile, stringToToken, SyntaxKind, TransformationContext,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Transforms ES5 syntax into ES3 syntax.

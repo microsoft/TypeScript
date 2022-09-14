@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     arrayToMap, binarySearch, BuilderProgram, closeFileWatcher, compareStringsCaseSensitive, CompilerOptions,
     createGetCanonicalFileName, Debug, DirectoryWatcherCallback, emptyArray, emptyFileSystemEntries,
@@ -9,7 +9,7 @@ import {
     noop, normalizePath, outFile, Path, PollingInterval, Program, removeFileExtension, removeIgnoredPath,
     returnNoopFileWatcher, returnTrue, Set, setSysLog, SortedArray, SortedReadonlyArray, supportedJSExtensionsFlat,
     timestamp, WatchDirectoryFlags, WatchFileKind, WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Partial interface of the System thats needed to support the caching of directory structure

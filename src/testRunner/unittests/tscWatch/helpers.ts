@@ -1,6 +1,6 @@
-import * as ts from "../../_namespaces/ts";
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts.js";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
 
 export const projects = `/user/username/projects`;
 export const projectRoot = `${projects}/myproject`;

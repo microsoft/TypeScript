@@ -16,7 +16,7 @@ import {
     TransformationContext, TransformFlags, TryStatement, VariableDeclaration, VariableDeclarationList,
     VariableStatement, visitEachChild, visitIterationBody, visitNode, visitNodes, visitParameterList, VisitResult,
     WhileStatement, WithStatement, YieldExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // Transforms generator functions into a compatible ES5 representation with similar runtime
 // semantics. This is accomplished by first transforming the body of each generator

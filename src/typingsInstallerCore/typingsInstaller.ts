@@ -5,11 +5,11 @@ import {
     mangleScopedPackageName, Map, mapDefined, MapLike, ModuleResolutionKind, noop, Path, PollingInterval,
     resolveModuleName, Set, version, Version, versionMajorMinor, WatchDirectoryFlags, WatchFactory, WatchFactoryHost,
     WatchLogLevel, WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionInvalidate, ActionSet, BeginInstallTypes, CloseProject, DiscoverTypings, EndInstallTypes,
     EventBeginInstallTypes, EventEndInstallTypes, InstallTypingHost, InvalidateCachedTypings, SetTypings,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 interface NpmConfig {
     devDependencies: MapLike<any>;

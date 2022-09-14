@@ -2,8 +2,8 @@ import {
     cast, Debug, Diagnostics, factory, first, getAllowSyntheticDefaultImports, getTokenAtPosition, Identifier,
     ImportSpecifier, isIdentifier, isObjectBindingPattern, isRequireCall, isVariableDeclaration, isVariableStatement,
     NamedImports, ObjectBindingPattern, Program, SourceFile, StringLiteralLike, textChanges, tryCast, VariableStatement,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "requireInTs";
 const errorCodes = [Diagnostics.require_call_may_be_converted_to_an_import.code];

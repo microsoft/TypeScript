@@ -8,7 +8,7 @@ import {
     moduleSpecifiers, normalizePath, Path, pathIsRelative, Program, PropertyAssignment,
     ResolvedModuleWithFailedLookupLocations, resolveModuleName, SourceFile, SourceFileLike, SourceMapper,
     StringLiteralLike, Symbol, textChanges, TextRange, tryRemoveDirectoryPrefix, UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getEditsForFileRename(

@@ -1,14 +1,14 @@
 import {
     addNodeFactoryPatcher, buildOverload, factory, Identifier, isArray, Modifier, NodeFactory, TypeNode,
     TypeParameterDeclaration,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // DEPRECATION: Overloads to createTypeParameter/updateTypeParameter that does not accept `modifiers`
 // DEPRECATION PLAN:
 //     - soft: 4.7
 //     - warn: 4.8
 //     - error: 5.0
-declare module "../../compiler/types" {
+declare module "../../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface NodeFactory {
         /** @deprecated Use the overload that accepts 'modifiers' */

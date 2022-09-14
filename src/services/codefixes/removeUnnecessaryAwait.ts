@@ -1,8 +1,8 @@
 import {
     AwaitKeywordToken, Diagnostics, findPrecedingToken, getLeftmostExpression, getTokenAtPosition, isAwaitExpression,
     isIdentifier, isParenthesizedExpression, Node, SourceFile, SyntaxKind, textChanges, TextSpan, tryCast,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "removeUnnecessaryAwait";
 const errorCodes = [

@@ -1,3 +1,3 @@
 /* Generated file to emulate the ts.Completions.StringCompletions namespace. */
 
-export * from "../stringCompletions";
+export * from "../stringCompletions.js";

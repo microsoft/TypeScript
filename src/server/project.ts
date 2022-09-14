@@ -1,10 +1,10 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     asNormalizedPath, createModuleSpecifierCache, emptyArray, Errors, FileStats, forEachResolvedProjectReferenceProject,
     LogLevel, ModuleImportResult, Msg, NormalizedPath, projectContainsInfoDirectly, ProjectOptions,
     ProjectReferenceProjectLoadKind, ProjectService, protocol, ScriptInfo, ServerHost, Session, toNormalizedPath,
     TypingsCache, updateProjectIfDirty,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 import {
     addRange, append, ApplyCodeActionCommandResult, arrayFrom, arrayToMap, BuilderState, CachedDirectoryStructureHost,
     changesAffectModuleResolution, clearMap, cloneCompilerOptions, closeFileWatcher, closeFileWatcherOf, combinePaths,
@@ -29,7 +29,7 @@ import {
     stripQuotes, StructureIsReused, SymlinkCache, ThrottledCancellationToken, timestamp, toPath, tracing,
     TypeAcquisition, updateErrorForNoInputFiles, updateMissingFilePathsWatch, WatchDirectoryFlags, WatchOptions,
     WatchType,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export enum ProjectKind {
     Inferred,

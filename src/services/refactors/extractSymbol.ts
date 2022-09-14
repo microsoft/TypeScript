@@ -25,8 +25,8 @@ import {
     StringLiteral, suppressLeadingAndTrailingTrivia, Symbol, SymbolFlags, SyntaxKind, textChanges, TextRange, TextSpan,
     textSpanEnd, TryStatement, Type, TypeChecker, TypeElement, TypeFlags, TypeLiteralNode, TypeNode, TypeParameter,
     TypeParameterDeclaration, VariableDeclaration, visitEachChild, visitNode, visitNodes, VisitResult,
-} from "../_namespaces/ts";
-import { refactorKindBeginsWith, registerRefactor } from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.js";
+import { refactorKindBeginsWith, registerRefactor } from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Extract Symbol";
 

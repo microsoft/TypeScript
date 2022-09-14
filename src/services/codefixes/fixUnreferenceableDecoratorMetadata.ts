@@ -3,8 +3,8 @@ import {
     ImportClause, ImportEqualsDeclaration, ImportSpecifier, isIdentifier, isImportClause, isImportEqualsDeclaration,
     isImportSpecifier, Node, or, Program, refactor, skipAlias, SourceFile, SymbolFlags, SyntaxKind, textChanges,
     tryCast,
-} from "../_namespaces/ts";
-import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "fixUnreferenceableDecoratorMetadata";
 const errorCodes = [Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.code];

@@ -1,4 +1,4 @@
-import { padLeft, sys } from "./_namespaces/ts";
+import { padLeft, sys } from "./_namespaces/ts.js";
 
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";

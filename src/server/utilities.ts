@@ -1,5 +1,5 @@
-import { binarySearch, Comparer, getBaseFileName, identity, Map, perfLogger, SortedArray } from "./_namespaces/ts";
-import { Logger, LogLevel, NormalizedPath, ServerHost } from "./_namespaces/ts.server";
+import { binarySearch, Comparer, getBaseFileName, identity, Map, perfLogger, SortedArray } from "./_namespaces/ts.js";
+import { Logger, LogLevel, NormalizedPath, ServerHost } from "./_namespaces/ts.server.js";
 
 /** @internal */
 export class ThrottledOperations {

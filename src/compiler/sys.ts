@@ -1,3 +1,10 @@
+import { createRequire } from "module";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(new URL(import.meta.url));
+const __dirname = dirname(__filename);
+
 import {
     AssertionLevel, closeFileWatcher, closeFileWatcherOf, combinePaths, Comparison, contains, containsPath,
     createGetCanonicalFileName, createMultiMap, Debug, directorySeparator, emptyArray, emptyFileSystemEntries, endsWith,
@@ -6,7 +13,7 @@ import {
     Map, mapDefined, matchesExclude, matchFiles, memoize, noop, normalizePath, normalizeSlashes, orderedRemoveItem,
     Path, perfLogger, PollingWatchKind, RequireResult, resolveJSModule, some, startsWith, stringContains, timestamp,
     unorderedRemoveItem, WatchDirectoryKind, WatchFileKind, WatchOptions, writeFileEnsuringDirectories,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -1408,11 +1415,8 @@ interface DirectoryWatcher extends FileWatcher {
     referenceCount: number;
 }
 
-declare const require: any;
 declare const process: any;
 declare const global: any;
-declare const __filename: string;
-declare const __dirname: string;
 
 export function getNodeMajorVersion(): number | undefined {
     if (typeof process === "undefined") {

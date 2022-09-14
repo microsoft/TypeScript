@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 function setup(fileName: string, content: string) {
     const file: ts.projectSystem.File = { path: fileName, content };

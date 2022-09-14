@@ -10,11 +10,11 @@ import {
     nodeIsSynthesized, rangeContainsPositionExclusive, rangeContainsRange, rangeContainsStartEnd,
     rangeOverlapsWithStartEnd, repeatString, SourceFile, SourceFileLike, startEndContainsRange,
     startEndOverlapsWithStartEnd, SyntaxKind, TextChange, TextRange, TriviaSyntaxKind, TypeReferenceNode,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     FormattingContext, FormattingRequestKind, FormattingScanner, getFormattingScanner, Rule, RuleAction, RuleFlags,
     RulesMap, SmartIndenter,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.formatting.js";
 
 /** @internal */
 export interface FormatContext {

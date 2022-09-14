@@ -1,7 +1,7 @@
-import * as ts from "./_namespaces/ts";
-import * as documents from "./_namespaces/documents";
-import * as Utils from "./_namespaces/Utils";
-import { Compiler } from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts.js";
+import * as documents from "./_namespaces/documents.js";
+import * as Utils from "./_namespaces/Utils.js";
+import { Compiler } from "./_namespaces/Harness.js";
 
 interface SourceMapSpanWithDecodeErrors {
     sourceMapSpan: ts.Mapping;

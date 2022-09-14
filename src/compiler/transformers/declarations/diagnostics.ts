@@ -12,7 +12,7 @@ import {
     PropertyAccessExpression, PropertyDeclaration, PropertySignature, QualifiedName, SetAccessorDeclaration,
     SymbolAccessibility, SymbolAccessibilityResult, SyntaxKind, TypeAliasDeclaration, TypeParameterDeclaration,
     VariableDeclaration,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => (SymbolAccessibilityDiagnostic | undefined);

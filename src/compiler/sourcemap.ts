@@ -4,7 +4,7 @@ import {
     getNormalizedAbsolutePath, getPositionOfLineAndCharacter, getRelativePathToDirectoryOrUrl, identity, isArray,
     isString, Iterator, LineAndCharacter, Map, performance, RawSourceMap, some, sortAndDeduplicate, SortedReadonlyArray,
     SourceMapGenerator, trimStringEnd,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface SourceMapGeneratorOptions {

@@ -30,7 +30,7 @@ import {
     RelationalOperator, RelationalOperatorOrHigher, SetAccessorDeclaration, setOriginalNode, setParent, setStartsOnNewLine, setTextRange,
     ShiftOperator, ShiftOperatorOrHigher, ShorthandPropertyAssignment, some, SourceFile, Statement, StringLiteral,
     SyntaxKind, TextRange, ThisTypeNode, Token, TypeNode, TypeParameterDeclaration,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // Compound nodes
 

@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import * as Harness from "../../_namespaces/Harness";
+import * as ts from "../../_namespaces/ts.js";
+import * as Harness from "../../_namespaces/Harness.js";
 
 describe("unittests:: tsserver:: ExternalProjects", () => {
     describe("can handle tsconfig file name with difference casing", () => {

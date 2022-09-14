@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
 
 describe("unittests:: tsserver:: languageService", () => {
     it("should work correctly on case-sensitive file systems", () => {

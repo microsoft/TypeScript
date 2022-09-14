@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: with project references and error reporting", () => {
     const dependecyLocation = `${ts.tscWatch.projectRoot}/dependency`;

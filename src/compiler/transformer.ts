@@ -10,7 +10,7 @@ import {
     transformES2018, transformES2019, transformES2020, transformES2021, transformES5, transformESNext,
     transformGenerators, transformJsx, transformLegacyDecorators, transformModule, transformNodeModule,
     transformSystemModule, transformTypeScript, VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {

@@ -5,7 +5,7 @@ import {
     getPropertyNameOfBindingOrAssignmentElement, Identifier, isCallExpression, isComputedPropertyName, isIdentifier,
     memoize, PrivateIdentifierKind, ReadonlyESMap, ScriptTarget, setEmitFlags, setTextRange, SyntaxKind, TextRange,
     TransformationContext, UnscopedEmitHelper,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export interface EmitHelperFactory {

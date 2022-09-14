@@ -22,7 +22,7 @@ import {
     TransformFlags, tryGetModuleNameFromFile, TryStatement, VariableDeclaration, VariableDeclarationList,
     VariableStatement, visitEachChild, visitIterationBody, visitNode, visitNodes, VisitResult, WhileStatement,
     WithStatement,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformSystemModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

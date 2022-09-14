@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AccessorDeclaration, ArrayBindingPattern, ArrayLiteralExpression, arrayToMap, ArrayTypeNode, ArrowFunction,
     AsExpression, AssertClause, AssertEntry, AwaitExpression, base64encode, BigIntLiteral, BinaryExpression,
@@ -77,7 +77,7 @@ import {
     UnparsedPrepend, UnparsedPrologue, UnparsedSource, UnparsedSyntheticReference, UnparsedTextLike,
     VariableDeclaration, VariableDeclarationList, VariableStatement, VoidExpression, WhileStatement, WithStatement,
     writeCommentRange, writeFile, WriteFileCallbackData, YieldExpression,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const brackets = createBracketsMap();
 

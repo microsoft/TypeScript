@@ -1,6 +1,6 @@
 import {
     Debug, Map, noop, Performance, PerformanceHooks, sys, System, timestamp, tryGetNativePerformanceHooks,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** Performance measurements for the compiler. */
 

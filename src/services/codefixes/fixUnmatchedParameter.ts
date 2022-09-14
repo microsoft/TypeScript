@@ -2,10 +2,10 @@ import {
     __String, append, CodeFixAction, CodeFixContext, Diagnostics, factory, firstDefined, getHostSignatureFromJSDoc,
     getJSDocTags, getTokenAtPosition, Identifier, isIdentifier, isJSDocParameterTag, JSDocParameterTag, JSDocTag,
     length, map, Map, Set, SignatureDeclaration, SourceFile, textChanges,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     createCodeFixAction, createCodeFixActionWithoutFixAll, createCombinedCodeActions, eachDiagnostic, registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.codefix.js";
 
 const deleteUnmatchedParameter = "deleteUnmatchedParameter";
 const renameUnmatchedParameter = "renameUnmatchedParameter";

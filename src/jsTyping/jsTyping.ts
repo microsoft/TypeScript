@@ -4,7 +4,7 @@ import {
     getEntries, getNormalizedAbsolutePath, getOwnKeys, getPathComponents, getProperty, hasJSFileExtension, Map,
     mapDefined, MapLike, normalizePath, Path, readConfigFile, ReadonlyESMap, removeFileExtension,
     removeMinAndVersionNumbers, Set, some, TypeAcquisition, Version, versionMajorMinor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface TypingResolutionHost {

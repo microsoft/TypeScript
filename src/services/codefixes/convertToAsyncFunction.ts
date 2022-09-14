@@ -11,8 +11,8 @@ import {
     Node, NodeFlags, ObjectFlags, PropertyAccessExpression, ReadonlyESMap, ReadonlySet, returnsPromise, ReturnStatement,
     returnTrue, Set, Signature, SignatureKind, skipTrivia, SourceFile, Statement, Symbol, SyntaxKind, textChanges,
     tryCast, TryStatement, Type, TypeChecker, TypeNode, TypeReference, UnionReduction,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "convertToAsyncFunction";
 const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];

@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import { verifyDynamic } from "./helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { verifyDynamic } from "./helpers.js";
 
 function verifyPathRecognizedAsDynamic(path: string) {
     const file: ts.projectSystem.File = {

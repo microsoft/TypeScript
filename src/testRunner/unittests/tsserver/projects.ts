@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: tsserver:: Projects", () => {
     it("handles the missing files - that were added to program because they were added with ///<ref", () => {

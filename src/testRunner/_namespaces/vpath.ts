@@ -1,4 +1,4 @@
 /* Generated file to emulate the vpath namespace. */
 
-export * from "../../harness/_namespaces/vpath";
-export * from "../vpathRef";
+export * from "../../harness/_namespaces/vpath.js";
+export * from "../vpathRef.js";

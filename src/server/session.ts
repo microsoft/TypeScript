@@ -23,7 +23,7 @@ import {
     SignatureHelpItems, singleIterator, some, SourceFile, startsWith, stringContains, SymbolDisplayPart, SyntaxKind,
     TextChange, TextInsertion, TextRange, TextSpan, textSpanEnd, toArray, toFileNameLowerCase, tracing,
     unmangleScopedPackageName, UserPreferences, version, WithMetadata,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ConfigFileDiagEvent, ConfiguredProject, convertFormatOptions, convertScriptKindName, convertUserPreferences,
     EmitResult, emptyArray, Errors, GcTimer, indent, isConfigFile, isConfiguredProject, isExternalProject,
@@ -32,7 +32,7 @@ import {
     ProjectLoadingStartEvent, ProjectService, ProjectServiceEvent, ProjectServiceEventHandler, ProjectServiceOptions,
     ProjectsUpdatedInBackgroundEvent, protocol, ScriptInfo, ScriptInfoOrConfig, ServerHost, stringifyIndented,
     toNormalizedPath, updateProjectIfDirty,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 interface StackTraceError extends Error {
     stack?: string;

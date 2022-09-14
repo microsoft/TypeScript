@@ -6,8 +6,8 @@ import {
     isNamedDeclaration, isPrivateIdentifier, isPropertyAccessExpression, isQualifiedName, isStringLiteralLike,
     ModifierFlags, Node, NodeFlags, ScriptTarget, SemanticMeaning, SourceFile, Symbol, SymbolFlags, symbolName,
     SyntaxKind, textChanges,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "fixSpelling";
 const errorCodes = [

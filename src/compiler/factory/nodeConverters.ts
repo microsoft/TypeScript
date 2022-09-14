@@ -5,7 +5,7 @@ import {
     isBindingPattern, isBlock, isExpression, isIdentifier, isObjectBindingPattern, isObjectLiteralElementLike,
     isObjectLiteralExpression, map, NodeConverters, NodeFactory, notImplemented, ObjectBindingOrAssignmentElement,
     ObjectBindingOrAssignmentPattern, setOriginalNode, setStartsOnNewLine, setTextRange, SyntaxKind,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function createNodeConverters(factory: NodeFactory): NodeConverters {

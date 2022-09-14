@@ -1,7 +1,7 @@
 import {
     Bundle, Debug, EmitHint, isSourceFile, map, ModuleKind, Node, SourceFile, SyntaxKind, TransformationContext,
     transformECMAScriptModule, transformModule,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformNodeModule(context: TransformationContext) {

@@ -58,7 +58,7 @@ import {
     TextRange, TextSpan, textSpanContainsPosition, textSpanContainsTextSpan, textSpanEnd, Token, tokenToString,
     TransientSymbol, tryCast, Type, TypeChecker, TypeFormatFlags, TypeNode, TypeOfExpression, TypeQueryNode,
     unescapeLeadingUnderscores, UserPreferences, VariableDeclaration, visitEachChild, VoidExpression, YieldExpression,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */ // Don't expose that we use this
 // Based on lib.es6.d.ts

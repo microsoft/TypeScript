@@ -1,6 +1,6 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 
-import { checkResolvedModulesCache, checkResolvedTypeDirectivesCache, createTestCompilerHost, NamedSourceText, newLine, newProgram, ProgramWithSourceTexts, SourceText, TestCompilerHost, updateProgram, updateProgramText } from "./helpers";
+import { checkResolvedModulesCache, checkResolvedTypeDirectivesCache, createTestCompilerHost, NamedSourceText, newLine, newProgram, ProgramWithSourceTexts, SourceText, TestCompilerHost, updateProgram, updateProgramText } from "./helpers.js";
 
 describe("unittests:: Reuse program structure:: General", () => {
     const target = ts.ScriptTarget.Latest;

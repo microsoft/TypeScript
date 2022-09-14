@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     arrayToMap, CachedDirectoryStructureHost, CacheWithRedirects, CharacterCodes, clearMap, closeFileWatcher,
     closeFileWatcherOf, CompilerOptions, contains, createCacheWithRedirects, createModeAwareCache,
@@ -15,7 +15,7 @@ import {
     resolutionExtensionIsTSOrJson, ResolvedModuleFull, ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference, ResolvedTypeReferenceDirective, ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     returnTrue, Set, some, SourceFile, startsWith, stringContains, trace, unorderedRemoveItem, WatchDirectoryFlags,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * This is the cache of module/typedirectives resolution that can be retained across program

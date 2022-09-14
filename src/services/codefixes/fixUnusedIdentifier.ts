@@ -8,8 +8,8 @@ import {
     isPrefixUnaryExpression, isPropertyAccessExpression, isSuperKeyword, isVariableDeclarationList, map, Node,
     ObjectBindingPattern, ParameterDeclaration, Program, showModuleSpecifier, SourceFile, SyntaxKind, textChanges,
     tryCast, TypeChecker, VariableDeclaration, VariableDeclarationList,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixName = "unusedIdentifier";
 const fixIdPrefix = "unusedIdentifier_prefix";

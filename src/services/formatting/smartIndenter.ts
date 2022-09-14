@@ -9,8 +9,8 @@ import {
     ObjectBindingPattern, ObjectLiteralExpression, positionBelongsToNode, rangeContainsRange, rangeContainsStartEnd,
     SignatureDeclaration, skipTrivia, SourceFile, SourceFileLike, SyntaxKind, TextRange, TypeAliasDeclaration,
     TypeLiteralNode, TypeReferenceNode, VariableDeclarationList,
-} from "../_namespaces/ts";
-import { getRangeOfEnclosingComment, TextRangeWithKind } from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
+import { getRangeOfEnclosingComment, TextRangeWithKind } from "../_namespaces/ts.formatting.js";
 
 /** @internal */
 export namespace SmartIndenter {

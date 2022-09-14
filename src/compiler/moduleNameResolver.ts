@@ -17,7 +17,7 @@ import {
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations, some, sort, SourceFile, startsWith, stringContains,
     supportedTSExtensionsFlat, toPath, tryExtractTSExtension, tryGetExtensionFromPath, tryParsePatterns,
     tryRemoveExtension, version, Version, versionMajorMinor, VersionRange,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;

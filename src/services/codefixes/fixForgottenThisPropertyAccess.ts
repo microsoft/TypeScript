@@ -1,8 +1,8 @@
 import {
     Diagnostics, factory, getContainingClass, getTokenAtPosition, Identifier, isIdentifier, isPrivateIdentifier,
     PrivateIdentifier, SourceFile, suppressLeadingAndTrailingTrivia, textChanges,
-} from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix.js";
 
 const fixId = "forgottenThisPropertyAccess";
 const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;

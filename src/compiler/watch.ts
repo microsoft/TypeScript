@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     addRange, BuilderProgram, CancellationToken, chainDiagnosticMessages, combinePaths, CompilerHost, CompilerOptions,
     contains, convertToRelativePath, copyProperties, countWhere, createCompilerDiagnostic,
@@ -19,7 +19,7 @@ import {
     targetOptionDeclaration, WatchCompilerHost, WatchCompilerHostOfConfigFile,
     WatchCompilerHostOfFilesAndCompilerOptions, WatchFactoryHost, WatchHost, WatchLogLevel, WatchOptions,
     WatchStatusReporter, WriteFileCallback, writeFileEnsuringDirectories,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),

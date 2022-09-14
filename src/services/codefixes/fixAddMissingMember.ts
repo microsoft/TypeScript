@@ -16,12 +16,12 @@ import {
     ScriptTarget, Set, setParent, Signature, SignatureKind, singleElementArray, singleOrUndefined, skipConstraint, some,
     SourceFile, startsWithUnderscore, StringLiteralType, Symbol, SymbolFlags, SyntaxKind, textChanges, tryCast, Type,
     TypeChecker, TypeFlags, TypeLiteralNode, TypeNode, TypeReference, UnionType,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     createCodeFixAction, createCodeFixActionWithoutFixAll, createCombinedCodeActions, createImportAdder,
     createSignatureDeclarationFromCallExpression, createSignatureDeclarationFromSignature, createStubbedBody,
     eachDiagnostic, getAllSupers, ImportAdder, registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.codefix.js";
 
 const fixMissingMember = "fixMissingMember";
 const fixMissingProperties = "fixMissingProperties";

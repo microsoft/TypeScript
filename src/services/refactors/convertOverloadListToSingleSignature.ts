@@ -5,8 +5,8 @@ import {
     length, map, mapDefined, MethodDeclaration, MethodSignature, NamedTupleMember, Node, NodeArray,
     ParameterDeclaration, Program, rangeContainsPosition, RefactorContext, RefactorEditInfo, setEmitFlags,
     setSyntheticLeadingComments, setTextRange, some, SourceFile, SyntaxKind, textChanges, TupleTypeNode,
-} from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.js";
+import { registerRefactor } from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Convert overload list to single signature";
 const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;

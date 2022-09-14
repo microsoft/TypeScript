@@ -9,7 +9,7 @@ import {
     isRequireCall, isReturnStatement, isSourceFileJS, isStringLiteral, isVariableDeclaration, isVariableStatement, Map,
     MethodDeclaration, ModuleKind, Node, NodeFlags, Program, programContainsEsModules, PropertyAccessExpression, Push,
     ReturnStatement, skipAlias, some, SourceFile, SyntaxKind, TypeChecker, VariableStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
 

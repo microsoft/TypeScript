@@ -3,7 +3,7 @@ import {
     CodeFixRegistration, CombinedCodeActions, computeSuggestionDiagnostics, contains, createMultiMap, Debug, Diagnostic,
     DiagnosticAndArguments, diagnosticToString, DiagnosticWithLocation, FileTextChanges, flatMap, isString, map, Map,
     Push, TextChange, textChanges,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();

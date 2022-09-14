@@ -8,7 +8,7 @@ import {
     RenameInfo, RenameInfoFailure, RenameInfoSuccess, ScriptElementKind, ScriptElementKindModifier, some, SourceFile,
     StringLiteralLike, stripQuotes, Symbol, SymbolDisplay, SymbolFlags, SyntaxKind, tryGetImportFromModuleSpecifier,
     tryRemoveSuffix, TypeChecker, TypeFlags, UnionType, UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, preferences: UserPreferences): RenameInfo {
@@ -53,7 +53,7 @@ function getRenameInfoForNode(
         return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
     }
 
-    // Cannot rename `default` as in `import { default as foo } from "./someModule";
+    // Cannot rename `default` as in `import { default as foo } from "./someModule.js";
     if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
         return undefined;
     }

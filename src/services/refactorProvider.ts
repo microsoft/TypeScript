@@ -1,7 +1,7 @@
 import {
     ApplicableRefactorInfo, arrayFrom, flatMapIterator, Map, Refactor, RefactorContext, RefactorEditInfo,
-} from "./_namespaces/ts";
-import { refactorKindBeginsWith } from "./_namespaces/ts.refactor";
+} from "./_namespaces/ts.js";
+import { refactorKindBeginsWith } from "./_namespaces/ts.refactor.js";
 
 // A map with the refactor code as key, the refactor itself as value
 // e.g.  nonSuggestableRefactors[refactorCode] -> the refactor you want

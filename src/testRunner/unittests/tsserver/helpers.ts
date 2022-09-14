@@ -1,6 +1,6 @@
-import * as ts from "../../_namespaces/ts";
-import * as Harness from "../../_namespaces/Harness";
-import * as Utils from "../../_namespaces/Utils";
+import * as ts from "../../_namespaces/ts.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as Utils from "../../_namespaces/Utils.js";
 
 export import TI = ts.server.typingsInstaller;
 export import protocol = ts.server.protocol;
