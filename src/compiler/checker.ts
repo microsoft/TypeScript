@@ -38460,19 +38460,26 @@ namespace ts {
 
         function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, condType: Type, body?: Statement | Expression) {
             if (!strictNullChecks) return;
-            condExpr = skipParentheses(condExpr);
-            helper(condExpr, body);
-            while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
-                condExpr = skipParentheses(condExpr.left);
+            bothHelper(condExpr, body);
+
+            function bothHelper(condExpr: Expression, body: Expression | Statement | undefined) {
+                condExpr = skipParentheses(condExpr);
                 helper(condExpr, body);
+                while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
+                    condExpr = skipParentheses(condExpr.left);
+                    helper(condExpr, body);
+                }
             }
 
             function helper(condExpr: Expression, body: Expression | Statement | undefined) {
-                const location = isBinaryExpression(condExpr) &&
-                    (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)
-                    ? condExpr.right
-                    : condExpr;
-                if (isModuleExportsAccessExpression(location)) return;
+                const location = isLogicalBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+                if (isModuleExportsAccessExpression(location)) {
+                    return;
+                }
+                if (isLogicalBinaryExpression(location)) {
+                    bothHelper(location, body);
+                    return;
+                }
                 const type = location === condExpr ? condType : checkTruthinessExpression(location);
                 const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
                 if (!(getTypeFacts(type) & TypeFacts.Truthy) || isPropertyExpressionCast) return;
@@ -38511,6 +38518,11 @@ namespace ts {
                         error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
                     }
                 }
+            }
+
+            function isLogicalBinaryExpression(expr: Expression): expr is BinaryExpression {
+                return isBinaryExpression(expr) &&
+                    (expr.operatorToken.kind === SyntaxKind.BarBarToken || expr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken);
             }
         }
 
