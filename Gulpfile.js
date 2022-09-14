@@ -122,12 +122,13 @@ const writeHackyCJSShim = (infile, outfile) => {
 
 /** @type {(infile: string, outfile: string) => (done: () => void) => void} */
 const writeHackyMJSShim = (infile, outfile) => {
-    return (done) => {
+    const writeHackyMJSShim = (done) => {
         const inRelativeToOut = infile = path.relative(path.dirname(outfile), infile);
         fs.writeFileSync(path.join(path.dirname(outfile), "package.json"), JSON.stringify({ name: "local", private: true, type: "module" }));
         fs.writeFileSync(outfile, `import "./${inRelativeToOut}"`);
         done();
     };
+    return writeHackyMJSShim;
 };
 
 const preBundleFromSrc = parallel(generateLibs, series(buildScripts, generateDiagnostics, localize));
@@ -188,7 +189,7 @@ const buildTsc = () => buildProject("src/tsc");
 // task("tsc", series(preBundleFromSrc, bundleTscFromSrc)); // esbuild on ./src
 // task("tsc", series(preBundleFromEmit, bundleTscFromEmit)); // esbuild on emitted ./built/local
 // task("tsc", series(preBuildSrc, buildSrc, writeHackyCJSShim("./built/local/tsc/tsc.js", "./built/local/tsc.js"))); // CJS
-task("tsc", series(preBuildSrc, buildSrc, writeHackyMJSShim("./built/local/tsc/tsc.js", "./built/local/tsc.js"))); // MJS
+task("tsc", series(preBuildSrc, buildTsc, writeHackyMJSShim("./built/local/tsc/tsc.js", "./built/local/tsc.js"))); // MJS
 task("tsc").description = "Builds the command-line compiler";
 
 const cleanTsc = () => cleanProject("src/tsc");
@@ -305,6 +306,12 @@ task("watch-services").flags = {
 const buildDynamicImportCompat = () => buildProject("src/dynamicImportCompat", cmdLineOptions);
 task("dynamicImportCompat", buildDynamicImportCompat);
 
+
+const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
+const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
+cleanTasks.push(cleanTypingsInstaller);
+
+
 const buildServerMain = () => buildProject("src/tsserver", cmdLineOptions);
 const buildServer = series(buildDynamicImportCompat, buildServerMain);
 buildServer.displayName = "buildServer";
@@ -312,7 +319,7 @@ buildServer.displayName = "buildServer";
 // task("tsserver", series(preBundleFromSrc, bundleServerFromSrc)); // esbuild on ./src
 // task("tsserver", series(preBundleFromEmit, bundleServerFromEmit)); // esbuild on emitted ./built/local
 // task("tsserver", series(preBuildSrc, buildSrc, writeHackyCJSShim("./built/local/tsserver/server.js", "./built/local/tsserver.js"))); // CJS
-task("tsserver", series(preBuildSrc, buildSrc, writeHackyMJSShim("./built/local/tsserver/server.js", "./built/local/tsserver.js"))); // CJS
+task("tsserver", series(preBuildSrc, buildTypingsInstaller, buildServerMain, writeHackyMJSShim("./built/local/tsserver/server.js", "./built/local/tsserver.js"))); // CJS
 task("tsserver").description = "Builds the language server";
 task("tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -480,10 +487,6 @@ task("lint").description = "Runs eslint on the compiler and scripts sources.";
 const buildCancellationToken = () => buildProject("src/cancellationToken");
 const cleanCancellationToken = () => cleanProject("src/cancellationToken");
 cleanTasks.push(cleanCancellationToken);
-
-const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
-const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
-cleanTasks.push(cleanTypingsInstaller);
 
 const buildWatchGuard = () => buildProject("src/watchGuard");
 const cleanWatchGuard = () => cleanProject("src/watchGuard");
