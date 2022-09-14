@@ -300,7 +300,7 @@ namespace ts.server {
     };
 
     function createDocumentSpanSet(): Set<DocumentSpan> {
-        return createSet(({textSpan}) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
+        return createSet(({ textSpan }) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
     }
 
     function getRenameLocationsWorker(
@@ -375,6 +375,65 @@ namespace ts.server {
         // No re-mapping or isDefinition updatses are required if there's exactly one project
         if (isArray(perProjectResults)) {
             return perProjectResults;
+        }
+
+        // Corner case: since FAR can cause projects to be loaded, it can cause files to be removed
+        // from inferred projects, possibly invalidating the results for those projects.
+
+        // NB: Iterate over a copy since we're going to modify the original as we go
+        for (const [project, referencedSymbols] of arrayFrom(perProjectResults.entries())) {
+            if (!project.dirty) {
+                continue;
+            }
+
+            const program = project.getLanguageService().getProgram()!;
+
+            let newReferencedSymbols: ReferencedSymbol[] | undefined;
+
+            for (let i = 0; i < referencedSymbols.length; i++) {
+                const referencedSymbol = referencedSymbols[i];
+                const def = referencedSymbol.definition;
+                if (!program.getSourceFile(def.fileName)) {
+                    // If the def file is no longer in the project, the ref files must not be either -
+                    // otherwise, they'd pull the ref file in
+                    if (!newReferencedSymbols) {
+                        newReferencedSymbols = referencedSymbols.slice(0, i); // i.e. Don't include the current element
+                    }
+                    continue;
+                }
+
+                const references = referencedSymbol.references;
+                let newReferences: ReferencedSymbolEntry[] | undefined;
+                for (let j = 0; j < references.length; j++) {
+                    const ref = references[j];
+                    if (!program.getSourceFile(ref.fileName)) {
+                        // If the ref file is no longer in the project, it must have pulled the def into
+                        // its new project, so there's no risk of losing information by dropping it
+                        if (!newReferences) {
+                            newReferences = references.slice(0, j); // i.e. Don't include the current element
+                        }
+                        continue;
+                    }
+                }
+
+                if (newReferences) {
+                    if (!newReferencedSymbols) {
+                        newReferencedSymbols = referencedSymbols.slice(0, i); // i.e. Don't include the current element
+                    }
+
+                    // Don't bother to add it if there are no remaining references
+                    if (newReferences.length) {
+                        newReferencedSymbols.push({ definition: def, references: newReferences });
+                    }
+                }
+                else if (newReferencedSymbols) {
+                    newReferencedSymbols.push(referencedSymbol);
+                }
+            }
+
+            if (newReferencedSymbols) {
+                perProjectResults.set(project, newReferencedSymbols);
+            }
         }
 
         // `isDefinition` is only (definitely) correct in `defaultProject` because we might
@@ -2589,7 +2648,7 @@ namespace ts.server {
             try {
                 codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
             }
-            catch(e) {
+            catch (e) {
                 const ls = project.getLanguageService();
                 const existingDiagCodes = [
                     ...ls.getSyntacticDiagnostics(file),
@@ -3537,6 +3596,6 @@ namespace ts.server {
             && typeof data.exportName === "string"
             && (data.fileName === undefined || typeof data.fileName === "string")
             && (data.ambientModuleName === undefined || typeof data.ambientModuleName === "string"
-            && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
+                && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
     }
 }
