@@ -12393,7 +12393,7 @@ namespace ts {
                     }
                     const baseObjectType = getBaseConstraint((t as IndexedAccessType).objectType);
                     const baseIndexType = getBaseConstraint((t as IndexedAccessType).indexType);
-                    let baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (t as IndexedAccessType).accessFlags);
+                    const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (t as IndexedAccessType).accessFlags);
                     if (!baseIndexedAccess && baseObjectType && baseIndexType) {
                         return getBoundOfIndexedAccess(baseObjectType, baseIndexType);
                     }
