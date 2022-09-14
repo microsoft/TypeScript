@@ -100,7 +100,8 @@ async function esbuild(entrypoint, outfile) {
         "--bundle",
         `--outfile=${outfile}`,
         "--platform=node",
-        "--target=node10", // Node 10; oldest benchmarker.
+        "--target=node12",
+        "--format=esm",
         "--sourcemap",
         "--external:./node_modules/*",
         "--conditions=require",
@@ -120,11 +121,15 @@ const writeHackyCJSShim = (infile, outfile) => {
     };
 };
 
+const writePackageJsonWithModuleType = (done) => {
+    fs.writeFileSync("./built/local/package.json", JSON.stringify({ name: "local", private: true, type: "module" }));
+    done();
+};
+
 /** @type {(infile: string, outfile: string) => (done: () => void) => void} */
 const writeHackyMJSShim = (infile, outfile) => {
     const writeHackyMJSShim = (done) => {
         const inRelativeToOut = infile = path.relative(path.dirname(outfile), infile);
-        fs.writeFileSync(path.join(path.dirname(outfile), "package.json"), JSON.stringify({ name: "local", private: true, type: "module" }));
         fs.writeFileSync(outfile, `import "./${inRelativeToOut}"`);
         done();
     };
@@ -187,9 +192,9 @@ const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnost
 const buildTsc = () => buildProject("src/tsc");
 
 // task("tsc", series(preBundleFromSrc, bundleTscFromSrc)); // esbuild on ./src
-// task("tsc", series(preBundleFromEmit, bundleTscFromEmit)); // esbuild on emitted ./built/local
+task("tsc", series(preBuildSrc, buildTsc, writePackageJsonWithModuleType, bundleTscFromEmit)); // esbuild on emitted ./built/local
 // task("tsc", series(preBuildSrc, buildSrc, writeHackyCJSShim("./built/local/tsc/tsc.js", "./built/local/tsc.js"))); // CJS
-task("tsc", series(preBuildSrc, buildTsc, writeHackyMJSShim("./built/local/tsc/tsc.js", "./built/local/tsc.js"))); // MJS
+// task("tsc", series(preBuildSrc, buildTsc, writePackageJsonWithModuleType, writeHackyMJSShim("./built/local/tsc/tsc.js", "./built/local/tsc.js"))); // MJS
 task("tsc").description = "Builds the command-line compiler";
 
 const cleanTsc = () => cleanProject("src/tsc");
@@ -317,9 +322,9 @@ const buildServer = series(buildDynamicImportCompat, buildServerMain);
 buildServer.displayName = "buildServer";
 
 // task("tsserver", series(preBundleFromSrc, bundleServerFromSrc)); // esbuild on ./src
-// task("tsserver", series(preBundleFromEmit, bundleServerFromEmit)); // esbuild on emitted ./built/local
+task("tsserver", series(preBuildSrc, buildTypingsInstaller, buildServer, writePackageJsonWithModuleType, bundleServerFromEmit)); // esbuild on emitted ./built/local
 // task("tsserver", series(preBuildSrc, buildSrc, writeHackyCJSShim("./built/local/tsserver/server.js", "./built/local/tsserver.js"))); // CJS
-task("tsserver", series(preBuildSrc, buildTypingsInstaller, buildServerMain, writeHackyMJSShim("./built/local/tsserver/server.js", "./built/local/tsserver.js"))); // CJS
+// task("tsserver", series(preBuildSrc, buildTypingsInstaller, buildServerMain, writePackageJsonWithModuleType, writeHackyMJSShim("./built/local/tsserver/server.js", "./built/local/tsserver.js"))); // CJS
 task("tsserver").description = "Builds the language server";
 task("tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
