@@ -1,4 +1,7 @@
-import * as ts from "./_namespaces/ts";
+import {
+    CompilerOptions, concatenate, DiagnosticWithLocation, factory, fixupCompilerOptions, isArray, Node,
+    TransformerFactory, transformNodes,
+} from "./_namespaces/ts";
 
 /**
  * Transform one or more nodes using the supplied transformers.
@@ -6,11 +9,11 @@ import * as ts from "./_namespaces/ts";
  * @param transformers An array of `TransformerFactory` callbacks used to process the transformation.
  * @param compilerOptions Optional compiler options.
  */
-export function transform<T extends ts.Node>(source: T | T[], transformers: ts.TransformerFactory<T>[], compilerOptions?: ts.CompilerOptions) {
-    const diagnostics: ts.DiagnosticWithLocation[] = [];
-    compilerOptions = ts.fixupCompilerOptions(compilerOptions!, diagnostics); // TODO: GH#18217
-    const nodes = ts.isArray(source) ? source : [source];
-    const result = ts.transformNodes(/*resolver*/ undefined, /*emitHost*/ undefined, ts.factory, compilerOptions, nodes, transformers, /*allowDtsFiles*/ true);
-    result.diagnostics = ts.concatenate(result.diagnostics, diagnostics);
+export function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions) {
+    const diagnostics: DiagnosticWithLocation[] = [];
+    compilerOptions = fixupCompilerOptions(compilerOptions!, diagnostics); // TODO: GH#18217
+    const nodes = isArray(source) ? source : [source];
+    const result = transformNodes(/*resolver*/ undefined, /*emitHost*/ undefined, factory, compilerOptions, nodes, transformers, /*allowDtsFiles*/ true);
+    result.diagnostics = concatenate(result.diagnostics, diagnostics);
     return result;
 }

@@ -1,10 +1,10 @@
-import * as Harness from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 import * as fakes from "./_namespaces/fakes";
 import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
 import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
+import { Compiler, harnessNewLine, mockHash, virtualFileSystemRoot } from "./_namespaces/Harness";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
@@ -131,7 +131,7 @@ export interface LanguageServiceAdapter {
 }
 
 export abstract class LanguageServiceAdapterHost {
-    public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: Harness.virtualFileSystemRoot }));
+    public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
     public typesRegistry: ts.ESMap<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
@@ -145,7 +145,7 @@ export abstract class LanguageServiceAdapterHost {
     }
 
     public getNewLine(): string {
-        return Harness.harnessNewLine;
+        return harnessNewLine;
     }
 
     public getFilenames(): string[] {
@@ -271,9 +271,9 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return this.sys.getDirectories(path);
     }
 
-    getCurrentDirectory(): string { return Harness.virtualFileSystemRoot; }
+    getCurrentDirectory(): string { return virtualFileSystemRoot; }
 
-    getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
+    getDefaultLibFileName(): string { return Compiler.defaultLibFileName; }
 
     getScriptFileNames(): string[] {
         return this.getFilenames().filter(ts.isAnySupportedFileExtension);
@@ -767,8 +767,8 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
     }
 
     readFile(fileName: string): string | undefined {
-        if (ts.stringContains(fileName, Harness.Compiler.defaultLibFileName)) {
-            fileName = Harness.Compiler.defaultLibFileName;
+        if (ts.stringContains(fileName, Compiler.defaultLibFileName)) {
+            fileName = Compiler.defaultLibFileName;
         }
 
         // System FS would follow symlinks, even though snapshots are stored by original file name
@@ -879,7 +879,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
     }
 
     createHash(s: string) {
-        return Harness.mockHash(s);
+        return mockHash(s);
     }
 
     require(_initialDir: string, _moduleName: string): ts.RequireResult {

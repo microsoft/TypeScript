@@ -1,7 +1,7 @@
-import * as Harness from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 import * as documents from "./_namespaces/documents";
 import * as Utils from "./_namespaces/Utils";
+import { Compiler } from "./_namespaces/Harness";
 
 interface SourceMapSpanWithDecodeErrors {
     sourceMapSpan: ts.Mapping;
@@ -42,7 +42,7 @@ namespace SourceMapDecoder {
 }
 
 namespace SourceMapSpanWriter {
-    let sourceMapRecorder: Harness.Compiler.WriterAggregator;
+    let sourceMapRecorder: Compiler.WriterAggregator;
     let sourceMapSources: string[];
     let sourceMapNames: string[] | null | undefined;
 
@@ -56,7 +56,7 @@ namespace SourceMapSpanWriter {
     let nextJsLineToWrite: number;
     let spanMarkerContinues: boolean;
 
-    export function initializeSourceMapSpanWriter(sourceMapRecordWriter: Harness.Compiler.WriterAggregator, sourceMap: ts.RawSourceMap, currentJsFile: documents.TextDocument) {
+    export function initializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMap: ts.RawSourceMap, currentJsFile: documents.TextDocument) {
         sourceMapRecorder = sourceMapRecordWriter;
         sourceMapSources = sourceMap.sources;
         sourceMapNames = sourceMap.names;
@@ -279,7 +279,7 @@ namespace SourceMapSpanWriter {
 }
 
 export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]) {
-    const sourceMapRecorder = new Harness.Compiler.WriterAggregator();
+    const sourceMapRecorder = new Compiler.WriterAggregator();
 
     for (let i = 0; i < sourceMapDataList.length; i++) {
         const sourceMapData = sourceMapDataList[i];
@@ -326,7 +326,7 @@ export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitR
 }
 
 export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
-    const sourceMapRecorder = new Harness.Compiler.WriterAggregator();
+    const sourceMapRecorder = new Compiler.WriterAggregator();
     let prevSourceFile: documents.TextDocument | undefined;
     const files = new ts.Map<string, documents.TextDocument>();
     const sourceMap = ts.tryParseRawSourceMap(sys.readFile(sourceMapFile, "utf8")!);

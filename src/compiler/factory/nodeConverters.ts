@@ -1,7 +1,14 @@
-import * as ts from "../_namespaces/ts";
+import {
+    ArrayBindingOrAssignmentElement, ArrayBindingOrAssignmentPattern, AssignmentPattern,
+    BindingOrAssignmentElementTarget, BindingOrAssignmentPattern, Block, cast, ConciseBody, Debug, Expression,
+    FunctionDeclaration, getStartsOnNewLine, isArrayBindingPattern, isArrayLiteralExpression, isBindingElement,
+    isBindingPattern, isBlock, isExpression, isIdentifier, isObjectBindingPattern, isObjectLiteralElementLike,
+    isObjectLiteralExpression, map, NodeConverters, NodeFactory, notImplemented, ObjectBindingOrAssignmentElement,
+    ObjectBindingOrAssignmentPattern, setOriginalNode, setStartsOnNewLine, setTextRange, SyntaxKind,
+} from "../_namespaces/ts";
 
 /** @internal */
-export function createNodeConverters(factory: ts.NodeFactory): ts.NodeConverters {
+export function createNodeConverters(factory: NodeFactory): NodeConverters {
     return {
         convertToFunctionBlock,
         convertToFunctionExpression,
@@ -13,17 +20,17 @@ export function createNodeConverters(factory: ts.NodeFactory): ts.NodeConverters
         convertToAssignmentElementTarget,
     };
 
-    function convertToFunctionBlock(node: ts.ConciseBody, multiLine?: boolean): ts.Block {
-        if (ts.isBlock(node)) return node;
+    function convertToFunctionBlock(node: ConciseBody, multiLine?: boolean): Block {
+        if (isBlock(node)) return node;
         const returnStatement = factory.createReturnStatement(node);
-        ts.setTextRange(returnStatement, node);
+        setTextRange(returnStatement, node);
         const body = factory.createBlock([returnStatement], multiLine);
-        ts.setTextRange(body, node);
+        setTextRange(body, node);
         return body;
     }
 
-    function convertToFunctionExpression(node: ts.FunctionDeclaration) {
-        if (!node.body) return ts.Debug.fail(`Cannot convert a FunctionDeclaration without a body`);
+    function convertToFunctionExpression(node: FunctionDeclaration) {
+        if (!node.body) return Debug.fail(`Cannot convert a FunctionDeclaration without a body`);
         const updated = factory.createFunctionExpression(
             node.modifiers,
             node.asteriskToken,
@@ -33,24 +40,24 @@ export function createNodeConverters(factory: ts.NodeFactory): ts.NodeConverters
             node.type,
             node.body
         );
-        ts.setOriginalNode(updated, node);
-        ts.setTextRange(updated, node);
-        if (ts.getStartsOnNewLine(node)) {
-            ts.setStartsOnNewLine(updated, /*newLine*/ true);
+        setOriginalNode(updated, node);
+        setTextRange(updated, node);
+        if (getStartsOnNewLine(node)) {
+            setStartsOnNewLine(updated, /*newLine*/ true);
         }
         return updated;
     }
 
-    function convertToArrayAssignmentElement(element: ts.ArrayBindingOrAssignmentElement) {
-        if (ts.isBindingElement(element)) {
+    function convertToArrayAssignmentElement(element: ArrayBindingOrAssignmentElement) {
+        if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
-                ts.Debug.assertNode(element.name, ts.isIdentifier);
-                return ts.setOriginalNode(ts.setTextRange(factory.createSpreadElement(element.name), element), element);
+                Debug.assertNode(element.name, isIdentifier);
+                return setOriginalNode(setTextRange(factory.createSpreadElement(element.name), element), element);
             }
             const expression = convertToAssignmentElementTarget(element.name);
             return element.initializer
-                ? ts.setOriginalNode(
-                    ts.setTextRange(
+                ? setOriginalNode(
+                    setTextRange(
                         factory.createAssignment(expression, element.initializer),
                         element
                     ),
@@ -58,81 +65,81 @@ export function createNodeConverters(factory: ts.NodeFactory): ts.NodeConverters
                 )
                 : expression;
         }
-        return ts.cast(element, ts.isExpression);
+        return cast(element, isExpression);
     }
 
-    function convertToObjectAssignmentElement(element: ts.ObjectBindingOrAssignmentElement) {
-        if (ts.isBindingElement(element)) {
+    function convertToObjectAssignmentElement(element: ObjectBindingOrAssignmentElement) {
+        if (isBindingElement(element)) {
             if (element.dotDotDotToken) {
-                ts.Debug.assertNode(element.name, ts.isIdentifier);
-                return ts.setOriginalNode(ts.setTextRange(factory.createSpreadAssignment(element.name), element), element);
+                Debug.assertNode(element.name, isIdentifier);
+                return setOriginalNode(setTextRange(factory.createSpreadAssignment(element.name), element), element);
             }
             if (element.propertyName) {
                 const expression = convertToAssignmentElementTarget(element.name);
-                return ts.setOriginalNode(ts.setTextRange(factory.createPropertyAssignment(element.propertyName, element.initializer ? factory.createAssignment(expression, element.initializer) : expression), element), element);
+                return setOriginalNode(setTextRange(factory.createPropertyAssignment(element.propertyName, element.initializer ? factory.createAssignment(expression, element.initializer) : expression), element), element);
             }
-            ts.Debug.assertNode(element.name, ts.isIdentifier);
-            return ts.setOriginalNode(ts.setTextRange(factory.createShorthandPropertyAssignment(element.name, element.initializer), element), element);
+            Debug.assertNode(element.name, isIdentifier);
+            return setOriginalNode(setTextRange(factory.createShorthandPropertyAssignment(element.name, element.initializer), element), element);
         }
 
-        return ts.cast(element, ts.isObjectLiteralElementLike);
+        return cast(element, isObjectLiteralElementLike);
     }
 
-    function convertToAssignmentPattern(node: ts.BindingOrAssignmentPattern): ts.AssignmentPattern {
+    function convertToAssignmentPattern(node: BindingOrAssignmentPattern): AssignmentPattern {
         switch (node.kind) {
-            case ts.SyntaxKind.ArrayBindingPattern:
-            case ts.SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ArrayLiteralExpression:
                 return convertToArrayAssignmentPattern(node);
 
-            case ts.SyntaxKind.ObjectBindingPattern:
-            case ts.SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ObjectLiteralExpression:
                 return convertToObjectAssignmentPattern(node);
         }
     }
 
-    function convertToObjectAssignmentPattern(node: ts.ObjectBindingOrAssignmentPattern) {
-        if (ts.isObjectBindingPattern(node)) {
-            return ts.setOriginalNode(
-                ts.setTextRange(
-                    factory.createObjectLiteralExpression(ts.map(node.elements, convertToObjectAssignmentElement)),
+    function convertToObjectAssignmentPattern(node: ObjectBindingOrAssignmentPattern) {
+        if (isObjectBindingPattern(node)) {
+            return setOriginalNode(
+                setTextRange(
+                    factory.createObjectLiteralExpression(map(node.elements, convertToObjectAssignmentElement)),
                     node
                 ),
                 node
             );
         }
-        return ts.cast(node, ts.isObjectLiteralExpression);
+        return cast(node, isObjectLiteralExpression);
     }
 
-    function convertToArrayAssignmentPattern(node: ts.ArrayBindingOrAssignmentPattern) {
-        if (ts.isArrayBindingPattern(node)) {
-            return ts.setOriginalNode(
-                ts.setTextRange(
-                    factory.createArrayLiteralExpression(ts.map(node.elements, convertToArrayAssignmentElement)),
+    function convertToArrayAssignmentPattern(node: ArrayBindingOrAssignmentPattern) {
+        if (isArrayBindingPattern(node)) {
+            return setOriginalNode(
+                setTextRange(
+                    factory.createArrayLiteralExpression(map(node.elements, convertToArrayAssignmentElement)),
                     node
                 ),
                 node
             );
         }
-        return ts.cast(node, ts.isArrayLiteralExpression);
+        return cast(node, isArrayLiteralExpression);
     }
 
-    function convertToAssignmentElementTarget(node: ts.BindingOrAssignmentElementTarget): ts.Expression {
-        if (ts.isBindingPattern(node)) {
+    function convertToAssignmentElementTarget(node: BindingOrAssignmentElementTarget): Expression {
+        if (isBindingPattern(node)) {
             return convertToAssignmentPattern(node);
         }
 
-        return ts.cast(node, ts.isExpression);
+        return cast(node, isExpression);
     }
 }
 
 /** @internal */
-export const nullNodeConverters: ts.NodeConverters = {
-    convertToFunctionBlock: ts.notImplemented,
-    convertToFunctionExpression: ts.notImplemented,
-    convertToArrayAssignmentElement: ts.notImplemented,
-    convertToObjectAssignmentElement: ts.notImplemented,
-    convertToAssignmentPattern: ts.notImplemented,
-    convertToObjectAssignmentPattern: ts.notImplemented,
-    convertToArrayAssignmentPattern: ts.notImplemented,
-    convertToAssignmentElementTarget: ts.notImplemented,
+export const nullNodeConverters: NodeConverters = {
+    convertToFunctionBlock: notImplemented,
+    convertToFunctionExpression: notImplemented,
+    convertToArrayAssignmentElement: notImplemented,
+    convertToObjectAssignmentElement: notImplemented,
+    convertToAssignmentPattern: notImplemented,
+    convertToObjectAssignmentPattern: notImplemented,
+    convertToArrayAssignmentPattern: notImplemented,
+    convertToAssignmentElementTarget: notImplemented,
 };

@@ -1,8 +1,11 @@
-import * as ts from "../_namespaces/ts";
+import { Diagnostics, factory, textChanges, TsConfigSourceFile } from "../_namespaces/ts";
+import {
+    codeFixAll, createCodeFixActionWithoutFixAll, registerCodeFix, setJsonCompilerOptionValue,
+} from "../_namespaces/ts.codefix";
 
 const fixID = "fixEnableJsxFlag";
-const errorCodes = [ts.Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided.code];
-ts.codefix.registerCodeFix({
+const errorCodes = [Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided.code];
+registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixEnableJsxFlag(context) {
         const { configFile } = context.program.getCompilerOptions();
@@ -10,16 +13,16 @@ ts.codefix.registerCodeFix({
             return undefined;
         }
 
-        const changes = ts.textChanges.ChangeTracker.with(context, changeTracker =>
+        const changes = textChanges.ChangeTracker.with(context, changeTracker =>
             doChange(changeTracker, configFile)
         );
         return [
-            ts.codefix.createCodeFixActionWithoutFixAll(fixID, changes, ts.Diagnostics.Enable_the_jsx_flag_in_your_configuration_file)
+            createCodeFixActionWithoutFixAll(fixID, changes, Diagnostics.Enable_the_jsx_flag_in_your_configuration_file)
         ];
     },
     fixIds: [fixID],
     getAllCodeActions: context =>
-        ts.codefix.codeFixAll(context, errorCodes, changes => {
+        codeFixAll(context, errorCodes, changes => {
             const { configFile } = context.program.getCompilerOptions();
             if (configFile === undefined) {
                 return undefined;
@@ -29,6 +32,6 @@ ts.codefix.registerCodeFix({
         })
 });
 
-function doChange(changeTracker: ts.textChanges.ChangeTracker, configFile: ts.TsConfigSourceFile) {
-    ts.codefix.setJsonCompilerOptionValue(changeTracker, configFile, "jsx", ts.factory.createStringLiteral("react"));
+function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
+    setJsonCompilerOptionValue(changeTracker, configFile, "jsx", factory.createStringLiteral("react"));
 }

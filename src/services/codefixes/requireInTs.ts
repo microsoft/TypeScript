@@ -1,19 +1,24 @@
-import * as ts from "../_namespaces/ts";
+import {
+    cast, Debug, Diagnostics, factory, first, getAllowSyntheticDefaultImports, getTokenAtPosition, Identifier,
+    ImportSpecifier, isIdentifier, isObjectBindingPattern, isRequireCall, isVariableDeclaration, isVariableStatement,
+    NamedImports, ObjectBindingPattern, Program, SourceFile, StringLiteralLike, textChanges, tryCast, VariableStatement,
+} from "../_namespaces/ts";
+import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 
 const fixId = "requireInTs";
-const errorCodes = [ts.Diagnostics.require_call_may_be_converted_to_an_import.code];
-ts.codefix.registerCodeFix({
+const errorCodes = [Diagnostics.require_call_may_be_converted_to_an_import.code];
+registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const info = getInfo(context.sourceFile, context.program, context.span.start);
         if (!info) {
             return undefined;
         }
-        const changes = ts.textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
-        return [ts.codefix.createCodeFixAction(fixId, changes, ts.Diagnostics.Convert_require_to_import, fixId, ts.Diagnostics.Convert_all_require_to_import)];
+        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
+        return [createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => ts.codefix.codeFixAll(context, errorCodes, (changes, diag) => {
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
         const info = getInfo(diag.file, context.program, diag.start);
         if (info) {
             doChange(changes, context.sourceFile, info);
@@ -21,51 +26,51 @@ ts.codefix.registerCodeFix({
     }),
 });
 
-function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, info: Info) {
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info) {
     const { allowSyntheticDefaults, defaultImportName, namedImports, statement, required } = info;
     changes.replaceNode(sourceFile, statement, defaultImportName && !allowSyntheticDefaults
-        ? ts.factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, ts.factory.createExternalModuleReference(required))
-        : ts.factory.createImportDeclaration(/*modifiers*/ undefined, ts.factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*assertClause*/ undefined));
+        ? factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
+        : factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*assertClause*/ undefined));
 }
 
 interface Info {
     readonly allowSyntheticDefaults: boolean;
-    readonly defaultImportName: ts.Identifier | undefined;
-    readonly namedImports: ts.NamedImports | undefined;
-    readonly statement: ts.VariableStatement;
-    readonly required: ts.StringLiteralLike;
+    readonly defaultImportName: Identifier | undefined;
+    readonly namedImports: NamedImports | undefined;
+    readonly statement: VariableStatement;
+    readonly required: StringLiteralLike;
 }
 
-function getInfo(sourceFile: ts.SourceFile, program: ts.Program, pos: number): Info | undefined {
-    const { parent } = ts.getTokenAtPosition(sourceFile, pos);
-    if (!ts.isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ true)) {
-        throw ts.Debug.failBadSyntaxKind(parent);
+function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | undefined {
+    const { parent } = getTokenAtPosition(sourceFile, pos);
+    if (!isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ true)) {
+        throw Debug.failBadSyntaxKind(parent);
     }
 
-    const decl = ts.cast(parent.parent, ts.isVariableDeclaration);
-    const defaultImportName = ts.tryCast(decl.name, ts.isIdentifier);
-    const namedImports = ts.isObjectBindingPattern(decl.name) ? tryCreateNamedImportsFromObjectBindingPattern(decl.name) : undefined;
+    const decl = cast(parent.parent, isVariableDeclaration);
+    const defaultImportName = tryCast(decl.name, isIdentifier);
+    const namedImports = isObjectBindingPattern(decl.name) ? tryCreateNamedImportsFromObjectBindingPattern(decl.name) : undefined;
     if (defaultImportName || namedImports) {
         return {
-            allowSyntheticDefaults: ts.getAllowSyntheticDefaultImports(program.getCompilerOptions()),
+            allowSyntheticDefaults: getAllowSyntheticDefaultImports(program.getCompilerOptions()),
             defaultImportName,
             namedImports,
-            statement: ts.cast(decl.parent.parent, ts.isVariableStatement),
-            required: ts.first(parent.arguments)
+            statement: cast(decl.parent.parent, isVariableStatement),
+            required: first(parent.arguments)
         };
     }
 }
 
-function tryCreateNamedImportsFromObjectBindingPattern(node: ts.ObjectBindingPattern): ts.NamedImports | undefined {
-    const importSpecifiers: ts.ImportSpecifier[] = [];
+function tryCreateNamedImportsFromObjectBindingPattern(node: ObjectBindingPattern): NamedImports | undefined {
+    const importSpecifiers: ImportSpecifier[] = [];
     for (const element of node.elements) {
-        if (!ts.isIdentifier(element.name) || element.initializer) {
+        if (!isIdentifier(element.name) || element.initializer) {
             return undefined;
         }
-        importSpecifiers.push(ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.tryCast(element.propertyName, ts.isIdentifier), element.name));
+        importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, tryCast(element.propertyName, isIdentifier), element.name));
     }
 
     if (importSpecifiers.length) {
-        return ts.factory.createNamedImports(importSpecifiers);
+        return factory.createNamedImports(importSpecifiers);
     }
 }

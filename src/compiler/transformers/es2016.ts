@@ -1,62 +1,66 @@
-import * as ts from "../_namespaces/ts";
+import {
+    BinaryExpression, chainBundle, Expression, isElementAccessExpression, isExpression, isPropertyAccessExpression,
+    Node, setTextRange, SourceFile, SyntaxKind, TransformationContext, TransformFlags, visitEachChild, visitNode,
+    VisitResult,
+} from "../_namespaces/ts";
 
 /** @internal */
-export function transformES2016(context: ts.TransformationContext) {
+export function transformES2016(context: TransformationContext) {
     const {
         factory,
         hoistVariableDeclaration
     } = context;
 
-    return ts.chainBundle(context, transformSourceFile);
+    return chainBundle(context, transformSourceFile);
 
-    function transformSourceFile(node: ts.SourceFile) {
+    function transformSourceFile(node: SourceFile) {
         if (node.isDeclarationFile) {
             return node;
         }
 
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
-    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
-        if ((node.transformFlags & ts.TransformFlags.ContainsES2016) === 0) {
+    function visitor(node: Node): VisitResult<Node> {
+        if ((node.transformFlags & TransformFlags.ContainsES2016) === 0) {
             return node;
         }
         switch (node.kind) {
-            case ts.SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as ts.BinaryExpression);
+            case SyntaxKind.BinaryExpression:
+                return visitBinaryExpression(node as BinaryExpression);
             default:
-                return ts.visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
         }
     }
 
-    function visitBinaryExpression(node: ts.BinaryExpression): ts.Expression {
+    function visitBinaryExpression(node: BinaryExpression): Expression {
         switch (node.operatorToken.kind) {
-            case ts.SyntaxKind.AsteriskAsteriskEqualsToken:
+            case SyntaxKind.AsteriskAsteriskEqualsToken:
                 return visitExponentiationAssignmentExpression(node);
-            case ts.SyntaxKind.AsteriskAsteriskToken:
+            case SyntaxKind.AsteriskAsteriskToken:
                 return visitExponentiationExpression(node);
             default:
-                return ts.visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
         }
     }
 
-    function visitExponentiationAssignmentExpression(node: ts.BinaryExpression) {
-        let target: ts.Expression;
-        let value: ts.Expression;
-        const left = ts.visitNode(node.left, visitor, ts.isExpression);
-        const right = ts.visitNode(node.right, visitor, ts.isExpression);
-        if (ts.isElementAccessExpression(left)) {
+    function visitExponentiationAssignmentExpression(node: BinaryExpression) {
+        let target: Expression;
+        let value: Expression;
+        const left = visitNode(node.left, visitor, isExpression);
+        const right = visitNode(node.right, visitor, isExpression);
+        if (isElementAccessExpression(left)) {
             // Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
             const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
             const argumentExpressionTemp = factory.createTempVariable(hoistVariableDeclaration);
-            target = ts.setTextRange(
+            target = setTextRange(
                 factory.createElementAccessExpression(
-                    ts.setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
-                    ts.setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
+                    setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
+                    setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
                 ),
                 left
             );
-            value = ts.setTextRange(
+            value = setTextRange(
                 factory.createElementAccessExpression(
                     expressionTemp,
                     argumentExpressionTemp
@@ -64,17 +68,17 @@ export function transformES2016(context: ts.TransformationContext) {
                 left
             );
         }
-        else if (ts.isPropertyAccessExpression(left)) {
+        else if (isPropertyAccessExpression(left)) {
             // Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
             const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
-            target = ts.setTextRange(
+            target = setTextRange(
                 factory.createPropertyAccessExpression(
-                    ts.setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
+                    setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
                     left.name
                 ),
                 left
             );
-            value = ts.setTextRange(
+            value = setTextRange(
                 factory.createPropertyAccessExpression(
                     expressionTemp,
                     left.name
@@ -87,19 +91,19 @@ export function transformES2016(context: ts.TransformationContext) {
             target = left;
             value = left;
         }
-        return ts.setTextRange(
+        return setTextRange(
             factory.createAssignment(
                 target,
-                ts.setTextRange(factory.createGlobalMethodCall("Math", "pow", [value, right]), node)
+                setTextRange(factory.createGlobalMethodCall("Math", "pow", [value, right]), node)
             ),
             node
         );
     }
 
-    function visitExponentiationExpression(node: ts.BinaryExpression) {
+    function visitExponentiationExpression(node: BinaryExpression) {
         // Transforms `a ** b` into `Math.pow(a, b)`
-        const left = ts.visitNode(node.left, visitor, ts.isExpression);
-        const right = ts.visitNode(node.right, visitor, ts.isExpression);
-        return ts.setTextRange(factory.createGlobalMethodCall("Math", "pow", [left, right]), node);
+        const left = visitNode(node.left, visitor, isExpression);
+        const right = visitNode(node.right, visitor, isExpression);
+        return setTextRange(factory.createGlobalMethodCall("Math", "pow", [left, right]), node);
     }
 }

@@ -1,4 +1,7 @@
-import * as ts from "../_namespaces/ts";
+import {
+    addNodeFactoryPatcher, buildOverload, ConstructorTypeNode, factory, Modifier, NodeArray, NodeFactory,
+    ParameterDeclaration, TypeNode, TypeParameterDeclaration,
+} from "../_namespaces/ts";
 
 // DEPRECATION: Overloads for createConstructorTypeNode/updateConstructorTypeNode that do not accept 'modifiers'
 // DEPRECATION PLAN:
@@ -9,26 +12,26 @@ declare module "../../compiler/types" {
     // Module transform: converted from interface augmentation
     export interface NodeFactory {
         /** @deprecated Use the overload that accepts 'modifiers' */
-        createConstructorTypeNode(typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode): ts.ConstructorTypeNode;
+        createConstructorTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
 
         /** @deprecated Use the overload that accepts 'modifiers' */
-        updateConstructorTypeNode(node: ts.ConstructorTypeNode, typeParameters: ts.NodeArray<ts.TypeParameterDeclaration> | undefined, parameters: ts.NodeArray<ts.ParameterDeclaration>, type: ts.TypeNode): ts.ConstructorTypeNode;
+        updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
     }
 }
 
-function patchNodeFactory(factory: ts.NodeFactory) {
+function patchNodeFactory(factory: NodeFactory) {
     const {
         createConstructorTypeNode,
         updateConstructorTypeNode,
     } = factory;
 
-    factory.createConstructorTypeNode = ts.buildOverload("createConstructorTypeNode")
+    factory.createConstructorTypeNode = buildOverload("createConstructorTypeNode")
         .overload({
-            0(modifiers: readonly ts.Modifier[] | undefined, typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode): ts.ConstructorTypeNode {
+            0(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode {
                 return createConstructorTypeNode(modifiers, typeParameters, parameters, type);
             },
 
-            1(typeParameters: readonly ts.TypeParameterDeclaration[] | undefined, parameters: readonly ts.ParameterDeclaration[], type: ts.TypeNode): ts.ConstructorTypeNode {
+            1(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode {
                 return createConstructorTypeNode(/*modifiers*/ undefined, typeParameters, parameters, type);
             },
         })
@@ -41,13 +44,13 @@ function patchNodeFactory(factory: ts.NodeFactory) {
         })
         .finish();
 
-    factory.updateConstructorTypeNode = ts.buildOverload("updateConstructorTypeNode")
+    factory.updateConstructorTypeNode = buildOverload("updateConstructorTypeNode")
         .overload({
-            0(node: ts.ConstructorTypeNode, modifiers: readonly ts.Modifier[] | undefined, typeParameters: ts.NodeArray<ts.TypeParameterDeclaration> | undefined, parameters: ts.NodeArray<ts.ParameterDeclaration>, type: ts.TypeNode) {
+            0(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode) {
                 return updateConstructorTypeNode(node, modifiers, typeParameters, parameters, type);
             },
 
-            1(node: ts.ConstructorTypeNode, typeParameters: ts.NodeArray<ts.TypeParameterDeclaration> | undefined, parameters: ts.NodeArray<ts.ParameterDeclaration>, type: ts.TypeNode) {
+            1(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode) {
                 return updateConstructorTypeNode(node, node.modifiers, typeParameters, parameters, type);
             }
         })
@@ -63,7 +66,7 @@ function patchNodeFactory(factory: ts.NodeFactory) {
 
 // Patch `createNodeFactory` because it creates the factories that are provided to transformers
 // in the public API.
-ts.addNodeFactoryPatcher(patchNodeFactory);
+addNodeFactoryPatcher(patchNodeFactory);
 
 // Patch `ts.factory` because its public
-patchNodeFactory(ts.factory);
+patchNodeFactory(factory);
