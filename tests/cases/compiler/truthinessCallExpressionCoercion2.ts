@@ -112,6 +112,18 @@ function checksPropertyAccess() {
 
     // error
     x1.a.b.c && x2.a.b.c();
+
+    // error, extra parens are on purpose here
+    if ((x1.a.b.c)) {
+    }
+
+    // error
+    if (1 && (x1.a.b.c || x2.a.b.c)) {
+    }
+
+    // error
+    if ((x1.a.b.c || x2.a.b.c) && 1) {
+    }
 }
 
 class Foo {

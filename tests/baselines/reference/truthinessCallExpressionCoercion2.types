@@ -398,6 +398,62 @@ function checksPropertyAccess() {
 >a : { b: { c: () => void; }; }
 >b : { c: () => void; }
 >c : () => void
+
+    // error, extra parens are on purpose here
+    if ((x1.a.b.c)) {
+>(x1.a.b.c) : () => void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+    }
+
+    // error
+    if (1 && (x1.a.b.c || x2.a.b.c)) {
+>1 && (x1.a.b.c || x2.a.b.c) : () => void
+>1 : 1
+>(x1.a.b.c || x2.a.b.c) : () => void
+>x1.a.b.c || x2.a.b.c : () => void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>x2.a.b.c : () => void
+>x2.a.b : { c: () => void; }
+>x2.a : { b: { c: () => void; }; }
+>x2 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+    }
+
+    // error
+    if ((x1.a.b.c || x2.a.b.c) && 1) {
+>(x1.a.b.c || x2.a.b.c) && 1 : 1
+>(x1.a.b.c || x2.a.b.c) : () => void
+>x1.a.b.c || x2.a.b.c : () => void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>x2.a.b.c : () => void
+>x2.a.b : { c: () => void; }
+>x2.a : { b: { c: () => void; }; }
+>x2 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>1 : 1
+    }
 }
 
 class Foo {
