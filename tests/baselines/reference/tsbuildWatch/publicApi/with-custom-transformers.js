@@ -85,25 +85,25 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/webpack/index.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/shared/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/shared/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/shared/index.ts:
-  {"fileName":"/user/username/projects/myproject/shared/index.ts","pollingInterval":250}
-/user/username/projects/myproject/webpack/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/webpack/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/webpack/index.ts:
-  {"fileName":"/user/username/projects/myproject/webpack/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/shared/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/index.ts:
+  {}
+/user/username/projects/myproject/webpack/tsconfig.json:
+  {}
+/user/username/projects/myproject/webpack/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/shared:
-  {"directoryName":"/user/username/projects/myproject/shared"}
+  {}
 /user/username/projects/myproject/webpack:
-  {"directoryName":"/user/username/projects/myproject/webpack"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -311,25 +311,25 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/shared/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/shared/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/shared/index.ts:
-  {"fileName":"/user/username/projects/myproject/shared/index.ts","pollingInterval":250}
-/user/username/projects/myproject/webpack/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/webpack/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/webpack/index.ts:
-  {"fileName":"/user/username/projects/myproject/webpack/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/shared/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/index.ts:
+  {}
+/user/username/projects/myproject/webpack/tsconfig.json:
+  {}
+/user/username/projects/myproject/webpack/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/shared:
-  {"directoryName":"/user/username/projects/myproject/shared"}
+  {}
 /user/username/projects/myproject/webpack:
-  {"directoryName":"/user/username/projects/myproject/webpack"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -30,8 +30,8 @@ exports.lazyCard = lazyCard;
 
 
 //// [Types.d.ts]
-declare type Suit = 'Hearts' | 'Spades' | 'Clubs' | 'Diamonds';
-declare type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'Jack' | 'Queen' | 'King';
+type Suit = 'Hearts' | 'Spades' | 'Clubs' | 'Diamonds';
+type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'Jack' | 'Queen' | 'King';
 export { Suit, Rank };
 //// [Card.d.ts]
 import { Suit, Rank } from './Types';

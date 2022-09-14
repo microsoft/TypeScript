@@ -241,3 +241,11 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2
         }
     }
     
+    // Repro from #50465
+    
+    type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
+    
+    function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
+      return column[key];
+    }
+    

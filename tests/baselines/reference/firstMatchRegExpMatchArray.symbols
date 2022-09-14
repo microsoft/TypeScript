@@ -1,0 +1,19 @@
+=== tests/cases/compiler/firstMatchRegExpMatchArray.ts ===
+const match = ''.match(/ /)
+>match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))
+>''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+
+if (match !== null) {
+>match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))
+
+    const foo: string = match[0]
+>foo : Symbol(foo, Decl(firstMatchRegExpMatchArray.ts, 3, 9))
+>match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))
+>0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
+
+    const bar: string = match[1]
+>bar : Symbol(bar, Decl(firstMatchRegExpMatchArray.ts, 4, 9))
+>match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))
+}
+

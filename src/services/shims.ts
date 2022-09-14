@@ -19,7 +19,7 @@ let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // esl
 })();
 
 // We need to use 'null' to interface with the managed side.
-/* eslint-disable no-in-operator */
+/* eslint-disable local/no-in-operator */
 
 /* @internal */
 namespace ts {
@@ -1357,4 +1357,4 @@ namespace ts {
     }
 }
 
-/* eslint-enable no-in-operator */
+/* eslint-enable local/no-in-operator */
