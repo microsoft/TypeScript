@@ -856,7 +856,8 @@ namespace ts {
         emptyTypeLiteralSymbol.members = createSymbolTable();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, emptyArray);
 
-        const unknownUnionType = strictNullChecks ? getUnionType([undefinedType, nullType, createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray)]) : unknownType;
+        const unknownEmptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
+        const unknownUnionType = strictNullChecks ? getUnionType([undefinedType, nullType, unknownEmptyObjectType]) : unknownType;
 
         const emptyGenericType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray) as ObjectType as GenericType;
         emptyGenericType.instantiations = new Map<string, TypeReference>();
@@ -33774,10 +33775,8 @@ namespace ts {
             return booleanType;
         }
 
-        function hasEmptyAnonymousObjectType(type: Type): boolean {
-            const t = getBaseConstraintOrType(type);
-            return isEmptyAnonymousObjectType(t) && !(getObjectFlags(t) & ObjectFlags.FreshLiteral) ||
-                !!(t.flags & TypeFlags.UnionOrIntersection && some((t as UnionType).types, hasEmptyAnonymousObjectType));
+        function hasEmptyObjectIntersection(type: Type): boolean {
+            return someType(type, t => t === unknownEmptyObjectType || !!(t.flags & TypeFlags.Intersection) && some((t as IntersectionType).types, isEmptyAnonymousObjectType));
         }
 
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
@@ -33801,7 +33800,11 @@ namespace ts {
             }
             // The type of the right operand must be assignable to 'object'.
             if (checkTypeAssignableTo(checkNonNullType(rightType, right), nonPrimitiveType, right)) {
-                if (strictNullChecks && hasEmptyAnonymousObjectType(rightType)) {
+                // The {} type is assignable to the object type, yet {} might represent a primitive type. Here we
+                // detect and error on {} that results from narrowing the unknown type, as well as intersections
+                // that include {} (we know that the other types in such intersections are assignable to object
+                // since we already checked for that).
+                if (hasEmptyObjectIntersection(rightType)) {
                     error(right, Diagnostics.Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operator, typeToString(rightType));
                 }
             }
