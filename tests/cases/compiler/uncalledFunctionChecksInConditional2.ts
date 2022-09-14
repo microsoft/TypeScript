@@ -23,6 +23,17 @@
   ) {
     perf.mark("");
   }
+
+  // With ??
+  if (
+    (
+      perf &&
+      perf.mark &&
+      perf.measure
+    ) ?? !!true
+  ) {
+    perf.mark("");
+  }
 };
 
 // Original #49192

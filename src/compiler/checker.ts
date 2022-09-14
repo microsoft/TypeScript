@@ -34160,7 +34160,7 @@ namespace ts {
                     if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                         let parent = node.parent;
                         while (parent.kind === SyntaxKind.ParenthesizedExpression
-                            || isBinaryExpression(parent) && (parent.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || parent.operatorToken.kind === SyntaxKind.BarBarToken)) {
+                            || isBinaryExpression(parent) && (parent.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || parent.operatorToken.kind === SyntaxKind.BarBarToken || parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken)) {
                             parent = parent.parent;
                         }
                         if (operator === SyntaxKind.AmpersandAmpersandToken || isIfStatement(parent)) {
