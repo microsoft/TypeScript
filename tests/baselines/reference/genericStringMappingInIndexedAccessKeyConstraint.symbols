@@ -1,0 +1,81 @@
+=== tests/cases/compiler/genericStringMappingInIndexedAccessKeyConstraint.ts ===
+export function childByTag<K extends Uppercase<keyof HTMLElementTagNameMap>>(
+>childByTag : Symbol(childByTag, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 0, 0), Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 3, 46), Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 4, 78))
+>K : Symbol(K, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 0, 27))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>HTMLElementTagNameMap : Symbol(HTMLElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+
+    element: Element,
+>element : Symbol(element, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 0, 77))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    tagName: K,
+>tagName : Symbol(tagName, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 1, 21))
+>K : Symbol(K, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 0, 27))
+
+): HTMLElementTagNameMap[Lowercase<K>] | null; // this overload is rejected
+>HTMLElementTagNameMap : Symbol(HTMLElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 0, 27))
+
+export function childByTag(element: Element, tagName: string): Element | null;
+>childByTag : Symbol(childByTag, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 0, 0), Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 3, 46), Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 4, 78))
+>element : Symbol(element, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 4, 27))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 4, 44))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+export function childByTag(element: Element, tagName: string): Element | null {
+>childByTag : Symbol(childByTag, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 0, 0), Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 3, 46), Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 4, 78))
+>element : Symbol(element, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 5, 27))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 5, 44))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    for (let i = 0; i < element.childElementCount; i++) {
+>i : Symbol(i, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 6, 12))
+>i : Symbol(i, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 6, 12))
+>element.childElementCount : Symbol(ParentNode.childElementCount, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 5, 27))
+>childElementCount : Symbol(ParentNode.childElementCount, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 6, 12))
+
+        if (element.children[i].nodeName === tagName) {
+>element.children[i].nodeName : Symbol(Node.nodeName, Decl(lib.dom.d.ts, --, --))
+>element.children : Symbol(ParentNode.children, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 5, 27))
+>children : Symbol(ParentNode.children, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 6, 12))
+>nodeName : Symbol(Node.nodeName, Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 5, 44))
+
+            return element.children[i];
+>element.children : Symbol(ParentNode.children, Decl(lib.dom.d.ts, --, --))
+>element : Symbol(element, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 5, 27))
+>children : Symbol(ParentNode.children, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 6, 12))
+        }
+    }
+
+    return null;
+}
+
+const anchor = childByTag(document.documentElement, 'A');
+>anchor : Symbol(anchor, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 15, 5))
+>childByTag : Symbol(childByTag, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 0, 0), Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 3, 46), Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 4, 78))
+>document.documentElement : Symbol(Document.documentElement, Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>documentElement : Symbol(Document.documentElement, Decl(lib.dom.d.ts, --, --))
+
+if (anchor) {
+>anchor : Symbol(anchor, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 15, 5))
+
+    console.log(anchor.href); // Would be rejected without the first overload.
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>anchor.href : Symbol(HTMLHyperlinkElementUtils.href, Decl(lib.dom.d.ts, --, --))
+>anchor : Symbol(anchor, Decl(genericStringMappingInIndexedAccessKeyConstraint.ts, 15, 5))
+>href : Symbol(HTMLHyperlinkElementUtils.href, Decl(lib.dom.d.ts, --, --))
+
+};
