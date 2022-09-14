@@ -195,49 +195,49 @@ const caseInsensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreC
 const caseSensitiveBasePath = "/dev/";
 const caseSensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ false, caseSensitiveBasePath, "/"));
 
-function verifyDiagnostics(actual: Diagnostic[], expected: { code: number; messageText: string; }[]) {
+function verifyDiagnostics(actual: ts.Diagnostic[], expected: { code: number; messageText: string; }[]) {
     assert.isTrue(expected.length === actual.length, `Expected error: ${JSON.stringify(expected)}. Actual error: ${JSON.stringify(actual)}.`);
     for (let i = 0; i < actual.length; i++) {
         const actualError = actual[i];
         const expectedError = expected[i];
         assert.equal(actualError.code, expectedError.code, "Error code mismatch");
-        assert.equal(actualError.category, DiagnosticCategory.Error, "Category mismatch"); // Should always be error
-        assert.equal(flattenDiagnosticMessageText(actualError.messageText, "\n"), expectedError.messageText);
+        assert.equal(actualError.category, ts.DiagnosticCategory.Error, "Category mismatch"); // Should always be error
+        assert.equal(ts.flattenDiagnosticMessageText(actualError.messageText, "\n"), expectedError.messageText);
     }
 }
 
 describe("unittests:: config:: configurationExtension", () => {
-    forEach<[string, string, fakes.ParseConfigHost], void>([
+    ts.forEach<[string, string, fakes.ParseConfigHost], void>([
         ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
         ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
     ], ([testName, basePath, host]) => {
         function getParseCommandLine(entry: string) {
-            const {config, error} = readConfigFile(entry, name => host.readFile(name));
-            assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-            return parseJsonConfigFileContent(config, host, basePath, {}, entry);
+            const {config, error} = ts.readConfigFile(entry, name => host.readFile(name));
+            assert(config && !error, ts.flattenDiagnosticMessageText(error && error.messageText, "\n"));
+            return ts.parseJsonConfigFileContent(config, host, basePath, {}, entry);
         }
 
         function getParseCommandLineJsonSourceFile(entry: string) {
-            const jsonSourceFile = readJsonConfigFile(entry, name => host.readFile(name));
-            assert(jsonSourceFile.endOfFileToken && !jsonSourceFile.parseDiagnostics.length, flattenDiagnosticMessageText(jsonSourceFile.parseDiagnostics[0] && jsonSourceFile.parseDiagnostics[0].messageText, "\n"));
+            const jsonSourceFile = ts.readJsonConfigFile(entry, name => host.readFile(name));
+            assert(jsonSourceFile.endOfFileToken && !jsonSourceFile.parseDiagnostics.length, ts.flattenDiagnosticMessageText(jsonSourceFile.parseDiagnostics[0] && jsonSourceFile.parseDiagnostics[0].messageText, "\n"));
             return {
                 jsonSourceFile,
-                parsed: parseJsonSourceFileConfigFileContent(jsonSourceFile, host, basePath, {}, entry)
+                parsed: ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, basePath, {}, entry)
             };
         }
 
-        function testSuccess(name: string, entry: string, expected: CompilerOptions, expectedFiles: string[]) {
+        function testSuccess(name: string, entry: string, expected: ts.CompilerOptions, expectedFiles: string[]) {
             expected.configFilePath = entry;
             it(name, () => {
                 const parsed = getParseCommandLine(entry);
-                assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
+                assert(!parsed.errors.length, ts.flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
                 assert.deepEqual(parsed.options, expected);
                 assert.deepEqual(parsed.fileNames, expectedFiles);
             });
 
             it(name + " with jsonSourceFile", () => {
                 const { parsed, jsonSourceFile } = getParseCommandLineJsonSourceFile(entry);
-                assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
+                assert(!parsed.errors.length, ts.flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
                 assert.deepEqual(parsed.options, expected);
                 assert.equal(parsed.options.configFile, jsonSourceFile);
                 assert.deepEqual(parsed.fileNames, expectedFiles);
@@ -262,8 +262,8 @@ describe("unittests:: config:: configurationExtension", () => {
                 noImplicitAny: true,
                 strictNullChecks: true,
             }, [
-                combinePaths(basePath, "main.ts"),
-                combinePaths(basePath, "supplemental.ts"),
+                ts.combinePaths(basePath, "main.ts"),
+                ts.combinePaths(basePath, "supplemental.ts"),
             ]);
 
             testSuccess("can resolve an extension with a base extension that overrides options", "tsconfig.nostrictnull.json", {
@@ -271,14 +271,14 @@ describe("unittests:: config:: configurationExtension", () => {
                 noImplicitAny: true,
                 strictNullChecks: false,
             }, [
-                combinePaths(basePath, "main.ts"),
-                combinePaths(basePath, "supplemental.ts"),
+                ts.combinePaths(basePath, "main.ts"),
+                ts.combinePaths(basePath, "supplemental.ts"),
             ]);
 
             testFailure("can report errors on circular imports", "circular.json", [
                 {
                     code: 18000,
-                    messageText: `Circularity detected while resolving configuration: ${[combinePaths(basePath, "circular.json"), combinePaths(basePath, "circular2.json"), combinePaths(basePath, "circular.json")].join(" -> ")}`
+                    messageText: `Circularity detected while resolving configuration: ${[ts.combinePaths(basePath, "circular.json"), ts.combinePaths(basePath, "circular2.json"), ts.combinePaths(basePath, "circular.json")].join(" -> ")}`
                 }
             ]);
 
@@ -303,49 +303,49 @@ describe("unittests:: config:: configurationExtension", () => {
                 strictNullChecks: true,
                 module: undefined // Technically, this is distinct from the key never being set; but within the compiler we don't make the distinction
             }, [
-                combinePaths(basePath, "supplemental.ts")
+                ts.combinePaths(basePath, "supplemental.ts")
             ]);
 
             testSuccess("can overwrite top-level options using extended 'null'", "configs/fourth.json", {
                 allowJs: true,
                 noImplicitAny: true,
                 strictNullChecks: true,
-                module: ModuleKind.System
+                module: ts.ModuleKind.System
             }, [
-                combinePaths(basePath, "main.ts")
+                ts.combinePaths(basePath, "main.ts")
             ]);
 
             testSuccess("can overwrite top-level files using extended []", "configs/fifth.json", {
                 allowJs: true,
                 noImplicitAny: true,
                 strictNullChecks: true,
-                module: ModuleKind.System
+                module: ts.ModuleKind.System
             }, [
-                combinePaths(basePath, "tests/utils.ts")
+                ts.combinePaths(basePath, "tests/utils.ts")
             ]);
 
             describe("finding extended configs from node_modules", () => {
-                testSuccess("can lookup via tsconfig field", "tsconfig.extendsBox.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
-                testSuccess("can lookup via package-relative path", "tsconfig.extendsStrict.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
-                testSuccess("can lookup via non-redirected-to package-relative path", "tsconfig.extendsUnStrict.json", { strict: false }, [combinePaths(basePath, "main.ts")]);
-                testSuccess("can lookup via package-relative path with extension", "tsconfig.extendsStrictExtension.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
-                testSuccess("can lookup via an implicit tsconfig", "tsconfig.extendsBoxImplied.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
-                testSuccess("can lookup via an implicit tsconfig in a package-relative directory", "tsconfig.extendsBoxImpliedUnstrict.json", { strict: false }, [combinePaths(basePath, "main.ts")]);
-                testSuccess("can lookup via an implicit tsconfig in a package-relative directory with name", "tsconfig.extendsBoxImpliedUnstrictExtension.json", { strict: false }, [combinePaths(basePath, "main.ts")]);
-                testSuccess("can lookup via an implicit tsconfig in a package-relative directory with extension", "tsconfig.extendsBoxImpliedPath.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via tsconfig field", "tsconfig.extendsBox.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via package-relative path", "tsconfig.extendsStrict.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via non-redirected-to package-relative path", "tsconfig.extendsUnStrict.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via package-relative path with extension", "tsconfig.extendsStrictExtension.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via an implicit tsconfig", "tsconfig.extendsBoxImplied.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via an implicit tsconfig in a package-relative directory", "tsconfig.extendsBoxImpliedUnstrict.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via an implicit tsconfig in a package-relative directory with name", "tsconfig.extendsBoxImpliedUnstrictExtension.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via an implicit tsconfig in a package-relative directory with extension", "tsconfig.extendsBoxImpliedPath.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
             });
 
             it("adds extendedSourceFiles only once", () => {
-                const sourceFile = readJsonConfigFile("configs/fourth.json", (path) => host.readFile(path));
-                const dir = combinePaths(basePath, "configs");
+                const sourceFile = ts.readJsonConfigFile("configs/fourth.json", (path) => host.readFile(path));
+                const dir = ts.combinePaths(basePath, "configs");
                 const expected = [
-                    combinePaths(dir, "third.json"),
-                    combinePaths(dir, "second.json"),
-                    combinePaths(dir, "base.json"),
+                    ts.combinePaths(dir, "third.json"),
+                    ts.combinePaths(dir, "second.json"),
+                    ts.combinePaths(dir, "base.json"),
                 ];
-                parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
+                ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
                 assert.deepEqual(sourceFile.extendedSourceFiles, expected);
-                parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
+                ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
                 assert.deepEqual(sourceFile.extendedSourceFiles, expected);
             });
         });

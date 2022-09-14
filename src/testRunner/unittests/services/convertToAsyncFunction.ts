@@ -1,5 +1,5 @@
 namespace ts {
-const libFile: TestFSWithWatch.File = {
+const libFile: ts.TestFSWithWatch.File = {
     path: "/a/lib/lib.d.ts",
     content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -262,7 +262,7 @@ interface String { charAt: any; }
 interface Array<T> {}`
 };
 
-const moduleFile: TestFSWithWatch.File = {
+const moduleFile: ts.TestFSWithWatch.File = {
     path: "/module.ts",
     content:
 `export function fn(res: any): any {
@@ -305,28 +305,28 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
     const expectAction = !!(flags & ConvertToAsyncTestFlags.ExpectAction);
     const expectNoAction = !!(flags & ConvertToAsyncTestFlags.ExpectNoAction);
     const expectFailure = expectNoSuggestionDiagnostic || expectNoAction;
-    Debug.assert(!(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic), "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'");
-    Debug.assert(!(expectAction && expectNoAction), "Cannot combine both 'ExpectAction' and 'ExpectNoAction'");
+    ts.Debug.assert(!(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic), "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'");
+    ts.Debug.assert(!(expectAction && expectNoAction), "Cannot combine both 'ExpectAction' and 'ExpectNoAction'");
 
-    const t = extractTest(text);
+    const t = ts.extractTest(text);
     const selectionRange = t.ranges.get("selection")!;
     if (!selectionRange) {
         throw new Error(`Test ${caption} does not specify selection range`);
     }
 
-    const extensions = expectFailure ? [Extension.Ts] : [Extension.Ts, Extension.Js];
+    const extensions = expectFailure ? [ts.Extension.Ts] : [ts.Extension.Ts, ts.Extension.Js];
 
     extensions.forEach(extension =>
         it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
-    function runBaseline(extension: Extension) {
+    function runBaseline(extension: ts.Extension) {
         const path = "/a" + extension;
         const languageService = makeLanguageService({ path, content: t.source }, includeLib, includeModule);
         const program = languageService.getProgram()!;
 
         if (hasSyntacticDiagnostics(program)) {
             // Don't bother generating JS baselines for inputs that aren't valid JS.
-            assert.equal(Extension.Js, extension, "Syntactic diagnostics found in non-JS file");
+            assert.equal(ts.Extension.Js, extension, "Syntactic diagnostics found in non-JS file");
             return;
         }
 
@@ -336,22 +336,22 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         };
 
         const sourceFile = program.getSourceFile(path)!;
-        const context: CodeFixContext = {
+        const context: ts.CodeFixContext = {
             errorCode: 80006,
             span: { start: selectionRange.pos, length: selectionRange.end - selectionRange.pos },
             sourceFile,
             program,
-            cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
-            preferences: emptyOptions,
-            host: notImplementedHost,
-            formatContext: formatting.getFormatContext(testFormatSettings, notImplementedHost)
+            cancellationToken: { throwIfCancellationRequested: ts.noop, isCancellationRequested: ts.returnFalse },
+            preferences: ts.emptyOptions,
+            host: ts.notImplementedHost,
+            formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, ts.notImplementedHost)
         };
 
         const diagnostics = languageService.getSuggestionDiagnostics(f.path);
-        const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === Diagnostics.This_may_be_converted_to_an_async_function.message &&
+        const diagnostic = ts.find(diagnostics, diagnostic => diagnostic.messageText === ts.Diagnostics.This_may_be_converted_to_an_async_function.message &&
             diagnostic.start === context.span.start && diagnostic.length === context.span.length);
-        const actions = codefix.getFixes(context);
-        const action = find(actions, action => action.description === Diagnostics.Convert_to_async_function.message);
+        const actions = ts.codefix.getFixes(context);
+        const action = ts.find(actions, action => action.description === ts.Diagnostics.Convert_to_async_function.message);
 
         let outputText: string | null;
         if (action?.changes.length) {
@@ -362,12 +362,12 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             assert.lengthOf(changes, 1);
 
             data.push(`// ==ASYNC FUNCTION::${action.description}==`);
-            const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
+            const newText = ts.textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
             data.push(newText);
 
             const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule).getProgram()!;
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-            outputText = data.join(newLineCharacter);
+            outputText = data.join(ts.newLineCharacter);
         }
         else {
             // eslint-disable-next-line no-null/no-null
@@ -393,7 +393,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         }
     }
 
-    function makeLanguageService(file: TestFSWithWatch.File, includeLib?: boolean, includeModule?: boolean) {
+    function makeLanguageService(file: ts.TestFSWithWatch.File, includeLib?: boolean, includeModule?: boolean) {
         const files = [file];
         if (includeLib) {
             files.push(libFile); // libFile is expensive to parse repeatedly - only test when required
@@ -401,15 +401,15 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         if (includeModule) {
             files.push(moduleFile);
         }
-        const host = projectSystem.createServerHost(files);
-        const projectService = projectSystem.createProjectService(host);
+        const host = ts.projectSystem.createServerHost(files);
+        const projectService = ts.projectSystem.createProjectService(host);
         projectService.openClientFile(file.path);
-        return first(projectService.inferredProjects).getLanguageService();
+        return ts.first(projectService.inferredProjects).getLanguageService();
     }
 
-    function hasSyntacticDiagnostics(program: Program) {
+    function hasSyntacticDiagnostics(program: ts.Program) {
         const diags = program.getSyntacticDiagnostics();
-        return length(diags) > 0;
+        return ts.length(diags) > 0;
     }
 }
 

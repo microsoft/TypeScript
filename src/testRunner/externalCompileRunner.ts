@@ -16,11 +16,11 @@ interface UserConfig {
     path?: string;
 }
 
-abstract class ExternalCompileRunnerBase extends RunnerBase {
+abstract class ExternalCompileRunnerBase extends Harness.RunnerBase {
     abstract testDir: string;
     abstract report(result: ExecResult): string | null;
     enumerateTestFiles() {
-        return IO.getDirectories(this.testDir);
+        return Harness.IO.getDirectories(this.testDir);
     }
     /** Setup the runner's tests so that they are ready to be executed by the harness
      *  The first test should be a describe/it block that sets up the harness's compiler instance appropriately
@@ -47,9 +47,9 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
             const cp: typeof import("child_process") = require("child_process");
 
             it("should build successfully", () => {
-                let cwd = path.join(IO.getWorkspaceRoot(), cls.testDir, directoryName);
+                let cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directoryName);
                 const originalCwd = cwd;
-                const stdio = isWorker ? "pipe" : "inherit";
+                const stdio = Harness.isWorker ? "pipe" : "inherit";
                 let types: string[] | undefined;
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
@@ -82,7 +82,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     }
                     exec("npm", ["i", "--ignore-scripts", ...(isV7OrLater ? ["--legacy-peer-deps"] : [])], { cwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                 }
-                const args = [path.join(IO.getWorkspaceRoot(), "built/local/tsc.js")];
+                const args = [path.join(Harness.IO.getWorkspaceRoot(), "built/local/tsc.js")];
                 if (types) {
                     args.push("--types", types.join(","));
                     // Also actually install those types (for, eg, the js projects which need node)
@@ -91,10 +91,10 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     }
                 }
                 args.push("--noEmit");
-                Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true })));
+                Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true })));
 
                 function exec(command: string, args: string[], options: { cwd: string, timeout?: number, stdio?: import("child_process").StdioOptions }): string | undefined {
-                    const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { shell: true, stdio, ...options });
+                    const res = cp.spawnSync(Harness.isWorker ? `${command} 2>&1` : command, args, { shell: true, stdio, ...options });
                     if (res.status !== 0) {
                         throw new Error(`${command} ${args.join(" ")} for ${directoryName} failed: ${res.stdout && res.stdout.toString()}`);
                     }
@@ -107,7 +107,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
 
 export class UserCodeRunner extends ExternalCompileRunnerBase {
     readonly testDir = "tests/cases/user/";
-    kind(): TestRunnerKind {
+    kind(): Harness.TestRunnerKind {
         return "user";
     }
     report(result: ExecResult) {
@@ -124,7 +124,7 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
 
 export class DockerfileRunner extends ExternalCompileRunnerBase {
     readonly testDir = "tests/cases/docker/";
-    kind(): TestRunnerKind {
+    kind(): Harness.TestRunnerKind {
         return "docker";
     }
     initializeTests(): void {
@@ -136,16 +136,16 @@ export class DockerfileRunner extends ExternalCompileRunnerBase {
         describe(`${this.kind()} code samples`, function (this: Mocha.Suite) {
             this.timeout(cls.timeout); // 20 minutes
             before(() => {
-                cls.exec("docker", ["build", ".", "-t", "typescript/typescript"], { cwd: IO.getWorkspaceRoot() }); // cached because workspace is hashed to determine cacheability
+                cls.exec("docker", ["build", ".", "-t", "typescript/typescript"], { cwd: Harness.IO.getWorkspaceRoot() }); // cached because workspace is hashed to determine cacheability
             });
             for (const test of testList) {
                 const directory = typeof test === "string" ? test : test.file;
-                const cwd = path.join(IO.getWorkspaceRoot(), cls.testDir, directory);
+                const cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directory);
                 it(`should build ${directory} successfully`, () => {
                     const imageName = `tstest/${directory}`;
                     cls.exec("docker", ["build", "--no-cache", ".", "-t", imageName], { cwd }); // --no-cache so the latest version of the repos referenced is always fetched
                     const cp: typeof import("child_process") = require("child_process");
-                    Baseline.runBaseline(`${cls.kind()}/${directory}.log`, cls.report(cp.spawnSync(`docker`, ["run", imageName], { cwd, timeout: cls.timeout, shell: true })));
+                    Harness.Baseline.runBaseline(`${cls.kind()}/${directory}.log`, cls.report(cp.spawnSync(`docker`, ["run", imageName], { cwd, timeout: cls.timeout, shell: true })));
                 });
             }
         });
@@ -154,8 +154,8 @@ export class DockerfileRunner extends ExternalCompileRunnerBase {
     private timeout = 1_200_000; // 20 minutes;
     private exec(command: string, args: string[], options: { cwd: string }): void {
         const cp: typeof import("child_process") = require("child_process");
-        const stdio = isWorker ? "pipe" : "inherit";
-        const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { timeout: this.timeout, shell: true, stdio, ...options });
+        const stdio = Harness.isWorker ? "pipe" : "inherit";
+        const res = cp.spawnSync(Harness.isWorker ? `${command} 2>&1` : command, args, { timeout: this.timeout, shell: true, stdio, ...options });
         if (res.status !== 0) {
             throw new Error(`${command} ${args.join(" ")} for ${options.cwd} failed: ${res.stdout && res.stdout.toString()}`);
         }
@@ -243,7 +243,7 @@ function sanitizeVersionSpecifiers(result: string): string {
  * This is problematic for error baselines, so we grep for them and strip them out.
  */
 function stripAbsoluteImportPaths(result: string) {
-    const workspaceRegexp = new RegExp(IO.getWorkspaceRoot().replace(/\\/g, "\\\\"), "g");
+    const workspaceRegexp = new RegExp(Harness.IO.getWorkspaceRoot().replace(/\\/g, "\\\\"), "g");
     return result
         .replace(/import\(".*?\/tests\/cases\/user\//g, `import("/`)
         .replace(/Module '".*?\/tests\/cases\/user\//g, `Module '"/`)
@@ -278,7 +278,7 @@ function compareErrorStrings(a: string[], b: string[]) {
 export class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
     readonly testDir = "../DefinitelyTyped/types/";
     workingDirectory = this.testDir;
-    kind(): TestRunnerKind {
+    kind(): Harness.TestRunnerKind {
         return "dt";
     }
     report(result: ExecResult) {

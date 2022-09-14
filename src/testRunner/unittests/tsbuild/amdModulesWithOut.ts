@@ -2,7 +2,7 @@ namespace ts {
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     let outFileFs: vfs.FileSystem;
     before(() => {
-        outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut");
+        outFileFs = ts.loadProjectFromDisk("tests/projects/amdModulesWithOut");
     });
     after(() => {
         outFileFs = undefined!;
@@ -19,7 +19,7 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         modifyFs,
         modifyAgainFs
     }: VerifyOutFileScenarioInput) {
-        verifyTscWithEdits({
+        ts.verifyTscWithEdits({
             scenario: "amdModulesWithOut",
             subScenario,
             fs: () => outFileFs,
@@ -29,12 +29,12 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
             edits: [
                 {
                     subScenario: "incremental-declaration-doesnt-change",
-                    modifyFs: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);")
+                    modifyFs: fs => ts.appendText(fs, "/src/lib/file1.ts", "console.log(x);")
                 },
                 ...(modifyAgainFs ? [{
                     subScenario: "incremental-headers-change-without-dts-changes",
                     modifyFs: modifyAgainFs
-                }] : emptyArray),
+                }] : ts.emptyArray),
             ]
         });
     }
@@ -49,15 +49,15 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
             verifyOutFileScenario({
                 subScenario: "multiple prologues in all projects",
                 modifyFs: fs => {
-                    enableStrict(fs, "/src/lib/tsconfig.json");
-                    addTestPrologue(fs, "/src/lib/file0.ts", `"myPrologue"`);
-                    addTestPrologue(fs, "/src/lib/file2.ts", `"myPrologueFile"`);
-                    addTestPrologue(fs, "/src/lib/global.ts", `"myPrologue3"`);
-                    enableStrict(fs, "/src/app/tsconfig.json");
-                    addTestPrologue(fs, "/src/app/file3.ts", `"myPrologue"`);
-                    addTestPrologue(fs, "/src/app/file4.ts", `"myPrologue2";`);
+                    ts.enableStrict(fs, "/src/lib/tsconfig.json");
+                    ts.addTestPrologue(fs, "/src/lib/file0.ts", `"myPrologue"`);
+                    ts.addTestPrologue(fs, "/src/lib/file2.ts", `"myPrologueFile"`);
+                    ts.addTestPrologue(fs, "/src/lib/global.ts", `"myPrologue3"`);
+                    ts.enableStrict(fs, "/src/app/tsconfig.json");
+                    ts.addTestPrologue(fs, "/src/app/file3.ts", `"myPrologue"`);
+                    ts.addTestPrologue(fs, "/src/app/file4.ts", `"myPrologue2";`);
                 },
-                modifyAgainFs: fs => addTestPrologue(fs, "/src/lib/file1.ts", `"myPrologue5"`)
+                modifyAgainFs: fs => ts.addTestPrologue(fs, "/src/lib/file1.ts", `"myPrologue5"`)
             });
         });
 
@@ -67,9 +67,9 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
             verifyOutFileScenario({
                 subScenario: "shebang in all projects",
                 modifyFs: fs => {
-                    addShebang(fs, "lib", "file0");
-                    addShebang(fs, "lib", "file1");
-                    addShebang(fs, "app", "file3");
+                    ts.addShebang(fs, "lib", "file0");
+                    ts.addShebang(fs, "lib", "file1");
+                    ts.addShebang(fs, "app", "file3");
                 },
             });
         });
@@ -79,12 +79,12 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
             verifyOutFileScenario({
                 subScenario: "multiple emitHelpers in all projects",
                 modifyFs: fs => {
-                    addSpread(fs, "lib", "file0");
-                    addRest(fs, "lib", "file1");
-                    addRest(fs, "app", "file3");
-                    addSpread(fs, "app", "file4");
+                    ts.addSpread(fs, "lib", "file0");
+                    ts.addRest(fs, "lib", "file1");
+                    ts.addRest(fs, "app", "file3");
+                    ts.addSpread(fs, "app", "file4");
                 },
-                modifyAgainFs: fs => removeRest(fs, "lib", "file1")
+                modifyAgainFs: fs => ts.removeRest(fs, "lib", "file1")
             });
         });
 
@@ -94,8 +94,8 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
             verifyOutFileScenario({
                 subScenario: "triple slash refs in all projects",
                 modifyFs: fs => {
-                    addTripleSlashRef(fs, "lib", "file0");
-                    addTripleSlashRef(fs, "app", "file4");
+                    ts.addTripleSlashRef(fs, "lib", "file0");
+                    ts.addTripleSlashRef(fs, "app", "file4");
                 }
             });
         });
@@ -103,10 +103,10 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         describe("stripInternal", () => {
             function stripInternalScenario(fs: vfs.FileSystem) {
                 const internal = "/*@internal*/";
-                replaceText(fs, "/src/app/tsconfig.json", `"composite": true,`, `"composite": true,
+                ts.replaceText(fs, "/src/app/tsconfig.json", `"composite": true,`, `"composite": true,
 "stripInternal": true,`);
-                replaceText(fs, "/src/lib/file0.ts", "const", `${internal} const`);
-                appendText(fs, "/src/lib/file1.ts", `
+                ts.replaceText(fs, "/src/lib/file0.ts", "const", `${internal} const`);
+                ts.appendText(fs, "/src/lib/file1.ts", `
 export class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -138,19 +138,19 @@ ${internal} export enum internalEnum { a, b, c }`);
             verifyOutFileScenario({
                 subScenario: "stripInternal",
                 modifyFs: stripInternalScenario,
-                modifyAgainFs: fs => replaceText(fs, "/src/lib/file1.ts", `export const`, `/*@internal*/ export const`),
+                modifyAgainFs: fs => ts.replaceText(fs, "/src/lib/file1.ts", `export const`, `/*@internal*/ export const`),
             });
         });
 
         describe("when the module resolution finds original source file", () => {
             function modifyFs(fs: vfs.FileSystem) {
                 // Make lib to output to parent dir
-                replaceText(fs, "/src/lib/tsconfig.json", `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
+                ts.replaceText(fs, "/src/lib/tsconfig.json", `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
                 // Change reference to file1 module to resolve to lib/file1
-                replaceText(fs, "/src/app/file3.ts", "file1", "lib/file1");
+                ts.replaceText(fs, "/src/app/file3.ts", "file1", "lib/file1");
             }
 
-            verifyTsc({
+            ts.verifyTsc({
                 scenario: "amdModulesWithOut",
                 subScenario: "when the module resolution finds original source file",
                 fs: () => outFileFs,

@@ -1,23 +1,23 @@
 namespace ts.tscWatch {
 describe("unittests:: tsc-watch:: console clearing", () => {
     const scenario = "consoleClearing";
-    const file: File = {
+    const file: ts.tscWatch.File = {
         path: "/f.ts",
         content: ""
     };
 
-    const makeChangeToFile: TscWatchCompileChange[] = [{
+    const makeChangeToFile: ts.tscWatch.TscWatchCompileChange[] = [{
         caption: "Comment added to file f",
         change: sys => sys.modifyFile(file.path, "//"),
-        timeouts: runQueuedTimeoutCallbacks,
+        timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
     }];
 
     function checkConsoleClearingUsingCommandLineOptions(subScenario: string, commandLineOptions?: string[]) {
-        verifyTscWatch({
+        ts.tscWatch.verifyTscWatch({
             scenario,
             subScenario,
-            commandLineArgs: ["--w", file.path, ...commandLineOptions || emptyArray],
-            sys: () => createWatchedSystem([file, libFile]),
+            commandLineArgs: ["--w", file.path, ...commandLineOptions || ts.emptyArray],
+            sys: () => ts.tscWatch.createWatchedSystem([file, ts.tscWatch.libFile]),
             changes: makeChangeToFile,
         });
     }
@@ -28,23 +28,23 @@ describe("unittests:: tsc-watch:: console clearing", () => {
     checkConsoleClearingUsingCommandLineOptions("with --preserveWatchOutput", ["--preserveWatchOutput"]);
 
     describe("when preserveWatchOutput is true in config file", () => {
-        const compilerOptions: CompilerOptions = {
+        const compilerOptions: ts.CompilerOptions = {
             preserveWatchOutput: true
         };
-        const configFile: File = {
+        const configFile: ts.tscWatch.File = {
             path: "/tsconfig.json",
             content: JSON.stringify({ compilerOptions })
         };
-        const files = [file, configFile, libFile];
+        const files = [file, configFile, ts.tscWatch.libFile];
         it("using createWatchOfConfigFile ", () => {
-            const baseline = createBaseline(createWatchedSystem(files));
-            const watch = createWatchProgram(createWatchCompilerHostOfConfigFileForBaseline({
+            const baseline = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem(files));
+            const watch = ts.createWatchProgram(ts.tscWatch.createWatchCompilerHostOfConfigFileForBaseline({
                 system: baseline.sys,
                 cb: baseline.cb,
                 configFileName: configFile.path,
             }));
             // Initially console is cleared if --preserveOutput is not provided since the config file is yet to be parsed
-            runWatchBaseline({
+            ts.tscWatch.runWatchBaseline({
                 scenario,
                 subScenario: "when preserveWatchOutput is true in config file/createWatchOfConfigFile",
                 commandLineArgs: ["--w", "-p", configFile.path],
@@ -54,11 +54,11 @@ describe("unittests:: tsc-watch:: console clearing", () => {
                 watchOrSolution: watch
             });
         });
-        verifyTscWatch({
+        ts.tscWatch.verifyTscWatch({
             scenario,
             subScenario: "when preserveWatchOutput is true in config file/when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile",
             commandLineArgs: ["--w", "-p", configFile.path],
-            sys: () => createWatchedSystem(files),
+            sys: () => ts.tscWatch.createWatchedSystem(files),
             changes: makeChangeToFile,
         });
     });

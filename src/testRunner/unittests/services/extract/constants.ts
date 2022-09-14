@@ -295,10 +295,10 @@ switch (1) {
 });
 
 function testExtractConstant(caption: string, text: string) {
-    testExtractSymbol(caption, text, "extractConstant", Diagnostics.Extract_constant);
+    ts.testExtractSymbol(caption, text, "extractConstant", ts.Diagnostics.Extract_constant);
 }
 
 function testExtractConstantFailed(caption: string, text: string) {
-    testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
+    ts.testExtractSymbolFailed(caption, text, ts.Diagnostics.Extract_constant);
 }
 }

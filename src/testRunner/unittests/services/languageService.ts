@@ -31,13 +31,13 @@ export function Component(x: Config): any;`
             },
             getScriptSnapshot(fileName) {
                 if (fileName === ".ts") {
-                    return ScriptSnapshot.fromString("");
+                    return ts.ScriptSnapshot.fromString("");
                 }
-                return ScriptSnapshot.fromString(files[fileName] || "");
+                return ts.ScriptSnapshot.fromString(files[fileName] || "");
             },
             getCurrentDirectory: () => ".",
             getDefaultLibFileName(options) {
-                return getDefaultLibFilePath(options);
+                return ts.getDefaultLibFilePath(options);
             },
             fileExists: name => !!files[name],
             readFile: name => files[name]
@@ -60,8 +60,8 @@ export function Component(x: Config): any;`
             ),
             {
                 emitSkipped: true,
-                diagnostics: emptyArray,
-                outputFiles: emptyArray,
+                diagnostics: ts.emptyArray,
+                outputFiles: ts.emptyArray,
             }
         );
 
@@ -73,7 +73,7 @@ export function Component(x: Config): any;`
             ),
             {
                 emitSkipped: false,
-                diagnostics: emptyArray,
+                diagnostics: ts.emptyArray,
                 outputFiles: [{
                     name: "foo.d.ts",
                     text: "export {};\r\n",
@@ -86,13 +86,13 @@ export function Component(x: Config): any;`
     describe("detects program upto date correctly", () => {
         function verifyProgramUptoDate(useProjectVersion: boolean) {
             let projectVersion = "1";
-            const files = new Map<string, { version: string, text: string; }>();
+            const files = new ts.Map<string, { version: string, text: string; }>();
             files.set("/project/root.ts", { version: "1", text: `import { foo } from "./other"` });
             files.set("/project/other.ts", { version: "1", text: `export function foo() { }` });
-            files.set("/lib/lib.d.ts", { version: "1", text: projectSystem.libFile.content });
-            const host: LanguageServiceHost = {
-                useCaseSensitiveFileNames: returnTrue,
-                getCompilationSettings: getDefaultCompilerOptions,
+            files.set("/lib/lib.d.ts", { version: "1", text: ts.projectSystem.libFile.content });
+            const host: ts.LanguageServiceHost = {
+                useCaseSensitiveFileNames: ts.returnTrue,
+                getCompilationSettings: ts.getDefaultCompilerOptions,
                 fileExists: path => files.has(path),
                 readFile: path => files.get(path)?.text,
                 getProjectVersion: !useProjectVersion ? undefined : () => projectVersion,
@@ -100,7 +100,7 @@ export function Component(x: Config): any;`
                 getScriptVersion: path => files.get(path)?.version || "",
                 getScriptSnapshot: path => {
                     const text = files.get(path)?.text;
-                    return text ? ScriptSnapshot.fromString(text) : undefined;
+                    return text ? ts.ScriptSnapshot.fromString(text) : undefined;
                 },
                 getCurrentDirectory: () => "/project",
                 getDefaultLibFileName: () => "/lib/lib.d.ts"
@@ -125,7 +125,7 @@ export function Component(x: Config): any;`
             assert.notStrictEqual(program3, program4);
             verifyProgramFiles(program4);
 
-            function verifyProgramFiles(program: Program) {
+            function verifyProgramFiles(program: ts.Program) {
                 assert.deepEqual(
                     program.getSourceFiles().map(f => f.fileName),
                     ["/lib/lib.d.ts", "/project/other.ts", "/project/root.ts"]
@@ -142,8 +142,8 @@ export function Component(x: Config): any;`
 
     describe("detects program upto date when new file is added to the referenced project", () => {
         function setup(useSourceOfProjectReferenceRedirect: (() => boolean) | undefined) {
-            const config1: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
+            const config1: ts.TestFSWithWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/projects/project1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -152,16 +152,16 @@ export function Component(x: Config): any;`
                     exclude: ["temp"]
                 })
             };
-            const class1: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projects/project1/class1.ts`,
+            const class1: ts.TestFSWithWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/projects/project1/class1.ts`,
                 content: `class class1 {}`
             };
-            const class1Dts: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projects/project1/class1.d.ts`,
+            const class1Dts: ts.TestFSWithWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/projects/project1/class1.d.ts`,
                 content: `declare class class1 {}`
             };
-            const config2: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
+            const config2: ts.TestFSWithWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/projects/project2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -172,21 +172,21 @@ export function Component(x: Config): any;`
                     ]
                 })
             };
-            const class2: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projects/project2/class2.ts`,
+            const class2: ts.TestFSWithWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/projects/project2/class2.ts`,
                 content: `class class2 {}`
             };
-            const system = projectSystem.createServerHost([config1, class1, class1Dts, config2, class2, projectSystem.libFile]);
-            const result = getParsedCommandLineOfConfigFile(`${tscWatch.projectRoot}/projects/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
+            const system = ts.projectSystem.createServerHost([config1, class1, class1Dts, config2, class2, ts.projectSystem.libFile]);
+            const result = ts.getParsedCommandLineOfConfigFile(`${ts.tscWatch.projectRoot}/projects/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
                 useCaseSensitiveFileNames: true,
                 fileExists: path => system.fileExists(path),
                 readFile: path => system.readFile(path),
                 getCurrentDirectory: () => system.getCurrentDirectory(),
                 readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
-                onUnRecoverableConfigFileDiagnostic: noop,
+                onUnRecoverableConfigFileDiagnostic: ts.noop,
             })!;
-            const host: LanguageServiceHost = {
-                useCaseSensitiveFileNames: returnTrue,
+            const host: ts.LanguageServiceHost = {
+                useCaseSensitiveFileNames: ts.returnTrue,
                 useSourceOfProjectReferenceRedirect,
                 getCompilationSettings: () => result.options,
                 fileExists: path => system.fileExists(path),
@@ -198,35 +198,35 @@ export function Component(x: Config): any;`
                 },
                 getScriptSnapshot: path => {
                     const text = system.readFile(path);
-                    return text ? ScriptSnapshot.fromString(text) : undefined;
+                    return text ? ts.ScriptSnapshot.fromString(text) : undefined;
                 },
                 readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
                 getCurrentDirectory: () => system.getCurrentDirectory(),
-                getDefaultLibFileName: () => projectSystem.libFile.path,
+                getDefaultLibFileName: () => ts.projectSystem.libFile.path,
                 getProjectReferences: () => result.projectReferences,
             };
             const ls = ts.createLanguageService(host);
             return { system, ls, class1, class1Dts, class2 };
         }
         it("detects program upto date when new file is added to the referenced project", () => {
-            const { ls, system, class1, class2 } = setup(returnTrue);
+            const { ls, system, class1, class2 } = setup(ts.returnTrue);
             assert.deepEqual(
                 ls.getProgram()!.getSourceFiles().map(f => f.fileName),
-                [projectSystem.libFile.path, class1.path, class2.path]
+                [ts.projectSystem.libFile.path, class1.path, class2.path]
             );
             // Add new file to referenced project
-            const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+            const class3 = `${ts.tscWatch.projectRoot}/projects/project1/class3.ts`;
             system.writeFile(class3, `class class3 {}`);
             const program = ls.getProgram()!;
             assert.deepEqual(
                 program.getSourceFiles().map(f => f.fileName),
-                [projectSystem.libFile.path, class1.path, class3, class2.path]
+                [ts.projectSystem.libFile.path, class1.path, class3, class2.path]
             );
             // Add excluded file to referenced project
-            system.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            system.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
             assert.strictEqual(ls.getProgram(), program);
             // Add output from new class to referenced project
-            system.writeFile(`${tscWatch.projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`);
+            system.writeFile(`${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`);
             assert.strictEqual(ls.getProgram(), program);
         });
 
@@ -235,38 +235,38 @@ export function Component(x: Config): any;`
             const program1 = ls.getProgram()!;
             assert.deepEqual(
                 program1.getSourceFiles().map(f => f.fileName),
-                [projectSystem.libFile.path, class1Dts.path, class2.path]
+                [ts.projectSystem.libFile.path, class1Dts.path, class2.path]
             );
             // Add new file to referenced project
-            const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+            const class3 = `${ts.tscWatch.projectRoot}/projects/project1/class3.ts`;
             system.writeFile(class3, `class class3 {}`);
             assert.notStrictEqual(ls.getProgram(), program1);
             assert.deepEqual(
                 ls.getProgram()!.getSourceFiles().map(f => f.fileName),
-                [projectSystem.libFile.path, class1Dts.path, class2.path]
+                [ts.projectSystem.libFile.path, class1Dts.path, class2.path]
             );
             // Add class3 output
-            const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+            const class3Dts = `${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`;
             system.writeFile(class3Dts, `declare class class3 {}`);
             const program2 = ls.getProgram()!;
             assert.deepEqual(
                 program2.getSourceFiles().map(f => f.fileName),
-                [projectSystem.libFile.path, class1Dts.path, class3Dts, class2.path]
+                [ts.projectSystem.libFile.path, class1Dts.path, class3Dts, class2.path]
             );
             // Add excluded file to referenced project
-            system.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            system.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
             assert.strictEqual(ls.getProgram(), program2);
             // Delete output from new class to referenced project
             system.deleteFile(class3Dts);
             assert.deepEqual(
                 ls.getProgram()!.getSourceFiles().map(f => f.fileName),
-                [projectSystem.libFile.path, class1Dts.path, class2.path]
+                [ts.projectSystem.libFile.path, class1Dts.path, class2.path]
             );
             // Write output again
             system.writeFile(class3Dts, `declare class class3 {}`);
             assert.deepEqual(
                 ls.getProgram()!.getSourceFiles().map(f => f.fileName),
-                [projectSystem.libFile.path, class1Dts.path, class3Dts, class2.path]
+                [ts.projectSystem.libFile.path, class1Dts.path, class3Dts, class2.path]
             );
         });
     });

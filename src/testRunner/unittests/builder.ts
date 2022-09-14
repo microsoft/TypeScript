@@ -1,13 +1,13 @@
 namespace ts {
 describe("unittests:: builder", () => {
     it("emits dependent files", () => {
-        const files: NamedSourceText[] = [
-            { name: "/a.ts", text: SourceText.New("", 'import { b } from "./b";', "") },
-            { name: "/b.ts", text: SourceText.New("", ' import { c } from "./c";', "export const b = c;") },
-            { name: "/c.ts", text: SourceText.New("", "", "export const c = 0;") },
+        const files: ts.NamedSourceText[] = [
+            { name: "/a.ts", text: ts.SourceText.New("", 'import { b } from "./b";', "") },
+            { name: "/b.ts", text: ts.SourceText.New("", ' import { c } from "./c";', "export const b = c;") },
+            { name: "/c.ts", text: ts.SourceText.New("", "", "export const c = 0;") },
         ];
 
-        let program = newProgram(files, ["/a.ts"], {});
+        let program = ts.newProgram(files, ["/a.ts"], {});
         const assertChanges = makeAssertChanges(() => program);
 
         assertChanges(["/c.js", "/b.js", "/a.js"]);
@@ -23,12 +23,12 @@ describe("unittests:: builder", () => {
     });
 
     it("if emitting all files, emits the changed file first", () => {
-        const files: NamedSourceText[] = [
-            { name: "/a.ts", text: SourceText.New("", "", "namespace A { export const x = 0; }") },
-            { name: "/b.ts", text: SourceText.New("", "", "namespace B { export const x = 0; }") },
+        const files: ts.NamedSourceText[] = [
+            { name: "/a.ts", text: ts.SourceText.New("", "", "namespace A { export const x = 0; }") },
+            { name: "/b.ts", text: ts.SourceText.New("", "", "namespace B { export const x = 0; }") },
         ];
 
-        let program = newProgram(files, ["/a.ts", "/b.ts"], {});
+        let program = ts.newProgram(files, ["/a.ts", "/b.ts"], {});
         const assertChanges = makeAssertChanges(() => program);
 
         assertChanges(["/a.js", "/b.js"]);
@@ -41,15 +41,15 @@ describe("unittests:: builder", () => {
     });
 
     it("keeps the file in affected files if cancellation token throws during the operation", () => {
-        const files: NamedSourceText[] = [
-            { name: "/a.ts", text: SourceText.New("", 'import { b } from "./b";', "") },
-            { name: "/b.ts", text: SourceText.New("", ' import { c } from "./c";', "export const b = c;") },
-            { name: "/c.ts", text: SourceText.New("", "", "export const c = 0;") },
-            { name: "/d.ts", text: SourceText.New("", "", "export const dd = 0;") },
-            { name: "/e.ts", text: SourceText.New("", "", "export const ee = 0;") },
+        const files: ts.NamedSourceText[] = [
+            { name: "/a.ts", text: ts.SourceText.New("", 'import { b } from "./b";', "") },
+            { name: "/b.ts", text: ts.SourceText.New("", ' import { c } from "./c";', "export const b = c;") },
+            { name: "/c.ts", text: ts.SourceText.New("", "", "export const c = 0;") },
+            { name: "/d.ts", text: ts.SourceText.New("", "", "export const dd = 0;") },
+            { name: "/e.ts", text: ts.SourceText.New("", "", "export const ee = 0;") },
         ];
 
-        let program = newProgram(files, ["/d.ts", "/e.ts", "/a.ts"], {});
+        let program = ts.newProgram(files, ["/d.ts", "/e.ts", "/a.ts"], {});
         const assertChanges = makeAssertChangesWithCancellationToken(() => program);
         // No cancellation
         assertChanges(["/d.js", "/e.js", "/c.js", "/b.js", "/a.js"]);
@@ -71,12 +71,12 @@ describe("unittests:: builder", () => {
     });
 });
 
-function makeAssertChanges(getProgram: () => Program): (fileNames: readonly string[]) => void {
-    const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
-    let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly string[]) => void {
+    const host: ts.BuilderProgramHost = { useCaseSensitiveFileNames: ts.returnTrue };
+    let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     return fileNames => {
         const program = getProgram();
-        builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
+        builderProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
         const outputFileNames: string[] = [];
         // eslint-disable-next-line no-empty
         while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName))) {
@@ -85,15 +85,15 @@ function makeAssertChanges(getProgram: () => Program): (fileNames: readonly stri
     };
 }
 
-function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
-    const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
-    let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
+    const host: ts.BuilderProgramHost = { useCaseSensitiveFileNames: ts.returnTrue };
+    let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     let cancel = false;
-    const cancellationToken: CancellationToken = {
+    const cancellationToken: ts.CancellationToken = {
         isCancellationRequested: () => cancel,
         throwIfCancellationRequested: () => {
             if (cancel) {
-                throw new OperationCanceledException();
+                throw new ts.OperationCanceledException();
             }
         },
     };
@@ -101,7 +101,7 @@ function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fil
         cancel = false;
         let operationWasCancelled = false;
         const program = getProgram();
-        builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
+        builderProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
         const outputFileNames: string[] = [];
         try {
             do {
@@ -113,7 +113,7 @@ function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fil
         }
         catch (e) {
             assert.isFalse(operationWasCancelled);
-            assert(e instanceof OperationCanceledException, e.toString());
+            assert(e instanceof ts.OperationCanceledException, e.toString());
             operationWasCancelled = true;
         }
         assert.equal(cancel, operationWasCancelled);
@@ -122,9 +122,9 @@ function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fil
     };
 }
 
-function updateProgramFile(program: ProgramWithSourceTexts, fileName: string, fileContent: string): ProgramWithSourceTexts {
-    return updateProgram(program, program.getRootFileNames(), program.getCompilerOptions(), files => {
-        updateProgramText(files, fileName, fileContent);
+function updateProgramFile(program: ts.ProgramWithSourceTexts, fileName: string, fileContent: string): ts.ProgramWithSourceTexts {
+    return ts.updateProgram(program, program.getRootFileNames(), program.getCompilerOptions(), files => {
+        ts.updateProgramText(files, fileName, fileContent);
     });
 }
 }
