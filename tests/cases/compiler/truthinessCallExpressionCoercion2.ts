@@ -48,11 +48,42 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // error
+    if (required1 || b) {
+    }
+
+    // error
+    if (required1 || required2) {
+    }
+
+    // error
+    if (required1 ?? b) {
+    }
+
+    // error
+    if (required1 ?? required2) {
+    }
+
+    // error
     if (((required1 && b))) {
     }
 
     // ok
     if (required1 && b) {
+        required1();
+    }
+
+    // ok
+    if (required1 || b) {
+        required1();
+    }
+
+    // ok
+    if (required1 ?? b) {
+        required1();
+    }
+
+    // ok
+    if (b ?? required1) {
         required1();
     }
 
@@ -71,6 +102,14 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 
     // error
     if ((required1 || required2) && b) {
+    }
+
+    // error
+    if (b && (required1 ?? required2)) {
+    }
+
+    // error
+    if ((required1 ?? required2) && b) {
     }
 }
 
@@ -123,6 +162,14 @@ function checksPropertyAccess() {
 
     // error
     if ((x1.a.b.c || x2.a.b.c) && 1) {
+    }
+
+    // error
+    if (1 && (x1.a.b.c ?? x2.a.b.c)) {
+    }
+
+    // error
+    if ((x1.a.b.c ?? x2.a.b.c) && 1) {
     }
 }
 

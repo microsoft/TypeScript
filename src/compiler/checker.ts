@@ -38465,18 +38465,18 @@ namespace ts {
             function bothHelper(condExpr: Expression, body: Expression | Statement | undefined) {
                 condExpr = skipParentheses(condExpr);
                 helper(condExpr, body);
-                while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
+                while (isBinaryExpression(condExpr) && (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.QuestionQuestionToken)) {
                     condExpr = skipParentheses(condExpr.left);
                     helper(condExpr, body);
                 }
             }
 
             function helper(condExpr: Expression, body: Expression | Statement | undefined) {
-                const location = isLogicalBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+                const location = isLogicalLikeBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
                 if (isModuleExportsAccessExpression(location)) {
                     return;
                 }
-                if (isLogicalBinaryExpression(location)) {
+                if (isLogicalLikeBinaryExpression(location)) {
                     bothHelper(location, body);
                     return;
                 }
@@ -38519,9 +38519,9 @@ namespace ts {
                 }
             }
 
-            function isLogicalBinaryExpression(expr: Expression): expr is BinaryExpression {
+            function isLogicalLikeBinaryExpression(expr: Expression): expr is BinaryExpression {
                 return isBinaryExpression(expr) &&
-                    (expr.operatorToken.kind === SyntaxKind.BarBarToken || expr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken);
+                    (expr.operatorToken.kind === SyntaxKind.BarBarToken || expr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || expr.operatorToken.kind === SyntaxKind.QuestionQuestionToken);
             }
         }
 
