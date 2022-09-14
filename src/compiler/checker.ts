@@ -38497,7 +38497,6 @@ namespace ts {
 
                 const testedNode = isIdentifier(location) ? location
                     : isPropertyAccessExpression(location) ? location.name
-                    : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
                     : undefined;
                 const testedSymbol = testedNode && getSymbolAtLocation(testedNode);
                 if (!testedSymbol && !isPromise) {
