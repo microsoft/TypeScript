@@ -15,9 +15,9 @@ if (typeof a.error === 'undefined') {
 
     a.result.prop; // number
 >a.result.prop : Symbol(prop, Decl(narrowingTypeofUndefined.ts, 0, 95))
->a.result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 85))
+>a.result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 43), Decl(narrowingTypeofUndefined.ts, 0, 85))
 >a : Symbol(a, Decl(narrowingTypeofUndefined.ts, 0, 13))
->result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 85))
+>result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 43), Decl(narrowingTypeofUndefined.ts, 0, 85))
 >prop : Symbol(prop, Decl(narrowingTypeofUndefined.ts, 0, 95))
 }
 else {
@@ -44,9 +44,9 @@ if (typeof a.error !== 'undefined') {
 else {
     a.result.prop; // number
 >a.result.prop : Symbol(prop, Decl(narrowingTypeofUndefined.ts, 0, 95))
->a.result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 85))
+>a.result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 43), Decl(narrowingTypeofUndefined.ts, 0, 85))
 >a : Symbol(a, Decl(narrowingTypeofUndefined.ts, 0, 13))
->result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 85))
+>result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 43), Decl(narrowingTypeofUndefined.ts, 0, 85))
 >prop : Symbol(prop, Decl(narrowingTypeofUndefined.ts, 0, 95))
 }
 

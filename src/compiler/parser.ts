@@ -734,6 +734,7 @@ namespace ts {
         [SyntaxKind.JSDocProtectedTag]: forEachChildInJSDocTag,
         [SyntaxKind.JSDocReadonlyTag]: forEachChildInJSDocTag,
         [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
+        [SyntaxKind.JSDocOverrideTag]: forEachChildInJSDocTag,
         [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
     };
 
@@ -815,10 +816,10 @@ namespace ts {
     }
 
     function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNode(cbNode, node.name);
+        return visitNode(cbNode, node.name);
     }
 
-    function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocOverrideTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName)
             || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
@@ -2313,6 +2314,7 @@ namespace ts {
                     return canFollowExportModifier();
                 case SyntaxKind.DefaultKeyword:
                     return nextTokenCanFollowDefaultKeyword();
+                case SyntaxKind.AccessorKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.GetKeyword:
                 case SyntaxKind.SetKeyword:
@@ -6613,6 +6615,7 @@ namespace ts {
                     case SyntaxKind.NamespaceKeyword:
                         return nextTokenIsIdentifierOrStringLiteralOnSameLine();
                     case SyntaxKind.AbstractKeyword:
+                    case SyntaxKind.AccessorKeyword:
                     case SyntaxKind.AsyncKeyword:
                     case SyntaxKind.DeclareKeyword:
                     case SyntaxKind.PrivateKeyword:
@@ -6705,6 +6708,7 @@ namespace ts {
                     // When these don't start a declaration, they're an identifier in an expression statement
                     return true;
 
+                case SyntaxKind.AccessorKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
@@ -6791,6 +6795,7 @@ namespace ts {
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.AccessorKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.ReadonlyKeyword:
                 case SyntaxKind.GlobalKeyword:

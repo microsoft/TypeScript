@@ -30,7 +30,7 @@ declare const a7: unknown | null
 >null : null
 
 declare const a8: never | null
->a8 : never
+>a8 : null
 >null : null
 
 declare const a9: any | null
@@ -81,9 +81,9 @@ const aa7 = a7 ?? 'whatever'
 >'whatever' : "whatever"
 
 const aa8 = a8 ?? 'whatever'
->aa8 : never
->a8 ?? 'whatever' : never
->a8 : never
+>aa8 : "whatever"
+>a8 ?? 'whatever' : "whatever"
+>a8 : null
 >'whatever' : "whatever"
 
 const aa9 = a9 ?? 'whatever'

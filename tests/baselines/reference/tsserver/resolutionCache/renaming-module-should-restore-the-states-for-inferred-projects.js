@@ -1,16 +1,38 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/file1.ts"}}
-Search path: /a/b
-For info: /a/b/file1.ts :: No config files found.
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-FileWatcher:: Added:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:12.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
+Before request
+//// [/a/b/moduleFile.ts]
+export function bar() { };
+
+//// [/a/b/file1.ts]
+import * as T from './moduleFile'; T.bar();
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+Info 2    [00:00:13.000] Search path: /a/b
+Info 3    [00:00:14.000] For info: /a/b/file1.ts :: No config files found.
+Info 4    [00:00:15.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 5    [00:00:16.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 6    [00:00:17.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
+Info 7    [00:00:18.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 8    [00:00:19.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 9    [00:00:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 10   [00:00:21.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 11   [00:00:22.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 12   [00:00:23.000] 	Files (2)
 	/a/b/moduleFile.ts
 	/a/b/file1.ts
 
@@ -20,78 +42,325 @@ Project '/dev/null/inferredProject1*' (Inferred)
 	file1.ts
 	  Root file specified for compilation
 
------------------------------------------------
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 13   [00:00:24.000] -----------------------------------------------
+Info 14   [00:00:25.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 14   [00:00:26.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/file1.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-response:{"responseRequired":false}
-request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
-response:{"response":[],"responseRequired":true}
-FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Close:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
-Scheduled: /dev/null/inferredProject1*
-Scheduled: *ensureProjectForOpenFiles*
-Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
-Running: /dev/null/inferredProject1*
-Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (1)
+Info 14   [00:00:27.000] -----------------------------------------------
+Info 14   [00:00:28.000] Open files: 
+Info 14   [00:00:29.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
+Info 14   [00:00:30.000] 		Projects: /dev/null/inferredProject1*
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 14   [00:00:31.000] response:
+    {
+      "responseRequired": false
+    }
+Info 15   [00:00:32.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 16   [00:00:33.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }
+Info 17   [00:00:35.000] FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
+Info 18   [00:00:36.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
+Info 19   [00:00:37.000] Scheduled: /dev/null/inferredProject1*
+Info 20   [00:00:38.000] Scheduled: *ensureProjectForOpenFiles*
+Info 21   [00:00:39.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
+Before running timeout callbacks
+//// [/a/b/moduleFile1.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
+Info 22   [00:00:42.000] Running: /dev/null/inferredProject1*
+Info 23   [00:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 24   [00:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 25   [00:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 26   [00:00:46.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 27   [00:00:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 28   [00:00:48.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 29   [00:00:49.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 30   [00:00:50.000] 	Files (1)
 	/a/b/file1.ts
 
 
 	file1.ts
 	  Root file specified for compilation
 
------------------------------------------------
-Running: *ensureProjectForOpenFiles*
-Before ensureProjectForOpenFiles:
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (1)
+Info 31   [00:00:51.000] -----------------------------------------------
+Info 32   [00:00:52.000] Running: *ensureProjectForOpenFiles*
+Info 33   [00:00:53.000] Before ensureProjectForOpenFiles:
+Info 34   [00:00:54.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 34   [00:00:55.000] 	Files (1)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/file1.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-After ensureProjectForOpenFiles:
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (1)
+Info 34   [00:00:56.000] -----------------------------------------------
+Info 34   [00:00:57.000] Open files: 
+Info 34   [00:00:58.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
+Info 34   [00:00:59.000] 		Projects: /dev/null/inferredProject1*
+Info 34   [00:01:00.000] After ensureProjectForOpenFiles:
+Info 35   [00:01:01.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 35   [00:01:02.000] 	Files (1)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/file1.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
-response:{"response":[{"start":{"line":1,"offset":20},"end":{"line":1,"offset":34},"text":"Cannot find module './moduleFile' or its corresponding type declarations.","code":2307,"category":"error"}],"responseRequired":true}
-DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
-Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Running: /dev/null/inferredProject1*FailedLookupInvalidation
-Scheduled: /dev/null/inferredProject1*
-Scheduled: *ensureProjectForOpenFiles*
-request:{"seq":0,"type":"request","command":"change","arguments":{"file":"/a/b/file1.ts","line":1,"offset":44,"endLine":1,"endOffset":44,"insertString":"\n"}}
-response:{"responseRequired":false}
-Running: /dev/null/inferredProject1*
-Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-FileWatcher:: Added:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
-DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-DirectoryWatcher:: Close:: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 35   [00:01:03.000] -----------------------------------------------
+Info 35   [00:01:04.000] Open files: 
+Info 35   [00:01:05.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
+Info 35   [00:01:06.000] 		Projects: /dev/null/inferredProject1*
+After running timeout callbacks
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Info 35   [00:01:07.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Info 36   [00:01:08.000] response:
+    {
+      "response": [
+        {
+          "start": {
+            "line": 1,
+            "offset": 20
+          },
+          "end": {
+            "line": 1,
+            "offset": 34
+          },
+          "text": "Cannot find module './moduleFile' or its corresponding type declarations.",
+          "code": 2307,
+          "category": "error"
+        }
+      ],
+      "responseRequired": true
+    }
+Info 37   [00:01:10.000] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 38   [00:01:11.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
+Info 39   [00:01:12.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 40   [00:01:15.000] DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 41   [00:01:16.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
+Info 42   [00:01:17.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Before running timeout callbacks
+//// [/a/b/moduleFile.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile1.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Info 43   [00:01:18.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
+Info 44   [00:01:19.000] Scheduled: /dev/null/inferredProject1*
+Info 45   [00:01:20.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Info 46   [00:01:21.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "change",
+      "arguments": {
+        "file": "/a/b/file1.ts",
+        "line": 1,
+        "offset": 44,
+        "endLine": 1,
+        "endOffset": 44,
+        "insertString": "\n"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Info 47   [00:01:22.000] response:
+    {
+      "responseRequired": false
+    }
+Before running timeout callbacks
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Info 48   [00:01:23.000] Running: /dev/null/inferredProject1*
+Info 49   [00:01:24.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 50   [00:01:25.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
+Info 51   [00:01:26.000] DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 52   [00:01:27.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 53   [00:01:28.000] DirectoryWatcher:: Close:: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 54   [00:01:29.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 55   [00:01:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info 56   [00:01:31.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 57   [00:01:32.000] 	Files (2)
 	/a/b/moduleFile.ts
 	/a/b/file1.ts
 
@@ -101,23 +370,77 @@ Project '/dev/null/inferredProject1*' (Inferred)
 	file1.ts
 	  Root file specified for compilation
 
------------------------------------------------
-Running: *ensureProjectForOpenFiles*
-Before ensureProjectForOpenFiles:
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 58   [00:01:33.000] -----------------------------------------------
+Info 59   [00:01:34.000] Running: *ensureProjectForOpenFiles*
+Info 60   [00:01:35.000] Before ensureProjectForOpenFiles:
+Info 61   [00:01:36.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 61   [00:01:37.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/file1.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-After ensureProjectForOpenFiles:
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 61   [00:01:38.000] -----------------------------------------------
+Info 61   [00:01:39.000] Open files: 
+Info 61   [00:01:40.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
+Info 61   [00:01:41.000] 		Projects: /dev/null/inferredProject1*
+Info 61   [00:01:42.000] After ensureProjectForOpenFiles:
+Info 62   [00:01:43.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 62   [00:01:44.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/file1.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/file1.ts"}}
-response:{"response":[],"responseRequired":true}
+Info 62   [00:01:45.000] -----------------------------------------------
+Info 62   [00:01:46.000] Open files: 
+Info 62   [00:01:47.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
+Info 62   [00:01:48.000] 		Projects: /dev/null/inferredProject1*
+After running timeout callbacks
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 62   [00:01:49.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 63   [00:01:50.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }

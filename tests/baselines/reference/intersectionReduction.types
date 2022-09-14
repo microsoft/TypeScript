@@ -255,10 +255,10 @@ declare let s2: string & Tag2;
 >s2 : never
 
 declare let t1: string & Tag1 | undefined;
->t1 : never
+>t1 : undefined
 
 declare let t2: string & Tag2 | undefined;
->t2 : never
+>t2 : undefined
 
 s1 = s2;
 >s1 = s2 : never
@@ -271,14 +271,14 @@ s2 = s1;
 >s1 : never
 
 t1 = t2;
->t1 = t2 : never
->t1 : never
->t2 : never
+>t1 = t2 : undefined
+>t1 : undefined
+>t2 : undefined
 
 t2 = t1;
->t2 = t1 : never
->t2 : never
->t1 : never
+>t2 = t1 : undefined
+>t2 : undefined
+>t1 : undefined
 
 // Repro from #36736
 

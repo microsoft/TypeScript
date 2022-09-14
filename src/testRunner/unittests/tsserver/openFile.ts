@@ -147,7 +147,7 @@ foo();
 bar();`
             };
             const host = createServerHost([file, libFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file], session);
             verifyGetErrRequest({ session, host, files: [file] });
 

@@ -7,7 +7,7 @@ namespace ts {
                 const outputFileName = `tsConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
 
                 it(`Correct output for ${outputFileName}`, () => {
-                    Harness.Baseline.runBaseline(outputFileName, initResult);
+                    Harness.Baseline.runBaseline(outputFileName, initResult, { PrintDiff: true });
                 });
             });
         }
@@ -29,5 +29,9 @@ namespace ts {
         initTSConfigCorrectly("Initialized TSConfig with incorrect compiler option value", ["--init", "--lib", "nonExistLib,es5,es2015.promise"]);
 
         initTSConfigCorrectly("Initialized TSConfig with advanced options", ["--init", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
+
+        initTSConfigCorrectly("Initialized TSConfig with --help", ["--init", "--help"]);
+
+        initTSConfigCorrectly("Initialized TSConfig with --watch", ["--init", "--watch"]);
     });
 }
