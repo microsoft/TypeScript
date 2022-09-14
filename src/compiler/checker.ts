@@ -12417,7 +12417,6 @@ namespace ts {
             let types: Type[] | undefined;
             const props = objectType.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(objectType as IntersectionType) : getPropertiesOfType(objectType);
             for (const prop of props) {
-                // Skip over ignored JSX and symbol-named members
                 if (isApplicableIndexType(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), indexType)) {
                     const propType = getNonMissingTypeOfSymbol(prop);
                     types = append(types, propType);
