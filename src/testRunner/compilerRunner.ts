@@ -119,6 +119,7 @@ namespace Harness {
             "module",
             "moduleResolution",
             "moduleDetection",
+            "allowImportingTsExtensions",
             "target",
             "jsx",
             "noEmit",

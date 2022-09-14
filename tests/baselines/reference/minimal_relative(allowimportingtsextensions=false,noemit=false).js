@@ -1,34 +1,30 @@
-// @moduleResolution: minimal
-// @outDir: dist
-// @noEmit: true,false
-// @allowImportingTsExtensions: true,false
-// @traceResolution: true
+//// [tests/cases/conformance/moduleResolution/minimal_relative.ts] ////
 
-// @Filename: /project/a.ts
+//// [a.ts]
 export {};
 
-// @Filename: /project/b.ts
+//// [b.ts]
 export {};
 
-// @Filename: /project/b.js
+//// [b.js]
 export {};
 
-// @Filename: /project/b.d.ts
+//// [b.d.ts]
 export {};
 
-// @Filename: /project/c.ts
+//// [c.ts]
 export {};
 
-// @Filename: /project/c.tsx
+//// [c.tsx]
 export {};
 
-// @Filename: /project/d/index.ts
+//// [index.ts]
 export {};
 
-// @Filename: /project/e
+//// [e]
 export {};
 
-// @Filename: /project/main.ts
+//// [main.ts]
 import {} from "./a";
 import {} from "./a.js";
 import {} from "./a.ts";
@@ -48,7 +44,21 @@ import {} from "./d/index.ts";
 
 import {} from "./e";
 
-// @Filename: /project/types.d.ts
+//// [types.d.ts]
 import {} from "./a.ts";
 import {} from "./a.d.ts";
 import type {} from "./a.d.ts";
+
+
+//// [a.js]
+"use strict";
+exports.__esModule = true;
+//// [b.js]
+"use strict";
+exports.__esModule = true;
+//// [index.js]
+"use strict";
+exports.__esModule = true;
+//// [main.js]
+"use strict";
+exports.__esModule = true;

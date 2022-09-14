@@ -6543,6 +6543,7 @@ namespace ts {
 
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
+        allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
         /*@internal*/ allowNonTsExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;

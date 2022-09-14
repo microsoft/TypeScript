@@ -2716,8 +2716,12 @@ namespace ts {
       return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal;
     }
 
-    export function shouldAllowTsExtension(compilerOptions: CompilerOptions) {
-        return shouldResolveTsExtension(compilerOptions) && !!compilerOptions.noEmit;
+    // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
+    // so this function doesn't check them to avoid propagating errors.
+    export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string) {
+        return shouldResolveTsExtension(compilerOptions) && (
+            !!compilerOptions.allowImportingTsExtensions ||
+            fromFileName && isDeclarationFileName(fromFileName));
     }
 
     /**

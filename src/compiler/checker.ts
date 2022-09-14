@@ -3620,9 +3620,9 @@ namespace ts {
                             getSuggestedImportSource(Debug.checkDefined(tryExtractTSExtension(moduleReference))));
                     }
                 }
-                else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowTsExtension(compilerOptions)) {
+                else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowImportingTsExtension(compilerOptions, currentSourceFile.fileName)) {
                     const tsExtension = Debug.checkDefined(tryExtractTSExtension(moduleReference));
-                    errorOnTSExtensionImport(tsExtension);
+                    error(errorNode, Diagnostics.An_import_path_can_only_end_with_a_0_extension_when_allowImportingTsExtensions_is_enabled, tsExtension);
                 }
 
                 if (sourceFile.symbol) {
