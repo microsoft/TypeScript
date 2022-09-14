@@ -90,3 +90,16 @@ if (NaN != NaN) {}
 >NaN : number
 >NaN : number
 
+// ...
+declare let y: any;
+>y : any
+
+if (NaN === y[0][1]) {}
+>NaN === y[0][1] : boolean
+>NaN : number
+>y[0][1] : any
+>y[0] : any
+>y : any
+>0 : 0
+>1 : 1
+

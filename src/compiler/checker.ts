@@ -34621,15 +34621,17 @@ namespace ts {
             }
 
             function checkNaNEquality(errorNode: Node | undefined, operator: SyntaxKind, left: Expression, right: Expression, leftType: Type, rightType: Type) {
-                const isLeftNaN = leftType.flags & TypeFlags.Number && isNaN(skipParentheses(left));
-                const isRightNaN = rightType.flags & TypeFlags.Number && isNaN(skipParentheses(right));
+                const isLeftNaN = (leftType.flags & TypeFlags.Number) && isNaN(skipParentheses(left));
+                const isRightNaN = (rightType.flags & TypeFlags.Number) && isNaN(skipParentheses(right));
                 if (isLeftNaN || isRightNaN) {
                     const err = error(errorNode, Diagnostics.This_condition_will_always_return_0,
                         tokenToString(operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.EqualsEqualsToken ? SyntaxKind.FalseKeyword : SyntaxKind.TrueKeyword));
                     if (isLeftNaN && isRightNaN) return;
+                    const operatorString = operator === SyntaxKind.ExclamationEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken ? tokenToString(SyntaxKind.ExclamationToken) : "";
                     const location = isLeftNaN ? right : left;
+                    const expression = skipParentheses(location);
                     addRelatedInfo(err, createDiagnosticForNode(location, Diagnostics.Did_you_mean_0,
-                        `${operator === SyntaxKind.ExclamationEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken ? tokenToString(SyntaxKind.ExclamationToken) : ""}Number.isNaN(${getTextOfNode(location)})`));
+                        `${operatorString}Number.isNaN(${isEntityNameExpression(expression) ? entityNameToString(expression) : "..."})`));
                 }
             }
 

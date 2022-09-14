@@ -66,3 +66,11 @@ if (NaN != NaN) {}
 >NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 >NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
+// ...
+declare let y: any;
+>y : Symbol(y, Decl(nanEquality.ts, 27, 11))
+
+if (NaN === y[0][1]) {}
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(nanEquality.ts, 27, 11))
+
