@@ -34159,8 +34159,7 @@ namespace ts {
                     const operator = operatorToken.kind;
                     if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                         let parent = node.parent;
-                        while (parent.kind === SyntaxKind.ParenthesizedExpression
-                            || isBinaryExpression(parent) && (parent.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || parent.operatorToken.kind === SyntaxKind.BarBarToken || parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken)) {
+                        while (parent.kind === SyntaxKind.ParenthesizedExpression || isValueCoalescingBinaryExpression(parent)) {
                             parent = parent.parent;
                         }
                         if (operator === SyntaxKind.AmpersandAmpersandToken || isIfStatement(parent)) {
@@ -38472,11 +38471,11 @@ namespace ts {
             }
 
             function helper(condExpr: Expression, body: Expression | Statement | undefined) {
-                const location = isLogicalLikeBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+                const location = isValueCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
                 if (isModuleExportsAccessExpression(location)) {
                     return;
                 }
-                if (isLogicalLikeBinaryExpression(location)) {
+                if (isValueCoalescingBinaryExpression(location)) {
                     bothHelper(location, body);
                     return;
                 }
@@ -38517,11 +38516,6 @@ namespace ts {
                         error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
                     }
                 }
-            }
-
-            function isLogicalLikeBinaryExpression(expr: Expression): expr is BinaryExpression {
-                return isBinaryExpression(expr) &&
-                    (expr.operatorToken.kind === SyntaxKind.BarBarToken || expr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || expr.operatorToken.kind === SyntaxKind.QuestionQuestionToken);
             }
         }
 

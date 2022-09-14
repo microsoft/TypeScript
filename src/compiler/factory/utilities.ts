@@ -1004,6 +1004,10 @@ namespace ts {
             || kind === SyntaxKind.BarBarToken;
     }
 
+    export function isValueCoalescingBinaryExpression(expr: Node): expr is BinaryExpression {
+        return isBinaryExpression(expr) && (isLogicalOperator(expr.operatorToken.kind) || expr.operatorToken.kind === SyntaxKind.QuestionQuestionToken);
+    }
+
     function isLogicalOperatorOrHigher(kind: SyntaxKind): kind is LogicalOperatorOrHigher {
         return isLogicalOperator(kind)
             || isBitwiseOperatorOrHigher(kind);
