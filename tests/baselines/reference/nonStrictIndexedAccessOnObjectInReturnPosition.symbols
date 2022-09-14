@@ -1,0 +1,16 @@
+=== tests/cases/compiler/nonStrictIndexedAccessOnObjectInReturnPosition.ts ===
+export function func(id: string): string[] {
+>func : Symbol(func, Decl(nonStrictIndexedAccessOnObjectInReturnPosition.ts, 0, 0))
+>id : Symbol(id, Decl(nonStrictIndexedAccessOnObjectInReturnPosition.ts, 0, 21))
+
+    var a1 = [];
+>a1 : Symbol(a1, Decl(nonStrictIndexedAccessOnObjectInReturnPosition.ts, 1, 7))
+
+    var a2 = ["elem"];
+>a2 : Symbol(a2, Decl(nonStrictIndexedAccessOnObjectInReturnPosition.ts, 2, 7))
+
+    return { a1, a2 }[id];
+>a1 : Symbol(a1, Decl(nonStrictIndexedAccessOnObjectInReturnPosition.ts, 3, 12))
+>a2 : Symbol(a2, Decl(nonStrictIndexedAccessOnObjectInReturnPosition.ts, 3, 16))
+>id : Symbol(id, Decl(nonStrictIndexedAccessOnObjectInReturnPosition.ts, 0, 21))
+}

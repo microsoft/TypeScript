@@ -15761,6 +15761,7 @@ namespace ts {
         function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
+            const undefinedForAccess = strictNullChecks(accessNode) ? undefinedType : undefinedPermissiveType;
 
             if (propName !== undefined) {
                 if (accessFlags & AccessFlags.Contextual) {
@@ -15797,7 +15798,7 @@ namespace ts {
                         if (isTupleType(objectType)) {
                             if (index < 0) {
                                 error(indexNode, Diagnostics.A_tuple_type_cannot_be_indexed_with_a_negative_value);
-                                return undefinedType;
+                                return undefinedForAccess;
                             }
                             error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
                                 typeToString(objectType), getTypeReferenceArity(objectType), unescapeLeadingUnderscores(propName));
@@ -15809,8 +15810,8 @@ namespace ts {
                     if (index >= 0) {
                         errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, numberType));
                         return mapType(objectType, t => {
-                            const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
-                            return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, undefinedType]) : restType;
+                            const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedForAccess;
+                            return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, undefinedForAccess]) : restType;
                         });
                     }
                 }
@@ -15832,10 +15833,10 @@ namespace ts {
                     if (accessNode && indexInfo.keyType === stringType && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
-                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedForAccess]) : indexInfo.type;
                     }
                     errorIfWritingToReadonlyIndex(indexInfo);
-                    return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                    return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedForAccess]) : indexInfo.type;
                 }
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
@@ -15847,13 +15848,13 @@ namespace ts {
                     if (isObjectLiteralType(objectType)) {
                         if (noImplicitAny(accessNode) && indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                             diagnostics.add(createDiagnosticForNode(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1, (indexType as StringLiteralType).value, typeToString(objectType)));
-                            return undefinedType;
+                            return undefinedForAccess;
                         }
                         else if (indexType.flags & (TypeFlags.Number | TypeFlags.String)) {
                             const types = map((objectType as ResolvedType).properties, property => {
                                 return getTypeOfSymbol(property);
                             });
-                            return getUnionType(append(types, undefinedType));
+                            return getUnionType(append(types, undefinedForAccess));
                         }
                     }
 

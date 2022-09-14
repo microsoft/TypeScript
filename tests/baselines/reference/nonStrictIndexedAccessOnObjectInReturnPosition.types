@@ -1,0 +1,21 @@
+=== tests/cases/compiler/nonStrictIndexedAccessOnObjectInReturnPosition.ts ===
+export function func(id: string): string[] {
+>func : (id: string) => string[]
+>id : string
+
+    var a1 = [];
+>a1 : any[]
+>[] : undefined[]
+
+    var a2 = ["elem"];
+>a2 : string[]
+>["elem"] : string[]
+>"elem" : "elem"
+
+    return { a1, a2 }[id];
+>{ a1, a2 }[id] : any[] | string[]
+>{ a1, a2 } : { a1: any[]; a2: string[]; }
+>a1 : any[]
+>a2 : string[]
+>id : string
+}
