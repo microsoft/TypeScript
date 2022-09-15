@@ -95,3 +95,15 @@ tests/cases/compiler/nanEquality.ts(29,5): error TS2845: This condition will alw
 !!! error TS2845: This condition will always return 'false'.
 !!! related TS1369 tests/cases/compiler/nanEquality.ts:29:13: Did you mean 'Number.isNaN(...)'?
     
+    function t1(value: number, NaN: number) {
+        return value === NaN; // ok
+    }
+    
+    function t2(value: number, NaN: number) {
+        return NaN == value; // ok
+    }
+    
+    function t3(NaN: number) {
+        return NaN === NaN; // ok
+    }
+    
