@@ -167,18 +167,18 @@ interface I {
     }): any;
 }
 declare function f1({ a }: O): void;
-declare const f2: ({ a }: O) => void;
-declare const f3: ({ a, b, c }: O) => void;
-declare const f4: ({ a }: O) => string;
-declare const f5: ({ a, b, c }: O) => string;
+declare const f2: ({ a: string }: O) => void;
+declare const f3: ({ a: string, b, c }: O) => void;
+declare const f4: ({ a: string }: O) => string;
+declare const f5: ({ a: string, b, c }: O) => string;
 declare const obj1: {
-    method({ a }: O): void;
+    method({ a: string }: O): void;
 };
 declare const obj2: {
-    method({ a }: O): string;
+    method({ a: string }: O): string;
 };
 declare function f6({ a }: O): void;
-declare const f7: ({ a, b, c }: O) => void;
+declare const f7: ({ a: string, b, c }: O) => void;
 declare const f8: ({ "a": string }: O) => void;
 declare function f9({ 2: string }: {
     2: any;
