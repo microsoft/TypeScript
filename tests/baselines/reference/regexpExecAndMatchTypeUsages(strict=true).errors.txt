@@ -1,0 +1,50 @@
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(3,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(6,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(6,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(7,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(10,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(13,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(13,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/regexpExecAndMatchTypeUsages.ts(14,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+
+
+==== tests/cases/compiler/regexpExecAndMatchTypeUsages.ts (8 errors) ====
+    export function foo(matchResult: RegExpExecArray, execResult: RegExpExecArray) {
+        matchResult[0].length;
+        matchResult[999].length;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        matchResult.index + 0;
+        matchResult.input.length;
+        matchResult.groups["someVariable"].length;
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        matchResult.groups = undefined;
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+    
+        execResult[0].length;
+        execResult[999].length;
+        ~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        execResult.index + 0;
+        execResult.input.length;
+        execResult.groups["someVariable"].length;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        execResult.groups = undefined;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+    
+        if (Math.random()) {
+            matchResult = execResult;
+        }
+        else {
+            execResult = matchResult
+        }
+    }
+    
