@@ -162,7 +162,7 @@ namespace ts.server {
             clearImmediate: handle => clearTimeout(handle),
             /* eslint-enable no-restricted-globals */
 
-            importServicePlugin: async (initialDir: string, moduleName: string): Promise<ModuleImportResult> => {
+            importPlugin: async (initialDir: string, moduleName: string): Promise<ModuleImportResult> => {
                 const packageRoot = combinePaths(initialDir, moduleName);
 
                 let packageJson: any | undefined;

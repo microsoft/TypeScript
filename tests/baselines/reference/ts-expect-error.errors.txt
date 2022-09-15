@@ -4,9 +4,9 @@ tests/cases/conformance/directives/ts-expect-error.ts(21,1): error TS2578: Unuse
 tests/cases/conformance/directives/ts-expect-error.ts(24,1): error TS2578: Unused '@ts-expect-error' directive.
 tests/cases/conformance/directives/ts-expect-error.ts(28,1): error TS2578: Unused '@ts-expect-error' directive.
 tests/cases/conformance/directives/ts-expect-error.ts(31,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/directives/ts-expect-error.ts(37,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
-tests/cases/conformance/directives/ts-expect-error.ts(39,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
-tests/cases/conformance/directives/ts-expect-error.ts(40,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(37,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(39,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(40,2): error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
 
 
 ==== tests/cases/conformance/directives/ts-expect-error.ts (9 errors) ====
@@ -60,11 +60,11 @@ tests/cases/conformance/directives/ts-expect-error.ts(40,2): error TS2367: This 
     (({ a: true } as const).a === false); // <-- compiles (as expected via comment)
     (({ a: true } as const).a === false); // Should error
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
     
     (({ a: true } as const).a === false); // error
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.
     (({ a: true } as const).a === false); // error
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'true' and 'false' have no overlap.

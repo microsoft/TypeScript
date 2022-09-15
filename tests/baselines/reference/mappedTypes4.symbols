@@ -205,7 +205,7 @@ type Clone<T> = {
 >Clone : Symbol(Clone, Decl(mappedTypes4.ts, 62, 23))
 >T : Symbol(T, Decl(mappedTypes4.ts, 63, 11))
 
-  [P in keyof (T & {})]: T[P];
+  [P in keyof (T & {})]: (T & {})[P];
 >P : Symbol(P, Decl(mappedTypes4.ts, 64, 3))
 >T : Symbol(T, Decl(mappedTypes4.ts, 63, 11))
 >T : Symbol(T, Decl(mappedTypes4.ts, 63, 11))

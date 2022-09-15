@@ -12,7 +12,7 @@ namespace ts.projectSystem {
             const host: TestServerHost & ModuleResolutionHost = createServerHost([file1, lib]);
             const projectService = createProjectService(host, {
                 typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host),
-                logger: createLoggerWithInMemoryLogs()
+                logger: createLoggerWithInMemoryLogs(host)
             });
 
             projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
@@ -78,7 +78,7 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([file1]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
@@ -108,7 +108,7 @@ namespace ts.projectSystem {
                 content: 'import f = require("pad"); f;'
             };
             const host = createServerHost([file1, libFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
                 arguments: {
@@ -140,7 +140,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -159,7 +159,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -185,7 +185,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -226,7 +226,7 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([moduleFile, file1]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
@@ -269,7 +269,7 @@ namespace ts.projectSystem {
                 content: `{}`
             };
             const host = createServerHost([moduleFile, file1, configFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
@@ -372,7 +372,7 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/module1.ts`, `${tscWatch.projectRoot}/module2.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 host.writeFile(file1.path, file1.content + fileContent);
@@ -388,7 +388,7 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 host.writeFile(file1.path, file1.content + fileContent);
@@ -428,7 +428,7 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/src/module1.ts`, `${tscWatch.projectRoot}/product/module2.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 host.writeFile(file1.path, file1.content + fileContent1);
@@ -445,7 +445,7 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 host.writeFile(file1.path, file1.content + fileContent);
@@ -467,7 +467,7 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.setCompilerOptionsForInferredProjects({ traceResolution: true });
                 service.openClientFile(file1.path);
                 host.writeFile(file1.path, file1.content + importModuleContent);
@@ -526,7 +526,7 @@ export const x = 10;`
 
                     const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
                     const host = createServerHost(files);
-                    const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                    const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                     service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, tscWatch.projectRoot);
                     baselineTsserverLogs("resolutionCache", scenario, service);
                 });
@@ -590,7 +590,7 @@ export const x = 10;`
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, configFile, libFile];
                 const host = createServerHost(files);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(file1.path);
 
                 // invoke callback to simulate saving

@@ -76,27 +76,27 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/a.ts (used version)
 /users/username/projects/project/index.ts (used version)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/a.ts:
-  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
-/users/username/projects/project/b.ts:
-  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
-/users/username/projects/project/c.ts:
-  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
-/users/username/projects/project/index.ts:
-  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /users/username/projects/project/node_modules/@types:
-  {"fileName":"/users/username/projects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/a.ts:
+  {}
+/users/username/projects/project/b.ts:
+  {}
+/users/username/projects/project/c.ts:
+  {}
+/users/username/projects/project/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -272,27 +272,27 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/c.ts (used version)
 /users/username/projects/project/b.ts (used version)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/a.ts:
-  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
-/users/username/projects/project/b.ts:
-  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
-/users/username/projects/project/c.ts:
-  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
-/users/username/projects/project/index.ts:
-  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /users/username/projects/project/node_modules/@types:
-  {"fileName":"/users/username/projects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/a.ts:
+  {}
+/users/username/projects/project/b.ts:
+  {}
+/users/username/projects/project/c.ts:
+  {}
+/users/username/projects/project/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

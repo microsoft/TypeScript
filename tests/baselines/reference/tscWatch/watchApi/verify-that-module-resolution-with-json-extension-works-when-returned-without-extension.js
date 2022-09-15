@@ -35,7 +35,7 @@ Output::
   [96msettings.json[0m:[93m1[0m:[93m1[0m
     [7m1[0m {"content":"Print this"}
     [7m [0m [96m~[0m
-    This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+    This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
 
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
@@ -59,19 +59,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/settings.json (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/index.ts:
-  {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
-/user/username/projects/myproject/settings.json:
-  {"fileName":"/user/username/projects/myproject/settings.json","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/index.ts:
+  {}
+/user/username/projects/myproject/settings.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 

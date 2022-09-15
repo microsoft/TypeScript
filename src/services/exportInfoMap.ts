@@ -49,7 +49,7 @@ namespace ts {
         clear(): void;
         add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
         get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-        search(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => void): void;
+        search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => T | undefined): T | undefined;
         releaseSymbols(): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
@@ -160,14 +160,15 @@ namespace ts {
             },
             search: (importingFile, preferCapitalized, matches, action) => {
                 if (importingFile !== usableByFileName) return;
-                exportInfo.forEach((info, key) => {
+                return forEachEntry(exportInfo, (info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
                     const name = preferCapitalized && info[0].capitalizedSymbolName || symbolName;
                     if (matches(name, info[0].targetFlags)) {
                         const rehydrated = info.map(rehydrateCachedInfo);
                         const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
                         if (filtered.length) {
-                            action(filtered, name, !!ambientModuleName, key);
+                            const res = action(filtered, name, !!ambientModuleName, key);
+                            if (res !== undefined) return res;
                         }
                     }
                 });

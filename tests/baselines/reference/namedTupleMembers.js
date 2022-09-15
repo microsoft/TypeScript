@@ -114,8 +114,8 @@ exports.argumentsOfG = f.apply(void 0, getArgsForInjection(g)); // captured argu
 
 
 //// [namedTupleMembers.d.ts]
-export declare type Segment = [length: number, count: number];
-export declare type SegmentAnnotated = [
+export type Segment = [length: number, count: number];
+export type SegmentAnnotated = [
     /**
      * Size of message buffer segment handles
      */
@@ -125,16 +125,16 @@ export declare type SegmentAnnotated = [
      */
     count: number
 ];
-export declare type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
-export declare type Func<T extends any[]> = (...x: T) => void;
+export type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
+export type Func<T extends any[]> = (...x: T) => void;
 export declare const func: Func<SegmentAnnotated>;
 export declare function useState<T>(initial: T): [value: T, setter: (T: any) => void];
-export declare type Iter = Func<[step: number, iterations: number]>;
+export type Iter = Func<[step: number, iterations: number]>;
 export declare function readSegment([length, count]: [number, number]): void;
 export declare const val: [number, number];
-export declare type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
-export declare type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
-export declare type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
-export declare type RecusiveRest2 = [string, ...RecusiveRest2[]];
+export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
+export type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
+export type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
+export type RecusiveRest2 = [string, ...RecusiveRest2[]];
 export declare const argumentsOfGAsFirstArgument: [[elem: object, index: number]];
 export declare const argumentsOfG: [elem: object, index: number];

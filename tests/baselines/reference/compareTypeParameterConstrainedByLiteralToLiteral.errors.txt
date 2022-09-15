@@ -1,4 +1,4 @@
-tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): error TS2367: This condition will always return 'false' since the types 'T' and '"x"' have no overlap.
+tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): error TS2367: This comparison appears to be unintentional because the types 'T' and '"x"' have no overlap.
 
 
 ==== tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts (1 errors) ====
@@ -8,6 +8,6 @@ tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): 
         t === "a";  // Should be allowed
         t === "x";  // Should be error
         ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'T' and '"x"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'T' and '"x"' have no overlap.
     }
     

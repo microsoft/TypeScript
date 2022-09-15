@@ -52,7 +52,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/index.ts (used version)
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -175,7 +175,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 /users/username/projects/project/src/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

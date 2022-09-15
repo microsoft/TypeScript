@@ -139,6 +139,11 @@ namespace ts {
         return node.kind === SyntaxKind.OverrideKeyword;
     }
 
+    /* @internal */
+    export function isAccessorModifier(node: Node): node is AccessorKeyword {
+        return node.kind === SyntaxKind.AccessorKeyword;
+    }
+
     /*@internal*/
     export function isSuperKeyword(node: Node): node is SuperExpression {
         return node.kind === SyntaxKind.SuperKeyword;
@@ -436,6 +441,10 @@ namespace ts {
 
     export function isAsExpression(node: Node): node is AsExpression {
         return node.kind === SyntaxKind.AsExpression;
+    }
+
+    export function isSatisfiesExpression(node: Node): node is SatisfiesExpression {
+        return node.kind === SyntaxKind.SatisfiesExpression;
     }
 
     export function isNonNullExpression(node: Node): node is NonNullExpression {

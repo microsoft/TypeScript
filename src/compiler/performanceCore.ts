@@ -13,6 +13,8 @@ namespace ts {
     export interface Performance {
         mark(name: string): void;
         measure(name: string, startMark?: string, endMark?: string): void;
+        clearMeasures(name?: string): void;
+        clearMarks(name?: string): void;
         now(): number;
         timeOrigin: number;
     }
@@ -50,6 +52,8 @@ namespace ts {
             typeof performance.mark === "function" &&
             typeof performance.measure === "function" &&
             typeof performance.now === "function" &&
+            typeof performance.clearMarks === "function" &&
+            typeof performance.clearMeasures === "function" &&
             typeof PerformanceObserver === "function";
     }
 
@@ -73,8 +77,8 @@ namespace ts {
             try {
                 let performance: Performance;
                 const { performance: nodePerformance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
-                if (hasRequiredAPI(nodePerformance, PerformanceObserver)) {
-                    performance = nodePerformance;
+                if (hasRequiredAPI(nodePerformance as unknown as Performance, PerformanceObserver)) {
+                    performance = nodePerformance as unknown as Performance;
                     // There is a bug in Node's performance.measure prior to 12.16.3/13.13.0 that does not
                     // match the Web Performance API specification. Node's implementation did not allow
                     // optional `start` and `end` arguments for `performance.measure`.
@@ -95,7 +99,9 @@ namespace ts {
                                 if (end === "__performance.measure-fix__") {
                                     nodePerformance.clearMarks("__performance.measure-fix__");
                                 }
-                            }
+                            },
+                            clearMarks(name) { return nodePerformance.clearMarks(name); },
+                            clearMeasures(name) { return (nodePerformance as unknown as Performance).clearMeasures(name); },
                         };
                     }
                     return {

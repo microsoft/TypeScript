@@ -890,6 +890,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_tuple_type_cannot_be_indexed_with_a_negative_value_2514" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple type cannot be indexed with a negative value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nie można indeksować typu krotki z wartością ujemną.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Con_17007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.]]></Val>
@@ -1724,6 +1733,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_accessor_property_cannot_be_declared_optional_1276" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An 'accessor' property cannot be declared optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwość „accessor” nie może być zadeklarowana jako opcjonalna.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file_1234" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An ambient module declaration is only allowed at the top level in a file.]]></Val>
@@ -2098,6 +2116,15 @@
           <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Parametr sygnatury indeksu musi mieć typ „string”, „number” lub „symbol” albo typ literału szablonu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_instantiation_expression_cannot_be_followed_by_a_property_access_1477" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An instantiation expression cannot be followed by a property access.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Po wyrażeniu tworzenia wystąpienia nie może następować dostęp do właściwości.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3536,7 +3563,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_constructor_may_not_be_a_generator_1360" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_constructor_may_not_be_a_generator_1368" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class constructor may not be a generator.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -3976,6 +4003,15 @@
           <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Konwertuj element „{0}” na zamapowany typ obiektu]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_all_const_to_let_95102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all 'const' to 'let']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Konwertuj wszystkie elementy „const” na „let”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6506,6 +6542,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_does_not_have_field_type_1460" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' does not have field "type"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Plik jest modułem CommonJS, ponieważ element „{0}” nie ma pola „type”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module_1459" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' has field "type" whose value is not "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Plik jest modułem CommonJS, ponieważ element „{0}” ma pole „type”, którego wartość nie jest „module”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_package_json_was_not_found_1461" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because 'package.json' was not found]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Plik jest modułem CommonJS, ponieważ nie znaleziono pliku „package.json”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_ECMAScript_module_because_0_has_field_type_with_value_module_1458" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is ECMAScript module because '{0}' has field "type" with value "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Plik jest modułem ECMAScript, ponieważ element „{0}” ma pole „type” z wartością „module”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File is a CommonJS module; it may be converted to an ES module.]]></Val>
@@ -7180,6 +7252,15 @@
           <Val><![CDATA[Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Oczekiwano identyfikatora. Ciąg „__esModule” jest zastrzeżony jako eksportowany znacznik podczas transformowania modułów ECMAScript.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Identifier_or_string_literal_expected_1478" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Identifier or string literal expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Oczekiwano identyfikatora lub literału ciągu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8488,10 +8569,13 @@
       </Item>
       <Item ItemId=";Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można zaimportować modułu „{0}” przy użyciu tej konstrukcji. Specyfikator jest rozpoznawany tylko jako moduł ES, którego nie można zaimportować synchronicznie. Zamiast tego użyj importu dynamicznego.]]></Val>
+            <Val><![CDATA[Nie można zaimportować modułu „{0}” przy użyciu tej konstrukcji. Specyfikator jest rozpoznawany tylko jako moduł ES, którego nie można zaimportować za pomocą wywołania „require”. Zamiast tego użyj importu ECMAScript.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10160,6 +10244,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Project_0_is_out_of_date_because_there_was_error_reading_file_1_6401" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is out of date because there was error reading file '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Projekt „{0}” jest nieaktualny, ponieważ wystąpił błąd podczas odczytywania pliku „{1}”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Project_0_is_up_to_date_6361" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date]]></Val>
@@ -10219,6 +10312,15 @@
           <Val><![CDATA[Projects in this build: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Projekty w tej kompilacji: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Properties_with_the_accessor_modifier_are_only_available_when_targeting_ECMAScript_2015_and_higher_18045" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwości z modyfikatorem „accessor” są dostępne tylko w przypadku określania wartości docelowej ECMAScript 2015 lub nowszej.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12764,6 +12866,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("{0}")' call instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bieżący plik jest modułem CommonJS, którego importy będą generować wywołania „require”; jednak przywoływany plik jest modułem ECMAScript i nie można go zaimportować za pomocą wywołania „require”. Zamiast tego rozważ zapisanie dynamicznego wywołania „import("{0}")”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_current_host_does_not_support_the_0_option_5001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The current host does not support the '{0}' option.]]></Val>
@@ -13538,20 +13649,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[To porównanie wydaje się niezamierzone, ponieważ typy „{0}” i „{1}” nie nakładają się na siebie.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value_2839" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This condition will always return '{0}' since JavaScript compares objects by reference, not value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Ten warunek zawsze będzie zwracać wartość „{0}”, ponieważ język JavaScript porównuje obiekty według odwołania, a nie wartości.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ten warunek będzie zawsze zwracał element „{0}”, ponieważ typy „{1}” i „{2}” nie nakładają się.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13736,9 +13847,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the__2594" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_module_is_declared_with_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag_2594" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
+          <Val><![CDATA[This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Ten moduł jest zadeklarowany przy użyciu składni „export =” i może być używany tylko z importem domyślnym, gdy jest używana flaga „{0}”.]]></Val>
           </Tgt>
@@ -13849,6 +13960,42 @@
           <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[To użycie elementu „import” jest nieprawidłowe. Wywołania „import()” mogą być zapisywane, ale muszą mieć nawiasy i nie mogą mieć argumentów typu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0_1482" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, add the field `"type": "module"` to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aby przekonwertować ten plik na moduł ECMAScript, dodaj pole „"type": "module"” do „{0}”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Co_1481" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `"type": "module"` to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aby przekonwertować ten plik na moduł ECMAScript, zmień rozszerzenie jego pliku na „{0}” lub dodaj pole „"type": "module"” do „{1}”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_packag_1480" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aby przekonwertować ten plik na moduł ECMAScript, zmień rozszerzenie jego pliku na „{0}” lub utwórz lokalny plik package.json z polem „{ "type": "module" }".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aby przekonwertować ten plik na moduł ECMAScript, utwórz lokalny plik package.json z polem „{ "type": "module" }".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13987,6 +14134,15 @@
           <Val><![CDATA[Type '{0}' does not satisfy the constraint '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Typ „{0}” nie spełnia warunków ograniczenia „{1}”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_does_not_satisfy_the_expected_type_1_1360" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' does not satisfy the expected type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typ „{0}” nie spełnia oczekiwanego typu „{1}”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14438,6 +14594,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor_2844" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typ zmiennej składowej wystąpienia „{0}” nie może odwoływać się do identyfikatora „{1}” zadeklarowanego w konstruktorze.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_con_1322" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.]]></Val>
@@ -14680,6 +14845,15 @@
           <Val><![CDATA[======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[======== Dyrektywa odwołania do typu „{0}” została pomyślnie rozpoznana jako „{1}” z identyfikatorem pakietu „{2}”, podstawowe: {3}. ========]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files_8037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type satisfaction expressions can only be used in TypeScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wyrażeń asercji typu można używać tylko w plikach TypeScript.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16096,6 +16270,15 @@
           <Val><![CDATA['abstract' modifier can only appear on a class, method, or property declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Modyfikator „abstract” może być stosowany jedynie w przypadku deklaracji klasy, metody lub właściwości.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";accessor_modifier_can_only_appear_on_a_property_declaration_1275" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['accessor' modifier can only appear on a property declaration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Modyfikator „accessor” może występować tylko w deklaracji właściwości.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

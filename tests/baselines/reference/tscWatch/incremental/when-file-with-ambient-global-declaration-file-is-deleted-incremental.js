@@ -46,7 +46,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/globals.d.ts (used version)
 /users/username/projects/project/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -129,7 +129,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

@@ -6,6 +6,5 @@
         "preserveConstEnums": false
     },
     "references": [
-        { "path": "../shims" }
     ]
 }

@@ -529,6 +529,9 @@ namespace ts {
                     // TypeScript type assertions are removed, but their subtrees are preserved.
                     return visitAssertionExpression(node as AssertionExpression);
 
+                case SyntaxKind.SatisfiesExpression:
+                    return visitSatisfiesExpression(node as SatisfiesExpression);
+
                 case SyntaxKind.CallExpression:
                     return visitCallExpression(node as CallExpression);
 
@@ -1113,7 +1116,8 @@ namespace ts {
             }
 
             // Add remaining statements from the body, skipping the super() call if it was found and any (already added) prologue statements
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, superStatementIndex + 1 + prologueStatementCount));
+            const start = superStatementIndex >= 0 ? superStatementIndex + 1 : prologueStatementCount;
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, start));
 
             // End the lexical environment.
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -1417,6 +1421,11 @@ namespace ts {
 
         function visitNonNullExpression(node: NonNullExpression): Expression {
             const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
+            return factory.createPartiallyEmittedExpression(expression, node);
+        }
+
+        function visitSatisfiesExpression(node: SatisfiesExpression): Expression {
+            const expression = visitNode(node.expression, visitor, isExpression);
             return factory.createPartiallyEmittedExpression(expression, node);
         }
 
