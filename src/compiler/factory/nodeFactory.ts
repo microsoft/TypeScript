@@ -240,6 +240,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -830,6 +831,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJSDocPropertyTag,
         createJSDocCallbackTag,
         updateJSDocCallbackTag,
+        createJSDocOverloadTag,
+        updateJSDocOverloadTag,
         createJSDocAugmentsTag,
         updateJSDocAugmentsTag,
         createJSDocImplementsTag,
@@ -5159,6 +5162,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
+    function createJSDocOverloadTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag {
+        const node = createBaseJSDocTag<JSDocOverloadTag>(SyntaxKind.JSDocOverloadTag, tagName ?? createIdentifier("overload"), comment);
+        node.typeExpression = typeExpression;
+        return node;
+    }
+
+    // @api
+    function updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, comment: string | NodeArray<JSDocComment> | undefined): JSDocOverloadTag {
+        return node.tagName !== tagName
+            || node.typeExpression !== typeExpression
+            || node.comment !== comment
+            ? update(createJSDocOverloadTag(tagName, typeExpression, comment), node)
+            : node;
+    }
+
+    // @api
     function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag {
         const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName ?? createIdentifier("augments"), comment);
         node.class = className;
@@ -6867,6 +6886,7 @@ function getDefaultTagNameForKind(kind: JSDocTag["kind"]): string {
         case SyntaxKind.JSDocParameterTag: return "param";
         case SyntaxKind.JSDocPropertyTag: return "prop";
         case SyntaxKind.JSDocCallbackTag: return "callback";
+        case SyntaxKind.JSDocOverloadTag: return "overload";
         case SyntaxKind.JSDocAugmentsTag: return "augments";
         case SyntaxKind.JSDocImplementsTag: return "implements";
         default:

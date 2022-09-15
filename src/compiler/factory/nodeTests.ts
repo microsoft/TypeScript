@@ -97,6 +97,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -1126,6 +1127,10 @@ export function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag {
 
 export function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag {
     return node.kind === SyntaxKind.JSDocOverrideTag;
+}
+
+export function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag {
+    return node.kind === SyntaxKind.JSDocOverloadTag;
 }
 
 export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {

@@ -421,6 +421,7 @@ export const enum SyntaxKind {
     JSDocReadonlyTag,
     JSDocOverrideTag,
     JSDocCallbackTag,
+    JSDocOverloadTag,
     JSDocEnumTag,
     JSDocParameterTag,
     JSDocReturnTag,
@@ -3823,6 +3824,12 @@ export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
     readonly parent: JSDoc;
     readonly fullName?: JSDocNamespaceDeclaration | Identifier;
     readonly name?: Identifier;
+    readonly typeExpression: JSDocSignature;
+}
+
+export interface JSDocOverloadTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocOverloadTag;
+    readonly parent: JSDoc;
     readonly typeExpression: JSDocSignature;
 }
 
@@ -8215,6 +8222,8 @@ export interface NodeFactory {
     updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocEnumTag;
     createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag;
     updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocCallbackTag;
+    createJSDocOverloadTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag;
+    updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, comment: string | NodeArray<JSDocComment> | undefined): JSDocOverloadTag;
     createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag;
     updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag;
     createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag;
