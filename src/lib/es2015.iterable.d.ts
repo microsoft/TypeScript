@@ -58,12 +58,22 @@ interface Array<T> {
 interface ArrayConstructor {
     isArray<T>(arg: T): arg is
         T extends any ? Extract<
-            true extends false & T ? any[] :
-            T extends readonly any[] ? T :
-            T extends string ? never :
-            T extends ArrayLike<infer U> | Iterable<infer U> ? U[] :
-            unknown[], T
-        > : never;
+            (
+                true extends false & T ? any :
+                T extends (infer U)[] ? U :
+                T extends string | readonly any[] ? unknown :
+                T extends ArrayLike<infer U> | Iterable<infer U> ? U :
+                unknown
+            )[] | (
+                true extends false & T ? never :
+                T extends readonly (infer U)[] ? Extract<T, readonly U[]> :
+                never
+            ), T
+        > | (
+            true extends false & T ? never :
+            {} extends T ? T & unknown[] :
+            never
+        ) : never;
 
     /**
      * Creates an array from an iterable object.

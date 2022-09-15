@@ -1,0 +1,120 @@
+=== tests/cases/compiler/isArrayConformance2.ts ===
+function fa(a: [number, ...string[]] | readonly [boolean, boolean] | null) {
+>fa : Symbol(fa, Decl(isArrayConformance2.ts, 0, 0))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 0, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 0, 12))
+
+		a; // Expected: [number, ...string[]] | readonly [boolean, boolean]
+>a : Symbol(a, Decl(isArrayConformance2.ts, 0, 12))
+	}
+}
+
+function fb<T extends [number, ...string[]] | readonly [boolean, boolean] | null>(a: T) {
+>fb : Symbol(fb, Decl(isArrayConformance2.ts, 4, 1))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 6, 12))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 6, 82))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 6, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 6, 82))
+
+		var b: [number, ...string[]] | readonly [boolean, boolean] = a; // OK
+>b : Symbol(b, Decl(isArrayConformance2.ts, 8, 5))
+>a : Symbol(a, Decl(isArrayConformance2.ts, 6, 82))
+
+		a[0]; // Expected: number | boolean
+>a : Symbol(a, Decl(isArrayConformance2.ts, 6, 82))
+>0 : Symbol(0)
+	}
+}
+
+function fc<T, P extends keyof T>(obj: T, prop: P) {
+>fc : Symbol(fc, Decl(isArrayConformance2.ts, 11, 1))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 13, 12))
+>P : Symbol(P, Decl(isArrayConformance2.ts, 13, 14))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 13, 12))
+>obj : Symbol(obj, Decl(isArrayConformance2.ts, 13, 34))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 13, 12))
+>prop : Symbol(prop, Decl(isArrayConformance2.ts, 13, 41))
+>P : Symbol(P, Decl(isArrayConformance2.ts, 13, 14))
+
+	const value = obj[prop];
+>value : Symbol(value, Decl(isArrayConformance2.ts, 14, 6))
+>obj : Symbol(obj, Decl(isArrayConformance2.ts, 13, 34))
+>prop : Symbol(prop, Decl(isArrayConformance2.ts, 13, 41))
+
+	if (Array.isArray(value)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(isArrayConformance2.ts, 14, 6))
+
+		value.length; // OK
+>value.length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(isArrayConformance2.ts, 14, 6))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+	}
+}
+
+function fd(value: Record<string, unknown>) {
+>fd : Symbol(fd, Decl(isArrayConformance2.ts, 18, 1))
+>value : Symbol(value, Decl(isArrayConformance2.ts, 20, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+	if (Array.isArray(value)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(isArrayConformance2.ts, 20, 12))
+
+		value.length; // OK
+>value.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(isArrayConformance2.ts, 20, 12))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+	}
+}
+
+function fe<T>(data: T) {
+>fe : Symbol(fe, Decl(isArrayConformance2.ts, 24, 1))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 26, 12))
+>data : Symbol(data, Decl(isArrayConformance2.ts, 26, 15))
+>T : Symbol(T, Decl(isArrayConformance2.ts, 26, 12))
+
+	if (Array.isArray(data)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(isArrayConformance2.ts, 26, 15))
+
+		for (const key in data) { // OK
+>key : Symbol(key, Decl(isArrayConformance2.ts, 28, 12))
+>data : Symbol(data, Decl(isArrayConformance2.ts, 26, 15))
+
+			const value = data[key];
+>value : Symbol(value, Decl(isArrayConformance2.ts, 29, 8))
+>data : Symbol(data, Decl(isArrayConformance2.ts, 26, 15))
+>key : Symbol(key, Decl(isArrayConformance2.ts, 28, 12))
+
+			if (Array.isArray(value)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(isArrayConformance2.ts, 29, 8))
+
+				value.length; // OK
+>value.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(isArrayConformance2.ts, 29, 8))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+			}
+		}
+	}
+}
+

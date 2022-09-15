@@ -66,11 +66,11 @@ function f2() {
 >a4 : (string | false) | (string | false)[]
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
 >Array.isArray(elOrA) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends (infer U)[] ? U : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : T extends readonly (infer U)[] ? Extract<T, readonly U[]> : never, T> | (true extends false & T ? never : {} extends T ? T & unknown[] : never) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends (infer U)[] ? U : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : T extends readonly (infer U)[] ? Extract<T, readonly U[]> : never, T> | (true extends false & T ? never : {} extends T ? T & unknown[] : never) : never
 >elOrA : (string | false) | (string | false)[]
->elOrA : (string | false)[]
+>elOrA : (string | false)[] | (string | false)[]
 >[elOrA] : (string | false)[]
 >elOrA : string | false
 
@@ -83,11 +83,11 @@ function f2() {
 >...Array.isArray(elOrA) ? elOrA : [elOrA] : string | false
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
 >Array.isArray(elOrA) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends (infer U)[] ? U : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : T extends readonly (infer U)[] ? Extract<T, readonly U[]> : never, T> | (true extends false & T ? never : {} extends T ? T & unknown[] : never) : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
+>isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends (infer U)[] ? U : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : T extends readonly (infer U)[] ? Extract<T, readonly U[]> : never, T> | (true extends false & T ? never : {} extends T ? T & unknown[] : never) : never
 >elOrA : (string | false) | (string | false)[]
->elOrA : (string | false)[]
+>elOrA : (string | false)[] | (string | false)[]
 >[elOrA] : (string | false)[]
 >elOrA : string | false
 }
