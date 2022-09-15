@@ -95,6 +95,7 @@ namespace ts.projectSystem {
         function msg(s: string, type = server.Msg.Err, write: (s: string) => void) {
             s = `[${nowString()}] ${s}`;
             if (!inGroup || firstInGroup) s = padStringRight(type + " " + seq.toString(), "          ") + s;
+            if (Debug.isDebugging) console.log(s);
             write(s);
             if (!inGroup) seq++;
         }
@@ -790,10 +791,15 @@ namespace ts.projectSystem {
         session.executeCommand(makeSessionRequest(command, args));
     }
 
-    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: server.Session): void {
+    export function openFilesForSession(files: readonly (File | string | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: server.Session): void {
         for (const file of files) {
             session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
-                "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line local/no-in-operator
+                isString(file) ?
+                    { file } :
+                    "projectRootPath" in file ? // eslint-disable-line local/no-in-operator
+                        { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } :
+                        { file: file.path }
+            ));
         }
     }
 

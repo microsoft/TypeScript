@@ -299,5 +299,33 @@ namespace ts.projectSystem {
                 ],
             });
         });
+
+        it("project is invalidated while processing request sheetal", () => {
+            const aTs: File = {
+                path: "/proj/a.ts",
+                content: "export const x = 1;"
+            }
+            const host = createServerHost({
+                "/tsconfig.json": "{}",
+                "/proj/tsconfig.json": JSON.stringify({
+                    compilerOptions: { composite: true },
+                    exclude: ["**/__test__/"]
+                }),
+                [aTs.path]: aTs.content,
+                "/proj/__test__/a.test.ts": Utils.dedent`
+                    import { x } from "../a";
+                    x.toString();
+                `,
+            });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([aTs, "/proj/__test__/a.test.ts"], session);
+
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(aTs, "x", { index: 1})
+            });
+
+            baselineTsserverLogs("rename", "project is invalidated while processing request", session);
+        });
     });
 }
