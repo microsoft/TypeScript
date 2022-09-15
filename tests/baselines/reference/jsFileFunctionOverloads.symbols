@@ -1,0 +1,87 @@
+=== tests/cases/compiler/0.js ===
+/**
+ * @overload
+ * @param {number} x
+ * @returns {'number'}
+ */
+/**
+ * @overload
+ * @param {string} x
+ * @returns {'string'}
+ */
+/**
+ * @overload
+ * @param {boolean} x
+ * @returns {'boolean'}
+ */
+/**
+ * @param {unknown} x
+ * @returns {string}
+ */
+ function getTypeName(x) {
+>getTypeName : Symbol(getTypeName, Decl(0.js, 0, 0), Decl(0.js, 4, 3), Decl(0.js, 9, 3), Decl(0.js, 14, 3))
+>x : Symbol(x, Decl(0.js, 19, 22))
+
+  return typeof x;
+>x : Symbol(x, Decl(0.js, 19, 22))
+}
+
+/**
+ * @template T
+ * @param {T} x 
+ * @returns {T}
+ */
+const identity = x => x;
+>identity : Symbol(identity, Decl(0.js, 28, 5))
+>x : Symbol(x, Decl(0.js, 28, 16))
+>x : Symbol(x, Decl(0.js, 28, 16))
+
+/**
+ * @template T
+ * @template U
+ * @overload
+ * @param {T[]} array 
+ * @param {(x: T) => U[]} iterable 
+ * @returns {U[]}
+ */
+/**
+ * @template T
+ * @overload
+ * @param {T[][]} array
+ * @returns {T[]}
+ */
+/**
+ * @param {unknown[]} array 
+ * @param {(x: unknown) => unknown} iterable 
+ * @returns {unknown[]}
+ */
+function flatMap(array, iterable = identity) {
+>flatMap : Symbol(flatMap, Decl(0.js, 28, 24), Decl(0.js, 37, 3), Decl(0.js, 43, 3))
+>array : Symbol(array, Decl(0.js, 49, 17))
+>iterable : Symbol(iterable, Decl(0.js, 49, 23))
+>identity : Symbol(identity, Decl(0.js, 28, 5))
+
+  /** @type {unknown[]} */
+  const result = [];
+>result : Symbol(result, Decl(0.js, 51, 7))
+
+  for (let i = 0; i < array.length; i += 1) {
+>i : Symbol(i, Decl(0.js, 52, 10))
+>i : Symbol(i, Decl(0.js, 52, 10))
+>array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(0.js, 49, 17))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(0.js, 52, 10))
+
+    result.push(.../** @type {unknown[]} */(iterable(array[i])));
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(0.js, 51, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>iterable : Symbol(iterable, Decl(0.js, 49, 23))
+>array : Symbol(array, Decl(0.js, 49, 17))
+>i : Symbol(i, Decl(0.js, 52, 10))
+  }
+  return result;
+>result : Symbol(result, Decl(0.js, 51, 7))
+}
+

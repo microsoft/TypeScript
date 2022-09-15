@@ -1,0 +1,72 @@
+=== tests/cases/compiler/0.js ===
+/**
+ * @template T
+ */
+ class Example {
+>Example : Symbol(Example, Decl(0.js, 0, 0))
+
+  /**
+   * @param {T} value 
+   */
+  constructor(value) {
+>value : Symbol(value, Decl(0.js, 7, 14))
+
+    this.value = value;
+>this.value : Symbol(Example.value, Decl(0.js, 7, 22))
+>this : Symbol(Example, Decl(0.js, 0, 0))
+>value : Symbol(Example.value, Decl(0.js, 7, 22))
+>value : Symbol(value, Decl(0.js, 7, 14))
+  }
+
+  /**
+   * @overload
+   * @this {Example<'number'>}
+   * @returns {'number'}
+   */
+  /**
+   * @overload
+   * @this {Example<'string'>}
+   * @returns {'string'}
+   */
+  /**
+   * @returns {string}
+   */
+  getTypeName() {
+>getTypeName : Symbol(Example.getTypeName, Decl(0.js, 9, 3), Decl(0.js, 15, 5), Decl(0.js, 20, 5))
+
+    return typeof this.value;
+>this.value : Symbol(Example.value, Decl(0.js, 7, 22))
+>this : Symbol(Example, Decl(0.js, 0, 0))
+>value : Symbol(Example.value, Decl(0.js, 7, 22))
+  }
+
+  /**
+   * @template U
+   * @overload
+   * @param {(y: T) => U} fn
+   * @returns {U}
+   */
+  /**
+   * @overload
+   * @returns {T}
+   */
+  /**
+   * @param {(y: T) => unknown} [fn]
+   * @returns {unknown}
+   */
+  transform(fn) {
+>transform : Symbol(Example.transform, Decl(0.js, 26, 3), Decl(0.js, 33, 5), Decl(0.js, 37, 5))
+>fn : Symbol(fn, Decl(0.js, 42, 12))
+
+    return fn ? fn(this.value) : this.value;
+>fn : Symbol(fn, Decl(0.js, 42, 12))
+>fn : Symbol(fn, Decl(0.js, 42, 12))
+>this.value : Symbol(Example.value, Decl(0.js, 7, 22))
+>this : Symbol(Example, Decl(0.js, 0, 0))
+>value : Symbol(Example.value, Decl(0.js, 7, 22))
+>this.value : Symbol(Example.value, Decl(0.js, 7, 22))
+>this : Symbol(Example, Decl(0.js, 0, 0))
+>value : Symbol(Example.value, Decl(0.js, 7, 22))
+  }
+}
+
