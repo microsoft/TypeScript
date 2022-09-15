@@ -1639,6 +1639,7 @@ namespace ts {
                     case SyntaxKind.JSDocTag:
                     case SyntaxKind.JSDocClassTag:
                     case SyntaxKind.JSDocOverrideTag:
+                    case SyntaxKind.JSDocOverloadTag:
                         return emitJSDocSimpleTag(node as JSDocTag);
                     case SyntaxKind.JSDocAugmentsTag:
                     case SyntaxKind.JSDocImplementsTag:

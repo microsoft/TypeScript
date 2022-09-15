@@ -390,6 +390,8 @@ namespace ts {
             get updateJSDocReadonlyTag() { return getJSDocSimpleTagUpdateFunction<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag); },
             get createJSDocOverrideTag() { return getJSDocSimpleTagCreateFunction<JSDocOverrideTag>(SyntaxKind.JSDocOverrideTag); },
             get updateJSDocOverrideTag() { return getJSDocSimpleTagUpdateFunction<JSDocOverrideTag>(SyntaxKind.JSDocOverrideTag); },
+            get createJSDocOverloadTag() { return getJSDocSimpleTagCreateFunction<JSDocOverloadTag>(SyntaxKind.JSDocOverloadTag); },
+            get updateJSDocOverloadTag() { return getJSDocSimpleTagUpdateFunction<JSDocOverloadTag>(SyntaxKind.JSDocOverloadTag); },
             get createJSDocDeprecatedTag() { return getJSDocSimpleTagCreateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag); },
             get updateJSDocDeprecatedTag() { return getJSDocSimpleTagUpdateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag); },
             createJSDocUnknownTag,
@@ -4630,6 +4632,7 @@ namespace ts {
                 : node;
         }
 
+
         // @api
         function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag {
             const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName ?? createIdentifier("augments"), comment);
@@ -6334,6 +6337,7 @@ namespace ts {
             case SyntaxKind.JSDocProtectedTag: return "protected";
             case SyntaxKind.JSDocReadonlyTag: return "readonly";
             case SyntaxKind.JSDocOverrideTag: return "override";
+            case SyntaxKind.JSDocOverloadTag: return "overload";
             case SyntaxKind.JSDocTemplateTag: return "template";
             case SyntaxKind.JSDocTypedefTag: return "typedef";
             case SyntaxKind.JSDocParameterTag: return "param";

@@ -898,6 +898,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocOverrideTag;
     }
 
+    export function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag {
+        return node.kind === SyntaxKind.JSDocOverloadTag;
+    }
+
     export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
         return node.kind === SyntaxKind.JSDocDeprecatedTag;
     }

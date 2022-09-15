@@ -401,6 +401,7 @@ namespace ts {
         JSDocProtectedTag,
         JSDocReadonlyTag,
         JSDocOverrideTag,
+        JSDocOverloadTag,
         JSDocCallbackTag,
         JSDocEnumTag,
         JSDocParameterTag,
@@ -3721,6 +3722,10 @@ namespace ts {
 
     export interface JSDocOverrideTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocOverrideTag;
+    }
+
+    export interface JSDocOverloadTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocOverloadTag;
     }
 
     export interface JSDocEnumTag extends JSDocTag, Declaration {
@@ -8053,6 +8058,8 @@ namespace ts {
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
         createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+        createJSDocOverloadTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag;
+        updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
