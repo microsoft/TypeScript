@@ -3333,11 +3333,110 @@ namespace ts {
             }
         }
 
+        function extractJSDocDeclarations<T>(node: T): T[];
+        function extractJSDocDeclarations(node: Node): Node[] {
+            if (!isFunctionDeclaration(node) && !isMethodDeclaration(node)) {
+                return [node];
+            }
+            if (!isInJSFile(node) || !hasJSDocNodes(node)) {
+                return [node];
+            }
+            const declarations: Node[] = [];
+            const jsDocNodes: JSDoc[] = node.jsDoc!;
+            const lastJsDocNode = last(jsDocNodes);
+            let jsDocNodesBuffer: JSDoc[] = [];
+            let currentPos = node.pos;
+            for (const jsDoc of jsDocNodes) {
+                jsDocNodesBuffer.push(jsDoc);
+                if (jsDoc === lastJsDocNode) {
+                    break;
+                }
+                const overloadTag = jsDoc.tags && find(jsDoc.tags, isJSDocOverloadTag);
+                if (!overloadTag) {
+                    continue;
+                }
+                const newParameters: ParameterDeclaration[] = [];
+                for (const tag of jsDoc.tags) {
+                    if (isJSDocParameterTag(tag) && tag.name.kind === SyntaxKind.Identifier) {
+                        const newParameter = factory.createParameterDeclaration(
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            tag.name,
+                            /*questionToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined
+                        );
+                        (newParameter as Mutable<Node>).flags |= NodeFlags.JavaScriptFile;
+                        newParameters.push(newParameter);
+                    }
+                }
+                let newDeclaration: FunctionDeclaration | MethodDeclaration | undefined;
+                if (isFunctionDeclaration(node)) {
+                    newDeclaration = factory.createFunctionDeclaration(
+                        /*modifiers*/ undefined,
+                        node.asteriskToken,
+                        node.name,
+                        /*typeParameters*/ undefined,
+                        newParameters,
+                        /*type*/ undefined,
+                        /*body*/ undefined,
+                    );
+                }
+                else if (isMethodDeclaration(node)) {
+                    newDeclaration = factory.createMethodDeclaration(
+                        /*modifiers*/ undefined,
+                        node.asteriskToken,
+                        node.name,
+                        /*questionToken*/ undefined,
+                        /*typeParameters*/ undefined,
+                        newParameters,
+                        /*type*/ undefined,
+                        /*body*/ undefined,
+                    );
+                    if (node.flowNode) {
+                        newDeclaration.flowNode = node.flowNode;
+                    }
+                }
+                if (newDeclaration) {
+                    for (const parameter of newParameters) {
+                        setParent(parameter, newDeclaration);
+                    }
+                    newDeclaration.jsDoc = [];
+                    (newDeclaration as Mutable<Node>).flags = node.flags;
+                    setParent(newDeclaration, node.parent);
+                    let end = -1;
+                    for (const anotherJSDoc of jsDocNodesBuffer) {
+                        setParent(anotherJSDoc, newDeclaration);
+                        end = anotherJSDoc.end;
+                        newDeclaration.jsDoc.push(anotherJSDoc);
+                    }
+                    setTextRangePosEnd(newDeclaration, currentPos, end);
+                    declarations.push(newDeclaration);
+                    currentPos = end;
+                    jsDocNodesBuffer = [];
+                }
+            }
+            if (jsDocNodesBuffer.length < jsDocNodes.length) {
+                node.jsDoc = jsDocNodesBuffer;
+                node.jsDocCache = undefined;
+                if (currentPos !== node.pos) {
+                    setTextRangePosEnd(node, currentPos, node.end);
+                }
+            }
+            declarations.push(node);
+            return declarations;
+        }
+
         function bindFunctionDeclaration(node: FunctionDeclaration) {
             if (!file.isDeclarationFile && !(node.flags & NodeFlags.Ambient)) {
                 if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
+            }
+
+            const declarations = extractJSDocDeclarations(node);
+            for (let i = 0; i < declarations.length - 1; i += 1) {
+                bind(declarations[i]);
             }
 
             checkStrictModeFunctionName(node);
@@ -3371,6 +3470,11 @@ namespace ts {
 
             if (currentFlow && isObjectLiteralOrClassExpressionMethodOrAccessor(node)) {
                 node.flowNode = currentFlow;
+            }
+
+            const declarations = extractJSDocDeclarations(node);
+            for (let i = 0; i < declarations.length - 1; i += 1) {
+                bind(declarations[i]);
             }
 
             return hasDynamicName(node)
