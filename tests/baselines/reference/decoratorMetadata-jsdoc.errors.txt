@@ -1,22 +1,19 @@
-tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(5,9): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(7,9): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(9,9): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(5,9): error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(7,9): error TS17019: Adding a postfix '!' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
 
 
-==== tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts (3 errors) ====
+==== tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts (2 errors) ====
     declare var decorator: any;
     
     class X {
         @decorator()
         a?: string?;
             ~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
+!!! error TS17019: Adding a postfix '?' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
         @decorator()
         b?: string!;
             ~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
+!!! error TS17019: Adding a postfix '!' to the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
         @decorator()
         c?: *;
-            ~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
     }

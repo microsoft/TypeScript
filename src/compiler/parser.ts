@@ -1687,12 +1687,12 @@ namespace ts {
             return parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
         }
 
-        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
+        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any): DiagnosticWithDetachedLocation | undefined {
             // Don't report another error if it would just be at the same position as the last error.
             const lastError = lastOrUndefined(parseDiagnostics);
             let result: DiagnosticWithDetachedLocation | undefined;
             if (!lastError || start !== lastError.start) {
-                result = createDetachedDiagnostic(fileName, start, length, message, arg0);
+                result = createDetachedDiagnostic(fileName, start, length, message, arg0, arg1);
                 parseDiagnostics.push(result);
             }
 
@@ -1702,8 +1702,8 @@ namespace ts {
             return result;
         }
 
-        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
-            return parseErrorAtPosition(start, end - start, message, arg0);
+        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any, arg1?: any): DiagnosticWithDetachedLocation | undefined {
+            return parseErrorAtPosition(start, end - start, message, arg0, arg1);
         }
 
         function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, arg0?: any): void {
@@ -3324,12 +3324,16 @@ namespace ts {
 
         function parseJSDocNonNullableType(): TypeNode {
             const pos = getNodePos();
+            const exclamationToken = token();
             nextToken();
-            return finishNode(factory.createJSDocNonNullableType(parseNonArrayType(), /*postfix*/ false), pos);
+            const type = parseNonArrayType();
+            parsePrefixTypeError(pos, type.end, exclamationToken, type);
+            return finishNode(factory.createJSDocNonNullableType(type, /*postfix*/ false), pos);
         }
 
         function parseJSDocUnknownOrNullableType(): JSDocUnknownType | JSDocNullableType {
             const pos = getNodePos();
+            const questionToken = token();
             // skip the ?
             nextToken();
 
@@ -3352,7 +3356,9 @@ namespace ts {
                 return finishNode(factory.createJSDocUnknownType(), pos);
             }
             else {
-                return finishNode(factory.createJSDocNullableType(parseType(), /*postfix*/ false), pos);
+                const type = parseType();
+                parsePrefixTypeError(pos, type.end, questionToken, type);
+                return finishNode(factory.createJSDocNullableType(type, /*postfix*/ false), pos);
             }
         }
 
@@ -3573,7 +3579,13 @@ namespace ts {
         function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode | undefined;
         function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean) {
             if (shouldParseReturnType(returnToken, isType)) {
-                return allowConditionalTypesAnd(parseTypeOrTypePredicate);
+                const returnType = allowConditionalTypesAnd(parseTypeOrTypePredicate);
+                if (returnToken === SyntaxKind.ColonToken && token() === SyntaxKind.QuestionToken && lookAhead(nextTokenIsOpenBrace)) {
+                    const type = isTypePredicateNode(returnType) && returnType.type ? returnType.type : returnType;
+                    parsePostfixTypeError(type.pos, scanner.getTextPos(), token(), type);
+                    nextToken();
+                }
+                return returnType;
             }
         }
 
@@ -3918,7 +3930,7 @@ namespace ts {
             if (parseOptional(SyntaxKind.DotDotDotToken)) {
                 return finishNode(factory.createRestTypeNode(parseType()), pos);
             }
-            const type = parseType();
+            const type = doInsideOfContext(NodeFlags.AllowJSDocNullableType, parseType);
             if (isJSDocNullableType(type) && type.pos === type.type.pos) {
                 const node = factory.createOptionalTypeNode(type.type);
                 setTextRange(node, type);
@@ -4198,6 +4210,7 @@ namespace ts {
             while (!scanner.hasPrecedingLineBreak()) {
                 switch (token()) {
                     case SyntaxKind.ExclamationToken:
+                        parsePostfixTypeError(type.pos, scanner.getTextPos(), token(), type);
                         nextToken();
                         type = finishNode(factory.createJSDocNonNullableType(type, /*postfix*/ true), pos);
                         break;
@@ -4206,6 +4219,7 @@ namespace ts {
                         if (lookAhead(nextTokenIsStartOfType)) {
                             return type;
                         }
+                        parsePostfixTypeError(type.pos, scanner.getTextPos(), token(), type);
                         nextToken();
                         type = finishNode(factory.createJSDocNullableType(type, /*postfix*/ true), pos);
                         break;
@@ -4439,6 +4453,24 @@ namespace ts {
 
         function parseTypeAnnotation(): TypeNode | undefined {
             return parseOptional(SyntaxKind.ColonToken) ? parseType() : undefined;
+        }
+
+        function parsePostfixTypeError(pos: number, end: number, token: SyntaxKind, node: TypeNode) {
+            if (contextFlags & (NodeFlags.JavaScriptFile | NodeFlags.AllowJSDocNullableType | NodeFlags.JSDoc)) {
+                return;
+            }
+            const isUndefinedUnion = !(node.kind === SyntaxKind.UndefinedKeyword || node.kind === SyntaxKind.AnyKeyword
+                || node.kind == SyntaxKind.UnknownKeyword || node.kind == SyntaxKind.NeverKeyword || node.kind == SyntaxKind.VoidKeyword);
+            const typeName = getTextOfNodeFromSourceText(sourceText, node);
+            const suggestion = token === SyntaxKind.QuestionToken && isUndefinedUnion ? `${typeName} | ${tokenToString(SyntaxKind.UndefinedKeyword)}` : typeName;
+            parseErrorAt(skipTrivia(sourceText, pos), end, Diagnostics.Adding_a_postfix_0_to_the_end_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1, tokenToString(token), suggestion);
+        }
+
+        function parsePrefixTypeError(pos: number, end: number, token: SyntaxKind, node: TypeNode) {
+            if (contextFlags & (NodeFlags.JavaScriptFile | NodeFlags.JSDoc)) {
+                return;
+            }
+            parseErrorAt(skipTrivia(sourceText, pos), end, Diagnostics.Adding_a_prefix_0_to_the_start_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1, tokenToString(token), getTextOfNodeFromSourceText(sourceText, node));
         }
 
         // EXPRESSIONS

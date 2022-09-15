@@ -2,7 +2,11 @@
 namespace ts.codefix {
     const fixIdPlain = "fixJSDocTypes_plain";
     const fixIdNullable = "fixJSDocTypes_nullable";
-    const errorCodes = [Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code];
+    const errorCodes = [
+        Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code,
+        Diagnostics.Adding_a_postfix_0_to_the_end_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1.code,
+        Diagnostics.Adding_a_prefix_0_to_the_start_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1.code,
+    ];
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {

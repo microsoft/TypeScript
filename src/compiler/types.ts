@@ -793,6 +793,7 @@ namespace ts {
         JsonFile                                      = 1 << 26, // If node was parsed in a Json
         /* @internal */ TypeCached                    = 1 << 27, // If a type was cached for node at any point
         /* @internal */ Deprecated                    = 1 << 28, // If has '@deprecated' JSDoc tag
+        /* @internal */ AllowJSDocNullableType        = 1 << 29, // Allow using ? after type (boolean?)
 
         BlockScoped = Let | Const,
 

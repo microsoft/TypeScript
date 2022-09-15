@@ -5,7 +5,7 @@
 
 verify.codeFix({
     description: "Change 'number?' to 'number | null'",
-    errorCode: 8020,
+    errorCode: 17019,
     index: 0,
     newRangeContent: "number | null",
 });

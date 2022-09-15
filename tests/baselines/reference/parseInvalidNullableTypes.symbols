@@ -1,0 +1,57 @@
+=== tests/cases/compiler/parseInvalidNullableTypes.ts ===
+function f1(a: string): a is string? {
+>f1 : Symbol(f1, Decl(parseInvalidNullableTypes.ts, 0, 0))
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 0, 12))
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 0, 12))
+
+    return true;
+}
+
+function f2(a: string): a is ?string {
+>f2 : Symbol(f2, Decl(parseInvalidNullableTypes.ts, 2, 1))
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 4, 12))
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 4, 12))
+
+    return true;
+}
+
+function f3(a: string?) {}
+>f3 : Symbol(f3, Decl(parseInvalidNullableTypes.ts, 6, 1))
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 8, 12))
+
+function f4(a: number?) {}
+>f4 : Symbol(f4, Decl(parseInvalidNullableTypes.ts, 8, 26))
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 9, 12))
+
+function f5(a: ?string) {}
+>f5 : Symbol(f5, Decl(parseInvalidNullableTypes.ts, 9, 26))
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 11, 12))
+
+function f6(a: ?number) {}
+>f6 : Symbol(f6, Decl(parseInvalidNullableTypes.ts, 11, 26))
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 12, 12))
+
+const a = 1 as any?;
+>a : Symbol(a, Decl(parseInvalidNullableTypes.ts, 14, 5))
+
+const b: number? = 1;
+>b : Symbol(b, Decl(parseInvalidNullableTypes.ts, 15, 5))
+
+const c = 1 as ?any;
+>c : Symbol(c, Decl(parseInvalidNullableTypes.ts, 17, 5))
+
+const d: ?number = 1;
+>d : Symbol(d, Decl(parseInvalidNullableTypes.ts, 18, 5))
+
+const e: unknown?;
+>e : Symbol(e, Decl(parseInvalidNullableTypes.ts, 20, 5))
+
+const f: never?;
+>f : Symbol(f, Decl(parseInvalidNullableTypes.ts, 21, 5))
+
+const g: void?;
+>g : Symbol(g, Decl(parseInvalidNullableTypes.ts, 22, 5))
+
+const h: undefined?;
+>h : Symbol(h, Decl(parseInvalidNullableTypes.ts, 23, 5))
+
