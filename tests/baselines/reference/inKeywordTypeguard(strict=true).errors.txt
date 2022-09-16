@@ -29,7 +29,7 @@ tests/cases/compiler/inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' do
 tests/cases/compiler/inKeywordTypeguard.ts(90,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
 tests/cases/compiler/inKeywordTypeguard.ts(150,16): error TS2339: Property 'ontouchstart' does not exist on type 'never'.
-tests/cases/compiler/inKeywordTypeguard.ts(155,16): error TS2571: Object is of type 'unknown'.
+tests/cases/compiler/inKeywordTypeguard.ts(155,16): error TS18046: 'x' is of type 'unknown'.
 tests/cases/compiler/inKeywordTypeguard.ts(158,21): error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
 tests/cases/compiler/inKeywordTypeguard.ts(183,16): error TS2322: Type 'T' is not assignable to type 'object'.
 tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNullable<T>' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
@@ -248,7 +248,7 @@ tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNulla
     function f1(x: unknown) {
         if ("a" in x) {
                    ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'x' is of type 'unknown'.
             x.a;
         }
         if (x && "a" in x) {

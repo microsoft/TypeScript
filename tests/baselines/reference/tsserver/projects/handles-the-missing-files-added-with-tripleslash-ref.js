@@ -1,16 +1,49 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/commonFile1.ts"}}
-Search path: /a/b
-For info: /a/b/commonFile1.ts :: No config files found.
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 0    [00:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [00:00:14.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts"
+      }
+    }
+Before request
+//// [/a/b/commonFile1.ts]
+/// <reference path="commonFile2.ts"/>
+                    let x = y
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+Info 2    [00:00:15.000] Search path: /a/b
+Info 3    [00:00:16.000] For info: /a/b/commonFile1.ts :: No config files found.
+Info 4    [00:00:17.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 5    [00:00:18.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 6    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 7    [00:00:20.000] FileWatcher:: Added:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 8    [00:00:21.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 9    [00:00:22.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 10   [00:00:23.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 11   [00:00:24.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 12   [00:00:25.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/a/b/commonFile1.ts
 
@@ -20,28 +53,127 @@ Project '/dev/null/inferredProject1*' (Inferred)
 	commonFile1.ts
 	  Root file specified for compilation
 
------------------------------------------------
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 13   [00:00:26.000] -----------------------------------------------
+Info 14   [00:00:27.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 14   [00:00:28.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-response:{"responseRequired":false}
-request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/commonFile1.ts"}}
-response:{"response":[{"start":{"line":2,"offset":29},"end":{"line":2,"offset":30},"text":"Cannot find name 'y'.","code":2304,"category":"error"},{"start":{"line":1,"offset":22},"end":{"line":1,"offset":36},"text":"File '/a/b/commonFile2.ts' not found.","code":6053,"category":"error"}],"responseRequired":true}
-FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-FileWatcher:: Close:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Scheduled: /dev/null/inferredProject1*
-Scheduled: *ensureProjectForOpenFiles*
-Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Running: /dev/null/inferredProject1*
-Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (3)
+Info 14   [00:00:29.000] -----------------------------------------------
+Info 14   [00:00:30.000] Open files: 
+Info 14   [00:00:31.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
+Info 14   [00:00:32.000] 		Projects: /dev/null/inferredProject1*
+After request
+
+PolledWatches::
+/a/b/commonfile2.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 14   [00:00:33.000] response:
+    {
+      "responseRequired": false
+    }
+Info 15   [00:00:34.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/b/commonfile2.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+After request
+
+PolledWatches::
+/a/b/commonfile2.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 16   [00:00:35.000] response:
+    {
+      "response": [
+        {
+          "start": {
+            "line": 2,
+            "offset": 29
+          },
+          "end": {
+            "line": 2,
+            "offset": 30
+          },
+          "text": "Cannot find name 'y'.",
+          "code": 2304,
+          "category": "error"
+        },
+        {
+          "start": {
+            "line": 1,
+            "offset": 22
+          },
+          "end": {
+            "line": 1,
+            "offset": 36
+          },
+          "text": "File '/a/b/commonFile2.ts' not found.",
+          "code": 6053,
+          "category": "error"
+        }
+      ],
+      "responseRequired": true
+    }
+Info 17   [00:00:38.000] FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 18   [00:00:39.000] FileWatcher:: Close:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 19   [00:00:40.000] Scheduled: /dev/null/inferredProject1*
+Info 20   [00:00:41.000] Scheduled: *ensureProjectForOpenFiles*
+Info 21   [00:00:42.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Before running timeout callbacks
+//// [/a/b/commonFile2.ts]
+let y = 1
+
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 22   [00:00:43.000] Running: /dev/null/inferredProject1*
+Info 23   [00:00:44.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 24   [00:00:45.000] FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
+Info 25   [00:00:46.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 26   [00:00:47.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 27   [00:00:48.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/a/b/commonFile2.ts
 	/a/b/commonFile1.ts
@@ -54,23 +186,77 @@ Project '/dev/null/inferredProject1*' (Inferred)
 	commonFile1.ts
 	  Root file specified for compilation
 
------------------------------------------------
-Running: *ensureProjectForOpenFiles*
-Before ensureProjectForOpenFiles:
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (3)
+Info 28   [00:00:49.000] -----------------------------------------------
+Info 29   [00:00:50.000] Running: *ensureProjectForOpenFiles*
+Info 30   [00:00:51.000] Before ensureProjectForOpenFiles:
+Info 31   [00:00:52.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 31   [00:00:53.000] 	Files (3)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-After ensureProjectForOpenFiles:
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (3)
+Info 31   [00:00:54.000] -----------------------------------------------
+Info 31   [00:00:55.000] Open files: 
+Info 31   [00:00:56.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
+Info 31   [00:00:57.000] 		Projects: /dev/null/inferredProject1*
+Info 31   [00:00:58.000] After ensureProjectForOpenFiles:
+Info 32   [00:00:59.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 32   [00:01:00.000] 	Files (3)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/commonFile1.ts"}}
-response:{"response":[],"responseRequired":true}
+Info 32   [00:01:01.000] -----------------------------------------------
+Info 32   [00:01:02.000] Open files: 
+Info 32   [00:01:03.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
+Info 32   [00:01:04.000] 		Projects: /dev/null/inferredProject1*
+After running timeout callbacks
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 32   [00:01:05.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+
+FsWatchesRecursive::
+
+After request
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+
+FsWatchesRecursive::
+
+Info 33   [00:01:06.000] response:
+    {
+      "response": [],
+      "responseRequired": true
+    }

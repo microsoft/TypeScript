@@ -853,6 +853,10 @@ namespace ts {
         return false;
     }
 
+    export function isAmbientPropertyDeclaration(node: PropertyDeclaration) {
+        return !!(node.flags & NodeFlags.Ambient) || hasSyntacticModifier(node, ModifierFlags.Ambient);
+    }
+
     export function isBlockScope(node: Node, parentNode: Node | undefined): boolean {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
@@ -996,7 +1000,7 @@ namespace ts {
         switch (name.kind) {
             case SyntaxKind.Identifier:
             case SyntaxKind.PrivateIdentifier:
-                return name.escapedText;
+                return name.autoGenerateFlags ? undefined : name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -3407,7 +3411,7 @@ namespace ts {
                 return false;
         }
     }
-    export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
+    export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral | PrivateIdentifier): string {
         return isMemberName(node) ? idText(node) : node.text;
     }
 
@@ -4922,6 +4926,10 @@ namespace ts {
         return hasSyntacticModifier(node, ModifierFlags.Ambient);
     }
 
+    export function hasAccessorModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Accessor);
+    }
+
     export function hasEffectiveReadonlyModifier(node: Node): boolean {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
@@ -5031,6 +5039,7 @@ namespace ts {
             case SyntaxKind.ProtectedKeyword: return ModifierFlags.Protected;
             case SyntaxKind.PrivateKeyword: return ModifierFlags.Private;
             case SyntaxKind.AbstractKeyword: return ModifierFlags.Abstract;
+            case SyntaxKind.AccessorKeyword: return ModifierFlags.Accessor;
             case SyntaxKind.ExportKeyword: return ModifierFlags.Export;
             case SyntaxKind.DeclareKeyword: return ModifierFlags.Ambient;
             case SyntaxKind.ConstKeyword: return ModifierFlags.Const;
@@ -5043,10 +5052,6 @@ namespace ts {
             case SyntaxKind.Decorator: return ModifierFlags.Decorator;
         }
         return ModifierFlags.None;
-    }
-
-    export function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
-        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
     }
 
     export function isLogicalOperator(token: SyntaxKind): boolean {

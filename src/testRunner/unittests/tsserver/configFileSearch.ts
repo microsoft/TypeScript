@@ -38,7 +38,7 @@ namespace ts.projectSystem {
                 content: "{}"
             };
             const host = createServerHost([f1, libFile, configFile, configFile2]);
-            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
 
             // Delete config file - should create inferred project and not configured project
@@ -67,7 +67,7 @@ namespace ts.projectSystem {
             const service = createProjectService(host, {
                 useSingleInferredProject: true,
                 useInferredProjectPerProjectRoot: true,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
 
@@ -89,7 +89,7 @@ namespace ts.projectSystem {
             };
             function openClientFile(files: File[]) {
                 const host = createServerHost(files);
-                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 projectService.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a/b/projects/proj");
                 return { host, projectService };
             }
@@ -124,7 +124,7 @@ namespace ts.projectSystem {
                 it(scenario, () => {
                     const path = `/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js`;
                     const host = createServerHost([libFile, { path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
-                    const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                    const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                     service.openClientFile(path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRootPath);
                     baselineTsserverLogs("configFileSearch", scenario, service);
                 });

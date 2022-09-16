@@ -424,10 +424,8 @@ task("watch-local").flags = {
 const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
-const postTest = (done) => cmdLineOptions.lint ? lint() : done();
-
 const runTests = () => runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("runtests", series(preBuild, preTest, runTests, postTest));
+task("runtests", series(preBuild, preTest, runTests));
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
     "-t --tests=<regex>": "Pattern for tests to run.",
@@ -439,7 +437,6 @@ task("runtests").flags = {
     "   --dirty": "Run tests without first cleaning test output directories",
     "   --stackTraceLimit=<limit>": "Sets the maximum number of stack frames to display. Use 'full' to show all frames.",
     "   --no-color": "Disables color",
-    "   --no-lint": "Disables lint",
     "   --timeout=<ms>": "Overrides the default test timeout.",
     "   --built": "Compile using the built version of the compiler.",
     "   --shards": "Total number of shards running tests (default: 1)",
@@ -447,10 +444,9 @@ task("runtests").flags = {
 };
 
 const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
-task("runtests-parallel", series(preBuild, preTest, runTestsParallel, postTest));
+task("runtests-parallel", series(preBuild, preTest, runTestsParallel));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
-    "   --no-lint": "disables lint.",
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
     "   --dirty": "Run tests without first cleaning test output directories.",
@@ -613,7 +609,6 @@ task("watch").flags = {
     "   --dirty": "Run tests without first cleaning test output directories",
     "   --stackTraceLimit=<limit>": "Sets the maximum number of stack frames to display. Use 'full' to show all frames.",
     "   --no-color": "Disables color",
-    "   --no-lint": "Disables lint",
     "   --timeout=<ms>": "Overrides the default test timeout.",
     "   --workers=<number>": "The number of parallel workers to use.",
     "   --built": "Compile using the built version of the compiler.",

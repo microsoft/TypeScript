@@ -159,7 +159,7 @@ namespace ts.SymbolDisplay {
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
             // If symbol is accessor, they are allowed only if location is at declaration identifier of the accessor
             if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
-                const declaration = find(symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration)[]), declaration => declaration.name === location);
+                const declaration = find(symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration | PropertyDeclaration)[]), declaration => declaration.name === location);
                 if (declaration) {
                     switch(declaration.kind){
                         case SyntaxKind.GetAccessor:
@@ -167,6 +167,9 @@ namespace ts.SymbolDisplay {
                             break;
                         case SyntaxKind.SetAccessor:
                             symbolKind = ScriptElementKind.memberSetAccessorElement;
+                            break;
+                        case SyntaxKind.PropertyDeclaration:
+                            symbolKind = ScriptElementKind.memberAccessorVariableElement;
                             break;
                         default:
                             Debug.assertNever(declaration);
@@ -509,6 +512,7 @@ namespace ts.SymbolDisplay {
                     }
                     // For properties, variables and local vars: show the type
                     if (symbolKind === ScriptElementKind.memberVariableElement ||
+                        symbolKind === ScriptElementKind.memberAccessorVariableElement ||
                         symbolKind === ScriptElementKind.memberGetAccessorElement ||
                         symbolKind === ScriptElementKind.memberSetAccessorElement ||
                         symbolKind === ScriptElementKind.jsxAttribute ||

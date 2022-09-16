@@ -12,37 +12,37 @@ type F1 = (arg: number) => any; // OK
 >arg : number
 
 type F2 = ({ a: string }: O) => any; // Error
->F2 : ({ a }: O) => any
+>F2 : ({ a: string }: O) => any
 >a : any
 >string : string
 
 type F3 = ({ a: string, b, c }: O) => any; // Error
->F3 : ({ a, b, c }: O) => any
+>F3 : ({ a: string, b, c }: O) => any
 >a : any
 >string : string
 >b : number
 >c : number
 
 type F4 = ({ a: string }: O) => any; // Error
->F4 : ({ a }: O) => any
+>F4 : ({ a: string }: O) => any
 >a : any
 >string : string
 
 type F5 = ({ a: string, b, c }: O) => any; // Error
->F5 : ({ a, b, c }: O) => any
+>F5 : ({ a: string, b, c }: O) => any
 >a : any
 >string : string
 >b : number
 >c : number
 
 type F6 = ({ a: string }) => typeof string; // OK
->F6 : ({ a }: { a: any; }) => any
+>F6 : ({ a: string }: { a: any; }) => any
 >a : any
 >string : any
 >string : any
 
 type F7 = ({ a: string, b: number }) => typeof number; // Error
->F7 : ({ a, b }: { a: any; b: any; }) => any
+>F7 : ({ a: string, b: number }: { a: any; b: any; }) => any
 >a : any
 >string : any
 >b : any
@@ -50,7 +50,7 @@ type F7 = ({ a: string, b: number }) => typeof number; // Error
 >number : any
 
 type F8 = ({ a, b: number }) => typeof number; // OK
->F8 : ({ a, b }: { a: any; b: any; }) => any
+>F8 : ({ a, b: number }: { a: any; b: any; }) => any
 >a : any
 >b : any
 >number : any
@@ -67,37 +67,37 @@ type G1 = new (arg: number) => any; // OK
 >arg : number
 
 type G2 = new ({ a: string }: O) => any; // Error
->G2 : new ({ a }: O) => any
+>G2 : new ({ a: string }: O) => any
 >a : any
 >string : string
 
 type G3 = new ({ a: string, b, c }: O) => any; // Error
->G3 : new ({ a, b, c }: O) => any
+>G3 : new ({ a: string, b, c }: O) => any
 >a : any
 >string : string
 >b : number
 >c : number
 
 type G4 = new ({ a: string }: O) => any; // Error
->G4 : new ({ a }: O) => any
+>G4 : new ({ a: string }: O) => any
 >a : any
 >string : string
 
 type G5 = new ({ a: string, b, c }: O) => any; // Error
->G5 : new ({ a, b, c }: O) => any
+>G5 : new ({ a: string, b, c }: O) => any
 >a : any
 >string : string
 >b : number
 >c : number
 
 type G6 = new ({ a: string }) => typeof string; // OK
->G6 : new ({ a }: { a: any; }) => any
+>G6 : new ({ a: string }: { a: any; }) => any
 >a : any
 >string : any
 >string : any
 
 type G7 = new ({ a: string, b: number }) => typeof number; // Error
->G7 : new ({ a, b }: { a: any; b: any; }) => any
+>G7 : new ({ a: string, b: number }: { a: any; b: any; }) => any
 >a : any
 >string : any
 >b : any
@@ -105,7 +105,7 @@ type G7 = new ({ a: string, b: number }) => typeof number; // Error
 >number : any
 
 type G8 = new ({ a, b: number }) => typeof number; // OK
->G8 : new ({ a, b }: { a: any; b: any; }) => any
+>G8 : new ({ a, b: number }: { a: any; b: any; }) => any
 >a : any
 >b : any
 >number : any
@@ -161,7 +161,7 @@ interface I {
 >arg : number
 
   method2({ a: string }): any; // Error
->method2 : ({ a }: { a: any; }) => any
+>method2 : ({ a: string }: { a: any; }) => any
 >a : any
 >string : any
 
@@ -182,35 +182,35 @@ interface I {
 
 // Below are OK but renaming should be removed from declaration emit
 function f1({ a: string }: O) { }
->f1 : ({ a }: O) => void
+>f1 : ({ a: string }: O) => void
 >a : any
 >string : string
 
 const f2 = function({ a: string }: O) { };
->f2 : ({ a }: O) => void
->function({ a: string }: O) { } : ({ a }: O) => void
+>f2 : ({ a: string }: O) => void
+>function({ a: string }: O) { } : ({ a: string }: O) => void
 >a : any
 >string : string
 
 const f3 = ({ a: string, b, c }: O) => { };
->f3 : ({ a, b, c }: O) => void
->({ a: string, b, c }: O) => { } : ({ a, b, c }: O) => void
+>f3 : ({ a: string, b, c }: O) => void
+>({ a: string, b, c }: O) => { } : ({ a: string, b, c }: O) => void
 >a : any
 >string : string
 >b : number
 >c : number
 
 const f4 = function({ a: string }: O): typeof string { return string; };
->f4 : ({ a }: O) => string
->function({ a: string }: O): typeof string { return string; } : ({ a }: O) => string
+>f4 : ({ a: string }: O) => string
+>function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => string
 >a : any
 >string : string
 >string : string
 >string : string
 
 const f5 = ({ a: string, b, c }: O): typeof string => '';
->f5 : ({ a, b, c }: O) => string
->({ a: string, b, c }: O): typeof string => '' : ({ a, b, c }: O) => string
+>f5 : ({ a: string, b, c }: O) => string
+>({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => string
 >a : any
 >string : string
 >b : number
@@ -219,21 +219,21 @@ const f5 = ({ a: string, b, c }: O): typeof string => '';
 >'' : ""
 
 const obj1 = {
->obj1 : { method({ a }: O): void; }
->{  method({ a: string }: O) { }} : { method({ a }: O): void; }
+>obj1 : { method({ a: string }: O): void; }
+>{  method({ a: string }: O) { }} : { method({ a: string }: O): void; }
 
   method({ a: string }: O) { }
->method : ({ a }: O) => void
+>method : ({ a: string }: O) => void
 >a : any
 >string : string
 
 };
 const obj2 = {
->obj2 : { method({ a }: O): string; }
->{  method({ a: string }: O): typeof string { return string; }} : { method({ a }: O): string; }
+>obj2 : { method({ a: string }: O): string; }
+>{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): string; }
 
   method({ a: string }: O): typeof string { return string; }
->method : ({ a }: O) => string
+>method : ({ a: string }: O) => string
 >a : any
 >string : string
 >string : string
@@ -241,14 +241,14 @@ const obj2 = {
 
 };
 function f6({ a: string = "" }: O) { }
->f6 : ({ a }: O) => void
+>f6 : ({ a: string }: O) => void
 >a : any
 >string : string
 >"" : ""
 
 const f7 = ({ a: string = "", b, c }: O) => { };
->f7 : ({ a, b, c }: O) => void
->({ a: string = "", b, c }: O) => { } : ({ a, b, c }: O) => void
+>f7 : ({ a: string, b, c }: O) => void
+>({ a: string = "", b, c }: O) => { } : ({ a: string, b, c }: O) => void
 >a : any
 >string : string
 >"" : ""
@@ -277,7 +277,7 @@ const f11 =  ({ [2]: string }) => { };
 
 // In below case `string` should be kept because it is used
 function f12({ a: string = "" }: O): typeof string { return "a"; }
->f12 : ({ a }: O) => typeof string
+>f12 : ({ a: string }: O) => typeof string
 >a : any
 >string : string
 >"" : ""

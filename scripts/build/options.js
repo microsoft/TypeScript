@@ -6,7 +6,7 @@ const ci = ["1", "true"].includes(process.env.CI);
 
 /** @type {CommandLineOptions} */
 module.exports = minimist(process.argv.slice(2), {
-    boolean: ["dirty", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci"],
+    boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci"],
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         /* eslint-disable quote-props */
@@ -33,7 +33,6 @@ module.exports = minimist(process.argv.slice(2), {
         runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
-        lint: process.env.lint || true,
         fix: process.env.fix || process.env.f,
         workers: process.env.workerCount || ((os.cpus().length - (ci ? 0 : 1)) || 1),
         failed: false,
@@ -54,7 +53,6 @@ if (module.exports.built) {
  * @property {boolean} dirty
  * @property {boolean} light
  * @property {boolean} colors
- * @property {boolean} lint
  * @property {boolean} lkg
  * @property {boolean} built
  * @property {boolean} soft

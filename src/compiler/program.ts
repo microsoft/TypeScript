@@ -849,7 +849,7 @@ namespace ts {
 
     /*@internal*/
     export function getImpliedNodeFormatForFileWorker(
-        fileName: Path,
+        fileName: string,
         packageJsonInfoCache: PackageJsonInfoCache | undefined,
         host: ModuleResolutionHost,
         options: CompilerOptions,
@@ -870,7 +870,7 @@ namespace ts {
             state.failedLookupLocations = packageJsonLocations;
             state.affectingLocations = packageJsonLocations;
             const packageJsonScope = getPackageScopeForPath(fileName, state);
-            const impliedNodeFormat = packageJsonScope?.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
+            const impliedNodeFormat = packageJsonScope?.contents.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
             return { impliedNodeFormat, packageJsonLocations, packageJsonScope };
         }
     }
@@ -2413,7 +2413,9 @@ namespace ts {
                             // Check modifiers of property declaration
                             if (nodes === (parent as PropertyDeclaration).modifiers) {
                                 for (const modifier of nodes as NodeArray<ModifierLike>) {
-                                    if (isModifier(modifier) && modifier.kind !== SyntaxKind.StaticKeyword) {
+                                    if (isModifier(modifier)
+                                        && modifier.kind !== SyntaxKind.StaticKeyword
+                                        && modifier.kind !== SyntaxKind.AccessorKeyword) {
                                         diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                     }
                                 }
@@ -2467,6 +2469,7 @@ namespace ts {
                             case SyntaxKind.StaticKeyword:
                             case SyntaxKind.ExportKeyword:
                             case SyntaxKind.DefaultKeyword:
+                            case SyntaxKind.AccessorKeyword:
                         }
                     }
                 }
@@ -2831,7 +2834,7 @@ namespace ts {
             // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
             // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
             // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
-            const result = getImpliedNodeFormatForFileWorker(toPath(fileName), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+            const result = getImpliedNodeFormatForFileWorker(getNormalizedAbsolutePath(fileName, currentDirectory), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
             const languageVersion = getEmitScriptTarget(options);
             const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
             return typeof result === "object" ?

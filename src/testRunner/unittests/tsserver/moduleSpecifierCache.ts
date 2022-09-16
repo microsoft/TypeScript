@@ -59,7 +59,7 @@ namespace ts.projectSystem {
         });
 
         it("invalidates module specifiers when changes happen in contained node_modules directories", () => {
-            const { host, session, moduleSpecifierCache, triggerCompletions } = setup(createLoggerWithInMemoryLogs());
+            const { host, session, moduleSpecifierCache, triggerCompletions } = setup(host => createLoggerWithInMemoryLogs(host));
             // Completion at an import statement will calculate and cache module specifiers
             triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
             host.writeFile("/node_modules/.staging/mobx-12345678/package.json", "{}");
@@ -123,9 +123,9 @@ namespace ts.projectSystem {
         });
     });
 
-    function setup(logger?: Logger) {
+    function setup(createLogger?: (host: TestServerHost) => Logger) {
         const host = createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts]);
-        const session = createSession(host, logger && { logger });
+        const session = createSession(host, createLogger && { logger: createLogger(host) });
         openFilesForSession([aTs, bTs, cTs], session);
         const projectService = session.getProjectService();
         const project = configuredProjectAt(projectService, 0);

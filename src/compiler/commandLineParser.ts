@@ -192,6 +192,7 @@ namespace ts {
             shortName: "h",
             type: "boolean",
             showInSimplifiedHelpView: true,
+            isCommandLineOnly: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_this_message,
             defaultValueDescription: false,
@@ -200,6 +201,8 @@ namespace ts {
             name: "help",
             shortName: "?",
             type: "boolean",
+            isCommandLineOnly: true,
+            category: Diagnostics.Command_line_Options,
             defaultValueDescription: false,
         },
         {
