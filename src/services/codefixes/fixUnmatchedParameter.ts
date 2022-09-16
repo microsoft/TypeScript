@@ -4,36 +4,36 @@ const deleteUnmatchedParameter = "deleteUnmatchedParameter";
 const renameUnmatchedParameter = "renameUnmatchedParameter";
 
 const errorCodes = [
-    Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name.code,
+    ts.Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name.code,
 ];
 
-registerCodeFix({
+ts.codefix.registerCodeFix({
     fixIds: [deleteUnmatchedParameter, renameUnmatchedParameter],
     errorCodes,
     getCodeActions: function getCodeActionsToFixUnmatchedParameter(context) {
         const { sourceFile, span } = context;
-        const actions: CodeFixAction[] = [];
+        const actions: ts.CodeFixAction[] = [];
         const info = getInfo(sourceFile, span.start);
         if (info) {
-            append(actions, getDeleteAction(context, info));
-            append(actions, getRenameAction(context, info));
+            ts.append(actions, getDeleteAction(context, info));
+            ts.append(actions, getRenameAction(context, info));
             return actions;
         }
         return undefined;
     },
     getAllCodeActions: function getAllCodeActionsToFixUnmatchedParameter(context) {
-        const tagsToSignature = new Map<SignatureDeclaration, JSDocTag[]>();
-        return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
-            eachDiagnostic(context, errorCodes, ({ file, start }) => {
+        const tagsToSignature = new ts.Map<ts.SignatureDeclaration, ts.JSDocTag[]>();
+        return ts.codefix.createCombinedCodeActions(ts.textChanges.ChangeTracker.with(context, changes => {
+            ts.codefix.eachDiagnostic(context, errorCodes, ({ file, start }) => {
                 const info = getInfo(file, start);
                 if (info) {
-                    tagsToSignature.set(info.signature, append(tagsToSignature.get(info.signature), info.jsDocParameterTag));
+                    tagsToSignature.set(info.signature, ts.append(tagsToSignature.get(info.signature), info.jsDocParameterTag));
                 }
             });
 
             tagsToSignature.forEach((tags, signature) => {
                 if (context.fixId === deleteUnmatchedParameter) {
-                    const tagsSet = new Set(tags);
+                    const tagsSet = new ts.Set(tags);
                     changes.filterJSDocTags(signature.getSourceFile(), signature, t => !tagsSet.has(t));
                 }
             });
@@ -41,60 +41,60 @@ registerCodeFix({
     }
 });
 
-function getDeleteAction(context: CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
-    const changes = textChanges.ChangeTracker.with(context, changeTracker =>
+function getDeleteAction(context: ts.CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
+    const changes = ts.textChanges.ChangeTracker.with(context, changeTracker =>
         changeTracker.filterJSDocTags(context.sourceFile, signature, t => t !== jsDocParameterTag));
-    return createCodeFixAction(
+    return ts.codefix.createCodeFixAction(
         deleteUnmatchedParameter,
         changes,
-        [Diagnostics.Delete_unused_param_tag_0, name.getText(context.sourceFile)],
+        [ts.Diagnostics.Delete_unused_param_tag_0, name.getText(context.sourceFile)],
         deleteUnmatchedParameter,
-        Diagnostics.Delete_all_unused_param_tags
+        ts.Diagnostics.Delete_all_unused_param_tags
     );
 }
 
-function getRenameAction(context: CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
-    if (!length(signature.parameters)) return undefined;
+function getRenameAction(context: ts.CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
+    if (!ts.length(signature.parameters)) return undefined;
 
     const sourceFile = context.sourceFile;
-    const tags = getJSDocTags(signature);
-    const names = new Set<__String>();
+    const tags = ts.getJSDocTags(signature);
+    const names = new ts.Set<ts.__String>();
     for (const tag of tags) {
-        if (isJSDocParameterTag(tag) && isIdentifier(tag.name)) {
+        if (ts.isJSDocParameterTag(tag) && ts.isIdentifier(tag.name)) {
             names.add(tag.name.escapedText);
         }
     }
     // @todo - match to all available names instead to the first parameter name
     // @see /codeFixRenameUnmatchedParameter3.ts
-    const parameterName = firstDefined(signature.parameters, p =>
-        isIdentifier(p.name) && !names.has(p.name.escapedText) ? p.name.getText(sourceFile) : undefined);
+    const parameterName = ts.firstDefined(signature.parameters, p =>
+        ts.isIdentifier(p.name) && !names.has(p.name.escapedText) ? p.name.getText(sourceFile) : undefined);
     if (parameterName === undefined) return undefined;
 
-    const newJSDocParameterTag = factory.updateJSDocParameterTag(
+    const newJSDocParameterTag = ts.factory.updateJSDocParameterTag(
         jsDocParameterTag,
         jsDocParameterTag.tagName,
-        factory.createIdentifier(parameterName),
+        ts.factory.createIdentifier(parameterName),
         jsDocParameterTag.isBracketed,
         jsDocParameterTag.typeExpression,
         jsDocParameterTag.isNameFirst,
         jsDocParameterTag.comment
     );
-    const changes = textChanges.ChangeTracker.with(context, changeTracker =>
-        changeTracker.replaceJSDocComment(sourceFile, signature, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)));
-    return createCodeFixActionWithoutFixAll(renameUnmatchedParameter, changes, [Diagnostics.Rename_param_tag_name_0_to_1, name.getText(sourceFile), parameterName]);
+    const changes = ts.textChanges.ChangeTracker.with(context, changeTracker =>
+        changeTracker.replaceJSDocComment(sourceFile, signature, ts.map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)));
+    return ts.codefix.createCodeFixActionWithoutFixAll(renameUnmatchedParameter, changes, [ts.Diagnostics.Rename_param_tag_name_0_to_1, name.getText(sourceFile), parameterName]);
 }
 
 interface Info {
-    readonly signature: SignatureDeclaration;
-    readonly jsDocParameterTag: JSDocParameterTag;
-    readonly name: Identifier;
+    readonly signature: ts.SignatureDeclaration;
+    readonly jsDocParameterTag: ts.JSDocParameterTag;
+    readonly name: ts.Identifier;
 }
 
-function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
-    const token = getTokenAtPosition(sourceFile, pos);
-    if (token.parent && isJSDocParameterTag(token.parent) && isIdentifier(token.parent.name)) {
+function getInfo(sourceFile: ts.SourceFile, pos: number): Info | undefined {
+    const token = ts.getTokenAtPosition(sourceFile, pos);
+    if (token.parent && ts.isJSDocParameterTag(token.parent) && ts.isIdentifier(token.parent.name)) {
         const jsDocParameterTag = token.parent;
-        const signature = getHostSignatureFromJSDoc(jsDocParameterTag);
+        const signature = ts.getHostSignatureFromJSDoc(jsDocParameterTag);
         if (signature) {
             return { signature, name: token.parent.name, jsDocParameterTag };
         }

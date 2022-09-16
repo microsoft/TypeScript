@@ -1,8 +1,8 @@
 namespace ts {
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
-    function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine, workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics) {
-        const parsed = parseCommandLineWorker(workerDiagnostic?.() || compilerOptionsDidYouMeanDiagnostics, commandLine);
+    function assertParseResult(commandLine: string[], expectedParsedCommandLine: ts.ParsedCommandLine, workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
+        const parsed = ts.parseCommandLineWorker(workerDiagnostic?.() || ts.compilerOptionsDidYouMeanDiagnostics, commandLine);
         assert.deepEqual(parsed.options, expectedParsedCommandLine.options);
         assert.deepEqual(parsed.watchOptions, expectedParsedCommandLine.watchOptions);
 
@@ -52,8 +52,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         assertParseResult(buildFlags, {
             errors: buildFlags.map(buildFlag => ({
                 messageText: `Compiler option '${buildFlag}' may only be used with '--build'.`,
-                category: Diagnostics.Compiler_option_0_may_only_be_used_with_build.category,
-                code: Diagnostics.Compiler_option_0_may_only_be_used_with_build.code,
+                category: ts.Diagnostics.Compiler_option_0_may_only_be_used_with_build.category,
+                code: ts.Diagnostics.Compiler_option_0_may_only_be_used_with_build.code,
                 file: undefined,
                 start: undefined,
                 length: undefined
@@ -69,16 +69,16 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             errors: [
                 {
                     messageText: "Unknown compiler option '--declarations'. Did you mean 'declaration'?",
-                    category: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
-                    code: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
+                    category: ts.Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
+                    code: ts.Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
                     file: undefined,
                     start: undefined,
                     length: undefined
                 },
                 {
                     messageText: "Unknown compiler option '--allowTS'. Did you mean 'allowJs'?",
-                    category: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
-                    code: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
+                    category: ts.Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.category,
+                    code: ts.Diagnostics.Unknown_compiler_option_0_Did_you_mean_1.code,
                     file: undefined,
                     start: undefined,
                     length: undefined
@@ -108,8 +108,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6' [...]",
-                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     file: undefined,
                     start: undefined,
                     length: undefined,
@@ -126,16 +126,16 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Compiler option 'jsx' expects an argument.",
-                    category: Diagnostics.Compiler_option_0_expects_an_argument.category,
-                    code: Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                    code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                     file: undefined,
                     start: undefined,
                     length: undefined,
                 }, {
                     messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react', 'react-jsx', 'react-jsxdev'.",
-                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                     file: undefined,
                     start: undefined,
@@ -152,16 +152,16 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Compiler option 'module' expects an argument.",
-                    category: Diagnostics.Compiler_option_0_expects_an_argument.category,
-                    code: Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                    code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                     file: undefined,
                     start: undefined,
                     length: undefined,
                 }, {
                     messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node16', 'nodenext'.",
-                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                     file: undefined,
                     start: undefined,
@@ -178,16 +178,16 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Compiler option 'newLine' expects an argument.",
-                    category: Diagnostics.Compiler_option_0_expects_an_argument.category,
-                    code: Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                    code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                     file: undefined,
                     start: undefined,
                     length: undefined,
                 }, {
                     messageText: "Argument for '--newLine' option must be: 'crlf', 'lf'.",
-                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                     file: undefined,
                     start: undefined,
@@ -204,16 +204,16 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Compiler option 'target' expects an argument.",
-                    category: Diagnostics.Compiler_option_0_expects_an_argument.category,
-                    code: Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                    code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                     file: undefined,
                     start: undefined,
                     length: undefined,
                 }, {
                     messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext'.",
-                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                     file: undefined,
                     start: undefined,
@@ -230,16 +230,16 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Compiler option 'moduleResolution' expects an argument.",
-                    category: Diagnostics.Compiler_option_0_expects_an_argument.category,
-                    code: Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                    code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                     file: undefined,
                     start: undefined,
                     length: undefined,
                 }, {
                     messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic', 'node16', 'nodenext'.",
-                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                     file: undefined,
                     start: undefined,
@@ -256,8 +256,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Compiler option 'lib' expects an argument.",
-                    category: Diagnostics.Compiler_option_0_expects_an_argument.category,
-                    code: Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                    code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                     file: undefined,
                     start: undefined,
@@ -277,8 +277,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Compiler option 'lib' expects an argument.",
-                    category: Diagnostics.Compiler_option_0_expects_an_argument.category,
-                    code: Diagnostics.Compiler_option_0_expects_an_argument.code,
+                    category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                    code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
 
                     file: undefined,
                     start: undefined,
@@ -310,8 +310,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6' [...].",
-                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     file: undefined,
                     start: undefined,
                     length: undefined,
@@ -329,8 +329,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             {
                 errors: [{
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6', [...]",
-                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     file: undefined,
                     start: undefined,
                     length: undefined,
@@ -350,7 +350,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 fileNames: ["0.ts"],
                 options: {
                     lib: ["lib.es5.d.ts", "lib.es2015.symbol.wellknown.d.ts"],
-                    target: ScriptTarget.ES5,
+                    target: ts.ScriptTarget.ES5,
                 }
             });
     });
@@ -362,8 +362,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
-                    module: ModuleKind.CommonJS,
-                    target: ScriptTarget.ES5,
+                    module: ts.ModuleKind.CommonJS,
+                    target: ts.ScriptTarget.ES5,
                     lib: ["lib.es5.d.ts", "lib.es2015.symbol.wellknown.d.ts"],
                 }
             });
@@ -376,8 +376,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
-                    module: ModuleKind.CommonJS,
-                    target: ScriptTarget.ES5,
+                    module: ts.ModuleKind.CommonJS,
+                    target: ts.ScriptTarget.ES5,
                     lib: ["lib.es2015.core.d.ts", "lib.es2015.symbol.wellknown.d.ts"],
                 }
             });
@@ -440,8 +440,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         interface VerifyNull {
             optionName: string;
             nonNullValue?: string;
-            workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics;
-            diagnosticMessage: DiagnosticMessage;
+            workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics;
+            diagnosticMessage: ts.DiagnosticMessage;
         }
         function verifyNull({ optionName, nonNullValue, workerDiagnostic, diagnosticMessage }: VerifyNull) {
             it("allows setting it to null", () => {
@@ -462,7 +462,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                         [`--${optionName}`, nonNullValue, "0.ts"],
                         {
                             errors: [{
-                                messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
+                                messageText: ts.formatStringFromArgs(diagnosticMessage.message, [optionName]),
                                 category: diagnosticMessage.category,
                                 code: diagnosticMessage.code,
                                 file: undefined,
@@ -482,7 +482,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                     ["0.ts", "--strictNullChecks", `--${optionName}`],
                     {
                         errors: [{
-                            messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
+                            messageText: ts.formatStringFromArgs(diagnosticMessage.message, [optionName]),
                             category: diagnosticMessage.category,
                             code: diagnosticMessage.code,
                             file: undefined,
@@ -501,7 +501,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                     ["0.ts", `--${optionName}`],
                     {
                         errors: [{
-                            messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
+                            messageText: ts.formatStringFromArgs(diagnosticMessage.message, [optionName]),
                             category: diagnosticMessage.category,
                             code: diagnosticMessage.code,
                             file: undefined,
@@ -517,30 +517,30 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         }
 
         interface VerifyNullNonIncludedOption {
-            type: () => "string" | "number" | ESMap<string, number | string>;
+            type: () => "string" | "number" | ts.ESMap<string, number | string>;
             nonNullValue?: string;
         }
         function verifyNullNonIncludedOption({ type, nonNullValue }: VerifyNullNonIncludedOption) {
             verifyNull({
                 optionName: "optionName",
                 nonNullValue,
-                diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line,
+                diagnosticMessage: ts.Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line,
                 workerDiagnostic: () => {
-                    const optionDeclarations: CommandLineOption[] = [
-                        ...compilerOptionsDidYouMeanDiagnostics.optionDeclarations,
+                    const optionDeclarations: ts.CommandLineOption[] = [
+                        ...ts.compilerOptionsDidYouMeanDiagnostics.optionDeclarations,
                         {
                             name: "optionName",
                             type: type(),
                             isTSConfigOnly: true,
-                            category: Diagnostics.Backwards_Compatibility,
-                            description: Diagnostics.Enable_project_compilation,
+                            category: ts.Diagnostics.Backwards_Compatibility,
+                            description: ts.Diagnostics.Enable_project_compilation,
                             defaultValueDescription: undefined,
                         }
                     ];
                     return {
-                        ...compilerOptionsDidYouMeanDiagnostics,
+                        ...ts.compilerOptionsDidYouMeanDiagnostics,
                         optionDeclarations,
-                        getOptionsNameMap: () => createOptionNameMap(optionDeclarations)
+                        getOptionsNameMap: () => ts.createOptionNameMap(optionDeclarations)
                     };
                 }
             });
@@ -561,14 +561,14 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             verifyNull({
                 optionName: "composite",
                 nonNullValue: "true",
-                diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line
+                diagnosticMessage: ts.Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_false_or_null_on_command_line
             });
         });
 
         describe("option of type object", () => {
             verifyNull({
                 optionName: "paths",
-                diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line
+                diagnosticMessage: ts.Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line
             });
         });
 
@@ -576,7 +576,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             verifyNull({
                 optionName: "rootDirs",
                 nonNullValue: "abc,xyz",
-                diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line
+                diagnosticMessage: ts.Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line
             });
         });
 
@@ -596,9 +596,9 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         describe("option of type Map<number | string>", () => {
             verifyNullNonIncludedOption({
-                type: () => new Map(getEntries({
-                    node: ModuleResolutionKind.NodeJs,
-                    classic: ModuleResolutionKind.Classic,
+                type: () => new ts.Map(ts.getEntries({
+                    node: ts.ModuleResolutionKind.NodeJs,
+                    classic: ts.ModuleResolutionKind.Classic,
                 })),
                 nonNullValue: "node"
             });
@@ -621,7 +621,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
-                    watchOptions: { watchFile: WatchFileKind.UseFsEvents }
+                    watchOptions: { watchFile: ts.WatchFileKind.UseFsEvents }
                 });
         });
 
@@ -631,7 +631,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
-                    watchOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
+                    watchOptions: { watchDirectory: ts.WatchDirectoryKind.FixedPollingInterval }
                 });
         });
 
@@ -641,7 +641,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
-                    watchOptions: { fallbackPolling: PollingWatchKind.PriorityInterval }
+                    watchOptions: { fallbackPolling: ts.PollingWatchKind.PriorityInterval }
                 });
         });
 
@@ -661,16 +661,16 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                     errors: [
                         {
                             messageText: "Watch option 'fallbackPolling' requires a value of type string.",
-                            category: Diagnostics.Watch_option_0_requires_a_value_of_type_1.category,
-                            code: Diagnostics.Watch_option_0_requires_a_value_of_type_1.code,
+                            category: ts.Diagnostics.Watch_option_0_requires_a_value_of_type_1.category,
+                            code: ts.Diagnostics.Watch_option_0_requires_a_value_of_type_1.code,
                             file: undefined,
                             start: undefined,
                             length: undefined
                         },
                         {
                             messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority', 'fixedchunksize'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                             file: undefined,
                             start: undefined,
                             length: undefined
@@ -698,8 +698,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                     errors: [
                         {
                             messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
-                            category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
-                            code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                            category: ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                            code: ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
                             file: undefined,
                             start: undefined,
                             length: undefined
@@ -727,8 +727,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                     errors: [
                         {
                             messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
-                            category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
-                            code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                            category: ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                            code: ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
                             file: undefined,
                             start: undefined,
                             length: undefined
@@ -743,8 +743,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 });
 
 describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
-    function assertParseResult(commandLine: string[], expectedParsedBuildCommand: ParsedBuildCommand) {
-        const parsed = parseBuildCommand(commandLine);
+    function assertParseResult(commandLine: string[], expectedParsedBuildCommand: ts.ParsedBuildCommand) {
+        const parsed = ts.parseBuildCommand(commandLine);
         assert.deepEqual(parsed.buildOptions, expectedParsedBuildCommand.buildOptions);
         assert.deepEqual(parsed.watchOptions, expectedParsedBuildCommand.watchOptions);
 
@@ -791,8 +791,8 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
             {
                 errors: [{
                     messageText: "Unknown build option '--invalidOption'.",
-                    category: Diagnostics.Unknown_build_option_0.category,
-                    code: Diagnostics.Unknown_build_option_0.code,
+                    category: ts.Diagnostics.Unknown_build_option_0.category,
+                    code: ts.Diagnostics.Unknown_build_option_0.code,
                     file: undefined,
                     start: undefined,
                     length: undefined,
@@ -809,8 +809,8 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
             {
                 errors: [{
                     messageText: "Compiler option '--listFilesOnly' may not be used with '--build'.",
-                    category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
-                    code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
+                    category: ts.Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                    code: ts.Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
                     file: undefined,
                     start: undefined,
                     length: undefined,
@@ -882,8 +882,8 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
             {
                 errors: [{
                     messageText: "Compiler option '--tsBuildInfoFile' may not be used with '--build'.",
-                    category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
-                    code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
+                    category: ts.Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                    code: ts.Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
                     file: undefined,
                     start: undefined,
                     length: undefined
@@ -900,8 +900,8 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         assertParseResult(buildFlags, {
             errors: buildFlags.map(buildFlag => ({
                 messageText: `Compiler option '${buildFlag}' may not be used with '--build'.`,
-                category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
-                code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
+                category: ts.Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                code: ts.Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
                 file: undefined,
                 start: undefined,
                 length: undefined
@@ -913,15 +913,15 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
     });
 
     describe("Combining options that make no sense together", () => {
-        function verifyInvalidCombination(flag1: keyof BuildOptions, flag2: keyof BuildOptions) {
+        function verifyInvalidCombination(flag1: keyof ts.BuildOptions, flag2: keyof ts.BuildOptions) {
             it(`--${flag1} and --${flag2} together is invalid`, () => {
                 // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
                 assertParseResult([`--${flag1}`, `--${flag2}`],
                     {
                         errors: [{
                             messageText: `Options '${flag1}' and '${flag2}' cannot be combined.`,
-                            category: Diagnostics.Options_0_and_1_cannot_be_combined.category,
-                            code: Diagnostics.Options_0_and_1_cannot_be_combined.code,
+                            category: ts.Diagnostics.Options_0_and_1_cannot_be_combined.category,
+                            code: ts.Diagnostics.Options_0_and_1_cannot_be_combined.code,
                             file: undefined,
                             start: undefined,
                             length: undefined,
@@ -946,7 +946,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
                     errors: [],
                     projects: ["."],
                     buildOptions: { verbose: true },
-                    watchOptions: { watchFile: WatchFileKind.UseFsEvents }
+                    watchOptions: { watchFile: ts.WatchFileKind.UseFsEvents }
                 });
         });
 
@@ -956,7 +956,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
                     errors: [],
                     projects: ["."],
                     buildOptions: { verbose: true },
-                    watchOptions: { watchDirectory: WatchDirectoryKind.FixedPollingInterval }
+                    watchOptions: { watchDirectory: ts.WatchDirectoryKind.FixedPollingInterval }
                 });
         });
 
@@ -966,7 +966,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
                     errors: [],
                     projects: ["."],
                     buildOptions: { verbose: true },
-                    watchOptions: { fallbackPolling: PollingWatchKind.PriorityInterval }
+                    watchOptions: { fallbackPolling: ts.PollingWatchKind.PriorityInterval }
                 });
         });
 
@@ -986,16 +986,16 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
                     errors: [
                         {
                             messageText: "Watch option 'fallbackPolling' requires a value of type string.",
-                            category: Diagnostics.Watch_option_0_requires_a_value_of_type_1.category,
-                            code: Diagnostics.Watch_option_0_requires_a_value_of_type_1.code,
+                            category: ts.Diagnostics.Watch_option_0_requires_a_value_of_type_1.category,
+                            code: ts.Diagnostics.Watch_option_0_requires_a_value_of_type_1.code,
                             file: undefined,
                             start: undefined,
                             length: undefined
                         },
                         {
                             messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority', 'fixedchunksize'.",
-                            category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                            code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                             file: undefined,
                             start: undefined,
                             length: undefined
@@ -1013,8 +1013,8 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
                     errors: [
                         {
                             messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
-                            category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
-                            code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                            category: ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                            code: ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
                             file: undefined,
                             start: undefined,
                             length: undefined
@@ -1042,8 +1042,8 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
                     errors: [
                         {
                             messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
-                            category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
-                            code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                            category: ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                            code: ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
                             file: undefined,
                             start: undefined,
                             length: undefined

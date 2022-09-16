@@ -1,10 +1,10 @@
 /*@internal*/
 /** Performance measurements for the compiler. */
 namespace ts.performance {
-let perfHooks: PerformanceHooks | undefined;
+let perfHooks: ts.PerformanceHooks | undefined;
 // when set, indicates the implementation of `Performance` to use for user timing.
 // when unset, indicates user timing is unavailable or disabled.
-let performanceImpl: Performance | undefined;
+let performanceImpl: ts.Performance | undefined;
 
 export interface Timer {
     enter(): void;
@@ -34,18 +34,18 @@ export function createTimer(measureName: string, startMarkName: string, endMarkN
             measure(measureName, startMarkName, endMarkName);
         }
         else if (enterCount < 0) {
-            Debug.fail("enter/exit count does not match.");
+            ts.Debug.fail("enter/exit count does not match.");
         }
     }
 }
 
-export const nullTimer: Timer = { enter: noop, exit: noop };
+export const nullTimer: Timer = { enter: ts.noop, exit: ts.noop };
 
 let enabled = false;
-let timeorigin = timestamp();
-const marks = new Map<string, number>();
-const counts = new Map<string, number>();
-const durations = new Map<string, number>();
+let timeorigin = ts.timestamp();
+const marks = new ts.Map<string, number>();
+const counts = new ts.Map<string, number>();
+const durations = new ts.Map<string, number>();
 
 /**
  * Marks a performance event.
@@ -56,7 +56,7 @@ export function mark(markName: string) {
     if (enabled) {
         const count = counts.get(markName) ?? 0;
         counts.set(markName, count + 1);
-        marks.set(markName, timestamp());
+        marks.set(markName, ts.timestamp());
         performanceImpl?.mark(markName);
     }
 }
@@ -72,7 +72,7 @@ export function mark(markName: string) {
  */
 export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
     if (enabled) {
-        const end = (endMarkName !== undefined ? marks.get(endMarkName) : undefined) ?? timestamp();
+        const end = (endMarkName !== undefined ? marks.get(endMarkName) : undefined) ?? ts.timestamp();
         const start = (startMarkName !== undefined ? marks.get(startMarkName) : undefined) ?? timeorigin;
         const previousDuration = durations.get(measureName) || 0;
         durations.set(measureName, previousDuration + (end - start));
@@ -137,10 +137,10 @@ export function isEnabled() {
 }
 
 /** Enables (and resets) performance measurements for the compiler. */
-export function enable(system: System = sys) {
+export function enable(system: ts.System = ts.sys) {
     if (!enabled) {
         enabled = true;
-        perfHooks ||= tryGetNativePerformanceHooks();
+        perfHooks ||= ts.tryGetNativePerformanceHooks();
         if (perfHooks) {
             timeorigin = perfHooks.performance.timeOrigin;
             // NodeJS's Web Performance API is currently slower than expected, but we'd still like

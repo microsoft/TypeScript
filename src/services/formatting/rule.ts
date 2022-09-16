@@ -8,8 +8,8 @@ export interface Rule {
     readonly flags: RuleFlags;
 }
 
-export type ContextPredicate = (context: FormattingContext) => boolean;
-export const anyContext: readonly ContextPredicate[] = emptyArray;
+export type ContextPredicate = (context: ts.formatting.FormattingContext) => boolean;
+export const anyContext: readonly ContextPredicate[] = ts.emptyArray;
 
 export const enum RuleAction {
     StopProcessingSpaceActions = 1 << 0,
@@ -31,7 +31,7 @@ export const enum RuleFlags {
 }
 
 export interface TokenRange {
-    readonly tokens: readonly SyntaxKind[];
+    readonly tokens: readonly ts.SyntaxKind[];
     readonly isSpecific: boolean;
 }
 }

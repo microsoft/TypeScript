@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.formatting {
-export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {
+export function getFormatContext(options: ts.FormatCodeSettings, host: ts.FormattingHost): ts.formatting.FormatContext {
     return { options, getRules: getRulesMap(), host };
 }
 
@@ -8,7 +8,7 @@ let rulesMapCache: RulesMap | undefined;
 
 function getRulesMap(): RulesMap {
     if (rulesMapCache === undefined) {
-        rulesMapCache = createRulesMap(getAllRules());
+        rulesMapCache = createRulesMap(ts.formatting.getAllRules());
     }
     return rulesMapCache;
 }
@@ -17,34 +17,34 @@ function getRulesMap(): RulesMap {
  * For a given rule action, gets a mask of other rule actions that
  * cannot be applied at the same position.
  */
-function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
-    let mask: RuleAction = 0;
-    if (ruleAction & RuleAction.StopProcessingSpaceActions) {
-        mask |= RuleAction.ModifySpaceAction;
+function getRuleActionExclusion(ruleAction: ts.formatting.RuleAction): ts.formatting.RuleAction {
+    let mask: ts.formatting.RuleAction = 0;
+    if (ruleAction & ts.formatting.RuleAction.StopProcessingSpaceActions) {
+        mask |= ts.formatting.RuleAction.ModifySpaceAction;
     }
-    if (ruleAction & RuleAction.StopProcessingTokenActions) {
-        mask |= RuleAction.ModifyTokenAction;
+    if (ruleAction & ts.formatting.RuleAction.StopProcessingTokenActions) {
+        mask |= ts.formatting.RuleAction.ModifyTokenAction;
     }
-    if (ruleAction & RuleAction.ModifySpaceAction) {
-        mask |= RuleAction.ModifySpaceAction;
+    if (ruleAction & ts.formatting.RuleAction.ModifySpaceAction) {
+        mask |= ts.formatting.RuleAction.ModifySpaceAction;
     }
-    if (ruleAction & RuleAction.ModifyTokenAction) {
-        mask |= RuleAction.ModifyTokenAction;
+    if (ruleAction & ts.formatting.RuleAction.ModifyTokenAction) {
+        mask |= ts.formatting.RuleAction.ModifyTokenAction;
     }
     return mask;
 }
 
-export type RulesMap = (context: FormattingContext) => readonly Rule[] | undefined;
-function createRulesMap(rules: readonly RuleSpec[]): RulesMap {
+export type RulesMap = (context: ts.formatting.FormattingContext) => readonly ts.formatting.Rule[] | undefined;
+function createRulesMap(rules: readonly ts.formatting.RuleSpec[]): RulesMap {
     const map = buildMap(rules);
     return context => {
         const bucket = map[getRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind)];
         if (bucket) {
-            const rules: Rule[] = [];
-            let ruleActionMask: RuleAction = 0;
+            const rules: ts.formatting.Rule[] = [];
+            let ruleActionMask: ts.formatting.RuleAction = 0;
             for (const rule of bucket) {
                 const acceptRuleActions = ~getRuleActionExclusion(ruleActionMask);
-                if (rule.action & acceptRuleActions && every(rule.context, c => c(context))) {
+                if (rule.action & acceptRuleActions && ts.every(rule.context, c => c(context))) {
                     rules.push(rule);
                     ruleActionMask |= rule.action;
                 }
@@ -56,9 +56,9 @@ function createRulesMap(rules: readonly RuleSpec[]): RulesMap {
     };
 }
 
-function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
+function buildMap(rules: readonly ts.formatting.RuleSpec[]): readonly (readonly ts.formatting.Rule[])[] {
     // Map from bucket index to array of rules
-    const map: Rule[][] = new Array(mapRowLength * mapRowLength);
+    const map: ts.formatting.Rule[][] = new Array(mapRowLength * mapRowLength);
     // This array is used only during construction of the rulesbucket in the map
     const rulesBucketConstructionStateList = new Array<number>(map.length);
     for (const rule of rules) {
@@ -79,13 +79,13 @@ function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
 }
 
 function getRuleBucketIndex(row: number, column: number): number {
-    Debug.assert(row <= SyntaxKind.LastKeyword && column <= SyntaxKind.LastKeyword, "Must compute formatting context from tokens");
+    ts.Debug.assert(row <= ts.SyntaxKind.LastKeyword && column <= ts.SyntaxKind.LastKeyword, "Must compute formatting context from tokens");
     return (row * mapRowLength) + column;
 }
 
 const maskBitSize = 5;
 const mask = 0b11111; // MaskBitSize bits
-const mapRowLength = SyntaxKind.LastToken + 1;
+const mapRowLength = ts.SyntaxKind.LastToken + 1;
 
 enum RulesPosition {
     StopRulesSpecific = 0,
@@ -111,10 +111,10 @@ enum RulesPosition {
 // Example:
 // In order to insert a rule to the end of sub-bucket (3), we get the index by adding
 // the values in the bitmap segments 3rd, 2nd, and 1st.
-function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructionState: number[], rulesBucketIndex: number): void {
-    const position = rule.action & RuleAction.StopAction ?
+function addRule(rules: ts.formatting.Rule[], rule: ts.formatting.Rule, specificTokens: boolean, constructionState: number[], rulesBucketIndex: number): void {
+    const position = rule.action & ts.formatting.RuleAction.StopAction ?
         specificTokens ? RulesPosition.StopRulesSpecific : RulesPosition.StopRulesAny :
-        rule.context !== anyContext ?
+        rule.context !== ts.formatting.anyContext ?
             specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny :
             specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
 
@@ -134,7 +134,7 @@ function getInsertionIndex(indexBitmap: number, maskPosition: RulesPosition) {
 
 function increaseInsertionIndex(indexBitmap: number, maskPosition: RulesPosition): number {
     const value = ((indexBitmap >> maskPosition) & mask) + 1;
-    Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
+    ts.Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
     return (indexBitmap & ~(mask << maskPosition)) | (value << maskPosition);
 }
 }

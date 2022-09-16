@@ -1,28 +1,28 @@
 namespace ts.projectSystem {
 describe("unittests:: tsserver:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;
-    const file: File = {
-        path: `${tscWatch.projectRoot}/index.ts`,
+    const file: ts.projectSystem.File = {
+        path: `${ts.tscWatch.projectRoot}/index.ts`,
         content: importModuleContent
     };
-    const moduleFile: File = {
-        path: `${tscWatch.projectRoot}/module1.d.ts`,
+    const moduleFile: ts.projectSystem.File = {
+        path: `${ts.tscWatch.projectRoot}/module1.d.ts`,
         content: "export const a: number;"
     };
-    const configFile: File = {
-        path: `${tscWatch.projectRoot}/tsconfig.json`,
+    const configFile: ts.projectSystem.File = {
+        path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
         content: JSON.stringify({ files: ["index.ts"] })
     };
 
-    function getProject(service: TestProjectService) {
+    function getProject(service: ts.projectSystem.TestProjectService) {
         return service.configuredProjects.get(configFile.path)!;
     }
 
-    function checkProject(service: TestProjectService, moduleIsOrphan: boolean) {
+    function checkProject(service: ts.projectSystem.TestProjectService, moduleIsOrphan: boolean) {
         // Update the project
         const project = getProject(service);
         project.getLanguageService();
-        checkProjectActualFiles(project, [file.path, libFile.path, configFile.path, ...(moduleIsOrphan ? [] : [moduleFile.path])]);
+        ts.projectSystem.checkProjectActualFiles(project, [file.path, ts.projectSystem.libFile.path, configFile.path, ...(moduleIsOrphan ? [] : [moduleFile.path])]);
         const moduleInfo = service.getScriptInfo(moduleFile.path)!;
         assert.isDefined(moduleInfo);
         assert.equal(moduleInfo.isOrphan(), moduleIsOrphan);
@@ -31,22 +31,22 @@ describe("unittests:: tsserver:: document registry in project service", () => {
     }
 
     function createServiceAndHost() {
-        const host = createServerHost([file, moduleFile, libFile, configFile]);
-        const service = createProjectService(host);
+        const host = ts.projectSystem.createServerHost([file, moduleFile, ts.projectSystem.libFile, configFile]);
+        const service = ts.projectSystem.createProjectService(host);
         service.openClientFile(file.path);
         checkProject(service, /*moduleIsOrphan*/ false);
         return { host, service };
     }
 
-    function changeFileToNotImportModule(service: TestProjectService) {
+    function changeFileToNotImportModule(service: ts.projectSystem.TestProjectService) {
         const info = service.getScriptInfo(file.path)!;
-        service.applyChangesToFile(info, singleIterator({ span: { start: 0, length: importModuleContent.length }, newText: "" }));
+        service.applyChangesToFile(info, ts.singleIterator({ span: { start: 0, length: importModuleContent.length }, newText: "" }));
         checkProject(service, /*moduleIsOrphan*/ true);
     }
 
-    function changeFileToImportModule(service: TestProjectService) {
+    function changeFileToImportModule(service: ts.projectSystem.TestProjectService) {
         const info = service.getScriptInfo(file.path)!;
-        service.applyChangesToFile(info, singleIterator({ span: { start: 0, length: 0 }, newText: importModuleContent }));
+        service.applyChangesToFile(info, ts.singleIterator({ span: { start: 0, length: 0 }, newText: importModuleContent }));
         checkProject(service, /*moduleIsOrphan*/ false);
     }
 

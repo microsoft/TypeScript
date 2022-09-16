@@ -135,7 +135,7 @@ const enum OpCode {
     Endfinally              // Marks the end of a `finally` block
 }
 
-type OperationArguments = [Label] | [Label, Expression] | [Statement] | [Expression | undefined] | [Expression, Expression];
+type OperationArguments = [Label] | [Label, ts.Expression] | [ts.Statement] | [ts.Expression | undefined] | [ts.Expression, ts.Expression];
 
 // whether a generated code block is opening or closing at the current operation for a FunctionBuilder
 const enum BlockAction {
@@ -168,7 +168,7 @@ interface ExceptionBlock {
     kind: CodeBlockKind.Exception;
     state: ExceptionBlockState;
     startLabel: Label;
-    catchVariable?: Identifier;
+    catchVariable?: ts.Identifier;
     catchLabel?: Label;
     finallyLabel?: Label;
     endLabel: Label;
@@ -200,7 +200,7 @@ interface LoopBlock {
 // a generated block associated with a 'with' statement
 interface WithBlock {
     kind: CodeBlockKind.With;
-    expression: Identifier;
+    expression: ts.Identifier;
     startLabel: Label;
     endLabel: Label;
 }
@@ -228,7 +228,7 @@ function getInstructionName(instruction: Instruction): string {
     }
 }
 
-export function transformGenerators(context: TransformationContext) {
+export function transformGenerators(context: ts.TransformationContext) {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -239,13 +239,13 @@ export function transformGenerators(context: TransformationContext) {
     } = context;
 
     const compilerOptions = context.getCompilerOptions();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
+    const languageVersion = ts.getEmitScriptTarget(compilerOptions);
     const resolver = context.getEmitResolver();
     const previousOnSubstituteNode = context.onSubstituteNode;
     context.onSubstituteNode = onSubstituteNode;
 
-    let renamedCatchVariables: ESMap<string, boolean>;
-    let renamedCatchVariableDeclarations: Identifier[];
+    let renamedCatchVariables: ts.ESMap<string, boolean>;
+    let renamedCatchVariableDeclarations: ts.Identifier[];
 
     let inGeneratorFunctionBody: boolean;
     let inStatementContainingYield: boolean;
@@ -265,7 +265,7 @@ export function transformGenerators(context: TransformationContext) {
     // allocating objects to store the same information to avoid GC overhead.
     //
     let labelOffsets: number[] | undefined; // The operation offset at which the label is defined.
-    let labelExpressions: Mutable<LiteralExpression>[][] | undefined; // The NumericLiteral nodes bound to each label.
+    let labelExpressions: ts.Mutable<ts.LiteralExpression>[][] | undefined; // The NumericLiteral nodes bound to each label.
     let nextLabelId = 1; // The next label id to use.
 
     // Operations store information about generated code for the function body. This
@@ -275,9 +275,9 @@ export function transformGenerators(context: TransformationContext) {
     //
     let operations: OpCode[] | undefined; // The operation to perform.
     let operationArguments: (OperationArguments | undefined)[] | undefined; // The arguments to the operation.
-    let operationLocations: (TextRange | undefined)[] | undefined; // The source map location for the operation.
+    let operationLocations: (ts.TextRange | undefined)[] | undefined; // The source map location for the operation.
 
-    let state: Identifier; // The name of the state object used by the generator at runtime.
+    let state: ts.Identifier; // The name of the state object used by the generator at runtime.
 
     // The following variables store information used by the `build` function:
     //
@@ -286,22 +286,22 @@ export function transformGenerators(context: TransformationContext) {
     let labelNumbers: number[][] | undefined;
     let lastOperationWasAbrupt: boolean; // Indicates whether the last operation was abrupt (break/continue).
     let lastOperationWasCompletion: boolean; // Indicates whether the last operation was a completion (return/throw).
-    let clauses: CaseClause[] | undefined; // The case clauses generated for labels.
-    let statements: Statement[] | undefined; // The statements for the current label.
+    let clauses: ts.CaseClause[] | undefined; // The case clauses generated for labels.
+    let statements: ts.Statement[] | undefined; // The statements for the current label.
     let exceptionBlockStack: ExceptionBlock[] | undefined; // A stack of containing exception blocks.
     let currentExceptionBlock: ExceptionBlock | undefined; // The current exception block.
     let withBlockStack: WithBlock[] | undefined; // A stack containing `with` blocks.
 
-    return chainBundle(context, transformSourceFile);
+    return ts.chainBundle(context, transformSourceFile);
 
-    function transformSourceFile(node: SourceFile) {
-        if (node.isDeclarationFile || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
+    function transformSourceFile(node: ts.SourceFile) {
+        if (node.isDeclarationFile || (node.transformFlags & ts.TransformFlags.ContainsGenerator) === 0) {
             return node;
         }
 
 
-        const visited = visitEachChild(node, visitor, context);
-        addEmitHelpers(visited, context.readEmitHelpers());
+        const visited = ts.visitEachChild(node, visitor, context);
+        ts.addEmitHelpers(visited, context.readEmitHelpers());
         return visited;
     }
 
@@ -310,7 +310,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
         const transformFlags = node.transformFlags;
         if (inStatementContainingYield) {
             return visitJavaScriptInStatementContainingYield(node);
@@ -318,11 +318,11 @@ export function transformGenerators(context: TransformationContext) {
         else if (inGeneratorFunctionBody) {
             return visitJavaScriptInGeneratorFunctionBody(node);
         }
-        else if (isFunctionLikeDeclaration(node) && node.asteriskToken) {
+        else if (ts.isFunctionLikeDeclaration(node) && node.asteriskToken) {
             return visitGenerator(node);
         }
-        else if (transformFlags & TransformFlags.ContainsGenerator) {
-            return visitEachChild(node, visitor, context);
+        else if (transformFlags & ts.TransformFlags.ContainsGenerator) {
+            return ts.visitEachChild(node, visitor, context);
         }
         else {
             return node;
@@ -334,16 +334,16 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitJavaScriptInStatementContainingYield(node: Node): VisitResult<Node> {
+    function visitJavaScriptInStatementContainingYield(node: ts.Node): ts.VisitResult<ts.Node> {
         switch (node.kind) {
-            case SyntaxKind.DoStatement:
-                return visitDoStatement(node as DoStatement);
-            case SyntaxKind.WhileStatement:
-                return visitWhileStatement(node as WhileStatement);
-            case SyntaxKind.SwitchStatement:
-                return visitSwitchStatement(node as SwitchStatement);
-            case SyntaxKind.LabeledStatement:
-                return visitLabeledStatement(node as LabeledStatement);
+            case ts.SyntaxKind.DoStatement:
+                return visitDoStatement(node as ts.DoStatement);
+            case ts.SyntaxKind.WhileStatement:
+                return visitWhileStatement(node as ts.WhileStatement);
+            case ts.SyntaxKind.SwitchStatement:
+                return visitSwitchStatement(node as ts.SwitchStatement);
+            case ts.SyntaxKind.LabeledStatement:
+                return visitLabeledStatement(node as ts.LabeledStatement);
             default:
                 return visitJavaScriptInGeneratorFunctionBody(node);
         }
@@ -354,33 +354,33 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitJavaScriptInGeneratorFunctionBody(node: Node): VisitResult<Node> {
+    function visitJavaScriptInGeneratorFunctionBody(node: ts.Node): ts.VisitResult<ts.Node> {
         switch (node.kind) {
-            case SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as FunctionDeclaration);
-            case SyntaxKind.FunctionExpression:
-                return visitFunctionExpression(node as FunctionExpression);
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return visitAccessorDeclaration(node as AccessorDeclaration);
-            case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
-            case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement);
-            case SyntaxKind.ForInStatement:
-                return visitForInStatement(node as ForInStatement);
-            case SyntaxKind.BreakStatement:
-                return visitBreakStatement(node as BreakStatement);
-            case SyntaxKind.ContinueStatement:
-                return visitContinueStatement(node as ContinueStatement);
-            case SyntaxKind.ReturnStatement:
-                return visitReturnStatement(node as ReturnStatement);
+            case ts.SyntaxKind.FunctionDeclaration:
+                return visitFunctionDeclaration(node as ts.FunctionDeclaration);
+            case ts.SyntaxKind.FunctionExpression:
+                return visitFunctionExpression(node as ts.FunctionExpression);
+            case ts.SyntaxKind.GetAccessor:
+            case ts.SyntaxKind.SetAccessor:
+                return visitAccessorDeclaration(node as ts.AccessorDeclaration);
+            case ts.SyntaxKind.VariableStatement:
+                return visitVariableStatement(node as ts.VariableStatement);
+            case ts.SyntaxKind.ForStatement:
+                return visitForStatement(node as ts.ForStatement);
+            case ts.SyntaxKind.ForInStatement:
+                return visitForInStatement(node as ts.ForInStatement);
+            case ts.SyntaxKind.BreakStatement:
+                return visitBreakStatement(node as ts.BreakStatement);
+            case ts.SyntaxKind.ContinueStatement:
+                return visitContinueStatement(node as ts.ContinueStatement);
+            case ts.SyntaxKind.ReturnStatement:
+                return visitReturnStatement(node as ts.ReturnStatement);
             default:
-                if (node.transformFlags & TransformFlags.ContainsYield) {
+                if (node.transformFlags & ts.TransformFlags.ContainsYield) {
                     return visitJavaScriptContainingYield(node);
                 }
-                else if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
-                    return visitEachChild(node, visitor, context);
+                else if (node.transformFlags & (ts.TransformFlags.ContainsGenerator | ts.TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
+                    return ts.visitEachChild(node, visitor, context);
                 }
                 else {
                     return node;
@@ -393,28 +393,28 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitJavaScriptContainingYield(node: Node): VisitResult<Node> {
+    function visitJavaScriptContainingYield(node: ts.Node): ts.VisitResult<ts.Node> {
         switch (node.kind) {
-            case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression);
-            case SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as CommaListExpression);
-            case SyntaxKind.ConditionalExpression:
-                return visitConditionalExpression(node as ConditionalExpression);
-            case SyntaxKind.YieldExpression:
-                return visitYieldExpression(node as YieldExpression);
-            case SyntaxKind.ArrayLiteralExpression:
-                return visitArrayLiteralExpression(node as ArrayLiteralExpression);
-            case SyntaxKind.ObjectLiteralExpression:
-                return visitObjectLiteralExpression(node as ObjectLiteralExpression);
-            case SyntaxKind.ElementAccessExpression:
-                return visitElementAccessExpression(node as ElementAccessExpression);
-            case SyntaxKind.CallExpression:
-                return visitCallExpression(node as CallExpression);
-            case SyntaxKind.NewExpression:
-                return visitNewExpression(node as NewExpression);
+            case ts.SyntaxKind.BinaryExpression:
+                return visitBinaryExpression(node as ts.BinaryExpression);
+            case ts.SyntaxKind.CommaListExpression:
+                return visitCommaListExpression(node as ts.CommaListExpression);
+            case ts.SyntaxKind.ConditionalExpression:
+                return visitConditionalExpression(node as ts.ConditionalExpression);
+            case ts.SyntaxKind.YieldExpression:
+                return visitYieldExpression(node as ts.YieldExpression);
+            case ts.SyntaxKind.ArrayLiteralExpression:
+                return visitArrayLiteralExpression(node as ts.ArrayLiteralExpression);
+            case ts.SyntaxKind.ObjectLiteralExpression:
+                return visitObjectLiteralExpression(node as ts.ObjectLiteralExpression);
+            case ts.SyntaxKind.ElementAccessExpression:
+                return visitElementAccessExpression(node as ts.ElementAccessExpression);
+            case ts.SyntaxKind.CallExpression:
+                return visitCallExpression(node as ts.CallExpression);
+            case ts.SyntaxKind.NewExpression:
+                return visitNewExpression(node as ts.NewExpression);
             default:
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
         }
     }
 
@@ -423,16 +423,16 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitGenerator(node: Node): VisitResult<Node> {
+    function visitGenerator(node: ts.Node): ts.VisitResult<ts.Node> {
         switch (node.kind) {
-            case SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as FunctionDeclaration);
+            case ts.SyntaxKind.FunctionDeclaration:
+                return visitFunctionDeclaration(node as ts.FunctionDeclaration);
 
-            case SyntaxKind.FunctionExpression:
-                return visitFunctionExpression(node as FunctionExpression);
+            case ts.SyntaxKind.FunctionExpression:
+                return visitFunctionExpression(node as ts.FunctionExpression);
 
             default:
-                return Debug.failBadSyntaxKind(node);
+                return ts.Debug.failBadSyntaxKind(node);
         }
     }
 
@@ -445,17 +445,17 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitFunctionDeclaration(node: FunctionDeclaration): Statement | undefined {
+    function visitFunctionDeclaration(node: ts.FunctionDeclaration): ts.Statement | undefined {
         // Currently, we only support generators that were originally async functions.
         if (node.asteriskToken) {
-            node = setOriginalNode(
-                setTextRange(
+            node = ts.setOriginalNode(
+                ts.setTextRange(
                     factory.createFunctionDeclaration(
                         node.modifiers,
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
-                        visitParameterList(node.parameters, visitor, context),
+                        ts.visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body!)
                     ),
@@ -469,7 +469,7 @@ export function transformGenerators(context: TransformationContext) {
             const savedInStatementContainingYield = inStatementContainingYield;
             inGeneratorFunctionBody = false;
             inStatementContainingYield = false;
-            node = visitEachChild(node, visitor, context);
+            node = ts.visitEachChild(node, visitor, context);
             inGeneratorFunctionBody = savedInGeneratorFunctionBody;
             inStatementContainingYield = savedInStatementContainingYield;
         }
@@ -494,17 +494,17 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitFunctionExpression(node: FunctionExpression): Expression {
+    function visitFunctionExpression(node: ts.FunctionExpression): ts.Expression {
         // Currently, we only support generators that were originally async functions.
         if (node.asteriskToken) {
-            node = setOriginalNode(
-                setTextRange(
+            node = ts.setOriginalNode(
+                ts.setTextRange(
                     factory.createFunctionExpression(
                         /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
                         node.name,
                         /*typeParameters*/ undefined,
-                        visitParameterList(node.parameters, visitor, context),
+                        ts.visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
                         transformGeneratorFunctionBody(node.body)
                     ),
@@ -518,7 +518,7 @@ export function transformGenerators(context: TransformationContext) {
             const savedInStatementContainingYield = inStatementContainingYield;
             inGeneratorFunctionBody = false;
             inStatementContainingYield = false;
-            node = visitEachChild(node, visitor, context);
+            node = ts.visitEachChild(node, visitor, context);
             inGeneratorFunctionBody = savedInGeneratorFunctionBody;
             inStatementContainingYield = savedInStatementContainingYield;
         }
@@ -534,12 +534,12 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitAccessorDeclaration(node: AccessorDeclaration) {
+    function visitAccessorDeclaration(node: ts.AccessorDeclaration) {
         const savedInGeneratorFunctionBody = inGeneratorFunctionBody;
         const savedInStatementContainingYield = inStatementContainingYield;
         inGeneratorFunctionBody = false;
         inStatementContainingYield = false;
-        node = visitEachChild(node, visitor, context);
+        node = ts.visitEachChild(node, visitor, context);
         inGeneratorFunctionBody = savedInGeneratorFunctionBody;
         inStatementContainingYield = savedInStatementContainingYield;
         return node;
@@ -550,9 +550,9 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The function body to transform.
      */
-    function transformGeneratorFunctionBody(body: Block) {
+    function transformGeneratorFunctionBody(body: ts.Block) {
         // Save existing generator state
-        const statements: Statement[] = [];
+        const statements: ts.Statement[] = [];
         const savedInGeneratorFunctionBody = inGeneratorFunctionBody;
         const savedInStatementContainingYield = inStatementContainingYield;
         const savedBlocks = blocks;
@@ -590,7 +590,7 @@ export function transformGenerators(context: TransformationContext) {
         transformAndEmitStatements(body.statements, statementOffset);
 
         const buildResult = build();
-        insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
+        ts.insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
         statements.push(factory.createReturnStatement(buildResult));
 
         // Restore previous generator state
@@ -608,7 +608,7 @@ export function transformGenerators(context: TransformationContext) {
         operationLocations = savedOperationLocations;
         state = savedState;
 
-        return setTextRange(factory.createBlock(statements, body.multiLine), body);
+        return ts.setTextRange(factory.createBlock(statements, body.multiLine), body);
     }
 
     /**
@@ -619,30 +619,30 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitVariableStatement(node: VariableStatement): Statement | undefined {
-        if (node.transformFlags & TransformFlags.ContainsYield) {
+    function visitVariableStatement(node: ts.VariableStatement): ts.Statement | undefined {
+        if (node.transformFlags & ts.TransformFlags.ContainsYield) {
             transformAndEmitVariableDeclarationList(node.declarationList);
             return undefined;
         }
         else {
             // Do not hoist custom prologues.
-            if (getEmitFlags(node) & EmitFlags.CustomPrologue) {
+            if (ts.getEmitFlags(node) & ts.EmitFlags.CustomPrologue) {
                 return node;
             }
 
             for (const variable of node.declarationList.declarations) {
-                hoistVariableDeclaration(variable.name as Identifier);
+                hoistVariableDeclaration(variable.name as ts.Identifier);
             }
 
-            const variables = getInitializedVariables(node.declarationList);
+            const variables = ts.getInitializedVariables(node.declarationList);
             if (variables.length === 0) {
                 return undefined;
             }
 
-            return setSourceMapRange(
+            return ts.setSourceMapRange(
                 factory.createExpressionStatement(
                     factory.inlineExpressions(
-                        map(variables, transformInitializedVariable)
+                        ts.map(variables, transformInitializedVariable)
                     )
                 ),
                 node
@@ -658,15 +658,15 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitBinaryExpression(node: BinaryExpression): Expression {
-        const assoc = getExpressionAssociativity(node);
+    function visitBinaryExpression(node: ts.BinaryExpression): ts.Expression {
+        const assoc = ts.getExpressionAssociativity(node);
         switch (assoc) {
-            case Associativity.Left:
+            case ts.Associativity.Left:
                 return visitLeftAssociativeBinaryExpression(node);
-            case Associativity.Right:
+            case ts.Associativity.Right:
                 return visitRightAssociativeBinaryExpression(node);
             default:
-                return Debug.assertNever(assoc);
+                return ts.Debug.assertNever(assoc);
         }
     }
 
@@ -675,12 +675,12 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitRightAssociativeBinaryExpression(node: BinaryExpression) {
+    function visitRightAssociativeBinaryExpression(node: ts.BinaryExpression) {
         const { left, right } = node;
         if (containsYield(right)) {
-            let target: Expression;
+            let target: ts.Expression;
             switch (left.kind) {
-                case SyntaxKind.PropertyAccessExpression:
+                case ts.SyntaxKind.PropertyAccessExpression:
                     // [source]
                     //      a.b = yield;
                     //
@@ -692,13 +692,13 @@ export function transformGenerators(context: TransformationContext) {
                     //      _a.b = %sent%;
 
                     target = factory.updatePropertyAccessExpression(
-                        left as PropertyAccessExpression,
-                        cacheExpression(visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression)),
-                        (left as PropertyAccessExpression).name
+                        left as ts.PropertyAccessExpression,
+                        cacheExpression(ts.visitNode((left as ts.PropertyAccessExpression).expression, visitor, ts.isLeftHandSideExpression)),
+                        (left as ts.PropertyAccessExpression).name
                     );
                     break;
 
-                case SyntaxKind.ElementAccessExpression:
+                case ts.SyntaxKind.ElementAccessExpression:
                     // [source]
                     //      a[b] = yield;
                     //
@@ -710,27 +710,27 @@ export function transformGenerators(context: TransformationContext) {
                     //  .mark resumeLabel
                     //      _a[_b] = %sent%;
 
-                    target = factory.updateElementAccessExpression(left as ElementAccessExpression,
-                        cacheExpression(visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression)),
-                        cacheExpression(visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression))
+                    target = factory.updateElementAccessExpression(left as ts.ElementAccessExpression,
+                        cacheExpression(ts.visitNode((left as ts.ElementAccessExpression).expression, visitor, ts.isLeftHandSideExpression)),
+                        cacheExpression(ts.visitNode((left as ts.ElementAccessExpression).argumentExpression, visitor, ts.isExpression))
                     );
                     break;
 
                 default:
-                    target = visitNode(left, visitor, isExpression);
+                    target = ts.visitNode(left, visitor, ts.isExpression);
                     break;
             }
 
             const operator = node.operatorToken.kind;
-            if (isCompoundAssignment(operator)) {
-                return setTextRange(
+            if (ts.isCompoundAssignment(operator)) {
+                return ts.setTextRange(
                     factory.createAssignment(
                         target,
-                        setTextRange(
+                        ts.setTextRange(
                             factory.createBinaryExpression(
                                 cacheExpression(target),
-                                getNonAssignmentOperatorForCompoundAssignment(operator),
-                                visitNode(right, visitor, isExpression)
+                                ts.getNonAssignmentOperatorForCompoundAssignment(operator),
+                                ts.visitNode(right, visitor, ts.isExpression)
                             ),
                             node
                         )
@@ -739,19 +739,19 @@ export function transformGenerators(context: TransformationContext) {
                 );
             }
             else {
-                return factory.updateBinaryExpression(node, target, node.operatorToken, visitNode(right, visitor, isExpression));
+                return factory.updateBinaryExpression(node, target, node.operatorToken, ts.visitNode(right, visitor, ts.isExpression));
             }
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitLeftAssociativeBinaryExpression(node: BinaryExpression) {
+    function visitLeftAssociativeBinaryExpression(node: ts.BinaryExpression) {
         if (containsYield(node.right)) {
-            if (isLogicalOperator(node.operatorToken.kind)) {
+            if (ts.isLogicalOperator(node.operatorToken.kind)) {
                 return visitLogicalBinaryExpression(node);
             }
-            else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+            else if (node.operatorToken.kind === ts.SyntaxKind.CommaToken) {
                 return visitCommaExpression(node);
             }
 
@@ -765,12 +765,12 @@ export function transformGenerators(context: TransformationContext) {
             //      _a + %sent% + c()
 
             return factory.updateBinaryExpression(node,
-                cacheExpression(visitNode(node.left, visitor, isExpression)),
+                cacheExpression(ts.visitNode(node.left, visitor, ts.isExpression)),
                 node.operatorToken,
-                visitNode(node.right, visitor, isExpression));
+                ts.visitNode(node.right, visitor, ts.isExpression));
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
     /**
@@ -778,7 +778,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitCommaExpression(node: BinaryExpression) {
+    function visitCommaExpression(node: ts.BinaryExpression) {
         // [source]
         //      x = a(), yield, b();
         //
@@ -788,13 +788,13 @@ export function transformGenerators(context: TransformationContext) {
         //  .mark resumeLabel
         //      x = %sent%, b();
 
-        let pendingExpressions: Expression[] = [];
+        let pendingExpressions: ts.Expression[] = [];
         visit(node.left);
         visit(node.right);
         return factory.inlineExpressions(pendingExpressions);
 
-        function visit(node: Expression) {
-            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken) {
+        function visit(node: ts.Expression) {
+            if (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.CommaToken) {
                 visit(node.left);
                 visit(node.right);
             }
@@ -804,7 +804,7 @@ export function transformGenerators(context: TransformationContext) {
                     pendingExpressions = [];
                 }
 
-                pendingExpressions.push(visitNode(node, visitor, isExpression));
+                pendingExpressions.push(ts.visitNode(node, visitor, ts.isExpression));
             }
         }
     }
@@ -814,11 +814,11 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitCommaListExpression(node: CommaListExpression) {
+    function visitCommaListExpression(node: ts.CommaListExpression) {
         // flattened version of `visitCommaExpression`
-        let pendingExpressions: Expression[] = [];
+        let pendingExpressions: ts.Expression[] = [];
         for (const elem of node.elements) {
-            if (isBinaryExpression(elem) && elem.operatorToken.kind === SyntaxKind.CommaToken) {
+            if (ts.isBinaryExpression(elem) && elem.operatorToken.kind === ts.SyntaxKind.CommaToken) {
                 pendingExpressions.push(visitCommaExpression(elem));
             }
             else {
@@ -826,7 +826,7 @@ export function transformGenerators(context: TransformationContext) {
                     emitWorker(OpCode.Statement, [factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))]);
                     pendingExpressions = [];
                 }
-                pendingExpressions.push(visitNode(elem, visitor, isExpression));
+                pendingExpressions.push(ts.visitNode(elem, visitor, ts.isExpression));
             }
         }
         return factory.inlineExpressions(pendingExpressions);
@@ -837,7 +837,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node A node to visit.
      */
-    function visitLogicalBinaryExpression(node: BinaryExpression) {
+    function visitLogicalBinaryExpression(node: ts.BinaryExpression) {
         // Logical binary expressions (`&&` and `||`) are shortcutting expressions and need
         // to be transformed as such:
         //
@@ -870,8 +870,8 @@ export function transformGenerators(context: TransformationContext) {
         const resultLabel = defineLabel();
         const resultLocal = declareLocal();
 
-        emitAssignment(resultLocal, visitNode(node.left, visitor, isExpression), /*location*/ node.left);
-        if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+        emitAssignment(resultLocal, ts.visitNode(node.left, visitor, ts.isExpression), /*location*/ node.left);
+        if (node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) {
             // Logical `&&` shortcuts when the left-hand operand is falsey.
             emitBreakWhenFalse(resultLabel, resultLocal, /*location*/ node.left);
         }
@@ -880,7 +880,7 @@ export function transformGenerators(context: TransformationContext) {
             emitBreakWhenTrue(resultLabel, resultLocal, /*location*/ node.left);
         }
 
-        emitAssignment(resultLocal, visitNode(node.right, visitor, isExpression), /*location*/ node.right);
+        emitAssignment(resultLocal, ts.visitNode(node.right, visitor, ts.isExpression), /*location*/ node.right);
         markLabel(resultLabel);
         return resultLocal;
     }
@@ -890,7 +890,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitConditionalExpression(node: ConditionalExpression): Expression {
+    function visitConditionalExpression(node: ts.ConditionalExpression): ts.Expression {
         // [source]
         //      x = a() ? yield : b();
         //
@@ -913,16 +913,16 @@ export function transformGenerators(context: TransformationContext) {
             const whenFalseLabel = defineLabel();
             const resultLabel = defineLabel();
             const resultLocal = declareLocal();
-            emitBreakWhenFalse(whenFalseLabel, visitNode(node.condition, visitor, isExpression), /*location*/ node.condition);
-            emitAssignment(resultLocal, visitNode(node.whenTrue, visitor, isExpression), /*location*/ node.whenTrue);
+            emitBreakWhenFalse(whenFalseLabel, ts.visitNode(node.condition, visitor, ts.isExpression), /*location*/ node.condition);
+            emitAssignment(resultLocal, ts.visitNode(node.whenTrue, visitor, ts.isExpression), /*location*/ node.whenTrue);
             emitBreak(resultLabel);
             markLabel(whenFalseLabel);
-            emitAssignment(resultLocal, visitNode(node.whenFalse, visitor, isExpression), /*location*/ node.whenFalse);
+            emitAssignment(resultLocal, ts.visitNode(node.whenFalse, visitor, ts.isExpression), /*location*/ node.whenFalse);
             markLabel(resultLabel);
             return resultLocal;
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
     /**
@@ -930,7 +930,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitYieldExpression(node: YieldExpression): LeftHandSideExpression {
+    function visitYieldExpression(node: ts.YieldExpression): ts.LeftHandSideExpression {
         // [source]
         //      x = yield a();
         //
@@ -940,11 +940,11 @@ export function transformGenerators(context: TransformationContext) {
         //      x = %sent%;
 
         const resumeLabel = defineLabel();
-        const expression = visitNode(node.expression, visitor, isExpression);
+        const expression = ts.visitNode(node.expression, visitor, ts.isExpression);
         if (node.asteriskToken) {
             // NOTE: `expression` must be defined for `yield*`.
-            const iterator = (getEmitFlags(node.expression!) & EmitFlags.Iterator) === 0
-                ? setTextRange(emitHelpers().createValuesHelper(expression!), node)
+            const iterator = (ts.getEmitFlags(node.expression!) & ts.EmitFlags.Iterator) === 0
+                ? ts.setTextRange(emitHelpers().createValuesHelper(expression!), node)
                 : expression;
             emitYieldStar(iterator, /*location*/ node);
         }
@@ -961,7 +961,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitArrayLiteralExpression(node: ArrayLiteralExpression) {
+    function visitArrayLiteralExpression(node: ts.ArrayLiteralExpression) {
         return visitElements(node.elements, /*leadingElement*/ undefined, /*location*/ undefined, node.multiLine);
     }
 
@@ -972,7 +972,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param elements The elements to visit.
      * @param multiLine Whether array literals created should be emitted on multiple lines.
      */
-    function visitElements(elements: NodeArray<Expression>, leadingElement?: Expression, location?: TextRange, multiLine?: boolean) {
+    function visitElements(elements: ts.NodeArray<ts.Expression>, leadingElement?: ts.Expression, location?: ts.TextRange, multiLine?: boolean) {
         // [source]
         //      ar = [1, yield, 2];
         //
@@ -985,10 +985,10 @@ export function transformGenerators(context: TransformationContext) {
 
         const numInitialElements = countInitialNodesWithoutYield(elements);
 
-        let temp: Identifier | undefined;
+        let temp: ts.Identifier | undefined;
         if (numInitialElements > 0) {
             temp = declareLocal();
-            const initialElements = visitNodes(elements, visitor, isExpression, 0, numInitialElements);
+            const initialElements = ts.visitNodes(elements, visitor, ts.isExpression, 0, numInitialElements);
             emitAssignment(temp,
                 factory.createArrayLiteralExpression(
                     leadingElement
@@ -999,15 +999,15 @@ export function transformGenerators(context: TransformationContext) {
             leadingElement = undefined;
         }
 
-        const expressions = reduceLeft(elements, reduceElement, [] as Expression[], numInitialElements);
+        const expressions = ts.reduceLeft(elements, reduceElement, [] as ts.Expression[], numInitialElements);
         return temp
             ? factory.createArrayConcatCall(temp, [factory.createArrayLiteralExpression(expressions, multiLine)])
-            : setTextRange(
+            : ts.setTextRange(
                 factory.createArrayLiteralExpression(leadingElement ? [leadingElement, ...expressions] : expressions, multiLine),
                 location
             );
 
-        function reduceElement(expressions: Expression[], element: Expression) {
+        function reduceElement(expressions: ts.Expression[], element: ts.Expression) {
             if (containsYield(element) && expressions.length > 0) {
                 const hasAssignedTemp = temp !== undefined;
                 if (!temp) {
@@ -1030,12 +1030,12 @@ export function transformGenerators(context: TransformationContext) {
                 expressions = [];
             }
 
-            expressions.push(visitNode(element, visitor, isExpression));
+            expressions.push(ts.visitNode(element, visitor, ts.isExpression));
             return expressions;
         }
     }
 
-    function visitObjectLiteralExpression(node: ObjectLiteralExpression) {
+    function visitObjectLiteralExpression(node: ts.ObjectLiteralExpression) {
         // [source]
         //      o = {
         //          a: 1,
@@ -1061,27 +1061,27 @@ export function transformGenerators(context: TransformationContext) {
         const temp = declareLocal();
         emitAssignment(temp,
             factory.createObjectLiteralExpression(
-                visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
+                ts.visitNodes(properties, visitor, ts.isObjectLiteralElementLike, 0, numInitialProperties),
                 multiLine
             )
         );
 
-        const expressions = reduceLeft(properties, reduceProperty, [] as Expression[], numInitialProperties);
+        const expressions = ts.reduceLeft(properties, reduceProperty, [] as ts.Expression[], numInitialProperties);
         // TODO(rbuckton): Does this need to be parented?
-        expressions.push(multiLine ? startOnNewLine(setParent(setTextRange(factory.cloneNode(temp), temp), temp.parent)) : temp);
+        expressions.push(multiLine ? ts.startOnNewLine(ts.setParent(ts.setTextRange(factory.cloneNode(temp), temp), temp.parent)) : temp);
         return factory.inlineExpressions(expressions);
 
-        function reduceProperty(expressions: Expression[], property: ObjectLiteralElementLike) {
+        function reduceProperty(expressions: ts.Expression[], property: ts.ObjectLiteralElementLike) {
             if (containsYield(property) && expressions.length > 0) {
                 emitStatement(factory.createExpressionStatement(factory.inlineExpressions(expressions)));
                 expressions = [];
             }
 
-            const expression = createExpressionForObjectLiteralElementLike(factory, node, property, temp);
-            const visited = visitNode(expression, visitor, isExpression);
+            const expression = ts.createExpressionForObjectLiteralElementLike(factory, node, property, temp);
+            const visited = ts.visitNode(expression, visitor, ts.isExpression);
             if (visited) {
                 if (multiLine) {
-                    startOnNewLine(visited);
+                    ts.startOnNewLine(visited);
                 }
                 expressions.push(visited);
             }
@@ -1094,7 +1094,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitElementAccessExpression(node: ElementAccessExpression) {
+    function visitElementAccessExpression(node: ts.ElementAccessExpression) {
         if (containsYield(node.argumentExpression)) {
             // [source]
             //      a = x[yield];
@@ -1107,15 +1107,15 @@ export function transformGenerators(context: TransformationContext) {
             //      a = _a[%sent%]
 
             return factory.updateElementAccessExpression(node,
-                cacheExpression(visitNode(node.expression, visitor, isLeftHandSideExpression)),
-                visitNode(node.argumentExpression, visitor, isExpression));
+                cacheExpression(ts.visitNode(node.expression, visitor, ts.isLeftHandSideExpression)),
+                ts.visitNode(node.argumentExpression, visitor, ts.isExpression));
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitCallExpression(node: CallExpression) {
-        if (!isImportCall(node) && forEach(node.arguments, containsYield)) {
+    function visitCallExpression(node: ts.CallExpression) {
+        if (!ts.isImportCall(node) && ts.forEach(node.arguments, containsYield)) {
             // [source]
             //      a.b(1, yield, 2);
             //
@@ -1127,10 +1127,10 @@ export function transformGenerators(context: TransformationContext) {
             //  .mark resumeLabel
             //      _b.apply(_a, _c.concat([%sent%, 2]));
             const { target, thisArg } = factory.createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
-            return setOriginalNode(
-                setTextRange(
+            return ts.setOriginalNode(
+                ts.setTextRange(
                     factory.createFunctionApplyCall(
-                        cacheExpression(visitNode(target, visitor, isLeftHandSideExpression)),
+                        cacheExpression(ts.visitNode(target, visitor, ts.isLeftHandSideExpression)),
                         thisArg,
                         visitElements(node.arguments)
                     ),
@@ -1140,11 +1140,11 @@ export function transformGenerators(context: TransformationContext) {
             );
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitNewExpression(node: NewExpression) {
-        if (forEach(node.arguments, containsYield)) {
+    function visitNewExpression(node: ts.NewExpression) {
+        if (ts.forEach(node.arguments, containsYield)) {
             // [source]
             //      new a.b(1, yield, 2);
             //
@@ -1157,11 +1157,11 @@ export function transformGenerators(context: TransformationContext) {
             //      new (_b.apply(_a, _c.concat([%sent%, 2])));
 
             const { target, thisArg } = factory.createCallBinding(factory.createPropertyAccessExpression(node.expression, "bind"), hoistVariableDeclaration);
-            return setOriginalNode(
-                setTextRange(
+            return ts.setOriginalNode(
+                ts.setTextRange(
                     factory.createNewExpression(
                         factory.createFunctionApplyCall(
-                            cacheExpression(visitNode(target, visitor, isExpression)),
+                            cacheExpression(ts.visitNode(target, visitor, ts.isExpression)),
                             thisArg,
                             visitElements(
                                 node.arguments!,
@@ -1176,18 +1176,18 @@ export function transformGenerators(context: TransformationContext) {
                 node
             );
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function transformAndEmitStatements(statements: readonly Statement[], start = 0) {
+    function transformAndEmitStatements(statements: readonly ts.Statement[], start = 0) {
         const numStatements = statements.length;
         for (let i = start; i < numStatements; i++) {
             transformAndEmitStatement(statements[i]);
         }
     }
 
-    function transformAndEmitEmbeddedStatement(node: Statement) {
-        if (isBlock(node)) {
+    function transformAndEmitEmbeddedStatement(node: ts.Statement) {
+        if (ts.isBlock(node)) {
             transformAndEmitStatements(node.statements);
         }
         else {
@@ -1195,7 +1195,7 @@ export function transformGenerators(context: TransformationContext) {
         }
     }
 
-    function transformAndEmitStatement(node: Statement): void {
+    function transformAndEmitStatement(node: ts.Statement): void {
         const savedInStatementContainingYield = inStatementContainingYield;
         if (!inStatementContainingYield) {
             inStatementContainingYield = containsYield(node);
@@ -1205,67 +1205,67 @@ export function transformGenerators(context: TransformationContext) {
         inStatementContainingYield = savedInStatementContainingYield;
     }
 
-    function transformAndEmitStatementWorker(node: Statement): void {
+    function transformAndEmitStatementWorker(node: ts.Statement): void {
         switch (node.kind) {
-            case SyntaxKind.Block:
-                return transformAndEmitBlock(node as Block);
-            case SyntaxKind.ExpressionStatement:
-                return transformAndEmitExpressionStatement(node as ExpressionStatement);
-            case SyntaxKind.IfStatement:
-                return transformAndEmitIfStatement(node as IfStatement);
-            case SyntaxKind.DoStatement:
-                return transformAndEmitDoStatement(node as DoStatement);
-            case SyntaxKind.WhileStatement:
-                return transformAndEmitWhileStatement(node as WhileStatement);
-            case SyntaxKind.ForStatement:
-                return transformAndEmitForStatement(node as ForStatement);
-            case SyntaxKind.ForInStatement:
-                return transformAndEmitForInStatement(node as ForInStatement);
-            case SyntaxKind.ContinueStatement:
-                return transformAndEmitContinueStatement(node as ContinueStatement);
-            case SyntaxKind.BreakStatement:
-                return transformAndEmitBreakStatement(node as BreakStatement);
-            case SyntaxKind.ReturnStatement:
-                return transformAndEmitReturnStatement(node as ReturnStatement);
-            case SyntaxKind.WithStatement:
-                return transformAndEmitWithStatement(node as WithStatement);
-            case SyntaxKind.SwitchStatement:
-                return transformAndEmitSwitchStatement(node as SwitchStatement);
-            case SyntaxKind.LabeledStatement:
-                return transformAndEmitLabeledStatement(node as LabeledStatement);
-            case SyntaxKind.ThrowStatement:
-                return transformAndEmitThrowStatement(node as ThrowStatement);
-            case SyntaxKind.TryStatement:
-                return transformAndEmitTryStatement(node as TryStatement);
+            case ts.SyntaxKind.Block:
+                return transformAndEmitBlock(node as ts.Block);
+            case ts.SyntaxKind.ExpressionStatement:
+                return transformAndEmitExpressionStatement(node as ts.ExpressionStatement);
+            case ts.SyntaxKind.IfStatement:
+                return transformAndEmitIfStatement(node as ts.IfStatement);
+            case ts.SyntaxKind.DoStatement:
+                return transformAndEmitDoStatement(node as ts.DoStatement);
+            case ts.SyntaxKind.WhileStatement:
+                return transformAndEmitWhileStatement(node as ts.WhileStatement);
+            case ts.SyntaxKind.ForStatement:
+                return transformAndEmitForStatement(node as ts.ForStatement);
+            case ts.SyntaxKind.ForInStatement:
+                return transformAndEmitForInStatement(node as ts.ForInStatement);
+            case ts.SyntaxKind.ContinueStatement:
+                return transformAndEmitContinueStatement(node as ts.ContinueStatement);
+            case ts.SyntaxKind.BreakStatement:
+                return transformAndEmitBreakStatement(node as ts.BreakStatement);
+            case ts.SyntaxKind.ReturnStatement:
+                return transformAndEmitReturnStatement(node as ts.ReturnStatement);
+            case ts.SyntaxKind.WithStatement:
+                return transformAndEmitWithStatement(node as ts.WithStatement);
+            case ts.SyntaxKind.SwitchStatement:
+                return transformAndEmitSwitchStatement(node as ts.SwitchStatement);
+            case ts.SyntaxKind.LabeledStatement:
+                return transformAndEmitLabeledStatement(node as ts.LabeledStatement);
+            case ts.SyntaxKind.ThrowStatement:
+                return transformAndEmitThrowStatement(node as ts.ThrowStatement);
+            case ts.SyntaxKind.TryStatement:
+                return transformAndEmitTryStatement(node as ts.TryStatement);
             default:
-                return emitStatement(visitNode(node, visitor, isStatement));
+                return emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function transformAndEmitBlock(node: Block): void {
+    function transformAndEmitBlock(node: ts.Block): void {
         if (containsYield(node)) {
             transformAndEmitStatements(node.statements);
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function transformAndEmitExpressionStatement(node: ExpressionStatement) {
-        emitStatement(visitNode(node, visitor, isStatement));
+    function transformAndEmitExpressionStatement(node: ts.ExpressionStatement) {
+        emitStatement(ts.visitNode(node, visitor, ts.isStatement));
     }
 
-    function transformAndEmitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList | undefined {
+    function transformAndEmitVariableDeclarationList(node: ts.VariableDeclarationList): ts.VariableDeclarationList | undefined {
         for (const variable of node.declarations) {
-            const name = factory.cloneNode(variable.name as Identifier);
-            setCommentRange(name, variable.name);
+            const name = factory.cloneNode(variable.name as ts.Identifier);
+            ts.setCommentRange(name, variable.name);
             hoistVariableDeclaration(name);
         }
 
-        const variables = getInitializedVariables(node);
+        const variables = ts.getInitializedVariables(node);
         const numVariables = variables.length;
         let variablesWritten = 0;
-        let pendingExpressions: Expression[] = [];
+        let pendingExpressions: ts.Expression[] = [];
         while (variablesWritten < numVariables) {
             for (let i = variablesWritten; i < numVariables; i++) {
                 const variable = variables[i];
@@ -1286,17 +1286,17 @@ export function transformGenerators(context: TransformationContext) {
         return undefined;
     }
 
-    function transformInitializedVariable(node: InitializedVariableDeclaration) {
-        return setSourceMapRange(
+    function transformInitializedVariable(node: ts.InitializedVariableDeclaration) {
+        return ts.setSourceMapRange(
             factory.createAssignment(
-                setSourceMapRange(factory.cloneNode(node.name) as Identifier, node.name),
-                visitNode(node.initializer, visitor, isExpression)
+                ts.setSourceMapRange(factory.cloneNode(node.name) as ts.Identifier, node.name),
+                ts.visitNode(node.initializer, visitor, ts.isExpression)
             ),
             node
         );
     }
 
-    function transformAndEmitIfStatement(node: IfStatement) {
+    function transformAndEmitIfStatement(node: ts.IfStatement) {
         if (containsYield(node)) {
             // [source]
             //      if (x)
@@ -1315,7 +1315,7 @@ export function transformGenerators(context: TransformationContext) {
             if (containsYield(node.thenStatement) || containsYield(node.elseStatement)) {
                 const endLabel = defineLabel();
                 const elseLabel = node.elseStatement ? defineLabel() : undefined;
-                emitBreakWhenFalse(node.elseStatement ? elseLabel! : endLabel, visitNode(node.expression, visitor, isExpression), /*location*/ node.expression);
+                emitBreakWhenFalse(node.elseStatement ? elseLabel! : endLabel, ts.visitNode(node.expression, visitor, ts.isExpression), /*location*/ node.expression);
                 transformAndEmitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     emitBreak(endLabel);
@@ -1325,15 +1325,15 @@ export function transformGenerators(context: TransformationContext) {
                 markLabel(endLabel);
             }
             else {
-                emitStatement(visitNode(node, visitor, isStatement));
+                emitStatement(ts.visitNode(node, visitor, ts.isStatement));
             }
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function transformAndEmitDoStatement(node: DoStatement) {
+    function transformAndEmitDoStatement(node: ts.DoStatement) {
         if (containsYield(node)) {
             // [source]
             //      do {
@@ -1356,27 +1356,27 @@ export function transformGenerators(context: TransformationContext) {
             markLabel(loopLabel);
             transformAndEmitEmbeddedStatement(node.statement);
             markLabel(conditionLabel);
-            emitBreakWhenTrue(loopLabel, visitNode(node.expression, visitor, isExpression));
+            emitBreakWhenTrue(loopLabel, ts.visitNode(node.expression, visitor, ts.isExpression));
             endLoopBlock();
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function visitDoStatement(node: DoStatement) {
+    function visitDoStatement(node: ts.DoStatement) {
         if (inStatementContainingYield) {
             beginScriptLoopBlock();
-            node = visitEachChild(node, visitor, context);
+            node = ts.visitEachChild(node, visitor, context);
             endLoopBlock();
             return node;
         }
         else {
-            return visitEachChild(node, visitor, context);
+            return ts.visitEachChild(node, visitor, context);
         }
     }
 
-    function transformAndEmitWhileStatement(node: WhileStatement) {
+    function transformAndEmitWhileStatement(node: ts.WhileStatement) {
         if (containsYield(node)) {
             // [source]
             //      while (i < 10) {
@@ -1395,29 +1395,29 @@ export function transformGenerators(context: TransformationContext) {
             const loopLabel = defineLabel();
             const endLabel = beginLoopBlock(loopLabel);
             markLabel(loopLabel);
-            emitBreakWhenFalse(endLabel, visitNode(node.expression, visitor, isExpression));
+            emitBreakWhenFalse(endLabel, ts.visitNode(node.expression, visitor, ts.isExpression));
             transformAndEmitEmbeddedStatement(node.statement);
             emitBreak(loopLabel);
             endLoopBlock();
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function visitWhileStatement(node: WhileStatement) {
+    function visitWhileStatement(node: ts.WhileStatement) {
         if (inStatementContainingYield) {
             beginScriptLoopBlock();
-            node = visitEachChild(node, visitor, context);
+            node = ts.visitEachChild(node, visitor, context);
             endLoopBlock();
             return node;
         }
         else {
-            return visitEachChild(node, visitor, context);
+            return ts.visitEachChild(node, visitor, context);
         }
     }
 
-    function transformAndEmitForStatement(node: ForStatement) {
+    function transformAndEmitForStatement(node: ts.ForStatement) {
         if (containsYield(node)) {
             // [source]
             //      for (var i = 0; i < 10; i++) {
@@ -1442,14 +1442,14 @@ export function transformGenerators(context: TransformationContext) {
             const endLabel = beginLoopBlock(incrementLabel);
             if (node.initializer) {
                 const initializer = node.initializer;
-                if (isVariableDeclarationList(initializer)) {
+                if (ts.isVariableDeclarationList(initializer)) {
                     transformAndEmitVariableDeclarationList(initializer);
                 }
                 else {
                     emitStatement(
-                        setTextRange(
+                        ts.setTextRange(
                             factory.createExpressionStatement(
-                                visitNode(initializer, visitor, isExpression)
+                                ts.visitNode(initializer, visitor, ts.isExpression)
                             ),
                             initializer
                         )
@@ -1459,7 +1459,7 @@ export function transformGenerators(context: TransformationContext) {
 
             markLabel(conditionLabel);
             if (node.condition) {
-                emitBreakWhenFalse(endLabel, visitNode(node.condition, visitor, isExpression));
+                emitBreakWhenFalse(endLabel, ts.visitNode(node.condition, visitor, ts.isExpression));
             }
 
             transformAndEmitEmbeddedStatement(node.statement);
@@ -1467,9 +1467,9 @@ export function transformGenerators(context: TransformationContext) {
             markLabel(incrementLabel);
             if (node.incrementor) {
                 emitStatement(
-                    setTextRange(
+                    ts.setTextRange(
                         factory.createExpressionStatement(
-                            visitNode(node.incrementor, visitor, isExpression)
+                            ts.visitNode(node.incrementor, visitor, ts.isExpression)
                         ),
                         node.incrementor
                     )
@@ -1479,33 +1479,33 @@ export function transformGenerators(context: TransformationContext) {
             endLoopBlock();
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function visitForStatement(node: ForStatement) {
+    function visitForStatement(node: ts.ForStatement) {
         if (inStatementContainingYield) {
             beginScriptLoopBlock();
         }
 
         const initializer = node.initializer;
-        if (initializer && isVariableDeclarationList(initializer)) {
+        if (initializer && ts.isVariableDeclarationList(initializer)) {
             for (const variable of initializer.declarations) {
-                hoistVariableDeclaration(variable.name as Identifier);
+                hoistVariableDeclaration(variable.name as ts.Identifier);
             }
 
-            const variables = getInitializedVariables(initializer);
+            const variables = ts.getInitializedVariables(initializer);
             node = factory.updateForStatement(node,
                 variables.length > 0
-                    ? factory.inlineExpressions(map(variables, transformInitializedVariable))
+                    ? factory.inlineExpressions(ts.map(variables, transformInitializedVariable))
                     : undefined,
-                visitNode(node.condition, visitor, isExpression),
-                visitNode(node.incrementor, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context)
+                ts.visitNode(node.condition, visitor, ts.isExpression),
+                ts.visitNode(node.incrementor, visitor, ts.isExpression),
+                ts.visitIterationBody(node.statement, visitor, context)
             );
         }
         else {
-            node = visitEachChild(node, visitor, context);
+            node = ts.visitEachChild(node, visitor, context);
         }
 
         if (inStatementContainingYield) {
@@ -1515,7 +1515,7 @@ export function transformGenerators(context: TransformationContext) {
         return node;
     }
 
-    function transformAndEmitForInStatement(node: ForInStatement) {
+    function transformAndEmitForInStatement(node: ts.ForInStatement) {
         // TODO(rbuckton): Source map locations
         if (containsYield(node)) {
             // [source]
@@ -1549,7 +1549,7 @@ export function transformGenerators(context: TransformationContext) {
             emitStatement(
                 factory.createForInStatement(
                     key,
-                    visitNode(node.expression, visitor, isExpression),
+                    ts.visitNode(node.expression, visitor, ts.isExpression),
                     factory.createExpressionStatement(
                         factory.createCallExpression(
                             factory.createPropertyAccessExpression(keysArray, "push"),
@@ -1569,17 +1569,17 @@ export function transformGenerators(context: TransformationContext) {
             markLabel(conditionLabel);
             emitBreakWhenFalse(endLabel, factory.createLessThan(keysIndex, factory.createPropertyAccessExpression(keysArray, "length")));
 
-            let variable: Expression;
-            if (isVariableDeclarationList(initializer)) {
+            let variable: ts.Expression;
+            if (ts.isVariableDeclarationList(initializer)) {
                 for (const variable of initializer.declarations) {
-                    hoistVariableDeclaration(variable.name as Identifier);
+                    hoistVariableDeclaration(variable.name as ts.Identifier);
                 }
 
-                variable = factory.cloneNode(initializer.declarations[0].name) as Identifier;
+                variable = factory.cloneNode(initializer.declarations[0].name) as ts.Identifier;
             }
             else {
-                variable = visitNode(initializer, visitor, isExpression);
-                Debug.assert(isLeftHandSideExpression(variable));
+                variable = ts.visitNode(initializer, visitor, ts.isExpression);
+                ts.Debug.assert(ts.isLeftHandSideExpression(variable));
             }
 
             emitAssignment(variable, factory.createElementAccessExpression(keysArray, keysIndex));
@@ -1592,11 +1592,11 @@ export function transformGenerators(context: TransformationContext) {
             endLoopBlock();
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function visitForInStatement(node: ForInStatement) {
+    function visitForInStatement(node: ts.ForInStatement) {
         // [source]
         //      for (var x in a) {
         //          /*body*/
@@ -1615,19 +1615,19 @@ export function transformGenerators(context: TransformationContext) {
         }
 
         const initializer = node.initializer;
-        if (isVariableDeclarationList(initializer)) {
+        if (ts.isVariableDeclarationList(initializer)) {
             for (const variable of initializer.declarations) {
-                hoistVariableDeclaration(variable.name as Identifier);
+                hoistVariableDeclaration(variable.name as ts.Identifier);
             }
 
             node = factory.updateForInStatement(node,
-                initializer.declarations[0].name as Identifier,
-                visitNode(node.expression, visitor, isExpression),
-                visitNode(node.statement, visitor, isStatement, factory.liftToBlock)
+                initializer.declarations[0].name as ts.Identifier,
+                ts.visitNode(node.expression, visitor, ts.isExpression),
+                ts.visitNode(node.statement, visitor, ts.isStatement, factory.liftToBlock)
             );
         }
         else {
-            node = visitEachChild(node, visitor, context);
+            node = ts.visitEachChild(node, visitor, context);
         }
 
         if (inStatementContainingYield) {
@@ -1637,8 +1637,8 @@ export function transformGenerators(context: TransformationContext) {
         return node;
     }
 
-    function transformAndEmitContinueStatement(node: ContinueStatement): void {
-        const label = findContinueTarget(node.label ? idText(node.label) : undefined);
+    function transformAndEmitContinueStatement(node: ts.ContinueStatement): void {
+        const label = findContinueTarget(node.label ? ts.idText(node.label) : undefined);
         if (label > 0) {
             emitBreak(label, /*location*/ node);
         }
@@ -1648,19 +1648,19 @@ export function transformGenerators(context: TransformationContext) {
         }
     }
 
-    function visitContinueStatement(node: ContinueStatement): Statement {
+    function visitContinueStatement(node: ts.ContinueStatement): ts.Statement {
         if (inStatementContainingYield) {
-            const label = findContinueTarget(node.label && idText(node.label));
+            const label = findContinueTarget(node.label && ts.idText(node.label));
             if (label > 0) {
                 return createInlineBreak(label, /*location*/ node);
             }
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function transformAndEmitBreakStatement(node: BreakStatement): void {
-        const label = findBreakTarget(node.label ? idText(node.label) : undefined);
+    function transformAndEmitBreakStatement(node: ts.BreakStatement): void {
+        const label = findBreakTarget(node.label ? ts.idText(node.label) : undefined);
         if (label > 0) {
             emitBreak(label, /*location*/ node);
         }
@@ -1670,32 +1670,32 @@ export function transformGenerators(context: TransformationContext) {
         }
     }
 
-    function visitBreakStatement(node: BreakStatement): Statement {
+    function visitBreakStatement(node: ts.BreakStatement): ts.Statement {
         if (inStatementContainingYield) {
-            const label = findBreakTarget(node.label && idText(node.label));
+            const label = findBreakTarget(node.label && ts.idText(node.label));
             if (label > 0) {
                 return createInlineBreak(label, /*location*/ node);
             }
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function transformAndEmitReturnStatement(node: ReturnStatement): void {
+    function transformAndEmitReturnStatement(node: ts.ReturnStatement): void {
         emitReturn(
-            visitNode(node.expression, visitor, isExpression),
+            ts.visitNode(node.expression, visitor, ts.isExpression),
             /*location*/ node
         );
     }
 
-    function visitReturnStatement(node: ReturnStatement) {
+    function visitReturnStatement(node: ts.ReturnStatement) {
         return createInlineReturn(
-            visitNode(node.expression, visitor, isExpression),
+            ts.visitNode(node.expression, visitor, ts.isExpression),
             /*location*/ node
         );
     }
 
-    function transformAndEmitWithStatement(node: WithStatement) {
+    function transformAndEmitWithStatement(node: ts.WithStatement) {
         if (containsYield(node)) {
             // [source]
             //      with (x) {
@@ -1706,16 +1706,16 @@ export function transformGenerators(context: TransformationContext) {
             //  .with (x)
             //      /*body*/
             //  .endwith
-            beginWithBlock(cacheExpression(visitNode(node.expression, visitor, isExpression)));
+            beginWithBlock(cacheExpression(ts.visitNode(node.expression, visitor, ts.isExpression)));
             transformAndEmitEmbeddedStatement(node.statement);
             endWithBlock();
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function transformAndEmitSwitchStatement(node: SwitchStatement) {
+    function transformAndEmitSwitchStatement(node: ts.SwitchStatement) {
         if (containsYield(node.caseBlock)) {
             // [source]
             //      switch (x) {
@@ -1753,7 +1753,7 @@ export function transformGenerators(context: TransformationContext) {
             const numClauses = caseBlock.clauses.length;
             const endLabel = beginSwitchBlock();
 
-            const expression = cacheExpression(visitNode(node.expression, visitor, isExpression));
+            const expression = cacheExpression(ts.visitNode(node.expression, visitor, ts.isExpression));
 
             // Create labels for each clause and find the index of the first default clause.
             const clauseLabels: Label[] = [];
@@ -1761,7 +1761,7 @@ export function transformGenerators(context: TransformationContext) {
             for (let i = 0; i < numClauses; i++) {
                 const clause = caseBlock.clauses[i];
                 clauseLabels.push(defineLabel());
-                if (clause.kind === SyntaxKind.DefaultClause && defaultClauseIndex === -1) {
+                if (clause.kind === ts.SyntaxKind.DefaultClause && defaultClauseIndex === -1) {
                     defaultClauseIndex = i;
                 }
             }
@@ -1770,19 +1770,19 @@ export function transformGenerators(context: TransformationContext) {
             // clause or the next case clause with a `yield` in its expression, up to the next
             // case clause with a `yield` in its expression.
             let clausesWritten = 0;
-            let pendingClauses: CaseClause[] = [];
+            let pendingClauses: ts.CaseClause[] = [];
             while (clausesWritten < numClauses) {
                 let defaultClausesSkipped = 0;
                 for (let i = clausesWritten; i < numClauses; i++) {
                     const clause = caseBlock.clauses[i];
-                    if (clause.kind === SyntaxKind.CaseClause) {
+                    if (clause.kind === ts.SyntaxKind.CaseClause) {
                         if (containsYield(clause.expression) && pendingClauses.length > 0) {
                             break;
                         }
 
                         pendingClauses.push(
                             factory.createCaseClause(
-                                visitNode(clause.expression, visitor, isExpression),
+                                ts.visitNode(clause.expression, visitor, ts.isExpression),
                                 [
                                     createInlineBreak(clauseLabels[i], /*location*/ clause.expression)
                                 ]
@@ -1820,16 +1820,16 @@ export function transformGenerators(context: TransformationContext) {
             endSwitchBlock();
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function visitSwitchStatement(node: SwitchStatement) {
+    function visitSwitchStatement(node: ts.SwitchStatement) {
         if (inStatementContainingYield) {
             beginScriptSwitchBlock();
         }
 
-        node = visitEachChild(node, visitor, context);
+        node = ts.visitEachChild(node, visitor, context);
 
         if (inStatementContainingYield) {
             endSwitchBlock();
@@ -1838,7 +1838,7 @@ export function transformGenerators(context: TransformationContext) {
         return node;
     }
 
-    function transformAndEmitLabeledStatement(node: LabeledStatement) {
+    function transformAndEmitLabeledStatement(node: ts.LabeledStatement) {
         if (containsYield(node)) {
             // [source]
             //      x: {
@@ -1850,21 +1850,21 @@ export function transformGenerators(context: TransformationContext) {
             //      /*body*/
             //  .endlabeled
             //  .mark endLabel
-            beginLabeledBlock(idText(node.label));
+            beginLabeledBlock(ts.idText(node.label));
             transformAndEmitEmbeddedStatement(node.statement);
             endLabeledBlock();
         }
         else {
-            emitStatement(visitNode(node, visitor, isStatement));
+            emitStatement(ts.visitNode(node, visitor, ts.isStatement));
         }
     }
 
-    function visitLabeledStatement(node: LabeledStatement) {
+    function visitLabeledStatement(node: ts.LabeledStatement) {
         if (inStatementContainingYield) {
-            beginScriptLabeledBlock(idText(node.label));
+            beginScriptLabeledBlock(ts.idText(node.label));
         }
 
-        node = visitEachChild(node, visitor, context);
+        node = ts.visitEachChild(node, visitor, context);
 
         if (inStatementContainingYield) {
             endLabeledBlock();
@@ -1873,15 +1873,15 @@ export function transformGenerators(context: TransformationContext) {
         return node;
     }
 
-    function transformAndEmitThrowStatement(node: ThrowStatement): void {
+    function transformAndEmitThrowStatement(node: ts.ThrowStatement): void {
         // TODO(rbuckton): `expression` should be required on `throw`.
         emitThrow(
-            visitNode(node.expression ?? factory.createVoidZero(), visitor, isExpression),
+            ts.visitNode(node.expression ?? factory.createVoidZero(), visitor, ts.isExpression),
             /*location*/ node
         );
     }
 
-    function transformAndEmitTryStatement(node: TryStatement) {
+    function transformAndEmitTryStatement(node: ts.TryStatement) {
         if (containsYield(node)) {
             // [source]
             //      try {
@@ -1928,15 +1928,15 @@ export function transformGenerators(context: TransformationContext) {
             endExceptionBlock();
         }
         else {
-            emitStatement(visitEachChild(node, visitor, context));
+            emitStatement(ts.visitEachChild(node, visitor, context));
         }
     }
 
-    function containsYield(node: Node | undefined): boolean {
-        return !!node && (node.transformFlags & TransformFlags.ContainsYield) !== 0;
+    function containsYield(node: ts.Node | undefined): boolean {
+        return !!node && (node.transformFlags & ts.TransformFlags.ContainsYield) !== 0;
     }
 
-    function countInitialNodesWithoutYield(nodes: NodeArray<Node>) {
+    function countInitialNodesWithoutYield(nodes: ts.NodeArray<ts.Node>) {
         const numNodes = nodes.length;
         for (let i = 0; i < numNodes; i++) {
             if (containsYield(nodes[i])) {
@@ -1947,33 +1947,33 @@ export function transformGenerators(context: TransformationContext) {
         return -1;
     }
 
-    function onSubstituteNode(hint: EmitHint, node: Node): Node {
+    function onSubstituteNode(hint: ts.EmitHint, node: ts.Node): ts.Node {
         node = previousOnSubstituteNode(hint, node);
-        if (hint === EmitHint.Expression) {
-            return substituteExpression(node as Expression);
+        if (hint === ts.EmitHint.Expression) {
+            return substituteExpression(node as ts.Expression);
         }
         return node;
     }
 
-    function substituteExpression(node: Expression): Expression {
-        if (isIdentifier(node)) {
+    function substituteExpression(node: ts.Expression): ts.Expression {
+        if (ts.isIdentifier(node)) {
             return substituteExpressionIdentifier(node);
         }
         return node;
     }
 
-    function substituteExpressionIdentifier(node: Identifier) {
-        if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(idText(node))) {
-            const original = getOriginalNode(node);
-            if (isIdentifier(original) && original.parent) {
+    function substituteExpressionIdentifier(node: ts.Identifier) {
+        if (!ts.isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(ts.idText(node))) {
+            const original = ts.getOriginalNode(node);
+            if (ts.isIdentifier(original) && original.parent) {
                 const declaration = resolver.getReferencedValueDeclaration(original);
                 if (declaration) {
-                    const name = renamedCatchVariableDeclarations[getOriginalNodeId(declaration)];
+                    const name = renamedCatchVariableDeclarations[ts.getOriginalNodeId(declaration)];
                     if (name) {
                         // TODO(rbuckton): Does this need to be parented?
-                        const clone = setParent(setTextRange(factory.cloneNode(name), name), name.parent);
-                        setSourceMapRange(clone, node);
-                        setCommentRange(clone, node);
+                        const clone = ts.setParent(ts.setTextRange(factory.cloneNode(name), name), name.parent);
+                        ts.setSourceMapRange(clone, node);
+                        ts.setCommentRange(clone, node);
                         return clone;
                     }
                 }
@@ -1983,9 +1983,9 @@ export function transformGenerators(context: TransformationContext) {
         return node;
     }
 
-    function cacheExpression(node: Expression): Identifier {
-        if (isGeneratedIdentifier(node) || getEmitFlags(node) & EmitFlags.HelperName) {
-            return node as Identifier;
+    function cacheExpression(node: ts.Expression): ts.Identifier {
+        if (ts.isGeneratedIdentifier(node) || ts.getEmitFlags(node) & ts.EmitFlags.HelperName) {
+            return node as ts.Identifier;
         }
 
         const temp = factory.createTempVariable(hoistVariableDeclaration);
@@ -1993,7 +1993,7 @@ export function transformGenerators(context: TransformationContext) {
         return temp;
     }
 
-    function declareLocal(name?: string): Identifier {
+    function declareLocal(name?: string): ts.Identifier {
         const temp = name
             ? factory.createUniqueName(name)
             : factory.createTempVariable(/*recordTempVariable*/ undefined);
@@ -2019,7 +2019,7 @@ export function transformGenerators(context: TransformationContext) {
      * Marks the current operation with the specified label.
      */
     function markLabel(label: Label): void {
-        Debug.assert(labelOffsets !== undefined, "No labels were defined.");
+        ts.Debug.assert(labelOffsets !== undefined, "No labels were defined.");
         labelOffsets[label] = operations ? operations.length : 0;
     }
 
@@ -2049,7 +2049,7 @@ export function transformGenerators(context: TransformationContext) {
      */
     function endBlock(): CodeBlock {
         const block = peekBlock();
-        if (block === undefined) return Debug.fail("beginBlock was never called.");
+        if (block === undefined) return ts.Debug.fail("beginBlock was never called.");
 
         const index = blockActions!.length;
         blockActions![index] = BlockAction.Close;
@@ -2063,7 +2063,7 @@ export function transformGenerators(context: TransformationContext) {
      * Gets the current open block.
      */
     function peekBlock() {
-        return lastOrUndefined(blockStack);
+        return ts.lastOrUndefined(blockStack);
     }
 
     /**
@@ -2079,7 +2079,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param expression An identifier representing expression for the `with` block.
      */
-    function beginWithBlock(expression: Identifier): void {
+    function beginWithBlock(expression: ts.Identifier): void {
         const startLabel = defineLabel();
         const endLabel = defineLabel();
         markLabel(startLabel);
@@ -2095,7 +2095,7 @@ export function transformGenerators(context: TransformationContext) {
      * Ends a code block for a generated `with` statement.
      */
     function endWithBlock(): void {
-        Debug.assert(peekBlockKind() === CodeBlockKind.With);
+        ts.Debug.assert(peekBlockKind() === CodeBlockKind.With);
         const block = endBlock() as WithBlock;
         markLabel(block.endLabel);
     }
@@ -2122,30 +2122,30 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param variable The catch variable.
      */
-    function beginCatchBlock(variable: VariableDeclaration): void {
-        Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
+    function beginCatchBlock(variable: ts.VariableDeclaration): void {
+        ts.Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
 
         // generated identifiers should already be unique within a file
-        let name: Identifier;
-        if (isGeneratedIdentifier(variable.name)) {
+        let name: ts.Identifier;
+        if (ts.isGeneratedIdentifier(variable.name)) {
             name = variable.name;
             hoistVariableDeclaration(variable.name);
         }
         else {
-            const text = idText(variable.name as Identifier);
+            const text = ts.idText(variable.name as ts.Identifier);
             name = declareLocal(text);
             if (!renamedCatchVariables) {
-                renamedCatchVariables = new Map<string, boolean>();
+                renamedCatchVariables = new ts.Map<string, boolean>();
                 renamedCatchVariableDeclarations = [];
-                context.enableSubstitution(SyntaxKind.Identifier);
+                context.enableSubstitution(ts.SyntaxKind.Identifier);
             }
 
             renamedCatchVariables.set(text, true);
-            renamedCatchVariableDeclarations[getOriginalNodeId(variable)] = name;
+            renamedCatchVariableDeclarations[ts.getOriginalNodeId(variable)] = name;
         }
 
         const exception = peekBlock() as ExceptionBlock;
-        Debug.assert(exception.state < ExceptionBlockState.Catch);
+        ts.Debug.assert(exception.state < ExceptionBlockState.Catch);
 
         const endLabel = exception.endLabel;
         emitBreak(endLabel);
@@ -2164,10 +2164,10 @@ export function transformGenerators(context: TransformationContext) {
      * Enters the `finally` block of a generated `try` statement.
      */
     function beginFinallyBlock(): void {
-        Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
+        ts.Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
 
         const exception = peekBlock() as ExceptionBlock;
-        Debug.assert(exception.state < ExceptionBlockState.Finally);
+        ts.Debug.assert(exception.state < ExceptionBlockState.Finally);
 
         const endLabel = exception.endLabel;
         emitBreak(endLabel);
@@ -2182,7 +2182,7 @@ export function transformGenerators(context: TransformationContext) {
      * Ends the code block for a generated `try` statement.
      */
     function endExceptionBlock(): void {
-        Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
+        ts.Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
         const exception = endBlock() as ExceptionBlock;
         const state = exception.state;
         if (state < ExceptionBlockState.Finally) {
@@ -2236,7 +2236,7 @@ export function transformGenerators(context: TransformationContext) {
      * generated code or in the source tree.
      */
     function endLoopBlock(): void {
-        Debug.assert(peekBlockKind() === CodeBlockKind.Loop);
+        ts.Debug.assert(peekBlockKind() === CodeBlockKind.Loop);
         const block = endBlock() as SwitchBlock;
         const breakLabel = block.breakLabel;
         if (!block.isScript) {
@@ -2276,7 +2276,7 @@ export function transformGenerators(context: TransformationContext) {
      * Ends a code block that supports `break` statements that are defined in generated code.
      */
     function endSwitchBlock(): void {
-        Debug.assert(peekBlockKind() === CodeBlockKind.Switch);
+        ts.Debug.assert(peekBlockKind() === CodeBlockKind.Switch);
         const block = endBlock() as SwitchBlock;
         const breakLabel = block.breakLabel;
         if (!block.isScript) {
@@ -2304,7 +2304,7 @@ export function transformGenerators(context: TransformationContext) {
     }
 
     function endLabeledBlock() {
-        Debug.assert(peekBlockKind() === CodeBlockKind.Labeled);
+        ts.Debug.assert(peekBlockKind() === CodeBlockKind.Labeled);
         const block = endBlock() as LabeledBlock;
         if (!block.isScript) {
             markLabel(block.breakLabel);
@@ -2417,7 +2417,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param label A label.
      */
-    function createLabel(label: Label | undefined): Expression {
+    function createLabel(label: Label | undefined): ts.Expression {
         if (label !== undefined && label > 0) {
             if (labelExpressions === undefined) {
                 labelExpressions = [];
@@ -2440,9 +2440,9 @@ export function transformGenerators(context: TransformationContext) {
     /**
      * Creates a numeric literal for the provided instruction.
      */
-    function createInstruction(instruction: Instruction): NumericLiteral {
+    function createInstruction(instruction: Instruction): ts.NumericLiteral {
         const literal = factory.createNumericLiteral(instruction);
-        addSyntheticTrailingComment(literal, SyntaxKind.MultiLineCommentTrivia, getInstructionName(instruction));
+        ts.addSyntheticTrailingComment(literal, ts.SyntaxKind.MultiLineCommentTrivia, getInstructionName(instruction));
         return literal;
     }
 
@@ -2452,9 +2452,9 @@ export function transformGenerators(context: TransformationContext) {
      * @param label A label.
      * @param location An optional source map location for the statement.
      */
-    function createInlineBreak(label: Label, location?: TextRange): ReturnStatement {
-        Debug.assertLessThan(0, label, "Invalid label");
-        return setTextRange(
+    function createInlineBreak(label: Label, location?: ts.TextRange): ts.ReturnStatement {
+        ts.Debug.assertLessThan(0, label, "Invalid label");
+        return ts.setTextRange(
             factory.createReturnStatement(
                 factory.createArrayLiteralExpression([
                     createInstruction(Instruction.Break),
@@ -2471,8 +2471,8 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression The expression for the return statement.
      * @param location An optional source map location for the statement.
      */
-    function createInlineReturn(expression?: Expression, location?: TextRange): ReturnStatement {
-        return setTextRange(
+    function createInlineReturn(expression?: ts.Expression, location?: ts.TextRange): ts.ReturnStatement {
+        return ts.setTextRange(
             factory.createReturnStatement(
                 factory.createArrayLiteralExpression(expression
                     ? [createInstruction(Instruction.Return), expression]
@@ -2486,8 +2486,8 @@ export function transformGenerators(context: TransformationContext) {
     /**
      * Creates an expression that can be used to resume from a Yield operation.
      */
-    function createGeneratorResume(location?: TextRange): LeftHandSideExpression {
-        return setTextRange(
+    function createGeneratorResume(location?: ts.TextRange): ts.LeftHandSideExpression {
+        return ts.setTextRange(
             factory.createCallExpression(
                 factory.createPropertyAccessExpression(state, "sent"),
                 /*typeArguments*/ undefined,
@@ -2509,7 +2509,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param node A statement.
      */
-    function emitStatement(node: Statement): void {
+    function emitStatement(node: ts.Statement): void {
         if (node) {
             emitWorker(OpCode.Statement, [node]);
         }
@@ -2525,7 +2525,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param right The right-hand side of the assignment.
      * @param location An optional source map location for the assignment.
      */
-    function emitAssignment(left: Expression, right: Expression, location?: TextRange): void {
+    function emitAssignment(left: ts.Expression, right: ts.Expression, location?: ts.TextRange): void {
         emitWorker(OpCode.Assign, [left, right], location);
     }
 
@@ -2535,7 +2535,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param label A label.
      * @param location An optional source map location for the assignment.
      */
-    function emitBreak(label: Label, location?: TextRange): void {
+    function emitBreak(label: Label, location?: ts.TextRange): void {
         emitWorker(OpCode.Break, [label], location);
     }
 
@@ -2547,7 +2547,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param condition The condition.
      * @param location An optional source map location for the assignment.
      */
-    function emitBreakWhenTrue(label: Label, condition: Expression, location?: TextRange): void {
+    function emitBreakWhenTrue(label: Label, condition: ts.Expression, location?: ts.TextRange): void {
         emitWorker(OpCode.BreakWhenTrue, [label, condition], location);
     }
 
@@ -2559,7 +2559,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param condition The condition.
      * @param location An optional source map location for the assignment.
      */
-    function emitBreakWhenFalse(label: Label, condition: Expression, location?: TextRange): void {
+    function emitBreakWhenFalse(label: Label, condition: ts.Expression, location?: ts.TextRange): void {
         emitWorker(OpCode.BreakWhenFalse, [label, condition], location);
     }
 
@@ -2569,7 +2569,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression An optional value for the yield operation.
      * @param location An optional source map location for the assignment.
      */
-    function emitYieldStar(expression?: Expression, location?: TextRange): void {
+    function emitYieldStar(expression?: ts.Expression, location?: ts.TextRange): void {
         emitWorker(OpCode.YieldStar, [expression], location);
     }
 
@@ -2579,7 +2579,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression An optional value for the yield operation.
      * @param location An optional source map location for the assignment.
      */
-    function emitYield(expression?: Expression, location?: TextRange): void {
+    function emitYield(expression?: ts.Expression, location?: ts.TextRange): void {
         emitWorker(OpCode.Yield, [expression], location);
     }
 
@@ -2589,7 +2589,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression An optional value for the operation.
      * @param location An optional source map location for the assignment.
      */
-    function emitReturn(expression?: Expression, location?: TextRange): void {
+    function emitReturn(expression?: ts.Expression, location?: ts.TextRange): void {
         emitWorker(OpCode.Return, [expression], location);
     }
 
@@ -2599,7 +2599,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression A value for the operation.
      * @param location An optional source map location for the assignment.
      */
-    function emitThrow(expression: Expression, location?: TextRange): void {
+    function emitThrow(expression: ts.Expression, location?: ts.TextRange): void {
         emitWorker(OpCode.Throw, [expression], location);
     }
 
@@ -2616,7 +2616,7 @@ export function transformGenerators(context: TransformationContext) {
      * @param code The OpCode for the operation.
      * @param args The optional arguments for the operation.
      */
-    function emitWorker(code: OpCode, args?: OperationArguments, location?: TextRange): void {
+    function emitWorker(code: OpCode, args?: OperationArguments, location?: ts.TextRange): void {
         if (operations === undefined) {
             operations = [];
             operationArguments = [];
@@ -2651,7 +2651,7 @@ export function transformGenerators(context: TransformationContext) {
 
         const buildResult = buildStatements();
         return emitHelpers().createGeneratorHelper(
-            setEmitFlags(
+            ts.setEmitFlags(
                 factory.createFunctionExpression(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
@@ -2664,7 +2664,7 @@ export function transformGenerators(context: TransformationContext) {
                         /*multiLine*/ buildResult.length > 0
                     )
                 ),
-                EmitFlags.ReuseTempVariableScope
+                ts.EmitFlags.ReuseTempVariableScope
             )
         );
     }
@@ -2672,7 +2672,7 @@ export function transformGenerators(context: TransformationContext) {
     /**
      * Builds the statements for the generator function body.
      */
-    function buildStatements(): Statement[] {
+    function buildStatements(): ts.Statement[] {
         if (operations) {
             for (let operationIndex = 0; operationIndex < operations.length; operationIndex++) {
                 writeOperation(operationIndex);
@@ -2687,7 +2687,7 @@ export function transformGenerators(context: TransformationContext) {
         if (clauses) {
             const labelExpression = factory.createPropertyAccessExpression(state, "label");
             const switchStatement = factory.createSwitchStatement(labelExpression, factory.createCaseBlock(clauses));
-            return [startOnNewLine(switchStatement)];
+            return [ts.startOnNewLine(switchStatement)];
         }
 
         if (statements) {
@@ -2944,27 +2944,27 @@ export function transformGenerators(context: TransformationContext) {
 
         const args = operationArguments![operationIndex]!;
         if (opcode === OpCode.Statement) {
-            return writeStatement(args[0] as Statement);
+            return writeStatement(args[0] as ts.Statement);
         }
 
         const location = operationLocations![operationIndex];
         switch (opcode) {
             case OpCode.Assign:
-                return writeAssign(args[0] as Expression, args[1] as Expression, location);
+                return writeAssign(args[0] as ts.Expression, args[1] as ts.Expression, location);
             case OpCode.Break:
                 return writeBreak(args[0] as Label, location);
             case OpCode.BreakWhenTrue:
-                return writeBreakWhenTrue(args[0] as Label, args[1] as Expression, location);
+                return writeBreakWhenTrue(args[0] as Label, args[1] as ts.Expression, location);
             case OpCode.BreakWhenFalse:
-                return writeBreakWhenFalse(args[0] as Label, args[1] as Expression, location);
+                return writeBreakWhenFalse(args[0] as Label, args[1] as ts.Expression, location);
             case OpCode.Yield:
-                return writeYield(args[0] as Expression, location);
+                return writeYield(args[0] as ts.Expression, location);
             case OpCode.YieldStar:
-                return writeYieldStar(args[0] as Expression, location);
+                return writeYieldStar(args[0] as ts.Expression, location);
             case OpCode.Return:
-                return writeReturn(args[0] as Expression, location);
+                return writeReturn(args[0] as ts.Expression, location);
             case OpCode.Throw:
-                return writeThrow(args[0] as Expression, location);
+                return writeThrow(args[0] as ts.Expression, location);
         }
     }
 
@@ -2973,7 +2973,7 @@ export function transformGenerators(context: TransformationContext) {
      *
      * @param statement A statement to write.
      */
-    function writeStatement(statement: Statement): void {
+    function writeStatement(statement: ts.Statement): void {
         if (statement) {
             if (!statements) {
                 statements = [statement];
@@ -2991,8 +2991,8 @@ export function transformGenerators(context: TransformationContext) {
      * @param right The right-hand side of the assignment.
      * @param operationLocation The source map location for the operation.
      */
-    function writeAssign(left: Expression, right: Expression, operationLocation: TextRange | undefined): void {
-        writeStatement(setTextRange(factory.createExpressionStatement(factory.createAssignment(left, right)), operationLocation));
+    function writeAssign(left: ts.Expression, right: ts.Expression, operationLocation: ts.TextRange | undefined): void {
+        writeStatement(ts.setTextRange(factory.createExpressionStatement(factory.createAssignment(left, right)), operationLocation));
     }
 
     /**
@@ -3001,10 +3001,10 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression The value to throw.
      * @param operationLocation The source map location for the operation.
      */
-    function writeThrow(expression: Expression, operationLocation: TextRange | undefined): void {
+    function writeThrow(expression: ts.Expression, operationLocation: ts.TextRange | undefined): void {
         lastOperationWasAbrupt = true;
         lastOperationWasCompletion = true;
-        writeStatement(setTextRange(factory.createThrowStatement(expression), operationLocation));
+        writeStatement(ts.setTextRange(factory.createThrowStatement(expression), operationLocation));
     }
 
     /**
@@ -3013,12 +3013,12 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression The value to return.
      * @param operationLocation The source map location for the operation.
      */
-    function writeReturn(expression: Expression | undefined, operationLocation: TextRange | undefined): void {
+    function writeReturn(expression: ts.Expression | undefined, operationLocation: ts.TextRange | undefined): void {
         lastOperationWasAbrupt = true;
         lastOperationWasCompletion = true;
         writeStatement(
-            setEmitFlags(
-                setTextRange(
+            ts.setEmitFlags(
+                ts.setTextRange(
                     factory.createReturnStatement(
                         factory.createArrayLiteralExpression(expression
                             ? [createInstruction(Instruction.Return), expression]
@@ -3027,7 +3027,7 @@ export function transformGenerators(context: TransformationContext) {
                     ),
                     operationLocation
                 ),
-                EmitFlags.NoTokenSourceMaps
+                ts.EmitFlags.NoTokenSourceMaps
             )
         );
     }
@@ -3038,11 +3038,11 @@ export function transformGenerators(context: TransformationContext) {
      * @param label The label for the Break.
      * @param operationLocation The source map location for the operation.
      */
-    function writeBreak(label: Label, operationLocation: TextRange | undefined): void {
+    function writeBreak(label: Label, operationLocation: ts.TextRange | undefined): void {
         lastOperationWasAbrupt = true;
         writeStatement(
-            setEmitFlags(
-                setTextRange(
+            ts.setEmitFlags(
+                ts.setTextRange(
                     factory.createReturnStatement(
                         factory.createArrayLiteralExpression([
                             createInstruction(Instruction.Break),
@@ -3051,7 +3051,7 @@ export function transformGenerators(context: TransformationContext) {
                     ),
                     operationLocation
                 ),
-                EmitFlags.NoTokenSourceMaps
+                ts.EmitFlags.NoTokenSourceMaps
             )
         );
     }
@@ -3063,13 +3063,13 @@ export function transformGenerators(context: TransformationContext) {
      * @param condition The condition for the Break.
      * @param operationLocation The source map location for the operation.
      */
-    function writeBreakWhenTrue(label: Label, condition: Expression, operationLocation: TextRange | undefined): void {
+    function writeBreakWhenTrue(label: Label, condition: ts.Expression, operationLocation: ts.TextRange | undefined): void {
         writeStatement(
-            setEmitFlags(
+            ts.setEmitFlags(
                 factory.createIfStatement(
                     condition,
-                    setEmitFlags(
-                        setTextRange(
+                    ts.setEmitFlags(
+                        ts.setTextRange(
                             factory.createReturnStatement(
                                 factory.createArrayLiteralExpression([
                                     createInstruction(Instruction.Break),
@@ -3078,10 +3078,10 @@ export function transformGenerators(context: TransformationContext) {
                             ),
                             operationLocation
                         ),
-                        EmitFlags.NoTokenSourceMaps
+                        ts.EmitFlags.NoTokenSourceMaps
                     )
                 ),
-                EmitFlags.SingleLine
+                ts.EmitFlags.SingleLine
             )
         );
     }
@@ -3093,13 +3093,13 @@ export function transformGenerators(context: TransformationContext) {
      * @param condition The condition for the Break.
      * @param operationLocation The source map location for the operation.
      */
-    function writeBreakWhenFalse(label: Label, condition: Expression, operationLocation: TextRange | undefined): void {
+    function writeBreakWhenFalse(label: Label, condition: ts.Expression, operationLocation: ts.TextRange | undefined): void {
         writeStatement(
-            setEmitFlags(
+            ts.setEmitFlags(
                 factory.createIfStatement(
                     factory.createLogicalNot(condition),
-                    setEmitFlags(
-                        setTextRange(
+                    ts.setEmitFlags(
+                        ts.setTextRange(
                             factory.createReturnStatement(
                                 factory.createArrayLiteralExpression([
                                     createInstruction(Instruction.Break),
@@ -3108,10 +3108,10 @@ export function transformGenerators(context: TransformationContext) {
                             ),
                             operationLocation
                         ),
-                        EmitFlags.NoTokenSourceMaps
+                        ts.EmitFlags.NoTokenSourceMaps
                     )
                 ),
-                EmitFlags.SingleLine
+                ts.EmitFlags.SingleLine
             )
         );
     }
@@ -3122,11 +3122,11 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression The expression to yield.
      * @param operationLocation The source map location for the operation.
      */
-    function writeYield(expression: Expression, operationLocation: TextRange | undefined): void {
+    function writeYield(expression: ts.Expression, operationLocation: ts.TextRange | undefined): void {
         lastOperationWasAbrupt = true;
         writeStatement(
-            setEmitFlags(
-                setTextRange(
+            ts.setEmitFlags(
+                ts.setTextRange(
                     factory.createReturnStatement(
                         factory.createArrayLiteralExpression(
                             expression
@@ -3136,7 +3136,7 @@ export function transformGenerators(context: TransformationContext) {
                     ),
                     operationLocation
                 ),
-                EmitFlags.NoTokenSourceMaps
+                ts.EmitFlags.NoTokenSourceMaps
             )
         );
     }
@@ -3147,11 +3147,11 @@ export function transformGenerators(context: TransformationContext) {
      * @param expression The expression to yield.
      * @param operationLocation The source map location for the operation.
      */
-    function writeYieldStar(expression: Expression, operationLocation: TextRange | undefined): void {
+    function writeYieldStar(expression: ts.Expression, operationLocation: ts.TextRange | undefined): void {
         lastOperationWasAbrupt = true;
         writeStatement(
-            setEmitFlags(
-                setTextRange(
+            ts.setEmitFlags(
+                ts.setTextRange(
                     factory.createReturnStatement(
                         factory.createArrayLiteralExpression([
                             createInstruction(Instruction.YieldStar),
@@ -3160,7 +3160,7 @@ export function transformGenerators(context: TransformationContext) {
                     ),
                     operationLocation
                 ),
-                EmitFlags.NoTokenSourceMaps
+                ts.EmitFlags.NoTokenSourceMaps
             )
         );
     }

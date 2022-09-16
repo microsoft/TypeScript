@@ -47,10 +47,10 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     });
 
     function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[], circular?: true) {
-        const builder = createSolutionBuilder(host!, rootNames.map(getProjectFileName), { dry: true, force: false, verbose: false });
+        const builder = ts.createSolutionBuilder(host!, rootNames.map(getProjectFileName), { dry: true, force: false, verbose: false });
         const buildOrder = builder.getBuildOrder();
-        assert.equal(isCircularBuildOrder(buildOrder), !!circular);
-        const buildQueue = getBuildOrderFromAnyBuildOrder(buildOrder);
+        assert.equal(ts.isCircularBuildOrder(buildOrder), !!circular);
+        const buildQueue = ts.getBuildOrderFromAnyBuildOrder(buildOrder);
         assert.deepEqual(buildQueue, expectedBuildSet.map(getProjectFileName));
 
         if (!circular) {
@@ -64,7 +64,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     }
 
     function getProjectFileName(proj: string) {
-        return `/project/${proj}/tsconfig.json` as ResolvedConfigFileName;
+        return `/project/${proj}/tsconfig.json` as ts.ResolvedConfigFileName;
     }
 
     function writeProjects(fileSystem: vfs.FileSystem, projectNames: string[], deps: [string, string][]): string[] {

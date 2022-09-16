@@ -10,11 +10,11 @@ export const enum FormattingRequestKind {
 }
 
 export class FormattingContext {
-    public currentTokenSpan!: TextRangeWithKind;
-    public nextTokenSpan!: TextRangeWithKind;
-    public contextNode!: Node;
-    public currentTokenParent!: Node;
-    public nextTokenParent!: Node;
+    public currentTokenSpan!: ts.formatting.TextRangeWithKind;
+    public nextTokenSpan!: ts.formatting.TextRangeWithKind;
+    public contextNode!: ts.Node;
+    public currentTokenParent!: ts.Node;
+    public nextTokenParent!: ts.Node;
 
     private contextNodeAllOnSameLine: boolean | undefined;
     private nextNodeAllOnSameLine: boolean | undefined;
@@ -22,15 +22,15 @@ export class FormattingContext {
     private contextNodeBlockIsOnOneLine: boolean | undefined;
     private nextNodeBlockIsOnOneLine: boolean | undefined;
 
-    constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: FormatCodeSettings) {
+    constructor(public readonly sourceFile: ts.SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: ts.FormatCodeSettings) {
     }
 
-    public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
-        this.currentTokenSpan = Debug.checkDefined(currentRange);
-        this.currentTokenParent = Debug.checkDefined(currentTokenParent);
-        this.nextTokenSpan = Debug.checkDefined(nextRange);
-        this.nextTokenParent = Debug.checkDefined(nextTokenParent);
-        this.contextNode = Debug.checkDefined(commonParent);
+    public updateContext(currentRange: ts.formatting.TextRangeWithKind, currentTokenParent: ts.Node, nextRange: ts.formatting.TextRangeWithKind, nextTokenParent: ts.Node, commonParent: ts.Node) {
+        this.currentTokenSpan = ts.Debug.checkDefined(currentRange);
+        this.currentTokenParent = ts.Debug.checkDefined(currentTokenParent);
+        this.nextTokenSpan = ts.Debug.checkDefined(nextRange);
+        this.nextTokenParent = ts.Debug.checkDefined(nextTokenParent);
+        this.contextNode = ts.Debug.checkDefined(commonParent);
 
         // drop cached results
         this.contextNodeAllOnSameLine = undefined;
@@ -82,15 +82,15 @@ export class FormattingContext {
         return this.nextNodeBlockIsOnOneLine;
     }
 
-    private NodeIsOnOneLine(node: Node): boolean {
+    private NodeIsOnOneLine(node: ts.Node): boolean {
         const startLine = this.sourceFile.getLineAndCharacterOfPosition(node.getStart(this.sourceFile)).line;
         const endLine = this.sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
         return startLine === endLine;
     }
 
-    private BlockIsOnOneLine(node: Node): boolean {
-        const openBrace = findChildOfKind(node, SyntaxKind.OpenBraceToken, this.sourceFile);
-        const closeBrace = findChildOfKind(node, SyntaxKind.CloseBraceToken, this.sourceFile);
+    private BlockIsOnOneLine(node: ts.Node): boolean {
+        const openBrace = ts.findChildOfKind(node, ts.SyntaxKind.OpenBraceToken, this.sourceFile);
+        const closeBrace = ts.findChildOfKind(node, ts.SyntaxKind.CloseBraceToken, this.sourceFile);
         if (openBrace && closeBrace) {
             const startLine = this.sourceFile.getLineAndCharacterOfPosition(openBrace.getEnd()).line;
             const endLine = this.sourceFile.getLineAndCharacterOfPosition(closeBrace.getStart(this.sourceFile)).line;

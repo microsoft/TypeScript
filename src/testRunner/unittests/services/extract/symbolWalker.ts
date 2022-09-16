@@ -1,6 +1,6 @@
 namespace ts {
 describe("unittests:: services:: extract:: Symbol Walker", () => {
-    function test(description: string, source: string, verifier: (file: SourceFile, checker: TypeChecker) => void) {
+    function test(description: string, source: string, verifier: (file: ts.SourceFile, checker: ts.TypeChecker) => void) {
         it(description, () => {
             const result = Harness.Compiler.compileFiles([{
                 unitName: "main.ts",
@@ -23,8 +23,8 @@ export default function foo(a: number, b: Bar): void {}`, (file, checker) => {
         let stdLibRefSymbols = 0;
         const expectedSymbols = ["default", "a", "b", "Bar", "x", "y", "history"];
         const walker = checker.getSymbolWalker(symbol => {
-            const isStdLibSymbol = forEach(symbol.declarations, d => {
-                return getSourceFileOfNode(d).hasNoDefaultLib;
+            const isStdLibSymbol = ts.forEach(symbol.declarations, d => {
+                return ts.getSourceFileOfNode(d).hasNoDefaultLib;
             });
             if (isStdLibSymbol) {
                 stdLibRefSymbols++;

@@ -1,10 +1,10 @@
 namespace ts {
 // https://github.com/microsoft/TypeScript/issues/31696
 describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "moduleSpecifiers",
         subScenario: `synthesized module specifiers resolve correctly`,
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/solution/common/nominal.ts": Utils.dedent`
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
@@ -84,17 +84,17 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                     ],
                     "include": []
                 }`
-        }, symbolLibContent),
+        }, ts.symbolLibContent),
         commandLineArgs: ["-b", "/src", "--verbose"]
     });
 });
 
 // https://github.com/microsoft/TypeScript/issues/44434 but with `module: node16`, some `exports` maps blocking direct access, and no `baseUrl`
 describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers across referenced projects resolve correctly", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "moduleSpecifiers",
         subScenario: `synthesized module specifiers across projects resolve correctly`,
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/src-types/index.ts": Utils.dedent`
                     export * from './dogconfig.js';`,
             "/src/src-types/dogconfig.ts": Utils.dedent`
@@ -178,7 +178,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                     }`,
         }, ""),
         modifyFs: fs => {
-            fs.writeFileSync("/lib/lib.es2022.full.d.ts", tscWatch.libFile.content);
+            fs.writeFileSync("/lib/lib.es2022.full.d.ts", ts.tscWatch.libFile.content);
             fs.symlinkSync("/src", "/src/src-types/node_modules");
             fs.symlinkSync("/src", "/src/src-dogs/node_modules");
         },

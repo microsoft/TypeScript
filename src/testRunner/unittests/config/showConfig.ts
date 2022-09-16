@@ -6,28 +6,28 @@ describe("unittests:: config:: showConfig", () => {
 
             it(`Correct output for ${outputFileName}`, () => {
                 const cwd = `/${name}`;
-                const configPath = combinePaths(cwd, "tsconfig.json");
+                const configPath = ts.combinePaths(cwd, "tsconfig.json");
                 const configContents = configJson ? JSON.stringify(configJson) : undefined;
-                const configParseHost: ParseConfigFileHost = {
+                const configParseHost: ts.ParseConfigFileHost = {
                     fileExists: path =>
-                        comparePaths(getNormalizedAbsolutePath(path, cwd), configPath) === Comparison.EqualTo ? true : false,
+                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true : false,
                     getCurrentDirectory() { return cwd; },
                     useCaseSensitiveFileNames: true,
                     onUnRecoverableConfigFileDiagnostic: d => {
-                        throw new Error(flattenDiagnosticMessageText(d.messageText, "\n"));
+                        throw new Error(ts.flattenDiagnosticMessageText(d.messageText, "\n"));
                     },
                     readDirectory() { return []; },
                     readFile: path =>
-                        comparePaths(getNormalizedAbsolutePath(path, cwd), configPath) === Comparison.EqualTo ? configContents : undefined,
+                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
                 };
-                let commandLine = parseCommandLine(commandLinesArgs);
+                let commandLine = ts.parseCommandLine(commandLinesArgs);
                 if (commandLine.options.project) {
-                    const result = getParsedCommandLineOfConfigFile(commandLine.options.project, commandLine.options, configParseHost);
+                    const result = ts.getParsedCommandLineOfConfigFile(commandLine.options.project, commandLine.options, configParseHost);
                     if (result) {
                         commandLine = result;
                     }
                 }
-                const initResult = convertToTSConfig(commandLine, configPath, configParseHost);
+                const initResult = ts.convertToTSConfig(commandLine, configPath, configParseHost);
 
                 // eslint-disable-next-line no-null/no-null
                 Harness.Baseline.runBaseline(outputFileName, JSON.stringify(initResult, null, 4) + "\n");
@@ -112,15 +112,15 @@ describe("unittests:: config:: showConfig", () => {
     });
 
     // Bulk validation of all option declarations
-    for (const option of optionDeclarations) {
+    for (const option of ts.optionDeclarations) {
         baselineOption(option, /*isCompilerOptions*/ true);
     }
 
-    for (const option of optionsForWatch) {
+    for (const option of ts.optionsForWatch) {
         baselineOption(option, /*isCompilerOptions*/ false);
     }
 
-    function baselineOption(option: CommandLineOption, isCompilerOptions: boolean) {
+    function baselineOption(option: ts.CommandLineOption, isCompilerOptions: boolean) {
         if (option.name === "project") return;
         let args: string[];
         let optionValue: object | undefined;
@@ -172,7 +172,7 @@ describe("unittests:: config:: showConfig", () => {
             }
             default: {
                 const iterResult = option.type.keys().next();
-                if (iterResult.done) return Debug.fail("Expected 'option.type' to have entries");
+                if (iterResult.done) return ts.Debug.fail("Expected 'option.type' to have entries");
                 const val = iterResult.value;
                 if (option.isTSConfigOnly) {
                     args = ["-p", "tsconfig.json"];

@@ -2,8 +2,8 @@ namespace ts.projectSystem {
 describe("unittests:: tsserver:: moduleResolution", () => {
     describe("package json file is edited", () => {
         function setup(packageFileContents: string) {
-            const configFile: File = {
-                path: `${tscWatch.projectRoot}/src/tsconfig.json`,
+            const configFile: ts.projectSystem.File = {
+                path: `${ts.tscWatch.projectRoot}/src/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         target: "es2016",
@@ -13,30 +13,30 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                     }
                 })
             };
-            const packageFile: File = {
-                path: `${tscWatch.projectRoot}/package.json`,
+            const packageFile: ts.projectSystem.File = {
+                path: `${ts.tscWatch.projectRoot}/package.json`,
                 content: packageFileContents
             };
-            const fileA: File = {
-                path: `${tscWatch.projectRoot}/src/fileA.ts`,
+            const fileA: ts.projectSystem.File = {
+                path: `${ts.tscWatch.projectRoot}/src/fileA.ts`,
                 content: Utils.dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
                     `
             };
-            const fileB: File = {
-                path: `${tscWatch.projectRoot}/src/fileB.mts`,
+            const fileB: ts.projectSystem.File = {
+                path: `${ts.tscWatch.projectRoot}/src/fileB.mts`,
                 content: Utils.dedent`
                         export function foo() {
                         }
                     `
             };
-            const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-            openFilesForSession([fileA], session);
+            const host = ts.projectSystem.createServerHost([configFile, fileA, fileB, packageFile, { ...ts.projectSystem.libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
+            const session = ts.projectSystem.createSession(host, { canUseEvents: true, logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
+            ts.projectSystem.openFilesForSession([fileA], session);
             return {
                 host, session, packageFile,
-                verifyErr: () => verifyGetErrRequest({ files: [fileA], session, host }),
+                verifyErr: () => ts.projectSystem.verifyGetErrRequest({ files: [fileA], session, host }),
             };
         }
         it("package json file is edited", () => {
@@ -76,7 +76,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
 
-            baselineTsserverLogs("moduleResolution", "package json file is edited", session);
+            ts.projectSystem.baselineTsserverLogs("moduleResolution", "package json file is edited", session);
         });
 
         it("package json file is edited when package json with type module exists", () => {
@@ -114,7 +114,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
 
-            baselineTsserverLogs("moduleResolution", "package json file is edited when package json with type module exists", session);
+            ts.projectSystem.baselineTsserverLogs("moduleResolution", "package json file is edited when package json with type module exists", session);
         });
     });
 });

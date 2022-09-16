@@ -1,9 +1,9 @@
 namespace ts {
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `loads js-based projects and emits them correctly`,
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/common/nominal.js": Utils.dedent`
                     /**
                      * @template T, Name
@@ -84,14 +84,14 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                             "declaration": true
                         }
                     }`,
-        }, symbolLibContent),
+        }, ts.symbolLibContent),
         commandLineArgs: ["-b", "/src"]
     });
 
-    verifyTscWithEdits({
+    ts.verifyTscWithEdits({
         scenario: "javascriptProjectEmit",
         subScenario: `modifies outfile js projects and concatenates them correctly`,
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/common/nominal.js": Utils.dedent`
                     /**
                      * @template T, Name
@@ -174,18 +174,18 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                             "declaration": true
                         }
                     }`,
-        }, symbolLibContent),
+        }, ts.symbolLibContent),
         commandLineArgs: ["-b", "/src"],
         edits: [{
             subScenario: "incremental-declaration-doesnt-change",
-            modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
+            modifyFs: fs => ts.replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
         }]
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/common/obj.json": Utils.dedent`
                     {
                         "val": 42
@@ -265,7 +265,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                             "declaration": true
                         }
                     }`,
-        }, symbolLibContent),
+        }, ts.symbolLibContent),
         commandLineArgs: ["-b", "/src"]
     });
 });

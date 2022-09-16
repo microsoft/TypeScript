@@ -30,19 +30,19 @@ describe("unittests:: services:: organizeImports", () => {
 
         function assertSortsBefore(importString1: string, importString2: string) {
             const [{moduleSpecifier: moduleSpecifier1}, {moduleSpecifier: moduleSpecifier2}] = parseImports(importString1, importString2);
-            assert.equal(OrganizeImports.compareModuleSpecifiers(moduleSpecifier1, moduleSpecifier2), Comparison.LessThan);
-            assert.equal(OrganizeImports.compareModuleSpecifiers(moduleSpecifier2, moduleSpecifier1), Comparison.GreaterThan);
+            assert.equal(ts.OrganizeImports.compareModuleSpecifiers(moduleSpecifier1, moduleSpecifier2), ts.Comparison.LessThan);
+            assert.equal(ts.OrganizeImports.compareModuleSpecifiers(moduleSpecifier2, moduleSpecifier1), ts.Comparison.GreaterThan);
         }
     });
 
     describe("Coalesce imports", () => {
         it("No imports", () => {
-            assert.isEmpty(OrganizeImports.coalesceImports([]));
+            assert.isEmpty(ts.OrganizeImports.coalesceImports([]));
         });
 
         it("Sort specifiers - case-insensitive", () => {
             const sortedImports = parseImports(`import { default as M, a as n, B, y, Z as O } from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(`import { a as n, B, default as M, y, Z as O } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -51,7 +51,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import "lib";`,
                 `import "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(`import "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -60,7 +60,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import * as x from "lib";`,
                 `import * as y from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -69,7 +69,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import x from "lib";`,
                 `import y from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(`import { default as x, default as y } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -78,7 +78,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import { x } from "lib";`,
                 `import { y as z } from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(`import { x, y as z } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -87,7 +87,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import "lib";`,
                 `import * as x from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -96,7 +96,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import "lib";`,
                 `import x from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -105,7 +105,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import "lib";`,
                 `import { x } from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -114,7 +114,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import * as x from "lib";`,
                 `import y from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(
                 `import y, * as x from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
@@ -124,7 +124,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import * as x from "lib";`,
                 `import { y } from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -133,7 +133,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import x from "lib";`,
                 `import { y } from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(
                 `import x, { y } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
@@ -149,7 +149,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `import * as x from "lib";`,
                 `import z from "lib";`,
                 `import { a } from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(
                 `import "lib";`,
                 `import * as x from "lib";`,
@@ -164,7 +164,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `import * as x from "lib";`,
                 `import * as y from "lib";`,
                 `import z from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -174,7 +174,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `import type { x } from "lib";`,
                 `import type { y } from "lib";`,
                 `import { z } from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(
                 `import { z } from "lib";`,
                 `import type { x, y } from "lib";`);
@@ -188,7 +188,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `import type z from "lib";`);
             // Default import could be rewritten as a named import to combine with `x`,
             // but seems of debatable merit.
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = actualCoalescedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -196,19 +196,19 @@ describe("unittests:: services:: organizeImports", () => {
 
     describe("Coalesce exports", () => {
         it("No exports", () => {
-            assert.isEmpty(OrganizeImports.coalesceExports([]));
+            assert.isEmpty(ts.OrganizeImports.coalesceExports([]));
         });
 
         it("Sort specifiers - case-insensitive", () => {
             const sortedExports = parseExports(`export { default as M, a as n, B, y, Z as O } from "lib";`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = parseExports(`export { a as n, B, default as M, y, Z as O } from "lib";`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
 
         it("Sort specifiers - type-only", () => {
             const sortedImports = parseImports(`import { type z, y, type x, c, type b, a } from "lib";`);
-            const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
             const expectedCoalescedImports = parseImports(`import { a, c, y, type b, type x, type z } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -217,7 +217,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export * from "lib";`,
                 `export * from "lib";`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = parseExports(`export * from "lib";`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -226,7 +226,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export { x };`,
                 `export { y as z };`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = parseExports(`export { x, y as z };`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -235,7 +235,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export { x } from "lib";`,
                 `export { y as z } from "lib";`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = parseExports(`export { x, y as z } from "lib";`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -244,7 +244,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export * from "lib";`,
                 `export { y } from "lib";`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = sortedExports;
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -254,7 +254,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `export { x };`,
                 `export { y as w, z as default };`,
                 `export { w as q };`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = parseExports(
                 `export { w as q, x, y as w, z as default };`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
@@ -265,7 +265,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `export { x as a, y } from "lib";`,
                 `export * from "lib";`,
                 `export { z as b } from "lib";`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = parseExports(
                 `export * from "lib";`,
                 `export { x as a, y, z as b } from "lib";`);
@@ -276,7 +276,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export { x };`,
                 `export type { y };`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = sortedExports;
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -285,7 +285,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export type { x };`,
                 `export type { y };`);
-            const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
             const expectedCoalescedExports = parseExports(
                 `export type { x, y };`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
@@ -321,7 +321,7 @@ export const Other = 1;
                 content: "function F() { }",
             };
             const languageService = makeLanguageService(testFile);
-            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
             assert.isEmpty(changes);
         });
 
@@ -331,7 +331,7 @@ export const Other = 1;
                 content: "declare module '*';",
             };
             const languageService = makeLanguageService(testFile);
-            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
             assert.isEmpty(changes);
         });
 
@@ -341,7 +341,7 @@ export const Other = 1;
                 content: `import { f } from 'foo';\nf();`
             };
             const languageService = makeLanguageService(testFile);
-            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
             assert.isEmpty(changes);
         });
 
@@ -457,7 +457,7 @@ D;
                     content: `import { f } from 'foo';\nf();`
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
                 assert.isEmpty(changes);
             });
 
@@ -481,7 +481,7 @@ import { } from "lib";
 `,
             };
             const languageService = makeLanguageService(testFile);
-            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
             assert.isEmpty(changes);
         });
 
@@ -526,7 +526,7 @@ const o = { x };
 `
             };
             const languageService = makeLanguageService(testFile);
-            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
             assert.isEmpty(changes);
         });
 
@@ -539,7 +539,7 @@ export { x };
 `
             };
             const languageService = makeLanguageService(testFile);
-            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+            const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
             assert.isEmpty(changes);
         });
 
@@ -1002,54 +1002,54 @@ export * from "lib";
                 libFile);
         });
 
-        function testOrganizeExports(testName: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+        function testOrganizeExports(testName: string, testFile: ts.TestFSWithWatch.File, ...otherFiles: ts.TestFSWithWatch.File[]) {
             testOrganizeImports(`${testName}.exports`, /*skipDestructiveCodeActions*/ true, testFile, ...otherFiles);
         }
 
-        function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+        function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: ts.TestFSWithWatch.File, ...otherFiles: ts.TestFSWithWatch.File[]) {
             it(testName, () => runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles));
         }
 
-        function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+        function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: ts.TestFSWithWatch.File, ...otherFiles: ts.TestFSWithWatch.File[]) {
             const { path: testPath, content: testContent } = testFile;
             const languageService = makeLanguageService(testFile, ...otherFiles);
-            const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, testFormatSettings, emptyOptions);
+            const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, ts.testFormatSettings, ts.emptyOptions);
             assert.equal(changes.length, 1);
             assert.equal(changes[0].fileName, testPath);
 
-            const newText = textChanges.applyChanges(testContent, changes[0].textChanges);
+            const newText = ts.textChanges.applyChanges(testContent, changes[0].textChanges);
             Harness.Baseline.runBaseline(baselinePath, [
                 "// ==ORIGINAL==",
                 testContent,
                 "// ==ORGANIZED==",
                 newText,
-            ].join(newLineCharacter));
+            ].join(ts.newLineCharacter));
         }
 
-        function makeLanguageService(...files: TestFSWithWatch.File[]) {
-            const host = projectSystem.createServerHost(files);
-            const projectService = projectSystem.createProjectService(host, { useSingleInferredProject: true });
-            projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? JsxEmit.React : JsxEmit.None });
+        function makeLanguageService(...files: ts.TestFSWithWatch.File[]) {
+            const host = ts.projectSystem.createServerHost(files);
+            const projectService = ts.projectSystem.createProjectService(host, { useSingleInferredProject: true });
+            projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? ts.JsxEmit.React : ts.JsxEmit.None });
             files.forEach(f => projectService.openClientFile(f.path));
             return projectService.inferredProjects[0].getLanguageService();
         }
     });
 
-    function parseImports(...importStrings: string[]): readonly ImportDeclaration[] {
-        const sourceFile = createSourceFile("a.ts", importStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
-        const imports = filter(sourceFile.statements, isImportDeclaration);
+    function parseImports(...importStrings: string[]): readonly ts.ImportDeclaration[] {
+        const sourceFile = ts.createSourceFile("a.ts", importStrings.join("\n"), ts.ScriptTarget.ES2015, /*setParentNodes*/ true, ts.ScriptKind.TS);
+        const imports = ts.filter(sourceFile.statements, ts.isImportDeclaration);
         assert.equal(imports.length, importStrings.length);
         return imports;
     }
 
-    function parseExports(...exportStrings: string[]): readonly ExportDeclaration[] {
-        const sourceFile = createSourceFile("a.ts", exportStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
-        const exports = filter(sourceFile.statements, isExportDeclaration);
+    function parseExports(...exportStrings: string[]): readonly ts.ExportDeclaration[] {
+        const sourceFile = ts.createSourceFile("a.ts", exportStrings.join("\n"), ts.ScriptTarget.ES2015, /*setParentNodes*/ true, ts.ScriptKind.TS);
+        const exports = ts.filter(sourceFile.statements, ts.isExportDeclaration);
         assert.equal(exports.length, exportStrings.length);
         return exports;
     }
 
-    function assertEqual(node1?: Node, node2?: Node) {
+    function assertEqual(node1?: ts.Node, node2?: ts.Node) {
         if (node1 === undefined) {
             assert.isUndefined(node2);
             return;
@@ -1062,60 +1062,60 @@ export * from "lib";
         assert.equal(node1.kind, node2.kind);
 
         switch (node1.kind) {
-            case SyntaxKind.ImportDeclaration:
-                const decl1 = node1 as ImportDeclaration;
-                const decl2 = node2 as ImportDeclaration;
+            case ts.SyntaxKind.ImportDeclaration:
+                const decl1 = node1 as ts.ImportDeclaration;
+                const decl2 = node2 as ts.ImportDeclaration;
                 assertEqual(decl1.importClause, decl2.importClause);
                 assertEqual(decl1.moduleSpecifier, decl2.moduleSpecifier);
                 break;
-            case SyntaxKind.ImportClause:
-                const clause1 = node1 as ImportClause;
-                const clause2 = node2 as ImportClause;
+            case ts.SyntaxKind.ImportClause:
+                const clause1 = node1 as ts.ImportClause;
+                const clause2 = node2 as ts.ImportClause;
                 assertEqual(clause1.name, clause2.name);
                 assertEqual(clause1.namedBindings, clause2.namedBindings);
                 break;
-            case SyntaxKind.NamespaceImport:
-                const nsi1 = node1 as NamespaceImport;
-                const nsi2 = node2 as NamespaceImport;
+            case ts.SyntaxKind.NamespaceImport:
+                const nsi1 = node1 as ts.NamespaceImport;
+                const nsi2 = node2 as ts.NamespaceImport;
                 assertEqual(nsi1.name, nsi2.name);
                 break;
-            case SyntaxKind.NamedImports:
-                const ni1 = node1 as NamedImports;
-                const ni2 = node2 as NamedImports;
+            case ts.SyntaxKind.NamedImports:
+                const ni1 = node1 as ts.NamedImports;
+                const ni2 = node2 as ts.NamedImports;
                 assertListEqual(ni1.elements, ni2.elements);
                 break;
-            case SyntaxKind.ImportSpecifier:
-                const is1 = node1 as ImportSpecifier;
-                const is2 = node2 as ImportSpecifier;
+            case ts.SyntaxKind.ImportSpecifier:
+                const is1 = node1 as ts.ImportSpecifier;
+                const is2 = node2 as ts.ImportSpecifier;
                 assertEqual(is1.name, is2.name);
                 assertEqual(is1.propertyName, is2.propertyName);
                 break;
-            case SyntaxKind.ExportDeclaration:
-                const ed1 = node1 as ExportDeclaration;
-                const ed2 = node2 as ExportDeclaration;
+            case ts.SyntaxKind.ExportDeclaration:
+                const ed1 = node1 as ts.ExportDeclaration;
+                const ed2 = node2 as ts.ExportDeclaration;
                 assertEqual(ed1.exportClause, ed2.exportClause);
                 assertEqual(ed1.moduleSpecifier, ed2.moduleSpecifier);
                 break;
-            case SyntaxKind.NamedExports:
-                const ne1 = node1 as NamedExports;
-                const ne2 = node2 as NamedExports;
+            case ts.SyntaxKind.NamedExports:
+                const ne1 = node1 as ts.NamedExports;
+                const ne2 = node2 as ts.NamedExports;
                 assertListEqual(ne1.elements, ne2.elements);
                 break;
-            case SyntaxKind.ExportSpecifier:
-                const es1 = node1 as ExportSpecifier;
-                const es2 = node2 as ExportSpecifier;
+            case ts.SyntaxKind.ExportSpecifier:
+                const es1 = node1 as ts.ExportSpecifier;
+                const es2 = node2 as ts.ExportSpecifier;
                 assertEqual(es1.name, es2.name);
                 assertEqual(es1.propertyName, es2.propertyName);
                 break;
-            case SyntaxKind.Identifier:
-                const id1 = node1 as Identifier;
-                const id2 = node2 as Identifier;
+            case ts.SyntaxKind.Identifier:
+                const id1 = node1 as ts.Identifier;
+                const id2 = node2 as ts.Identifier;
                 assert.equal(id1.text, id2.text);
                 break;
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
-                const sl1 = node1 as LiteralLikeNode;
-                const sl2 = node2 as LiteralLikeNode;
+            case ts.SyntaxKind.StringLiteral:
+            case ts.SyntaxKind.NoSubstitutionTemplateLiteral:
+                const sl1 = node1 as ts.LiteralLikeNode;
+                const sl2 = node2 as ts.LiteralLikeNode;
                 assert.equal(sl1.text, sl2.text);
                 break;
             default:
@@ -1124,7 +1124,7 @@ export * from "lib";
         }
     }
 
-    function assertListEqual(list1: readonly Node[], list2: readonly Node[]) {
+    function assertListEqual(list1: readonly ts.Node[], list2: readonly ts.Node[]) {
         if (list1 === undefined || list2 === undefined) {
             assert.isUndefined(list1);
             assert.isUndefined(list2);

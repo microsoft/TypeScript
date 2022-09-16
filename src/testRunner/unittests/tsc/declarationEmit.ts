@@ -2,39 +2,39 @@ namespace ts {
 describe("unittests:: tsc:: declarationEmit::", () => {
     interface VerifyDeclarationEmitInput {
         subScenario: string;
-        files: TestFSWithWatch.FileOrFolderOrSymLink[];
+        files: ts.TestFSWithWatch.FileOrFolderOrSymLink[];
         rootProject: string;
         changeCaseFileTestPath: (path: string) => boolean;
     }
 
-    function changeCaseFile(file: TestFSWithWatch.FileOrFolderOrSymLink, testPath: (path: string) => boolean, replacePath: (path: string) => string): TestFSWithWatch.FileOrFolderOrSymLink {
-        return !TestFSWithWatch.isSymLink(file) || !testPath(file.symLink) ?
+    function changeCaseFile(file: ts.TestFSWithWatch.FileOrFolderOrSymLink, testPath: (path: string) => boolean, replacePath: (path: string) => string): ts.TestFSWithWatch.FileOrFolderOrSymLink {
+        return !ts.TestFSWithWatch.isSymLink(file) || !testPath(file.symLink) ?
             testPath(file.path) ? { ...file, path: replacePath(file.path) } : file :
             { path: testPath(file.path) ? replacePath(file.path) : file.path, symLink: replacePath(file.symLink) };
     }
 
     function verifyDeclarationEmit({ subScenario, files, rootProject, changeCaseFileTestPath }: VerifyDeclarationEmitInput) {
         describe(subScenario, () => {
-            tscWatch.verifyTscWatch({
+            ts.tscWatch.verifyTscWatch({
                 scenario: "declarationEmit",
                 subScenario,
-                sys: () => tscWatch.createWatchedSystem(files, { currentDirectory: tscWatch.projectRoot }),
+                sys: () => ts.tscWatch.createWatchedSystem(files, { currentDirectory: ts.tscWatch.projectRoot }),
                 commandLineArgs: ["-p", rootProject, "--explainFiles"],
-                changes: emptyArray
+                changes: ts.emptyArray
             });
         });
 
         const caseChangeScenario = `${subScenario} moduleCaseChange`;
         describe(caseChangeScenario, () => {
-            tscWatch.verifyTscWatch({
+            ts.tscWatch.verifyTscWatch({
                 scenario: "declarationEmit",
                 subScenario: caseChangeScenario,
-                sys: () => tscWatch.createWatchedSystem(
+                sys: () => ts.tscWatch.createWatchedSystem(
                     files.map(f => changeCaseFile(f, changeCaseFileTestPath, str => str.replace("myproject", "myProject"))),
-                    { currentDirectory: tscWatch.projectRoot }
+                    { currentDirectory: ts.tscWatch.projectRoot }
                 ),
                 commandLineArgs: ["-p", rootProject, "--explainFiles"],
-                changes: emptyArray
+                changes: ts.emptyArray
             });
         });
     }
@@ -110,18 +110,18 @@ describe("unittests:: tsc:: declarationEmit::", () => {
             subScenario: "when same version is referenced through source and another symlinked package",
             rootProject: "plugin-one",
             files: [
-                { path: `${tscWatch.projectRoot}/plugin-two/index.d.ts`, content: pluginTwoDts() },
-                { path: `${tscWatch.projectRoot}/plugin-two/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
-                { path: `${tscWatch.projectRoot}/plugin-two/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
-                { path: `${tscWatch.projectRoot}/plugin-one/tsconfig.json`, content: pluginOneConfig() },
-                { path: `${tscWatch.projectRoot}/plugin-one/index.ts`, content: pluginOneIndex() },
-                { path: `${tscWatch.projectRoot}/plugin-one/action.ts`, content: pluginOneAction() },
-                { path: `${tscWatch.projectRoot}/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
-                { path: `${tscWatch.projectRoot}/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
-                { path: `${tscWatch.projectRoot}/plugin-one/node_modules/plugin-two`, symLink: `${tscWatch.projectRoot}/plugin-two` },
-                tscWatch.libFile
+                { path: `${ts.tscWatch.projectRoot}/plugin-two/index.d.ts`, content: pluginTwoDts() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-two/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-two/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/tsconfig.json`, content: pluginOneConfig() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/index.ts`, content: pluginOneIndex() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/action.ts`, content: pluginOneAction() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/node_modules/plugin-two`, symLink: `${ts.tscWatch.projectRoot}/plugin-two` },
+                ts.tscWatch.libFile
             ],
-            changeCaseFileTestPath: str => stringContains(str, "/plugin-two"),
+            changeCaseFileTestPath: str => ts.stringContains(str, "/plugin-two"),
         });
 
         verifyDeclarationEmit({
@@ -129,29 +129,29 @@ describe("unittests:: tsc:: declarationEmit::", () => {
             rootProject: "plugin-one",
             files: [
                 {
-                    path: `${tscWatch.projectRoot}/plugin-two/package.json`,
+                    path: `${ts.tscWatch.projectRoot}/plugin-two/package.json`,
                     content: JSON.stringify({
                         name: "plugin-two",
                         version: "0.1.3",
                         main: "dist/commonjs/index.js"
                     })
                 },
-                { path: `${tscWatch.projectRoot}/plugin-two/dist/commonjs/index.d.ts`, content: pluginTwoDts() },
-                { path: `${tscWatch.projectRoot}/plugin-two/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
-                { path: `${tscWatch.projectRoot}/plugin-two/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
-                { path: `${tscWatch.projectRoot}/plugin-one/tsconfig.json`, content: pluginOneConfig() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-two/dist/commonjs/index.d.ts`, content: pluginTwoDts() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-two/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-two/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/tsconfig.json`, content: pluginOneConfig() },
                 {
-                    path: `${tscWatch.projectRoot}/plugin-one/index.ts`,
+                    path: `${ts.tscWatch.projectRoot}/plugin-one/index.ts`,
                     content: `${pluginOneIndex()}
 ${pluginOneAction()}`
                 },
-                { path: `${tscWatch.projectRoot}/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
-                { path: `${tscWatch.projectRoot}/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
-                { path: `/temp/yarn/data/link/plugin-two`, symLink: `${tscWatch.projectRoot}/plugin-two` },
-                { path: `${tscWatch.projectRoot}/plugin-one/node_modules/plugin-two`, symLink: `/temp/yarn/data/link/plugin-two` },
-                tscWatch.libFile
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
+                { path: `/temp/yarn/data/link/plugin-two`, symLink: `${ts.tscWatch.projectRoot}/plugin-two` },
+                { path: `${ts.tscWatch.projectRoot}/plugin-one/node_modules/plugin-two`, symLink: `/temp/yarn/data/link/plugin-two` },
+                ts.tscWatch.libFile
             ],
-            changeCaseFileTestPath: str => stringContains(str, "/plugin-two"),
+            changeCaseFileTestPath: str => ts.stringContains(str, "/plugin-two"),
         });
     });
 
@@ -160,12 +160,12 @@ ${pluginOneAction()}`
         rootProject: "pkg3",
         files: [
             {
-                path: `${tscWatch.projectRoot}/pkg1/dist/index.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/pkg1/dist/index.d.ts`,
                 content: Utils.dedent`
                             export * from './types';`
             },
             {
-                path: `${tscWatch.projectRoot}/pkg1/dist/types.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/pkg1/dist/types.d.ts`,
                 content: Utils.dedent`
                             export declare type A = {
                                 id: string;
@@ -182,7 +182,7 @@ ${pluginOneAction()}`
                             }`
             },
             {
-                path: `${tscWatch.projectRoot}/pkg1/package.json`,
+                path: `${ts.tscWatch.projectRoot}/pkg1/package.json`,
                 content: JSON.stringify({
                     name: "@raymondfeng/pkg1",
                     version: "1.0.0",
@@ -191,17 +191,17 @@ ${pluginOneAction()}`
                 })
             },
             {
-                path: `${tscWatch.projectRoot}/pkg2/dist/index.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/pkg2/dist/index.d.ts`,
                 content: Utils.dedent`
                             export * from './types';`
             },
             {
-                path: `${tscWatch.projectRoot}/pkg2/dist/types.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/pkg2/dist/types.d.ts`,
                 content: Utils.dedent`
                             export {MetadataAccessor} from '@raymondfeng/pkg1';`
             },
             {
-                path: `${tscWatch.projectRoot}/pkg2/package.json`,
+                path: `${ts.tscWatch.projectRoot}/pkg2/package.json`,
                 content: JSON.stringify({
                     name: "@raymondfeng/pkg2",
                     version: "1.0.0",
@@ -210,18 +210,18 @@ ${pluginOneAction()}`
                 })
             },
             {
-                path: `${tscWatch.projectRoot}/pkg3/src/index.ts`,
+                path: `${ts.tscWatch.projectRoot}/pkg3/src/index.ts`,
                 content: Utils.dedent`
                             export * from './keys';`
             },
             {
-                path: `${tscWatch.projectRoot}/pkg3/src/keys.ts`,
+                path: `${ts.tscWatch.projectRoot}/pkg3/src/keys.ts`,
                 content: Utils.dedent`
                             import {MetadataAccessor} from "@raymondfeng/pkg2";
                             export const ADMIN = MetadataAccessor.create<boolean>('1');`
             },
             {
-                path: `${tscWatch.projectRoot}/pkg3/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/pkg3/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         outDir: "dist",
@@ -235,16 +235,16 @@ ${pluginOneAction()}`
                 })
             },
             {
-                path: `${tscWatch.projectRoot}/pkg2/node_modules/@raymondfeng/pkg1`,
-                symLink: `${tscWatch.projectRoot}/pkg1`
+                path: `${ts.tscWatch.projectRoot}/pkg2/node_modules/@raymondfeng/pkg1`,
+                symLink: `${ts.tscWatch.projectRoot}/pkg1`
             },
             {
-                path: `${tscWatch.projectRoot}/pkg3/node_modules/@raymondfeng/pkg2`,
-                symLink: `${tscWatch.projectRoot}/pkg2`
+                path: `${ts.tscWatch.projectRoot}/pkg3/node_modules/@raymondfeng/pkg2`,
+                symLink: `${ts.tscWatch.projectRoot}/pkg2`
             },
-            tscWatch.libFile
+            ts.tscWatch.libFile
         ],
-        changeCaseFileTestPath: str => stringContains(str, "/pkg1"),
+        changeCaseFileTestPath: str => ts.stringContains(str, "/pkg1"),
     });
 });
 }
