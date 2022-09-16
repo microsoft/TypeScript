@@ -220,66 +220,66 @@ var OuterC = /** @class */ (function () {
 
 
 //// [varianceAnnotations.d.ts]
-declare type Covariant<out T> = {
+type Covariant<out T> = {
     x: T;
 };
 declare let super_covariant: Covariant<unknown>;
 declare let sub_covariant: Covariant<string>;
-declare type Contravariant<in T> = {
+type Contravariant<in T> = {
     f: (x: T) => void;
 };
 declare let super_contravariant: Contravariant<unknown>;
 declare let sub_contravariant: Contravariant<string>;
-declare type Invariant<in out T> = {
+type Invariant<in out T> = {
     f: (x: T) => T;
 };
 declare let super_invariant: Invariant<unknown>;
 declare let sub_invariant: Invariant<string>;
-declare type T10<out T> = T;
-declare type T11<in T> = keyof T;
-declare type T12<out T, out K extends keyof T> = T[K];
-declare type T13<in out T> = T[keyof T];
-declare type Covariant1<in T> = {
+type T10<out T> = T;
+type T11<in T> = keyof T;
+type T12<out T, out K extends keyof T> = T[K];
+type T13<in out T> = T[keyof T];
+type Covariant1<in T> = {
     x: T;
 };
-declare type Contravariant1<out T> = keyof T;
-declare type Contravariant2<out T> = {
+type Contravariant1<out T> = keyof T;
+type Contravariant2<out T> = {
     f: (x: T) => void;
 };
-declare type Invariant1<in T> = {
+type Invariant1<in T> = {
     f: (x: T) => T;
 };
-declare type Invariant2<out T> = {
+type Invariant2<out T> = {
     f: (x: T) => T;
 };
-declare type Foo1<in T> = {
+type Foo1<in T> = {
     x: T;
     f: FooFn1<T>;
 };
-declare type FooFn1<T> = (foo: Bar1<T[]>) => void;
-declare type Bar1<T> = {
+type FooFn1<T> = (foo: Bar1<T[]>) => void;
+type Bar1<T> = {
     value: Foo1<T[]>;
 };
-declare type Foo2<out T> = {
+type Foo2<out T> = {
     x: T;
     f: FooFn2<T>;
 };
-declare type FooFn2<T> = (foo: Bar2<T[]>) => void;
-declare type Bar2<T> = {
+type FooFn2<T> = (foo: Bar2<T[]>) => void;
+type Bar2<T> = {
     value: Foo2<T[]>;
 };
-declare type Foo3<in out T> = {
+type Foo3<in out T> = {
     x: T;
     f: FooFn3<T>;
 };
-declare type FooFn3<T> = (foo: Bar3<T[]>) => void;
-declare type Bar3<T> = {
+type FooFn3<T> = (foo: Bar3<T[]>) => void;
+type Bar3<T> = {
     value: Foo3<T[]>;
 };
-declare type T20<public T> = T;
-declare type T21<in out in T> = T;
-declare type T22<in out out T> = T;
-declare type T23<out in T> = T;
+type T20<public T> = T;
+type T21<in out in T> = T;
+type T22<in out out T> = T;
+type T23<out in T> = T;
 declare function f1<in T>(x: T): void;
 declare function f2<out T>(): T;
 declare class C {

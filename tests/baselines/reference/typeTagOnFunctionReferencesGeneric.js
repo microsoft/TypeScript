@@ -37,9 +37,5 @@ inJsArrow(2); // no error gets linted as expected
 
 
 //// [typeTagOnFunctionReferencesGeneric.d.ts]
-/**
- * @typedef {<T>(m : T) => T} IFn
- */
-/**@type {IFn}*/
-export function inJs<T>(l: T): T;
+export function inJs<T>(m: T): T;
 export type IFn = <T>(m: T) => T;

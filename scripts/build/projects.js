@@ -35,7 +35,7 @@ class ProjectQueue {
     }
 }
 
-const execTsc = (lkg, ...args) =>
+const execTsc = (/** @type {boolean} */ lkg, /** @type {string[]} */ ...args) =>
     exec(process.execPath,
          [resolve(findUpRoot(), lkg ? "./lib/tsc" : "./built/local/tsc"),
           "-b", ...args],
@@ -45,7 +45,7 @@ const projectBuilder = new ProjectQueue((projects, lkg, force) => execTsc(lkg, .
 
 /**
  * @param {string} project
- * @param {object} [options]
+ * @param {object} options
  * @param {boolean} [options.lkg=true]
  * @param {boolean} [options.force=false]
  */
@@ -58,11 +58,11 @@ const projectCleaner = new ProjectQueue((projects, lkg) => execTsc(lkg, "--clean
  */
 exports.cleanProject = (project) => projectCleaner.enqueue(project);
 
-const projectWatcher = new ProjectQueue((projects) => execTsc(true, "--watch", ...projects));
+const projectWatcher = new ProjectQueue((projects) => execTsc(/*lkg*/ true, "--watch", ...projects));
 
 /**
  * @param {string} project
- * @param {object} [options]
+ * @param {object} options
  * @param {boolean} [options.lkg=true]
  */
 exports.watchProject = (project, { lkg } = {}) => projectWatcher.enqueue(project, { lkg });

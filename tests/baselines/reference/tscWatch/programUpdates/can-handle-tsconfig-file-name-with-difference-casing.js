@@ -43,17 +43,17 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/A/B/tsconfig.json","pollingInterval":250}
-/a/b/app.ts:
-  {"fileName":"/A/B/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /a/b/node_modules/@types:
-  {"fileName":"/A/B/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 

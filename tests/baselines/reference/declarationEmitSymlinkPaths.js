@@ -42,8 +42,8 @@ exports.NotificationScenario = (0, index_1.test)(NotificationAPIUtils_1.getNotif
 
 
 //// [NotificationAPIUtils.d.ts]
-export declare type NotificationRequest = {};
-export declare type NotificationResponse = {};
+export type NotificationRequest = {};
+export type NotificationResponse = {};
 export declare function getNotification(): NotificationResponse;
 //// [NotificationStore.d.ts]
 export declare const NotificationScenario: () => import("../API/NotificationAPIUtils").NotificationResponse;

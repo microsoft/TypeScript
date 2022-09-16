@@ -1933,9 +1933,9 @@ class SampleClass<P> {
 >this.props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 536, 22))
 >this : Symbol(SampleClass, Decl(keyofAndIndexedAccess.ts, 532, 1))
 >props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 536, 22))
->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 538, 16))
     }
 }
