@@ -8,7 +8,7 @@ const rename = require("gulp-rename");
 const concat = require("gulp-concat");
 const merge2 = require("merge2");
 const { src, dest, task, parallel, series, watch } = require("gulp");
-const { append, transform } = require("gulp-insert");
+const { transform } = require("gulp-insert");
 const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
 const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 const { buildProject: realBuildProject, cleanProject, watchProject } = require("./scripts/build/projects");
@@ -47,7 +47,7 @@ const buildProjectWithEmit = async (...args) => {
 const buildProject = cmdLineOptions.bundle ? realBuildProject : buildProjectWithEmit;
 
 
-const buildScripts = () => buildProject("scripts", cmdLineOptions);
+const buildScripts = () => buildProject("scripts");
 task("scripts", buildScripts);
 task("scripts").description = "Builds files in the 'scripts' folder.";
 
@@ -210,7 +210,7 @@ function esbuildTask(entrypoint, outfile) {
 
 const esbuildDebugTools = esbuildTask("./src/debug/compilerDebug.ts", "./built/local/compilerDebug.js");
 
-const buildDebugTools = () => cmdLineOptions.bundle ? esbuildDebugTools.build() : buildProject("src/debug", cmdLineOptions);
+const buildDebugTools = () => cmdLineOptions.bundle ? esbuildDebugTools.build() : buildProject("src/debug");
 const cleanDebugTools = () => cmdLineOptions.bundle ? esbuildDebugTools.build() : cleanProject("src/debug");
 cleanTasks.push(cleanDebugTools);
 
@@ -221,7 +221,7 @@ const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnost
 const esbuildTsc = esbuildTask("./src/tsc/tsc.ts", "./built/local/tsc.js");
 
 
-const buildTsc = () => cmdLineOptions.bundle ? esbuildTsc.build() : buildProject("src/tsc", cmdLineOptions);
+const buildTsc = () => cmdLineOptions.bundle ? esbuildTsc.build() : buildProject("src/tsc");
 task("tsc", series(lkgPreBuild, buildTsc));
 task("tsc").description = "Builds the command-line compiler";
 
@@ -242,7 +242,7 @@ const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
 
 const esbuildServices = esbuildTask("./src/typescript/typescript.ts", "./built/local/typescript.js");
 
-const buildServices = () => cmdLineOptions.bundle ? esbuildServices.build() : buildProject("src/typescript", cmdLineOptions);
+const buildServices = () => cmdLineOptions.bundle ? esbuildServices.build() : buildProject("src/typescript");
 
 task("services", series(preBuild, buildServices));
 task("services").description = "Builds the language service";
@@ -264,16 +264,16 @@ task("watch-services").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const buildDynamicImportCompat = () => buildProject("src/dynamicImportCompat", cmdLineOptions);
+const buildDynamicImportCompat = () => buildProject("src/dynamicImportCompat");
 task("dynamicImportCompat", buildDynamicImportCompat);
 
 const cleanDynamicImportCompat = () => cleanProject("src/dynamicImportCompat");
-const watchDynamicImportCompat = () => watchProject("src/dynamicImportCompat", cmdLineOptions);
+const watchDynamicImportCompat = () => watchProject("src/dynamicImportCompat");
 
 
 const esbuildServer = esbuildTask("./src/tsserver/server.ts", "./built/local/tsserver.js");
 
-const buildServerMain = () => cmdLineOptions.bundle ? esbuildServer.build() : buildProject("src/tsserver", cmdLineOptions);
+const buildServerMain = () => cmdLineOptions.bundle ? esbuildServer.build() : buildProject("src/tsserver");
 const buildServer = series(buildDynamicImportCompat, buildServerMain);
 buildServer.displayName = "buildServer";
 task("tsserver", series(preBuild, buildServer));
@@ -289,7 +289,7 @@ cleanTasks.push(cleanServer);
 task("clean-tsserver", cleanServer);
 task("clean-tsserver").description = "Cleans outputs for the language server";
 
-const watchServer = () => cmdLineOptions.bundle ? esbuildServer.watch() : watchProject("src/tsserver", cmdLineOptions);
+const watchServer = () => cmdLineOptions.bundle ? esbuildServer.watch() : watchProject("src/tsserver");
 task("watch-tsserver", series(preBuild, parallel(watchLib, watchDiagnostics, watchDynamicImportCompat, watchServer)));
 task("watch-tsserver").description = "Watch for changes and rebuild the language server only";
 task("watch-tsserver").flags = {
@@ -313,7 +313,7 @@ task("watch-min").flags = {
 
 const esbuildLssl = esbuildTask("./src/tsserverlibrary/tsserverlibrary.ts", "./built/local/tsserverlibrary.js");
 
-const buildLssl = () => cmdLineOptions.bundle ? esbuildLssl.build() : buildProject("src/tsserverlibrary", cmdLineOptions);
+const buildLssl = () => cmdLineOptions.bundle ? esbuildLssl.build() : buildProject("src/tsserverlibrary");
 task("lssl", series(preBuild, buildLssl));
 task("lssl").description = "Builds language service server library";
 task("lssl").flags = {
@@ -337,7 +337,7 @@ task("watch-lssl").flags = {
 const testRunner = cmdLineOptions.bundle ? "./built/local/run.js" : "./built/local/testRunner/runner.js";
 const esbuildTests = esbuildTask("./src/testRunner/_namespaces/Harness.ts", testRunner);
 
-const buildTests = () => cmdLineOptions.bundle ? esbuildTests.build() : buildProject("src/testRunner", cmdLineOptions);
+const buildTests = () => cmdLineOptions.bundle ? esbuildTests.build() : buildProject("src/testRunner");
 task("tests", series(preBuild, parallel(buildLssl, buildTests)));
 task("tests").description = "Builds the test infrastructure";
 task("tests").flags = {
@@ -349,9 +349,9 @@ cleanTasks.push(cleanTests);
 task("clean-tests", cleanTests);
 task("clean-tests").description = "Cleans the outputs for the test infrastructure";
 
-const watchTests = () => cmdLineOptions.bundle ? esbuildTests.watch() : watchProject("src/testRunner", cmdLineOptions);
+const watchTests = () => cmdLineOptions.bundle ? esbuildTests.watch() : watchProject("src/testRunner");
 
-const buildEslintRules = () => buildProject("scripts/eslint", cmdLineOptions);
+const buildEslintRules = () => buildProject("scripts/eslint");
 task("build-eslint-rules", buildEslintRules);
 task("build-eslint-rules").description = "Compiles eslint rules to js";
 
@@ -392,19 +392,19 @@ task("lint").description = "Runs eslint on the compiler and scripts sources.";
 
 const esbuildCancellationToken = esbuildTask("./src/cancellationToken/cancellationToken.ts", "./built/local/cancellationToken.js");
 
-const buildCancellationToken = () => cmdLineOptions.bundle ? esbuildCancellationToken.build() : buildProject("src/cancellationToken", cmdLineOptions);
+const buildCancellationToken = () => cmdLineOptions.bundle ? esbuildCancellationToken.build() : buildProject("src/cancellationToken");
 const cleanCancellationToken = () => cmdLineOptions.bundle ? esbuildCancellationToken.clean() : cleanProject("src/cancellationToken");
 cleanTasks.push(cleanCancellationToken);
 
 const esbuildTypingsInstaller = esbuildTask("./src/typingsInstaller/nodeTypingsInstaller.ts", "./built/local/typingsInstaller.js");
 
-const buildTypingsInstaller = () => cmdLineOptions.bundle ? esbuildTypingsInstaller.build() : buildProject("src/typingsInstaller", cmdLineOptions);
+const buildTypingsInstaller = () => cmdLineOptions.bundle ? esbuildTypingsInstaller.build() : buildProject("src/typingsInstaller");
 const cleanTypingsInstaller = () => cmdLineOptions.bundle ? esbuildTypingsInstaller.clean() : cleanProject("src/typingsInstaller");
 cleanTasks.push(cleanTypingsInstaller);
 
 const esbuildWatchGuard = esbuildTask("./src/typingsInstaller/nodeTypingsInstaller.ts", "./built/local/typingsInstaller.js");
 
-const buildWatchGuard = () => cmdLineOptions.bundle ? esbuildWatchGuard.build() : buildProject("src/watchGuard", cmdLineOptions);
+const buildWatchGuard = () => cmdLineOptions.bundle ? esbuildWatchGuard.build() : buildProject("src/watchGuard");
 const cleanWatchGuard = () => cmdLineOptions.bundle ? esbuildWatchGuard.clean() : cleanProject("src/watchGuard");
 cleanTasks.push(cleanWatchGuard);
 
@@ -511,11 +511,11 @@ task("baseline-accept-rwc").description = "Makes the most recent rwc test result
 
 // TODO(jakebailey): figure out what tsc-instrumented and such are for and what do to with them.
 
-const buildLoggedIO = () => buildProject("src/loggedIO/tsconfig-tsc-instrumented.json", cmdLineOptions);
+const buildLoggedIO = () => buildProject("src/loggedIO/tsconfig-tsc-instrumented.json");
 const cleanLoggedIO = () => del("built/local/loggedIO.js");
 cleanTasks.push(cleanLoggedIO);
 
-const buildInstrumenter = () => buildProject("src/instrumenter", cmdLineOptions);
+const buildInstrumenter = () => buildProject("src/instrumenter");
 const cleanInstrumenter = () => cleanProject("src/instrumenter");
 cleanTasks.push(cleanInstrumenter);
 
@@ -533,7 +533,7 @@ const updateSublime = () => src(["built/local/tsserver.js", "built/local/tsserve
 task("update-sublime", updateSublime);
 task("update-sublime").description = "Updates the sublime plugin's tsserver";
 
-const buildImportDefinitelyTypedTests = () => buildProject("scripts/importDefinitelyTypedTests", cmdLineOptions);
+const buildImportDefinitelyTypedTests = () => buildProject("scripts/importDefinitelyTypedTests");
 const cleanImportDefinitelyTypedTests = () => cleanProject("scripts/importDefinitelyTypedTests");
 cleanTasks.push(cleanImportDefinitelyTypedTests);
 

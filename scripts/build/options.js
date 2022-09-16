@@ -50,7 +50,7 @@ if (module.exports.built) {
 }
 
 /**
- * @typedef TypedOptions
+ * @typedef CommandLineOptions
  * @property {boolean} dirty
  * @property {boolean} light
  * @property {boolean} colors
@@ -71,7 +71,8 @@ if (module.exports.built) {
  * @property {boolean} keepFailed
  * @property {boolean} ci
  * @property {boolean} bundle
- *
- * @typedef {import("minimist").ParsedArgs & TypedOptions} CommandLineOptions
+ * @property {string} shards
+ * @property {string} shardId
+ * @property {string} break
  */
 void 0;
