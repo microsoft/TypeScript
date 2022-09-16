@@ -17073,8 +17073,8 @@ namespace ts {
                         const firstIdentifier = getFirstIdentifier(entityName);
                         const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
                         if (firstIdentifierSymbol.declarations) {
-                            return !!forEach(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tp.symbol.declarations![0].parent)) ||
-                                !!forEach((node as TypeQueryNode).typeArguments, containsReference);
+                            return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, getDeclarationOfKind<TypeParameterDeclaration>(tp.symbol, SyntaxKind.TypeParameter)!.parent)) ||
+                                some((node as TypeQueryNode).typeArguments, containsReference);
                         }
                         return true;
                     case SyntaxKind.MethodDeclaration:
