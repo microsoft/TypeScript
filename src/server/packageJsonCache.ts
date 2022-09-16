@@ -1,39 +1,43 @@
-import * as ts from "./_namespaces/ts";
+import {
+    combinePaths, createPackageJsonInfo, Debug, forEachAncestorDirectory, getDirectoryPath, Map, Path,
+    ProjectPackageJsonInfo, Ternary, tryFileExists,
+} from "./_namespaces/ts";
+import { ProjectService } from "./_namespaces/ts.server";
 
 /** @internal */
 export interface PackageJsonCache {
-    addOrUpdate(fileName: ts.Path): void;
-    forEach(action: (info: ts.ProjectPackageJsonInfo, fileName: ts.Path) => void): void;
-    delete(fileName: ts.Path): void;
-    get(fileName: ts.Path): ts.ProjectPackageJsonInfo | false | undefined;
-    getInDirectory(directory: ts.Path): ts.ProjectPackageJsonInfo | undefined;
-    directoryHasPackageJson(directory: ts.Path): ts.Ternary;
-    searchDirectoryAndAncestors(directory: ts.Path): void;
+    addOrUpdate(fileName: Path): void;
+    forEach(action: (info: ProjectPackageJsonInfo, fileName: Path) => void): void;
+    delete(fileName: Path): void;
+    get(fileName: Path): ProjectPackageJsonInfo | false | undefined;
+    getInDirectory(directory: Path): ProjectPackageJsonInfo | undefined;
+    directoryHasPackageJson(directory: Path): Ternary;
+    searchDirectoryAndAncestors(directory: Path): void;
 }
 
 /** @internal */
-export function createPackageJsonCache(host: ts.server.ProjectService): PackageJsonCache {
-    const packageJsons = new ts.Map<string, ts.ProjectPackageJsonInfo>();
-    const directoriesWithoutPackageJson = new ts.Map<string, true>();
+export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
+    const packageJsons = new Map<string, ProjectPackageJsonInfo>();
+    const directoriesWithoutPackageJson = new Map<string, true>();
     return {
         addOrUpdate,
         forEach: packageJsons.forEach.bind(packageJsons),
         get: packageJsons.get.bind(packageJsons),
         delete: fileName => {
             packageJsons.delete(fileName);
-            directoriesWithoutPackageJson.set(ts.getDirectoryPath(fileName), true);
+            directoriesWithoutPackageJson.set(getDirectoryPath(fileName), true);
         },
         getInDirectory: directory => {
-            return packageJsons.get(ts.combinePaths(directory, "package.json")) || undefined;
+            return packageJsons.get(combinePaths(directory, "package.json")) || undefined;
         },
         directoryHasPackageJson,
         searchDirectoryAndAncestors: directory => {
-            ts.forEachAncestorDirectory(directory, ancestor => {
-                if (directoryHasPackageJson(ancestor) !== ts.Ternary.Maybe) {
+            forEachAncestorDirectory(directory, ancestor => {
+                if (directoryHasPackageJson(ancestor) !== Ternary.Maybe) {
                     return true;
                 }
-                const packageJsonFileName = host.toPath(ts.combinePaths(ancestor, "package.json"));
-                if (ts.tryFileExists(host, packageJsonFileName)) {
+                const packageJsonFileName = host.toPath(combinePaths(ancestor, "package.json"));
+                if (tryFileExists(host, packageJsonFileName)) {
                     addOrUpdate(packageJsonFileName);
                 }
                 else {
@@ -43,15 +47,15 @@ export function createPackageJsonCache(host: ts.server.ProjectService): PackageJ
         },
     };
 
-    function addOrUpdate(fileName: ts.Path) {
-        const packageJsonInfo = ts.Debug.checkDefined(ts.createPackageJsonInfo(fileName, host.host));
+    function addOrUpdate(fileName: Path) {
+        const packageJsonInfo = Debug.checkDefined(createPackageJsonInfo(fileName, host.host));
         packageJsons.set(fileName, packageJsonInfo);
-        directoriesWithoutPackageJson.delete(ts.getDirectoryPath(fileName));
+        directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));
     }
 
-    function directoryHasPackageJson(directory: ts.Path) {
-        return packageJsons.has(ts.combinePaths(directory, "package.json")) ? ts.Ternary.True :
-            directoriesWithoutPackageJson.has(directory) ? ts.Ternary.False :
-            ts.Ternary.Maybe;
+    function directoryHasPackageJson(directory: Path) {
+        return packageJsons.has(combinePaths(directory, "package.json")) ? Ternary.True :
+            directoriesWithoutPackageJson.has(directory) ? Ternary.False :
+            Ternary.Maybe;
     }
 }

@@ -1,38 +1,41 @@
-import * as ts from "../_namespaces/ts";
+import {
+    CatchClause, chainBundle, isBlock, Node, SourceFile, SyntaxKind, TransformationContext, TransformFlags,
+    visitEachChild, visitNode, VisitResult,
+} from "../_namespaces/ts";
 
 /** @internal */
-export function transformES2019(context: ts.TransformationContext) {
+export function transformES2019(context: TransformationContext) {
     const factory = context.factory;
-    return ts.chainBundle(context, transformSourceFile);
+    return chainBundle(context, transformSourceFile);
 
-    function transformSourceFile(node: ts.SourceFile) {
+    function transformSourceFile(node: SourceFile) {
         if (node.isDeclarationFile) {
             return node;
         }
 
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 
-    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
-        if ((node.transformFlags & ts.TransformFlags.ContainsES2019) === 0) {
+    function visitor(node: Node): VisitResult<Node> {
+        if ((node.transformFlags & TransformFlags.ContainsES2019) === 0) {
             return node;
         }
         switch (node.kind) {
-            case ts.SyntaxKind.CatchClause:
-                return visitCatchClause(node as ts.CatchClause);
+            case SyntaxKind.CatchClause:
+                return visitCatchClause(node as CatchClause);
             default:
-                return ts.visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
         }
     }
 
-    function visitCatchClause(node: ts.CatchClause): ts.CatchClause {
+    function visitCatchClause(node: CatchClause): CatchClause {
         if (!node.variableDeclaration) {
             return factory.updateCatchClause(
                 node,
                 factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined)),
-                ts.visitNode(node.block, visitor, ts.isBlock)
+                visitNode(node.block, visitor, isBlock)
             );
         }
-        return ts.visitEachChild(node, visitor, context);
+        return visitEachChild(node, visitor, context);
     }
 }

@@ -1,35 +1,40 @@
-import * as ts from "./_namespaces/ts";
+import {
+    arrayFrom, cast, CodeActionCommand, CodeFixAction, CodeFixAllContext, CodeFixContext, CodeFixContextBase,
+    CodeFixRegistration, CombinedCodeActions, computeSuggestionDiagnostics, contains, createMultiMap, Debug, Diagnostic,
+    DiagnosticAndArguments, diagnosticToString, DiagnosticWithLocation, FileTextChanges, flatMap, isString, map, Map,
+    Push, TextChange, textChanges,
+} from "./_namespaces/ts";
 
-const errorCodeToFixes = ts.createMultiMap<ts.CodeFixRegistration>();
-const fixIdToRegistration = new ts.Map<string, ts.CodeFixRegistration>();
+const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
+const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
 /** @internal */
-export function createCodeFixActionWithoutFixAll(fixName: string, changes: ts.FileTextChanges[], description: ts.DiagnosticAndArguments) {
-    return createCodeFixActionWorker(fixName, ts.diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
+export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments) {
+    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
 }
 
 /** @internal */
-export function createCodeFixAction(fixName: string, changes: ts.FileTextChanges[], description: ts.DiagnosticAndArguments, fixId: {}, fixAllDescription: ts.DiagnosticAndArguments, command?: ts.CodeActionCommand): ts.CodeFixAction {
-    return createCodeFixActionWorker(fixName, ts.diagnosticToString(description), changes, fixId, ts.diagnosticToString(fixAllDescription), command);
+export function createCodeFixAction(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
+    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
 }
 
 /** @internal */
-export function createCodeFixActionMaybeFixAll(fixName: string, changes: ts.FileTextChanges[], description: ts.DiagnosticAndArguments, fixId?: {}, fixAllDescription?: ts.DiagnosticAndArguments, command?: ts.CodeActionCommand) {
-    return createCodeFixActionWorker(fixName, ts.diagnosticToString(description), changes, fixId, fixAllDescription && ts.diagnosticToString(fixAllDescription), command);
+export function createCodeFixActionMaybeFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments, fixId?: {}, fixAllDescription?: DiagnosticAndArguments, command?: CodeActionCommand) {
+    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, fixAllDescription && diagnosticToString(fixAllDescription), command);
 }
 
-function createCodeFixActionWorker(fixName: string, description: string, changes: ts.FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: ts.CodeActionCommand): ts.CodeFixAction {
+function createCodeFixActionWorker(fixName: string, description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: CodeActionCommand): CodeFixAction {
     return { fixName, description, changes, fixId, fixAllDescription, commands: command ? [command] : undefined };
 }
 
 /** @internal */
-export function registerCodeFix(reg: ts.CodeFixRegistration) {
+export function registerCodeFix(reg: CodeFixRegistration) {
     for (const error of reg.errorCodes) {
         errorCodeToFixes.add(String(error), reg);
     }
     if (reg.fixIds) {
         for (const fixId of reg.fixIds) {
-            ts.Debug.assert(!fixIdToRegistration.has(fixId));
+            Debug.assert(!fixIdToRegistration.has(fixId));
             fixIdToRegistration.set(fixId, reg);
         }
     }
@@ -37,70 +42,70 @@ export function registerCodeFix(reg: ts.CodeFixRegistration) {
 
 /** @internal */
 export function getSupportedErrorCodes(): string[] {
-    return ts.arrayFrom(errorCodeToFixes.keys());
+    return arrayFrom(errorCodeToFixes.keys());
 }
 
-function removeFixIdIfFixAllUnavailable(registration: ts.CodeFixRegistration, diagnostics: ts.Diagnostic[]) {
+function removeFixIdIfFixAllUnavailable(registration: CodeFixRegistration, diagnostics: Diagnostic[]) {
     const { errorCodes } = registration;
     let maybeFixableDiagnostics = 0;
     for (const diag of diagnostics) {
-        if (ts.contains(errorCodes, diag.code)) maybeFixableDiagnostics++;
+        if (contains(errorCodes, diag.code)) maybeFixableDiagnostics++;
         if (maybeFixableDiagnostics > 1) break;
     }
 
     const fixAllUnavailable = maybeFixableDiagnostics < 2;
-    return ({ fixId, fixAllDescription, ...action }: ts.CodeFixAction): ts.CodeFixAction => {
+    return ({ fixId, fixAllDescription, ...action }: CodeFixAction): CodeFixAction => {
         return fixAllUnavailable ? action : { ...action, fixId, fixAllDescription };
     };
 }
 
 /** @internal */
-export function getFixes(context: ts.CodeFixContext): readonly ts.CodeFixAction[] {
+export function getFixes(context: CodeFixContext): readonly CodeFixAction[] {
     const diagnostics = getDiagnostics(context);
     const registrations = errorCodeToFixes.get(String(context.errorCode));
-    return ts.flatMap(registrations, f => ts.map(f.getCodeActions(context), removeFixIdIfFixAllUnavailable(f, diagnostics)));
+    return flatMap(registrations, f => map(f.getCodeActions(context), removeFixIdIfFixAllUnavailable(f, diagnostics)));
 }
 
 /** @internal */
-export function getAllFixes(context: ts.CodeFixAllContext): ts.CombinedCodeActions {
+export function getAllFixes(context: CodeFixAllContext): CombinedCodeActions {
     // Currently fixId is always a string.
-    return fixIdToRegistration.get(ts.cast(context.fixId, ts.isString))!.getAllCodeActions!(context);
+    return fixIdToRegistration.get(cast(context.fixId, isString))!.getAllCodeActions!(context);
 }
 
 /** @internal */
-export function createCombinedCodeActions(changes: ts.FileTextChanges[], commands?: ts.CodeActionCommand[]): ts.CombinedCodeActions {
+export function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {
     return { changes, commands };
 }
 
 /** @internal */
-export function createFileTextChanges(fileName: string, textChanges: ts.TextChange[]): ts.FileTextChanges {
+export function createFileTextChanges(fileName: string, textChanges: TextChange[]): FileTextChanges {
     return { fileName, textChanges };
 }
 
 /** @internal */
 export function codeFixAll(
-    context: ts.CodeFixAllContext,
+    context: CodeFixAllContext,
     errorCodes: number[],
-    use: (changes: ts.textChanges.ChangeTracker, error: ts.DiagnosticWithLocation, commands: ts.Push<ts.CodeActionCommand>) => void,
-): ts.CombinedCodeActions {
-    const commands: ts.CodeActionCommand[] = [];
-    const changes = ts.textChanges.ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
+    use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void,
+): CombinedCodeActions {
+    const commands: CodeActionCommand[] = [];
+    const changes = textChanges.ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
     return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
 }
 
 /** @internal */
-export function eachDiagnostic(context: ts.CodeFixAllContext, errorCodes: readonly number[], cb: (diag: ts.DiagnosticWithLocation) => void): void {
+export function eachDiagnostic(context: CodeFixAllContext, errorCodes: readonly number[], cb: (diag: DiagnosticWithLocation) => void): void {
     for (const diag of getDiagnostics(context)) {
-        if (ts.contains(errorCodes, diag.code)) {
-            cb(diag as ts.DiagnosticWithLocation);
+        if (contains(errorCodes, diag.code)) {
+            cb(diag as DiagnosticWithLocation);
         }
     }
 }
 
-function getDiagnostics({ program, sourceFile, cancellationToken }: ts.CodeFixContextBase) {
+function getDiagnostics({ program, sourceFile, cancellationToken }: CodeFixContextBase) {
     return [
         ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
         ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-        ...ts.computeSuggestionDiagnostics(sourceFile, program, cancellationToken)
+        ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken)
     ];
 }

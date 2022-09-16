@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import { Version, VersionRange } from "./_namespaces/ts";
 
 // The following definitions provide the minimum compatible support for the Web Performance User Timings API
 // between browsers and NodeJS:
@@ -90,8 +90,8 @@ function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
                 // match the Web Performance API specification. Node's implementation did not allow
                 // optional `start` and `end` arguments for `performance.measure`.
                 // See https://github.com/nodejs/node/pull/32651 for more information.
-                const version = new ts.Version(process.versions.node);
-                const range = new ts.VersionRange("<12.16.3 || 13 <13.13");
+                const version = new Version(process.versions.node);
+                const range = new VersionRange("<12.16.3 || 13 <13.13");
                 if (range.test(version)) {
                     performance = {
                         get timeOrigin() { return nodePerformance.timeOrigin; },

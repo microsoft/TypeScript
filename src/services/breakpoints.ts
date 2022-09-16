@@ -1,16 +1,29 @@
-import * as ts from "./_namespaces/ts";
+import {
+    ArrayLiteralExpression, BinaryExpression, BindingPattern, Block, BreakOrContinueStatement, canHaveDecorators,
+    CaseBlock, CaseOrDefaultClause, CatchClause, ClassDeclaration, createTextSpanFromBounds, Debug,
+    DestructuringPattern, DoStatement, EnumDeclaration, ExportAssignment, ExportDeclaration, Expression,
+    ExpressionStatement, findLast, findNextToken, findPrecedingToken, forEach, ForInStatement, ForOfStatement,
+    ForStatement, FunctionLikeDeclaration, getModuleInstanceState, getTokenAtPosition, HasDecorators,
+    hasOnlyExpressionInitializer, hasSyntacticModifier, IfStatement, ImportDeclaration, ImportEqualsDeclaration,
+    isArrayLiteralOrObjectLiteralDestructuringPattern, isAssignmentOperator, isBindingPattern, isDecorator,
+    isExpressionNode, isFunctionBlock, isFunctionLike, isVariableDeclarationList, LabeledStatement, lastOrUndefined,
+    ModifierFlags, ModuleDeclaration, ModuleInstanceState, Node, NodeArray, NodeFlags, ObjectLiteralElement,
+    ObjectLiteralExpression, ParameterDeclaration, PropertyAssignment, PropertyDeclaration, PropertySignature,
+    ReturnStatement, skipTrivia, SourceFile, SwitchStatement, SyntaxKind, TextSpan, ThrowStatement, TryStatement,
+    TypeAssertion, VariableDeclaration, VariableDeclarationList, VariableStatement, WhileStatement, WithStatement,
+} from "./_namespaces/ts";
 
 /** @internal */
 /**
  * Get the breakpoint span in given sourceFile
  */
-export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: number) {
+export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number) {
     // Cannot set breakpoint in dts file
     if (sourceFile.isDeclarationFile) {
         return undefined;
     }
 
-    let tokenAtLocation = ts.getTokenAtPosition(sourceFile, position);
+    let tokenAtLocation = getTokenAtPosition(sourceFile, position);
     const lineOfPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
     if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart(sourceFile)).line > lineOfPosition) {
         // Get previous token if the token is returned starts on new line
@@ -18,7 +31,7 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
         //     let y = 10;
         // token at position will return let keyword on second line as the token but we would like to use
         // token on same line if trailing trivia (comments or white spaces on same line) part of the last token on that line
-        const preceding = ts.findPrecedingToken(tokenAtLocation.pos, sourceFile);
+        const preceding = findPrecedingToken(tokenAtLocation.pos, sourceFile);
 
         // It's a blank line
         if (!preceding || sourceFile.getLineAndCharacterOfPosition(preceding.getEnd()).line !== lineOfPosition) {
@@ -28,33 +41,33 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
     }
 
     // Cannot set breakpoint in ambient declarations
-    if (tokenAtLocation.flags & ts.NodeFlags.Ambient) {
+    if (tokenAtLocation.flags & NodeFlags.Ambient) {
         return undefined;
     }
 
     // Get the span in the node based on its syntax
     return spanInNode(tokenAtLocation);
 
-    function textSpan(startNode: ts.Node, endNode?: ts.Node) {
-        const lastDecorator = ts.canHaveDecorators(startNode) ? ts.findLast(startNode.modifiers, ts.isDecorator) : undefined;
+    function textSpan(startNode: Node, endNode?: Node) {
+        const lastDecorator = canHaveDecorators(startNode) ? findLast(startNode.modifiers, isDecorator) : undefined;
         const start = lastDecorator ?
-            ts.skipTrivia(sourceFile.text, lastDecorator.end) :
+            skipTrivia(sourceFile.text, lastDecorator.end) :
             startNode.getStart(sourceFile);
-        return ts.createTextSpanFromBounds(start, (endNode || startNode).getEnd());
+        return createTextSpanFromBounds(start, (endNode || startNode).getEnd());
     }
 
-    function textSpanEndingAtNextToken(startNode: ts.Node, previousTokenToFindNextEndToken: ts.Node): ts.TextSpan {
-        return textSpan(startNode, ts.findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent, sourceFile));
+    function textSpanEndingAtNextToken(startNode: Node, previousTokenToFindNextEndToken: Node): TextSpan {
+        return textSpan(startNode, findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent, sourceFile));
     }
 
-    function spanInNodeIfStartsOnSameLine(node: ts.Node | undefined, otherwiseOnNode?: ts.Node): ts.TextSpan | undefined {
+    function spanInNodeIfStartsOnSameLine(node: Node | undefined, otherwiseOnNode?: Node): TextSpan | undefined {
         if (node && lineOfPosition === sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line) {
             return spanInNode(node);
         }
         return spanInNode(otherwiseOnNode);
     }
 
-    function spanInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T> | undefined, node: T, match: (value: ts.Node) => boolean) {
+    function spanInNodeArray<T extends Node>(nodeArray: NodeArray<T> | undefined, node: T, match: (value: Node) => boolean) {
         if (nodeArray) {
             const index = nodeArray.indexOf(node);
             if (index >= 0) {
@@ -62,237 +75,237 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
                 let end = index + 1;
                 while (start > 0 && match(nodeArray[start - 1])) start--;
                 while (end < nodeArray.length && match(nodeArray[end])) end++;
-                return ts.createTextSpanFromBounds(ts.skipTrivia(sourceFile.text, nodeArray[start].pos), nodeArray[end - 1].end);
+                return createTextSpanFromBounds(skipTrivia(sourceFile.text, nodeArray[start].pos), nodeArray[end - 1].end);
             }
         }
         return textSpan(node);
     }
 
-    function spanInPreviousNode(node: ts.Node): ts.TextSpan | undefined {
-        return spanInNode(ts.findPrecedingToken(node.pos, sourceFile));
+    function spanInPreviousNode(node: Node): TextSpan | undefined {
+        return spanInNode(findPrecedingToken(node.pos, sourceFile));
     }
 
-    function spanInNextNode(node: ts.Node): ts.TextSpan | undefined {
-        return spanInNode(ts.findNextToken(node, node.parent, sourceFile));
+    function spanInNextNode(node: Node): TextSpan | undefined {
+        return spanInNode(findNextToken(node, node.parent, sourceFile));
     }
 
-    function spanInNode(node: ts.Node | undefined): ts.TextSpan | undefined {
+    function spanInNode(node: Node | undefined): TextSpan | undefined {
         if (node) {
             const { parent } = node;
             switch (node.kind) {
-                case ts.SyntaxKind.VariableStatement:
+                case SyntaxKind.VariableStatement:
                     // Span on first variable declaration
-                    return spanInVariableDeclaration((node as ts.VariableStatement).declarationList.declarations[0]);
+                    return spanInVariableDeclaration((node as VariableStatement).declarationList.declarations[0]);
 
-                case ts.SyntaxKind.VariableDeclaration:
-                case ts.SyntaxKind.PropertyDeclaration:
-                case ts.SyntaxKind.PropertySignature:
-                    return spanInVariableDeclaration(node as ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature);
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return spanInVariableDeclaration(node as VariableDeclaration | PropertyDeclaration | PropertySignature);
 
-                case ts.SyntaxKind.Parameter:
-                    return spanInParameterDeclaration(node as ts.ParameterDeclaration);
+                case SyntaxKind.Parameter:
+                    return spanInParameterDeclaration(node as ParameterDeclaration);
 
-                case ts.SyntaxKind.FunctionDeclaration:
-                case ts.SyntaxKind.MethodDeclaration:
-                case ts.SyntaxKind.MethodSignature:
-                case ts.SyntaxKind.GetAccessor:
-                case ts.SyntaxKind.SetAccessor:
-                case ts.SyntaxKind.Constructor:
-                case ts.SyntaxKind.FunctionExpression:
-                case ts.SyntaxKind.ArrowFunction:
-                    return spanInFunctionDeclaration(node as ts.FunctionLikeDeclaration);
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    return spanInFunctionDeclaration(node as FunctionLikeDeclaration);
 
-                case ts.SyntaxKind.Block:
-                    if (ts.isFunctionBlock(node)) {
-                        return spanInFunctionBlock(node as ts.Block);
+                case SyntaxKind.Block:
+                    if (isFunctionBlock(node)) {
+                        return spanInFunctionBlock(node as Block);
                     }
                     // falls through
-                case ts.SyntaxKind.ModuleBlock:
-                    return spanInBlock(node as ts.Block);
+                case SyntaxKind.ModuleBlock:
+                    return spanInBlock(node as Block);
 
-                case ts.SyntaxKind.CatchClause:
-                    return spanInBlock((node as ts.CatchClause).block);
+                case SyntaxKind.CatchClause:
+                    return spanInBlock((node as CatchClause).block);
 
-                case ts.SyntaxKind.ExpressionStatement:
+                case SyntaxKind.ExpressionStatement:
                     // span on the expression
-                    return textSpan((node as ts.ExpressionStatement).expression);
+                    return textSpan((node as ExpressionStatement).expression);
 
-                case ts.SyntaxKind.ReturnStatement:
+                case SyntaxKind.ReturnStatement:
                     // span on return keyword and expression if present
-                    return textSpan(node.getChildAt(0), (node as ts.ReturnStatement).expression);
+                    return textSpan(node.getChildAt(0), (node as ReturnStatement).expression);
 
-                case ts.SyntaxKind.WhileStatement:
+                case SyntaxKind.WhileStatement:
                     // Span on while(...)
-                    return textSpanEndingAtNextToken(node, (node as ts.WhileStatement).expression);
+                    return textSpanEndingAtNextToken(node, (node as WhileStatement).expression);
 
-                case ts.SyntaxKind.DoStatement:
+                case SyntaxKind.DoStatement:
                     // span in statement of the do statement
-                    return spanInNode((node as ts.DoStatement).statement);
+                    return spanInNode((node as DoStatement).statement);
 
-                case ts.SyntaxKind.DebuggerStatement:
+                case SyntaxKind.DebuggerStatement:
                     // span on debugger keyword
                     return textSpan(node.getChildAt(0));
 
-                case ts.SyntaxKind.IfStatement:
+                case SyntaxKind.IfStatement:
                     // set on if(..) span
-                    return textSpanEndingAtNextToken(node, (node as ts.IfStatement).expression);
+                    return textSpanEndingAtNextToken(node, (node as IfStatement).expression);
 
-                case ts.SyntaxKind.LabeledStatement:
+                case SyntaxKind.LabeledStatement:
                     // span in statement
-                    return spanInNode((node as ts.LabeledStatement).statement);
+                    return spanInNode((node as LabeledStatement).statement);
 
-                case ts.SyntaxKind.BreakStatement:
-                case ts.SyntaxKind.ContinueStatement:
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
                     // On break or continue keyword and label if present
-                    return textSpan(node.getChildAt(0), (node as ts.BreakOrContinueStatement).label);
+                    return textSpan(node.getChildAt(0), (node as BreakOrContinueStatement).label);
 
-                case ts.SyntaxKind.ForStatement:
-                    return spanInForStatement(node as ts.ForStatement);
+                case SyntaxKind.ForStatement:
+                    return spanInForStatement(node as ForStatement);
 
-                case ts.SyntaxKind.ForInStatement:
+                case SyntaxKind.ForInStatement:
                     // span of for (a in ...)
-                    return textSpanEndingAtNextToken(node, (node as ts.ForInStatement).expression);
+                    return textSpanEndingAtNextToken(node, (node as ForInStatement).expression);
 
-                case ts.SyntaxKind.ForOfStatement:
+                case SyntaxKind.ForOfStatement:
                     // span in initializer
-                    return spanInInitializerOfForLike(node as ts.ForOfStatement);
+                    return spanInInitializerOfForLike(node as ForOfStatement);
 
-                case ts.SyntaxKind.SwitchStatement:
+                case SyntaxKind.SwitchStatement:
                     // span on switch(...)
-                    return textSpanEndingAtNextToken(node, (node as ts.SwitchStatement).expression);
+                    return textSpanEndingAtNextToken(node, (node as SwitchStatement).expression);
 
-                case ts.SyntaxKind.CaseClause:
-                case ts.SyntaxKind.DefaultClause:
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
                     // span in first statement of the clause
-                    return spanInNode((node as ts.CaseOrDefaultClause).statements[0]);
+                    return spanInNode((node as CaseOrDefaultClause).statements[0]);
 
-                case ts.SyntaxKind.TryStatement:
+                case SyntaxKind.TryStatement:
                     // span in try block
-                    return spanInBlock((node as ts.TryStatement).tryBlock);
+                    return spanInBlock((node as TryStatement).tryBlock);
 
-                case ts.SyntaxKind.ThrowStatement:
+                case SyntaxKind.ThrowStatement:
                     // span in throw ...
-                    return textSpan(node, (node as ts.ThrowStatement).expression);
+                    return textSpan(node, (node as ThrowStatement).expression);
 
-                case ts.SyntaxKind.ExportAssignment:
+                case SyntaxKind.ExportAssignment:
                     // span on export = id
-                    return textSpan(node, (node as ts.ExportAssignment).expression);
+                    return textSpan(node, (node as ExportAssignment).expression);
 
-                case ts.SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
                     // import statement without including semicolon
-                    return textSpan(node, (node as ts.ImportEqualsDeclaration).moduleReference);
+                    return textSpan(node, (node as ImportEqualsDeclaration).moduleReference);
 
-                case ts.SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportDeclaration:
                     // import statement without including semicolon
-                    return textSpan(node, (node as ts.ImportDeclaration).moduleSpecifier);
+                    return textSpan(node, (node as ImportDeclaration).moduleSpecifier);
 
-                case ts.SyntaxKind.ExportDeclaration:
+                case SyntaxKind.ExportDeclaration:
                     // import statement without including semicolon
-                    return textSpan(node, (node as ts.ExportDeclaration).moduleSpecifier);
+                    return textSpan(node, (node as ExportDeclaration).moduleSpecifier);
 
-                case ts.SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ModuleDeclaration:
                     // span on complete module if it is instantiated
-                    if (ts.getModuleInstanceState(node as ts.ModuleDeclaration) !== ts.ModuleInstanceState.Instantiated) {
+                    if (getModuleInstanceState(node as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                         return undefined;
                     }
                     // falls through
 
-                case ts.SyntaxKind.ClassDeclaration:
-                case ts.SyntaxKind.EnumDeclaration:
-                case ts.SyntaxKind.EnumMember:
-                case ts.SyntaxKind.BindingElement:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.BindingElement:
                     // span on complete node
                     return textSpan(node);
 
-                case ts.SyntaxKind.WithStatement:
+                case SyntaxKind.WithStatement:
                     // span in statement
-                    return spanInNode((node as ts.WithStatement).statement);
+                    return spanInNode((node as WithStatement).statement);
 
-                case ts.SyntaxKind.Decorator:
-                    return spanInNodeArray((parent as ts.HasDecorators).modifiers, node, ts.isDecorator);
+                case SyntaxKind.Decorator:
+                    return spanInNodeArray((parent as HasDecorators).modifiers, node, isDecorator);
 
-                case ts.SyntaxKind.ObjectBindingPattern:
-                case ts.SyntaxKind.ArrayBindingPattern:
-                    return spanInBindingPattern(node as ts.BindingPattern);
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                    return spanInBindingPattern(node as BindingPattern);
 
                 // No breakpoint in interface, type alias
-                case ts.SyntaxKind.InterfaceDeclaration:
-                case ts.SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
                     return undefined;
 
                 // Tokens:
-                case ts.SyntaxKind.SemicolonToken:
-                case ts.SyntaxKind.EndOfFileToken:
-                    return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile));
+                case SyntaxKind.SemicolonToken:
+                case SyntaxKind.EndOfFileToken:
+                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile));
 
-                case ts.SyntaxKind.CommaToken:
+                case SyntaxKind.CommaToken:
                     return spanInPreviousNode(node);
 
-                case ts.SyntaxKind.OpenBraceToken:
+                case SyntaxKind.OpenBraceToken:
                     return spanInOpenBraceToken(node);
 
-                case ts.SyntaxKind.CloseBraceToken:
+                case SyntaxKind.CloseBraceToken:
                     return spanInCloseBraceToken(node);
 
-                case ts.SyntaxKind.CloseBracketToken:
+                case SyntaxKind.CloseBracketToken:
                     return spanInCloseBracketToken(node);
 
-                case ts.SyntaxKind.OpenParenToken:
+                case SyntaxKind.OpenParenToken:
                     return spanInOpenParenToken(node);
 
-                case ts.SyntaxKind.CloseParenToken:
+                case SyntaxKind.CloseParenToken:
                     return spanInCloseParenToken(node);
 
-                case ts.SyntaxKind.ColonToken:
+                case SyntaxKind.ColonToken:
                     return spanInColonToken(node);
 
-                case ts.SyntaxKind.GreaterThanToken:
-                case ts.SyntaxKind.LessThanToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.LessThanToken:
                     return spanInGreaterThanOrLessThanToken(node);
 
                 // Keywords:
-                case ts.SyntaxKind.WhileKeyword:
+                case SyntaxKind.WhileKeyword:
                     return spanInWhileKeyword(node);
 
-                case ts.SyntaxKind.ElseKeyword:
-                case ts.SyntaxKind.CatchKeyword:
-                case ts.SyntaxKind.FinallyKeyword:
+                case SyntaxKind.ElseKeyword:
+                case SyntaxKind.CatchKeyword:
+                case SyntaxKind.FinallyKeyword:
                     return spanInNextNode(node);
 
-                case ts.SyntaxKind.OfKeyword:
+                case SyntaxKind.OfKeyword:
                     return spanInOfKeyword(node);
 
                 default:
                     // Destructuring pattern in destructuring assignment
                     // [a, b, c] of
                     // [a, b, c] = expression
-                    if (ts.isArrayLiteralOrObjectLiteralDestructuringPattern(node)) {
-                        return spanInArrayLiteralOrObjectLiteralDestructuringPattern(node as ts.DestructuringPattern);
+                    if (isArrayLiteralOrObjectLiteralDestructuringPattern(node)) {
+                        return spanInArrayLiteralOrObjectLiteralDestructuringPattern(node as DestructuringPattern);
                     }
 
                     // Set breakpoint on identifier element of destructuring pattern
                     // `a` or `...c` or `d: x` from
                     // `[a, b, ...c]` or `{ a, b }` or `{ d: x }` from destructuring pattern
-                    if ((node.kind === ts.SyntaxKind.Identifier ||
-                        node.kind === ts.SyntaxKind.SpreadElement ||
-                        node.kind === ts.SyntaxKind.PropertyAssignment ||
-                        node.kind === ts.SyntaxKind.ShorthandPropertyAssignment) &&
-                        ts.isArrayLiteralOrObjectLiteralDestructuringPattern(parent)) {
+                    if ((node.kind === SyntaxKind.Identifier ||
+                        node.kind === SyntaxKind.SpreadElement ||
+                        node.kind === SyntaxKind.PropertyAssignment ||
+                        node.kind === SyntaxKind.ShorthandPropertyAssignment) &&
+                        isArrayLiteralOrObjectLiteralDestructuringPattern(parent)) {
                         return textSpan(node);
                     }
 
-                    if (node.kind === ts.SyntaxKind.BinaryExpression) {
-                        const { left, operatorToken } = node as ts.BinaryExpression;
+                    if (node.kind === SyntaxKind.BinaryExpression) {
+                        const { left, operatorToken } = node as BinaryExpression;
                         // Set breakpoint in destructuring pattern if its destructuring assignment
                         // [a, b, c] or {a, b, c} of
                         // [a, b, c] = expression or
                         // {a, b, c} = expression
-                        if (ts.isArrayLiteralOrObjectLiteralDestructuringPattern(left)) {
+                        if (isArrayLiteralOrObjectLiteralDestructuringPattern(left)) {
                             return spanInArrayLiteralOrObjectLiteralDestructuringPattern(
-                                left as ts.ArrayLiteralExpression | ts.ObjectLiteralExpression);
+                                left as ArrayLiteralExpression | ObjectLiteralExpression);
                         }
 
-                        if (operatorToken.kind === ts.SyntaxKind.EqualsToken && ts.isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+                        if (operatorToken.kind === SyntaxKind.EqualsToken && isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
                             // Set breakpoint on assignment expression element of destructuring pattern
                             // a = expression of
                             // [a = expression, b, c] = someExpression or
@@ -300,34 +313,34 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
                             return textSpan(node);
                         }
 
-                        if (operatorToken.kind === ts.SyntaxKind.CommaToken) {
+                        if (operatorToken.kind === SyntaxKind.CommaToken) {
                             return spanInNode(left);
                         }
                     }
 
-                    if (ts.isExpressionNode(node)) {
+                    if (isExpressionNode(node)) {
                         switch (parent.kind) {
-                            case ts.SyntaxKind.DoStatement:
+                            case SyntaxKind.DoStatement:
                                 // Set span as if on while keyword
                                 return spanInPreviousNode(node);
 
-                            case ts.SyntaxKind.Decorator:
+                            case SyntaxKind.Decorator:
                                 // Set breakpoint on the decorator emit
                                 return spanInNode(node.parent);
 
-                            case ts.SyntaxKind.ForStatement:
-                            case ts.SyntaxKind.ForOfStatement:
+                            case SyntaxKind.ForStatement:
+                            case SyntaxKind.ForOfStatement:
                                 return textSpan(node);
 
-                            case ts.SyntaxKind.BinaryExpression:
-                                if ((node.parent as ts.BinaryExpression).operatorToken.kind === ts.SyntaxKind.CommaToken) {
+                            case SyntaxKind.BinaryExpression:
+                                if ((node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken) {
                                     // If this is a comma expression, the breakpoint is possible in this expression
                                     return textSpan(node);
                                 }
                                 break;
 
-                            case ts.SyntaxKind.ArrowFunction:
-                                if ((node.parent as ts.FunctionLikeDeclaration).body === node) {
+                            case SyntaxKind.ArrowFunction:
+                                if ((node.parent as FunctionLikeDeclaration).body === node) {
                                     // If this is body of arrow function, it is allowed to have the breakpoint
                                     return textSpan(node);
                                 }
@@ -336,31 +349,31 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
                     }
 
                     switch (node.parent.kind) {
-                        case ts.SyntaxKind.PropertyAssignment:
+                        case SyntaxKind.PropertyAssignment:
                             // If this is name of property assignment, set breakpoint in the initializer
-                            if ((node.parent as ts.PropertyAssignment).name === node &&
-                                !ts.isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)) {
-                                return spanInNode((node.parent as ts.PropertyAssignment).initializer);
+                            if ((node.parent as PropertyAssignment).name === node &&
+                                !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)) {
+                                return spanInNode((node.parent as PropertyAssignment).initializer);
                             }
                             break;
-                        case ts.SyntaxKind.TypeAssertionExpression:
+                        case SyntaxKind.TypeAssertionExpression:
                             // Breakpoint in type assertion goes to its operand
-                            if ((node.parent as ts.TypeAssertion).type === node) {
-                                return spanInNextNode((node.parent as ts.TypeAssertion).type);
+                            if ((node.parent as TypeAssertion).type === node) {
+                                return spanInNextNode((node.parent as TypeAssertion).type);
                             }
                             break;
-                        case ts.SyntaxKind.VariableDeclaration:
-                        case ts.SyntaxKind.Parameter: {
+                        case SyntaxKind.VariableDeclaration:
+                        case SyntaxKind.Parameter: {
                             // initializer of variable/parameter declaration go to previous node
-                            const { initializer, type } = node.parent as ts.VariableDeclaration | ts.ParameterDeclaration;
-                            if (initializer === node || type === node || ts.isAssignmentOperator(node.kind)) {
+                            const { initializer, type } = node.parent as VariableDeclaration | ParameterDeclaration;
+                            if (initializer === node || type === node || isAssignmentOperator(node.kind)) {
                                 return spanInPreviousNode(node);
                             }
                             break;
                         }
-                        case ts.SyntaxKind.BinaryExpression: {
-                            const { left } = node.parent as ts.BinaryExpression;
-                            if (ts.isArrayLiteralOrObjectLiteralDestructuringPattern(left) && node !== left) {
+                        case SyntaxKind.BinaryExpression: {
+                            const { left } = node.parent as BinaryExpression;
+                            if (isArrayLiteralOrObjectLiteralDestructuringPattern(left) && node !== left) {
                                 // If initializer of destructuring assignment move to previous token
                                 return spanInPreviousNode(node);
                             }
@@ -368,7 +381,7 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
                         }
                         default:
                             // return type of function go to previous token
-                            if (ts.isFunctionLike(node.parent) && node.parent.type === node) {
+                            if (isFunctionLike(node.parent) && node.parent.type === node) {
                                 return spanInPreviousNode(node);
                             }
                     }
@@ -378,10 +391,10 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             }
         }
 
-        function textSpanFromVariableDeclaration(variableDeclaration: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature): ts.TextSpan {
-            if (ts.isVariableDeclarationList(variableDeclaration.parent) && variableDeclaration.parent.declarations[0] === variableDeclaration) {
+        function textSpanFromVariableDeclaration(variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature): TextSpan {
+            if (isVariableDeclarationList(variableDeclaration.parent) && variableDeclaration.parent.declarations[0] === variableDeclaration) {
                 // First declaration - include let keyword
-                return textSpan(ts.findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent)!, variableDeclaration);
+                return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent)!, variableDeclaration);
             }
             else {
                 // Span only on this declaration
@@ -389,44 +402,44 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             }
         }
 
-        function spanInVariableDeclaration(variableDeclaration: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature): ts.TextSpan | undefined {
+        function spanInVariableDeclaration(variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature): TextSpan | undefined {
             // If declaration of for in statement, just set the span in parent
-            if (variableDeclaration.parent.parent.kind === ts.SyntaxKind.ForInStatement) {
+            if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return spanInNode(variableDeclaration.parent.parent);
             }
 
             const parent = variableDeclaration.parent;
             // If this is a destructuring pattern, set breakpoint in binding pattern
-            if (ts.isBindingPattern(variableDeclaration.name)) {
+            if (isBindingPattern(variableDeclaration.name)) {
                 return spanInBindingPattern(variableDeclaration.name);
             }
 
             // Breakpoint is possible in variableDeclaration only if there is initialization
             // or its declaration from 'for of'
-            if ((ts.hasOnlyExpressionInitializer(variableDeclaration) && variableDeclaration.initializer) ||
-                ts.hasSyntacticModifier(variableDeclaration, ts.ModifierFlags.Export) ||
-                parent.parent.kind === ts.SyntaxKind.ForOfStatement) {
+            if ((hasOnlyExpressionInitializer(variableDeclaration) && variableDeclaration.initializer) ||
+                hasSyntacticModifier(variableDeclaration, ModifierFlags.Export) ||
+                parent.parent.kind === SyntaxKind.ForOfStatement) {
                 return textSpanFromVariableDeclaration(variableDeclaration);
             }
 
-            if (ts.isVariableDeclarationList(variableDeclaration.parent) &&
+            if (isVariableDeclarationList(variableDeclaration.parent) &&
                 variableDeclaration.parent.declarations[0] !== variableDeclaration) {
                 // If we cannot set breakpoint on this declaration, set it on previous one
                 // Because the variable declaration may be binding pattern and
                 // we would like to set breakpoint in last binding element if that's the case,
                 // use preceding token instead
-                return spanInNode(ts.findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent));
+                return spanInNode(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent));
             }
         }
 
-        function canHaveSpanInParameterDeclaration(parameter: ts.ParameterDeclaration): boolean {
+        function canHaveSpanInParameterDeclaration(parameter: ParameterDeclaration): boolean {
             // Breakpoint is possible on parameter only if it has initializer, is a rest parameter, or has public or private modifier
             return !!parameter.initializer || parameter.dotDotDotToken !== undefined ||
-                ts.hasSyntacticModifier(parameter, ts.ModifierFlags.Public | ts.ModifierFlags.Private);
+                hasSyntacticModifier(parameter, ModifierFlags.Public | ModifierFlags.Private);
         }
 
-        function spanInParameterDeclaration(parameter: ts.ParameterDeclaration): ts.TextSpan | undefined {
-            if (ts.isBindingPattern(parameter.name)) {
+        function spanInParameterDeclaration(parameter: ParameterDeclaration): TextSpan | undefined {
+            if (isBindingPattern(parameter.name)) {
                 // Set breakpoint in binding pattern
                 return spanInBindingPattern(parameter.name);
             }
@@ -434,9 +447,9 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
                 return textSpan(parameter);
             }
             else {
-                const functionDeclaration = parameter.parent as ts.FunctionLikeDeclaration;
+                const functionDeclaration = parameter.parent as FunctionLikeDeclaration;
                 const indexOfParameter = functionDeclaration.parameters.indexOf(parameter);
-                ts.Debug.assert(indexOfParameter !== -1);
+                Debug.assert(indexOfParameter !== -1);
                 if (indexOfParameter !== 0) {
                     // Not a first parameter, go to previous parameter
                     return spanInParameterDeclaration(functionDeclaration.parameters[indexOfParameter - 1]);
@@ -448,12 +461,12 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             }
         }
 
-        function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: ts.FunctionLikeDeclaration) {
-            return ts.hasSyntacticModifier(functionDeclaration, ts.ModifierFlags.Export) ||
-                (functionDeclaration.parent.kind === ts.SyntaxKind.ClassDeclaration && functionDeclaration.kind !== ts.SyntaxKind.Constructor);
+        function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionLikeDeclaration) {
+            return hasSyntacticModifier(functionDeclaration, ModifierFlags.Export) ||
+                (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration && functionDeclaration.kind !== SyntaxKind.Constructor);
         }
 
-        function spanInFunctionDeclaration(functionDeclaration: ts.FunctionLikeDeclaration): ts.TextSpan | undefined {
+        function spanInFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration): TextSpan | undefined {
             // No breakpoints in the function signature
             if (!functionDeclaration.body) {
                 return undefined;
@@ -468,43 +481,43 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             return spanInNode(functionDeclaration.body);
         }
 
-        function spanInFunctionBlock(block: ts.Block): ts.TextSpan | undefined {
+        function spanInFunctionBlock(block: Block): TextSpan | undefined {
             const nodeForSpanInBlock = block.statements.length ? block.statements[0] : block.getLastToken();
-            if (canFunctionHaveSpanInWholeDeclaration(block.parent as ts.FunctionLikeDeclaration)) {
+            if (canFunctionHaveSpanInWholeDeclaration(block.parent as FunctionLikeDeclaration)) {
                 return spanInNodeIfStartsOnSameLine(block.parent, nodeForSpanInBlock);
             }
 
             return spanInNode(nodeForSpanInBlock);
         }
 
-        function spanInBlock(block: ts.Block): ts.TextSpan | undefined {
+        function spanInBlock(block: Block): TextSpan | undefined {
             switch (block.parent.kind) {
-                case ts.SyntaxKind.ModuleDeclaration:
-                    if (ts.getModuleInstanceState(block.parent as ts.ModuleDeclaration) !== ts.ModuleInstanceState.Instantiated) {
+                case SyntaxKind.ModuleDeclaration:
+                    if (getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                         return undefined;
                     }
 
                 // Set on parent if on same line otherwise on first statement
                 // falls through
-                case ts.SyntaxKind.WhileStatement:
-                case ts.SyntaxKind.IfStatement:
-                case ts.SyntaxKind.ForInStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.ForInStatement:
                     return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
 
                 // Set span on previous token if it starts on same line otherwise on the first statement of the block
-                case ts.SyntaxKind.ForStatement:
-                case ts.SyntaxKind.ForOfStatement:
-                    return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForOfStatement:
+                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
             }
 
             // Default action is to set on first statement
             return spanInNode(block.statements[0]);
         }
 
-        function spanInInitializerOfForLike(forLikeStatement: ts.ForStatement | ts.ForOfStatement | ts.ForInStatement): ts.TextSpan | undefined {
-            if (forLikeStatement.initializer!.kind === ts.SyntaxKind.VariableDeclarationList) {
+        function spanInInitializerOfForLike(forLikeStatement: ForStatement | ForOfStatement | ForInStatement): TextSpan | undefined {
+            if (forLikeStatement.initializer!.kind === SyntaxKind.VariableDeclarationList) {
                 // Declaration list - set breakpoint in first declaration
-                const variableDeclarationList = forLikeStatement.initializer as ts.VariableDeclarationList;
+                const variableDeclarationList = forLikeStatement.initializer as VariableDeclarationList;
                 if (variableDeclarationList.declarations.length > 0) {
                     return spanInNode(variableDeclarationList.declarations[0]);
                 }
@@ -515,7 +528,7 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             }
         }
 
-        function spanInForStatement(forStatement: ts.ForStatement): ts.TextSpan | undefined {
+        function spanInForStatement(forStatement: ForStatement): TextSpan | undefined {
             if (forStatement.initializer) {
                 return spanInInitializerOfForLike(forStatement);
             }
@@ -528,30 +541,30 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             }
         }
 
-        function spanInBindingPattern(bindingPattern: ts.BindingPattern): ts.TextSpan | undefined {
+        function spanInBindingPattern(bindingPattern: BindingPattern): TextSpan | undefined {
             // Set breakpoint in first binding element
-            const firstBindingElement = ts.forEach(bindingPattern.elements,
-                element => element.kind !== ts.SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(bindingPattern.elements,
+                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
             }
 
             // Empty binding pattern of binding element, set breakpoint on binding element
-            if (bindingPattern.parent.kind === ts.SyntaxKind.BindingElement) {
+            if (bindingPattern.parent.kind === SyntaxKind.BindingElement) {
                 return textSpan(bindingPattern.parent);
             }
 
             // Variable declaration is used as the span
-            return textSpanFromVariableDeclaration(bindingPattern.parent as ts.VariableDeclaration);
+            return textSpanFromVariableDeclaration(bindingPattern.parent as VariableDeclaration);
         }
 
-        function spanInArrayLiteralOrObjectLiteralDestructuringPattern(node: ts.DestructuringPattern): ts.TextSpan | undefined {
-            ts.Debug.assert(node.kind !== ts.SyntaxKind.ArrayBindingPattern && node.kind !== ts.SyntaxKind.ObjectBindingPattern);
-            const elements: ts.NodeArray<ts.Expression | ts.ObjectLiteralElement> = node.kind === ts.SyntaxKind.ArrayLiteralExpression ? node.elements : node.properties;
+        function spanInArrayLiteralOrObjectLiteralDestructuringPattern(node: DestructuringPattern): TextSpan | undefined {
+            Debug.assert(node.kind !== SyntaxKind.ArrayBindingPattern && node.kind !== SyntaxKind.ObjectBindingPattern);
+            const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ? node.elements : node.properties;
 
-            const firstBindingElement = ts.forEach(elements,
-                element => element.kind !== ts.SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(elements,
+                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
@@ -561,89 +574,89 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             // just nested element in another destructuring assignment
             // set breakpoint on assignment when parent is destructuring assignment
             // Otherwise set breakpoint for this element
-            return textSpan(node.parent.kind === ts.SyntaxKind.BinaryExpression ? node.parent : node);
+            return textSpan(node.parent.kind === SyntaxKind.BinaryExpression ? node.parent : node);
         }
 
         // Tokens:
-        function spanInOpenBraceToken(node: ts.Node): ts.TextSpan | undefined {
+        function spanInOpenBraceToken(node: Node): TextSpan | undefined {
             switch (node.parent.kind) {
-                case ts.SyntaxKind.EnumDeclaration:
-                    const enumDeclaration = node.parent as ts.EnumDeclaration;
-                    return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
+                case SyntaxKind.EnumDeclaration:
+                    const enumDeclaration = node.parent as EnumDeclaration;
+                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
 
-                case ts.SyntaxKind.ClassDeclaration:
-                    const classDeclaration = node.parent as ts.ClassDeclaration;
-                    return spanInNodeIfStartsOnSameLine(ts.findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
+                case SyntaxKind.ClassDeclaration:
+                    const classDeclaration = node.parent as ClassDeclaration;
+                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
 
-                case ts.SyntaxKind.CaseBlock:
-                    return spanInNodeIfStartsOnSameLine(node.parent.parent, (node.parent as ts.CaseBlock).clauses[0]);
+                case SyntaxKind.CaseBlock:
+                    return spanInNodeIfStartsOnSameLine(node.parent.parent, (node.parent as CaseBlock).clauses[0]);
             }
 
             // Default to parent node
             return spanInNode(node.parent);
         }
 
-        function spanInCloseBraceToken(node: ts.Node): ts.TextSpan | undefined {
+        function spanInCloseBraceToken(node: Node): TextSpan | undefined {
             switch (node.parent.kind) {
-                case ts.SyntaxKind.ModuleBlock:
+                case SyntaxKind.ModuleBlock:
                     // If this is not an instantiated module block, no bp span
-                    if (ts.getModuleInstanceState(node.parent.parent as ts.ModuleDeclaration) !== ts.ModuleInstanceState.Instantiated) {
+                    if (getModuleInstanceState(node.parent.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
                         return undefined;
                     }
                     // falls through
 
-                case ts.SyntaxKind.EnumDeclaration:
-                case ts.SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ClassDeclaration:
                     // Span on close brace token
                     return textSpan(node);
 
-                case ts.SyntaxKind.Block:
-                    if (ts.isFunctionBlock(node.parent)) {
+                case SyntaxKind.Block:
+                    if (isFunctionBlock(node.parent)) {
                         // Span on close brace token
                         return textSpan(node);
                     }
                     // falls through
 
-                case ts.SyntaxKind.CatchClause:
-                    return spanInNode(ts.lastOrUndefined((node.parent as ts.Block).statements));
+                case SyntaxKind.CatchClause:
+                    return spanInNode(lastOrUndefined((node.parent as Block).statements));
 
-                case ts.SyntaxKind.CaseBlock:
+                case SyntaxKind.CaseBlock:
                     // breakpoint in last statement of the last clause
-                    const caseBlock = node.parent as ts.CaseBlock;
-                    const lastClause = ts.lastOrUndefined(caseBlock.clauses);
+                    const caseBlock = node.parent as CaseBlock;
+                    const lastClause = lastOrUndefined(caseBlock.clauses);
                     if (lastClause) {
-                        return spanInNode(ts.lastOrUndefined(lastClause.statements));
+                        return spanInNode(lastOrUndefined(lastClause.statements));
                     }
                     return undefined;
 
-                case ts.SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ObjectBindingPattern:
                     // Breakpoint in last binding element or binding pattern if it contains no elements
-                    const bindingPattern = node.parent as ts.BindingPattern;
-                    return spanInNode(ts.lastOrUndefined(bindingPattern.elements) || bindingPattern);
+                    const bindingPattern = node.parent as BindingPattern;
+                    return spanInNode(lastOrUndefined(bindingPattern.elements) || bindingPattern);
 
                 // Default to parent node
                 default:
-                    if (ts.isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+                    if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
                         // Breakpoint in last binding element or binding pattern if it contains no elements
-                        const objectLiteral = node.parent as ts.ObjectLiteralExpression;
-                        return textSpan(ts.lastOrUndefined(objectLiteral.properties) || objectLiteral);
+                        const objectLiteral = node.parent as ObjectLiteralExpression;
+                        return textSpan(lastOrUndefined(objectLiteral.properties) || objectLiteral);
                     }
                     return spanInNode(node.parent);
             }
         }
 
-        function spanInCloseBracketToken(node: ts.Node): ts.TextSpan | undefined {
+        function spanInCloseBracketToken(node: Node): TextSpan | undefined {
             switch (node.parent.kind) {
-                case ts.SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
                     // Breakpoint in last binding element or binding pattern if it contains no elements
-                    const bindingPattern = node.parent as ts.BindingPattern;
-                    return textSpan(ts.lastOrUndefined(bindingPattern.elements) || bindingPattern);
+                    const bindingPattern = node.parent as BindingPattern;
+                    return textSpan(lastOrUndefined(bindingPattern.elements) || bindingPattern);
 
                 default:
-                    if (ts.isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+                    if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
                         // Breakpoint in last binding element or binding pattern if it contains no elements
-                        const arrayLiteral = node.parent as ts.ArrayLiteralExpression;
-                        return textSpan(ts.lastOrUndefined(arrayLiteral.elements) || arrayLiteral);
+                        const arrayLiteral = node.parent as ArrayLiteralExpression;
+                        return textSpan(lastOrUndefined(arrayLiteral.elements) || arrayLiteral);
                     }
 
                     // Default to parent node
@@ -651,14 +664,14 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             }
         }
 
-        function spanInOpenParenToken(node: ts.Node): ts.TextSpan | undefined {
-            if (node.parent.kind === ts.SyntaxKind.DoStatement || // Go to while keyword and do action instead
-                node.parent.kind === ts.SyntaxKind.CallExpression ||
-                node.parent.kind === ts.SyntaxKind.NewExpression) {
+        function spanInOpenParenToken(node: Node): TextSpan | undefined {
+            if (node.parent.kind === SyntaxKind.DoStatement || // Go to while keyword and do action instead
+                node.parent.kind === SyntaxKind.CallExpression ||
+                node.parent.kind === SyntaxKind.NewExpression) {
                 return spanInPreviousNode(node);
             }
 
-            if (node.parent.kind === ts.SyntaxKind.ParenthesizedExpression) {
+            if (node.parent.kind === SyntaxKind.ParenthesizedExpression) {
                 return spanInNextNode(node);
             }
 
@@ -666,24 +679,24 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             return spanInNode(node.parent);
         }
 
-        function spanInCloseParenToken(node: ts.Node): ts.TextSpan | undefined {
+        function spanInCloseParenToken(node: Node): TextSpan | undefined {
             // Is this close paren token of parameter list, set span in previous token
             switch (node.parent.kind) {
-                case ts.SyntaxKind.FunctionExpression:
-                case ts.SyntaxKind.FunctionDeclaration:
-                case ts.SyntaxKind.ArrowFunction:
-                case ts.SyntaxKind.MethodDeclaration:
-                case ts.SyntaxKind.MethodSignature:
-                case ts.SyntaxKind.GetAccessor:
-                case ts.SyntaxKind.SetAccessor:
-                case ts.SyntaxKind.Constructor:
-                case ts.SyntaxKind.WhileStatement:
-                case ts.SyntaxKind.DoStatement:
-                case ts.SyntaxKind.ForStatement:
-                case ts.SyntaxKind.ForOfStatement:
-                case ts.SyntaxKind.CallExpression:
-                case ts.SyntaxKind.NewExpression:
-                case ts.SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.ParenthesizedExpression:
                     return spanInPreviousNode(node);
 
                 // Default to parent node
@@ -692,37 +705,37 @@ export function spanInSourceFileAtLocation(sourceFile: ts.SourceFile, position: 
             }
         }
 
-        function spanInColonToken(node: ts.Node): ts.TextSpan | undefined {
+        function spanInColonToken(node: Node): TextSpan | undefined {
             // Is this : specifying return annotation of the function declaration
-            if (ts.isFunctionLike(node.parent) ||
-                node.parent.kind === ts.SyntaxKind.PropertyAssignment ||
-                node.parent.kind === ts.SyntaxKind.Parameter) {
+            if (isFunctionLike(node.parent) ||
+                node.parent.kind === SyntaxKind.PropertyAssignment ||
+                node.parent.kind === SyntaxKind.Parameter) {
                 return spanInPreviousNode(node);
             }
 
             return spanInNode(node.parent);
         }
 
-        function spanInGreaterThanOrLessThanToken(node: ts.Node): ts.TextSpan | undefined {
-            if (node.parent.kind === ts.SyntaxKind.TypeAssertionExpression) {
+        function spanInGreaterThanOrLessThanToken(node: Node): TextSpan | undefined {
+            if (node.parent.kind === SyntaxKind.TypeAssertionExpression) {
                 return spanInNextNode(node);
             }
 
             return spanInNode(node.parent);
         }
 
-        function spanInWhileKeyword(node: ts.Node): ts.TextSpan | undefined {
-            if (node.parent.kind === ts.SyntaxKind.DoStatement) {
+        function spanInWhileKeyword(node: Node): TextSpan | undefined {
+            if (node.parent.kind === SyntaxKind.DoStatement) {
                 // Set span on while expression
-                return textSpanEndingAtNextToken(node, (node.parent as ts.DoStatement).expression);
+                return textSpanEndingAtNextToken(node, (node.parent as DoStatement).expression);
             }
 
             // Default to parent node
             return spanInNode(node.parent);
         }
 
-        function spanInOfKeyword(node: ts.Node): ts.TextSpan | undefined {
-            if (node.parent.kind === ts.SyntaxKind.ForOfStatement) {
+        function spanInOfKeyword(node: Node): TextSpan | undefined {
+            if (node.parent.kind === SyntaxKind.ForOfStatement) {
                 // Set using next token
                 return spanInNextNode(node);
             }

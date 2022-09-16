@@ -1,5 +1,5 @@
-import * as Harness from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
+import { FileBasedTest, IO, userSpecifiedRoot } from "./_namespaces/Harness";
 
 export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user" | "dt" | "docker";
 export type CompilerTestKind = "conformance" | "compiler";
@@ -20,7 +20,7 @@ export function setShardId(id: number) {
 
 export abstract class RunnerBase {
     // contains the tests to run
-    public tests: (string | Harness.FileBasedTest)[] = [];
+    public tests: (string | FileBasedTest)[] = [];
 
     /** Add a source file to the runner's list of tests that need to be initialized with initializeTests */
     public addTest(fileName: string) {
@@ -28,12 +28,12 @@ export abstract class RunnerBase {
     }
 
     public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean }): string[] {
-        return ts.map(Harness.IO.listFiles(Harness.userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
+        return ts.map(IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
     }
 
     abstract kind(): TestRunnerKind;
 
-    abstract enumerateTestFiles(): (string | Harness.FileBasedTest)[];
+    abstract enumerateTestFiles(): (string | FileBasedTest)[];
 
     getTestFiles(): ReturnType<this["enumerateTestFiles"]> {
         const all = this.enumerateTestFiles();
