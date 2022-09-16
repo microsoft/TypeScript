@@ -1,34 +1,34 @@
 === tests/cases/compiler/regexpExecAndMatchTypeUsages.ts ===
-export function foo(matchResult: RegExpExecArray, execResult: RegExpExecArray) {
->foo : (matchResult: RegExpExecArray, execResult: RegExpExecArray) => void
->matchResult : RegExpExecArray
+export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
+>foo : (matchResult: RegExpMatchArray, execResult: RegExpExecArray) => void
+>matchResult : RegExpMatchArray
 >execResult : RegExpExecArray
 
     matchResult[0].length;
 >matchResult[0].length : number
 >matchResult[0] : string
->matchResult : RegExpExecArray
+>matchResult : RegExpMatchArray
 >0 : 0
 >length : number
 
     matchResult[999].length;
 >matchResult[999].length : number
 >matchResult[999] : string
->matchResult : RegExpExecArray
+>matchResult : RegExpMatchArray
 >999 : 999
 >length : number
 
     matchResult.index + 0;
 >matchResult.index + 0 : number
 >matchResult.index : number
->matchResult : RegExpExecArray
+>matchResult : RegExpMatchArray
 >index : number
 >0 : 0
 
     matchResult.input.length;
 >matchResult.input.length : number
 >matchResult.input : string
->matchResult : RegExpExecArray
+>matchResult : RegExpMatchArray
 >input : string
 >length : number
 
@@ -36,7 +36,7 @@ export function foo(matchResult: RegExpExecArray, execResult: RegExpExecArray) {
 >matchResult.groups["someVariable"].length : number
 >matchResult.groups["someVariable"] : string
 >matchResult.groups : { [key: string]: string; }
->matchResult : RegExpExecArray
+>matchResult : RegExpMatchArray
 >groups : { [key: string]: string; }
 >"someVariable" : "someVariable"
 >length : number
@@ -44,7 +44,7 @@ export function foo(matchResult: RegExpExecArray, execResult: RegExpExecArray) {
     matchResult.groups = undefined;
 >matchResult.groups = undefined : undefined
 >matchResult.groups : { [key: string]: string; }
->matchResult : RegExpExecArray
+>matchResult : RegExpMatchArray
 >groups : { [key: string]: string; }
 >undefined : undefined
 
@@ -100,14 +100,14 @@ export function foo(matchResult: RegExpExecArray, execResult: RegExpExecArray) {
 
         matchResult = execResult;
 >matchResult = execResult : RegExpExecArray
->matchResult : RegExpExecArray
+>matchResult : RegExpMatchArray
 >execResult : RegExpExecArray
     }
     else {
         execResult = matchResult
->execResult = matchResult : RegExpExecArray
+>execResult = matchResult : RegExpMatchArray
 >execResult : RegExpExecArray
->matchResult : RegExpExecArray
+>matchResult : RegExpMatchArray
     }
 }
 

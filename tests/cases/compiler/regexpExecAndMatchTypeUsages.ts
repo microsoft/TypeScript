@@ -3,7 +3,7 @@
 // @exactOptionalPropertyTypes: true
 // @lib: es2018
 
-export function foo(matchResult: RegExpExecArray, execResult: RegExpExecArray) {
+export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
     matchResult[0].length;
     matchResult[999].length;
     matchResult.index + 0;
