@@ -64,6 +64,16 @@ ${JSON.stringify(dupes, undefined, 2)}`);
                 return new DefinitelyTypedRunner();
             case "docker":
                 return new DockerfileRunner();
+            case "tsbuild":
+                return new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsbuild);
+            case "tsbuildWatch":
+                return new DynamicUnittestsRunner(DynamicUnittests.TestType.TsbuildWatch);
+            case "tsc":
+                return new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsc);
+            case "tscWatch":
+                return new DynamicUnittestsRunner(DynamicUnittests.TestType.TscWatch);
+            case "tsserver":
+                return new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsserver);
         }
         return ts.Debug.fail(`Unknown runner kind ${kind}`);
     }
@@ -210,6 +220,26 @@ ${JSON.stringify(dupes, undefined, 2)}`);
                         case "docker":
                             runners.push(new DockerfileRunner());
                             break;
+                        case "tsbuild":
+                            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsbuild));
+                            runUnitTests = true;
+                            break;
+                        case "tsbuildWatch":
+                            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.TsbuildWatch));
+                            runUnitTests = true;
+                            break;
+                        case "tsc":
+                            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsc));
+                            runUnitTests = true;
+                            break;
+                        case "tscWatch":
+                            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.TscWatch));
+                            runUnitTests = true;
+                            break;
+                        case "tsserver":
+                            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsserver));
+                            runUnitTests = true;
+                            break;
                     }
                 }
             }
@@ -228,6 +258,14 @@ ${JSON.stringify(dupes, undefined, 2)}`);
             runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
             runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
             // runners.push(new GeneratedFourslashRunner());
+
+            // dynamic unittests
+            runUnitTests = true;
+            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsbuild));
+            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.TsbuildWatch));
+            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsc));
+            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.TscWatch));
+            runners.push(new DynamicUnittestsRunner(DynamicUnittests.TestType.Tsserver));
 
             // CRON-only tests
             if (process.env.TRAVIS_EVENT_TYPE === "cron") {

@@ -112,6 +112,7 @@ namespace ts.tscWatch {
     export interface TscWatchCompileBase<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram> extends TscWatchCheckOptions {
         scenario: string;
         subScenario: string;
+        dynamicTestName?: string;
         commandLineArgs: readonly string[];
         changes: readonly TscWatchCompileChange<T>[];
     }
@@ -127,7 +128,7 @@ namespace ts.tscWatch {
 
     export type SystemSnap = ReturnType<WatchedSystem["snap"]>;
     function tscWatchCompile(input: TscWatchCompile) {
-        it("tsc-watch:: Generates files matching the baseline", () => {
+        it(`tsc-watch:: Generates files matching the baseline ${input.dynamicTestName ? input.dynamicTestName : ""}`, () => {
             const { sys, baseline, oldSnap } = createBaseline(input.sys());
             const {
                 scenario, subScenario,

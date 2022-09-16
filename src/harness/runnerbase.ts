@@ -1,5 +1,5 @@
 namespace Harness {
-    export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user" | "dt" | "docker";
+    export type TestRunnerKind = CompilerTestKind | FourslashTestKind | DynamicUnittests.TestType | "project" | "rwc" | "test262" | "user" | "dt" | "docker";
     export type CompilerTestKind = "conformance" | "compiler";
     export type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
 

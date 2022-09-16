@@ -22,32 +22,6 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(service, 0);
         });
 
-        it("should use projectRootPath when searching for inferred project again", () => {
-            const projectDir = "/a/b/projects/project";
-            const configFileLocation = `${projectDir}/src`;
-            const f1 = {
-                path: `${configFileLocation}/file1.ts`,
-                content: ""
-            };
-            const configFile = {
-                path: `${configFileLocation}/tsconfig.json`,
-                content: "{}"
-            };
-            const configFile2 = {
-                path: "/a/b/projects/tsconfig.json",
-                content: "{}"
-            };
-            const host = createServerHost([f1, libFile, configFile, configFile2]);
-            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
-
-            // Delete config file - should create inferred project and not configured project
-            host.deleteFile(configFile.path);
-            host.runQueuedTimeoutCallbacks();
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again", service);
-        });
-
         it("should use projectRootPath when searching for inferred project again 2", () => {
             const projectDir = "/a/b/projects/project";
             const configFileLocation = `${projectDir}/src`;

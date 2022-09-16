@@ -575,11 +575,11 @@ interface Symbol {
      * Verify non watch tsc invokcation after each edit
      */
     export function verifyTscWithEdits({
-        subScenario, fs, scenario, commandLineArgs,
+        subScenario, fs, scenario, dynamicTestName, commandLineArgs,
         baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
         edits
     }: VerifyTscWithEditsInput) {
-        describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario} serializedEdits`, () => {
+        describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario} serializedEdits ${dynamicTestName ? dynamicTestName : ""}`, () => {
             let sys: TscCompileSystem;
             let baseFs: vfs.FileSystem;
             let editsSys: TscCompileSystem[];

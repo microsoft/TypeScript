@@ -214,6 +214,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
     export interface VerifyTscCompileLike {
         scenario: string;
         subScenario: string;
+        dynamicTestName?: string;
         commandLineArgs: readonly string[];
         fs: () => vfs.FileSystem;
     }
@@ -222,7 +223,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
      * Verify by baselining after initializing FS and custom compile
      */
     export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (input: T) => { baseLine: TscCompileSystem["baseLine"]; }, input: T) {
-        describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
+        describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario} ${input.dynamicTestName ? input.dynamicTestName : ""}`, () => {
             describe(input.scenario, () => {
                 describe(input.subScenario, () => {
                     verifyTscBaseline(() => verifier({

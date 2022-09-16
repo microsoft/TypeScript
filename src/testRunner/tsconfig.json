@@ -3,8 +3,8 @@
     "compilerOptions": {
         "outFile": "../../built/local/run.js",
         "composite": false,
-        "declaration": false,
-        "declarationMap": false,
+        "declaration": true,
+        "declarationMap": true,
         "types": [
             "node", "mocha", "chai"
         ],
@@ -39,6 +39,7 @@
 
         "fourslashRunner.ts",
         "compilerRunner.ts",
+        "dynamicUnittestsRunner.ts",
         "projectsRunner.ts",
         "rwcRunner.ts",
         "externalCompileRunner.ts",
@@ -117,7 +118,6 @@
         "unittests/services/textChanges.ts",
         "unittests/services/transpile.ts",
         "unittests/tsbuild/amdModulesWithOut.ts",
-        "unittests/tsbuild/clean.ts",
         "unittests/tsbuild/configFileErrors.ts",
         "unittests/tsbuild/configFileExtends.ts",
         "unittests/tsbuild/containerOnlyReferenced.ts",
@@ -143,7 +143,6 @@
         "unittests/tsbuildWatch/configFileErrors.ts",
         "unittests/tsbuildWatch/demo.ts",
         "unittests/tsbuildWatch/moduleResolution.ts",
-        "unittests/tsbuildWatch/noEmit.ts",
         "unittests/tsbuildWatch/noEmitOnError.ts",
         "unittests/tsbuildWatch/programUpdates.ts",
         "unittests/tsbuildWatch/projectsBuilding.ts",
@@ -153,7 +152,6 @@
         "unittests/tsc/cancellationToken.ts",
         "unittests/tsc/composite.ts",
         "unittests/tsc/declarationEmit.ts",
-        "unittests/tsc/forceConsistentCasingInFileNames.ts",
         "unittests/tsc/incremental.ts",
         "unittests/tsc/listFilesOnly.ts",
         "unittests/tsc/projectReferences.ts",
@@ -161,7 +159,6 @@
         "unittests/tsc/runWithoutArgs.ts",
         "unittests/tscWatch/consoleClearing.ts",
         "unittests/tscWatch/emit.ts",
-        "unittests/tscWatch/nodeNextWatch.ts",
         "unittests/tscWatch/emitAndErrorUpdates.ts",
         "unittests/tscWatch/forceConsistentCasingInFileNames.ts",
         "unittests/tscWatch/incremental.ts",
