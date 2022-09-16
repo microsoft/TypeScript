@@ -11,7 +11,7 @@
 //// }
 //// declare const e: E;
 //// switch (e) {
-////     case /*2*/   
+////     case /*2*/
 //// }
 //// enum F {
 ////     D = 1 << 0,
@@ -40,6 +40,9 @@ verify.completions(
         excludes: [
             // >> TODO: exclude C
         ],
+        preferences: {
+            includeCompletionsWithInsertText: true,
+        },
     },
     {
         marker: "2",
@@ -58,6 +61,9 @@ verify.completions(
             //     sortText: completion.SortText.LocationPriority,
             // }
         ],
+        preferences: {
+            includeCompletionsWithInsertText: true,
+        },
     },
     {
         marker: "3",
@@ -76,5 +82,8 @@ verify.completions(
             //     sortText: completion.SortText.LocationPriority,
             // }
         ],
+        preferences: {
+            includeCompletionsWithInsertText: true,
+        },
     },
 );

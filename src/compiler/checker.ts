@@ -6611,10 +6611,7 @@ namespace ts {
                     if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                         return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
                     }
-                    const canUsePropertyAccess = firstChar === CharacterCodes.hash ?
-                        symbolName.length > 1 && isIdentifierStart(symbolName.charCodeAt(1), languageVersion) :
-                        isIdentifierStart(firstChar, languageVersion);
-                    if (index === 0 || canUsePropertyAccess) {
+                    if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
                         const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                         identifier.symbol = symbol;
 
@@ -39764,7 +39761,7 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            let firstDefaultClause: CaseOrDefaultClause;
+            let firstDefaultClause: CaseOrDefaultClause | undefined = undefined;
             let hasDuplicateDefaultClause = false;
 
             const expressionType = checkExpression(node.expression);
@@ -39808,6 +39805,13 @@ namespace ts {
                     };
                 }
             });
+
+            const lastCaseClause = !firstDefaultClause && last(node.caseBlock.clauses);
+            if (lastCaseClause) {
+                // >> TODO: check if switch expression is never
+                // >> TODO: I'd need to learn how the flow graph is built to check this correctly, if there's even a way
+            }
+
             if (node.caseBlock.locals) {
                 registerForUnusedIdentifiersCheck(node.caseBlock);
             }
