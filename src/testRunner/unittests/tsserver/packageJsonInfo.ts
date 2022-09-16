@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 const tsConfig: ts.projectSystem.File = {
     path: "/tsconfig.json",
     content: "{}"
@@ -108,5 +109,4 @@ function setup(files: readonly ts.projectSystem.File[] = [tsConfig, packageJson]
     projectService.openClientFile(files[0].path);
     const project = ts.projectSystem.configuredProjectAt(projectService, 0);
     return { host, session, project, projectService };
-}
 }

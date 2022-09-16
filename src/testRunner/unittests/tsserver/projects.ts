@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: Projects", () => {
     it("handles the missing files - that were added to program because they were added with ///<ref", () => {
         const file1: ts.projectSystem.File = {
@@ -1645,4 +1646,3 @@ describe("unittests:: tsserver:: Projects", () => {
         ts.projectSystem.baselineTsserverLogs("projects", "file opened is in configured project that will be removed", session);
     });
 });
-}

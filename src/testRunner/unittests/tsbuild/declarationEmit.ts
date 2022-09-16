@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsbuild:: declarationEmit", () => {
     function getFiles(): vfs.FileSet {
         return {
@@ -115,4 +118,3 @@ export function fn4() {
         commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"]
     });
 });
-}

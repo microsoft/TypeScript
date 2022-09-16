@@ -1,4 +1,10 @@
-namespace Harness {
+import * as Harness from "./_namespaces/Harness";
+import * as vpath from "./_namespaces/vpath";
+import * as ts from "./_namespaces/ts";
+import * as FourSlash from "./_namespaces/FourSlash";
+import * as project from "./_namespaces/project";
+import * as RWC from "./_namespaces/RWC";
+
 /* eslint-disable prefer-const */
 export let runners: Harness.RunnerBase[] = [];
 export let iterations = 1;
@@ -281,4 +287,3 @@ function startTestEnvironment() {
 }
 
 startTestEnvironment();
-}

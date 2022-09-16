@@ -1,5 +1,6 @@
-/*@internal*/
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
+/** @internal */
 export function transformJsx(context: ts.TransformationContext) {
     interface PerFileState {
         importSpecifier?: string;
@@ -812,4 +813,3 @@ const entities = new ts.Map(ts.getEntries({
     hearts: 0x2665,
     diams: 0x2666
 }));
-}

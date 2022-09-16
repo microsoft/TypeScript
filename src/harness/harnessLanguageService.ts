@@ -1,4 +1,10 @@
-namespace Harness.LanguageService {
+import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as fakes from "./_namespaces/fakes";
+import * as vfs from "./_namespaces/vfs";
+import * as collections from "./_namespaces/collections";
+import * as vpath from "./_namespaces/vpath";
+import * as Utils from "./_namespaces/Utils";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
@@ -1040,5 +1046,4 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             "This probably means something is wrong with the fourslash infrastructure, not with the test."
         ].join(ts.sys.newLine));
     }
-}
 }

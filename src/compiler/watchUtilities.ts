@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 /**
  * Partial interface of the System thats needed to support the caching of directory structure
  */
@@ -22,6 +23,7 @@ interface FileAndDirectoryExistence {
     directoryExists: boolean;
 }
 
+/** @internal */
 export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
     useCaseSensitiveFileNames: boolean;
 
@@ -50,6 +52,7 @@ interface SortedAndCanonicalizedMutableFileSystemEntries {
     readonly sortedAndCanonicalizedDirectories: ts.SortedArray<Canonicalized>
 }
 
+/** @internal */
 export function createCachedDirectoryStructureHost(host: DirectoryStructureHost, currentDirectory: string, useCaseSensitiveFileNames: boolean): CachedDirectoryStructureHost | undefined {
     if (!host.getDirectories || !host.readDirectory) {
         return undefined;
@@ -303,6 +306,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 }
 
+/** @internal */
 export enum ConfigFileProgramReloadLevel {
     None,
     /** Update the file name list from the disk */
@@ -311,11 +315,13 @@ export enum ConfigFileProgramReloadLevel {
     Full
 }
 
+/** @internal */
 export interface SharedExtendedConfigFileWatcher<T> extends ts.FileWatcher {
     watcher: ts.FileWatcher;
     projects: ts.Set<T>;
 }
 
+/** @internal */
 /**
  * Updates the map of shared extended config file watches with a new set of extended config files from a base config file of the project
  */
@@ -356,6 +362,7 @@ export function updateSharedExtendedConfigFileWatcher<T>(
     });
 }
 
+/** @internal */
 /**
  * Remove the project from the extended config file watchers and close not needed watches
  */
@@ -368,6 +375,7 @@ export function clearSharedExtendedConfigFileWatcher<T>(
     });
 }
 
+/** @internal */
 /**
  * Clean the extendsConfigCache when extended config file has changed
  */
@@ -384,6 +392,7 @@ export function cleanExtendedConfigCache(
     });
 }
 
+/** @internal */
 /**
  * Updates watchers based on the package json files used in module resolution
  */
@@ -403,6 +412,7 @@ export function updatePackageJsonWatch(
     );
 }
 
+/** @internal */
 /**
  * Updates the existing missing file watches with the new set of missing files after new program is created
  */
@@ -428,11 +438,13 @@ export function updateMissingFilePathsWatch(
     );
 }
 
+/** @internal */
 export interface WildcardDirectoryWatcher {
     watcher: ts.FileWatcher;
     flags: ts.WatchDirectoryFlags;
 }
 
+/** @internal */
 /**
  * Updates the existing wild card directory watches with the new set of wild card directories from the config file
  * after new program is created because the config file was reloaded or program was created first time from the config file
@@ -476,6 +488,7 @@ export function updateWatchingWildcardDirectories(
     }
 }
 
+/** @internal */
 export interface IsIgnoredFileFromWildCardWatchingInput {
     watchedDirPath: ts.Path;
     fileOrDirectory: string;
@@ -556,6 +569,7 @@ function isBuilderProgram<T extends ts.BuilderProgram>(program: ts.Program | T):
     return !!(program as T).getState;
 }
 
+/** @internal */
 export function isEmittedFileOfProgram(program: ts.Program | undefined, file: string) {
     if (!program) {
         return false;
@@ -564,12 +578,14 @@ export function isEmittedFileOfProgram(program: ts.Program | undefined, file: st
     return program.isEmittedFile(file);
 }
 
+/** @internal */
 export enum WatchLogLevel {
     None,
     TriggerOnly,
     Verbose
 }
 
+/** @internal */
 export interface WatchFactoryHost {
     watchFile(path: string, callback: ts.FileWatcherCallback, pollingInterval?: number, options?: ts.WatchOptions): ts.FileWatcher;
     watchDirectory(path: string, callback: ts.DirectoryWatcherCallback, recursive?: boolean, options?: ts.WatchOptions): ts.FileWatcher;
@@ -577,12 +593,15 @@ export interface WatchFactoryHost {
     useCaseSensitiveFileNames: boolean | (() => boolean);
 }
 
+/** @internal */
 export interface WatchFactory<X, Y = undefined> {
     watchFile: (file: string, callback: ts.FileWatcherCallback, pollingInterval: ts.PollingInterval, options: ts.WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => ts.FileWatcher;
     watchDirectory: (directory: string, callback: ts.DirectoryWatcherCallback, flags: ts.WatchDirectoryFlags, options: ts.WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => ts.FileWatcher;
 }
 
+/** @internal */
 export type GetDetailWatchInfo<X, Y> = (detailInfo1: X, detailInfo2: Y | undefined) => string;
+/** @internal */
 export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
     ts.setSysLog(watchLogLevel === WatchLogLevel.Verbose ? log : ts.noop);
     const plainInvokeFactory: WatchFactory<X, Y> = {
@@ -709,6 +728,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     }
 }
 
+/** @internal */
 export function getFallbackOptions(options: ts.WatchOptions | undefined): ts.WatchOptions {
     const fallbackPolling = options?.fallbackPolling;
     return {
@@ -718,7 +738,7 @@ export function getFallbackOptions(options: ts.WatchOptions | undefined): ts.Wat
     };
 }
 
+/** @internal */
 export function closeFileWatcherOf<T extends { watcher: ts.FileWatcher; }>(objWithWatcher: T) {
     objWithWatcher.watcher.close();
-}
 }

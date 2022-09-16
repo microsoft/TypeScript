@@ -1,4 +1,7 @@
-namespace Harness {
+import * as Harness from "./_namespaces/Harness";
+import * as FourSlash from "./_namespaces/FourSlash";
+import * as ts from "./_namespaces/ts";
+
 export class FourSlashRunner extends Harness.RunnerBase {
     protected basePath: string;
     protected testSuiteName: Harness.TestRunnerKind;
@@ -68,5 +71,4 @@ export class GeneratedFourslashRunner extends FourSlashRunner {
         super(testType);
         this.basePath += "/generated/";
     }
-}
 }

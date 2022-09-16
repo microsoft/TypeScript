@@ -1,4 +1,3 @@
-namespace ts {
 // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
 // If changing the text in this section, be sure to test `configurePrerelease` too.
 export const versionMajorMinor = "4.9";
@@ -154,4 +153,3 @@ namespace NativeCollections {
 export const Map = NativeCollections.tryGetNativeMap();
 /* @internal */
 export const Set = NativeCollections.tryGetNativeSet();
-}

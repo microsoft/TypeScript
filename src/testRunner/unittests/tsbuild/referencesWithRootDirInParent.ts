@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
     let projFs: vfs.FileSystem;
     before(() => {
@@ -58,4 +60,3 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         },
     });
 });
-}

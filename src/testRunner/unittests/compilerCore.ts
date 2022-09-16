@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 describe("unittests:: compilerCore", () => {
     describe("equalOwnProperties", () => {
         it("correctly equates objects", () => {
@@ -192,4 +193,3 @@ describe("unittests:: compilerCore", () => {
         });
     });
 });
-}

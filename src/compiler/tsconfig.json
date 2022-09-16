@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/compiler.js",
+        "outDir": "../../built/local",
         "types": ["node"]
     },
 
@@ -80,6 +80,9 @@
         "watch.ts",
         "watchPublic.ts",
         "tsbuild.ts",
-        "tsbuildPublic.ts"
+        "tsbuildPublic.ts",
+        "_namespaces/ts.ts",
+        "_namespaces/ts.moduleSpecifiers.ts",
+        "_namespaces/ts.performance.ts"
     ]
 }

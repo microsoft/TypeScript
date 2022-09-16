@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: config:: showConfig", () => {
     function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
         describe(name, () => {
@@ -190,4 +192,3 @@ describe("unittests:: config:: showConfig", () => {
         showTSConfigCorrectly(`Shows tsconfig for single option/${option.name}`, args, configObject);
     }
 });
-}

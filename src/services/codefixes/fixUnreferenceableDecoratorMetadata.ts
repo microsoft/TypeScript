@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixUnreferenceableDecoratorMetadata";
 const errorCodes = [ts.Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.code];
 ts.codefix.registerCodeFix({
@@ -66,5 +66,4 @@ function doTypeOnlyImportChange(changes: ts.textChanges.ChangeTracker, sourceFil
 
 function doNamespaceImportChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, importDeclaration: ts.ImportSpecifier, program: ts.Program) {
     ts.refactor.doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, importDeclaration.parent);
-}
 }

@@ -1,4 +1,9 @@
-namespace Harness {
+import * as Harness from "./_namespaces/Harness";
+import * as vpath from "./_namespaces/vpath";
+import * as ts from "./_namespaces/ts";
+import * as compiler from "./_namespaces/compiler";
+import * as Utils from "./_namespaces/Utils";
+
 export const enum CompilerTestType {
     Conformance,
     Regressions,
@@ -339,5 +344,4 @@ class CompilerTest {
     private createHarnessTestFile(lastUnit: Harness.TestCaseParser.TestUnitData, rootDir: string, unitName?: string): Harness.Compiler.TestFile {
         return { unitName: unitName || this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content, fileOptions: lastUnit.fileOptions };
     }
-}
 }

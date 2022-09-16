@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: autoDiscovery", () => {
     it("does not depend on extension", () => {
         const file1 = {
@@ -49,4 +50,3 @@ describe("unittests:: tsserver:: prefer typings to js", () => {
         ts.projectSystem.checkProjectActualFiles(ts.projectSystem.configuredProjectAt(projectService, 0), [f1.path, barTypings.path, config.path]);
     });
 });
-}

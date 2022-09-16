@@ -1,12 +1,17 @@
-/* @internal */
-namespace ts.Completions {
+import * as ts from "./_namespaces/ts";
+
 // Exported only for tests
+/** @internal */
 export const moduleSpecifierResolutionLimit = 100;
+/** @internal */
 export const moduleSpecifierResolutionCacheAttemptLimit = 1000;
 
+/** @internal */
 export type Log = (message: string) => void;
 
+/** @internal */
 export type SortText = string & { __sortText: any };
+/** @internal */
 export const SortText = {
     // Presets
     LocalDeclarationPriority: "10" as SortText,
@@ -33,6 +38,7 @@ export const SortText = {
     },
 };
 
+/** @internal */
 /**
  * Special values for `CompletionInfo['source']` used to disambiguate
  * completion items with the same `name`. (Each completion item must
@@ -246,6 +252,7 @@ function resolvingModuleSpecifiers<TReturn>(
     }
 }
 
+/** @internal */
 export function getCompletionsAtPosition(
     host: ts.LanguageServiceHost,
     program: ts.Program,
@@ -1389,6 +1396,7 @@ function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | und
     }
 }
 
+/** @internal */
 export function getCompletionEntriesFromSymbols(
     symbols: readonly ts.Symbol[],
     entries: ts.SortedArray<ts.CompletionEntry>,
@@ -1625,12 +1633,14 @@ function getSymbolCompletionFromEntryId(
     }) || { type: "none" };
 }
 
+/** @internal */
 export interface CompletionEntryIdentifier {
     name: string;
     source?: string;
     data?: ts.CompletionEntryData;
 }
 
+/** @internal */
 export function getCompletionEntryDetails(
     program: ts.Program,
     log: Log,
@@ -1690,6 +1700,7 @@ function createSimpleDetails(name: string, kind: ts.ScriptElementKind, kind2: ts
     return createCompletionDetails(name, ts.ScriptElementKindModifier.none, kind, [ts.displayPart(name, kind2)]);
 }
 
+/** @internal */
 export function createCompletionDetailsForSymbol(symbol: ts.Symbol, checker: ts.TypeChecker, sourceFile: ts.SourceFile, location: ts.Node, cancellationToken: ts.CancellationToken, codeActions?: ts.CodeAction[], sourceDisplay?: ts.SymbolDisplayPart[]): ts.CompletionEntryDetails {
     const { displayParts, documentation, symbolKind, tags } =
         checker.runWithCancellationToken(cancellationToken, checker =>
@@ -1698,6 +1709,7 @@ export function createCompletionDetailsForSymbol(symbol: ts.Symbol, checker: ts.
     return createCompletionDetails(symbol.name, ts.SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
 }
 
+/** @internal */
 export function createCompletionDetails(name: string, kindModifiers: string, kind: ts.ScriptElementKind, displayParts: ts.SymbolDisplayPart[], documentation?: ts.SymbolDisplayPart[], tags?: ts.JSDocTagInfo[], codeActions?: ts.CodeAction[], source?: ts.SymbolDisplayPart[]): ts.CompletionEntryDetails {
     return { name, kindModifiers, kind, displayParts, documentation, tags, codeActions, source, sourceDisplay: source };
 }
@@ -1793,6 +1805,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     return { sourceDisplay: [ts.textPart(moduleSpecifier)], codeActions: [codeAction] };
 }
 
+/** @internal */
 export function getCompletionEntrySymbol(
     program: ts.Program,
     log: Log,
@@ -1840,6 +1853,7 @@ type Request =
     | { readonly kind: CompletionDataKind.JsDocParameterName, tag: ts.JSDocParameterTag }
     | { readonly kind: CompletionDataKind.Keywords, keywordCompletions: readonly ts.CompletionEntry[], isNewIdentifierLocation: boolean };
 
+/** @internal */
 export const enum CompletionKind {
     ObjectPropertyDeclaration,
     Global,
@@ -4014,6 +4028,7 @@ function getJsDocTagAtPosition(node: ts.Node, position: number): ts.JSDocTag | u
             ts.isJSDoc(n) ? "quit" : false) as ts.JSDocTag | undefined;
 }
 
+/** @internal */
 export function getPropertiesForObjectExpression(contextualType: ts.Type, completionsType: ts.Type | undefined, obj: ts.ObjectLiteralExpression | ts.JsxAttributes, checker: ts.TypeChecker): ts.Symbol[] {
     const hasCompletionsType = completionsType && completionsType !== contextualType;
     const type = hasCompletionsType && !(completionsType.flags & ts.TypeFlags.AnyOrUnknown)
@@ -4407,7 +4422,5 @@ function toUpperCharCode(charCode: number) {
         return charCode - 32;
     }
     return charCode;
-}
-
 }
 

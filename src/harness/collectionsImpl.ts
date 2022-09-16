@@ -1,4 +1,5 @@
-namespace collections {
+import * as ts from "./_namespaces/ts";
+
 export interface SortOptions<T> {
     comparer: (a: T, b: T) => number;
     sort: "insertion" | "comparison";
@@ -322,5 +323,4 @@ export class Metadata {
     private static _unescapeKey(text: string) {
         return (text.length >= 3 && text.charAt(0) === "_" && text.charAt(1) === "_" && text.charAt(2) === "_" ? text.slice(1) : text);
     }
-}
 }

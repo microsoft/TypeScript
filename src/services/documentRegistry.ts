@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 /**
  * The document registry represents a store of SourceFile objects that can be shared between
  * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
@@ -396,5 +397,4 @@ function getKeyForCompilationSettings(settings: ts.CompilerOptions): DocumentReg
 
 function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ts.ModuleKind.ESNext | ts.ModuleKind.CommonJS | undefined) {
     return (mode ? `${key}|${mode}` : key) as DocumentRegistryBucketKeyWithMode;
-}
 }

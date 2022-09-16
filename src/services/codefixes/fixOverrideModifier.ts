@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixName = "fixOverrideModifier";
 const fixAddOverrideId = "fixAddOverrideModifier";
 const fixRemoveOverrideId = "fixRemoveOverrideModifier";
@@ -188,6 +188,5 @@ function findContainerClassElementLike(sourceFile: ts.SourceFile, pos: number) {
 
     ts.Debug.assert(classElement && isClassElementLikeHasJSDoc(classElement));
     return classElement;
-}
 }
 

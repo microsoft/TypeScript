@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as vfs from "../../_namespaces/vfs";
+
 interface TestProjectSpecification {
     configFileName?: string;
     references?: readonly (string | ts.ProjectReference)[];
@@ -349,4 +352,3 @@ describe("unittests:: config:: project-references errors when a file in a compos
         });
     });
 });
-}

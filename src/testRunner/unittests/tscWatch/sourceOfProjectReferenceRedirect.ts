@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 import getFileFromProject = ts.TestFSWithWatch.getTsBuildProjectFile;
 describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
     interface VerifyWatchInput {
@@ -170,4 +171,3 @@ bar();
         });
     });
 });
-}

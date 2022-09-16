@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+
 import Tsc_WatchDirectory = ts.TestFSWithWatch.Tsc_WatchDirectory;
 describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
     const scenario = "watchEnvironment";
@@ -718,4 +719,3 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         });
     });
 });
-}

@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: tsserver:: ExternalProjects", () => {
     describe("can handle tsconfig file name with difference casing", () => {
         function verifyConfigFileCasing(lazyConfiguredProjectsFromExternalProject: boolean) {
@@ -938,4 +940,3 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         ts.projectSystem.checkNumberOfProjects(projectService, { externalProjects: 1 });
     });
 });
-}

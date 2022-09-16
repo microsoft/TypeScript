@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../../../_namespaces/ts";
+
 function testExtractRangeFailed(caption: string, s: string, expectedErrors: string[]) {
     return it(caption, () => {
         const t = ts.extractTest(s);
@@ -405,4 +406,3 @@ switch (x) {
 
     testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [ts.refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
 });
-}

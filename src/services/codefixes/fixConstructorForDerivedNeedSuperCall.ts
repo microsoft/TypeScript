@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "constructorForDerivedNeedSuperCall";
 const errorCodes = [ts.Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call.code];
 ts.codefix.registerCodeFix({
@@ -24,5 +24,4 @@ function getNode(sourceFile: ts.SourceFile, pos: number): ts.ConstructorDeclarat
 function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, ctr: ts.ConstructorDeclaration) {
     const superCall = ts.factory.createExpressionStatement(ts.factory.createCallExpression(ts.factory.createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ ts.emptyArray));
     changes.insertNodeAtConstructorStart(sourceFile, ctr, superCall);
-}
 }

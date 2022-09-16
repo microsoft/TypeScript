@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "convertLiteralTypeToMappedType";
 const errorCodes = [ts.Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0.code];
 
@@ -54,5 +54,4 @@ function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFi
         /*questionToken*/ undefined,
         typeNode,
         /*members*/ undefined));
-}
 }

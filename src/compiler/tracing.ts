@@ -1,8 +1,10 @@
+import * as ts from "./_namespaces/ts";
+
 /* Tracing events for the compiler. */
 
-/*@internal*/
-namespace ts { // eslint-disable-line local/one-namespace-per-file
+// eslint-disable-line local/one-namespace-per-file
 // should be used as tracing?.___
+/** @internal */
 export let tracing: typeof tracingEnabled | undefined;
 // enable the above using startTracing()
 
@@ -340,10 +342,12 @@ namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
 }
 
 // define after tracingEnabled is initialized
+/** @internal */
 export const startTracing = tracingEnabled.startTracing;
+/** @internal */
 export const dumpTracingLegend = tracingEnabled.dumpLegend;
 
+/** @internal */
 export interface TracingNode {
     tracingPath?: ts.Path;
-}
 }

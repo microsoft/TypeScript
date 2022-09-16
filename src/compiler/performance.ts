@@ -1,20 +1,24 @@
-/*@internal*/
+import * as ts from "./_namespaces/ts";
+
 /** Performance measurements for the compiler. */
-namespace ts.performance {
+
 let perfHooks: ts.PerformanceHooks | undefined;
 // when set, indicates the implementation of `Performance` to use for user timing.
 // when unset, indicates user timing is unavailable or disabled.
 let performanceImpl: ts.Performance | undefined;
 
+/** @internal */
 export interface Timer {
     enter(): void;
     exit(): void;
 }
 
+/** @internal */
 export function createTimerIf(condition: boolean, measureName: string, startMarkName: string, endMarkName: string) {
     return condition ? createTimer(measureName, startMarkName, endMarkName) : nullTimer;
 }
 
+/** @internal */
 export function createTimer(measureName: string, startMarkName: string, endMarkName: string): Timer {
     let enterCount = 0;
     return {
@@ -39,6 +43,7 @@ export function createTimer(measureName: string, startMarkName: string, endMarkN
     }
 }
 
+/** @internal */
 export const nullTimer: Timer = { enter: ts.noop, exit: ts.noop };
 
 let enabled = false;
@@ -47,6 +52,7 @@ const marks = new ts.Map<string, number>();
 const counts = new ts.Map<string, number>();
 const durations = new ts.Map<string, number>();
 
+/** @internal */
 /**
  * Marks a performance event.
  *
@@ -61,6 +67,7 @@ export function mark(markName: string) {
     }
 }
 
+/** @internal */
 /**
  * Adds a performance measurement with the specified name.
  *
@@ -80,6 +87,7 @@ export function measure(measureName: string, startMarkName?: string, endMarkName
     }
 }
 
+/** @internal */
 /**
  * Gets the number of times a marker was encountered.
  *
@@ -89,6 +97,7 @@ export function getCount(markName: string) {
     return counts.get(markName) || 0;
 }
 
+/** @internal */
 /**
  * Gets the total duration of all measurements with the supplied name.
  *
@@ -98,6 +107,7 @@ export function getDuration(measureName: string) {
     return durations.get(measureName) || 0;
 }
 
+/** @internal */
 /**
  * Iterate over each measure, performing some action
  *
@@ -107,16 +117,19 @@ export function forEachMeasure(cb: (measureName: string, duration: number) => vo
     durations.forEach((duration, measureName) => cb(measureName, duration));
 }
 
+/** @internal */
 export function forEachMark(cb: (markName: string) => void) {
     marks.forEach((_time, markName) => cb(markName));
 }
 
+/** @internal */
 export function clearMeasures(name?: string) {
     if (name !== undefined) durations.delete(name);
     else durations.clear();
     performanceImpl?.clearMeasures(name);
 }
 
+/** @internal */
 export function clearMarks(name?: string) {
     if (name !== undefined) {
         counts.delete(name);
@@ -129,6 +142,7 @@ export function clearMarks(name?: string) {
     performanceImpl?.clearMarks(name);
 }
 
+/** @internal */
 /**
  * Indicates whether the performance API is enabled.
  */
@@ -136,6 +150,7 @@ export function isEnabled() {
     return enabled;
 }
 
+/** @internal */
 /** Enables (and resets) performance measurements for the compiler. */
 export function enable(system: ts.System = ts.sys) {
     if (!enabled) {
@@ -155,6 +170,7 @@ export function enable(system: ts.System = ts.sys) {
     return true;
 }
 
+/** @internal */
 /** Disables performance measurements for the compiler. */
 export function disable() {
     if (enabled) {
@@ -164,5 +180,4 @@ export function disable() {
         performanceImpl = undefined;
         enabled = false;
     }
-}
 }

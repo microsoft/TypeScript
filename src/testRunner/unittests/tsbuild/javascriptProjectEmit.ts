@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
     ts.verifyTsc({
         scenario: "javascriptProjectEmit",
@@ -269,4 +271,3 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
         commandLineArgs: ["-b", "/src"]
     });
 });
-}

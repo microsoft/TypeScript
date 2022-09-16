@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsc:: composite::", () => {
     ts.verifyTsc({
         scenario: "composite",
@@ -82,4 +84,3 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
     });
 });
-}

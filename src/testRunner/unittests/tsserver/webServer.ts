@@ -1,5 +1,7 @@
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 /* eslint-disable local/boolean-trivia */
-namespace ts.projectSystem {
 describe("unittests:: tsserver:: webServer", () => {
     class TestWorkerSession extends ts.server.WorkerSession {
         constructor(host: ts.server.ServerHost, webHost: ts.server.HostWithWriteMessage, options: Partial<ts.server.StartSessionOptions>, logger: ts.server.Logger) {
@@ -356,4 +358,3 @@ describe("unittests:: tsserver:: webServer", () => {
         });
     });
 });
-}

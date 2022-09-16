@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
+
 describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
     function build(sys: ts.tscWatch.WatchedSystem) {
         sys.checkTimeoutQueueLengthAndRun(1); // build the project
@@ -57,4 +59,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
         ]
     });
 });
-}

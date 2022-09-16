@@ -1,4 +1,5 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
+
 describe("unittests:: convertToBase64", () => {
     function runTest(input: string): void {
         const actual = ts.convertToBase64(input);
@@ -30,4 +31,3 @@ console.log(x);`);
         });
     }
 });
-}

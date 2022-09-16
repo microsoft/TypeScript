@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 import Tsc_WatchDirectory = ts.TestFSWithWatch.Tsc_WatchDirectory;
 describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
     function verifyCompletionListWithNewFileInSubFolder(scenario: string, tscWatchDirectory: Tsc_WatchDirectory) {
@@ -477,4 +478,3 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFile is single watcher 
         ts.projectSystem.baselineTsserverLogs("watchEnvironment", "when watchFile is single watcher per file", session);
     });
 });
-}

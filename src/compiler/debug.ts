@@ -1,5 +1,6 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
+/** @internal */
 export enum LogLevel {
     Off,
     Error,
@@ -8,10 +9,12 @@ export enum LogLevel {
     Verbose
 }
 
+/** @internal */
 export interface LoggingHost {
     log(level: LogLevel, s: string): void;
 }
 
+/** @internal */
 export interface DeprecationOptions {
     message?: string;
     error?: boolean;
@@ -22,6 +25,7 @@ export interface DeprecationOptions {
     name?: string;
 }
 
+/** @internal */
 export namespace Debug {
     let typeScriptVersion: ts.Version | undefined;
 
@@ -813,5 +817,4 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
         return mapper;
     }
-}
 }

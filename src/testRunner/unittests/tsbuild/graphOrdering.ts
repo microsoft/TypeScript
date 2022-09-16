@@ -1,4 +1,7 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as fakes from "../../_namespaces/fakes";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild - graph-ordering", () => {
     let host: fakes.SolutionBuilderHost | undefined;
     const deps: [string, string][] = [
@@ -88,4 +91,3 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         return projFileNames;
     }
 });
-}

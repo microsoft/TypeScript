@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "inferFromUsage";
 const errorCodes = [
     // Variable declarations
@@ -1129,5 +1129,4 @@ function inferTypeFromReferences(program: ts.Program, references: readonly ts.Id
             (usage.candidateThisTypes || (usage.candidateThisTypes = [])).push(type);
         }
     }
-}
 }

@@ -1,4 +1,4 @@
-namespace ts.server {
+import * as ts from "./_namespaces/ts";
 
 export enum ProjectKind {
     Inferred,
@@ -2710,5 +2710,4 @@ export function isConfiguredProject(project: Project): project is ConfiguredProj
 /* @internal */
 export function isExternalProject(project: Project): project is ExternalProject {
     return project.projectKind === ProjectKind.External;
-}
 }

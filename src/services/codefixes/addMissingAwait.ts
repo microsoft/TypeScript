@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 type ContextualTrackChangesFunction = (cb: (changeTracker: ts.textChanges.ChangeTracker) => void) => ts.FileTextChanges[];
 const fixId = "addMissingAwait";
 const propertyAccessCode = ts.Diagnostics.Property_0_does_not_exist_on_type_1.code;
@@ -278,5 +278,4 @@ function insertLeadingSemicolonIfNeeded(changeTracker: ts.textChanges.ChangeTrac
     if (precedingToken && ts.positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
         changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");
     }
-}
 }

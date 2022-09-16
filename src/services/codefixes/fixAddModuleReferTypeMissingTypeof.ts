@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixIdAddMissingTypeof = "fixAddModuleReferTypeMissingTypeof";
 const fixId = fixIdAddMissingTypeof;
 const errorCodes = [ts.Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0.code];
@@ -27,5 +27,4 @@ function getImportTypeNode(sourceFile: ts.SourceFile, pos: number): ts.ImportTyp
 function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, importType: ts.ImportTypeNode) {
     const newTypeNode = ts.factory.updateImportTypeNode(importType, importType.argument, importType.assertions, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
     changes.replaceNode(sourceFile, importType, newTypeNode);
-}
 }

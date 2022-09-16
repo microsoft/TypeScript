@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness";
+
 describe("unittests:: tsserver:: plugins loading", () => {
     const testProtocolCommand = "testProtocolCommand";
     const testProtocolCommandRequest = "testProtocolCommandRequest";
@@ -101,4 +103,3 @@ describe("unittests:: tsserver:: plugins loading", () => {
         assert.deepEqual(resp, expectedResp);
     });
 });
-}

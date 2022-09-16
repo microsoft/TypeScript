@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.NavigationBar {
+import * as ts from "./_namespaces/ts";
+
 /**
  * Matches all whitespace characters in a string. Eg:
  *
@@ -52,6 +52,7 @@ interface NavigationBarNode {
     indent: number; // # of parents
 }
 
+/** @internal */
 export function getNavigationBarItems(sourceFile: ts.SourceFile, cancellationToken: ts.CancellationToken): ts.NavigationBarItem[] {
     curCancellationToken = cancellationToken;
     curSourceFile = sourceFile;
@@ -63,6 +64,7 @@ export function getNavigationBarItems(sourceFile: ts.SourceFile, cancellationTok
     }
 }
 
+/** @internal */
 export function getNavigationTree(sourceFile: ts.SourceFile, cancellationToken: ts.CancellationToken): ts.NavigationTree {
     curCancellationToken = cancellationToken;
     curSourceFile = sourceFile;
@@ -982,5 +984,4 @@ function cleanText(text: string): string {
     // \u2028 - Line separator
     // \u2029 - Paragraph separator
     return text.replace(/\\?(\r?\n|\r|\u2028|\u2029)/g, "");
-}
 }

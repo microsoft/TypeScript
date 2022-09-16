@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixIdExpression = "fixInvalidJsxCharacters_expression";
 const fixIdHtmlEntity = "fixInvalidJsxCharacters_htmlEntity";
 
@@ -44,5 +44,4 @@ function doChange(changes: ts.textChanges.ChangeTracker, preferences: ts.UserPre
 
     const replacement = useHtmlEntity ? htmlEntity[character] : `{${ts.quote(sourceFile, preferences, character)}}`;
     changes.replaceRangeWithText(sourceFile, { pos: start, end: start + 1 }, replacement);
-}
 }

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "useDefaultImport";
 const errorCodes = [ts.Diagnostics.Import_may_be_converted_to_a_default_import.code];
 ts.codefix.registerCodeFix({
@@ -38,5 +38,4 @@ function getInfo(sourceFile: ts.SourceFile, pos: number): Info | undefined {
 
 function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, info: Info, preferences: ts.UserPreferences): void {
     changes.replaceNode(sourceFile, info.importNode, ts.makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, ts.getQuotePreference(sourceFile, preferences)));
-}
 }

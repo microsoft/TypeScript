@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
     enum CalledMapsWithSingleArg {
         fileExists = "fileExists",
@@ -573,4 +574,3 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         ts.projectSystem.checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, ts.projectSystem.libFile.path, `${symlink.path}/module3.ts`]);
     });
 });
-}

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 type AcceptedDeclaration = ts.ParameterPropertyDeclaration | ts.PropertyDeclaration | ts.PropertyAssignment;
 type AcceptedNameType = ts.Identifier | ts.StringLiteral;
 type ContainerDeclaration = ts.ClassLikeDeclaration | ts.ObjectLiteralExpression;
@@ -17,6 +17,7 @@ interface AccessorInfo {
     readonly renameAccessor: boolean;
 }
 
+/** @internal */
 export function generateAccessorFromProperty(file: ts.SourceFile, program: ts.Program, start: number, end: number, context: ts.textChanges.TextChangesContext, _actionName: string): ts.FileTextChanges[] | undefined {
     const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, program, start, end);
     if (!fieldInfo || ts.refactor.isRefactorErrorInfo(fieldInfo)) return undefined;
@@ -104,6 +105,7 @@ function prepareModifierFlagsForField(modifierFlags: ts.ModifierFlags): ts.Modif
     return modifierFlags;
 }
 
+/** @internal */
 export function getAccessorConvertiblePropertyAtPosition(file: ts.SourceFile, program: ts.Program, start: number, end: number, considerEmptySpans = true): Info | undefined {
     const node = ts.getTokenAtPosition(file, start);
     const cursorRequest = start === end && considerEmptySpans;
@@ -250,6 +252,7 @@ function getDeclarationType(declaration: AcceptedDeclaration, program: ts.Progra
     return typeNode;
 }
 
+/** @internal */
 export function getAllSupers(decl: ClassOrInterface | undefined, checker: ts.TypeChecker): readonly ClassOrInterface[] {
     const res: ts.ClassLikeDeclaration[] = [];
     while (decl) {
@@ -265,5 +268,5 @@ export function getAllSupers(decl: ClassOrInterface | undefined, checker: ts.Typ
     return res;
 }
 
+/** @internal */
 export type ClassOrInterface = ts.ClassLikeDeclaration | ts.InterfaceDeclaration;
-}

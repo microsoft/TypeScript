@@ -1,6 +1,6 @@
-/* @internal */
-namespace ts.JsTyping {
+import * as ts from "./_namespaces/ts";
 
+/** @internal */
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
     fileExists(fileName: string): boolean;
@@ -18,11 +18,13 @@ interface PackageJson {
     typings?: string;
 }
 
+/** @internal */
 export interface CachedTyping {
     typingLocation: string;
     version: ts.Version;
 }
 
+/** @internal */
 export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: ts.MapLike<string>) {
     const availableVersion = new ts.Version(ts.getProperty(availableTypingVersions, `ts${ts.versionMajorMinor}`) || ts.getProperty(availableTypingVersions, "latest")!);
     return availableVersion.compareTo(cachedTyping.version) <= 0;
@@ -78,26 +80,33 @@ const unprefixedNodeCoreModuleList = [
     "zlib"
 ];
 
+/** @internal */
 export const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
 
+/** @internal */
 export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
 
+/** @internal */
 export const nodeCoreModules = new ts.Set(nodeCoreModuleList);
 
+/** @internal */
 export function nonRelativeModuleNameForTypingCache(moduleName: string) {
     return nodeCoreModules.has(moduleName) ? "node" : moduleName;
 }
 
+/** @internal */
 /**
  * A map of loose file names to library names that we are confident require typings
  */
 export type SafeList = ts.ReadonlyESMap<string, string>;
 
+/** @internal */
 export function loadSafeList(host: TypingResolutionHost, safeListPath: ts.Path): SafeList {
     const result = ts.readConfigFile(safeListPath, path => host.readFile(path));
     return new ts.Map(ts.getEntries<string>(result.config));
 }
 
+/** @internal */
 export function loadTypesMap(host: TypingResolutionHost, typesMapPath: ts.Path): SafeList | undefined {
     const result = ts.readConfigFile(typesMapPath, path => host.readFile(path));
     if (result.config) {
@@ -106,6 +115,7 @@ export function loadTypesMap(host: TypingResolutionHost, typesMapPath: ts.Path):
     return undefined;
 }
 
+/** @internal */
 /**
  * @param host is the object providing I/O related operations.
  * @param fileNames are the file names that belong to the same project
@@ -334,6 +344,7 @@ export function discoverTypings(
     }
 }
 
+/** @internal */
 export const enum NameValidationResult {
     Ok,
     EmptyName,
@@ -345,13 +356,16 @@ export const enum NameValidationResult {
 
 const maxPackageNameLength = 214;
 
+/** @internal */
 export interface ScopedPackageNameValidationResult {
     name: string;
     isScopeName: boolean;
     result: NameValidationResult;
 }
+/** @internal */
 export type PackageNameValidationResult = NameValidationResult | ScopedPackageNameValidationResult;
 
+/** @internal */
 /**
  * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
  */
@@ -396,6 +410,7 @@ function validatePackageNameWorker(packageName: string, supportScopedPackage: bo
     return NameValidationResult.Ok;
 }
 
+/** @internal */
 export function renderPackageNameValidationFailure(result: PackageNameValidationResult, typing: string): string {
     return typeof result === "object" ?
         renderPackageNameValidationFailureWorker(typing, result.result, result.name, result.isScopeName) :
@@ -420,5 +435,4 @@ function renderPackageNameValidationFailureWorker(typing: string, result: NameVa
         default:
             throw ts.Debug.assertNever(result);
     }
-}
 }

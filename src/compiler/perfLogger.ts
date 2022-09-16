@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts {
+import * as ts from "./_namespaces/ts";
+
 type PerfLogger = typeof import("@microsoft/typescript-etw");
 const nullLogger: PerfLogger = {
     logEvent: ts.noop,
@@ -38,6 +38,6 @@ catch (e) {
     etwModule = undefined;
 }
 
+/** @internal */
 /** Performance logger that will generate ETW events if possible - check for `logEvent` member, as `etwModule` will be `{}` when browserified */
 export const perfLogger: PerfLogger = etwModule && etwModule.logEvent ? etwModule : nullLogger;
-}

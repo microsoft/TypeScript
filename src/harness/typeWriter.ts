@@ -1,4 +1,5 @@
-namespace Harness {
+import * as ts from "./_namespaces/ts";
+
 export interface TypeWriterTypeResult {
     line: number;
     syntaxKind: number;
@@ -190,5 +191,4 @@ export class TypeWriterWalker {
             symbol: symbolString
         };
     }
-}
 }

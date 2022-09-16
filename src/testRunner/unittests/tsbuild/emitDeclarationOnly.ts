@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
     let projFs: vfs.FileSystem;
     before(() => {
@@ -49,4 +51,3 @@ export interface A {`),
         ],
     });
 });
-}

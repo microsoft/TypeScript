@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.NavigateTo {
+import * as ts from "./_namespaces/ts";
+
 interface RawNavigateToItem {
     readonly name: string;
     readonly fileName: string;
@@ -8,6 +8,7 @@ interface RawNavigateToItem {
     readonly declaration: ts.Declaration;
 }
 
+/** @internal */
 export function getNavigateToItems(sourceFiles: readonly ts.SourceFile[], checker: ts.TypeChecker, cancellationToken: ts.CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): ts.NavigateToItem[] {
     const patternMatcher = ts.createPatternMatcher(searchValue);
     if (!patternMatcher) return ts.emptyArray;
@@ -132,5 +133,4 @@ function createNavigateToItem(rawItem: RawNavigateToItem): ts.NavigateToItem {
         containerName: containerName ? (containerName as ts.Identifier).text : "",
         containerKind: containerName ? ts.getNodeKind(container) : ts.ScriptElementKind.unknown,
     };
-}
 }

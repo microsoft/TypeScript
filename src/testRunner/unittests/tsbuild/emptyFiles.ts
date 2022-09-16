@@ -1,4 +1,6 @@
-namespace ts {
+import * as ts from "../../_namespaces/ts";
+import * as vfs from "../../_namespaces/vfs";
+
 describe("unittests:: tsbuild - empty files option in tsconfig", () => {
     let projFs: vfs.FileSystem;
     before(() => {
@@ -22,4 +24,3 @@ describe("unittests:: tsbuild - empty files option in tsconfig", () => {
         commandLineArgs: ["--b", "/src/with-references"],
     });
 });
-}

@@ -1,5 +1,5 @@
-/* @internal */
-namespace ts.codefix {
+import * as ts from "../_namespaces/ts";
+
 const fixId = "fixExpectedComma";
 const expectedErrorCode = ts.Diagnostics._0_expected.code;
 const errorCodes = [expectedErrorCode];
@@ -42,5 +42,4 @@ function getInfo(sourceFile: ts.SourceFile, pos: number, _: number): Info | unde
 function doChange(changes: ts.textChanges.ChangeTracker, sourceFile: ts.SourceFile, { node }: Info): void {
     const newNode = ts.factory.createToken(ts.SyntaxKind.CommaToken);
     changes.replaceNode(sourceFile, node, newNode);
-}
 }

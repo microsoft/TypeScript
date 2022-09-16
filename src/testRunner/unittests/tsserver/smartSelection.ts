@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import * as ts from "../../_namespaces/ts";
+
 function setup(fileName: string, content: string) {
     const file: ts.projectSystem.File = { path: fileName, content };
     const host = ts.projectSystem.createServerHost([file, ts.projectSystem.libFile]);
@@ -63,4 +64,3 @@ class Foo {
                                             end: { line: 9, offset: 2 }, } } } } } } } } }]);
     });
 });
-}

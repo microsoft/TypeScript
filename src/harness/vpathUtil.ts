@@ -1,4 +1,6 @@
-namespace vpath {
+import * as ts from "./_namespaces/ts";
+import * as vfs from "./_namespaces/vfs";
+
 export import sep = ts.directorySeparator;
 export import normalizeSeparators = ts.normalizeSlashes;
 export import isAbsolute = ts.isRootedDiskPath;
@@ -132,5 +134,4 @@ export function isDefaultLibrary(path: string) {
 
 export function isTsConfigFile(path: string): boolean {
     return path.indexOf("tsconfig") !== -1 && path.indexOf("json") !== -1;
-}
 }

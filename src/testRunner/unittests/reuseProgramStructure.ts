@@ -1,4 +1,4 @@
-namespace ts {
+import * as ts from "../_namespaces/ts";
 
 const enum ChangedPart {
     references = 1 << 0,
@@ -1181,4 +1181,3 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
         });
     });
 });
-}
