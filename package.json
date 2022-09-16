@@ -39,6 +39,9 @@
         "!**/.gitattributes"
     ],
     "devDependencies": {
+        "@babel/cli": "^7.18.10",
+        "@babel/core": "^7.19.1",
+        "@babel/plugin-transform-block-scoping": "^7.18.9",
         "@microsoft/api-extractor": "^7.31.0",
         "@octokit/rest": "latest",
         "@types/async": "latest",

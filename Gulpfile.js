@@ -160,12 +160,14 @@ function getCopyrightHeader() {
  * @param {string} outfile
  */
 function esbuildTask(entrypoint, outfile) {
+    const preBabel = `${outfile}.tmp.js`;
+
     /** @type {esbuild.BuildOptions} */
     const options = {
         entryPoints: [entrypoint],
         banner: { js: getCopyrightHeader() },
         bundle: true,
-        outfile,
+        outfile: preBabel,
         platform: "node",
         // TODO: also specify minimal browser targets
         target: "node10", // Node 10 is the oldest benchmarker.
@@ -183,7 +185,11 @@ function esbuildTask(entrypoint, outfile) {
 
     // TODO: these need to have better function names, for gulp.
     return {
-        build: () => esbuild.build(options),
+        build: async () => {
+            await esbuild.build(options);
+            await exec(process.execPath, ["./node_modules/@babel/cli/bin/babel.js", preBabel, "--out-file", outfile, "--plugins", "@babel/plugin-transform-block-scoping", "--compact", "false"]);
+            await del(preBabel);
+        },
         clean: () => del([outfile, `${outfile}.map`]),
         watch: () => esbuild.build({ ...options, watch: true }),
     };
