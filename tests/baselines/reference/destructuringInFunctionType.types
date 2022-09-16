@@ -31,7 +31,7 @@ type T3 = ([{ a: b }, { b: a }]);
 >b : a
 
 type F3 = ([{ a: b }, { b: a }]) => void;
->F3 : ([{ a: b }, { b: a }]: [{ a: any; }, { b: any; }]) => void
+>F3 : ([{ a }, { b }]: [{ a: any; }, { b: any; }]) => void
 >a : any
 >b : any
 >b : any

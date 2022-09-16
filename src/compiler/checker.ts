@@ -6116,19 +6116,29 @@ namespace ts {
                 return parameterNode;
 
                 function cloneBindingName(node: BindingName): BindingName {
-                    return elideInitializerAndSetEmitFlags(node) as BindingName;
-                    function elideInitializerAndSetEmitFlags(node: Node): Node {
+                    return elideInitializerAndPropertyRenamingAndSetEmitFlags(node) as BindingName;
+                    function elideInitializerAndPropertyRenamingAndSetEmitFlags(node: Node): Node {
                         if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                             trackComputedName(node.expression, context.enclosingDeclaration, context);
                         }
-                        let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
+                        let visited = visitEachChild(node, elideInitializerAndPropertyRenamingAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndPropertyRenamingAndSetEmitFlags)!;
                         if (isBindingElement(visited)) {
-                            visited = factory.updateBindingElement(
-                                visited,
-                                visited.dotDotDotToken,
-                                visited.propertyName,
-                                visited.name,
-                                /*initializer*/ undefined);
+                            if (visited.propertyName && isIdentifier(visited.propertyName) && isIdentifier(visited.name) && !isStringAKeyword(idText(visited.propertyName))) {
+                                visited = factory.updateBindingElement(
+                                    visited,
+                                    visited.dotDotDotToken,
+                                    /* propertyName*/ undefined,
+                                    visited.propertyName,
+                                    /*initializer*/ undefined);
+                            }
+                            else {
+                                visited = factory.updateBindingElement(
+                                    visited,
+                                    visited.dotDotDotToken,
+                                    visited.propertyName,
+                                    visited.name,
+                                    /*initializer*/ undefined);
+                            }
                         }
                         if (!nodeIsSynthesized(visited)) {
                             visited = factory.cloneNode(visited);
@@ -29172,30 +29182,11 @@ namespace ts {
         }
 
         function reportObjectPossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
-            const nodeText = isEntityNameExpression(node) ? entityNameToString(node) : undefined;
-            if (node.kind === SyntaxKind.NullKeyword) {
-                error(node, Diagnostics.The_value_0_cannot_be_used_here, "null");
-                return;
-            }
-            if (nodeText !== undefined && nodeText.length < 100) {
-                if (isIdentifier(node) && nodeText === "undefined") {
-                    error(node, Diagnostics.The_value_0_cannot_be_used_here, "undefined");
-                    return;
-                }
-                error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
-                    Diagnostics._0_is_possibly_null_or_undefined :
-                    Diagnostics._0_is_possibly_undefined :
-                    Diagnostics._0_is_possibly_null,
-                    nodeText
-                );
-            }
-            else {
-                error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
-                    Diagnostics.Object_is_possibly_null_or_undefined :
-                    Diagnostics.Object_is_possibly_undefined :
-                    Diagnostics.Object_is_possibly_null
-                );
-            }
+            error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+                Diagnostics.Object_is_possibly_null_or_undefined :
+                Diagnostics.Object_is_possibly_undefined :
+                Diagnostics.Object_is_possibly_null
+            );
         }
 
         function reportCannotInvokePossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
@@ -29212,13 +29203,6 @@ namespace ts {
             reportError: (node: Node, facts: TypeFacts) => void
         ): Type {
             if (strictNullChecks && type.flags & TypeFlags.Unknown) {
-                if (isEntityNameExpression(node)) {
-                    const nodeText = entityNameToString(node);
-                    if (nodeText.length < 100) {
-                        error(node, Diagnostics._0_is_of_type_unknown, nodeText);
-                        return errorType;
-                    }
-                }
                 error(node, Diagnostics.Object_is_of_type_unknown);
                 return errorType;
             }
@@ -29238,17 +29222,6 @@ namespace ts {
         function checkNonNullNonVoidType(type: Type, node: Node): Type {
             const nonNullType = checkNonNullType(type, node);
             if (nonNullType.flags & TypeFlags.Void) {
-                if (isEntityNameExpression(node)) {
-                    const nodeText = entityNameToString(node);
-                    if (isIdentifier(node) && nodeText === "undefined") {
-                        error(node, Diagnostics.The_value_0_cannot_be_used_here, nodeText);
-                        return nonNullType;
-                    }
-                    if (nodeText.length < 100) {
-                        error(node, Diagnostics._0_is_possibly_undefined, nodeText);
-                        return nonNullType;
-                    }
-                }
                 error(node, Diagnostics.Object_is_possibly_undefined);
             }
             return nonNullType;
@@ -36070,8 +36043,8 @@ namespace ts {
         }
 
         function getEffectiveTypeArgumentAtIndex(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: readonly TypeParameter[], index: number): Type {
-            if (node.typeArguments && index < node.typeArguments.length) {
-                return getTypeFromTypeNode(node.typeArguments[index]);
+            if (index < typeParameters.length) {
+                return getTypeFromTypeNode(node.typeArguments![index]);
             }
             return getEffectiveTypeArguments(node, typeParameters)[index];
         }
