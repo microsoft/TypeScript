@@ -171,7 +171,7 @@ let Anon = class <out T> {
 }
 
 let OuterC = class C<out T> {
-    foo(): C<T> {
+    foo(): C<typeof OuterC> {
         return this;
     }
 }
