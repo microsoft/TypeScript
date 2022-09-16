@@ -4460,7 +4460,7 @@ namespace ts {
                 return;
             }
             const isUndefinedUnion = !(node.kind === SyntaxKind.UndefinedKeyword || node.kind === SyntaxKind.AnyKeyword
-                || node.kind == SyntaxKind.UnknownKeyword || node.kind == SyntaxKind.NeverKeyword || node.kind == SyntaxKind.VoidKeyword);
+                || node.kind === SyntaxKind.UnknownKeyword || node.kind === SyntaxKind.NeverKeyword || node.kind === SyntaxKind.VoidKeyword);
             const typeName = getTextOfNodeFromSourceText(sourceText, node);
             const suggestion = token === SyntaxKind.QuestionToken && isUndefinedUnion ? `${typeName} | ${tokenToString(SyntaxKind.UndefinedKeyword)}` : typeName;
             parseErrorAt(skipTrivia(sourceText, pos), end, Diagnostics.Adding_a_postfix_0_to_the_end_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1, tokenToString(token), suggestion);
