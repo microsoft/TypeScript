@@ -1078,7 +1078,7 @@
                   "target": {
                     "fileName": "lib.d.ts",
                     "textSpan": {
-                      "start": 19079,
+                      "start": 19080,
                       "length": 28
                     }
                   }
@@ -1088,7 +1088,7 @@
                   "kind": "link"
                 },
                 {
-                  "text": " is a string, only the first match is replaced. If the ",
+                  "text": " is a RegExp, all matches are replaced if the g flag is set (taking into account the y flag if present). Otherwise ",
                   "kind": "text"
                 },
                 {
@@ -1101,7 +1101,7 @@
                   "target": {
                     "fileName": "lib.d.ts",
                     "textSpan": {
-                      "start": 19079,
+                      "start": 19080,
                       "length": 28
                     }
                   }
@@ -1111,7 +1111,7 @@
                   "kind": "link"
                 },
                 {
-                  "text": " is a RegExp, all matches are replaced if the g flag is set. Otherwise only the first one is.",
+                  "text": " only the first match is replaced.",
                   "kind": "text"
                 }
               ]
