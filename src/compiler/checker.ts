@@ -36070,8 +36070,8 @@ namespace ts {
         }
 
         function getEffectiveTypeArgumentAtIndex(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: readonly TypeParameter[], index: number): Type {
-            if (index < typeParameters.length) {
-                return getTypeFromTypeNode(node.typeArguments![index]);
+            if (node.typeArguments && index < node.typeArguments.length) {
+                return getTypeFromTypeNode(node.typeArguments[index]);
             }
             return getEffectiveTypeArguments(node, typeParameters)[index];
         }
