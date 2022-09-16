@@ -430,7 +430,7 @@ interface String {
     /**
      * Replaces text in a string, using a regular expression or search string.
      * @param searchValue A string or regular expression to search for.
-     * @param replaceValue A string containing the text to replace. When the {@linkcode searchValue} is a string, only the first match is replaced. If the {@linkcode searchValue} is a RegExp, all matches are replaced if the g flag is set. Otherwise only the first one is.
+     * @param replaceValue A string containing the text to replace. When the {@linkcode searchValue} is a RegExp, all matches are replaced if the g flag is set (taking into account the y flag if present). Otherwise {@linkcode searchValue} only the first match is replaced.
      */
     replace(searchValue: string | RegExp, replaceValue: string): string;
 
