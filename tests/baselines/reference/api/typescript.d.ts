@@ -5522,6 +5522,19 @@ declare namespace ts {
         verbose?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
+        declarationMap?: boolean;
+        emitBOM?: boolean;
+        emitDeclarationOnly?: boolean;
+        emitDecoratorMetadata?: boolean;
+        importHelpers?: boolean;
+        inlineSourceMap?: boolean;
+        inlineSources?: boolean;
+        noEmitOnError?: boolean;
+        removeComments?: boolean;
+        skipDefaultLibCheck?: boolean;
+        skipLibCheck?: boolean;
+        sourceMap?: boolean;
+        stripInternal?: boolean;
         traceResolution?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }

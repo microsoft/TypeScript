@@ -31,12 +31,38 @@ interface Array<T> { length: number; [n: number]: T; }
     // "disableSolutionSearching": true,                 /* Opt a project out of multi-project reference checking when editing. */
     // "disableReferencedProjectLoad": true,             /* Reduce the number of projects loaded automatically by TypeScript. */
 
+    /* Emit */
+    // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
+    // "emitBOM": true,                                  /* Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files. */
+    // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
+    // "importHelpers": true,                            /* Allow importing helper functions from tslib once per project, instead of including them per-file. */
+    // "inlineSourceMap": true,                          /* Include sourcemap files inside the emitted JavaScript. */
+    // "inlineSources": true,                            /* Include source code in the sourcemaps inside the emitted JavaScript. */
+    // "noEmitOnError": true,                            /* Disable emitting files if any type checking errors are reported. */
+    // "removeComments": true,                           /* Disable emitting comments. */
+    // "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
+    // "stripInternal": true,                            /* Disable emitting declarations that have '@internal' in their JSDoc comments. */
+    // "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
+    // "outDir": "./",                                   /* Specify an output folder for all emitted files. */
+    // "removeComments": true,                           /* Disable emitting comments. */
+    // "noEmit": true,                                   /* Disable emitting files from a compilation. */
+    // "importsNotUsedAsValues": "remove",               /* Specify emit/checking behavior for imports that are only used for types. */
+    // "downlevelIteration": true,                       /* Emit more compliant, but verbose and less performant JavaScript for iteration. */
+    // "sourceRoot": "",                                 /* Specify the root path for debuggers to find the reference source code. */
+    // "mapRoot": "",                                    /* Specify the location where debugger should locate map files instead of generated locations. */
+    // "newLine": "crlf",                                /* Set the newline character for emitting files. */
+    // "noEmitHelpers": true,                            /* Disable generating custom helper functions like '__extends' in compiled output. */
+    // "preserveConstEnums": true,                       /* Disable erasing 'const enum' declarations in generated code. */
+    // "declarationDir": "./",                           /* Specify the output directory for generated declaration files. */
+    // "preserveValueImports": true,                     /* Preserve unused imported values in the JavaScript output that would otherwise be removed. */
+
     /* Language and Environment */
+    // "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* Specify what JSX code is generated. */
     // "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
-    // "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
     // "jsxFactory": "",                                 /* Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'. */
     // "jsxFragmentFactory": "",                         /* Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'. */
     // "jsxImportSource": "",                            /* Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'. */
@@ -44,6 +70,10 @@ interface Array<T> { length: number; [n: number]: T; }
     // "noLib": true,                                    /* Disable including any library files, including the default lib.d.ts. */
     // "useDefineForClassFields": true,                  /* Emit ECMAScript-standard-compliant class fields. */
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
+
+    /* Completeness */
+    // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
+    "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
 
     /* Modules */
     "module": "amd",                                     /* Specify what module code is generated. */
@@ -64,31 +94,6 @@ interface Array<T> { length: number; [n: number]: T; }
     // "checkJs": true,                                  /* Enable error reporting in type-checked JavaScript files. */
     // "maxNodeModuleJsDepth": 1,                        /* Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'. */
 
-    /* Emit */
-    // "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
-    // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
-    // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
-    // "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
-    // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
-    // "outDir": "./",                                   /* Specify an output folder for all emitted files. */
-    // "removeComments": true,                           /* Disable emitting comments. */
-    // "noEmit": true,                                   /* Disable emitting files from a compilation. */
-    // "importHelpers": true,                            /* Allow importing helper functions from tslib once per project, instead of including them per-file. */
-    // "importsNotUsedAsValues": "remove",               /* Specify emit/checking behavior for imports that are only used for types. */
-    // "downlevelIteration": true,                       /* Emit more compliant, but verbose and less performant JavaScript for iteration. */
-    // "sourceRoot": "",                                 /* Specify the root path for debuggers to find the reference source code. */
-    // "mapRoot": "",                                    /* Specify the location where debugger should locate map files instead of generated locations. */
-    // "inlineSourceMap": true,                          /* Include sourcemap files inside the emitted JavaScript. */
-    // "inlineSources": true,                            /* Include source code in the sourcemaps inside the emitted JavaScript. */
-    // "emitBOM": true,                                  /* Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files. */
-    // "newLine": "crlf",                                /* Set the newline character for emitting files. */
-    // "stripInternal": true,                            /* Disable emitting declarations that have '@internal' in their JSDoc comments. */
-    // "noEmitHelpers": true,                            /* Disable generating custom helper functions like '__extends' in compiled output. */
-    // "noEmitOnError": true,                            /* Disable emitting files if any type checking errors are reported. */
-    // "preserveConstEnums": true,                       /* Disable erasing 'const enum' declarations in generated code. */
-    // "declarationDir": "./",                           /* Specify the output directory for generated declaration files. */
-    // "preserveValueImports": true,                     /* Preserve unused imported values in the JavaScript output that would otherwise be removed. */
-
     /* Interop Constraints */
     // "isolatedModules": true,                          /* Ensure that each file can be safely transpiled without relying on other imports. */
     // "allowSyntheticDefaultImports": true,             /* Allow 'import x from y' when a module doesn't have a default export. */
@@ -97,7 +102,7 @@ interface Array<T> { length: number; [n: number]: T; }
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
 
     /* Type Checking */
-    "strict": true,                                      /* Enable all strict type-checking options. */
+    "strict": true                                       /* Enable all strict type-checking options. */
     // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     // "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
     // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
@@ -116,10 +121,6 @@ interface Array<T> { length: number; [n: number]: T; }
     // "noPropertyAccessFromIndexSignature": true,       /* Enforces using indexed accessors for keys declared using an indexed type. */
     // "allowUnusedLabels": true,                        /* Disable error reporting for unused labels. */
     // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
-
-    /* Completeness */
-    // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   }
 }
 
@@ -154,8 +155,8 @@ Output::
   The file is in the program because:
     Default library for target 'es2016'
 
-  [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
-    [7m14[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+  [96mtsconfig.json[0m:[93m41[0m:[93m15[0m
+    [7m41[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     [7m  [0m [96m              ~~~~~~~~[0m
     File is default library for target specified here.
 
@@ -164,7 +165,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"target":3,"module":2,"esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":3,"skipLibCheck":true,"module":2,"esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /user/username/projects/myproject/file1.ts
@@ -281,8 +282,8 @@ Output::
   The file is in the program because:
     Default library for target 'es2016'
 
-  [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
-    [7m14[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+  [96mtsconfig.json[0m:[93m41[0m:[93m15[0m
+    [7m41[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     [7m  [0m [96m              ~~~~~~~~[0m
     File is default library for target specified here.
 
@@ -291,7 +292,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts","/user/username/projects/myproject/src/file3.ts"]
-Program options: {"target":3,"module":2,"esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":3,"skipLibCheck":true,"module":2,"esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /user/username/projects/myproject/file1.ts
