@@ -111,7 +111,7 @@ namespace ts {
             expressions = append(expressions, expression);
         }
 
-        function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) {
+        function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node | undefined) {
             Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
             const expression = createAssignmentCallback
                 ? createAssignmentCallback(target as Identifier, value, location)
@@ -518,19 +518,21 @@ namespace ts {
 
     function makeArrayBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
         Debug.assertEachNode(elements, isArrayBindingElement);
-        return factory.createArrayBindingPattern(elements as ArrayBindingElement[]);
+        return factory.createArrayBindingPattern(elements);
     }
 
     function makeArrayAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
+        Debug.assertEachNode(elements, isArrayBindingOrAssignmentElement);
         return factory.createArrayLiteralExpression(map(elements, factory.converters.convertToArrayAssignmentElement));
     }
 
     function makeObjectBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
         Debug.assertEachNode(elements, isBindingElement);
-        return factory.createObjectBindingPattern(elements as BindingElement[]);
+        return factory.createObjectBindingPattern(elements);
     }
 
     function makeObjectAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
+        Debug.assertEachNode(elements, isObjectBindingOrAssignmentElement);
         return factory.createObjectLiteralExpression(map(elements, factory.converters.convertToObjectAssignmentElement));
     }
 

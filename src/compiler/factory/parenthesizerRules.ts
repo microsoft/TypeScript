@@ -602,6 +602,12 @@ namespace ts {
         }
     }
 
+    function castToNodeArray<T extends Node>(nodes: readonly T[]): NodeArray<T> {
+        // TODO(jakebailey): Why do we need this helper? GH#49924?
+        // Also, why can't I write `isNodeArray<T>` as an expression?
+        return cast(nodes, isNodeArray as typeof isNodeArray<T>);
+    }
+
     export const nullParenthesizerRules: ParenthesizerRules = {
         getParenthesizeLeftSideOfBinaryForOperator: _ => identity,
         getParenthesizeRightSideOfBinaryForOperator: _ => identity,
@@ -615,23 +621,23 @@ namespace ts {
         parenthesizeLeftSideOfAccess: expression => cast(expression, isLeftHandSideExpression),
         parenthesizeOperandOfPostfixUnary: operand => cast(operand, isLeftHandSideExpression),
         parenthesizeOperandOfPrefixUnary: operand => cast(operand, isUnaryExpression),
-        parenthesizeExpressionsOfCommaDelimitedList: nodes => cast(nodes, isNodeArray),
+        parenthesizeExpressionsOfCommaDelimitedList: castToNodeArray,
         parenthesizeExpressionForDisallowedComma: identity,
         parenthesizeExpressionOfExpressionStatement: identity,
         parenthesizeConciseBodyOfArrowFunction: identity,
         parenthesizeCheckTypeOfConditionalType: identity,
         parenthesizeExtendsTypeOfConditionalType: identity,
-        parenthesizeConstituentTypesOfUnionType: nodes => cast(nodes, isNodeArray),
+        parenthesizeConstituentTypesOfUnionType: castToNodeArray,
         parenthesizeConstituentTypeOfUnionType: identity,
-        parenthesizeConstituentTypesOfIntersectionType: nodes => cast(nodes, isNodeArray),
+        parenthesizeConstituentTypesOfIntersectionType: castToNodeArray,
         parenthesizeConstituentTypeOfIntersectionType: identity,
         parenthesizeOperandOfTypeOperator: identity,
         parenthesizeOperandOfReadonlyTypeOperator: identity,
         parenthesizeNonArrayTypeOfPostfixType: identity,
-        parenthesizeElementTypesOfTupleType: nodes => cast(nodes, isNodeArray),
+        parenthesizeElementTypesOfTupleType: castToNodeArray,
         parenthesizeElementTypeOfTupleType: identity,
         parenthesizeTypeOfOptionalType: identity,
-        parenthesizeTypeArguments: nodes => nodes && cast(nodes, isNodeArray),
+        parenthesizeTypeArguments: nodes => nodes && castToNodeArray(nodes),
         parenthesizeLeadingTypeArgument: identity,
     };
 }

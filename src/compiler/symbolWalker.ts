@@ -4,10 +4,10 @@ namespace ts {
         getRestTypeOfSignature: (sig: Signature) => Type,
         getTypePredicateOfSignature: (sig: Signature) => TypePredicate | undefined,
         getReturnTypeOfSignature: (sig: Signature) => Type,
-        getBaseTypes: (type: Type) => Type[],
+        getBaseTypes: (type: InterfaceType) => BaseType[],
         resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
         getTypeOfSymbol: (sym: Symbol) => Type,
-        getResolvedSymbol: (node: Node) => Symbol,
+        getResolvedSymbol: (node: Identifier) => Symbol,
         getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
         getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
         getTypeArguments: (type: TypeReference) => readonly Type[]) {

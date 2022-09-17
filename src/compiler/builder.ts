@@ -995,7 +995,7 @@ namespace ts {
     function convertToReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, relativeToBuildInfo: (path: string) => string) {
         if (option) {
             if (option.type === "list") {
-                const values = value as readonly (string | number)[];
+                const values = value as readonly string[];
                 if (option.element.isFilePath && values.length) {
                     return values.map(relativeToBuildInfo);
                 }

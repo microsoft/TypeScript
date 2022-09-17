@@ -6,9 +6,9 @@ namespace ts {
      */
     /* @internal */
     export interface BaseNodeFactory {
-        createBaseSourceFileNode(kind: SyntaxKind): Node;
-        createBaseIdentifierNode(kind: SyntaxKind): Node;
-        createBasePrivateIdentifierNode(kind: SyntaxKind): Node;
+        createBaseSourceFileNode(kind: SyntaxKind.SourceFile): Node;
+        createBaseIdentifierNode(kind: SyntaxKind.Identifier): Node;
+        createBasePrivateIdentifierNode(kind: SyntaxKind.PrivateIdentifier): Node;
         createBaseTokenNode(kind: SyntaxKind): Node;
         createBaseNode(kind: SyntaxKind): Node;
     }
@@ -18,11 +18,11 @@ namespace ts {
      */
     export function createBaseNodeFactory(): BaseNodeFactory {
         // tslint:disable variable-name
-        let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Node;
+        let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => Node;
+        let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => Node;
         // tslint:enable variable-name
 
         return {
@@ -33,15 +33,15 @@ namespace ts {
             createBaseNode
         };
 
-        function createBaseSourceFileNode(kind: SyntaxKind): Node {
+        function createBaseSourceFileNode(kind: SyntaxKind.SourceFile): Node {
             return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
         }
 
-        function createBaseIdentifierNode(kind: SyntaxKind): Node {
+        function createBaseIdentifierNode(kind: SyntaxKind.Identifier): Node {
             return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
         }
 
-        function createBasePrivateIdentifierNode(kind: SyntaxKind): Node {
+        function createBasePrivateIdentifierNode(kind: SyntaxKind.PrivateIdentifier): Node {
             return new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
         }
 

@@ -3797,7 +3797,7 @@ namespace ts {
 
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
-        function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol | undefined {
+        function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined {
             if (moduleSymbol?.exports) {
                 const exportEquals = resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias);
                 const exported = getCommonJsExportEquals(getMergedSymbol(exportEquals), getMergedSymbol(moduleSymbol));
@@ -5178,7 +5178,8 @@ namespace ts {
 
                 if (objectFlags & ObjectFlags.Reference) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    return (type as TypeReference).node ? visitAndTransformType(type, typeReferenceToTypeNode) : typeReferenceToTypeNode(type as TypeReference);
+                    Debug.type<TypeReference>(type);
+                    return type.node ? visitAndTransformType(type, typeReferenceToTypeNode) : typeReferenceToTypeNode(type);
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
@@ -5432,11 +5433,11 @@ namespace ts {
                     }
                 }
 
-                function visitAndTransformType<T extends TypeNode>(type: Type, transform: (type: Type) => T) {
+                function visitAndTransformType<T extends Type>(type: T, transform: (type: T) => TypeNode) {
                     const typeId = type.id;
                     const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                    const id = getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference).node ? "N" + getNodeId((type as TypeReference).node!) :
-                        type.flags & TypeFlags.Conditional ? "N" + getNodeId((type as ConditionalType).root.node) :
+                    const id = getObjectFlags(type) & ObjectFlags.Reference && (type as T & TypeReference).node ? "N" + getNodeId((type as T & TypeReference).node!) :
+                        type.flags & TypeFlags.Conditional ? "N" + getNodeId((type as T & ConditionalType).root.node) :
                         type.symbol ? (isConstructorObject ? "+" : "") + getSymbolId(type.symbol) :
                         undefined;
                     // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
@@ -5459,7 +5460,7 @@ namespace ts {
                             context.truncating = true;
                         }
                         context.approximateLength += cachedResult.addedLength;
-                        return deepCloneOrReuseNode(cachedResult) as TypeNode as T;
+                        return deepCloneOrReuseNode(cachedResult);
                     }
 
                     let depth: number | undefined;
@@ -5479,7 +5480,7 @@ namespace ts {
                             (result as any).truncating = true;
                         }
                         (result as any).addedLength = addedLength;
-                        links?.serializedTypes?.set(key, result as TypeNode as TypeNode & {truncating?: boolean, addedLength: number});
+                        links?.serializedTypes?.set(key, result as TypeNode & {truncating?: boolean, addedLength: number});
                     }
                     context.visitedTypes.delete(typeId);
                     if (id) {
@@ -5487,7 +5488,7 @@ namespace ts {
                     }
                     return result;
 
-                    function deepCloneOrReuseNode(node: Node): Node {
+                    function deepCloneOrReuseNode<T extends Node>(node: T): T {
                         if (!nodeIsSynthesized(node) && getParseTreeNode(node) === node) {
                             return node;
                         }
@@ -7412,7 +7413,7 @@ namespace ts {
                 }
 
                 function includePrivateSymbol(symbol: Symbol) {
-                    if (some(symbol.declarations, isParameterDeclaration)) return;
+                    if (some(symbol.declarations, isParameter)) return;
                     Debug.assertIsDefined(deferredPrivatesStack[deferredPrivatesStack.length - 1]);
                     getUnusedName(unescapeLeadingUnderscores(symbol.escapedName), symbol); // Call to cache unique name for symbol
                     // Blanket moving (import) aliases into the root private context should work, since imports are not valid within namespaces
@@ -7648,7 +7649,7 @@ namespace ts {
                             /*isTypeOnly*/ false,
                             factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, d.expression, factory.createIdentifier(InternalSymbolName.Default))])
                         ) : d);
-                        const exportModifierStripped = every(defaultReplaced, d => hasSyntacticModifier(d, ModifierFlags.Export)) ? map(defaultReplaced, removeExportModifier) : defaultReplaced;
+                        const exportModifierStripped = every(defaultReplaced, d => hasSyntacticModifier(d, ModifierFlags.Export)) ? map(defaultReplaced as Extract<HasModifiers, Statement>[], removeExportModifier) : defaultReplaced;
                         fakespace = factory.updateModuleDeclaration(
                             fakespace,
                             fakespace.modifiers,
@@ -7866,7 +7867,7 @@ namespace ts {
                         case SyntaxKind.ImportEqualsDeclaration:
                             // This _specifically_ only exists to handle json declarations - where we make aliases, but since
                             // we emit no declarations for the json document, must not refer to it in the declarations
-                            if (target.escapedName === InternalSymbolName.ExportEquals && some(target.declarations, isJsonSourceFile)) {
+                            if (target.escapedName === InternalSymbolName.ExportEquals && some(target.declarations, d => isSourceFile(d) && isJsonSourceFile(d))) {
                                 serializeMaybeAliasAssignment(symbol);
                                 break;
                             }
@@ -18872,7 +18873,7 @@ namespace ts {
                 return true;
             }
 
-            function isRelatedToWorker(source: Type, target: Type, reportErrors: boolean) {
+            function isRelatedToWorker(source: Type, target: Type, reportErrors?: boolean) {
                 return isRelatedTo(source, target, RecursionFlags.Both, reportErrors);
             }
 
@@ -22737,7 +22738,7 @@ namespace ts {
                     inferWithPriority(getSubstitutionIntersection(source as SubstitutionType), target, InferencePriority.SubstituteSource); // Make substitute inference at a lower priority
                 }
                 else if (target.flags & TypeFlags.Conditional) {
-                    invokeOnce(source, target, inferToConditionalType);
+                    invokeOnce(source, (target as ConditionalType), inferToConditionalType);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     inferToMultipleTypes(source, (target as UnionOrIntersectionType).types, target.flags);
@@ -22799,7 +22800,7 @@ namespace ts {
                 priority = savePriority;
             }
 
-            function invokeOnce(source: Type, target: Type, action: (source: Type, target: Type) => void) {
+            function invokeOnce<Source extends Type, Target extends Type>(source: Source, target: Target, action: (source: Source, target: Target) => void) {
                 const key = source.id + "," + target.id;
                 const status = visited && visited.get(key);
                 if (status !== undefined) {

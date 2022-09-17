@@ -578,7 +578,7 @@ namespace ts {
          * @param decorators The decorators for the parameter at the provided offset.
          * @param parameterOffset The offset of the parameter.
          */
-        function transformDecoratorsOfParameter(decorators: Decorator[], parameterOffset: number) {
+        function transformDecoratorsOfParameter(decorators: readonly Decorator[] | undefined, parameterOffset: number) {
             let expressions: Expression[] | undefined;
             if (decorators) {
                 expressions = [];

@@ -150,6 +150,9 @@ namespace ts {
      * returns a falsey value, then returns false.
      * If no such value is found, the callback is applied to each element of array and `true` is returned.
      */
+    export function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
+    export function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
+    export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
     export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
         if (array) {
             for (let i = 0; i < array.length; i++) {
@@ -1726,13 +1729,16 @@ namespace ts {
         return typeof x === "number";
     }
 
-    export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
+    // TODO(jakebailey): This should be TOut <= TIn <= TParam, but this does not infer correctly.
+    // https://github.com/microsoft/TypeScript/issues/49924
+
+    export function tryCast<TOut extends TParam, TIn extends TParam, TParam = any>(value: TIn | undefined, test: (value: TParam) => value is TOut): TOut | undefined;
     export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
     export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {
         return value !== undefined && test(value) ? value : undefined;
     }
 
-    export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
+    export function cast<TOut extends TParam, TIn extends TParam, TParam = any>(value: TIn | undefined, test: (value: TParam) => value is TOut): TOut {
         if (value !== undefined && test(value)) return value;
 
         return Debug.fail(`Invalid cast. The supplied value ${value} did not pass the test '${Debug.getFunctionName(test)}'.`);
