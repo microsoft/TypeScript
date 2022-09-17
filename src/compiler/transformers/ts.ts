@@ -119,7 +119,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
+        function saveStateAndInvoke<T, U extends Node>(node: U, f: (node: U) => T): T {
             // Save state
             const savedCurrentScope = currentLexicalScope;
             const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
@@ -813,7 +813,7 @@ namespace ts {
          * @param parameterDecorators The decorators for the parameter at the provided offset.
          * @param parameterOffset The offset of the parameter.
          */
-        function transformDecoratorsOfParameter(parameterDecorators: Decorator[], parameterOffset: number) {
+        function transformDecoratorsOfParameter(parameterDecorators: readonly Decorator[] | undefined, parameterOffset: number) {
             if (parameterDecorators) {
                 const decorators: Decorator[] = [];
                 for (const parameterDecorator of parameterDecorators) {
@@ -1895,7 +1895,7 @@ namespace ts {
             let blockLocation: TextRange | undefined;
             if (node.body) {
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
-                    saveStateAndInvoke(node.body, body => addRange(statements, visitNodes((body as ModuleBlock).statements, namespaceElementVisitor, isStatement)));
+                    saveStateAndInvoke(node.body, body => addRange(statements, visitNodes(body.statements, namespaceElementVisitor, isStatement)));
                     statementsLocation = node.body.statements;
                     blockLocation = node.body;
                 }

@@ -372,8 +372,8 @@ namespace ts {
             // of JsxSpreadAttribute nodes into expressions.
             const expressions = flatten(
                 spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                    ? map(attrs, transformJsxSpreadAttributeToExpression)
-                    : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                    ? map(attrs as JsxSpreadAttribute[], transformJsxSpreadAttributeToExpression)
+                    : factory.createObjectLiteralExpression(map(attrs as JsxAttribute[], transformJsxAttributeToObjectLiteralElement))
                 )
             );
 
