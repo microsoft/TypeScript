@@ -303,7 +303,7 @@ namespace ts {
             return factory.updateConstructorDeclaration(
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                visitNodes(node.parameters, visitor, isParameterDeclaration),
+                visitNodes(node.parameters, visitor, isParameter),
                 visitNode(node.body, visitor, isBlock));
         }
 
@@ -325,7 +325,7 @@ namespace ts {
                 visitNode(node.name, visitor, isPropertyName),
                 /*questionToken*/ undefined,
                 /*typeParameters*/ undefined,
-                visitNodes(node.parameters, visitor, isParameterDeclaration),
+                visitNodes(node.parameters, visitor, isParameter),
                 /*type*/ undefined,
                 visitNode(node.body, visitor, isBlock)
             ), node);
@@ -336,7 +336,7 @@ namespace ts {
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitNode(node.name, visitor, isPropertyName),
-                visitNodes(node.parameters, visitor, isParameterDeclaration),
+                visitNodes(node.parameters, visitor, isParameter),
                 /*type*/ undefined,
                 visitNode(node.body, visitor, isBlock)
             ), node);
@@ -347,7 +347,7 @@ namespace ts {
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitNode(node.name, visitor, isPropertyName),
-                visitNodes(node.parameters, visitor, isParameterDeclaration),
+                visitNodes(node.parameters, visitor, isParameter),
                 visitNode(node.body, visitor, isBlock)
             ), node);
         }

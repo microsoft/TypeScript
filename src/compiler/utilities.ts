@@ -3446,6 +3446,10 @@ namespace ts {
         return node.escapedText === "push" || node.escapedText === "unshift";
     }
 
+    // TODO(jakebailey): this function should not be named this. While it does technically
+    // return true if the argument is a ParameterDeclaration, it also returns true for nodes
+    // that are children of ParameterDeclarations inside binding elements.
+    // Probably, this should be called `rootDeclarationIsParameter`.
     export function isParameterDeclaration(node: VariableLikeDeclaration): boolean {
         const root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;

@@ -684,7 +684,7 @@ namespace ts {
                         node.asteriskToken,
                         factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                         /*typeParameters*/ undefined,
-                        visitNodes(node.parameters, visitor, isParameterDeclaration),
+                        visitNodes(node.parameters, visitor, isParameter),
                         /*type*/ undefined,
                         visitNode(node.body, visitor, isBlock)));
             }

@@ -8535,7 +8535,7 @@ namespace ts {
     /**
      * A function that transforms a node.
      */
-    export type Transformer<T extends Node> = (node: T) => T;
+    export type Transformer<T extends Node> = (node: T) => T; // TODO(jakebailey): This signature is totally wrong.
 
     /**
      * A function that accepts and possibly transforms a node.
@@ -8552,6 +8552,7 @@ namespace ts {
         <T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
     }
 
+    // TODO(jakebailey): This should really be <T extends Node, U extends Node = T> = T | readonly U[] | undefined.
     export type VisitResult<T extends Node> = T | readonly T[] | undefined;
 
     export interface Printer {

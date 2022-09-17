@@ -206,7 +206,7 @@ namespace ts {
         context.startLexicalEnvironment();
         if (nodes) {
             context.setLexicalEnvironmentFlags(LexicalEnvironmentFlags.InParameters, true);
-            updated = nodesVisitor(nodes, visitor, isParameterDeclaration);
+            updated = nodesVisitor(nodes, visitor, isParameter);
 
             // As of ES2015, any runtime execution of that occurs in for a parameter (such as evaluating an
             // initializer or a binding pattern), occurs in its own lexical scope. As a result, any expression
@@ -486,7 +486,7 @@ namespace ts {
                 nodeVisitor(node.name, visitor, isPropertyName),
                 nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-                nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                nodesVisitor(node.parameters, visitor, isParameter),
                 nodeVisitor(node.type, visitor, isTypeNode));
         },
 
@@ -536,21 +536,21 @@ namespace ts {
         [SyntaxKind.CallSignature]: function visitEachChildOfCallSignatureDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateCallSignature(node,
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-                nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                nodesVisitor(node.parameters, visitor, isParameter),
                 nodeVisitor(node.type, visitor, isTypeNode));
         },
 
         [SyntaxKind.ConstructSignature]: function visitEachChildOfConstructSignatureDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateConstructSignature(node,
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-                nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                nodesVisitor(node.parameters, visitor, isParameter),
                 nodeVisitor(node.type, visitor, isTypeNode));
         },
 
         [SyntaxKind.IndexSignature]: function visitEachChildOfIndexSignatureDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateIndexSignature(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
-                nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                nodesVisitor(node.parameters, visitor, isParameter),
                 nodeVisitor(node.type, visitor, isTypeNode));
         },
 
@@ -571,7 +571,7 @@ namespace ts {
         [SyntaxKind.FunctionType]: function visitEachChildOfFunctionTypeNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateFunctionTypeNode(node,
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-                nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                nodesVisitor(node.parameters, visitor, isParameter),
                 nodeVisitor(node.type, visitor, isTypeNode));
         },
 
@@ -579,7 +579,7 @@ namespace ts {
             return context.factory.updateConstructorTypeNode(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-                nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                nodesVisitor(node.parameters, visitor, isParameter),
                 nodeVisitor(node.type, visitor, isTypeNode));
         },
 
