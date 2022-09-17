@@ -38321,8 +38321,11 @@ namespace ts {
             }
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
+                if (findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n) || !!(n.flags & NodeFlags.Ambient))) {
+                    return;
+                }
                 const needCheckInitializer = hasOnlyExpressionInitializer(node) && node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
-                const needCheckWidenedType = !!node.name.elements.length && !some(node.name.elements, not(isOmittedExpression));
+                const needCheckWidenedType = !some(node.name.elements, not(isOmittedExpression));
                 if (needCheckInitializer || needCheckWidenedType) {
                     // Don't validate for-in initializer as it is already an error
                     const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
