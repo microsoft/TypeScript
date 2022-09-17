@@ -269,7 +269,9 @@ namespace ts {
         return false;
     }
 
-    export function isEmptyBindingElement(node: BindingElement): boolean {
+    // TODO(jakebailey): It is very weird that we have BindingElement and ArrayBindingElement;
+    // we should have ObjectBindingElement and ArrayBindingElement, which are both BindingElement.
+    export function isEmptyBindingElement(node: BindingElement | ArrayBindingElement): boolean {
         if (isOmittedExpression(node)) {
             return true;
         }
@@ -397,18 +399,24 @@ namespace ts {
         }
     }
 
+    // TODO(jakebailey): I've changed this signature in an incompatible way.
+    // The original signatures didn't seem to make any sense, but I'm willing to be wrong.
     export function getOriginalNode(node: Node): Node;
     export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     export function getOriginalNode(node: Node | undefined): Node | undefined;
-    export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node | undefined) => node is T): T | undefined;
-    export function getOriginalNode(node: Node | undefined, nodeTest?: (node: Node | undefined) => boolean): Node | undefined {
+    export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node) => node is T): T | undefined;
+    export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest?: (node: Node) => node is T): T | undefined {
         if (node) {
             while (node.original !== undefined) {
                 node = node.original;
             }
         }
 
-        return !nodeTest || nodeTest(node) ? node : undefined;
+        if (!node || !nodeTest) {
+            return node as T | undefined;
+        }
+
+        return nodeTest(node) ? node : undefined;
     }
 
     /**
@@ -419,7 +427,7 @@ namespace ts {
      */
     export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
     export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
-    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined {
+    export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined {
         while (node) {
             const result = callback(node);
             if (result === "quit") {
@@ -1530,6 +1538,22 @@ namespace ts {
         }
 
         return false;
+    }
+
+    /* @internal */
+    export function isArrayBindingOrAssignmentElement(node: Node): node is ArrayBindingOrAssignmentElement {
+        switch (node.kind) {
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.OmittedExpression: // Elision
+            case SyntaxKind.SpreadElement: // AssignmentRestElement
+            case SyntaxKind.ArrayLiteralExpression: // ArrayAssignmentPattern
+            case SyntaxKind.ObjectLiteralExpression: // ObjectAssignmentPattern
+            case SyntaxKind.Identifier: // DestructuringAssignmentTarget
+            case SyntaxKind.PropertyAccessExpression: // DestructuringAssignmentTarget
+            case SyntaxKind.ElementAccessExpression: // DestructuringAssignmentTarget
+                return true;
+        }
+        return isAssignmentExpression(node, /*excludeCompoundAssignment*/ true); // AssignmentElement
     }
 
     /* @internal */

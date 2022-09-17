@@ -2668,7 +2668,7 @@ namespace ts {
     function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
         if (option && !isNullOrUndefined(value)) {
             if (option.type === "list") {
-                const values = value as readonly (string | number)[];
+                const values = value as readonly string[];
                 if (option.element.isFilePath && values.length) {
                     return values.map(toAbsolutePath);
                 }
@@ -3560,7 +3560,8 @@ namespace ts {
         }
     }
 
-    function specToDiagnostic(spec: string, disallowTrailingRecursion?: boolean): [DiagnosticMessage, string] | undefined {
+    function specToDiagnostic(spec: CompilerOptionsValue, disallowTrailingRecursion?: boolean): [DiagnosticMessage, string] | undefined {
+        Debug.assert(typeof spec === "string");
         if (disallowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
             return [Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }

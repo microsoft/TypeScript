@@ -12,14 +12,17 @@
         "composite": true,
         "noEmitOnError": true,
 
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "noImplicitThis": true,
-        "strictPropertyInitialization": true,
+        "strict": true,
+        "strictBindCallApply": false,
+        "useUnknownInCatchVariables": false,
+        // "strictFunctionTypes": false,
+
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "allowUnusedLabels": false,
 
         "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
 
         "alwaysStrict": true,
         "preserveConstEnums": true,

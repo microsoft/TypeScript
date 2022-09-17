@@ -454,7 +454,7 @@ namespace ts {
      */
     export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | readonly T[]): T[];
     export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[];
-    export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | T[]): T[] {
+    export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[] {
         let result: T[] | undefined;
         if (array) {
             for (let i = 0; i < array.length; i++) {
@@ -685,9 +685,13 @@ namespace ts {
 
     export function concatenate<T>(array1: T[], array2: T[]): T[];
     export function concatenate<T>(array1: readonly T[], array2: readonly T[]): readonly T[];
-    export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[];
-    export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[];
-    export function concatenate<T>(array1: T[], array2: T[]): T[] {
+    export function concatenate<T>(array1: T[], array2: T[] | undefined): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function concatenate<T>(array1: T[] | undefined, array2: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function concatenate<T>(array1: readonly T[], array2: readonly T[] | undefined): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[] | undefined;
+    export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined;
+    export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined {
         if (!some(array2)) return array1;
         if (!some(array1)) return array2;
         return [...array1, ...array2];
@@ -842,7 +846,7 @@ namespace ts {
     // ESLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
     export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
     export function compact<T>(array: readonly T[]): readonly T[]; // eslint-disable-line @typescript-eslint/unified-signatures
-    export function compact<T>(array: T[]): T[] {
+    export function compact<T>(array: readonly T[]): readonly T[] {
         let result: T[] | undefined;
         if (array) {
             for (let i = 0; i < array.length; i++) {
@@ -924,11 +928,12 @@ namespace ts {
     export function append<T>(to: T[] | undefined, value: T): T[];
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
     export function append<T>(to: Push<T>, value: T | undefined): void;
-    export function append<T>(to: T[], value: T | undefined): T[] | undefined {
-        if (value === undefined) return to;
+    export function append<T>(to: Push<T> | T[] | undefined, value: T | undefined): T[] | undefined {
+        // If to is Push<T>, return value is void, so safe to cast to T[].
+        if (value === undefined) return to as T[];
         if (to === undefined) return [value];
         to.push(value);
-        return to;
+        return to as T[];
     }
 
     /**
@@ -1197,7 +1202,7 @@ namespace ts {
 
     export function reduceLeft<T, U>(array: readonly T[] | undefined, f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
     export function reduceLeft<T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined;
-    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T | undefined {
+    export function reduceLeft<T>(array: readonly T[] | undefined, f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T | undefined {
         if (array && array.length > 0) {
             const size = array.length;
             if (size > 0) {

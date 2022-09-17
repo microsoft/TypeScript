@@ -2930,7 +2930,8 @@ namespace ts {
                 return valueSymbol;
             }
             const result = createSymbol(valueSymbol.flags | typeSymbol.flags, valueSymbol.escapedName);
-            result.declarations = deduplicate(concatenate(valueSymbol.declarations, typeSymbol.declarations), equateValues);
+            Debug.assert(valueSymbol.declarations || typeSymbol.declarations);
+            result.declarations = deduplicate(concatenate(valueSymbol.declarations!, typeSymbol.declarations), equateValues);
             result.parent = valueSymbol.parent || typeSymbol.parent;
             if (valueSymbol.valueDeclaration) result.valueDeclaration = valueSymbol.valueDeclaration;
             if (typeSymbol.members) result.members = new Map(typeSymbol.members);

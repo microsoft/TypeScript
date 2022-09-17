@@ -264,7 +264,7 @@ namespace ts {
 
     export function getSourceFileOfNode(node: Node): SourceFile;
     export function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined;
-    export function getSourceFileOfNode(node: Node): SourceFile {
+    export function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined {
         while (node && node.kind !== SyntaxKind.SourceFile) {
             node = node.parent;
         }
@@ -886,8 +886,8 @@ namespace ts {
         return false;
     }
 
-    export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
-    export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
+    export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters {
+        Debug.type<DeclarationWithTypeParameters>(node);
         switch (node.kind) {
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocTypedefTag:
@@ -899,8 +899,8 @@ namespace ts {
         }
     }
 
-    export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren;
-    export function isDeclarationWithTypeParameterChildren(node: DeclarationWithTypeParameterChildren): node is DeclarationWithTypeParameterChildren {
+    export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren {
+        Debug.type<DeclarationWithTypeParameterChildren>(node);
         switch (node.kind) {
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
