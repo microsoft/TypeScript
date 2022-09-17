@@ -25194,8 +25194,7 @@ namespace ts {
                     // where X is the name of the property.
                     const recordSymbol = getGlobalRecordSymbol();
                     if (recordSymbol !== unknownSymbol) {
-                        const record = getTypeAliasInstantiation(recordSymbol, [nameType, unknownType]);
-                        return mapType(type, t => t.flags & TypeFlags.NonPrimitive ? record : getIntersectionType([t, record]));
+                        return getIntersectionType([type, getTypeAliasInstantiation(recordSymbol, [nameType, unknownType])]);
                     }
                 }
                 return type;
