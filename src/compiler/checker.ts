@@ -14310,8 +14310,9 @@ namespace ts {
             return (deferredGlobalBigIntType ||= getGlobalType("BigInt" as __String, /*arity*/ 0, /*reportErrors*/ false)) || emptyObjectType;
         }
 
-        function getGlobalRecordSymbol() {
-            return deferredGlobalRecordSymbol ||= getGlobalTypeAliasSymbol("Record" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
+        function getGlobalRecordSymbol(): Symbol | undefined {
+            deferredGlobalRecordSymbol ||= getGlobalTypeAliasSymbol("Record" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
+            return deferredGlobalRecordSymbol === unknownSymbol ? undefined : deferredGlobalRecordSymbol;
         }
 
         /**
@@ -25193,7 +25194,7 @@ namespace ts {
                     // If the check is for an unknown property, we intersect the target type with `Record<X, unknown>`,
                     // where X is the name of the property.
                     const recordSymbol = getGlobalRecordSymbol();
-                    if (recordSymbol !== unknownSymbol) {
+                    if (recordSymbol) {
                         return getIntersectionType([type, getTypeAliasInstantiation(recordSymbol, [nameType, unknownType])]);
                     }
                 }
