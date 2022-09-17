@@ -38321,7 +38321,7 @@ namespace ts {
             }
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
-                if (findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n) || !!(n.flags & NodeFlags.Ambient))) {
+                if (findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n) || isTypeAliasDeclaration(n) || !!(n.flags & NodeFlags.Ambient))) {
                     return;
                 }
                 const needCheckInitializer = hasOnlyExpressionInitializer(node) && node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
