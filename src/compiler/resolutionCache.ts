@@ -366,7 +366,7 @@ namespace ts {
             hasChangedAutomaticTypeDirectiveNames = false;
         }
 
-        function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: never, mode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): CachedResolvedModuleWithFailedLookupLocations {
+        function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: SourceFile, mode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): CachedResolvedModuleWithFailedLookupLocations {
             const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
             // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
             if (!resolutionHost.getGlobalCache) {
