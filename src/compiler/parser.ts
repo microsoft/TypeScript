@@ -9219,6 +9219,7 @@ namespace ts {
         }
 
         function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+            // TODO(jakebailey): instead of isArray, use overloads and the just use isNodeArray.
             if (isArray) {
                 visitArray(element as IncrementalNodeArray);
             }
@@ -9227,7 +9228,8 @@ namespace ts {
             }
             return;
 
-            function visitNode(node: IncrementalNode) {
+            function visitNode(node: Node) {
+                Debug.type<IncrementalNode>(node);
                 let text = "";
                 if (aggressiveChecks && shouldCheckNode(node)) {
                     text = oldText.substring(node.pos, node.end);
@@ -9254,7 +9256,8 @@ namespace ts {
                 checkNodePositions(node, aggressiveChecks);
             }
 
-            function visitArray(array: IncrementalNodeArray) {
+            function visitArray(array: NodeArray<Node>) {
+                Debug.type<IncrementalNodeArray>(array);
                 array._children = undefined;
                 setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
@@ -9379,7 +9382,8 @@ namespace ts {
             visitNode(sourceFile);
             return;
 
-            function visitNode(child: IncrementalNode) {
+            function visitNode(child: Node) {
+                Debug.type<IncrementalNode>(child);
                 Debug.assert(child.pos <= child.end);
                 if (child.pos > changeRangeOldEnd) {
                     // Node is entirely past the change range.  We need to move both its pos and
@@ -9401,7 +9405,7 @@ namespace ts {
                     forEachChild(child, visitNode, visitArray);
                     if (hasJSDocNodes(child)) {
                         for (const jsDocComment of child.jsDoc!) {
-                            visitNode(jsDocComment as Node as IncrementalNode);
+                            visitNode(jsDocComment);
                         }
                     }
                     checkNodePositions(child, aggressiveChecks);
@@ -9412,7 +9416,8 @@ namespace ts {
                 Debug.assert(fullEnd < changeStart);
             }
 
-            function visitArray(array: IncrementalNodeArray) {
+            function visitArray(array: NodeArray<Node>) {
+                Debug.type<IncrementalNodeArray>(array);
                 Debug.assert(array.pos <= array.end);
                 if (array.pos > changeRangeOldEnd) {
                     // Array is entirely after the change range.  We need to move it, and move any of
