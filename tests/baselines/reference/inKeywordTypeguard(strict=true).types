@@ -146,13 +146,13 @@ function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWit
         x.a();
 >x.a() : any
 >x.a : any
->x : (AWithMethod & Record<"c", unknown>) | (BWithMethod & Record<"c", unknown>)
+>x : (AWithMethod | BWithMethod) & Record<"c", unknown>
 >a : any
 
         x.b();
 >x.b() : any
 >x.b : any
->x : (AWithMethod & Record<"c", unknown>) | (BWithMethod & Record<"c", unknown>)
+>x : (AWithMethod | BWithMethod) & Record<"c", unknown>
 >b : any
 
     } else {
@@ -492,7 +492,7 @@ function f1(x: unknown) {
 
         x.a;
 >x.a : unknown
->x : Record<"a", unknown>
+>x : object & Record<"a", unknown>
 >a : unknown
     }
     if (x && typeof x === "object" && "a" in x && "b" in x && "c" in x) {
@@ -510,24 +510,24 @@ function f1(x: unknown) {
 >x : object
 >"b" in x : boolean
 >"b" : "b"
->x : Record<"a", unknown>
+>x : object & Record<"a", unknown>
 >"c" in x : boolean
 >"c" : "c"
->x : Record<"a", unknown> & Record<"b", unknown>
+>x : object & Record<"a", unknown> & Record<"b", unknown>
 
         x.a;
 >x.a : unknown
->x : Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
 >a : unknown
 
         x.b;
 >x.b : unknown
->x : Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
 >b : unknown
 
         x.c;
 >x.c : unknown
->x : Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
 >c : unknown
     }
 }
@@ -543,7 +543,7 @@ function f2(x: object) {
 
         x.a;
 >x.a : unknown
->x : Record<"a", unknown>
+>x : object & Record<"a", unknown>
 >a : unknown
     }
     if ("a" in x && "b" in x && "c" in x) {
@@ -554,24 +554,24 @@ function f2(x: object) {
 >x : object
 >"b" in x : boolean
 >"b" : "b"
->x : Record<"a", unknown>
+>x : object & Record<"a", unknown>
 >"c" in x : boolean
 >"c" : "c"
->x : Record<"a", unknown> & Record<"b", unknown>
+>x : object & Record<"a", unknown> & Record<"b", unknown>
 
         x.a;
 >x.a : unknown
->x : Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
 >a : unknown
 
         x.b;
 >x.b : unknown
->x : Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
 >b : unknown
 
         x.c;
 >x.c : unknown
->x : Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
+>x : object & Record<"a", unknown> & Record<"b", unknown> & Record<"c", unknown>
 >c : unknown
     }
 }
@@ -811,34 +811,34 @@ function f8(x: object) {
 >x : object
 >1 in x : boolean
 >1 : 1
->x : Record<"a", unknown>
+>x : object & Record<"a", unknown>
 >sym in x : boolean
 >sym : unique symbol
->x : Record<"a", unknown> & Record<1, unknown>
+>x : object & Record<"a", unknown> & Record<1, unknown>
 
         x.a;
 >x.a : unknown
->x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
 >a : unknown
 
         x["a"];
 >x["a"] : unknown
->x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
 >"a" : "a"
 
         x[1];
 >x[1] : unknown
->x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
 >1 : 1
 
         x["1"];
 >x["1"] : unknown
->x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
 >"1" : "1"
 
         x[sym];
 >x[sym] : unknown
->x : Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<1, unknown> & Record<unique symbol, unknown>
 >sym : unique symbol
     }
 }
@@ -855,34 +855,34 @@ function f9(x: object) {
 >x : object
 >"1" in x : boolean
 >"1" : "1"
->x : Record<"a", unknown>
+>x : object & Record<"a", unknown>
 >sym in x : boolean
 >sym : unique symbol
->x : Record<"a", unknown> & Record<"1", unknown>
+>x : object & Record<"a", unknown> & Record<"1", unknown>
 
         x.a;
 >x.a : unknown
->x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
 >a : unknown
 
         x["a"];
 >x["a"] : unknown
->x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
 >"a" : "a"
 
         x[1];
 >x[1] : unknown
->x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
 >1 : 1
 
         x["1"];
 >x["1"] : unknown
->x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
 >"1" : "1"
 
         x[sym];
 >x[sym] : unknown
->x : Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
+>x : object & Record<"a", unknown> & Record<"1", unknown> & Record<unique symbol, unknown>
 >sym : unique symbol
     }
 }
