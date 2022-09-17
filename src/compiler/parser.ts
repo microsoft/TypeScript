@@ -9218,13 +9218,12 @@ namespace ts {
             }
         }
 
-        function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
-            // TODO(jakebailey): instead of isArray, use overloads and the just use isNodeArray.
-            if (isArray) {
-                visitArray(element as IncrementalNodeArray);
+        function moveElementEntirelyPastChangeRange(element: IncrementalNode | IncrementalNodeArray, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+            if (isArray(element)) {
+                visitArray(element);
             }
             else {
-                visitNode(element as IncrementalNode);
+                visitNode(element);
             }
             return;
 
@@ -9388,7 +9387,7 @@ namespace ts {
                 if (child.pos > changeRangeOldEnd) {
                     // Node is entirely past the change range.  We need to move both its pos and
                     // end, forward or backward appropriately.
-                    moveElementEntirelyPastChangeRange(child, /*isArray*/ false, delta, oldText, newText, aggressiveChecks);
+                    moveElementEntirelyPastChangeRange(child, delta, oldText, newText, aggressiveChecks);
                     return;
                 }
 
@@ -9422,7 +9421,7 @@ namespace ts {
                 if (array.pos > changeRangeOldEnd) {
                     // Array is entirely after the change range.  We need to move it, and move any of
                     // its children.
-                    moveElementEntirelyPastChangeRange(array, /*isArray*/ true, delta, oldText, newText, aggressiveChecks);
+                    moveElementEntirelyPastChangeRange(array, delta, oldText, newText, aggressiveChecks);
                     return;
                 }
 
