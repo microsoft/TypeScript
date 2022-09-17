@@ -1,0 +1,19 @@
+=== tests/cases/compiler/emptyOptionalBindingPatternInDeclarationSignature.ts ===
+// #50791
+
+declare function fn1({}?: { x: string }): void; // ok
+>fn1 : ({}?: {    x: string;}) => void
+>x : string
+
+declare function fn2({ x }?: { x: string }): void; // ok
+>fn2 : ({ x }?: {    x: string;}) => void
+>x : string
+>x : string
+
+declare function fn3([]?: [ x: string ]): void; // ok
+>fn3 : ([]?: [x: string]) => void
+
+declare function fn4([ x ]?: [ x: string ]): void; // ok
+>fn4 : ([x]?: [x: string]) => void
+>x : string
+

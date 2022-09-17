@@ -1,0 +1,19 @@
+=== tests/cases/compiler/emptyOptionalBindingPatternInDeclarationSignature.ts ===
+// #50791
+
+declare function fn1({}?: { x: string }): void; // ok
+>fn1 : Symbol(fn1, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 0, 0))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 2, 27))
+
+declare function fn2({ x }?: { x: string }): void; // ok
+>fn2 : Symbol(fn2, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 2, 47))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 3, 22))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 3, 30))
+
+declare function fn3([]?: [ x: string ]): void; // ok
+>fn3 : Symbol(fn3, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 3, 50))
+
+declare function fn4([ x ]?: [ x: string ]): void; // ok
+>fn4 : Symbol(fn4, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 4, 47))
+>x : Symbol(x, Decl(emptyOptionalBindingPatternInDeclarationSignature.ts, 5, 22))
+
