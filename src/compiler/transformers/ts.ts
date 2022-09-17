@@ -649,7 +649,7 @@ namespace ts {
             const moveModifiers =
                 promoteToIIFE ||
                 facts & ClassFacts.IsExportOfNamespace ||
-                facts & ClassFacts.HasClassOrConstructorParameterDecorators ||
+                facts & ClassFacts.HasClassOrConstructorParameterDecorators && legacyDecorators ||
                 facts & ClassFacts.HasStaticInitializedProperties;
 
             // elide modifiers on the declaration if we are emitting an IIFE or the class is
@@ -664,6 +664,7 @@ namespace ts {
             }
 
             const needsName =
+                moveModifiers && !node.name ||
                 facts & ClassFacts.HasMemberDecorators ||
                 facts & ClassFacts.HasStaticInitializedProperties;
 
@@ -996,7 +997,7 @@ namespace ts {
             // The names are used more than once when:
             //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
             //   - the property has a decorator.
-            if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member))) {
+            if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
                 const expression = visitNode(name.expression, visitor, isExpression);
                 const innerExpression = skipPartiallyEmittedExpressions(expression);
                 if (!isSimpleInlineableExpression(innerExpression)) {
@@ -1053,7 +1054,7 @@ namespace ts {
 
         function visitPropertyDeclaration(node: PropertyDeclaration, parent: ClassLikeDeclaration) {
             const isAmbient = node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Abstract);
-            if (isAmbient && !hasDecorators(node)) {
+            if (isAmbient && !(legacyDecorators && hasDecorators(node))) {
                 return undefined;
             }
 

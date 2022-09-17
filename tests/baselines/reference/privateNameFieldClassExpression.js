@@ -15,6 +15,10 @@ class B {
 
 
 //// [privateNameFieldClassExpression.js]
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: name });
+};
 var _B_foo, _B_foo2;
 class B {
     constructor() {
@@ -24,6 +28,7 @@ class B {
                     console.log("hello");
                 }
             },
+            __setFunctionName(_a, "#foo"),
             _a.test = 123,
             _a));
         _B_foo2.set(this, (_b = class Foo {

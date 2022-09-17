@@ -1923,7 +1923,7 @@ namespace ts {
             case SyntaxKind.PropertyDeclaration:
                 // property declarations are valid if their parent is a class declaration.
                 return parent !== undefined
-                    && (useLegacyDecorators ? isClassDeclaration(parent) : isClassLike(parent));
+                    && (useLegacyDecorators ? isClassDeclaration(parent) : isClassLike(parent) && !hasAbstractModifier(node) && !hasAmbientModifier(node));
 
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
@@ -2014,6 +2014,19 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    export function isEmptyStringLiteral(node: StringLiteral): boolean {
+        if (node.textSourceNode) {
+            switch (node.textSourceNode.kind) {
+                case SyntaxKind.StringLiteral:
+                    return isEmptyStringLiteral(node.textSourceNode);
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    return node.text === "";
+            }
+            return false;
+        }
+        return node.text === "";
     }
 
     export function isJSXTagName(node: Node) {
@@ -3483,6 +3496,17 @@ namespace ts {
      */
     export function isESSymbolIdentifier(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier && (node as Identifier).escapedText === "Symbol";
+    }
+
+    /**
+     * Indicates whether a property name is the special `__proto__` property.
+     * Per the ECMA-262 spec, this only matters for property assignments whose name is
+     * the Identifier `__proto__`, or the string literal `"__proto__"`, but not for
+     * computed property names.
+     */
+    export function isProtoSetter(node: PropertyName) {
+        return isIdentifier(node) ? idText(node) === "__proto__" :
+            isStringLiteral(node) && node.text === "__proto__";
     }
 
     export function isPushOrUnshiftIdentifier(node: Identifier) {

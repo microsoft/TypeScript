@@ -1614,6 +1614,7 @@ namespace ts {
             case SyntaxKind.ExpressionWithTypeArguments:
             case SyntaxKind.MetaProperty:
             case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
+            case SyntaxKind.MissingDeclaration:
                 return true;
             default:
                 return false;

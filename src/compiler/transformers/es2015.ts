@@ -3845,8 +3845,21 @@ namespace ts {
                 addRange(statements, funcStatements, classBodyEnd + 1);
             }
 
-            // Add the remaining statements of the outer wrapper.
-            addRange(statements, remainingStatements);
+            // TODO(rbuckton): We should consider either improving the inlining here, or remove it entirely, since
+            //                 the new esDecorators emit doesn't inline.
+
+            // Add the remaining statements of the outer wrapper. Use the 'return' statement
+            // of the inner wrapper if its expression is not trivially an Identifier.
+            const returnStatement = tryCast(elementAt(funcStatements, classBodyEnd), isReturnStatement);
+            for (const statement of remainingStatements) {
+                if (isReturnStatement(statement) && returnStatement?.expression &&
+                    !isIdentifier(returnStatement.expression)) {
+                    statements.push(returnStatement);
+                }
+                else {
+                    statements.push(statement);
+                }
+            }
 
             // The 'es2015' class transform may add an end-of-declaration marker. If so we will add it
             // after the remaining statements from the 'ts' transformer.

@@ -4477,6 +4477,7 @@ namespace ts {
                 case SyntaxKind.AwaitKeyword:
                 case SyntaxKind.YieldKeyword:
                 case SyntaxKind.PrivateIdentifier:
+                case SyntaxKind.AtToken:
                     // Yield/await always starts an expression.  Either it is an identifier (in which case
                     // it is definitely an expression).  Or it's a keyword (either because we're in
                     // a generator or async function, or in strict mode (or both)) and it started a yield or await expression.
@@ -6039,6 +6040,8 @@ namespace ts {
                     }
 
                     return parseFunctionExpression();
+                case SyntaxKind.AtToken:
+                    return parseDecoratoratedExpression();
                 case SyntaxKind.ClassKeyword:
                     return parseClassExpression();
                 case SyntaxKind.FunctionKeyword:
@@ -7422,6 +7425,20 @@ namespace ts {
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
             return Debug.fail("Should not have attempted to parse class member declaration.");
+        }
+
+        function parseDecoratoratedExpression(): PrimaryExpression {
+            const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
+            const modifiers = parseModifiers(/*allowDecorators*/ true);
+            if (token() === SyntaxKind.ClassKeyword) {
+                return parseClassDeclarationOrExpression(pos, hasJSDoc, modifiers, SyntaxKind.ClassExpression) as ClassExpression;
+            }
+
+            const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Expression_expected);
+            setTextRangePos(missing, pos);
+            (missing as Mutable<MissingDeclaration>).decoratorsAndModifiers = modifiers;
+            return missing;
         }
 
         function parseClassExpression(): ClassExpression {

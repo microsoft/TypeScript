@@ -49,6 +49,7 @@
         "transformers/ts.ts",
         "transformers/classFields.ts",
         "transformers/typeSerializer.ts",
+        "transformers/esDecorators.ts",
         "transformers/legacyDecorators.ts",
         "transformers/es2017.ts",
         "transformers/es2018.ts",

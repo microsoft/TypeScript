@@ -885,6 +885,7 @@ namespace ts {
         /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
         /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
         /* @internal */ inferenceContext?: InferenceContext;  // Inference context for contextual type
+        /* @internal */ transformer?: TransformerFactory<Node>; // Source transformer that created the node
     }
 
     export interface JSDocContainer {
@@ -2416,6 +2417,9 @@ namespace ts {
         | SpreadAssignment // AssignmentRestProperty
         ;
 
+    /*@internal*/
+    export type ObjectAssignmentElement = Exclude<ObjectBindingOrAssignmentElement, BindingElement>;
+
     export type ArrayBindingOrAssignmentElement =
         | BindingElement
         | OmittedExpression // Elision
@@ -2427,6 +2431,9 @@ namespace ts {
         | PropertyAccessExpression // DestructuringAssignmentTarget
         | ElementAccessExpression // DestructuringAssignmentTarget
         ;
+
+    /*@internal*/
+    export type ArrayAssignmentElement = Exclude<ArrayBindingOrAssignmentElement, BindingElement>;
 
     export type BindingOrAssignmentElementRestIndicator =
         | DotDotDotToken // from BindingElement
@@ -2440,6 +2447,9 @@ namespace ts {
         | PropertyAccessExpression
         | ElementAccessExpression
         | OmittedExpression;
+
+    /*@internal*/
+    export type AssignmentElementTarget = Exclude<BindingOrAssignmentElementTarget, BindingPattern>;
 
     export type ObjectBindingOrAssignmentPattern =
         | ObjectBindingPattern
@@ -3044,7 +3054,7 @@ namespace ts {
         readonly kind: SyntaxKind.DebuggerStatement;
     }
 
-    export interface MissingDeclaration extends DeclarationStatement {
+    export interface MissingDeclaration extends DeclarationStatement, PrimaryExpression {
         readonly kind: SyntaxKind.MissingDeclaration;
         readonly name?: Identifier;
 
@@ -6660,6 +6670,7 @@ namespace ts {
         esModuleInterop?: boolean;
         /* @internal */ showConfig?: boolean;
         useDefineForClassFields?: boolean;
+        annotateTransforms?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
@@ -7466,8 +7477,10 @@ namespace ts {
         ClassPrivateFieldSet = 1 << 20, // __classPrivateFieldSet (used by the class private field transformation)
         ClassPrivateFieldIn = 1 << 21,  // __classPrivateFieldIn (used by the class private field transformation)
         CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
+        ESDecorate = 1 << 23,           // __esDecorate (used by ECMAScript decorators transformation)
+        RunInitializers = 1 << 24,      // __runInitializers (used by ECMAScript decorators transformation)
         FirstEmitHelper = Extends,
-        LastEmitHelper = CreateBinding,
+        LastEmitHelper = RunInitializers,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
@@ -8249,6 +8262,7 @@ namespace ts {
         /* @internal */ createFunctionCallCall(target: Expression, thisArg: Expression, argumentsList: readonly Expression[]): CallExpression;
         /* @internal */ createFunctionApplyCall(target: Expression, thisArg: Expression, argumentsExpression: Expression): CallExpression;
         /* @internal */ createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression): CallExpression;
+        /* @internal */ createObjectGetOwnPropertyDescriptorCall(target: Expression, propertyName: string | Expression): CallExpression;
         /* @internal */ createReflectGetCall(target: Expression, propertyKey: Expression, receiver?: Expression): CallExpression;
         /* @internal */ createReflectSetCall(target: Expression, propertyKey: Expression, value: Expression, receiver?: Expression): CallExpression;
         /* @internal */ createPropertyDescriptor(attributes: PropertyDescriptorAttributes, singleLine?: boolean): ObjectLiteralExpression;
@@ -8776,6 +8790,7 @@ namespace ts {
         /*@internal*/ stripInternal?: boolean;
         /*@internal*/ preserveSourceNewlines?: boolean;
         /*@internal*/ terminateUnterminatedLiterals?: boolean;
+        /*@internal*/ annotateTransforms?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 

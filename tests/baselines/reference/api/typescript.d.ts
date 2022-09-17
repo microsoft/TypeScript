@@ -1457,7 +1457,7 @@ declare namespace ts {
     export interface DebuggerStatement extends Statement {
         readonly kind: SyntaxKind.DebuggerStatement;
     }
-    export interface MissingDeclaration extends DeclarationStatement {
+    export interface MissingDeclaration extends DeclarationStatement, PrimaryExpression {
         readonly kind: SyntaxKind.MissingDeclaration;
         readonly name?: Identifier;
     }
@@ -3088,6 +3088,7 @@ declare namespace ts {
         typeRoots?: string[];
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
+        annotateTransforms?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
     export interface WatchOptions {
@@ -5122,6 +5123,12 @@ declare namespace ts {
      * Visits an iteration body, adding any block-scoped variables required by the transformation.
      */
     function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement;
+    /**
+     * Visits the elements of a {@link CommaListExpression}.
+     * @param visitor The visitor to use when visiting expressions whose result will not be discarded at runtime.
+     * @param discardVisitor The visitor to use when visiting expressions whose result will be discarded at runtime. Defaults to {@link visitor}.
+     */
+    function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor?: Visitor): NodeArray<Expression>;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *

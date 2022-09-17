@@ -438,10 +438,13 @@ namespace ts {
      * @param parent The class node that contains the member.
      * @param member The class member.
      */
-    export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration): AllDecorators | undefined {
+    export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
         switch (member.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+                if (!useLegacyDecorators) {
+                    return getAllDecoratorsOfMethod(member as AccessorDeclaration);
+                }
                 return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent);
 
             case SyntaxKind.MethodDeclaration:
@@ -495,7 +498,7 @@ namespace ts {
      *
      * @param method The class method member.
      */
-    function getAllDecoratorsOfMethod(method: MethodDeclaration): AllDecorators | undefined {
+    function getAllDecoratorsOfMethod(method: MethodDeclaration | AccessorDeclaration): AllDecorators | undefined {
         if (!method.body) {
             return undefined;
         }

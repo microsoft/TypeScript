@@ -997,6 +997,12 @@ namespace ts {
         let deferredGlobalOmitSymbol: Symbol | undefined;
         let deferredGlobalAwaitedSymbol: Symbol | undefined;
         let deferredGlobalBigIntType: ObjectType | undefined;
+        let deferredGlobalClassDecoratorContextType: GenericType | undefined;
+        let deferredGlobalClassMethodDecoratorContextType: GenericType | undefined;
+        let deferredGlobalClassGetterDecoratorContextType: GenericType | undefined;
+        let deferredGlobalClassSetterDecoratorContextType: GenericType | undefined;
+        let deferredGlobalClassAccessorDecoratorContextType: GenericType | undefined;
+        let deferredGlobalClassFieldDecoratorContextType: GenericType | undefined;
 
         const allPotentiallyUnusedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -14308,6 +14314,30 @@ namespace ts {
             return (deferredGlobalBigIntType ||= getGlobalType("BigInt" as __String, /*arity*/ 0, /*reportErrors*/ false)) || emptyObjectType;
         }
 
+        function getGlobalClassDecoratorContextType(reportErrors: boolean) {
+            return (deferredGlobalClassDecoratorContextType ??= getGlobalType("ClassDecoratorContext" as __String, /*arity*/ 1, reportErrors)) ?? emptyGenericType;
+        }
+
+        function getGlobalClassMethodDecoratorContextType(reportErrors: boolean) {
+            return (deferredGlobalClassMethodDecoratorContextType ??= getGlobalType("ClassMethodDecoratorContext" as __String, /*arity*/ 2, reportErrors)) ?? emptyGenericType;
+        }
+
+        function getGlobalClassGetterDecoratorContextType(reportErrors: boolean) {
+            return (deferredGlobalClassGetterDecoratorContextType ??= getGlobalType("ClassGetterDecoratorContext" as __String, /*arity*/ 2, reportErrors)) ?? emptyGenericType;
+        }
+
+        function getGlobalClassSetterDecoratorContextType(reportErrors: boolean) {
+            return (deferredGlobalClassSetterDecoratorContextType ??= getGlobalType("ClassSetterDecoratorContext" as __String, /*arity*/ 2, reportErrors)) ?? emptyGenericType;
+        }
+
+        function getGlobalClassAccessorDecoratorContextType(reportErrors: boolean) {
+            return (deferredGlobalClassAccessorDecoratorContextType ??= getGlobalType("ClassAccessorDecoratorContext" as __String, /*arity*/ 2, reportErrors)) ?? emptyGenericType;
+        }
+
+        function getGlobalClassFieldDecoratorContextType(reportErrors: boolean) {
+            return (deferredGlobalClassFieldDecoratorContextType ??= getGlobalType("ClassFieldDecoratorContext" as __String, /*arity*/ 2, reportErrors)) ?? emptyGenericType;
+        }
+
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
@@ -26329,7 +26359,7 @@ namespace ts {
         }
 
         function checkThisInStaticClassFieldInitializerInDecoratedClass(thisExpression: Node, container: Node) {
-            if (isPropertyDeclaration(container) && hasStaticModifier(container) &&
+            if (isPropertyDeclaration(container) && hasStaticModifier(container) && legacyDecorators &&
                 container.initializer && textRangeContainsPositionInclusive(container.initializer, thisExpression.pos) && hasDecorators(container.parent)) {
                     error(thisExpression, Diagnostics.Cannot_use_this_in_a_static_property_initializer_of_a_decorated_class);
             }
@@ -30748,6 +30778,15 @@ namespace ts {
          * Returns the synthetic argument list for a decorator invocation.
          */
         function getEffectiveDecoratorArguments(node: Decorator): readonly Expression[] {
+            return compilerOptions.experimentalDecorators ?
+                getEffectiveLegacyDecoratorArguments(node) :
+                getEffectiveESDecoratorArguments(node);
+        }
+
+        /**
+         * Returns the synthetic argument list for a decorator invocation.
+         */
+        function getEffectiveLegacyDecoratorArguments(node: Decorator): readonly Expression[] {
             const parent = node.parent;
             const expr = node.expression;
             switch (parent.kind) {
@@ -30785,9 +30824,68 @@ namespace ts {
         }
 
         /**
+         * Returns the synthetic argument list for a decorator invocation.
+         */
+        function getEffectiveESDecoratorArguments(node: Decorator): readonly Expression[] {
+            const parent = node.parent;
+            const expr = node.expression;
+            switch (parent.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression: {
+                    // For a class decorator, the `target` is the type of the class (e.g. the
+                    // "static" or "constructor" side of the class).
+
+                    // TODO(rbuckton): Some mechanism of defining a type variable that
+                    //                 is dependent on the result of evaluating all decorators.
+                    const classInType = getTypeOfSymbol(getSymbolOfNode(parent));
+                    const classFinalType = classInType;
+                    return [
+                        createSyntheticExpression(expr, classInType),
+                        createSyntheticExpression(expr, createClassDecoratorContextType(classFinalType))
+                    ];
+                }
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.PropertyDeclaration: {
+                    // TODO(rbuckton): Some mechanism of defining a type variable that
+                    //                 is dependent on the result of evaluating all decorators.
+                    const nameType = undefined;
+                    const isStatic = hasStaticModifier(parent);
+                    const isPrivate = !!parent.name && isPrivateIdentifier(parent.name);
+                    const valueInType = getTypeOfNode(parent);
+                    const valueFinalType = valueInType;
+                    const thisFinalType = unknownType;
+                    const contextType =
+                        isMethodDeclaration(parent) ? createClassMethodDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
+                        isGetAccessorDeclaration(parent) ? createClassGetterDecoratorContextType(thisFinalType, valueFinalType) :
+                        isSetAccessorDeclaration(parent) ? createClassSetterDecoratorContextType(thisFinalType, valueFinalType) :
+                        hasAccessorModifier(parent) ? createClassAccessorDecoratorContextType(thisFinalType, valueFinalType) :
+                        createClassFieldDecoratorContextType(thisFinalType, valueFinalType);
+                    return [
+                        createSyntheticExpression(expr, valueInType),
+                        createSyntheticExpression(expr, contextType)
+                    ];
+                }
+                case SyntaxKind.Parameter:
+                    Debug.fail("Not yet implemented.");
+            }
+            return Debug.fail();
+        }
+
+        /**
          * Returns the argument count for a decorator node that works like a function invocation.
          */
         function getDecoratorArgumentCount(node: Decorator, signature: Signature) {
+            return compilerOptions.experimentalDecorators ?
+                getLegacyDecoratorArgumentCount(node, signature) :
+                2;
+        }
+
+        /**
+         * Returns the argument count for a decorator node that works like a function invocation.
+         */
+        function getLegacyDecoratorArgumentCount(node: Decorator, signature: Signature) {
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -30805,6 +30903,7 @@ namespace ts {
                     return Debug.fail();
             }
         }
+
         function getDiagnosticSpanForCallNode(node: CallExpression, doNotIncludeArguments?: boolean) {
             let start: number;
             let length: number;
@@ -32879,6 +32978,81 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function createClassDecoratorContextType(classType: Type) {
+            const globalClassDecoratorContextType = getGlobalClassDecoratorContextType(/*reportErrors*/ true);
+            if (globalClassDecoratorContextType !== emptyGenericType) {
+                return createTypeReference(globalClassDecoratorContextType, [classType]);
+            }
+            return unknownType;
+        }
+
+        function tryCreateDecoratorContextOverrideType(nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+            let members: SymbolTable | undefined;
+            if (nameType !== undefined) {
+                const symbol = createSymbol(SymbolFlags.Property, "name" as __String);
+                symbol.type = nameType;
+                members ??= createSymbolTable();
+                members.set(symbol.escapedName, symbol);
+            }
+            if (isStatic !== undefined) {
+                const symbol = createSymbol(SymbolFlags.Property, "static" as __String);
+                symbol.type = isStatic ? trueType : falseType;
+                members ??= createSymbolTable();
+                members.set(symbol.escapedName, symbol);
+            }
+            if (isPrivate !== undefined) {
+                const symbol = createSymbol(SymbolFlags.Property, "private" as __String);
+                symbol.type = isPrivate ? trueType : falseType;
+                members ??= createSymbolTable();
+                members.set(symbol.escapedName, symbol);
+            }
+            if (members) {
+                return createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, emptyArray);
+            }
+        }
+
+        function createClassMethodDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+            const globalClassMethodDecoratorContextType = getGlobalClassMethodDecoratorContextType(/*reportErrors*/ true);
+            if (globalClassMethodDecoratorContextType !== emptyGenericType) {
+                const contextType = createTypeReference(globalClassMethodDecoratorContextType, [thisType, valueType]);
+                const overrideType = tryCreateDecoratorContextOverrideType(nameType, isStatic, isPrivate);
+                return overrideType ? getIntersectionType([contextType, overrideType]) : contextType;
+            }
+            return unknownType;
+        }
+
+        function createClassGetterDecoratorContextType(thisType: Type, valueType: Type) {
+            const globalClassGetterDecoratorContextType = getGlobalClassGetterDecoratorContextType(/*reportErrors*/ true);
+            if (globalClassGetterDecoratorContextType !== emptyGenericType) {
+                return createTypeReference(globalClassGetterDecoratorContextType, [thisType, valueType]);
+            }
+            return unknownType;
+        }
+
+        function createClassSetterDecoratorContextType(thisType: Type, valueType: Type) {
+            const globalClassSetterDecoratorContextType = getGlobalClassSetterDecoratorContextType(/*reportErrors*/ true);
+            if (globalClassSetterDecoratorContextType !== emptyGenericType) {
+                return createTypeReference(globalClassSetterDecoratorContextType, [thisType, valueType]);
+            }
+            return unknownType;
+        }
+
+        function createClassAccessorDecoratorContextType(thisType: Type, valueType: Type) {
+            const globalClassAccessorDecoratorContextType = getGlobalClassAccessorDecoratorContextType(/*reportErrors*/ true);
+            if (globalClassAccessorDecoratorContextType !== emptyGenericType) {
+                return createTypeReference(globalClassAccessorDecoratorContextType, [thisType, valueType]);
+            }
+            return unknownType;
+        }
+
+        function createClassFieldDecoratorContextType(thisType: Type, valueType: Type) {
+            const globalClassFieldDecoratorContextType = getGlobalClassFieldDecoratorContextType(/*reportErrors*/ true);
+            if (globalClassFieldDecoratorContextType !== emptyGenericType) {
+                return createTypeReference(globalClassFieldDecoratorContextType, [thisType, valueType]);
+            }
+            return unknownType;
         }
 
         function createPromiseType(promisedType: Type): Type {
@@ -37189,6 +37363,7 @@ namespace ts {
             let expectedReturnType: Type;
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
                     headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
                     const classSymbol = getSymbolOfNode(node.parent);
                     const classConstructorType = getTypeOfSymbol(classSymbol);
@@ -37206,12 +37381,14 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
                     const methodType = getTypeOfNode(node.parent);
-                    const descriptorType = createTypedPropertyDescriptorType(methodType);
-                    expectedReturnType = getUnionType([descriptorType, voidType]);
+                    expectedReturnType = getUnionType([
+                        legacyDecorators ? createTypedPropertyDescriptorType(methodType) : methodType,
+                        voidType
+                    ]);
                     break;
 
                 default:
-                    return Debug.fail();
+                    return Debug.failBadSyntaxKind(node.parent);
             }
 
             checkTypeAssignableTo(
@@ -37335,13 +37512,9 @@ namespace ts {
         /** Check the decorators of a node */
         function checkDecorators(node: Node): void {
             // skip this check for nodes that cannot have decorators. These should have already had an error reported by
-            // checkGrammarDecorators.
+            // checkGrammarModifiers.
             if (!canHaveDecorators(node) || !hasDecorators(node) || !node.modifiers || !nodeCanBeDecorated(legacyDecorators, node, node.parent, node.parent.parent)) {
                 return;
-            }
-
-            if (!compilerOptions.experimentalDecorators) {
-                error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning);
             }
 
             const firstDecorator = find(node.modifiers, isDecorator);
@@ -37349,9 +37522,15 @@ namespace ts {
                 return;
             }
 
-            checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Decorate);
-            if (node.kind === SyntaxKind.Parameter) {
-                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Param);
+            if (legacyDecorators) {
+                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Decorate);
+                if (node.kind === SyntaxKind.Parameter) {
+                    checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Param);
+                }
+            }
+            else if (languageVersion < ScriptTarget.ESNext) {
+                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.ESDecorate);
+                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.RunInitializers);
             }
 
             if (compilerOptions.emitDecoratorMetadata) {
@@ -40047,7 +40226,7 @@ namespace ts {
 
         function checkClassDeclaration(node: ClassDeclaration) {
             const firstDecorator = find(node.modifiers, isDecorator);
-            if (firstDecorator && some(node.members, p => hasStaticModifier(p) && isPrivateIdentifierClassElementDeclaration(p))) {
+            if (legacyDecorators && firstDecorator && some(node.members, p => hasStaticModifier(p) && isPrivateIdentifierClassElementDeclaration(p))) {
                 grammarErrorOnNode(firstDecorator, Diagnostics.Class_decorators_can_t_be_used_with_static_private_identifier_Consider_removing_the_experimental_decorator);
             }
             if (!node.name && !hasSyntacticModifier(node, ModifierFlags.Default)) {
@@ -44124,6 +44303,8 @@ namespace ts {
                 case ExternalEmitHelpers.ClassPrivateFieldSet: return "__classPrivateFieldSet";
                 case ExternalEmitHelpers.ClassPrivateFieldIn: return "__classPrivateFieldIn";
                 case ExternalEmitHelpers.CreateBinding: return "__createBinding";
+                case ExternalEmitHelpers.ESDecorate: return "__esDecorate";
+                case ExternalEmitHelpers.RunInitializers: return "__runInitializers";
                 default: return Debug.fail("Unrecognized helper");
             }
         }

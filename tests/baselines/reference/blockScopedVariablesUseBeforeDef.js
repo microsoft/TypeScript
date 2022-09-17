@@ -125,6 +125,10 @@ function foo16() {
 
 
 //// [blockScopedVariablesUseBeforeDef.js]
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: name });
+};
 function foo0() {
     var a = x;
     var x;
@@ -190,6 +194,7 @@ function foo9() {
             }
             return class_2;
         }()),
+        __setFunctionName(_a, "y"),
         _a.a = x,
         _a);
     var x;
@@ -211,6 +216,7 @@ function foo11() {
                 }
                 return class_3;
             }()),
+            __setFunctionName(_a, "y"),
             _a.a = x,
             _a);
     }

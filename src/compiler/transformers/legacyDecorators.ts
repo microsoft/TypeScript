@@ -94,7 +94,7 @@ namespace ts {
         function hasClassElementWithDecoratorContainingPrivateIdentifierInExpression(node: ClassDeclaration) {
             for (const member of node.members) {
                 if (!canHaveDecorators(member)) continue;
-                const allDecorators = getAllDecoratorsOfClassElement(member, node);
+                const allDecorators = getAllDecoratorsOfClassElement(member, node, /*useLegacyDecorators*/ true);
                 if (some(allDecorators?.decorators, decoratorContainsPrivateIdentifierInExpression)) return true;
                 if (some(allDecorators?.parameters, parameterDecoratorsContainPrivateIdentifierInExpression)) return true;
             }
@@ -258,7 +258,7 @@ namespace ts {
 
             const classExpression = factory.createClassExpression(
                 /*modifiers*/ undefined,
-                name,
+                name && isGeneratedIdentifier(name) ? undefined : name,
                 /*typeParameters*/ undefined,
                 heritageClauses,
                 members);
@@ -472,7 +472,7 @@ namespace ts {
          * @param member The class member.
          */
         function generateClassElementDecorationExpression(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            const allDecorators = getAllDecoratorsOfClassElement(member, node);
+            const allDecorators = getAllDecoratorsOfClassElement(member, node, /*useLegacyDecorators*/ true);
             const decoratorExpressions = transformAllDecoratorsOfDeclaration(allDecorators);
             if (!decoratorExpressions) {
                 return undefined;

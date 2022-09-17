@@ -510,6 +510,7 @@ namespace ts {
             createArraySliceCall,
             createArrayConcatCall,
             createObjectDefinePropertyCall,
+            createObjectGetOwnPropertyDescriptorCall,
             createReflectGetCall,
             createReflectSetCall,
             createPropertyDescriptor,
@@ -5787,6 +5788,10 @@ namespace ts {
 
         function createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression) {
             return createGlobalMethodCall("Object", "defineProperty", [target, asExpression(propertyName), attributes]);
+        }
+
+        function createObjectGetOwnPropertyDescriptorCall(target: Expression, propertyName: string | Expression) {
+            return createGlobalMethodCall("Object", "getOwnPropertyDescriptor", [target, asExpression(propertyName)]);
         }
 
         function createReflectGetCall(target: Expression, propertyKey: Expression, receiver?: Expression): CallExpression {

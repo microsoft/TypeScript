@@ -375,6 +375,25 @@ namespace ts {
     }
 
     /**
+     * Visits the elements of a {@link CommaListExpression}.
+     * @param visitor The visitor to use when visiting expressions whose result will not be discarded at runtime.
+     * @param discardVisitor The visitor to use when visiting expressions whose result will be discarded at runtime. Defaults to {@link visitor}.
+     */
+    export function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor = visitor): NodeArray<Expression> {
+        if (discardVisitor === visitor || elements.length <= 1) {
+            return visitNodes(elements, visitor, isExpression);
+        }
+
+        let i = 0;
+        const length = elements.length;
+        return visitNodes(elements, node => {
+            const discarded = i < length - 1;
+            i++;
+            return discarded ? discardVisitor(node) : visitor(node);
+        }, isExpression);
+    }
+
+    /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
      * @param node The Node whose children will be visited.

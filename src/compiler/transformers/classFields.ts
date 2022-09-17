@@ -132,6 +132,7 @@ namespace ts {
     export function transformClassFields(context: TransformationContext) {
         const {
             factory,
+            getEmitHelperFactory: emitHelpers,
             hoistVariableDeclaration,
             endLexicalEnvironment,
             startLexicalEnvironment,
@@ -224,13 +225,21 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                     return visitClassDeclaration(node as ClassDeclaration);
                 case SyntaxKind.ClassExpression:
-                    return visitClassExpression(node as ClassExpression);
+                    return visitClassExpression(node as ClassExpression, /*referencedName*/ undefined);
                 case SyntaxKind.ClassStaticBlockDeclaration:
                     return visitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
                 case SyntaxKind.PropertyDeclaration:
                     return visitPropertyDeclaration(node as PropertyDeclaration);
+                case SyntaxKind.PropertyAssignment:
+                    return visitPropertyAssignment(node as PropertyAssignment);
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(node as VariableStatement);
+                case SyntaxKind.VariableDeclaration:
+                    return visitVariableDeclaration(node as VariableDeclaration);
+                case SyntaxKind.BindingElement:
+                    return visitBindingElement(node as BindingElement);
+                case SyntaxKind.ExportAssignment:
+                    return visitExportAssignment(node as ExportAssignment);
                 case SyntaxKind.PrivateIdentifier:
                     return visitPrivateIdentifier(node as PrivateIdentifier);
                 case SyntaxKind.PropertyAccessExpression:
@@ -239,9 +248,11 @@ namespace ts {
                     return visitElementAccessExpression(node as ElementAccessExpression);
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
-                    return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*valueIsDiscarded*/ false);
+                    return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*discarded*/ false);
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(node as BinaryExpression, /*valueIsDiscarded*/ false);
+                    return visitBinaryExpression(node as BinaryExpression, /*discarded*/ false);
+                case SyntaxKind.ParenthesizedExpression:
+                    return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false, /*referencedName*/ undefined);
                 case SyntaxKind.CallExpression:
                     return visitCallExpression(node as CallExpression);
                 case SyntaxKind.ExpressionStatement:
@@ -272,6 +283,19 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        function namedEvaluationVisitor(node: Node, referencedName: Expression): VisitResult<Node> {
+            switch (node.kind) {
+                case SyntaxKind.PartiallyEmittedExpression:
+                    return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, /*discarded*/ false, referencedName);
+                case SyntaxKind.ParenthesizedExpression:
+                    return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false, referencedName);
+                case SyntaxKind.ClassExpression:
+                    return visitClassExpression(node as ClassExpression, referencedName);
+                default:
+                    return visitor(node);
+            }
+        }
+
         /**
          * Visits a node in an expression whose result is discarded.
          */
@@ -279,9 +303,13 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
-                    return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*valueIsDiscarded*/ true);
+                    return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, /*discarded*/ true);
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(node as BinaryExpression, /*valueIsDiscarded*/ true);
+                    return visitBinaryExpression(node as BinaryExpression, /*discarded*/ true);
+                case SyntaxKind.CommaListExpression:
+                    return visitCommaListExpression(node as CommaListExpression, /*discarded*/ true);
+                case SyntaxKind.ParenthesizedExpression:
+                    return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ true, /*referencedName*/ undefined);
                 default:
                     return visitor(node);
             }
@@ -399,6 +427,24 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        function visitPropertyAssignment(node: PropertyAssignment) {
+            // 13.2.5.5 RS: PropertyDefinitionEvaluation
+            //   PropertyAssignment : PropertyName `:` AssignmentExpression
+            //     ...
+            //     5. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true* and _isProtoSetter_ is *false*, then
+            //        a. Let _popValue_ be ? NamedEvaluation of |AssignmentExpression| with argument _propKey_.
+            //     ...
+
+            if (!isProtoSetter(node.name) &&
+                isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
+                const { referencedName, name } = visitReferencedPropertyName(node.name);
+                const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                return factory.updatePropertyAssignment(node, name, initializer);
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
         function visitVariableStatement(node: VariableStatement) {
             const savedPendingStatements = pendingStatements;
             pendingStatements = [];
@@ -412,8 +458,83 @@ namespace ts {
             return statement;
         }
 
-        function visitComputedPropertyName(node: ComputedPropertyName) {
-            let expression = visitNode(node.expression, visitor, isExpression);
+        function visitVariableDeclaration(node: VariableDeclaration) {
+            // 14.3.1.2 RS: Evaluation
+            //   LexicalBinding : BindingIdentifier Initializer
+            //     ...
+            //     3. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+            //        a. Let _value_ be ? NamedEvaluation of |Initializer| with argument _bindingId_.
+            //     ...
+            //
+            // 14.3.2.1 RS: Evaluation
+            //   VariableDeclaration : BindingIdentifier Initializer
+            //     ...
+            //     3. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+            //        a. Let _value_ be ? NamedEvaluation of |Initializer| with argument _bindingId_.
+            //     ...
+
+            if (isIdentifier(node.name) && node.initializer &&
+                isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
+                const referencedName = factory.createStringLiteralFromNode(node.name);
+                const name = visitNode(node.name, visitor, isBindingName);
+                const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                return factory.updateVariableDeclaration(node, name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitBindingElement(node: BindingElement) {
+            // 8.6.3 RS: IteratorBindingInitialization
+            //   SingleNameBinding : BindingIdentifier Initializer?
+            //     ...
+            //     5. If |Initializer| is present and _v_ is *undefined*, then
+            //        a. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+            //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _bindingId_.
+            //     ...
+            //
+            // 14.3.3.3 RS: KeyedBindingInitialization
+            //   SingleNameBinding : BindingIdentifier Initializer?
+            //     ...
+            //     4. If |Initializer| is present and _v_ is *undefined*, then
+            //        a. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+            //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _bindingId_.
+            //     ...
+
+            if (!node.dotDotDotToken &&
+                isIdentifier(node.name) && node.initializer &&
+                isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
+                const referencedName = factory.createStringLiteralFromNode(node.name);
+                const propertyName = visitNode(node.propertyName, visitor, isPropertyName);
+                const name = visitNode(node.name, visitor, isBindingName);
+                const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                return factory.updateBindingElement(node, /*dotDotDotToken*/ undefined, propertyName, name, initializer);
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitExportAssignment(node: ExportAssignment) {
+            // 16.2.3.7 RS: Evaluation
+            //   ExportDeclaration : `export` `default` AssignmentExpression `;`
+            //     1. If IsAnonymmousFunctionDefinition(|AssignmentExpression|) is *true*, then
+            //        a. Let _value_ be ? NamedEvaluation of |AssignmentExpression| with argument `"default"`.
+            //     ...
+
+            // NOTE: Since emit for `export =` translates to `module.exports = ...`, the assigned nameof the class
+            // is `""`.
+
+            if (isAnonymousClassDeclarationNeedingAssignedName(node.expression)) {
+                const referencedName = factory.createStringLiteral(node.isExportEquals ? "" : "default");
+                const modifiers = visitNodes(node.modifiers, visitor, isModifier);
+                const expression = visitNode(node.expression, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                return factory.updateExportAssignment(node, modifiers, expression);
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function injectPendingExpressions(expression: Expression) {
             if (some(pendingExpressions)) {
                 if (isParenthesizedExpression(expression)) {
                     expression = factory.updateParenthesizedExpression(expression, factory.inlineExpressions([...pendingExpressions, expression.expression]));
@@ -423,7 +544,12 @@ namespace ts {
                 }
                 pendingExpressions = undefined;
             }
-            return factory.updateComputedPropertyName(node, expression);
+            return expression;
+        }
+
+        function visitComputedPropertyName(node: ComputedPropertyName) {
+            const expression = visitNode(node.expression, visitor, isExpression);
+            return factory.updateComputedPropertyName(node, injectPendingExpressions(expression));
         }
 
         function visitConstructorDeclaration(node: ConstructorDeclaration) {
@@ -519,14 +645,22 @@ namespace ts {
             let getterName = name;
             let setterName = name;
             if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
-                const temp = factory.createTempVariable(hoistVariableDeclaration);
-                setSourceMapRange(temp, name.expression);
-                const expression = visitNode(name.expression, visitor, isExpression);
-                const assignment = factory.createAssignment(temp, expression);
-                setSourceMapRange(assignment, name.expression);
-                getterName = factory.updateComputedPropertyName(name, factory.inlineExpressions([assignment, temp]));
-                setterName = factory.updateComputedPropertyName(name, temp);
+                const cacheVariable = findComputedPropertyNameCacheVariable(name);
+                if (cacheVariable) {
+                    getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
+                    setterName = factory.updateComputedPropertyName(name, cacheVariable);
+                }
+                else {
+                    const temp = factory.createTempVariable(hoistVariableDeclaration);
+                    setSourceMapRange(temp, name.expression);
+                    const expression = visitNode(name.expression, visitor, isExpression);
+                    const assignment = factory.createAssignment(temp, expression);
+                    setSourceMapRange(assignment, name.expression);
+                    getterName = factory.updateComputedPropertyName(name, assignment);
+                    setterName = factory.updateComputedPropertyName(name, temp);
+                }
             }
+
 
             const backingField = createAccessorPropertyBackingField(factory, node, node.modifiers, node.initializer);
             setOriginalNode(backingField, node);
@@ -571,6 +705,18 @@ namespace ts {
                 );
             }
 
+            if (node.initializer && isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
+                const { referencedName, name } = visitReferencedPropertyName(node.name);
+                return factory.updatePropertyDeclaration(
+                    node,
+                    visitNodes(node.modifiers, visitor, isModifierLike),
+                    name,
+                    /*questionOrExclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    visitNode(node.initializer, child => namedEvaluationVisitor(child, referencedName), isExpression)
+                );
+            }
+
             return visitEachChild(node, visitor, context);
         }
 
@@ -580,7 +726,10 @@ namespace ts {
                 // If it's not inlineable, then we emit an expression after the class which assigns
                 // the property name to the temporary variable.
 
-                const expr = getPropertyNameExpressionIfNeeded(node.name, /*shouldHoist*/ !!node.initializer || useDefineForClassFields);
+                const expr = getPropertyNameExpressionIfNeeded(
+                    node.name,
+                    /*shouldHoist*/ !!node.initializer || useDefineForClassFields,
+                    /*captureReferencedName*/ !!node.initializer && isAnonymousClassDeclarationNeedingAssignedName(node.initializer));
                 if (expr) {
                     getPendingExpressions().push(expr);
                 }
@@ -723,7 +872,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitPreOrPostfixUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded: boolean) {
+        function visitPreOrPostfixUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression, discarded: boolean) {
             if (node.operator === SyntaxKind.PlusPlusToken ||
                 node.operator === SyntaxKind.MinusMinusToken) {
                 const operand = skipParentheses(node.operand);
@@ -735,7 +884,7 @@ namespace ts {
                         const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
 
                         let expression: Expression = createPrivateIdentifierAccess(info, readExpression);
-                        const temp = isPrefixUnaryExpression(node) || valueIsDiscarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
+                        const temp = isPrefixUnaryExpression(node) || discarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
                         expression = expandPreOrPostfixIncrementOrDecrementExpression(factory, node, expression, hoistVariableDeclaration, temp);
                         expression = createPrivateIdentifierAssignment(
                             info,
@@ -792,7 +941,7 @@ namespace ts {
                             let expression: Expression = factory.createReflectGetCall(superClassReference, getterName, classConstructor);
                             setTextRange(expression, operand);
 
-                            const temp = valueIsDiscarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
+                            const temp = discarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
                             expression = expandPreOrPostfixIncrementOrDecrementExpression(factory, node, expression, hoistVariableDeclaration, temp);
                             expression = factory.createReflectSetCall(superClassReference, setterName, expression, classConstructor);
                             setOriginalNode(expression, node);
@@ -942,7 +1091,31 @@ namespace ts {
             }
         }
 
-        function visitBinaryExpression(node: BinaryExpression, valueIsDiscarded: boolean) {
+        function isAnonymousClassDeclarationNeedingAssignedName(node: Expression) {
+            node = skipOuterExpressions(node);
+            if (isClassExpression(node) && !node.name) {
+                const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
+                const classStaticBlock = find(staticPropertiesOrClassStaticBlocks, isClassStaticBlockDeclaration);
+                if (classStaticBlock) {
+                    for (const statement of classStaticBlock.body.statements) {
+                        if (isExpressionStatement(statement) &&
+                            isCallToHelper(statement.expression, "___setFunctionName" as __String)) {
+                            return false;
+                        }
+                    }
+                }
+                const hasTransformableStatics =
+                    shouldTransformPrivateElementsOrClassStaticBlocks &&
+                    some(staticPropertiesOrClassStaticBlocks, node =>
+                        isClassStaticBlockDeclaration(node) ||
+                        isPrivateIdentifierClassElementDeclaration(node) ||
+                        shouldTransformInitializers && isInitializedProperty(node));
+                return hasTransformableStatics;
+            }
+            return false;
+        }
+
+        function visitBinaryExpression(node: BinaryExpression, discarded: boolean) {
             if (isDestructuringAssignment(node)) {
                 // ({ x: obj.#x } = ...)
                 // ({ x: super.x } = ...)
@@ -962,6 +1135,47 @@ namespace ts {
                 return expr;
             }
             if (isAssignmentExpression(node)) {
+                // 13.15.2 RS: Evaluation
+                //   AssignmentExpression : LeftHandSideExpression `=` AssignmentExpression
+                //     1. If |LeftHandSideExpression| is neither an |ObjectLiteral| nor an |ArrayLiteral|, then
+                //        a. Let _lref_ be ? Evaluation of |LeftHandSideExpression|.
+                //        b. If IsAnonymousFunctionDefinition(|AssignmentExpression|) and IsIdentifierRef of |LeftHandSideExpression| are both *true*, then
+                //           i. Let _rval_ be ? NamedEvaluation of |AssignmentExpression| with argument _lref_.[[ReferencedName]].
+                //     ...
+                //
+                //   AssignmentExpression : LeftHandSideExpression `&&=` AssignmentExpression
+                //     ...
+                //     5. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true* and IsIdentifierRef of |LeftHandSideExpression| is *true*, then
+                //        a. Let _rval_ be ? NamedEvaluation of |AssignmentExpression| with argument _lref_.[[ReferencedName]].
+                //     ...
+                //
+                //   AssignmentExpression : LeftHandSideExpression `||=` AssignmentExpression
+                //     ...
+                //     5. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true* and IsIdentifierRef of |LeftHandSideExpression| is *true*, then
+                //        a. Let _rval_ be ? NamedEvaluation of |AssignmentExpression| with argument _lref_.[[ReferencedName]].
+                //     ...
+                //
+                //   AssignmentExpression : LeftHandSideExpression `??=` AssignmentExpression
+                //     ...
+                //     4. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true* and IsIdentifierRef of |LeftHandSideExpression| is *true*, then
+                //        a. Let _rval_ be ? NamedEvaluation of |AssignmentExpression| with argument _lref_.[[ReferencedName]].
+                //     ...
+
+                switch (node.operatorToken.kind) {
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.AmpersandAmpersandEqualsToken:
+                    case SyntaxKind.BarBarEqualsToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
+                        if (isIdentifier(node.left) &&
+                            isAnonymousClassDeclarationNeedingAssignedName(node.right)) {
+                            const referencedName = factory.createStringLiteralFromNode(node.left);
+                            const left = visitNode(node.left, visitor, isExpression);
+                            const right = visitNode(node.right, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                            return factory.updateBinaryExpression(node, left, node.operatorToken, right);
+                        }
+                        break;
+                }
+
                 if (shouldTransformPrivateElementsOrClassStaticBlocks &&
                     isPrivateIdentifierPropertyAccessExpression(node.left)) {
                     // obj.#x = ...
@@ -1026,7 +1240,7 @@ namespace ts {
                                 setTextRange(expression, node);
                             }
 
-                            const temp = valueIsDiscarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
+                            const temp = discarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
                             if (temp) {
                                 expression = factory.createAssignment(temp, expression);
                                 setTextRange(temp, node);
@@ -1057,6 +1271,58 @@ namespace ts {
                 return transformPrivateIdentifierInInExpression(node);
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        function visitCommaListExpression(node: CommaListExpression, discarded: boolean) {
+            const elements = discarded ?
+                visitCommaListElements(node.elements, discardedValueVisitor) :
+                visitCommaListElements(node.elements, visitor, discardedValueVisitor);
+            return factory.updateCommaListExpression(node, elements);
+        }
+
+        function visitParenthesizedExpression(node: ParenthesizedExpression, discarded: boolean, referencedName: Expression | undefined) {
+            // 8.4.5 RS: NamedEvaluation
+            //   ParenthesizedExpression : `(` Expression `)`
+            //     ...
+            //     2. Return ? NamedEvaluation of |Expression| with argument _name_.
+
+            const visitorFunc: Visitor =
+                discarded ? discardedValueVisitor :
+                referencedName ? node => namedEvaluationVisitor(node, referencedName) :
+                visitor;
+            const expression = visitNode(node.expression, visitorFunc, isExpression);
+            return factory.updateParenthesizedExpression(node, expression);
+        }
+
+        function visitPartiallyEmittedExpression(node: PartiallyEmittedExpression, discarded: boolean, referencedName: Expression | undefined) {
+            // Emulates 8.4.5 RS: NamedEvaluation
+
+            const visitorFunc: Visitor =
+                discarded ? discardedValueVisitor :
+                referencedName ? node => namedEvaluationVisitor(node, referencedName) :
+                visitor;
+            const expression = visitNode(node.expression, visitorFunc, isExpression);
+            return factory.updatePartiallyEmittedExpression(node, expression);
+        }
+
+        function visitReferencedPropertyName(node: PropertyName) {
+            if (isPropertyNameLiteral(node) || isPrivateIdentifier(node)) {
+                const referencedName = factory.createStringLiteralFromNode(node);
+                const name = visitNode(node, visitor, isPropertyName);
+                return { referencedName, name };
+            }
+
+            if (isPropertyNameLiteral(node.expression) && !isIdentifier(node.expression)) {
+                const referencedName = factory.createStringLiteralFromNode(node.expression);
+                const name = visitNode(node, visitor, isPropertyName);
+                return { referencedName, name };
+            }
+
+            const referencedName = factory.createTempVariable(hoistVariableDeclaration);
+            const key = emitHelpers().createPropKeyHelper(visitNode(node.expression, visitor, isExpression));
+            const assignment = factory.createAssignment(referencedName, key);
+            const name = factory.updateComputedPropertyName(node, injectPendingExpressions(assignment));
+            return { referencedName, name };
         }
 
         function createPrivateIdentifierAssignment(info: PrivateIdentifierInfo, receiver: Expression, right: Expression, operator: AssignmentOperator): Expression {
@@ -1154,7 +1420,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitInNewClassLexicalEnvironment<T extends ClassLikeDeclaration, U>(node: T, visitor: (node: T, facts: ClassFacts) => U) {
+        function visitInNewClassLexicalEnvironment<T extends ClassLikeDeclaration, U>(node: T, referencedName: Expression | undefined, visitor: (node: T, facts: ClassFacts, referencedName: Expression | undefined) => U) {
             const savedCurrentClassContainer = currentClassContainer;
             const savedPendingExpressions = pendingExpressions;
             currentClassContainer = node;
@@ -1185,7 +1451,7 @@ namespace ts {
                 enableSubstitutionForClassStaticThisOrSuperReference();
             }
 
-            const result = visitor(node, facts);
+            const result = visitor(node, facts, referencedName);
             endClassLexicalEnvironment();
             currentClassContainer = savedCurrentClassContainer;
             pendingExpressions = savedPendingExpressions;
@@ -1194,7 +1460,7 @@ namespace ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration) {
-            return visitInNewClassLexicalEnvironment(node, visitClassDeclarationInNewClassLexicalEnvironment);
+            return visitInNewClassLexicalEnvironment(node, /*referencedName*/ undefined, visitClassDeclarationInNewClassLexicalEnvironment);
         }
 
         function visitClassDeclarationInNewClassLexicalEnvironment(node: ClassDeclaration, facts: ClassFacts) {
@@ -1251,11 +1517,11 @@ namespace ts {
             return statements;
         }
 
-        function visitClassExpression(node: ClassExpression): Expression {
-            return visitInNewClassLexicalEnvironment(node, visitClassExpressionInNewClassLexicalEnvironment);
+        function visitClassExpression(node: ClassExpression, referencedName: Expression | undefined): Expression {
+            return visitInNewClassLexicalEnvironment(node, referencedName, visitClassExpressionInNewClassLexicalEnvironment);
         }
 
-        function visitClassExpressionInNewClassLexicalEnvironment(node: ClassExpression, facts: ClassFacts): Expression {
+        function visitClassExpressionInNewClassLexicalEnvironment(node: ClassExpression, facts: ClassFacts, referencedName: Expression | undefined): Expression {
             // If this class expression is a transformation of a decorated class declaration,
             // then we want to output the pendingExpressions as statements, not as inlined
             // expressions with the class statement.
@@ -1307,7 +1573,7 @@ namespace ts {
                     isPrivateIdentifierClassElementDeclaration(node) ||
                     shouldTransformInitializers && isInitializedProperty(node));
 
-            if (hasTransformableStatics || some(pendingExpressions)) {
+            if (hasTransformableStatics || some(pendingExpressions) || referencedName) {
                 if (isDecoratedClassDeclaration) {
                     Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
@@ -1320,10 +1586,16 @@ namespace ts {
                         addPropertyOrClassStaticBlockStatements(pendingStatements, staticPropertiesOrClassStaticBlocks, factory.getInternalName(node));
                     }
 
+                    if (referencedName) {
+                        temp ??= createClassTempVar();
+                    }
+
                     if (temp) {
-                        expressions.push(
-                            startOnNewLine(factory.createAssignment(temp, classExpression)),
-                            startOnNewLine(temp));
+                        expressions.push(startOnNewLine(factory.createAssignment(temp, classExpression)));
+                        if (referencedName) {
+                            expressions.push(emitHelpers().createSetFunctionNameHelper(temp, referencedName));
+                        }
+                        expressions.push(startOnNewLine(temp));
                     }
                     else {
                         expressions.push(classExpression);
@@ -1346,8 +1618,12 @@ namespace ts {
                     // the body of a class with static initializers.
                     setEmitFlags(classExpression, EmitFlags.Indented | getEmitFlags(classExpression));
                     expressions.push(startOnNewLine(factory.createAssignment(temp, classExpression)));
+
                     // Add any pending expressions leftover from elided or relocated computed property names
                     addRange(expressions, map(pendingExpressions, startOnNewLine));
+                    if (referencedName) {
+                        expressions.push(startOnNewLine(emitHelpers().createSetFunctionNameHelper(temp, referencedName)));
+                    }
                     addRange(expressions, generateInitializedPropertyExpressionsOrClassStaticBlock(staticPropertiesOrClassStaticBlocks, temp));
                     expressions.push(startOnNewLine(temp));
                 }
@@ -1737,6 +2013,19 @@ namespace ts {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const emitAssignment = !useDefineForClassFields;
 
+            let referencedName: Expression | undefined;
+            if (!!property.initializer && isAnonymousClassDeclarationNeedingAssignedName(property.initializer)) {
+                if (isPropertyNameLiteral(property.name) || isPrivateIdentifier(property.name)) {
+                    referencedName = factory.createStringLiteralFromNode(property.name);
+                }
+                else if (isPropertyNameLiteral(property.name.expression) && !isIdentifier(property.name.expression)) {
+                    referencedName = factory.createStringLiteralFromNode(property.name.expression);
+                }
+                else {
+                    referencedName = factory.getGeneratedNameForNode(property.name);
+                }
+            }
+
             const propertyName =
                 hasAccessorModifier(property) ?
                     factory.getGeneratedPrivateNameForNode(property.name) :
@@ -1748,6 +2037,10 @@ namespace ts {
                 currentStaticPropertyDeclarationOrStaticBlock = property;
             }
 
+            const initializerVisitor: Visitor =
+                referencedName ? child => namedEvaluationVisitor(child, referencedName!) :
+                visitor;
+
             if (shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifier(propertyName)) {
                 const privateIdentifierInfo = accessPrivateIdentifier(propertyName);
                 if (privateIdentifierInfo) {
@@ -1755,14 +2048,14 @@ namespace ts {
                         if (!privateIdentifierInfo.isStatic) {
                             return createPrivateInstanceFieldInitializer(
                                 receiver,
-                                visitNode(property.initializer, visitor, isExpression),
+                                visitNode(property.initializer, initializerVisitor, isExpression),
                                 privateIdentifierInfo.brandCheckIdentifier
                             );
                         }
                         else {
                             return createPrivateStaticFieldInitializer(
                                 privateIdentifierInfo.variableName,
-                                visitNode(property.initializer, visitor, isExpression)
+                                visitNode(property.initializer, initializerVisitor, isExpression)
                             );
                         }
                     }
@@ -1783,7 +2076,7 @@ namespace ts {
                 return undefined;
             }
 
-            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) ?? factory.createVoidZero()
+            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, initializerVisitor, isExpression) ?? factory.createVoidZero()
                 : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
                 : factory.createVoidZero();
 
@@ -2008,9 +2301,9 @@ namespace ts {
          * value of the result or the expression itself if the value is either unused or safe to inline into multiple locations
          * @param shouldHoist Does the expression need to be reused? (ie, for an initializer or a decorator)
          */
-        function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean): Expression | undefined {
+        function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, captureReferencedName: boolean): Expression | undefined {
             if (isComputedPropertyName(name)) {
-                const expression = visitNode(name.expression, visitor, isExpression);
+                let expression = visitNode(name.expression, visitor, isExpression);
                 const innerExpression = skipPartiallyEmittedExpressions(expression);
                 const inlinable = isSimpleInlineableExpression(innerExpression);
                 const alreadyTransformed = isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);
@@ -2021,6 +2314,9 @@ namespace ts {
                     }
                     else {
                         hoistVariableDeclaration(generatedName);
+                    }
+                    if (captureReferencedName) {
+                        expression = emitHelpers().createPropKeyHelper(expression);
                     }
                     return factory.createAssignment(generatedName, expression);
                 }
@@ -2351,115 +2647,149 @@ namespace ts {
             );
         }
 
-        function visitArrayAssignmentTarget(node: BindingOrAssignmentElement) {
-            const target = getTargetOfBindingOrAssignmentElement(node);
-            if (target) {
-                let wrapped: LeftHandSideExpression | undefined;
-                if (isPrivateIdentifierPropertyAccessExpression(target)) {
-                    wrapped = wrapPrivateIdentifierForDestructuringTarget(target);
+        function visitDestructuringAssignmentTarget(node: LeftHandSideExpression): Expression {
+            if (isObjectLiteralExpression(node) || isArrayLiteralExpression(node)) {
+                return visitAssignmentPattern(node);
+            }
+
+            if (isPrivateIdentifierPropertyAccessExpression(node)) {
+                return wrapPrivateIdentifierForDestructuringTarget(node);
+            }
+            else if (shouldTransformSuperInStaticInitializers &&
+                isSuperProperty(node) &&
+                currentStaticPropertyDeclarationOrStaticBlock &&
+                currentClassLexicalEnvironment) {
+                const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
+                if (facts & ClassFacts.ClassWasDecorated) {
+                    return visitInvalidSuperProperty(node);
                 }
-                else if (shouldTransformSuperInStaticInitializers &&
-                    isSuperProperty(target) &&
-                    currentStaticPropertyDeclarationOrStaticBlock &&
-                    currentClassLexicalEnvironment) {
-                    const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
-                    if (facts & ClassFacts.ClassWasDecorated) {
-                        wrapped = visitInvalidSuperProperty(target);
-                    }
-                    else if (classConstructor && superClassReference) {
-                        const name =
-                            isElementAccessExpression(target) ? visitNode(target.argumentExpression, visitor, isExpression) :
-                            isIdentifier(target.name) ? factory.createStringLiteralFromNode(target.name) :
-                            undefined;
-                        if (name) {
-                            const temp = factory.createTempVariable(/*recordTempVariable*/ undefined);
-                            wrapped = factory.createAssignmentTargetWrapper(
+                else if (classConstructor && superClassReference) {
+                    const name =
+                        isElementAccessExpression(node) ? visitNode(node.argumentExpression, visitor, isExpression) :
+                        isIdentifier(node.name) ? factory.createStringLiteralFromNode(node.name) :
+                        undefined;
+                    if (name) {
+                        const temp = factory.createTempVariable(/*recordTempVariable*/ undefined);
+                        return factory.createAssignmentTargetWrapper(
+                            temp,
+                            factory.createReflectSetCall(
+                                superClassReference,
+                                name,
                                 temp,
-                                factory.createReflectSetCall(
-                                    superClassReference,
-                                    name,
-                                    temp,
-                                    classConstructor,
-                                )
-                            );
-                        }
-                    }
-                }
-                if (wrapped) {
-                    if (isAssignmentExpression(node)) {
-                        return factory.updateBinaryExpression(
-                            node,
-                            wrapped,
-                            node.operatorToken,
-                            visitNode(node.right, visitor, isExpression)
+                                classConstructor,
+                            )
                         );
                     }
-                    else if (isSpreadElement(node)) {
-                        return factory.updateSpreadElement(node, wrapped);
-                    }
-                    else {
-                        return wrapped;
-                    }
                 }
             }
-            return visitNode(node, assignmentTargetVisitor);
+            return visitEachChild(node, visitor, context);
         }
 
-        function visitObjectAssignmentTarget(node: ObjectLiteralElementLike) {
-            if (isObjectBindingOrAssignmentElement(node) && !isShorthandPropertyAssignment(node)) {
-                const target = getTargetOfBindingOrAssignmentElement(node);
-                let wrapped: LeftHandSideExpression | undefined;
-                if (target) {
-                    if (isPrivateIdentifierPropertyAccessExpression(target)) {
-                        wrapped = wrapPrivateIdentifierForDestructuringTarget(target);
-                    }
-                    else if (shouldTransformSuperInStaticInitializers &&
-                        isSuperProperty(target) &&
-                        currentStaticPropertyDeclarationOrStaticBlock &&
-                        currentClassLexicalEnvironment) {
-                        const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
-                        if (facts & ClassFacts.ClassWasDecorated) {
-                            wrapped = visitInvalidSuperProperty(target);
-                        }
-                        else if (classConstructor && superClassReference) {
-                            const name =
-                                isElementAccessExpression(target) ? visitNode(target.argumentExpression, visitor, isExpression) :
-                                isIdentifier(target.name) ? factory.createStringLiteralFromNode(target.name) :
-                                undefined;
-                            if (name) {
-                                const temp = factory.createTempVariable(/*recordTempVariable*/ undefined);
-                                wrapped = factory.createAssignmentTargetWrapper(
-                                    temp,
-                                    factory.createReflectSetCall(
-                                        superClassReference,
-                                        name,
-                                        temp,
-                                        classConstructor,
-                                    )
-                                );
-                            }
-                        }
-                    }
+        function visitAssignmentElement(node: Exclude<ArrayAssignmentElement, SpreadElement | OmittedExpression>) {
+            // 13.15.5.5 RS: IteratorDestructuringAssignmentEvaluation
+            //   AssignmentElement : DestructuringAssignmentTarget Initializer?
+            //     ...
+            //     4. If |Initializer| is present and _value_ is *undefined*, then
+            //        a. If IsAnonymousFunctionDefinition(|Initializer|) and IsIdentifierRef of |DestructuringAssignmentTarget| are both *true*, then
+            //           i. Let _v_ be ? NamedEvaluation of |Initializer| with argument _lref_.[[ReferencedName]].
+            //     ...
+
+            if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
+                const assignmentTarget = visitDestructuringAssignmentTarget(node.left);
+                let initializer: Expression;
+                if (isIdentifier(node.left) &&
+                    isAnonymousClassDeclarationNeedingAssignedName(node.right)) {
+                    const referencedName = factory.createStringLiteralFromNode(node.left);
+                    initializer = visitNode(node.right, node => namedEvaluationVisitor(node, referencedName), isExpression);
                 }
-                if (isPropertyAssignment(node)) {
-                    const initializer = getInitializerOfBindingOrAssignmentElement(node);
-                    return factory.updatePropertyAssignment(
-                        node,
-                        visitNode(node.name, visitor, isPropertyName),
-                        wrapped ?
-                            initializer ? factory.createAssignment(wrapped, visitNode(initializer, visitor)) : wrapped :
-                            visitNode(node.initializer, assignmentTargetVisitor, isExpression)
-                    );
+                else {
+                    initializer = visitNode(node.right, visitor, isExpression);
                 }
-                if (isSpreadAssignment(node)) {
-                    return factory.updateSpreadAssignment(
-                        node,
-                        wrapped || visitNode(node.expression, assignmentTargetVisitor, isExpression)
-                    );
-                }
-                Debug.assert(wrapped === undefined, "Should not have generated a wrapped target");
+                return factory.updateBinaryExpression(node, assignmentTarget, node.operatorToken, initializer);
             }
-            return visitNode(node, visitor);
+            else {
+                return visitDestructuringAssignmentTarget(node);
+            }
+        }
+
+        function visitAssignmentRestElement(node: SpreadElement) {
+            if (isLeftHandSideExpression(node.expression)) {
+                const expression = visitDestructuringAssignmentTarget(node.expression);
+                return factory.updateSpreadElement(node, expression);
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitArrayAssignmentElement(node: ArrayAssignmentElement) {
+            if (isSpreadElement(node)) return visitAssignmentRestElement(node);
+            if (!isOmittedExpression(node)) return visitAssignmentElement(node);
+            return visitEachChild(node, visitor, context);
+
+        }
+
+        function visitAssignmentProperty(node: PropertyAssignment) {
+            // AssignmentProperty : PropertyName `:` AssignmentElement
+            // AssignmentElement : DestructuringAssignmentTarget Initializer?
+
+            // 13.15.5.6 RS: KeyedDestructuringAssignmentEvaluation
+            //   AssignmentElement : DestructuringAssignmentTarget Initializer?
+            //     ...
+            //     3. If |Initializer| is present and _v_ is *undefined*, then
+            //        a. If IsAnonymousfunctionDefinition(|Initializer|) and IsIdentifierRef of |DestructuringAssignmentTarget| are both *true*, then
+            //           i. Let _rhsValue_ be ? NamedEvaluation of |Initializer| with argument _lref_.[[ReferencedName]].
+            //     ...
+
+            const name = visitNode(node.name, visitor, isPropertyName);
+            if (isAssignmentExpression(node.initializer, /*excludeCompoundAssignment*/ true)) {
+                const assignmentElement = visitAssignmentElement(node.initializer);
+                return factory.updatePropertyAssignment(node, name, assignmentElement);
+            }
+
+            if (isLeftHandSideExpression(node.initializer)) {
+                const assignmentElement = visitDestructuringAssignmentTarget(node.initializer);
+                return factory.updatePropertyAssignment(node, name, assignmentElement);
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitShorthandAssignmentProperty(node: ShorthandPropertyAssignment) {
+            // AssignmentProperty : IdentifierReference Initializer?
+
+            // 13.15.5.3 RS: PropertyDestructuringAssignmentEvaluation
+            //   AssignmentProperty : IdentifierReference Initializer?
+            //     ...
+            //     4. If |Initializer?| is present and _v_ is *undefined*, then
+            //        a. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+            //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _P_.
+            //     ...
+
+            if (node.objectAssignmentInitializer &&
+                isAnonymousClassDeclarationNeedingAssignedName(node.objectAssignmentInitializer)) {
+                const name = visitNode(node.name, visitor, isIdentifier);
+                const referencedName = factory.createStringLiteralFromNode(node.name);
+                const objectAssignmentInitializer = visitNode(node.objectAssignmentInitializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
+                return factory.updateShorthandPropertyAssignment(node, name, objectAssignmentInitializer);
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitAssignmentRestProperty(node: SpreadAssignment) {
+            if (isLeftHandSideExpression(node.expression)) {
+                const expression = visitDestructuringAssignmentTarget(node.expression);
+                return factory.updateSpreadAssignment(node, expression);
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitObjectAssignmentElement(node: ObjectAssignmentElement) {
+            if (isSpreadAssignment(node)) return visitAssignmentRestProperty(node);
+            if (isShorthandPropertyAssignment(node)) return visitShorthandAssignmentProperty(node);
+            if (isPropertyAssignment(node)) return visitAssignmentProperty(node);
+            return visitEachChild(node, visitor, context);
         }
 
         function visitAssignmentPattern(node: AssignmentPattern) {
@@ -2474,7 +2804,7 @@ namespace ts {
                 // [ { set value(x) { this.#myProp = x; } }.value ] = [ "hello" ];
                 return factory.updateArrayLiteralExpression(
                     node,
-                    visitNodes(node.elements, visitArrayAssignmentTarget, isExpression)
+                    visitNodes(node.elements, visitArrayAssignmentElement, isExpression)
                 );
             }
             else {
@@ -2488,7 +2818,7 @@ namespace ts {
                 // ({ stringProperty: { set value(x) { this.#myProp = x; } }.value }) = { stringProperty: "hello" };
                 return factory.updateObjectLiteralExpression(
                     node,
-                    visitNodes(node.properties, visitObjectAssignmentTarget, isObjectLiteralElementLike)
+                    visitNodes(node.properties, visitObjectAssignmentElement, isObjectLiteralElementLike)
                 );
             }
         }

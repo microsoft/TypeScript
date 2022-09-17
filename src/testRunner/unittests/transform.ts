@@ -328,6 +328,7 @@ namespace ts {
                 },
                 compilerOptions: {
                     target: ScriptTarget.ES5,
+                    experimentalDecorators: true,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
@@ -639,6 +640,7 @@ class MyClass {
                 },
                 compilerOptions: {
                     target: ScriptTarget.ES2015,
+                    experimentalDecorators: true,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
@@ -654,6 +656,7 @@ const MyClass = class {
                 },
                 compilerOptions: {
                     target: ScriptTarget.ES2015,
+                    experimentalDecorators: true,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;

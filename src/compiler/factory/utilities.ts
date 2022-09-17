@@ -411,9 +411,12 @@ namespace ts {
             && isUseStrictPrologue(firstStatement);
     }
 
+    export function isCommaExpression(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken> } {
+        return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken;
+    }
+
     export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
-        return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken ||
-            node.kind === SyntaxKind.CommaListExpression;
+        return isCommaExpression(node) || isCommaListExpression(node);
     }
 
     export function isJSDocTypeAssertion(node: Node): node is JSDocTypeAssertion {
@@ -437,6 +440,7 @@ namespace ts {
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
+            case SyntaxKind.ExpressionWithTypeArguments:
             case SyntaxKind.SatisfiesExpression:
                 return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
             case SyntaxKind.NonNullExpression:
@@ -1335,7 +1339,6 @@ namespace ts {
         return `${privateName ? "#" : ""}${prefix}${baseName}${suffix}`;
     }
 
-
     /**
      * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
      */
@@ -1394,5 +1397,27 @@ namespace ts {
                 )
             ])
         );
+    }
+
+    export function findComputedPropertyNameCacheVariable(name: ComputedPropertyName) {
+        let node = name.expression;
+        while (true) {
+            node = skipOuterExpressions(node);
+            if (isCommaListExpression(node)) {
+                node = last(node.elements);
+                continue;
+            }
+
+            if (isCommaExpression(node)) {
+                node = node.right;
+                continue;
+            }
+
+            if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) && isGeneratedIdentifier(node.left)) {
+                return node.left;
+            }
+
+            break;
+        }
     }
 }
