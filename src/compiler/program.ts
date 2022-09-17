@@ -2523,7 +2523,7 @@ namespace ts {
             return result;
         }
 
-        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): readonly DiagnosticWithLocation[] {
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
             return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
 

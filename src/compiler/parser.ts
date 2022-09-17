@@ -14,11 +14,11 @@ namespace ts {
         Reparse
     }
 
-    let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Node;
+    let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => Node;
+    let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => Node;
 
     /**
      * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
@@ -1030,9 +1030,9 @@ namespace ts {
         // tslint:disable variable-name
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-        let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-        let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-        let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
+        let PrivateIdentifierConstructor: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
+        let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
         // tslint:enable variable-name
 
         function countNode(node: Node) {
@@ -2150,9 +2150,9 @@ namespace ts {
 
         function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: false, diagnosticMessage?: DiagnosticMessage, arg0?: any): T;
         function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T;
-        function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): T {
+        function createMissingNode<T extends Node>(kind: T["kind"], reportAtCurrentPosition: boolean, diagnosticMessage?: DiagnosticMessage, arg0?: any): T {
             if (reportAtCurrentPosition) {
-                parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
+                parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage!, arg0);
             }
             else if (diagnosticMessage) {
                 parseErrorAtCurrentToken(diagnosticMessage, arg0);
@@ -8364,7 +8364,7 @@ namespace ts {
                         case "override":
                             tag = parseSimpleTag(start, factory.createJSDocOverrideTag, tagName, margin, indentText);
                             break;
-                        case "deprecated":
+                        case "deprecated":  
                             hasDeprecatedTag = true;
                             tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
                             break;

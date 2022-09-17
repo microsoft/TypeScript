@@ -212,8 +212,8 @@ namespace ts {
 
     export function hasChangesInResolutions<T>(
         names: readonly string[] | readonly FileReference[],
-        newResolutions: readonly T[],
-        oldResolutions: ModeAwareCache<T> | undefined,
+        newResolutions: readonly (T | undefined)[],
+        oldResolutions: ModeAwareCache<T | undefined> | undefined,
         oldSourceFile: SourceFile | undefined,
         comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         Debug.assert(names.length === newResolutions.length);
@@ -5954,11 +5954,11 @@ namespace ts {
     }
 
     export interface ObjectAllocator {
-        getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
-        getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
-        getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos?: number, end?: number) => PrivateIdentifier;
-        getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
+        getNodeConstructor(): new (kind: SyntaxKind, pos: number, end: number) => Node;
+        getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos: number, end: number) => Token<TKind>;
+        getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
+        getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
+        getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker, flags: SignatureFlags) => Signature;
