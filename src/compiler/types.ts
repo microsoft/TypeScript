@@ -8372,8 +8372,8 @@ namespace ts {
          * @param statementOffset The offset at which to begin the copy.
          * @param visitor Optional callback used to visit any custom prologue directives.
          */
-        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number;
-        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number | undefined;
+        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number;
+        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number | undefined;
         /* @internal */ ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement>;
         /* @internal */ liftToBlock(nodes: readonly Node[]): Statement;
         /**

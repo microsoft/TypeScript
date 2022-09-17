@@ -145,7 +145,7 @@ namespace ts {
         loopOutParameters: LoopOutParameter[];
     }
 
-    type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
+    type LoopConverter<T extends IterationStatement> = (node: T, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
 
     // Facts we track as we traverse the tree
     const enum HierarchyFacts {
@@ -2369,7 +2369,7 @@ namespace ts {
             }
         }
 
-        function visitIterationStatementWithFacts(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter) {
+        function visitIterationStatementWithFacts<T extends IterationStatement>(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: T, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter<T>) {
             const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
             const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, ancestorFacts, convert);
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
@@ -2419,7 +2419,7 @@ namespace ts {
                 compilerOptions.downlevelIteration ? convertForOfStatementForIterable : convertForOfStatementForArray);
         }
 
-        function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[]) {
+        function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, convertedLoopBodyStatements: Statement[] | undefined) {
             const statements: Statement[] = [];
             const initializer = node.initializer;
             if (isVariableDeclarationList(initializer)) {
@@ -2518,7 +2518,7 @@ namespace ts {
             );
         }
 
-        function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[]): Statement {
+        function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined): Statement {
             // The following ES6 code:
             //
             //    for (let v of expr) { }
@@ -2588,7 +2588,7 @@ namespace ts {
             return factory.restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
-        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement, convertedLoopBodyStatements: Statement[], ancestorFacts: HierarchyFacts): Statement {
+        function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts): Statement {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
@@ -2816,7 +2816,7 @@ namespace ts {
             }
         }
 
-        function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter): VisitResult<Statement> {
+        function convertIterationStatementBodyIfNecessary<T extends IterationStatement>(node: T, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter<T>): VisitResult<Statement> {
             if (!shouldConvertIterationStatement(node)) {
                 let saveAllowedNonLabeledJumps: Jump | undefined;
                 if (convertedLoopState) {
@@ -4075,7 +4075,8 @@ namespace ts {
             return map(chunk, visitExpressionOfSpread);
         }
 
-        function visitExpressionOfSpread(node: SpreadElement): SpreadSegment {
+        function visitExpressionOfSpread(node: Expression): SpreadSegment {
+            Debug.assertNode(node, isSpreadElement);
             let expression = visitNode(node.expression, visitor, isExpression);
 
             // We don't need to pack already packed array literals, or existing calls to the `__read` helper.
