@@ -1068,7 +1068,7 @@ namespace ts {
 
         function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
+                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
             if (!some(parametersWithPropertyAssignments)) {
                 return visitFunctionBody(body, visitor, context);
             }
