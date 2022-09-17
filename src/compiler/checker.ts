@@ -27723,7 +27723,7 @@ namespace ts {
                     (left, right) =>
                         left === right || !left ? left
                         : compareTypeParametersIdentical(left.typeParameters, right.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right)
-                        : undefined)
+                        : undefined!) // TODO(jakebailey): This is suspect. Can't pass initialValue as reduceLeft checks argument length.
                 : undefined;
         }
 
