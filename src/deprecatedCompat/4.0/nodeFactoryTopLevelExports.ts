@@ -30,7 +30,7 @@ namespace ts {
     export const createLoopVariable = Debug.deprecate(factory.createLoopVariable, factoryDeprecation);
 
     /** @deprecated Use `factory.createUniqueName` or the factory supplied by your transformation context instead. */
-    export const createUniqueName = Debug.deprecate(factory.createUniqueName, factoryDeprecation);
+    export const createUniqueName: (text: string, flags?: GeneratedIdentifierFlags | undefined) => Identifier = Debug.deprecate(factory.createUniqueName, factoryDeprecation);
 
     /** @deprecated Use `factory.createPrivateIdentifier` or the factory supplied by your transformation context instead. */
     export const createPrivateIdentifier = Debug.deprecate(factory.createPrivateIdentifier, factoryDeprecation);

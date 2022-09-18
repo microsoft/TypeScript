@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(14,9): error TS2367: This condition will always return 'true' since the types 'E1' and '0' have no overlap.
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(23,9): error TS2367: This condition will always return 'true' since the types 'E1' and '3' have no overlap.
+tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(14,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '0' have no overlap.
+tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(23,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '3' have no overlap.
 
 
 ==== tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts (2 errors) ====
@@ -18,7 +18,7 @@ tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes
     function f1(v: E1) {
         if (v !== 0) {  // Error
             ~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'E1' and '0' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'E1' and '0' have no overlap.
             v;
         }
         if (v !== 1) {
@@ -29,7 +29,7 @@ tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes
         }
         if (v !== 3) {  // Error
             ~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'E1' and '3' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'E1' and '3' have no overlap.
             v;
         }
     }

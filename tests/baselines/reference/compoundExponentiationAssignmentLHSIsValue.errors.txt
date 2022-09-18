@@ -8,7 +8,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(30,1): error TS2628: Cannot assign to 'E' because it is an enum.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(32,1): error TS2630: Cannot assign to 'foo' because it is a function.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(35,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(35,1): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(35,1): error TS18050: The value 'null' cannot be used here.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(36,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(37,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(38,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
@@ -96,7 +96,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     ~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     true **= value;
     ~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
