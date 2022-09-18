@@ -2916,7 +2916,7 @@ interface ServiceWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "notificationclick": NotificationEvent;
     "notificationclose": NotificationEvent;
     "push": PushEvent;
-    "pushsubscriptionchange":PushSubscriptionChangeEvent;
+    "pushsubscriptionchange": PushSubscriptionChangeEvent;
 }
 
 /** This ServiceWorker API interface represents the global execution context of a service worker. */
