@@ -1638,7 +1638,7 @@ namespace ts {
                 return true;
             }
 
-            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || usageInTypeDeclaration()) {
+            if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInTypeDeclaration(usage)) {
                 return true;
             }
             if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
@@ -1652,10 +1652,6 @@ namespace ts {
                 }
             }
             return false;
-
-            function usageInTypeDeclaration() {
-                return !!findAncestor(usage, node => isInterfaceDeclaration(node) || isTypeAliasDeclaration(node));
-            }
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 switch (declaration.parent.parent.kind) {
@@ -23472,6 +23468,10 @@ namespace ts {
                 n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
         }
 
+        function isInTypeDeclaration(node: Node): boolean {
+            return !!findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n) || !!(n.flags & NodeFlags.Ambient));
+        }
+
         // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
         // separated by dots). The key consists of the id of the symbol referenced by the
         // leftmost identifier followed by zero or more property names separated by dots.
@@ -26130,7 +26130,7 @@ namespace ts {
             // declaration container are the same).
             const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isBindingElement(declaration) ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
-                isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
+                isInTypeQuery(node) || isInTypeDeclaration(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
