@@ -328,7 +328,7 @@ namespace ts {
                     && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !isComputedPropertyName(propertyName)) {
-                    bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor));
+                    bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor, isBindingOrAssignmentElement));
                 }
                 else {
                     if (bindingElements) {

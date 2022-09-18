@@ -2195,6 +2195,8 @@ namespace ts {
                     ? visitVariableDeclarationInLetDeclarationList
                     : visitVariableDeclaration);
 
+                Debug.assertEachNode(declarations, isVariableDeclaration); // TODO(jakebailey): side effect of VisitResult.
+
                 const declarationList = factory.createVariableDeclarationList(declarations);
                 setOriginalNode(declarationList, node);
                 setTextRange(declarationList, node);

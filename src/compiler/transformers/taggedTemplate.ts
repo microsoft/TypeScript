@@ -8,7 +8,7 @@ namespace ts {
     export function processTaggedTemplateExpression(
         context: TransformationContext,
         node: TaggedTemplateExpression,
-        visitor: Visitor,
+        visitor: Visitor<Node>,
         currentSourceFile: SourceFile,
         recordTaggedTemplateString: (temp: Identifier) => void,
         level: ProcessLevel) {

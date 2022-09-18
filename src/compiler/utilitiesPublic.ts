@@ -1491,6 +1491,13 @@ namespace ts {
         return false;
     }
 
+    export function isBindingOrAssignmentElement(node: Node): node is BindingOrAssignmentElement {
+        return isVariableDeclaration(node)
+            || isParameter(node)
+            || isObjectBindingOrAssignmentElement(node)
+            || isArrayBindingOrAssignmentElement(node);
+    }
+
     /**
      * Determines whether a node is a BindingOrAssignmentPattern
      */
@@ -1669,6 +1676,22 @@ namespace ts {
                     (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
             default:
                 return false;
+        }
+    }
+
+    /**
+     * See isExpression; not for use in transforms.
+     * @internal
+     */
+    export function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
+        node = skipPartiallyEmittedExpressions(node);
+        switch (skipPartiallyEmittedExpressions(node).kind) {
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.PrefixUnaryExpression:
+                return true;
+            default:
+                return isLiteralExpression(node);
         }
     }
 

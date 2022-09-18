@@ -2473,7 +2473,7 @@ namespace ts {
                 // [ { set value(x) { this.#myProp = x; } }.value ] = [ "hello" ];
                 return factory.updateArrayLiteralExpression(
                     node,
-                    visitNodes(node.elements , visitArrayAssignmentTarget, isExpression)
+                    visitNodes(node.elements as NodeArray<Extract<BindingOrAssignmentElement, Expression>>, visitArrayAssignmentTarget, isExpression) // TODO(jakebailey): the elements property's type looks to be wrong.
                 );
             }
             else {

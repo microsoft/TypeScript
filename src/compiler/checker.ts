@@ -5495,13 +5495,13 @@ namespace ts {
                         return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext, deepCloneOrReuseNodes)), node);
                     }
 
-                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
-                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
-                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined {
+                    function deepCloneOrReuseNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn>, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut>;
+                    function deepCloneOrReuseNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn> | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | undefined;
+                    function deepCloneOrReuseNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn> | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | undefined {
                         if (nodes && nodes.length === 0) {
                             // Ensure we explicitly make a copy of an empty array; visitNodes will not do this unless the array has elements,
                             // which can lead to us reusing the same empty NodeArray more than once within the same AST during type noding.
-                            return setTextRange(factory.createNodeArray<T>(/*nodes*/ undefined, nodes.hasTrailingComma), nodes);
+                            return setTextRange(factory.createNodeArray<TOut>(/*nodes*/ undefined, nodes.hasTrailingComma), nodes);
                         }
                         return visitNodes(nodes, visitor, test, start, count);
                     }
@@ -6800,13 +6800,13 @@ namespace ts {
                 }
                 let hadError = false;
                 const file = getSourceFileOfNode(existing);
-                const transformed = visitNode(existing, visitExistingNodeTreeSymbols);
+                const transformed = visitNode(existing, visitExistingNodeTreeSymbols, isTypeNode);
                 if (hadError) {
                     return undefined;
                 }
                 return transformed === existing ? setTextRange(factory.cloneNode(existing), existing) : transformed;
 
-                function visitExistingNodeTreeSymbols<T extends Node>(node: T): Node {
+                function visitExistingNodeTreeSymbols(node: Node): Node {
                     // We don't _actually_ support jsdoc namepath types, emit `any` instead
                     if (isJSDocAllType(node) || node.kind === SyntaxKind.JSDocNamepathType) {
                         return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -6836,7 +6836,7 @@ namespace ts {
                                 /*modifiers*/ undefined,
                                 name,
                                 t.isBracketed || t.typeExpression && isJSDocOptionalType(t.typeExpression.type) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                                overrideTypeNode || (t.typeExpression && visitNode(t.typeExpression.type, visitExistingNodeTreeSymbols)) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                                overrideTypeNode || (t.typeExpression && visitNode(t.typeExpression.type, visitExistingNodeTreeSymbols, isTypeNode)) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                             );
                         }));
                     }
@@ -6851,7 +6851,7 @@ namespace ts {
                                 /*dotdotdotToken*/ undefined,
                                 "x",
                                 /*questionToken*/ undefined,
-                                visitNode(node.typeArguments![0], visitExistingNodeTreeSymbols)
+                                visitNode(node.typeArguments![0], visitExistingNodeTreeSymbols, isTypeNode)
                             )],
                             visitNode(node.typeArguments![1], visitExistingNodeTreeSymbols)
                         )]);

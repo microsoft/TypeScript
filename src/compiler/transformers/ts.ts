@@ -333,7 +333,7 @@ namespace ts {
             }
         }
 
-        function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): (node: Node) => VisitResult<Node> {
+        function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node> {
             return node => saveStateAndInvoke(node, n => objectLiteralElementVisitorWorker(n, parent));
         }
 
@@ -589,7 +589,7 @@ namespace ts {
         function visitObjectLiteralExpression(node: ObjectLiteralExpression) {
             return factory.updateObjectLiteralExpression(
                 node,
-                visitNodes(node.properties, getObjectLiteralElementVisitor(node), isObjectLiteralElement)
+                visitNodes(node.properties, getObjectLiteralElementVisitor(node), isObjectLiteralElementLike)
             );
         }
 
@@ -1450,7 +1450,7 @@ namespace ts {
                 node,
                 visitNode(node.tag, visitor, isExpression),
                 /*typeArguments*/ undefined,
-                visitNode(node.template, visitor, isExpression));
+                visitNode(node.template, visitor, isTemplateLiteral));
         }
 
         function visitJsxSelfClosingElement(node: JsxSelfClosingElement) {

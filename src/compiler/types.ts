@@ -8537,23 +8537,27 @@ namespace ts {
      */
     export type Transformer<T extends Node> = (node: T) => T; // TODO(jakebailey): This signature is totally wrong.
 
+    // TODO(jakebailey): can we redefne NodeVisitor/NodesVisitor to not need overloads?
+    // Maybe <T extends Node | undefined> along with NonNullable<T>?
+
     /**
      * A function that accepts and possibly transforms a node.
      */
-    export type Visitor = (node: Node) => VisitResult<Node>;
+    export type Visitor<TOut extends Node, TIn extends Node = TOut> = (node: TIn) => VisitResult<TOut>;
 
     export interface NodeVisitor {
-        <T extends Node>(nodes: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
-        <T extends Node>(nodes: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
+        <TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(node: TIn, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut;
+        <TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(node: TIn | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | undefined;
     }
 
     export interface NodesVisitor {
-        <T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
-        <T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
+        <TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn>, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut>;
+        <TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn> | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | undefined;
     }
 
-    // TODO(jakebailey): This should really be <T extends Node, U extends Node = T> = T | readonly U[] | undefined.
-    export type VisitResult<T extends Node> = T | readonly T[] | undefined;
+    // Either a node, or a list of nodes to be be lifted via a lift function.
+    // TODO: 
+    export type VisitResult<T extends Node> = T | readonly Node[] | undefined;
 
     export interface Printer {
         /**

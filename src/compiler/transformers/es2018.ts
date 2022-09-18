@@ -898,7 +898,7 @@ namespace ts {
                     ? undefined
                     : node.asteriskToken,
                 visitNode(node.name, visitor, isPropertyName),
-                visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
+                visitNode(/*questionToken*/ undefined, visitor, isQuestionToken),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, parameterVisitor, context),
                 /*type*/ undefined,

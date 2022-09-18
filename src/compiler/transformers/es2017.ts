@@ -232,7 +232,7 @@ namespace ts {
         function visitForOfStatementInAsyncBody(node: ForOfStatement) {
             return factory.updateForOfStatement(
                 node,
-                visitNode(node.awaitModifier, visitor, isToken),
+                visitNode(node.awaitModifier, visitor, isAwaitKeyword),
                 isVariableDeclarationListWithCollidingName(node.initializer)
                     ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
                     : visitNode(node.initializer, visitor, isForInitializer),
@@ -336,7 +336,7 @@ namespace ts {
         function visitFunctionExpression(node: FunctionExpression): Expression {
             return factory.updateFunctionExpression(
                 node,
-                visitNodes(node.modifiers, visitor, isModifierLike),
+                visitNodes(node.modifiers, visitor, isModifier),
                 node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
@@ -359,7 +359,7 @@ namespace ts {
         function visitArrowFunction(node: ArrowFunction) {
             return factory.updateArrowFunction(
                 node,
-                visitNodes(node.modifiers, visitor, isModifierLike),
+                visitNodes(node.modifiers, visitor, isModifier),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,

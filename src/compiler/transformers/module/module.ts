@@ -469,7 +469,7 @@ namespace ts {
          */
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (currentModuleInfo.exportEquals) {
-                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, visitor);
+                const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, visitor, isExpression);
                 if (expressionResult) {
                     if (emitAsReturn) {
                         const statement = factory.createReturnStatement(expressionResult);
@@ -710,7 +710,7 @@ namespace ts {
 
         function visitImportCallExpression(node: ImportCall): Expression {
             const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
-            const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor);
+            const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
             // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
             const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
             const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
@@ -1337,7 +1337,7 @@ namespace ts {
                                 variable.name,
                                 variable.exclamationToken,
                                 variable.type,
-                                visitNode(variable.initializer, visitor)
+                                visitNode(variable.initializer, visitor, isExpression)
                             );
 
                             variables = append(variables, updatedVariable);

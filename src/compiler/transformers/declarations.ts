@@ -285,7 +285,7 @@ namespace ts {
                         if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
                             resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                             needsDeclare = false;
-                            const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
+                            const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                             const newFile = factory.updateSourceFile(sourceFile, [factory.createModuleDeclaration(
                                 [factory.createModifier(SyntaxKind.DeclareKeyword)],
                                 factory.createStringLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
@@ -294,7 +294,7 @@ namespace ts {
                             return newFile;
                         }
                         needsDeclare = true;
-                        const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
+                        const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                         return factory.updateSourceFile(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                     }
                 ), mapDefined(node.prepends, prepend => {
@@ -343,7 +343,7 @@ namespace ts {
                 emittedImports = filter(combinedStatements, isAnyImportSyntax);
             }
             else {
-                const statements = visitNodes(node.statements, visitDeclarationStatements);
+                const statements = visitNodes(node.statements, visitDeclarationStatements, isStatement);
                 combinedStatements = setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
                 refs.forEach(referenceVisitor);
                 emittedImports = filter(combinedStatements, isAnyImportSyntax);
@@ -550,10 +550,10 @@ namespace ts {
                 (resolver.isRequiredInitializedParameter(node) ||
                  resolver.isOptionalUninitializedParameterProperty(node));
             if (type && !shouldUseResolverType) {
-                return visitNode(type, visitDeclarationSubtree);
+                return visitNode(type, visitDeclarationSubtree, isTypeNode);
             }
             if (!getParseTreeNode(node)) {
-                return type ? visitNode(type, visitDeclarationSubtree) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                return type ? visitNode(type, visitDeclarationSubtree, isTypeNode) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
             if (node.kind === SyntaxKind.SetAccessor) {
                 // Set accessors with no associated type node (from it's param or get accessor return) are `any` since they are never contextually typed right now
@@ -674,7 +674,7 @@ namespace ts {
         }
 
         function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration> | undefined) {
-            return hasEffectiveModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree);
+            return hasEffectiveModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree, isTypeParameterDeclaration);
         }
 
         function isEnclosingDeclaration(node: Node) {
@@ -851,6 +851,7 @@ namespace ts {
                     const key = getOriginalNodeId(statement);
                     if (lateStatementReplacementMap.has(key)) {
                         const result = lateStatementReplacementMap.get(key);
+                        Debug.type<readonly Statement[]>(result);
                         lateStatementReplacementMap.delete(key);
                         if (result) {
                             if (isArray(result) ? some(result, needsScopeMarker) : needsScopeMarker(result)) {
@@ -1057,13 +1058,13 @@ namespace ts {
                     case SyntaxKind.ConditionalType: {
                         // We have to process conditional types in a special way because for visibility purposes we need to push a new enclosingDeclaration
                         // just for the `infer` types in the true branch. It's an implicit declaration scope that only applies to _part_ of the type.
-                        const checkType = visitNode(input.checkType, visitDeclarationSubtree);
-                        const extendsType = visitNode(input.extendsType, visitDeclarationSubtree);
+                        const checkType = visitNode(input.checkType, visitDeclarationSubtree, isTypeNode);
+                        const extendsType = visitNode(input.extendsType, visitDeclarationSubtree, isTypeNode);
                         const oldEnclosingDecl = enclosingDeclaration;
                         enclosingDeclaration = input.trueType;
-                        const trueType = visitNode(input.trueType, visitDeclarationSubtree);
+                        const trueType = visitNode(input.trueType, visitDeclarationSubtree, isTypeNode);
                         enclosingDeclaration = oldEnclosingDecl;
-                        const falseType = visitNode(input.falseType, visitDeclarationSubtree);
+                        const falseType = visitNode(input.falseType, visitDeclarationSubtree, isTypeNode);
                         return cleanup(factory.updateConditionalTypeNode(input, checkType, extendsType, trueType, falseType));
                     }
                     case SyntaxKind.FunctionType: {
@@ -1336,7 +1337,7 @@ namespace ts {
                         const oldHasScopeFix = resultHasScopeMarker;
                         resultHasScopeMarker = false;
                         needsScopeFixMarker = false;
-                        const statements = visitNodes(inner.statements, visitDeclarationStatements);
+                        const statements = visitNodes(inner.statements, visitDeclarationStatements, isStatement);
                         let lateStatements = transformAndReplaceLatePaintedStatements(statements);
                         if (input.flags & NodeFlags.Ambient) {
                             needsScopeFixMarker = false; // If it was `declare`'d everything is implicitly exported already, ignore late printed "privates"
@@ -1441,7 +1442,7 @@ namespace ts {
                             /*initializer*/ undefined
                         )
                     ] : undefined;
-                    const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree));
+                    const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree, isClassElement));
                     const members = factory.createNodeArray(memberNodes);
 
                     const extendsClause = getEffectiveBaseTypeNode(input);
@@ -1524,7 +1525,7 @@ namespace ts {
 
         function transformVariableStatement(input: VariableStatement) {
             if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
-            const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree);
+            const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree, isVariableDeclaration);
             if (!length(nodes)) return;
             return factory.updateVariableStatement(input, factory.createNodeArray(ensureModifiers(input)), factory.updateVariableDeclarationList(input.declarationList, nodes));
         }
