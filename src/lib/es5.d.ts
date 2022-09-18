@@ -940,6 +940,10 @@ interface RegExpExecArray extends Array<string> {
      * A copy of the search string.
      */
     input: string;
+    /**
+     * The first match. This will always be present because `null` will be returned if there are no matches.
+     */
+    0: string;
 }
 
 interface RegExp {

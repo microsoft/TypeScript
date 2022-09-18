@@ -1743,6 +1743,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_accessor_property_cannot_be_declared_optional_1276" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An 'accessor' property cannot be declared optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['accessor' 속성은 선택 사항으로 선언할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file_1234" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An ambient module declaration is only allowed at the top level in a file.]]></Val>
@@ -3564,7 +3573,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_constructor_may_not_be_a_generator_1360" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_constructor_may_not_be_a_generator_1368" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class constructor may not be a generator.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -4004,6 +4013,15 @@
           <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}'을(를) 매핑된 개체 형식으로 변환]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_all_const_to_let_95102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all 'const' to 'let']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 'const'를 'let'으로 변환]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10311,6 +10329,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Properties_with_the_accessor_modifier_are_only_available_when_targeting_ECMAScript_2015_and_higher_18045" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['accessor' 한정자가 있는 속성은 ECMAScript 2015 이상을 대상으로 하는 경우에만 사용할 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_cannot_have_an_initializer_because_it_is_marked_abstract_1267" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' cannot have an initializer because it is marked abstract.]]></Val>
@@ -13590,6 +13617,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_value_0_cannot_be_used_here_18050" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The value '{0}' cannot be used here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[여기서는 '{0}' 값을 사용할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer_1189" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The variable declaration of a 'for...in' statement cannot have an initializer.]]></Val>
@@ -13635,20 +13671,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'이(가) '{1}'과(와) 겹치지 않으므로 이 비교는 의도하지 않은 것 같습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value_2839" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This condition will always return '{0}' since JavaScript compares objects by reference, not value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[JavaScript는 값이 아닌 참조로 개체를 비교하므로 이 조건은 항상 '{0}'을(를) 반환합니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' 및 '{2}' 형식에 겹침이 없기 때문에 이 조건은 항상 '{0}'을(를) 반환합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14120,6 +14156,15 @@
           <Val><![CDATA[Type '{0}' does not satisfy the constraint '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 형식이 '{1}' 제약 조건을 만족하지 않습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_does_not_satisfy_the_expected_type_1_1360" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' does not satisfy the expected type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[형식 '{0}'이(가) 필요한 형식 '{1}'을(를) 충족하지 않습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14822,6 +14867,15 @@
           <Val><![CDATA[======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[======== 형식 참조 지시문 '{0}'이(가) 패키지 ID가 '{2}'인 '{1}'(으)로 확인되었습니다. 주: {3}. ========]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files_8037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type satisfaction expressions can only be used in TypeScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[형식 만족 식은 TypeScript 파일에서만 사용할 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15921,6 +15975,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_of_type_unknown_18046" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is of type 'unknown'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'은(는) 'unknown' 형식입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_null_18047" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'null'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'은(는) 'null'일 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_null_or_undefined_18049" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'null' or 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'은(는) 'null' 또는 'undefined'일 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_undefined_18048" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'은(는) 'undefined'일 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_referenced_directly_or_indirectly_in_its_own_base_expression_2506" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is referenced directly or indirectly in its own base expression.]]></Val>
@@ -16238,6 +16328,15 @@
           <Val><![CDATA['abstract' modifier can only appear on a class, method, or property declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['abstract' 한정자는 클래스, 메서드 또는 속성 선언에만 나타날 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";accessor_modifier_can_only_appear_on_a_property_declaration_1275" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['accessor' modifier can only appear on a property declaration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['accessor' 한정자는 속성 선언에만 나타날 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

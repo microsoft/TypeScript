@@ -223,39 +223,39 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 /user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -386,39 +386,39 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 /user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -482,39 +482,39 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/nrefs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/nrefs/a.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/nrefs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/nrefs:
-  {"directoryName":"/user/username/projects/transitiveReferences/nrefs"}
+  {}
 /user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -573,39 +573,39 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 /user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -664,39 +664,39 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
-/user/username/projects/transitivereferences/nrefs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/nrefs/a.d.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/nrefs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 /user/username/projects/transitivereferences/nrefs:
-  {"directoryName":"/user/username/projects/transitiveReferences/nrefs"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -747,35 +747,35 @@ Dependencies for::
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -831,33 +831,33 @@ Dependencies for::
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b/index.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
-/user/username/projects/transitivereferences/b/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -919,39 +919,39 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 /user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1013,39 +1013,39 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/a/index.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 /user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1106,39 +1106,39 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/c/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/b/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/c/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/transitivereferences/c/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
-  {"fileName":"/user/username/projects/transitiveReferences/node_modules/@types","pollingInterval":500}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"fileName":"/user/username/projects/transitiveReferences/a/tsconfig.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
-  {"directoryName":"/user/username/projects/transitiveReferences"}
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {"directoryName":"/user/username/projects/transitiveReferences/b"}
+  {}
 /user/username/projects/transitivereferences/refs:
-  {"directoryName":"/user/username/projects/transitiveReferences/refs"}
+  {}
 /user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

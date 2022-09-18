@@ -57,19 +57,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (used version)
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/solution/app/tsconfig.json:
+  {}
+/user/username/projects/solution/app/filewitherror.ts:
+  {}
+/user/username/projects/solution/app/filewithouterror.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -108,19 +108,19 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/solution/app/tsconfig.json:
+  {}
+/user/username/projects/solution/app/filewitherror.ts:
+  {}
+/user/username/projects/solution/app/filewithouterror.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

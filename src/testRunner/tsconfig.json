@@ -89,6 +89,7 @@
         "unittests/evaluation/arraySpread.ts",
         "unittests/evaluation/asyncArrow.ts",
         "unittests/evaluation/asyncGenerator.ts",
+        "unittests/evaluation/autoAccessors.ts",
         "unittests/evaluation/awaiter.ts",
         "unittests/evaluation/destructuring.ts",
         "unittests/evaluation/externalModules.ts",
