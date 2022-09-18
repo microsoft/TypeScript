@@ -41,13 +41,13 @@ namespace ts {
         }
 
         function replaceIdentifiersNamedOldNameWithNewName2(context: TransformationContext) {
-            const visitor: Visitor = (node) => {
+            const visitor: Visitor<Node> = (node) => {
                 if (isIdentifier(node) && node.text === "oldName") {
                     return factory.createIdentifier("newName");
                 }
                 return visitEachChild(node, visitor, context);
             };
-            return (node: SourceFile) => visitNode(node, visitor);
+            return (node: Node) => visitNode(node, visitor);
         }
 
         function createTaggedTemplateLiteral(): Transformer<SourceFile> {
@@ -539,6 +539,7 @@ module MyModule {
             const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true);
             const transformed = transform(createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ScriptTarget.ES3), [transformSourceFile]);
             const transformedSourceFile = transformed.transformed[0];
+            Debug.assertNode(transformedSourceFile, isSourceFile);
             transformed.dispose();
             const host = new fakes.CompilerHost(fs);
             host.getSourceFile = () => transformedSourceFile;
@@ -551,7 +552,7 @@ module MyModule {
             return host.readFile("source.js")!.toString();
 
             function transformSourceFile(context: TransformationContext) {
-                const visitor: Visitor = (node) => {
+                const visitor: Visitor<Node> = (node) => {
                     if (isMethodDeclaration(node)) {
                         return factory.updateMethodDeclaration(
                             node,

@@ -1687,7 +1687,8 @@ namespace ts {
         node = skipPartiallyEmittedExpressions(node);
         switch (skipPartiallyEmittedExpressions(node).kind) {
             case SyntaxKind.NullKeyword:
-            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.FalseKeyword:
             case SyntaxKind.PrefixUnaryExpression:
                 return true;
             default:

@@ -1136,8 +1136,8 @@ namespace ts.textChanges {
         return newNode;
     }
 
-    function assignPositionsToNodeArray(nodes: NodeArray<any>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) {
-        const visited = visitNodes(nodes, visitor, test, start, count);
+    function assignPositionsToNodeArray(nodes: NodeArray<any>, visitor: Visitor<Node>, test?: (node: Node) => boolean, start?: number, count?: number) {
+        const visited = visitNodes(nodes, visitor, test as (node: Node) => node is Node, start, count); // TODO(jakebailey): remove this once a non-guard signature is added to visitNode/visitNodes
         if (!visited) {
             return visited;
         }

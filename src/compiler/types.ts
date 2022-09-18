@@ -4506,11 +4506,11 @@ namespace ts {
 
     export interface CustomTransformers {
         /** Custom transformers to evaluate before built-in .js transformations. */
-        before?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
+        before?: (TransformerFactory<Node> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .js transformations. */
-        after?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
+        after?: (TransformerFactory<Node> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .d.ts transformations. */
-        afterDeclarations?: (TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory)[];
+        afterDeclarations?: (TransformerFactory<Node> | CustomTransformerFactory)[];
     }
 
     /*@internal*/
@@ -8530,12 +8530,12 @@ namespace ts {
      * A function that is used to initialize and return a `Transformer` callback, which in turn
      * will be used to transform one or more nodes.
      */
-    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
+    export type TransformerFactory<T extends Node, U extends Node = T> = (context: TransformationContext) => Transformer<T, U>;
 
     /**
      * A function that transforms a node.
      */
-    export type Transformer<T extends Node> = (node: T) => T; // TODO(jakebailey): This signature is totally wrong.
+    export type Transformer<T extends Node, U extends Node = T> = (node: T) => U; // TODO(jakebailey): This signature was totally wrong.  Is it right now?
 
     // TODO(jakebailey): can we redefne NodeVisitor/NodesVisitor to not need overloads?
     // Maybe <T extends Node | undefined> along with NonNullable<T>?

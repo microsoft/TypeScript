@@ -5833,6 +5833,7 @@ namespace ts {
             || kind === SyntaxKind.VoidKeyword
             || kind === SyntaxKind.UndefinedKeyword
             || kind === SyntaxKind.NeverKeyword
+            || kind === SyntaxKind.IntrinsicKeyword
             || kind === SyntaxKind.ExpressionWithTypeArguments
             || kind === SyntaxKind.JSDocAllType
             || kind === SyntaxKind.JSDocUnknownType

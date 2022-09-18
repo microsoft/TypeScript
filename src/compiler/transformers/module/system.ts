@@ -1317,7 +1317,7 @@ namespace ts {
                 return expressions ? factory.inlineExpressions(expressions) : factory.createOmittedExpression();
             }
             else {
-                return visitNode(node, discardedValueVisitor, isExpression);
+                return visitNode(node, discardedValueVisitor, isForInitializer);
             }
         }
 
