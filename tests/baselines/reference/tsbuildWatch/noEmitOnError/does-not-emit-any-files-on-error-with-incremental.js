@@ -73,21 +73,21 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -180,21 +180,21 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -242,21 +242,21 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 /user/username/projects/noemitonerror/src/other.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -377,21 +377,21 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -506,21 +506,21 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -560,21 +560,21 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -659,21 +659,21 @@ Output::
 
 
 
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -132,7 +132,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host, {
                 useSingleInferredProject: true,
                 typingsInstaller: installer,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
             projectService.openClientFile(file1.path);
@@ -1029,7 +1029,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host, {
                 useSingleInferredProject: true,
                 typingsInstaller: installer,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             projectService.openClientFile(app.path);
 
@@ -1204,7 +1204,7 @@ namespace ts.projectSystem {
             })();
             const service = createProjectService(host, {
                 typingsInstaller: installer,
-                logger: createLoggerWithInMemoryLogs(),
+                logger: createLoggerWithInMemoryLogs(host),
             });
             service.openClientFile(file.path);
 

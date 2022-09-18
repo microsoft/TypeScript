@@ -17,7 +17,8 @@ startOfDiags.split(EOL).forEach(line => {
     try {
         execSync(`grep -rnw 'src' -e 'Diagnostics.${diagName}'`).toString();
         process.stdout.write(".");
-    } catch (error) {
+    }
+    catch (error) {
         missingNames.push(diagName);
         process.stdout.write("x");
     }

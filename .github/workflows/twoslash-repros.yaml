@@ -8,35 +8,31 @@ on:
     - cron:  '0 8 * * *'
   repository_dispatch:
     types: run-twoslash-repros
-  issues:
-    types:
-      - labeled
   workflow_dispatch:
     inputs:
-      bisect_issue:
-        description: Triggers a bisect request on the given issue number instead of updating repros on all issues
+      issue:
+        description: Limits run to a single issue.
+        required: false
+        type: string
+      bisect:
+        description: If set, runs a git bisect on an existing repro. Requires 'issue' to be set. Value can be revision labels (e.g. `good v4.7.3 bad main`) or `true` to infer bisect range.
         required: false
         type: string
 
 jobs:
   run:
-    if: ${{ github.repository == 'microsoft/TypeScript' && !github.event.label && !github.event.inputs.bisect_issue }}
+    if: ${{ github.repository == 'microsoft/TypeScript' }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/setup-node@v3
-    - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
-      with:
-        github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-
-  bisect:
-    if: ${{ github.event.label.name == 'Bisect Repro' || github.event.inputs.bisect_issue }}
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
+    - if: ${{ github.event.inputs.bisect }}
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
+    - if: ${{ !github.event.inputs.bisect }}
+      uses: actions/checkout@v3
     - uses: actions/setup-node@v3
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
       with:
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-        bisect: ${{ github.event.issue.number || github.event.inputs.bisect_issue }}
+        issue: ${{ github.event.inputs.issue }}
+        bisect: ${{ github.event.inputs.bisect }}

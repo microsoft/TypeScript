@@ -29,18 +29,18 @@ namespace ts.codefix {
         suppressLeadingAndTrailingTrivia(declaration);
         suppressLeadingAndTrailingTrivia(container);
 
-        let accessorModifiers: NodeArray<ModifierLike> | undefined;
+        let accessorModifiers: readonly ModifierLike[] | undefined;
         let fieldModifiers: readonly ModifierLike[] | undefined;
         if (isClassLike(container)) {
             const modifierFlags = getEffectiveModifierFlags(declaration);
             if (isSourceFileJS(file)) {
-                const modifiers = createModifiers(modifierFlags);
+                const modifiers = factory.createModifiersFromModifierFlags(modifierFlags);
                 accessorModifiers = modifiers;
                 fieldModifiers = modifiers;
             }
             else {
-                accessorModifiers = createModifiers(prepareModifierFlagsForAccessor(modifierFlags));
-                fieldModifiers = createModifiers(prepareModifierFlagsForField(modifierFlags));
+                accessorModifiers = factory.createModifiersFromModifierFlags(prepareModifierFlagsForAccessor(modifierFlags));
+                fieldModifiers = factory.createModifiersFromModifierFlags(prepareModifierFlagsForField(modifierFlags));
             }
             if (canHaveDecorators(declaration)) {
                 fieldModifiers = concatenate(getDecorators(declaration), fieldModifiers);
@@ -146,7 +146,7 @@ namespace ts.codefix {
         };
     }
 
-    function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: NodeArray<ModifierLike> | undefined, isStatic: boolean, container: ContainerDeclaration) {
+    function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: readonly ModifierLike[] | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return factory.createGetAccessorDeclaration(
             modifiers,
             accessorName,
@@ -160,7 +160,7 @@ namespace ts.codefix {
         );
     }
 
-    function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: NodeArray<ModifierLike> | undefined, isStatic: boolean, container: ContainerDeclaration) {
+    function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: readonly ModifierLike[] | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return factory.createSetAccessorDeclaration(
             modifiers,
             accessorName,

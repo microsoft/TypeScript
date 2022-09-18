@@ -32,7 +32,7 @@ namespace ts.projectSystem {
                     `
                 };
                 const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
-                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([fileA], session);
                 return {
                     host, session, packageFile,

@@ -108,6 +108,7 @@ declare module ts {
         fileName?: string;
         ambientModuleName?: string;
         isPackageJsonImport?: true;
+        moduleSpecifier?: string;
         exportName: string;
     }
 
