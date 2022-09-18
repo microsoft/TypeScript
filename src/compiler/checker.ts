@@ -36923,7 +36923,7 @@ namespace ts {
                 // We only need `Awaited<T>` if `T` is a type variable that has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
                 // or is promise-like.
                 if (baseConstraint ?
-                    baseConstraint.flags & TypeFlags.AnyOrUnknown || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint) :
+                    baseConstraint.flags & TypeFlags.AnyOrUnknown || isEmptyObjectType(baseConstraint) || someType(baseConstraint, isThenableType) :
                     maybeTypeOfKind(type, TypeFlags.TypeVariable)) {
                     return true;
                 }
