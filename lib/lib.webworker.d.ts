@@ -1503,6 +1503,11 @@ interface FetchEvent extends ExtendableEvent {
     respondWith(r: Response | PromiseLike<Response>): void;
 }
 
+interface PushSubscriptionChangeEvent extends ExtendableEvent {
+    readonly newSubscription: PushSubscription;
+    readonly oldSubscription: PushSubscription;
+}
+
 declare var FetchEvent: {
     prototype: FetchEvent;
     new(type: string, eventInitDict: FetchEventInit): FetchEvent;
@@ -2911,6 +2916,7 @@ interface ServiceWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "notificationclick": NotificationEvent;
     "notificationclose": NotificationEvent;
     "push": PushEvent;
+    "pushsubscriptionchange":PushSubscriptionChangeEvent;
 }
 
 /** This ServiceWorker API interface represents the global execution context of a service worker. */
@@ -2924,6 +2930,7 @@ interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
     onnotificationclick: ((this: ServiceWorkerGlobalScope, ev: NotificationEvent) => any) | null;
     onnotificationclose: ((this: ServiceWorkerGlobalScope, ev: NotificationEvent) => any) | null;
     onpush: ((this: ServiceWorkerGlobalScope, ev: PushEvent) => any) | null;
+    onpushsubscriptionchange :  ((this: ServiceWorkerGlobalScope, ev: PushSubscriptionChangeEvent) => any) | null;
     readonly registration: ServiceWorkerRegistration;
     readonly serviceWorker: ServiceWorker;
     skipWaiting(): Promise<void>;
