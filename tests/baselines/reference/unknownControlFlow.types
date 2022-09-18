@@ -802,3 +802,226 @@ type NullableFoo = Foo | undefined;
 type Bar<T extends NullableFoo> = NonNullable<T>[string];
 >Bar : Bar<T>
 
+// Generics and intersections with {}
+
+function fx0<T>(value: T & ({} | null)) {
+>fx0 : <T>(value: T & ({} | null)) => void
+>value : T & ({} | null)
+>null : null
+
+    if (value === 42) {
+>value === 42 : boolean
+>value : T & ({} | null)
+>42 : 42
+
+        value;  // T & {}
+>value : T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+    }
+}
+
+function fx1<T extends unknown>(value: T & ({} | null)) {
+>fx1 : <T extends unknown>(value: T & ({} | null)) => void
+>value : T & ({} | null)
+>null : null
+
+    if (value === 42) {
+>value === 42 : boolean
+>value : T & ({} | null)
+>42 : 42
+
+        value;  // T & {}
+>value : T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+    }
+}
+
+function fx2<T extends {}>(value: T & ({} | null)) {
+>fx2 : <T extends {}>(value: T & ({} | null)) => void
+>value : T & ({} | null)
+>null : null
+
+    if (value === 42) {
+>value === 42 : boolean
+>value : T & ({} | null)
+>42 : 42
+
+        value;  // T & {}
+>value : T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+    }
+}
+
+function fx3<T extends {} | undefined>(value: T & ({} | null)) {
+>fx3 : <T extends {} | undefined>(value: T & ({} | null)) => void
+>value : T & ({} | null)
+>null : null
+
+    if (value === 42) {
+>value === 42 : boolean
+>value : T & ({} | null)
+>42 : 42
+
+        value;  // T & {}
+>value : T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+    }
+}
+
+function fx4<T extends {} | null>(value: T & ({} | null)) {
+>fx4 : <T extends {} | null>(value: T & ({} | null)) => void
+>null : null
+>value : T & ({} | null)
+>null : null
+
+    if (value === 42) {
+>value === 42 : boolean
+>value : T & ({} | null)
+>42 : 42
+
+        value;  // T & {}
+>value : T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+    }
+}
+
+function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
+>fx5 : <T extends {} | null | undefined>(value: T & ({} | null)) => void
+>null : null
+>value : T & ({} | null)
+>null : null
+
+    if (value === 42) {
+>value === 42 : boolean
+>value : T & ({} | null)
+>42 : 42
+
+        value;  // T & {}
+>value : T & {}
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T & ({} | null)
+    }
+}
+
+// Double-equals narrowing
+
+function fx10(x: string | number, y: number) {
+>fx10 : (x: string | number, y: number) => void
+>x : string | number
+>y : number
+
+    if (x == y) {
+>x == y : boolean
+>x : string | number
+>y : number
+
+        x;  // string | number
+>x : string | number
+    }
+    else {
+        x;  // string | number
+>x : string | number
+    }
+    if (x != y) {
+>x != y : boolean
+>x : string | number
+>y : number
+
+        x;  // string | number
+>x : string | number
+    }
+    else {
+        x;  // string | number
+>x : string | number
+    }
+}
+
+// Repros from #50706
+
+function SendBlob(encoding: unknown) {
+>SendBlob : (encoding: unknown) => void
+>encoding : unknown
+
+    if (encoding !== undefined && encoding !== 'utf8') {
+>encoding !== undefined && encoding !== 'utf8' : boolean
+>encoding !== undefined : boolean
+>encoding : unknown
+>undefined : undefined
+>encoding !== 'utf8' : boolean
+>encoding : {} | null
+>'utf8' : "utf8"
+
+        throw new Error('encoding');
+>new Error('encoding') : Error
+>Error : ErrorConstructor
+>'encoding' : "encoding"
+    }
+    encoding;
+>encoding : "utf8" | undefined
+
+};
+
+function doSomething1<T extends unknown>(value: T): T {
+>doSomething1 : <T extends unknown>(value: T) => T
+>value : T
+
+    if (value === undefined) {
+>value === undefined : boolean
+>value : T
+>undefined : undefined
+
+        return value;
+>value : T
+    }
+    if (value === 42) {
+>value === 42 : boolean
+>value : T & ({} | null)
+>42 : 42
+
+        throw Error('Meaning of life value');
+>Error('Meaning of life value') : Error
+>Error : ErrorConstructor
+>'Meaning of life value' : "Meaning of life value"
+    }
+    return value;
+>value : T & ({} | null)
+}
+
+function doSomething2(value: unknown): void {
+>doSomething2 : (value: unknown) => void
+>value : unknown
+
+    if (value === undefined) {
+>value === undefined : boolean
+>value : unknown
+>undefined : undefined
+
+        return;
+    }
+    if (value === 42) {
+>value === 42 : boolean
+>value : {} | null
+>42 : 42
+
+        value;
+>value : 42
+    }
+}
+

@@ -1659,7 +1659,7 @@ namespace ts {
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
      *
-     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
+     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)`
      * @param predicate Additional predicate to test on the comment range.
      */
     export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined {
@@ -2522,7 +2522,7 @@ namespace ts {
      * and code fixes (because those are triggered by explicit user actions).
      */
     export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
-        const clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>);
+        const clone = node && getSynthesizedDeepCloneWorker(node);
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
         return clone;
     }

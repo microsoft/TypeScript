@@ -1,7 +1,6 @@
 // @ts-check
 const cp = require("child_process");
 /**
- * 
  * @param {[string, string[]][]} tasks
  * @param {cp.SpawnSyncOptions} opts
  */

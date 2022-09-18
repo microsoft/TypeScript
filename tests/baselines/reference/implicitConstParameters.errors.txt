@@ -1,5 +1,5 @@
-tests/cases/compiler/implicitConstParameters.ts(38,27): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/implicitConstParameters.ts(44,27): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/implicitConstParameters.ts(38,27): error TS18048: 'x' is possibly 'undefined'.
+tests/cases/compiler/implicitConstParameters.ts(44,27): error TS18048: 'x' is possibly 'undefined'.
 
 
 ==== tests/cases/compiler/implicitConstParameters.ts (2 errors) ====
@@ -42,7 +42,7 @@ tests/cases/compiler/implicitConstParameters.ts(44,27): error TS2532: Object is 
         if (x) {
             doSomething(() => x.length);
                               ~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'x' is possibly 'undefined'.
         }
     }
     
@@ -50,7 +50,7 @@ tests/cases/compiler/implicitConstParameters.ts(44,27): error TS2532: Object is 
         if (x) {
             doSomething(() => x.length);
                               ~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'x' is possibly 'undefined'.
         }
         x = "abc";  // causes x to be considered non-const
     }

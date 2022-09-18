@@ -43,7 +43,6 @@ scripts/run.bat
 scripts/word2md.js
 scripts/buildProtocol.js
 scripts/ior.js
-scripts/authors.js
 scripts/configurePrerelease.js
 scripts/configureLanguageServiceBuild.js
 scripts/open-user-pr.js

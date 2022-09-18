@@ -13,7 +13,7 @@ namespace ts.codefix {
         Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type.code,
         Diagnostics.Operator_0_cannot_be_applied_to_type_1.code,
         Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code,
-        Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code,
+        Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code,
         Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined.code,
         Diagnostics.Type_0_is_not_an_array_type.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type.code,
