@@ -40,7 +40,7 @@ namespace ts.projectSystem {
 
             const files = [cFile, libFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
             const host = createServerHost(files);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession(
                 [
                     { file: aFile, projectRootPath: folderA },
@@ -106,7 +106,7 @@ new C();`
             };
 
             function createSessionAndOpenFile(host: TestServerHost) {
-                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
                 session.executeCommandSeq<protocol.OpenRequest>({
                     command: protocol.CommandTypes.Open,
                     arguments: {

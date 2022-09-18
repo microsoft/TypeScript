@@ -449,6 +449,10 @@ namespace ts.CallHierarchy {
                     recordCallSite(node as AccessExpression);
                     forEachChild(node, collect);
                     break;
+                case SyntaxKind.SatisfiesExpression:
+                    // do not descend into the type side of an assertion
+                    collect((node as SatisfiesExpression).expression);
+                    return;
             }
 
             if (isPartOfTypeNode(node)) {

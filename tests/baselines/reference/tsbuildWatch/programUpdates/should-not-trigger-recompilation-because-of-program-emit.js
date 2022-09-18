@@ -67,19 +67,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/anothermodule.ts (computed .d.ts during emit)
 /user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -169,19 +169,19 @@ Input::
 
 Output::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -220,21 +220,21 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/file3.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/file3.ts:
-  {"fileName":"/user/username/projects/sample1/core/file3.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/core/file3.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -310,21 +310,21 @@ Input::
 
 Output::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/file3.ts:
-  {"fileName":"/user/username/projects/sample1/core/file3.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/core/file3.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

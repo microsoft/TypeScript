@@ -238,7 +238,7 @@ node_modules/adonis-framework/src/Session/index.js(265,12): error TS1359: Identi
 node_modules/adonis-framework/src/Session/index.js(267,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(287,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(293,12): error TS2532: Object is possibly 'undefined'.
-node_modules/adonis-framework/src/Static/index.js(45,18): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+node_modules/adonis-framework/src/Static/index.js(45,18): error TS2810: Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.
 node_modules/adonis-framework/src/View/Form/index.js(75,11): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/View/Form/index.js(115,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/View/Form/index.js(147,63): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'any[]'.

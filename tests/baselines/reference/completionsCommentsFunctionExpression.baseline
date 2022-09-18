@@ -3023,6 +3023,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "string",
           "kind": "keyword",
           "kindModifiers": "",
@@ -7470,6 +7482,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "string",
           "kind": "keyword",
           "kindModifiers": "",
@@ -11468,6 +11492,18 @@
           "displayParts": [
             {
               "text": "return",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
               "kind": "keyword"
             }
           ]
@@ -15699,6 +15735,18 @@
           "displayParts": [
             {
               "text": "return",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
               "kind": "keyword"
             }
           ]
