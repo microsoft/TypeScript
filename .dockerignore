@@ -20,7 +20,6 @@ scripts/run.bat
 scripts/word2md.js
 scripts/buildProtocol.js
 scripts/ior.js
-scripts/authors.js
 scripts/configurePrerelease.js
 scripts/open-user-pr.js
 scripts/open-cherry-pick-pr.js
