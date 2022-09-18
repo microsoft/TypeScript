@@ -14,11 +14,11 @@ var xs2: typeof Array;
 >Array : ArrayConstructor
 
 var xs3: typeof Array<number>;
->xs3 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray<T>(arg: T): arg is T extends any ? Extract<(true extends false & T ? any : T extends (infer U)[] ? U : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : T extends readonly (infer U)[] ? Extract<T, readonly U[]> : never, T> | (true extends false & T ? never : {} extends T ? T & unknown[] : never) : never; readonly prototype: any[]; }
+>xs3 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray<T>(arg: T): arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
 var xs4: typeof Array<typeof x>;
->xs4 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray<T>(arg: T): arg is T extends any ? Extract<(true extends false & T ? any : T extends (infer U)[] ? U : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : T extends readonly (infer U)[] ? Extract<T, readonly U[]> : never, T> | (true extends false & T ? never : {} extends T ? T & unknown[] : never) : never; readonly prototype: any[]; }
+>xs4 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray<T>(arg: T): arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never; readonly prototype: any[]; }
 >Array : ArrayConstructor
 >x : number
 

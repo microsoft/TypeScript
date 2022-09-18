@@ -22,11 +22,11 @@ foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
 >...Array.isArray(foo2) ? foo2 : [foo2] : FooBase
 >Array.isArray(foo2) ? foo2 : [foo2] : FooArray
 >Array.isArray(foo2) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends (infer U)[] ? U : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : T extends readonly (infer U)[] ? Extract<T, readonly U[]> : never, T> | (true extends false & T ? never : {} extends T ? T & unknown[] : never) : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends (infer U)[] ? U : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : T extends readonly (infer U)[] ? Extract<T, readonly U[]> : never, T> | (true extends false & T ? never : {} extends T ? T & unknown[] : never) : never
+>isArray : <T>(arg: T) => arg is T extends any ? Extract<(true extends false & T ? any : T extends string | readonly any[] ? unknown : T extends ArrayLike<infer U> ? U : unknown)[], T> | Extract<true extends false & T ? never : {} extends T ? T & unknown[] : Extract<T, readonly any[]>, T> : never
 >foo2 : Foo
->foo2 : FooArray | FooBase[]
+>foo2 : FooArray
 >[foo2] : FooBase[]
 >foo2 : FooBase
 

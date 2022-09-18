@@ -60,20 +60,15 @@ interface ArrayConstructor {
         T extends any ? Extract<
             (
                 true extends false & T ? any :
-                T extends (infer U)[] ? U :
                 T extends string | readonly any[] ? unknown :
                 T extends ArrayLike<infer U> | Iterable<infer U> ? U :
                 unknown
             )[] | (
                 true extends false & T ? never :
-                T extends readonly (infer U)[] ? Extract<T, readonly U[]> :
-                never
+                {} extends T ? T & unknown[] :
+                Extract<T, readonly any[]>
             ), T
-        > | (
-            true extends false & T ? never :
-            {} extends T ? T & unknown[] :
-            never
-        ) : never;
+        > : never;
 
     /**
      * Creates an array from an iterable object.
