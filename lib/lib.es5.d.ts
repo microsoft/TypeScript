@@ -33,18 +33,18 @@ declare function eval(x: string): any;
 
 /**
  * Converts a string to an integer.
- * @param string A string to convert into a number.
+ * @param value A string or number to convert into an integer.
  * @param radix A value between 2 and 36 that specifies the base of the number in `string`.
  * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
  * All other strings are considered decimal.
  */
-declare function parseInt(string: string, radix?: number): number;
+declare function parseInt(value: string | String | number | Number, radix?: number): number;
 
 /**
- * Converts a string to a floating-point number.
- * @param string A string that contains a floating-point number.
+ * Converts a string or number into a floating-point number.
+ * @param value A string or number that contains a number.
  */
-declare function parseFloat(string: string): number;
+declare function parseFloat(value: string | String | number | Number): number;
 
 /**
  * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number).
