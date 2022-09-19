@@ -9250,7 +9250,7 @@ namespace ts {
             setParent(reference.expression, reference);
             setParent(reference, file);
             reference.flowNode = file.endFlowNode;
-            return getFlowTypeOfReference(reference, autoType, undefinedType);
+            return getFlowTypeOfReference(reference, autoType, strictNullChecks(file) ? undefinedType : undefinedPermissiveType);
         }
 
         function getFlowTypeInStaticBlocks(symbol: Symbol, staticBlocks: readonly ClassStaticBlockDeclaration[]) {
@@ -9294,7 +9294,7 @@ namespace ts {
             const initialType = prop?.valueDeclaration
                 && (!isAutoTypedProperty(prop) || getEffectiveModifierFlags(prop.valueDeclaration) & ModifierFlags.Ambient)
                 && getTypeOfPropertyInBaseClass(prop)
-                || undefinedType;
+                || (strictNullChecks(reference) ? undefinedType : undefinedPermissiveType);
             return getFlowTypeOfReference(reference, autoType, initialType);
         }
 
@@ -26285,7 +26285,7 @@ namespace ts {
                 declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
-                type === autoType || type === autoArrayType ? undefinedType :
+                type === autoType || type === autoArrayType ? (strictNullChecks(node) ? undefinedType : undefinedPermissiveType) :
                 getOptionalType(type, node);
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph

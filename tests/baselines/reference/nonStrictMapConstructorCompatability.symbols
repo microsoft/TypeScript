@@ -1,0 +1,80 @@
+=== tests/cases/compiler/file.js ===
+// reduced a bit from Webpack
+
+const EMPTY_MAP = new Map();
+>EMPTY_MAP : Symbol(EMPTY_MAP, Decl(file.js, 2, 5))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+class HarmonyExportInitFragment {
+>HarmonyExportInitFragment : Symbol(HarmonyExportInitFragment, Decl(file.js, 2, 28))
+
+    /**
+     * @param {Map<string, string>} exportMap mapping from used name to exposed variable name
+     */
+    constructor(
+        exportMap = EMPTY_MAP,
+>exportMap : Symbol(exportMap, Decl(file.js, 8, 16))
+>EMPTY_MAP : Symbol(EMPTY_MAP, Decl(file.js, 2, 5))
+
+    ) {
+        this.exportMap = exportMap;
+>this.exportMap : Symbol(HarmonyExportInitFragment.exportMap, Decl(file.js, 10, 7))
+>this : Symbol(HarmonyExportInitFragment, Decl(file.js, 2, 28))
+>exportMap : Symbol(HarmonyExportInitFragment.exportMap, Decl(file.js, 10, 7))
+>exportMap : Symbol(exportMap, Decl(file.js, 8, 16))
+    }
+
+    /**
+     * @param {HarmonyExportInitFragment[]} fragments all fragments to merge
+     */
+    mergeAll(fragments) {
+>mergeAll : Symbol(HarmonyExportInitFragment.mergeAll, Decl(file.js, 12, 5))
+>fragments : Symbol(fragments, Decl(file.js, 17, 13))
+
+        let exportMap;
+>exportMap : Symbol(exportMap, Decl(file.js, 18, 11))
+
+        let exportMapOwned = false;
+>exportMapOwned : Symbol(exportMapOwned, Decl(file.js, 19, 11))
+
+        for (const fragment of fragments) {
+>fragment : Symbol(fragment, Decl(file.js, 21, 18))
+>fragments : Symbol(fragments, Decl(file.js, 17, 13))
+
+            if (fragment.exportMap.size !== 0) {
+>fragment.exportMap.size : Symbol(Map.size, Decl(lib.es2015.collection.d.ts, --, --))
+>fragment.exportMap : Symbol(HarmonyExportInitFragment.exportMap, Decl(file.js, 10, 7))
+>fragment : Symbol(fragment, Decl(file.js, 21, 18))
+>exportMap : Symbol(HarmonyExportInitFragment.exportMap, Decl(file.js, 10, 7))
+>size : Symbol(Map.size, Decl(lib.es2015.collection.d.ts, --, --))
+
+                if (exportMap === undefined) {
+>exportMap : Symbol(exportMap, Decl(file.js, 18, 11))
+>undefined : Symbol(undefined)
+
+                    exportMap = fragment.exportMap;
+>exportMap : Symbol(exportMap, Decl(file.js, 18, 11))
+>fragment.exportMap : Symbol(HarmonyExportInitFragment.exportMap, Decl(file.js, 10, 7))
+>fragment : Symbol(fragment, Decl(file.js, 21, 18))
+>exportMap : Symbol(HarmonyExportInitFragment.exportMap, Decl(file.js, 10, 7))
+
+                    exportMapOwned = false;
+>exportMapOwned : Symbol(exportMapOwned, Decl(file.js, 19, 11))
+
+                } else {
+                    if (!exportMapOwned) {
+>exportMapOwned : Symbol(exportMapOwned, Decl(file.js, 19, 11))
+
+                        exportMap = new Map(exportMap);
+>exportMap : Symbol(exportMap, Decl(file.js, 18, 11))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>exportMap : Symbol(exportMap, Decl(file.js, 18, 11))
+
+                        exportMapOwned = true;
+>exportMapOwned : Symbol(exportMapOwned, Decl(file.js, 19, 11))
+                    }
+                }
+            }
+        }
+    }
+}

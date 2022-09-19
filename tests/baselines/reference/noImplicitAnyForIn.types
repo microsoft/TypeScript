@@ -59,8 +59,8 @@ for (var a in x) {
 >b : any
 
     var c = a || b;
->c : string | undefined
->a || b : string | undefined
+>c : string
+>a || b : string
 >a : string
 >b : undefined
 }

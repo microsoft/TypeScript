@@ -1,0 +1,94 @@
+=== tests/cases/compiler/file.js ===
+// reduced a bit from Webpack
+
+const EMPTY_MAP = new Map();
+>EMPTY_MAP : Map<any, any>
+>new Map() : Map<any, any>
+>Map : MapConstructor
+
+class HarmonyExportInitFragment {
+>HarmonyExportInitFragment : HarmonyExportInitFragment
+
+    /**
+     * @param {Map<string, string>} exportMap mapping from used name to exposed variable name
+     */
+    constructor(
+        exportMap = EMPTY_MAP,
+>exportMap : Map<string, string>
+>EMPTY_MAP : Map<any, any>
+
+    ) {
+        this.exportMap = exportMap;
+>this.exportMap = exportMap : Map<string, string>
+>this.exportMap : any
+>this : this
+>exportMap : any
+>exportMap : Map<string, string>
+    }
+
+    /**
+     * @param {HarmonyExportInitFragment[]} fragments all fragments to merge
+     */
+    mergeAll(fragments) {
+>mergeAll : (fragments: HarmonyExportInitFragment[]) => void
+>fragments : HarmonyExportInitFragment[]
+
+        let exportMap;
+>exportMap : any
+
+        let exportMapOwned = false;
+>exportMapOwned : boolean
+>false : false
+
+        for (const fragment of fragments) {
+>fragment : HarmonyExportInitFragment
+>fragments : HarmonyExportInitFragment[]
+
+            if (fragment.exportMap.size !== 0) {
+>fragment.exportMap.size !== 0 : boolean
+>fragment.exportMap.size : number
+>fragment.exportMap : Map<string, string>
+>fragment : HarmonyExportInitFragment
+>exportMap : Map<string, string>
+>size : number
+>0 : 0
+
+                if (exportMap === undefined) {
+>exportMap === undefined : boolean
+>exportMap : Map<any, any>
+>undefined : undefined
+
+                    exportMap = fragment.exportMap;
+>exportMap = fragment.exportMap : Map<string, string>
+>exportMap : any
+>fragment.exportMap : Map<string, string>
+>fragment : HarmonyExportInitFragment
+>exportMap : Map<string, string>
+
+                    exportMapOwned = false;
+>exportMapOwned = false : false
+>exportMapOwned : boolean
+>false : false
+
+                } else {
+                    if (!exportMapOwned) {
+>!exportMapOwned : boolean
+>exportMapOwned : boolean
+
+                        exportMap = new Map(exportMap);
+>exportMap = new Map(exportMap) : Map<any, any>
+>exportMap : any
+>new Map(exportMap) : Map<any, any>
+>Map : MapConstructor
+>exportMap : Map<any, any>
+
+                        exportMapOwned = true;
+>exportMapOwned = true : true
+>exportMapOwned : boolean
+>true : true
+                    }
+                }
+            }
+        }
+    }
+}
