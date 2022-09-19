@@ -2545,14 +2545,8 @@ namespace ts {
     }
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
-        const nodeClone: (n: T) => T = replaceNode
-            ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
-            : getSynthesizedDeepClone;
-        const nodesClone: (ns: NodeArray<T> | undefined) => (NodeArray<T> | undefined) = replaceNode
-            ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
-            : ns => ns && getSynthesizedDeepClones(ns);
         const visited =
-            visitEachChild(node, nodeClone, nullTransformationContext, nodesClone as NodesVisitor, nodeClone); // TODO(jakebailey): This is unfortunate.
+            visitEachChild(node, nodeClone, nullTransformationContext, nodesClone, nodeClone);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -2568,6 +2562,20 @@ namespace ts {
         // would have made.
         (visited as Mutable<T>).parent = undefined!;
         return visited;
+
+        function nodeClone<T extends Node>(node: T): T {
+            return replaceNode
+                ? getSynthesizedDeepCloneWithReplacements(node, /*includeTrivia*/ true, replaceNode)
+                : getSynthesizedDeepClone(node);
+        }
+
+        function nodesClone<T extends Node>(nodes: NodeArray<T>): NodeArray<T>;
+        function nodesClone<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
+        function nodesClone<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+            return replaceNode
+                ? nodes && getSynthesizedDeepClonesWithReplacements(nodes, /*includeTrivia*/ true, replaceNode)
+                : nodes && getSynthesizedDeepClones(nodes);
+        }
     }
 
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
@@ -3378,7 +3386,7 @@ namespace ts {
             return false;
         }
         // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
-        return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
+        return isInJSFile(declaration) || !findAncestor(declaration, d => isModuleDeclaration(d) && isGlobalScopeAugmentation(d));
     }
 
     export function isDeprecatedDeclaration(decl: Declaration) {

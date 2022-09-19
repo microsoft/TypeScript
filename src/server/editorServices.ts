@@ -549,7 +549,7 @@ namespace ts.server {
 
     function forEachPotentialProjectReference<T>(
         project: ConfiguredProject,
-        cb: (potentialProjectReference: Path) => T | undefined
+        cb: (potentialProjectReference: NormalizedPath) => T | undefined
     ): T | undefined {
         return project.potentialProjectReferences &&
             forEachKey(project.potentialProjectReferences, cb);
@@ -559,7 +559,7 @@ namespace ts.server {
         project: ConfiguredProject,
         cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
         cbProjectRef: (projectReference: ProjectReference) => T | undefined,
-        cbPotentialProjectRef: (potentialProjectReference: Path) => T | undefined
+        cbPotentialProjectRef: (potentialProjectReference: NormalizedPath) => T | undefined
     ): T | undefined {
         return project.getCurrentProgram() ?
             project.forEachResolvedProjectReference(cb) :
@@ -568,10 +568,10 @@ namespace ts.server {
                 forEach(project.getProjectReferences(), cbProjectRef);
     }
 
-    function callbackRefProject<T>(
+    function callbackRefProject<T, P extends string>(
         project: ConfiguredProject,
         cb: (refProj: ConfiguredProject) => T | undefined,
-        refPath: Path | undefined
+        refPath: P | undefined
     ) {
         const refProject = refPath && project.projectService.configuredProjects.get(refPath);
         return refProject && cb(refProject);

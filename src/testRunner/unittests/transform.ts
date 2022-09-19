@@ -27,7 +27,7 @@ namespace ts {
             return (file: SourceFile) => visitNode(file, visitor, isSourceFile);
         }
 
-        function replaceIdentifiersNamedOldNameWithNewName(context: TransformationContext) {
+        function replaceIdentifiersNamedOldNameWithNewName<T extends SourceFile | Bundle>(context: TransformationContext) {
             const previousOnSubstituteNode = context.onSubstituteNode;
             context.enableSubstitution(SyntaxKind.Identifier);
             context.onSubstituteNode = (hint, node) => {
@@ -37,7 +37,7 @@ namespace ts {
                 }
                 return node;
             };
-            return (file: SourceFile) => file;
+            return (file: T) => file;
         }
 
         function replaceIdentifiersNamedOldNameWithNewName2(context: TransformationContext) {
@@ -568,7 +568,7 @@ module MyModule {
                     }
                     return visitEachChild(node, visitor, context);
                 };
-                return (node: SourceFile) => visitNode(node, visitor);
+                return (node: SourceFile) => visitNode(node, visitor, isSourceFile);
             }
 
         });

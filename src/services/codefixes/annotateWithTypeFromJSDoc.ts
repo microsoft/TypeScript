@@ -50,19 +50,29 @@ namespace ts.codefix {
             for (const param of decl.parameters) {
                 if (!param.type) {
                     const paramType = getJSDocType(param);
-                    if (paramType) changes.tryInsertTypeAnnotation(sourceFile, param, transformJSDocType(paramType));
+                    if (paramType) {
+                        const transformedType = transformJSDocType(paramType);
+                        Debug.assertNode(transformedType, isTypeNode);
+                        changes.tryInsertTypeAnnotation(sourceFile, param, transformedType);
+                    }
                 }
             }
             if (needParens) changes.insertNodeAfter(sourceFile, last(decl.parameters), factory.createToken(SyntaxKind.CloseParenToken));
             if (!decl.type) {
                 const returnType = getJSDocReturnType(decl);
-                if (returnType) changes.tryInsertTypeAnnotation(sourceFile, decl, transformJSDocType(returnType));
+                if (returnType) {
+                    const transformedType = transformJSDocType(returnType);
+                    Debug.assertNode(transformedType, isTypeNode);
+                    changes.tryInsertTypeAnnotation(sourceFile, decl, transformedType);
+                };
             }
         }
         else {
             const jsdocType = Debug.checkDefined(getJSDocType(decl), "A JSDocType for this declaration should exist"); // If not defined, shouldn't have been an error to fix
             Debug.assert(!decl.type, "The JSDocType decl should have a type"); // If defined, shouldn't have been an error to fix.
-            changes.tryInsertTypeAnnotation(sourceFile, decl, transformJSDocType(jsdocType));
+            const transformedType = transformJSDocType(jsdocType);
+            Debug.assertNode(transformedType, isTypeNode);
+            changes.tryInsertTypeAnnotation(sourceFile, decl, transformedType);
         }
     }
 
@@ -73,7 +83,7 @@ namespace ts.codefix {
             node.kind === SyntaxKind.PropertyDeclaration;
     }
 
-    function transformJSDocType(node: TypeNode): TypeNode {
+    function transformJSDocType(node: Node): Node {
         switch (node.kind) {
             case SyntaxKind.JSDocAllType:
             case SyntaxKind.JSDocUnknownType:

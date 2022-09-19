@@ -86,8 +86,8 @@ namespace ts.server.typingsInstaller {
 
     type ProjectWatchers = ESMap<string, FileWatcher> & { isInvoked?: boolean; };
 
-    function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers) {
-        return `Project: ${projectName} watcher already invoked: ${watchers.isInvoked}`;
+    function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers | undefined) {
+        return `Project: ${projectName} watcher already invoked: ${watchers?.isInvoked}`;
     }
 
     export abstract class TypingsInstaller {

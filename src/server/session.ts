@@ -14,7 +14,7 @@ namespace ts.server {
         resetRequest: () => void 0
     };
 
-    function hrTimeToMilliseconds(time: number[]): number {
+    function hrTimeToMilliseconds(time: [number, number]): number {
         const seconds = time[0];
         const nanoseconds = time[1];
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
@@ -738,7 +738,7 @@ namespace ts.server {
         useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
-        hrtime: (start?: number[]) => number[];
+        hrtime: (start?: [number, number]) => [number, number];
         logger: Logger;
         /**
          * If falsy, all events are suppressed.
@@ -773,7 +773,7 @@ namespace ts.server {
         private readonly cancellationToken: ServerCancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
         protected byteLength: (buf: string, encoding?: string) => number;
-        private hrtime: (start?: number[]) => number[];
+        private hrtime: (start?: [number, number]) => [number, number];
         protected logger: Logger;
 
         protected canUseEvents: boolean;
@@ -2916,7 +2916,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
+        private handlers = new Map(getEntries<(request: any) => HandlerResponse>({ // TODO(jakebailey): correctly type the handlers
             [CommandNames.Status]: () => {
                 const response: protocol.StatusResponseBody = { version: ts.version }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 return this.requiredResponse(response);
@@ -3361,7 +3361,7 @@ namespace ts.server {
 
             this.performanceData = undefined;
 
-            let start: number[] | undefined;
+            let start: [number, number] | undefined;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
                 if (this.logger.hasLevel(LogLevel.verbose)) {

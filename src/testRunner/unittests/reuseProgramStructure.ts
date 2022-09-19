@@ -169,13 +169,15 @@ namespace ts {
         file.text = file.text.updateProgram(newProgramText);
     }
 
-    function checkResolvedTypeDirective(actual: ResolvedTypeReferenceDirective, expected: ResolvedTypeReferenceDirective) {
+    function checkResolvedTypeDirective(actual: ResolvedTypeReferenceDirective | undefined, expected: ResolvedTypeReferenceDirective | undefined) {
+        assert(actual, "Actual ResolvedTypeReferenceDirective is undefined");
+        assert(expected, "Resolved ResolvedTypeReferenceDirective is undefined");
         assert.equal(actual.resolvedFileName, expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
         assert.equal(actual.primary, expected.primary, `'primary': expected '${actual.primary}' to be equal to '${expected.primary}'`);
         return true;
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ModeAwareCache<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T | undefined> | undefined, getCache: (f: SourceFile) => ModeAwareCache<T | undefined> | undefined, entryChecker: (expected: T | undefined, original: T | undefined) => boolean): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file!);
@@ -189,7 +191,7 @@ namespace ts {
     }
 
     /** True if the maps have the same keys and values. */
-    function mapEqualToCache<T>(left: ESMap<string, T>, right: ModeAwareCache<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
+    function mapEqualToCache<T>(left: ESMap<string, T | undefined>, right: ModeAwareCache<T | undefined>, valuesAreEqual?: (left: T | undefined, right: T | undefined) => boolean): boolean {
         if (left as any === right) return true; // given the type mismatch (the tests never pass a cache), this'll never be true
         if (!left || !right) return false;
         const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
@@ -203,11 +205,11 @@ namespace ts {
         return !someInRightHasNoMatch;
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedModule | undefined> | undefined): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedModuleFull | undefined> | undefined): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedTypeReferenceDirective> | undefined): void {
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedTypeReferenceDirective | undefined> | undefined): void {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 

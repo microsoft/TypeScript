@@ -236,7 +236,7 @@ namespace ts {
                     // If we're an accessibility modifier, we're in an instance member and should search
                     // the constructor's parameter list for instance members as well.
                     if (modifierFlag & (ModifierFlags.AccessibilityModifier | ModifierFlags.Readonly)) {
-                        const constructor = find(container.members, isConstructorDeclaration);
+                        const constructor = find<ClassElement | TypeElement, ConstructorDeclaration>(container.members, isConstructorDeclaration); // TODO(jakebailey): GH#49924 ???
                         if (constructor) {
                             return [...nodes, ...constructor.parameters];
                         }

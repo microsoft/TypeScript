@@ -20,7 +20,7 @@ namespace ts.projectSystem {
                     },
                     logger,
                     server.nullCancellationToken,
-                    () => emptyArray
+                    () => [0, 0]
                 );
             }
 

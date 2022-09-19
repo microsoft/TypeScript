@@ -345,7 +345,7 @@ namespace ts.projectSystem {
         describe("Verify npm install in directory with tsconfig file works when", () => {
             function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
                 const root = "/user/username/rootfolder/otherfolder";
-                const getRootedFileOrFolder = (fileOrFolder: File) => {
+                const getRootedFileOrFolder = <T extends File | Folder>(fileOrFolder: T) => {
                     fileOrFolder.path = root + fileOrFolder.path;
                     return fileOrFolder;
                 };
@@ -390,7 +390,7 @@ namespace ts.projectSystem {
                 let npmInstallComplete = false;
 
                 // Simulate npm install
-                const filesAndFoldersToAdd: File[] = [
+                const filesAndFoldersToAdd: (File | Folder)[] = [
                     { path: "/a/b/node_modules" },
                     { path: "/a/b/node_modules/.staging/@types" },
                     { path: "/a/b/node_modules/.staging/lodash-b0733faa" },

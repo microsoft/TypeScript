@@ -2373,7 +2373,7 @@ namespace ts.server {
 
         /** Potential project references before the project is actually loaded (read config file) */
         /*@internal*/
-        potentialProjectReferences: Set<string> | undefined;
+        potentialProjectReferences: Set<NormalizedPath> | undefined;
 
         /*@internal*/
         projectOptions?: ProjectOptions | true;

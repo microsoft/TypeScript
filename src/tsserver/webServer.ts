@@ -97,7 +97,7 @@ namespace ts.server {
         }
     }
 
-    function hrtime(previous?: [number, number]) {
+    function hrtime(previous?: [number, number]): [number, number] {
         const now = self.performance.now() * 1e-3;
         let seconds = Math.floor(now);
         let nanoseconds = Math.floor((now % 1) * 1e9);
