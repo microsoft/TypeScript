@@ -8571,7 +8571,7 @@ namespace ts {
         >(
             node: TIn,
             visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
-            test?: (node: Node) => node is TAssert,
+            test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
             lift?: (node: readonly Node[]) => Node,
         ): TOut;
     }
@@ -8599,7 +8599,7 @@ namespace ts {
         >(
             nodes: TArray,
             visitor: Visitor<TIn, TVisited> | undefined,
-            test?: (node: Node) => node is TAssert,
+            test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
             start?: number,
             count?: number,
         ): TOutArray;

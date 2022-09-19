@@ -1146,7 +1146,7 @@ namespace ts.textChanges {
     >(
         nodes: TArray,
         visitor: Visitor<TIn, TVisited> | undefined,
-        test?: (node: Node) => node is TAssert,
+        test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
         start?: number,
         count?: number,
     ): TOutArray {

@@ -3973,7 +3973,7 @@ declare namespace ts {
      * @see {visitNode}
      */
     export interface NodeVisitor {
-        <TIn extends Node | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOut extends TIn extends undefined ? TAssert | undefined : TVisited extends undefined ? TAssert | undefined : TAssert>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test?: (node: Node) => node is TAssert, lift?: (node: readonly Node[]) => Node): TOut;
+        <TIn extends Node | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOut extends TIn extends undefined ? TAssert | undefined : TVisited extends undefined ? TAssert | undefined : TAssert>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean), lift?: (node: readonly Node[]) => Node): TOut;
     }
     /**
      * A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
@@ -3987,7 +3987,7 @@ declare namespace ts {
      * @see {visitNodes}
      */
     export interface NodesVisitor {
-        <TIn extends Node, TArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined : NodeArray<TAssert>>(nodes: TArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => node is TAssert, start?: number, count?: number): TOutArray;
+        <TIn extends Node, TArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined : NodeArray<TAssert>>(nodes: TArray, visitor: Visitor<TIn, TVisited> | undefined, test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean), start?: number, count?: number): TOutArray;
     }
     export interface Printer {
         /**
@@ -5084,7 +5084,7 @@ declare namespace ts {
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOut extends TIn extends undefined ? TAssert | undefined : TVisited extends undefined ? TAssert | undefined : TAssert>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test?: (node: Node) => node is TAssert, lift?: (node: readonly Node[]) => Node): TOut;
+    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOut extends TIn extends undefined ? TAssert | undefined : TVisited extends undefined ? TAssert | undefined : TAssert>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean), lift?: (node: readonly Node[]) => Node): TOut;
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
@@ -5094,7 +5094,7 @@ declare namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodes<TIn extends Node, TArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined : NodeArray<TAssert>>(nodes: TArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => node is TAssert, start?: number, count?: number): TOutArray;
+    function visitNodes<TIn extends Node, TArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined : NodeArray<TAssert>>(nodes: TArray, visitor: Visitor<TIn, TVisited> | undefined, test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean), start?: number, count?: number): TOutArray;
     /**
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.

@@ -19,7 +19,7 @@ namespace ts {
     >(
         node: TIn,
         visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
-        test?: (node: Node) => node is TAssert,
+        test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
         lift?: (node: readonly Node[]) => Node,
     ): TOut {
         if (node === undefined) {
@@ -68,7 +68,7 @@ namespace ts {
     >(
         nodes: TArray,
         visitor: Visitor<TIn, TVisited> | undefined,
-        test?: (node: Node) => node is TAssert,
+        test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
         start?: number,
         count?: number,
     ): TOutArray {
@@ -158,7 +158,7 @@ namespace ts {
     >(
         nodes: readonly TIn[],
         visitor: Visitor<TIn, TVisited> | undefined,
-        test: ((node: Node) => node is TAssert) | undefined,
+        test: ((node: Node) => node is TAssert) | ((node: Node) => boolean) | undefined,
         start: number,
         count: number,
     ): readonly TAssert[] {
