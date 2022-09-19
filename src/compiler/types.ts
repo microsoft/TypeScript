@@ -8530,12 +8530,12 @@ namespace ts {
      * A function that is used to initialize and return a `Transformer` callback, which in turn
      * will be used to transform one or more nodes.
      */
-    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
+    export type TransformerFactory<TIn extends Node, TOut extends Node | undefined = TIn> = (context: TransformationContext) => Transformer<TIn, TOut>;
 
     /**
      * A function that transforms a node.
      */
-    export type Transformer<T extends Node> = (node: T) => T; // TODO(jakebailey): This signature is totally wrong.
+    export type Transformer<TIn extends Node, TOut extends Node | undefined = TIn> = (node: TIn) => TOut;
 
     // Either a node, or a list of nodes to be be lifted via a lift function.
     export type VisitResult<T extends Node | undefined> = T | readonly Node[];
