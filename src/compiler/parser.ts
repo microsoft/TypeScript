@@ -8364,7 +8364,7 @@ namespace ts {
                         case "override":
                             tag = parseSimpleTag(start, factory.createJSDocOverrideTag, tagName, margin, indentText);
                             break;
-                        case "deprecated":  
+                        case "deprecated":
                             hasDeprecatedTag = true;
                             tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
                             break;

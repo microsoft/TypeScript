@@ -4506,7 +4506,7 @@ namespace ts {
 
     export interface CustomTransformers {
         /** Custom transformers to evaluate before built-in .js transformations. */
-        before?:  (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
+        before?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .js transformations. */
         after?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .d.ts transformations. */
@@ -8530,7 +8530,7 @@ namespace ts {
      * A function that is used to initialize and return a `Transformer` callback, which in turn
      * will be used to transform one or more nodes.
      */
-    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>
+    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
 
     /**
      * A function that transforms a node.
@@ -8539,25 +8539,28 @@ namespace ts {
 
     // Either a node, or a list of nodes to be be lifted via a lift function.
     export type VisitResult<T extends Node | undefined, U extends Node = NonNullable<T>> = T | readonly U[];
-    
+
     /**
      * A function that accepts and possibly transforms a node.
      */
     export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn> = (node: TIn) => VisitResult<TOut>;
-    
+
     /**
      * A function that walks a node using the given visitor, lifting node arrays into single nodes,
      * returning an node which satisfies the test.
-     * 
+     *
      * This type is complicated, but intends to encode the following behaviors:
-     * 
+     *
      *   - If the input node is potentially undefined, the output is potentially undefined.
      *   - If the visitor can return undefined, the output is potentially undefined.
      *   - If the output node is not undefined, then it will satisfy the test.
-     * 
+     *
      * @see {visitNode}
      */
     export interface NodeVisitor {
+        // TODO(jakebailey): Was previously declared as an interface; I don't konw if changing it to a type is safe. Same for NodesVisitor.
+        // This form is nice, thuogh, because you can copy and paste the signature without changing the return `:` to `=>`.
+        // eslint-disable-next-line @typescript-eslint/prefer-function-type
         <
             TIn extends Node | undefined,
             TVisited extends Node | undefined,
@@ -8572,19 +8575,20 @@ namespace ts {
             lift?: (node: readonly Node[]) => Node,
         ): TOut;
     }
-    
+
     /**
      * A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
-     * 
+     *
      * This type is complicated, but intends to encode the following behaviors:
-     * 
+     *
      *   - If the input node array is potentially undefined, the output is potentially undefined.
      *   - If the visitor can return undefined, the output may not be undefined; these nodes will be left in the output.
      *   - If the output node array is not undefined, then its contents will satisfy the test.
-     * 
+     *
      * @see {visitNodes}
      */
     export interface NodesVisitor {
+        // eslint-disable-next-line @typescript-eslint/prefer-function-type
         <
             TIn extends Node,
             TArray extends NodeArray<TIn> | undefined,

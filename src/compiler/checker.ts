@@ -6835,7 +6835,7 @@ namespace ts {
                         return visitNode(node.type, visitExistingNodeTreeSymbols);
                     }
                     if (isJSDocVariadicType(node)) {
-                        return factory.createArrayTypeNode(visitNode((node as JSDocVariadicType).type, visitExistingNodeTreeSymbols));
+                        return factory.createArrayTypeNode(visitNode(node.type, visitExistingNodeTreeSymbols));
                     }
                     if (isJSDocTypeLiteral(node)) {
                         return factory.createTypeLiteralNode(map(node.jsDocPropertyTags, t => {

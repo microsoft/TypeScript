@@ -165,7 +165,7 @@ namespace ts {
         return true;
     }
 
-    /** 
+    /**
      * Equivalent to every, but can discriminate between unions of arrays.
      */
     export function isArrayOf<T>(array: readonly any[], callback: (element: any, index: number) => element is T): array is readonly T[];
