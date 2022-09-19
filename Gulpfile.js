@@ -8,7 +8,6 @@ const del = require("del");
 const rename = require("gulp-rename");
 const concat = require("gulp-concat");
 const merge2 = require("merge2");
-const mkdirp = require("mkdirp");
 const { src, dest, task, parallel, series, watch } = require("gulp");
 const { append, transform } = require("gulp-insert");
 const { prependFile } = require("./scripts/build/prepend");
@@ -27,9 +26,10 @@ task("scripts").description = "Builds files in the 'scripts' folder.";
 const cleanScripts = () => cleanProject("scripts");
 cleanTasks.push(cleanScripts);
 
+/** @type {{ libs: string[]; paths: Record<string, string | undefined>; }} */
 const libraries = readJson("./src/lib/libs.json");
 const libs = libraries.libs.map(lib => {
-    const relativeSources = ["header.d.ts"].concat(libraries.sources && libraries.sources[lib] || [lib + ".d.ts"]);
+    const relativeSources = ["header.d.ts", lib + ".d.ts"];
     const relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
     const sources = relativeSources.map(s => path.posix.join("src/lib", s));
     const target = `built/local/${relativeTarget}`;
@@ -350,14 +350,12 @@ task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
 /** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
 const eslint = (folder) => async () => {
-
     const formatter = cmdLineOptions.ci ? "stylish" : "autolinkable-stylish";
     const args = [
         "node_modules/eslint/bin/eslint",
         "--cache",
         "--cache-location", `${folder}/.eslintcache`,
         "--format", formatter,
-        "--rulesdir", "scripts/eslint/built/rules",
     ];
 
     if (cmdLineOptions.fix) {
@@ -370,26 +368,10 @@ const eslint = (folder) => async () => {
     return exec(process.execPath, args);
 };
 
-const lintScripts = eslint("scripts");
-lintScripts.displayName = "lint-scripts";
-task("lint-scripts", series([buildEslintRules, lintScripts]));
-task("lint-scripts").description = "Runs eslint on the scripts sources.";
-
-const lintCompiler = eslint("src");
-lintCompiler.displayName = "lint-compiler";
-task("lint-compiler", series([buildEslintRules, lintCompiler]));
-task("lint-compiler").description = "Runs eslint on the compiler sources.";
-task("lint-compiler").flags = {
-    "   --ci": "Runs eslint additional rules",
-};
-
-const lint = series([buildEslintRules, lintScripts, lintCompiler]);
+const lint = eslint(".");
 lint.displayName = "lint";
-task("lint", series([buildEslintRules, lint]));
+task("lint", lint);
 task("lint").description = "Runs eslint on the compiler and scripts sources.";
-task("lint").flags = {
-    "   --ci": "Runs eslint additional rules",
-};
 
 const buildCancellationToken = () => buildProject("src/cancellationToken");
 const cleanCancellationToken = () => cleanProject("src/cancellationToken");
@@ -442,10 +424,8 @@ task("watch-local").flags = {
 const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
-const postTest = (done) => cmdLineOptions.lint ? lint(done) : done();
-
 const runTests = () => runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("runtests", series(preBuild, preTest, runTests, postTest));
+task("runtests", series(preBuild, preTest, runTests));
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
     "-t --tests=<regex>": "Pattern for tests to run.",
@@ -457,7 +437,6 @@ task("runtests").flags = {
     "   --dirty": "Run tests without first cleaning test output directories",
     "   --stackTraceLimit=<limit>": "Sets the maximum number of stack frames to display. Use 'full' to show all frames.",
     "   --no-color": "Disables color",
-    "   --no-lint": "Disables lint",
     "   --timeout=<ms>": "Overrides the default test timeout.",
     "   --built": "Compile using the built version of the compiler.",
     "   --shards": "Total number of shards running tests (default: 1)",
@@ -465,10 +444,9 @@ task("runtests").flags = {
 };
 
 const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
-task("runtests-parallel", series(preBuild, preTest, runTestsParallel, postTest));
+task("runtests-parallel", series(preBuild, preTest, runTestsParallel));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
-    "   --no-lint": "disables lint.",
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
     "   --dirty": "Run tests without first cleaning test output directories.",
@@ -631,7 +609,6 @@ task("watch").flags = {
     "   --dirty": "Run tests without first cleaning test output directories",
     "   --stackTraceLimit=<limit>": "Sets the maximum number of stack frames to display. Use 'full' to show all frames.",
     "   --no-color": "Disables color",
-    "   --no-lint": "Disables lint",
     "   --timeout=<ms>": "Overrides the default test timeout.",
     "   --workers=<number>": "The number of parallel workers to use.",
     "   --built": "Compile using the built version of the compiler.",

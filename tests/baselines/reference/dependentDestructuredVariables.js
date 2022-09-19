@@ -35,6 +35,26 @@ function f12({ kind, payload }: Action) {
     }
 }
 
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
+function f14<T extends Action>(t: T) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
 type Action2 =
     | { kind: 'A', payload: number | undefined }
     | { kind: 'B', payload: string | undefined };
@@ -420,6 +440,24 @@ function f12({ kind, payload }) {
             payload; // never
     }
 }
+// repro #50206
+function f13({ kind, payload }) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+function f14(t) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
 function f20({ kind, payload }) {
     if (payload) {
         if (kind === 'A') {
@@ -662,6 +700,8 @@ type Action = {
 declare function f10({ kind, payload }: Action): void;
 declare function f11(action: Action): void;
 declare function f12({ kind, payload }: Action): void;
+declare function f13<T extends Action>({ kind, payload }: T): void;
+declare function f14<T extends Action>(t: T): void;
 type Action2 = {
     kind: 'A';
     payload: number | undefined;

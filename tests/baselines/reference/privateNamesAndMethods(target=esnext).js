@@ -32,13 +32,6 @@ class B extends A {
 
 //// [privateNamesAndMethods.js]
 class A {
-    constructor() {
-        this.#foo(30);
-        this.#bar(30);
-        this.#baz(30);
-        this.#quux = this.#quux + 1;
-        this.#quux++;
-    }
     #foo(a) { }
     async #bar(a) { }
     async *#baz(a) {
@@ -50,6 +43,13 @@ class A {
     }
     set #quux(val) {
         this.#_quux = val;
+    }
+    constructor() {
+        this.#foo(30);
+        this.#bar(30);
+        this.#baz(30);
+        this.#quux = this.#quux + 1;
+        this.#quux++;
     }
 }
 class B extends A {
