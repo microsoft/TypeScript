@@ -3955,7 +3955,7 @@ declare namespace ts {
      * A function that transforms a node.
      */
     export type Transformer<T extends Node> = (node: T) => T;
-    export type VisitResult<T extends Node | undefined, U extends Node = NonNullable<T>> = T | readonly U[];
+    export type VisitResult<T extends Node | undefined> = T | readonly Node[];
     /**
      * A function that accepts and possibly transforms a node.
      */
@@ -3989,8 +3989,6 @@ declare namespace ts {
     export interface NodesVisitor {
         <TIn extends Node, TArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined : NodeArray<TAssert>>(nodes: TArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => node is TAssert, start?: number, count?: number): TOutArray;
     }
-    export function _jakeTesting(node: Node, nodeVisitor: Visitor<Node, Expression>): AssertionExpression;
-    export function _jakeTesting2(nodes: NodeArray<Node>, nodeVisitor: Visitor<Node, Expression | undefined>): NodeArray<AssertionExpression>;
     export interface Printer {
         /**
          * Print a node and its subtree as-is, without any emit transformations.

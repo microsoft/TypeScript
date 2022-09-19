@@ -8538,7 +8538,7 @@ namespace ts {
     export type Transformer<T extends Node> = (node: T) => T; // TODO(jakebailey): This signature is totally wrong.
 
     // Either a node, or a list of nodes to be be lifted via a lift function.
-    export type VisitResult<T extends Node | undefined, U extends Node = NonNullable<T>> = T | readonly U[];
+    export type VisitResult<T extends Node | undefined> = T | readonly Node[];
 
     /**
      * A function that accepts and possibly transforms a node.
@@ -8603,21 +8603,6 @@ namespace ts {
             start?: number,
             count?: number,
         ): TOutArray;
-    }
-
-    declare const testNodeVisitor2: NodeVisitor;
-    declare const testNodesVisitor2: NodesVisitor;
-
-    export function _jakeTesting(node: Node, nodeVisitor: Visitor<Node, Expression>) {
-        const result = testNodeVisitor2(node, nodeVisitor, isAssertionExpression);
-        //     ^?
-        return result;
-    }
-
-    export function _jakeTesting2(nodes: NodeArray<Node>, nodeVisitor: Visitor<Node, Expression | undefined>) {
-        const result = testNodesVisitor2(nodes, nodeVisitor, isAssertionExpression);
-        //     ^?
-        return result;
     }
 
     export interface Printer {
