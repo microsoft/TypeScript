@@ -5868,8 +5868,8 @@ namespace ts {
                 }
 
                 function preserveCommentsOn<T extends Node>(node: T) {
-                    const d = propertySymbol.declarations?.find(d => d.kind === SyntaxKind.JSDocPropertyTag) as JSDocPropertyTag | undefined;
-                    if (d) {
+                    if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
+                        const d = propertySymbol.declarations?.find(d => d.kind === SyntaxKind.JSDocPropertyTag)! as JSDocPropertyTag;
                         const commentText = getTextOfJSDocComment(d.comment);
                         if (commentText) {
                             setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]);
