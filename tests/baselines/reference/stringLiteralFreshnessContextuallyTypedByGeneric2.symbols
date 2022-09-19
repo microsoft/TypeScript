@@ -1,0 +1,49 @@
+=== tests/cases/compiler/stringLiteralFreshnessContextuallyTypedByGeneric2.ts ===
+type Model = { s: string; b: boolean }
+>Model : Symbol(Model, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 0, 0))
+>s : Symbol(s, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 0, 14))
+>b : Symbol(b, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 0, 25))
+
+declare let pick: <Keys extends keyof Model>(properties: readonly Keys[]) => Pick<Model, Keys>
+>pick : Symbol(pick, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 1, 11))
+>Keys : Symbol(Keys, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 1, 19))
+>Model : Symbol(Model, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 0, 0))
+>properties : Symbol(properties, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 1, 45))
+>Keys : Symbol(Keys, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 1, 19))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Model : Symbol(Model, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 0, 0))
+>Keys : Symbol(Keys, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 1, 19))
+
+declare let transform1: <T>(obj: T) => T
+>transform1 : Symbol(transform1, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 2, 11))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 2, 25))
+>obj : Symbol(obj, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 2, 28))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 2, 25))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 2, 25))
+
+declare let transform2: <T extends {}>(obj: T) => T
+>transform2 : Symbol(transform2, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 3, 11))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 3, 25))
+>obj : Symbol(obj, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 3, 39))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 3, 25))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 3, 25))
+
+const result1 = transform1(pick(["s"]))
+>result1 : Symbol(result1, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 5, 5))
+>transform1 : Symbol(transform1, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 2, 11))
+>pick : Symbol(pick, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 1, 11))
+
+const result2 = transform2(pick(["s"]))
+>result2 : Symbol(result2, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 6, 5))
+>transform2 : Symbol(transform2, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 3, 11))
+>pick : Symbol(pick, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 1, 11))
+
+const intermediate = pick(["s"])
+>intermediate : Symbol(intermediate, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 8, 5))
+>pick : Symbol(pick, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 1, 11))
+
+const result3 = transform1(intermediate)
+>result3 : Symbol(result3, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 9, 5))
+>transform1 : Symbol(transform1, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 2, 11))
+>intermediate : Symbol(intermediate, Decl(stringLiteralFreshnessContextuallyTypedByGeneric2.ts, 8, 5))
+

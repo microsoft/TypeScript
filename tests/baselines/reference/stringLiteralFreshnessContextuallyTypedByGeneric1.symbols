@@ -1,0 +1,72 @@
+=== tests/cases/compiler/stringLiteralFreshnessContextuallyTypedByGeneric1.ts ===
+interface Guard<T> {
+>Guard : Symbol(Guard, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 0, 0))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 0, 16))
+
+  (val: unknown): val is T;
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 1, 3))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 1, 3))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 0, 16))
+}
+
+type ObjectGuard<T> = {
+>ObjectGuard : Symbol(ObjectGuard, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 2, 1))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 4, 17))
+
+  [key in keyof T]: Guard<T[key]>;
+>key : Symbol(key, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 5, 3))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 4, 17))
+>Guard : Symbol(Guard, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 0, 0))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 4, 17))
+>key : Symbol(key, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 5, 3))
+
+};
+
+function isObject(val: unknown): val is Record<string, unknown> {
+>isObject : Symbol(isObject, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 6, 2))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 8, 18))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 8, 18))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  return val !== undefined && val !== null && typeof val === 'object' && !Array.isArray(val);
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 8, 18))
+>undefined : Symbol(undefined)
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 8, 18))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 8, 18))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 8, 18))
+}
+
+declare function createObjectGuard<T>(guard: ObjectGuard<T>): (val: unknown) => val is T;
+>createObjectGuard : Symbol(createObjectGuard, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 10, 1))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 12, 35))
+>guard : Symbol(guard, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 12, 38))
+>ObjectGuard : Symbol(ObjectGuard, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 2, 1))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 12, 35))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 12, 63))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 12, 63))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 12, 35))
+
+declare function asLiteral<T extends (string | boolean | number)[]>(...literals: T): (val: unknown) => val is T[number]
+>asLiteral : Symbol(asLiteral, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 12, 89))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 14, 27))
+>literals : Symbol(literals, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 14, 68))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 14, 27))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 14, 86))
+>val : Symbol(val, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 14, 86))
+>T : Symbol(T, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 14, 27))
+
+// See type of `isWorking` - should include the type key as a union of strings
+const isWorking = createObjectGuard({
+>isWorking : Symbol(isWorking, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 17, 5))
+>createObjectGuard : Symbol(createObjectGuard, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 10, 1))
+
+//    ^?
+  type: asLiteral('these', 'should', 'be', 'a', 'union'),
+>type : Symbol(type, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 17, 37))
+>asLiteral : Symbol(asLiteral, Decl(stringLiteralFreshnessContextuallyTypedByGeneric1.ts, 12, 89))
+
+});
+
