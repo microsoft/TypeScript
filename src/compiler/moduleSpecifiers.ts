@@ -3,7 +3,7 @@
 namespace ts.moduleSpecifiers {
     const enum RelativePreference { Relative, NonRelative, Shortest, ExternalNonRelative }
     // See UserPreferences#importPathEnding
-    const enum Ending { Minimal, Index, JsExtension }
+    const enum Ending { Minimal, Index, JsExtension, TsExtension }
 
     // Processed preferences
     interface Preferences {
@@ -36,6 +36,9 @@ namespace ts.moduleSpecifiers {
                     getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal ||
                     isFormatRequiringExtensions()
                 ) {
+                    if (shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
+                        return [Ending.TsExtension, Ending.JsExtension];
+                    }
                     return [Ending.JsExtension];
                 }
                 if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic) {
@@ -43,6 +46,7 @@ namespace ts.moduleSpecifiers {
                 }
                 switch (preferredEnding) {
                     case Ending.JsExtension: return [Ending.JsExtension, Ending.Minimal, Ending.Index];
+                    case Ending.TsExtension: return [Ending.TsExtension, Ending.TsExtension, Ending.Minimal, Ending.Index];
                     case Ending.Index: return [Ending.Index, Ending.Minimal, Ending.JsExtension];
                     case Ending.Minimal: return [Ending.Minimal, Ending.Index, Ending.JsExtension];
                     default: Debug.assertNever(preferredEnding);
@@ -58,8 +62,10 @@ namespace ts.moduleSpecifiers {
             switch (importModuleSpecifierEnding) {
                 case "minimal": return Ending.Minimal;
                 case "index": return Ending.Index;
-                case "js": return Ending.JsExtension;
-                default: return usesJsExtensionOnImports(importingSourceFile) ? Ending.JsExtension : Ending.Minimal;
+                case "js": return shouldAllowImportingTsExtension(compilerOptions) ? Ending.TsExtension : Ending.JsExtension;
+                default: return usesExtensionsOnImports(importingSourceFile)
+                    ? shouldAllowImportingTsExtension(compilerOptions) ? Ending.TsExtension : Ending.JsExtension
+                    : Ending.Minimal;
             }
         }
 
@@ -403,8 +409,8 @@ namespace ts.moduleSpecifiers {
         return count;
     }
 
-    function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSFileExtension(text) : undefined) || false;
+    function usesExtensionsOnImports({ imports }: SourceFile): boolean {
+        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? (hasJSFileExtension(text) || hasTSFileExtension(text)) : undefined) || false;
     }
 
     function comparePathsByRedirectAndNumberOfDirectorySeparators(a: ModulePath, b: ModulePath) {
@@ -928,6 +934,8 @@ namespace ts.moduleSpecifiers {
                 return noExtension;
             case Ending.JsExtension:
                 return noExtension + getJSExtensionForFile(fileName, options);
+            case Ending.TsExtension:
+                return fileName;
             default:
                 return Debug.assertNever(ending);
         }

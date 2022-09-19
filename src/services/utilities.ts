@@ -1909,8 +1909,9 @@ namespace ts {
     export function programContainsEsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
+    // TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
     export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
-        return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
+        return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal;
     }
 
     export function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
