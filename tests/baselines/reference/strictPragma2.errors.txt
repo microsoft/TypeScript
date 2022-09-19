@@ -3,19 +3,19 @@ tests/cases/conformance/pragma/strict/file1.ts(10,1): error TS2322: Type '(arg: 
   Types of parameters 'arg' and 'arg' are incompatible.
     Type 'unknown' is not assignable to type 'string'.
 tests/cases/conformance/pragma/strict/file1.ts(13,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/pragma/strict/file1.ts(18,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/pragma/strict/file1.ts(18,1): error TS18048: 'c.member' is possibly 'undefined'.
 tests/cases/conformance/pragma/strict/file2.ts(3,20): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/pragma/strict/file2.ts(10,1): error TS2322: Type '(arg: string) => number' is not assignable to type '(arg: unknown) => number'.
   Types of parameters 'arg' and 'arg' are incompatible.
     Type 'unknown' is not assignable to type 'string'.
 tests/cases/conformance/pragma/strict/file2.ts(13,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/pragma/strict/file2.ts(18,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/pragma/strict/file2.ts(18,1): error TS18048: 'c.member' is possibly 'undefined'.
 tests/cases/conformance/pragma/strict/file4.ts(2,20): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/pragma/strict/file4.ts(9,1): error TS2322: Type '(arg: string) => number' is not assignable to type '(arg: unknown) => number'.
   Types of parameters 'arg' and 'arg' are incompatible.
     Type 'unknown' is not assignable to type 'string'.
 tests/cases/conformance/pragma/strict/file4.ts(12,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/pragma/strict/file4.ts(17,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/pragma/strict/file4.ts(17,1): error TS18048: 'c.member' is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/pragma/strict/file1.ts (4 errors) ====
@@ -46,7 +46,7 @@ tests/cases/conformance/pragma/strict/file4.ts(17,1): error TS2532: Object is po
     declare var c: { member?: string };
     c.member.charAt(0);
     ~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'c.member' is possibly 'undefined'.
     
 ==== tests/cases/conformance/pragma/strict/file2.ts (4 errors) ====
     // @ts-strict true
@@ -76,7 +76,7 @@ tests/cases/conformance/pragma/strict/file4.ts(17,1): error TS2532: Object is po
     declare var c: { member?: string };
     c.member.charAt(0);
     ~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'c.member' is possibly 'undefined'.
     
 ==== tests/cases/conformance/pragma/strict/file3.ts (0 errors) ====
     // @ts-strict false
@@ -125,5 +125,5 @@ tests/cases/conformance/pragma/strict/file4.ts(17,1): error TS2532: Object is po
     declare var c: { member?: string };
     c.member.charAt(0);
     ~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'c.member' is possibly 'undefined'.
     

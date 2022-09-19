@@ -2,7 +2,7 @@ tests/cases/conformance/pragma/strict/file2.ts(11,1): error TS2322: Type '(arg: 
   Types of parameters 'arg' and 'arg' are incompatible.
     Type 'unknown' is not assignable to type 'string'.
 tests/cases/conformance/pragma/strict/file2.ts(14,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/pragma/strict/file2.ts(19,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/pragma/strict/file2.ts(19,1): error TS18048: 'c.member' is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/pragma/strict/file2.ts (3 errors) ====
@@ -32,5 +32,5 @@ tests/cases/conformance/pragma/strict/file2.ts(19,1): error TS2532: Object is po
     declare var c: { member?: string };
     c.member.charAt(0);
     ~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'c.member' is possibly 'undefined'.
     

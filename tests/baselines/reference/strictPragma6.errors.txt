@@ -1,6 +1,6 @@
 tests/cases/conformance/pragma/strict/file1.ts(4,20): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/pragma/strict/file1.ts(14,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/pragma/strict/file1.ts(19,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/pragma/strict/file1.ts(19,1): error TS18048: 'c.member' is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/pragma/strict/file1.ts (3 errors) ====
@@ -28,5 +28,5 @@ tests/cases/conformance/pragma/strict/file1.ts(19,1): error TS2532: Object is po
     declare var c: { member?: string };
     c.member.charAt(0);
     ~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'c.member' is possibly 'undefined'.
     
