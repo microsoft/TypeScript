@@ -1141,7 +1141,7 @@ namespace ts.textChanges {
         TArray extends NodeArray<TIn> | undefined,
         TVisited extends Node | undefined,
         TAssert extends NonNullable<TVisited>,
-        TOut extends TArray extends undefined ? NodeArray<TAssert> | undefined
+        TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined
             : NodeArray<TAssert>,
     >(
         nodes: TArray,
@@ -1149,16 +1149,16 @@ namespace ts.textChanges {
         test?: (node: Node) => node is TAssert,
         start?: number,
         count?: number,
-    ): TOut {
+    ): TOutArray {
         const visited = visitNodes(nodes, visitor, test, start, count);
         if (!visited) {
-            return visited as TOut;
+            return visited as TOutArray;
         }
         Debug.assert(nodes);
         // clone nodearray if necessary
         const nodeArray = visited as NodeArray<Node> === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
         setTextRangePosEnd(nodeArray, getPos(nodes), getEnd(nodes));
-        return nodeArray as TOut;
+        return nodeArray as TOutArray;
     }
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}

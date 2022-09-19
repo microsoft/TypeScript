@@ -63,7 +63,7 @@ namespace ts {
         TArray extends NodeArray<TIn> | undefined,
         TVisited extends Node | undefined,
         TAssert extends NonNullable<TVisited>,
-        TOut extends TArray extends undefined ? NodeArray<TAssert> | undefined
+        TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined
             : NodeArray<TAssert>,
     >(
         nodes: TArray,
@@ -71,10 +71,10 @@ namespace ts {
         test?: (node: Node) => node is TAssert,
         start?: number,
         count?: number,
-    ): TOut {
+    ): TOutArray {
         if (nodes === undefined) {
             // If the input type is undefined, then the output type can be undefined.
-            return nodes as NodeArray<Node> | undefined as TOut;
+            return nodes as NodeArray<Node> | undefined as TOutArray;
         }
 
         // Ensure start and count have valid values
@@ -106,13 +106,13 @@ namespace ts {
             // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
             const updatedArray = factory.createNodeArray(updated, hasTrailingComma);
             setTextRangePosEnd(updatedArray, pos, end);
-            return updatedArray as TOut;
+            return updatedArray as TOutArray;
         }
 
         // If we are here, updated === nodes. This means that it's still a NodeArray,
         // and also that its contents passed the tests in visitArrayWorker, so has contents
         // of type TOut.
-        return nodes as NodeArray<Node> as TOut;
+        return nodes as NodeArray<Node> as TOutArray;
     }
 
     ((_: NodesVisitor) => {})(visitNodes); // Check that visitNode is a NodeVisitor.

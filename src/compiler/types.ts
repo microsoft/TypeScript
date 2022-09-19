@@ -8546,6 +8546,15 @@ namespace ts {
     export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn> = (node: TIn) => VisitResult<TOut>;
     
     /**
+     * A function that walks a node using the given visitor, lifting node arrays into single nodes,
+     * returning an node which satisfies the test.
+     * 
+     * This type is complicated, but intends to encode the following behaviors:
+     * 
+     *   - If the input node is potentially undefined, the output is potentially undefined.
+     *   - If the visitor can return undefined, the output is potentially undefined.
+     *   - If the output node is not undefined, then it will satisfy the test.
+     * 
      * @see {visitNode}
      */
     export interface NodeVisitor {
@@ -8565,6 +8574,14 @@ namespace ts {
     }
     
     /**
+     * A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
+     * 
+     * This type is complicated, but intends to encode the following behaviors:
+     * 
+     *   - If the input node array is potentially undefined, the output is potentially undefined.
+     *   - If the visitor can return undefined, the output may not be undefined; these nodes will be left in the output.
+     *   - If the output node array is not undefined, then its contents will satisfy the test.
+     * 
      * @see {visitNodes}
      */
     export interface NodesVisitor {
@@ -8573,7 +8590,7 @@ namespace ts {
             TArray extends NodeArray<TIn> | undefined,
             TVisited extends Node | undefined,
             TAssert extends NonNullable<TVisited>,
-            TOut extends TArray extends undefined ? NodeArray<TAssert> | undefined
+            TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined
                 : NodeArray<TAssert>,
         >(
             nodes: TArray,
@@ -8581,7 +8598,7 @@ namespace ts {
             test?: (node: Node) => node is TAssert,
             start?: number,
             count?: number,
-        ): TOut;
+        ): TOutArray;
     }
 
     declare const testNodeVisitor2: NodeVisitor;

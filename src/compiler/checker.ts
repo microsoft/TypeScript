@@ -5500,7 +5500,7 @@ namespace ts {
                         TArray extends NodeArray<TIn> | undefined,
                         TVisited extends Node | undefined,
                         TAssert extends NonNullable<TVisited>,
-                        TOut extends TArray extends undefined ? NodeArray<TAssert> | undefined
+                        TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined
                             : NodeArray<TAssert>,
                     >(
                         nodes: TArray,
@@ -5508,11 +5508,11 @@ namespace ts {
                         test?: (node: Node) => node is TAssert,
                         start?: number,
                         count?: number,
-                    ): TOut {
+                    ): TOutArray {
                         if (nodes && nodes.length === 0) {
                             // Ensure we explicitly make a copy of an empty array; visitNodes will not do this unless the array has elements,
                             // which can lead to us reusing the same empty NodeArray more than once within the same AST during type noding.
-                            return setTextRange(factory.createNodeArray(/*nodes*/ undefined, nodes.hasTrailingComma), nodes) as TOut;
+                            return setTextRange(factory.createNodeArray(/*nodes*/ undefined, nodes.hasTrailingComma), nodes) as TOutArray;
                         }
                         return visitNodes(nodes, visitor, test, start, count);
                     }
