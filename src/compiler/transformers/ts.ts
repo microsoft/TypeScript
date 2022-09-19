@@ -2463,11 +2463,10 @@ namespace ts {
         }
 
         function shouldEmitAliasDeclaration(node: Node): boolean {
-            return isInJSFile(node)
-                ? true
-                : compilerOptions.preserveValueImports
+            return isInJSFile(node) ||
+                (compilerOptions.preserveValueImports
                     ? resolver.isValueAliasDeclaration(node)
-                    : resolver.isReferencedAliasDeclaration(node);
+                    : resolver.isReferencedAliasDeclaration(node));
         }
     }
 }
