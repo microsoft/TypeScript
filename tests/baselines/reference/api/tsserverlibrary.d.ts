@@ -3950,11 +3950,11 @@ declare namespace ts {
      * A function that is used to initialize and return a `Transformer` callback, which in turn
      * will be used to transform one or more nodes.
      */
-    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
+    export type TransformerFactory<TIn extends Node, TOut extends Node | undefined = TIn> = (context: TransformationContext) => Transformer<TIn, TOut>;
     /**
      * A function that transforms a node.
      */
-    export type Transformer<T extends Node> = (node: T) => T;
+    export type Transformer<TIn extends Node, TOut extends Node | undefined = TIn> = (node: TIn) => TOut;
     export type VisitResult<T extends Node | undefined> = T | readonly Node[];
     /**
      * A function that accepts and possibly transforms a node.
