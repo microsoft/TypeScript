@@ -83,7 +83,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -199,7 +199,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts (used version)
 /users/username/projects/project/index.tsx (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

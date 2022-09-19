@@ -241,7 +241,7 @@ namespace ts.Completions.StringCompletions {
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
-                    return argumentInfo ? getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) : fromContextualType();
+                    return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType();
                 }
                 // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -283,7 +283,7 @@ namespace ts.Completions.StringCompletions {
             type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
     }
 
-    function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes {
+    function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes | undefined {
         let isNewIdentifier = false;
         const uniques = new Map<string, true>();
         const candidates: Signature[] = [];
@@ -301,8 +301,7 @@ namespace ts.Completions.StringCompletions {
             isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
             return getStringLiteralTypes(type, uniques);
         });
-
-        return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier };
+        return length(types) ? { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier } : undefined;
     }
 
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {

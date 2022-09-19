@@ -59,7 +59,7 @@ namespace ts.formatting {
             // in other cases there should be no space between '?' and next token
             rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext, isNotPropertyAccessOnIntegerLiteral], RuleAction.DeleteSpace),
             rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.DeleteSpace),
@@ -149,6 +149,7 @@ namespace ts.formatting {
                 "SpaceAfterCertainTypeScriptKeywords",
                 [
                     SyntaxKind.AbstractKeyword,
+                    SyntaxKind.AccessorKeyword,
                     SyntaxKind.ClassKeyword,
                     SyntaxKind.DeclareKeyword,
                     SyntaxKind.DefaultKeyword,
@@ -449,6 +450,7 @@ namespace ts.formatting {
             case SyntaxKind.TypePredicate:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
+            case SyntaxKind.SatisfiesExpression:
                 return true;
 
             // equals in binding elements: function foo([[x, y] = [1, 2]])
@@ -891,5 +893,11 @@ namespace ts.formatting {
 
     function isSemicolonInsertionContext(context: FormattingContext): boolean {
         return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
+    }
+
+    function isNotPropertyAccessOnIntegerLiteral(context: FormattingContext): boolean {
+        return !isPropertyAccessExpression(context.contextNode)
+            || !isNumericLiteral(context.contextNode.expression)
+            || context.contextNode.expression.getText().indexOf(".") !== -1;
     }
 }

@@ -49,23 +49,23 @@ Shape signatures in builder refreshed for::
 /a/rootfolder/project/scripts/javascript.js (used version)
 /a/rootfolder/project/scripts/typescript.ts (used version)
 
-WatchedFiles::
-/a/rootfolder/project/tsconfig.json:
-  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
-/a/rootfolder/project/scripts/javascript.js:
-  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
-/a/rootfolder/project/scripts/typescript.ts:
-  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /a/rootfolder/project/node_modules/@types:
-  {"fileName":"/a/rootFolder/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/rootfolder/project/tsconfig.json:
+  {}
+/a/rootfolder/project/scripts/javascript.js:
+  {}
+/a/rootfolder/project/scripts/typescript.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/rootfolder/project/scripts:
-  {"directoryName":"/a/rootfolder/project/scripts"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -110,23 +110,23 @@ Shape signatures in builder refreshed for::
 /a/rootfolder/project/scripts/typescript.ts (computed .d.ts)
 /a/rootfolder/project/scripts/javascript.js (computed .d.ts)
 
-WatchedFiles::
-/a/rootfolder/project/tsconfig.json:
-  {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
-/a/rootfolder/project/scripts/javascript.js:
-  {"fileName":"/a/rootFolder/project/Scripts/Javascript.js","pollingInterval":250}
-/a/rootfolder/project/scripts/typescript.ts:
-  {"fileName":"/a/rootFolder/project/Scripts/TypeScript.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /a/rootfolder/project/node_modules/@types:
-  {"fileName":"/a/rootFolder/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/rootfolder/project/tsconfig.json:
+  {}
+/a/rootfolder/project/scripts/javascript.js:
+  {}
+/a/rootfolder/project/scripts/typescript.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/rootfolder/project/scripts:
-  {"directoryName":"/a/rootfolder/project/scripts"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

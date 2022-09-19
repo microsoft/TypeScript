@@ -1706,10 +1706,7 @@ namespace ts {
             }
         }
 
-        const seenRefs = buildInfoPath ? new Set<ResolvedConfigFilePath>() : undefined;
         const buildInfoCacheEntry = state.buildInfoCache.get(resolvedPath);
-        seenRefs?.add(resolvedPath);
-
         /** Inputs are up-to-date, just need either timestamp update or bundle prepend manipulation to make it look up-to-date */
         let pseudoUpToDate = false;
         let usesPrepend = false;
@@ -1724,7 +1721,7 @@ namespace ts {
                 }
 
                 // Check if tsbuildinfo path is shared, then we need to rebuild
-                if (buildInfoCacheEntry && hasSameBuildInfo(state, buildInfoCacheEntry, seenRefs!, resolvedConfig, resolvedRefPath)) {
+                if (buildInfoCacheEntry && hasSameBuildInfo(state, buildInfoCacheEntry, resolvedRefPath)) {
                     return {
                         type: UpToDateStatusType.OutOfDateWithUpstream,
                         outOfDateOutputFileName: buildInfoPath!,
@@ -1787,22 +1784,9 @@ namespace ts {
         };
     }
 
-    function hasSameBuildInfo(state: SolutionBuilderState, buildInfoCacheEntry: BuildInfoCacheEntry, seenRefs: Set<ResolvedConfigFilePath>, resolvedConfig: ParsedCommandLine, resolvedRefPath: ResolvedConfigFilePath) {
-        if (seenRefs.has(resolvedRefPath)) return false;
-        seenRefs.add(resolvedRefPath);
+    function hasSameBuildInfo(state: SolutionBuilderState, buildInfoCacheEntry: BuildInfoCacheEntry, resolvedRefPath: ResolvedConfigFilePath) {
         const refBuildInfo = state.buildInfoCache.get(resolvedRefPath)!;
-        if (refBuildInfo.path === buildInfoCacheEntry.path) return true;
-
-        if (resolvedConfig.projectReferences) {
-            // Check references
-            for (const ref of resolvedConfig.projectReferences) {
-                const resolvedRef = resolveProjectReferencePath(ref);
-                const resolvedRefPath = toResolvedConfigFilePath(state, resolvedRef);
-                const resolvedConfig = parseConfigFile(state, resolvedRef, resolvedRefPath)!;
-                if (hasSameBuildInfo(state, buildInfoCacheEntry, seenRefs, resolvedConfig, resolvedRefPath)) return true;
-            }
-        }
-        return false;
+        return refBuildInfo.path === buildInfoCacheEntry.path;
     }
 
     function getUpToDateStatus(state: SolutionBuilderState, project: ParsedCommandLine | undefined, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
