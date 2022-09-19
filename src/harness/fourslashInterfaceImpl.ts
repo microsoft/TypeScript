@@ -1271,6 +1271,7 @@ namespace FourSlashInterface {
 
         export const classElementKeywords: readonly ExpectedCompletionEntryObject[] = [
             "abstract",
+            "accessor",
             "async",
             "constructor",
             "declare",
@@ -1388,6 +1389,7 @@ namespace FourSlashInterface {
             "package",
             "readonly",
             "return",
+            "satisfies",
             "string",
             "super",
             "switch",
@@ -1503,6 +1505,7 @@ namespace FourSlashInterface {
             "null",
             "package",
             "return",
+            "satisfies",
             "super",
             "switch",
             "this",
@@ -1601,6 +1604,7 @@ namespace FourSlashInterface {
             "package",
             "readonly",
             "return",
+            "satisfies",
             "string",
             "super",
             "switch",
@@ -1655,6 +1659,7 @@ namespace FourSlashInterface {
             "null",
             "package",
             "return",
+            "satisfies",
             "super",
             "switch",
             "this",
@@ -1895,11 +1900,11 @@ namespace FourSlashInterface {
     };
     export interface DiagnosticIgnoredInterpolations {
         template: string
-    };
+    }
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
     export interface RenameOptions {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
-    };
+    }
 }

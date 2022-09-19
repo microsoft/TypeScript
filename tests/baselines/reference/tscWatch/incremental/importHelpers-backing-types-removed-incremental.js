@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/tslib/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -150,7 +150,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

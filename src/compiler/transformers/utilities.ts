@@ -381,8 +381,8 @@ namespace ts {
      *
      * @param member The class element node.
      */
-    export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration {
-        return !isStatic(member) && isMethodOrAccessor(member) && isPrivateIdentifier(member.name);
+    export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierAutoAccessorPropertyDeclaration {
+        return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) && isPrivateIdentifier(member.name);
     }
 
     /**

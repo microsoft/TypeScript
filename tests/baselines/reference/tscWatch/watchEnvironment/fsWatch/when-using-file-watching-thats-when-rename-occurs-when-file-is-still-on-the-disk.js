@@ -59,19 +59,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json"}
+  {}
 /user/username/projects/myproject/foo.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.ts"}
+  {}
 /user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts"}
+  {}
 /a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts"}
+  {}
 
 FsWatchesRecursive::
 
@@ -137,19 +137,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json"}
+  {}
 /user/username/projects/myproject/foo.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.ts"}
+  {}
 /user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts"}
+  {}
 /a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts"}
+  {}
 
 FsWatchesRecursive::
 
@@ -198,19 +198,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
-  {"directoryName":"/user/username/projects/myproject/tsconfig.json"}
+  {}
 /user/username/projects/myproject/foo.ts:
-  {"directoryName":"/user/username/projects/myproject/foo.ts"}
+  {}
 /user/username/projects/myproject/main.ts:
-  {"directoryName":"/user/username/projects/myproject/main.ts"}
+  {}
 /a/lib/lib.d.ts:
-  {"directoryName":"/a/lib/lib.d.ts"}
+  {}
 
 FsWatchesRecursive::
 

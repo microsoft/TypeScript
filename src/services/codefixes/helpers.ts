@@ -70,18 +70,25 @@ namespace ts.codefix {
          * `MappedIndirect.ax` and `MappedIndirect.ay` have no declaration node attached (due to their mapped-type
          * parent):
          *
-         * >>> ```ts
-         * >>> type Base = { ax: number; ay: string };
-         * >>> type BaseKeys = keyof Base;
-         * >>> type MappedIndirect = { [K in BaseKeys]: boolean };
-         * >>> ```
+         * ```ts
+         * type Base = { ax: number; ay: string };
+         * type BaseKeys = keyof Base;
+         * type MappedIndirect = { [K in BaseKeys]: boolean };
+         * ```
          *
          * In such cases, we assume the declaration to be a `PropertySignature`.
          */
         const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
-        const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
-        const visibilityModifier = createVisibilityModifier(declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None);
-        const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
+        const declarationName = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
+        const effectiveModifierFlags = declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None;
+        let modifierFlags =
+            effectiveModifierFlags & ModifierFlags.Public ? ModifierFlags.Public :
+            effectiveModifierFlags & ModifierFlags.Protected ? ModifierFlags.Protected :
+            ModifierFlags.None;
+        if (declaration && isAutoAccessorPropertyDeclaration(declaration)) {
+            modifierFlags |= ModifierFlags.Accessor;
+        }
+        const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
         const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
@@ -101,7 +108,7 @@ namespace ts.codefix {
                 }
                 addClassElement(factory.createPropertyDeclaration(
                     modifiers,
-                    declaration ? name : symbol.getName(),
+                    declaration ? createName(declarationName) : symbol.getName(),
                     optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
                     /*initializer*/ undefined));
@@ -125,10 +132,10 @@ namespace ts.codefix {
                     if (isGetAccessorDeclaration(accessor)) {
                         addClassElement(factory.createGetAccessorDeclaration(
                             modifiers,
-                            name,
+                            createName(declarationName),
                             emptyArray,
-                            typeNode,
-                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
+                            createTypeNode(typeNode),
+                            createBody(body, quotePreference, ambient)));
                     }
                     else {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
@@ -136,9 +143,9 @@ namespace ts.codefix {
                         const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
                         addClassElement(factory.createSetAccessorDeclaration(
                             modifiers,
-                            name,
-                            createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
-                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
+                            createName(declarationName),
+                            createDummyParameters(1, [parameterName], [createTypeNode(typeNode)], 1, /*inJs*/ false),
+                            createBody(body, quotePreference, ambient)));
                     }
                 }
                 break;
@@ -161,23 +168,23 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1, "One declaration implies one signature");
                     const signature = signatures[0];
-                    outputMethod(quotePreference, signature, modifiers, name, ambient ? undefined : body || createStubbedMethodBody(quotePreference));
+                    outputMethod(quotePreference, signature, modifiers, createName(declarationName), createBody(body, quotePreference, ambient));
                     break;
                 }
 
                 for (const signature of signatures) {
                     // Ensure nodes are fresh so they can have different positions when going through formatting.
-                    outputMethod(quotePreference, signature, getSynthesizedDeepClones(modifiers, /*includeTrivia*/ false), getSynthesizedDeepClone(name, /*includeTrivia*/ false));
+                    outputMethod(quotePreference, signature, modifiers, createName(declarationName));
                 }
 
                 if (!ambient) {
                     if (declarations.length > signatures.length) {
                         const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration)!;
-                        outputMethod(quotePreference, signature, modifiers, name, body || createStubbedMethodBody(quotePreference));
+                        outputMethod(quotePreference, signature, modifiers, createName(declarationName), createBody(body, quotePreference));
                     }
                     else {
                         Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
-                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, name, optional && !!(preserveOptional & PreserveOptionalFlags.Method), modifiers, quotePreference, body));
+                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, createName(declarationName), optional && !!(preserveOptional & PreserveOptionalFlags.Method), modifiers, quotePreference, body));
                     }
                 }
                 break;
@@ -186,6 +193,19 @@ namespace ts.codefix {
         function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
             const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder) as MethodDeclaration;
             if (method) addClassElement(method);
+        }
+
+        function createName(node: PropertyName) {
+            return getSynthesizedDeepClone(node, /*includeTrivia*/ false);
+        }
+
+        function createBody(block: Block | undefined, quotePreference: QuotePreference, ambient?: boolean) {
+            return ambient ? undefined :
+                getSynthesizedDeepClone(block, /*includeTrivia*/ false) || createStubbedMethodBody(quotePreference);
+        }
+
+        function createTypeNode(typeNode: TypeNode | undefined) {
+            return getSynthesizedDeepClone(typeNode, /*includeTrivia*/ false);
         }
     }
 
@@ -626,16 +646,6 @@ namespace ts.codefix {
                     // TODO Handle auto quote preference.
                     [factory.createStringLiteral(text, /*isSingleQuote*/ quotePreference === QuotePreference.Single)]))],
             /*multiline*/ true);
-    }
-
-    function createVisibilityModifier(flags: ModifierFlags): Modifier | undefined {
-        if (flags & ModifierFlags.Public) {
-            return factory.createToken(SyntaxKind.PublicKeyword);
-        }
-        else if (flags & ModifierFlags.Protected) {
-            return factory.createToken(SyntaxKind.ProtectedKeyword);
-        }
-        return undefined;
     }
 
     export function setJsonCompilerOptionValues(

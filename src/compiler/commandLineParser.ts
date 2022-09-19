@@ -67,6 +67,7 @@ namespace ts {
         ["es2019.object", "lib.es2019.object.d.ts"],
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
+        ["es2019.intl", "lib.es2019.intl.d.ts"],
         ["es2020.bigint", "lib.es2020.bigint.d.ts"],
         ["es2020.date", "lib.es2020.date.d.ts"],
         ["es2020.promise", "lib.es2020.promise.d.ts"],
@@ -191,6 +192,7 @@ namespace ts {
             shortName: "h",
             type: "boolean",
             showInSimplifiedHelpView: true,
+            isCommandLineOnly: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_this_message,
             defaultValueDescription: false,
@@ -199,6 +201,8 @@ namespace ts {
             name: "help",
             shortName: "?",
             type: "boolean",
+            isCommandLineOnly: true,
+            category: Diagnostics.Command_line_Options,
             defaultValueDescription: false,
         },
         {
@@ -3705,7 +3709,7 @@ namespace ts {
     export function convertCompilerOptionsForTelemetry(opts: CompilerOptions): CompilerOptions {
         const out: CompilerOptions = {};
         for (const key in opts) {
-            if (opts.hasOwnProperty(key)) {
+            if (hasProperty(opts, key)) {
                 const type = getOptionFromName(key);
                 if (type !== undefined) { // Ignore unknown options
                     out[key] = getOptionValueWithEmptyStrings(opts[key], type);

@@ -80,6 +80,7 @@ namespace ts {
     /** @internal */
     export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
         abstract: SyntaxKind.AbstractKeyword,
+        accessor: SyntaxKind.AccessorKeyword,
         any: SyntaxKind.AnyKeyword,
         as: SyntaxKind.AsKeyword,
         asserts: SyntaxKind.AssertsKeyword,
@@ -136,6 +137,7 @@ namespace ts {
         require: SyntaxKind.RequireKeyword,
         global: SyntaxKind.GlobalKeyword,
         return: SyntaxKind.ReturnKeyword,
+        satisfies: SyntaxKind.SatisfiesKeyword,
         set: SyntaxKind.SetKeyword,
         static: SyntaxKind.StaticKeyword,
         string: SyntaxKind.StringKeyword,
@@ -359,7 +361,7 @@ namespace ts {
 
     /* @internal */
     export function computeLineStarts(text: string): number[] {
-        const result: number[] = new Array();
+        const result: number[] = [];
         let pos = 0;
         let lineStart = 0;
         while (pos < text.length) {

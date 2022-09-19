@@ -297,7 +297,7 @@ namespace ts.server {
     interface ProjectNavigateToItems {
         project: Project;
         navigateToItems: readonly NavigateToItem[];
-    };
+    }
 
     function createDocumentSpanSet(): Set<DocumentSpan> {
         return createSet(({textSpan}) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
@@ -1378,7 +1378,7 @@ namespace ts.server {
                     const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
                     const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
                     const compilerOptions = project.getCompilationSettings();
-                    const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
+                    const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory + "/package.json", project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
                     if (!packageJson) return undefined;
                     // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                     // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be
@@ -1868,9 +1868,9 @@ namespace ts.server {
 
         private getFileAndLanguageServiceForSyntacticOperation(args: protocol.FileRequestArgs) {
             // Since this is syntactic operation, there should always be project for the file
-            // we wouldnt have to ensure project but rather throw if we dont get project
+            // throw if we dont get project
             const file = toNormalizedPath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.tryGetDefaultProjectForFile(file);
+            const project = this.getProject(args.projectFileName) || this.projectService.ensureDefaultProjectForFile(file);
             if (!project) {
                 return Errors.ThrowNoProject();
             }
