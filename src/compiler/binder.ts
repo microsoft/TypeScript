@@ -3044,11 +3044,8 @@ namespace ts {
                 return;
             }
             const rootExpr = getLeftmostAccessExpression(node.left);
-            if (isIdentifier(rootExpr)) {
-                const symbol = lookupSymbolForName(container, rootExpr.escapedText);
-                if (symbol && symbol.flags & SymbolFlags.Alias) {
-                    return;
-                }
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)?.flags! & SymbolFlags.Alias) {
+                return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             setParent(node.left, node);
@@ -3080,7 +3077,7 @@ namespace ts {
         }
 
         function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: BindableStaticNameExpression, isToplevel: boolean, isPrototypeProperty: boolean, containerIsClass: boolean) {
-            if (namespaceSymbol && namespaceSymbol.flags & SymbolFlags.Alias) {
+            if (namespaceSymbol?.flags! & SymbolFlags.Alias) {
                 return namespaceSymbol;
             }
             if (isToplevel && !isPrototypeProperty) {
