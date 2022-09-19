@@ -728,6 +728,7 @@ namespace ts {
             isPropertyAccessible,
             getTypeOnlyAliasDeclaration,
             getMemberOverrideModifierStatus,
+            isTypeParameterPossiblyReferenced,
         };
 
         function runWithInferenceBlockedFromSourceNode<T>(node: Node | undefined, fn: () => T): T {
@@ -1846,6 +1847,7 @@ namespace ts {
          * the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
          * the given name can be found.
          *
+         * @param nameNotFoundMessage If defined, we will report errors found during resolve.
          * @param isUse If true, this will count towards --noUnusedLocals / --noUnusedParameters.
          */
         function resolveName(
@@ -1856,8 +1858,8 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals = false,
-            getSpellingSuggstions = true): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggstions, getSymbol);
+            getSpellingSuggestions = true): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggestions, getSymbol);
         }
 
         function resolveNameHelper(
@@ -2030,7 +2032,9 @@ namespace ts {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
-                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                if (nameNotFoundMessage) {
+                                    error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                }
                                 return undefined;
                             }
                             break loop;
@@ -2068,7 +2072,9 @@ namespace ts {
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = lookup(getSymbolOfNode(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
-                                error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                if (nameNotFoundMessage) {
+                                    error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                }
                                 return undefined;
                             }
                         }
@@ -2278,7 +2284,7 @@ namespace ts {
                 }
                 return undefined;
             }
-            else if (checkAndReportErrorForInvalidInitializer()) {
+            else if (nameNotFoundMessage && checkAndReportErrorForInvalidInitializer()) {
                 return undefined;
             }
 
@@ -6132,29 +6138,19 @@ namespace ts {
                 return parameterNode;
 
                 function cloneBindingName(node: BindingName): BindingName {
-                    return elideInitializerAndPropertyRenamingAndSetEmitFlags(node) as BindingName;
-                    function elideInitializerAndPropertyRenamingAndSetEmitFlags(node: Node): Node {
+                    return elideInitializerAndSetEmitFlags(node) as BindingName;
+                    function elideInitializerAndSetEmitFlags(node: Node): Node {
                         if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                             trackComputedName(node.expression, context.enclosingDeclaration, context);
                         }
-                        let visited = visitEachChild(node, elideInitializerAndPropertyRenamingAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndPropertyRenamingAndSetEmitFlags)!;
+                        let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
                         if (isBindingElement(visited)) {
-                            if (visited.propertyName && isIdentifier(visited.propertyName) && isIdentifier(visited.name) && !isStringAKeyword(idText(visited.propertyName))) {
-                                visited = factory.updateBindingElement(
-                                    visited,
-                                    visited.dotDotDotToken,
-                                    /* propertyName*/ undefined,
-                                    visited.propertyName,
-                                    /*initializer*/ undefined);
-                            }
-                            else {
-                                visited = factory.updateBindingElement(
-                                    visited,
-                                    visited.dotDotDotToken,
-                                    visited.propertyName,
-                                    visited.name,
-                                    /*initializer*/ undefined);
-                            }
+                            visited = factory.updateBindingElement(
+                                visited,
+                                visited.dotDotDotToken,
+                                visited.propertyName,
+                                visited.name,
+                                /*initializer*/ undefined);
                         }
                         if (!nodeIsSynthesized(visited)) {
                             visited = factory.cloneNode(visited);
@@ -17264,9 +17260,10 @@ namespace ts {
         }
 
         function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
-            // If the type parameter doesn't have exactly one declaration, if there are invening statement blocks
+            // If the type parameter doesn't have exactly one declaration, if there are intervening statement blocks
             // between the node and the type parameter declaration, if the node contains actual references to the
-            // type parameter, or if the node contains type queries, we consider the type parameter possibly referenced.
+            // type parameter, or if the node contains type queries that we can't prove couldn't contain references to the type parameter,
+            // we consider the type parameter possibly referenced.
             if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
                 const container = tp.symbol.declarations[0].parent;
                 for (let n = node; n !== container; n = n.parent) {
@@ -17285,6 +17282,28 @@ namespace ts {
                         return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
                             getTypeFromTypeNodeWorker(node as TypeNode) === tp; // use worker because we're looking for === equality
                     case SyntaxKind.TypeQuery:
+                        const entityName = (node as TypeQueryNode).exprName;
+                        const firstIdentifier = getFirstIdentifier(entityName);
+                        const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
+                        const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
+                        let tpScope: Node;
+                        if (tpDeclaration.kind === SyntaxKind.TypeParameter) { // Type parameter is a regular type parameter, e.g. foo<T>
+                            tpScope = tpDeclaration.parent;
+                        }
+                        else if (tp.isThisType) {
+                             // Type parameter is the this type, and its declaration is the class declaration.
+                            tpScope = tpDeclaration;
+                        }
+                        else {
+                            // Type parameter's declaration was unrecognized.
+                            // This could happen if the type parameter comes from e.g. a JSDoc annotation, so we default to returning true.
+                            return true;
+                        }
+
+                        if (firstIdentifierSymbol.declarations) {
+                            return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpScope)) ||
+                                some((node as TypeQueryNode).typeArguments, containsReference);
+                        }
                         return true;
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
@@ -26041,10 +26060,11 @@ namespace ts {
                         if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                             links.flags |= NodeCheckFlags.InCheckIdentifier;
                             const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
+                            const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
                             links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                            if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                            if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
                                 const pattern = declaration.parent;
-                                const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
+                                const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
                                 if (narrowedType.flags & TypeFlags.Never) {
                                     return neverType;
                                 }
@@ -29302,11 +29322,30 @@ namespace ts {
         }
 
         function reportObjectPossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
-            error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
-                Diagnostics.Object_is_possibly_null_or_undefined :
-                Diagnostics.Object_is_possibly_undefined :
-                Diagnostics.Object_is_possibly_null
-            );
+            const nodeText = isEntityNameExpression(node) ? entityNameToString(node) : undefined;
+            if (node.kind === SyntaxKind.NullKeyword) {
+                error(node, Diagnostics.The_value_0_cannot_be_used_here, "null");
+                return;
+            }
+            if (nodeText !== undefined && nodeText.length < 100) {
+                if (isIdentifier(node) && nodeText === "undefined") {
+                    error(node, Diagnostics.The_value_0_cannot_be_used_here, "undefined");
+                    return;
+                }
+                error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+                    Diagnostics._0_is_possibly_null_or_undefined :
+                    Diagnostics._0_is_possibly_undefined :
+                    Diagnostics._0_is_possibly_null,
+                    nodeText
+                );
+            }
+            else {
+                error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+                    Diagnostics.Object_is_possibly_null_or_undefined :
+                    Diagnostics.Object_is_possibly_undefined :
+                    Diagnostics.Object_is_possibly_null
+                );
+            }
         }
 
         function reportCannotInvokePossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
@@ -29323,6 +29362,13 @@ namespace ts {
             reportError: (node: Node, facts: TypeFacts) => void
         ): Type {
             if (strictNullChecks(node) && type.flags & TypeFlags.Unknown) {
+                if (isEntityNameExpression(node)) {
+                    const nodeText = entityNameToString(node);
+                    if (nodeText.length < 100) {
+                        error(node, Diagnostics._0_is_of_type_unknown, nodeText);
+                        return errorType;
+                    }
+                }
                 error(node, Diagnostics.Object_is_of_type_unknown);
                 return errorType;
             }
@@ -29347,6 +29393,17 @@ namespace ts {
         function checkNonNullNonVoidType(type: Type, node: Node): Type {
             const nonNullType = checkNonNullType(type, node);
             if (nonNullType.flags & TypeFlags.Void) {
+                if (isEntityNameExpression(node)) {
+                    const nodeText = entityNameToString(node);
+                    if (isIdentifier(node) && nodeText === "undefined") {
+                        error(node, Diagnostics.The_value_0_cannot_be_used_here, nodeText);
+                        return nonNullType;
+                    }
+                    if (nodeText.length < 100) {
+                        error(node, Diagnostics._0_is_possibly_undefined, nodeText);
+                        return nonNullType;
+                    }
+                }
                 error(node, Diagnostics.Object_is_possibly_undefined);
             }
             return nonNullType;
@@ -36173,8 +36230,8 @@ namespace ts {
         }
 
         function getEffectiveTypeArgumentAtIndex(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: readonly TypeParameter[], index: number): Type {
-            if (index < typeParameters.length) {
-                return getTypeFromTypeNode(node.typeArguments![index]);
+            if (node.typeArguments && index < node.typeArguments.length) {
+                return getTypeFromTypeNode(node.typeArguments[index]);
             }
             return getEffectiveTypeArguments(node, typeParameters)[index];
         }
@@ -43370,7 +43427,8 @@ namespace ts {
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
-                const symbol = getReferencedValueSymbol(node);
+                const symbol = getReferencedValueOrAliasSymbol(node);
+
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
                 if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) {
@@ -43772,6 +43830,30 @@ namespace ts {
             }
 
             return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+        }
+
+        /**
+         * Get either a value-meaning symbol or an alias symbol.
+         * Unlike `getReferencedValueSymbol`, if the cached resolved symbol is the unknown symbol,
+         * we call `resolveName` to find a symbol.
+         * This is because when caching the resolved symbol, we only consider value symbols, but here
+         * we want to also get an alias symbol if one exists.
+         */
+        function getReferencedValueOrAliasSymbol(reference: Identifier): Symbol | undefined {
+            const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
+            if (resolvedSymbol && resolvedSymbol !== unknownSymbol) {
+                return resolvedSymbol;
+            }
+
+            return resolveName(
+                reference,
+                reference.escapedText,
+                SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
+                /*nodeNotFoundMessage*/ undefined,
+                /*nameArg*/ undefined,
+                /*isUse*/ true,
+                /*excludeGlobals*/ undefined,
+                /*getSpellingSuggestions*/ undefined);
         }
 
         function getReferencedValueDeclaration(referenceIn: Identifier): Declaration | undefined {

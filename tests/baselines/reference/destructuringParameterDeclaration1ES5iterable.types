@@ -402,7 +402,7 @@ d5();  // Parameter is optional as its declaration included an initializer
 // Type annotations must instead be written on the top- level parameter declaration
 
 function e1({x: number}) { }  // x has type any NOT number
->e1 : ({ x }: { x: any; }) => void
+>e1 : ({ x: number }: { x: any; }) => void
 >x : any
 >number : any
 

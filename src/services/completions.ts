@@ -1171,7 +1171,7 @@ namespace ts.Completions {
                         /*modifiers*/ undefined,
                         typedParam.dotDotDotToken,
                         typedParam.name,
-                        typedParam.questionToken,
+                        /*questionToken*/ undefined,
                         /*type*/ undefined,
                         typedParam.initializer,
                     ));
