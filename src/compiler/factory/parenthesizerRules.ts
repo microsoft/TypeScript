@@ -603,8 +603,9 @@ namespace ts {
     }
 
     function castToNodeArray<T extends Node>(nodes: readonly T[]): NodeArray<T> {
-        // TODO(jakebailey): Why do we need this helper? GH#49924?
-        // Also, why can't I write `isNodeArray<T>` as an expression?
+        // TODO(jakebailey): Why do we need this helper? GH#49924? It seems like `cast(nodes, isNodeArray)` should be enough.
+        // Also, this typeof shouldn't be needed, but https://github.com/microsoft/TypeScript/issues/50161
+        // makes any change to this file cause an error to appear.
         return cast(nodes, isNodeArray as typeof isNodeArray<T>);
     }
 
