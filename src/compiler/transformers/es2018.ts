@@ -127,7 +127,7 @@ namespace ts {
             return visitorWorker(node, /*expressionResultIsUnused*/ true);
         }
 
-        function visitorNoAsyncModifier(node: Node): VisitResult<Node> {
+        function visitorNoAsyncModifier(node: Node): VisitResult<Node> | undefined {
             if (node.kind === SyntaxKind.AsyncKeyword) {
                 return undefined;
             }

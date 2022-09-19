@@ -505,7 +505,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function topLevelVisitor(node: Node): VisitResult<Node> {
+        function topLevelVisitor(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(node as ImportDeclaration);
@@ -891,7 +891,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> | undefined {
             let statements: Statement[] | undefined;
             const namespaceDeclaration = getNamespaceDeclarationNode(node);
             if (moduleKind !== ModuleKind.AMD) {
@@ -1011,7 +1011,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> | undefined {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
             let statements: Statement[] | undefined;
@@ -1087,7 +1087,7 @@ namespace ts {
          *
          * @param The node to visit.
          */
-        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> | undefined {
             if (!node.moduleSpecifier) {
                 // Elide export declarations with no module specifier as they are handled
                 // elsewhere.
@@ -1197,7 +1197,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> | undefined {
             if (node.isExportEquals) {
                 return undefined;
             }
@@ -1221,7 +1221,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
+        function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> | undefined {
             let statements: Statement[] | undefined;
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
@@ -1232,7 +1232,7 @@ namespace ts {
                                 node.asteriskToken,
                                 factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                visitNodes(node.parameters, visitor),
+                                visitNodes(node.parameters, visitor, isParameter),
                                 /*type*/ undefined,
                                 visitEachChild(node.body, visitor, context)
                             ),
@@ -1263,7 +1263,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> | undefined {
             let statements: Statement[] | undefined;
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
@@ -1273,8 +1273,8 @@ namespace ts {
                                 visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                                 factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                visitNodes(node.heritageClauses, visitor),
-                                visitNodes(node.members, visitor)
+                                visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                                visitNodes(node.members, visitor, isClassElement)
                             ),
                             node
                         ),
@@ -1303,7 +1303,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
+        function visitVariableStatement(node: VariableStatement): VisitResult<Statement> | undefined {
             let statements: Statement[] | undefined;
             let variables: VariableDeclaration[] | undefined;
             let expressions: Expression[] | undefined;
@@ -1743,7 +1743,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function modifierVisitor(node: Node): VisitResult<Node> {
+        function modifierVisitor(node: Node): VisitResult<Node> | undefined {
             // Elide module-specific modifiers.
             switch (node.kind) {
                 case SyntaxKind.ExportKeyword:

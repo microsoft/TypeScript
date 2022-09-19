@@ -31,11 +31,11 @@ namespace ts {
             return visited;
         }
 
-        function modifierVisitor(node: Node): VisitResult<Node> {
+        function modifierVisitor(node: Node): VisitResult<Node> | undefined {
             return isDecorator(node) ? undefined : node;
         }
 
-        function visitor(node: Node): VisitResult<Node> {
+        function visitor(node: Node): VisitResult<Node> | undefined {
             if (!(node.transformFlags & TransformFlags.ContainsDecorators)) {
                 return node;
             }
@@ -360,7 +360,7 @@ namespace ts {
             return finishClassElement(factory.updatePropertyDeclaration(
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                visitNode(node.name, visitor, isPropertyName),
+                Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression)
@@ -372,7 +372,7 @@ namespace ts {
                 node,
                 elideNodes(factory, node.modifiers),
                 node.dotDotDotToken,
-                visitNode(node.name, visitor, isBindingName),
+                Debug.checkDefined(visitNode(node.name, visitor, isBindingName)),
                 /*questionToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression)
@@ -569,7 +569,7 @@ namespace ts {
          * @param decorator The decorator node.
          */
         function transformDecorator(decorator: Decorator) {
-            return visitNode(decorator.expression, visitor, isExpression);
+            return Debug.checkDefined(visitNode(decorator.expression, visitor, isExpression));
         }
 
         /**

@@ -8,13 +8,14 @@ namespace ts {
     export function processTaggedTemplateExpression(
         context: TransformationContext,
         node: TaggedTemplateExpression,
-        visitor: Visitor<Node>,
+        visitor: Visitor<Node, Node | undefined>,
         currentSourceFile: SourceFile,
         recordTaggedTemplateString: (temp: Identifier) => void,
         level: ProcessLevel) {
 
         // Visit the tag expression
         const tag = visitNode(node.tag, visitor, isExpression);
+        Debug.assert(tag);
 
         // Build up the template arguments and the raw and cooked strings for the template.
         // We start out with 'undefined' for the first argument and revisit later

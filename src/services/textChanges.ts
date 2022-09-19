@@ -1136,15 +1136,29 @@ namespace ts.textChanges {
         return newNode;
     }
 
-    function assignPositionsToNodeArray(nodes: NodeArray<any>, visitor: Visitor<Node>, test?: (node: Node) => boolean, start?: number, count?: number) {
-        const visited = visitNodes(nodes, visitor, test as (node: Node) => node is Node, start, count); // TODO(jakebailey): remove this once a non-guard signature is added to visitNode/visitNodes
+    function assignPositionsToNodeArray<
+        TIn extends Node,
+        TArray extends NodeArray<TIn> | undefined,
+        TVisited extends Node | undefined,
+        TAssert extends NonNullable<TVisited>,
+        TOut extends TArray extends undefined ? NodeArray<TAssert> | undefined
+            : NodeArray<TAssert>,
+    >(
+        nodes: TArray,
+        visitor: Visitor<TIn, TVisited> | undefined,
+        test?: (node: Node) => node is TAssert,
+        start?: number,
+        count?: number,
+    ): TOut {
+        const visited = visitNodes(nodes, visitor, test, start, count);
         if (!visited) {
-            return visited;
+            return visited as TOut;
         }
+        Debug.assert(nodes);
         // clone nodearray if necessary
-        const nodeArray = visited === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
+        const nodeArray = visited as NodeArray<Node> === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
         setTextRangePosEnd(nodeArray, getPos(nodes), getEnd(nodes));
-        return nodeArray;
+        return nodeArray as TOut;
     }
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}

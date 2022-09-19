@@ -9,33 +9,32 @@ namespace ts {
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    export function visitNode<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(node: TIn, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut;
-
-    /**
-     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
-     *
-     * @param node The Node to visit.
-     * @param visitor The callback used to visit the Node.
-     * @param test A callback to execute to verify the Node is valid.
-     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
-     */
-    export function visitNode<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(node: TIn | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | undefined;
-
-    export function visitNode<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(node: TIn | undefined, visitor?: Visitor<TMid, TIn>, test?: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | undefined {
+    export function visitNode<
+        TIn extends Node | undefined,
+        TVisited extends Node | undefined,
+        TAssert extends NonNullable<TVisited>,
+        TOut extends TIn extends undefined ? TAssert | undefined
+            : TVisited extends undefined ? TAssert | undefined
+            : TAssert,
+    >(
+        node: TIn,
+        visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
+        test?: (node: Node) => node is TAssert,
+        lift?: (node: readonly Node[]) => Node,
+    ): TOut {
         if (node === undefined) {
-            return node;
+            // If the input type is undefined, then the output type can be undefined.
+            return node as Node | undefined as TOut;
         }
 
         const visited = visitor ? visitor(node) : node;
-        // TODO(jakebailey): With the modified type vars, it doesn't make sense to skip the node test,
-        // becuase the input type may not be the desired output type.
-        // if (visited === node) {
-        //     return node;
-        // }
 
         let visitedNode: Node | undefined;
         if (visited === undefined) {
-            return undefined;
+            // If the visited node is undefined, then the visitor must have returned undefined,
+            // so the visitor must have been declared as able to return undefined, so TOut must be
+            // potentially undefined.
+            return undefined as TOut;
         }
         else if (isArray(visited)) {
             visitedNode = (lift || extractSingleNode)(visited);
@@ -59,31 +58,23 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn>, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut>;
-
-    /**
-     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
-     *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
-     */
-    export function visitNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn> | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | undefined;
-
-    /**
-     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
-     *
-     * @param nodes The NodeArray to visit.
-     * @param visitor The callback used to visit a Node.
-     * @param test A node test to execute for each node.
-     * @param start An optional value indicating the starting offset at which to start visiting.
-     * @param count An optional value indicating the maximum number of nodes to visit.
-     */
-     export function visitNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn> | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | undefined {
+    export function visitNodes<
+        TIn extends Node,
+        TArray extends NodeArray<TIn> | undefined,
+        TVisited extends Node | undefined,
+        TAssert extends NonNullable<TVisited>,
+        TOut extends TArray extends undefined ? NodeArray<TAssert> | undefined
+            : NodeArray<TAssert>,
+    >(
+        nodes: TArray,
+        visitor: Visitor<TIn, TVisited> | undefined,
+        test?: (node: Node) => node is TAssert,
+        start?: number,
+        count?: number,
+    ): TOut {
         if (nodes === undefined) {
-            return nodes;
+            // If the input type is undefined, then the output type can be undefined.
+            return nodes as NodeArray<Node> | undefined as TOut;
         }
 
         // Ensure start and count have valid values
@@ -115,24 +106,35 @@ namespace ts {
             // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
             const updatedArray = factory.createNodeArray(updated, hasTrailingComma);
             setTextRangePosEnd(updatedArray, pos, end);
-            return updatedArray;
+            return updatedArray as TOut;
         }
 
         // If we are here, updated === nodes. This means that it's still a NodeArray,
         // and also that its contents passed the tests in visitArrayWorker, so has contents
         // of type TOut.
-        return nodes as NodeArray<Node> as NodeArray<TOut>;
+        return nodes as NodeArray<Node> as TOut;
     }
 
     ((_: NodesVisitor) => {})(visitNodes); // Check that visitNode is a NodeVisitor.
 
     /* @internal */
-    export function visitArray<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: readonly TIn[], visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): readonly TOut[];
-    /* @internal */
-    export function visitArray<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: readonly TIn[] | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): readonly TOut[] | undefined;
-    export function visitArray<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: readonly TIn[] | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): readonly TOut[] | undefined {
+    export function visitArray<
+        TIn extends Node,
+        TArray extends readonly TIn[] | undefined,
+        TVisited extends Node | undefined,
+        TAssert extends NonNullable<TVisited>,
+        TOut extends TArray extends undefined ? readonly TAssert[] | undefined
+            : readonly TAssert[],
+    >(
+        nodes: TArray,
+        visitor: Visitor<TIn, TVisited> | undefined,
+        test?: (node: Node) => node is TAssert,
+        start?: number,
+        count?: number,
+    ): TOut {
         if (nodes === undefined) {
-            return nodes;
+            // If the input type is undefined, then the output type can be undefined.
+            return nodes as readonly Node[] | undefined as TOut;
         }
 
         // Ensure start and count have valid values
@@ -145,11 +147,21 @@ namespace ts {
             count = length - start;
         }
 
-        return visitArrayWorker(nodes, visitor, test, start, count);
+        return visitArrayWorker(nodes, visitor, test, start, count) as TOut;
     }
 
     /* @internal */
-    function visitArrayWorker<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: readonly TIn[], visitor: Visitor<TMid, TIn> | undefined, test: ((node: Node) => node is TOut) | undefined, start: number, count: number): readonly TOut[] {
+    function visitArrayWorker<
+        TIn extends Node,
+        TVisited extends Node | undefined,
+        TAssert extends NonNullable<TVisited>,
+    >(
+        nodes: readonly TIn[],
+        visitor: Visitor<TIn, TVisited> | undefined,
+        test: ((node: Node) => node is TAssert) | undefined,
+        start: number,
+        count: number,
+    ): readonly TAssert[] {
         let updated: Node[] | undefined;
 
         const length = nodes.length;
@@ -184,14 +196,14 @@ namespace ts {
 
         const result: readonly Node[] = updated ?? nodes;
         Debug.assertEachNode(result, test)
-        return result as readonly TOut[];
+        return result as readonly TAssert[];
     }
 
     /**
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.
      */
-    export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor<Node>, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes) {
+    export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes) {
         context.startLexicalEnvironment();
         statements = nodesVisitor(statements, visitor, isStatement, start);
         if (ensureUseStrict) statements = context.factory.ensureUseStrict(statements);
@@ -202,9 +214,9 @@ namespace ts {
      * Starts a new lexical environment and visits a parameter list, suspending the lexical
      * environment upon completion.
      */
-    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor<Node>, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
-    export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor<Node>, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
-    export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor<Node>, context: TransformationContext, nodesVisitor = visitNodes) {
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor = visitNodes) {
         let updated: NodeArray<ParameterDeclaration> | undefined;
         context.startLexicalEnvironment();
         if (nodes) {
@@ -327,21 +339,21 @@ namespace ts {
      * Resumes a suspended lexical environment and visits a function body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    export function visitFunctionBody(node: FunctionBody, visitor: Visitor<Node>, context: TransformationContext): FunctionBody;
+    export function visitFunctionBody(node: FunctionBody, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): FunctionBody;
     /**
      * Resumes a suspended lexical environment and visits a function body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor<Node>, context: TransformationContext): FunctionBody | undefined;
+    export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): FunctionBody | undefined;
     /**
      * Resumes a suspended lexical environment and visits a concise body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    export function visitFunctionBody(node: ConciseBody, visitor: Visitor<Node>, context: TransformationContext): ConciseBody;
-    /* @internal*/ export function visitFunctionBody(node: FunctionBody, visitor: Visitor<Node>, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
-    /* @internal*/ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor<Node>, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-    /* @internal*/ export function visitFunctionBody(node: ConciseBody, visitor: Visitor<Node>, context: TransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
-    export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visitor<Node>, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): ConciseBody | undefined {
+    export function visitFunctionBody(node: ConciseBody, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): ConciseBody;
+    /* @internal*/ export function visitFunctionBody(node: FunctionBody, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
+    /* @internal*/ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    /* @internal*/ export function visitFunctionBody(node: ConciseBody, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): ConciseBody | undefined {
         context.resumeLexicalEnvironment();
         const updated = nodeVisitor(node, visitor, isConciseBody);
         const declarations = context.endLexicalEnvironment();
@@ -359,12 +371,13 @@ namespace ts {
     /**
      * Visits an iteration body, adding any block-scoped variables required by the transformation.
      */
-    export function visitIterationBody(body: Statement, visitor: Visitor<Node>, context: TransformationContext): Statement;
+    export function visitIterationBody(body: Statement, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): Statement;
     /* @internal */
-    export function visitIterationBody(body: Statement, visitor: Visitor<Node>, context: TransformationContext, nodeVisitor?: NodeVisitor): Statement; // eslint-disable-line @typescript-eslint/unified-signatures
-    export function visitIterationBody(body: Statement, visitor: Visitor<Node>, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): Statement {
+    export function visitIterationBody(body: Statement, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodeVisitor?: NodeVisitor): Statement; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function visitIterationBody(body: Statement, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): Statement {
         context.startBlockScope();
         const updated = nodeVisitor(body, visitor, isStatement, context.factory.liftToBlock);
+        Debug.assert(updated);
         const declarations = context.endBlockScope();
         if (some(declarations)) {
             if (isBlock(updated)) {
@@ -384,9 +397,9 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: Visitor<Node>, context: TransformationContext): T;
+    export function visitEachChild<T extends Node>(node: T, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): T;
     /* @internal */
-    export function visitEachChild<T extends Node>(node: T, visitor: Visitor<Node>, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor<Node>, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function visitEachChild<T extends Node>(node: T, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -394,10 +407,10 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor<Node>, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor<Node>): T | undefined;
+    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
     /* @internal */
-    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor<Node>, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor<Node>, nodeVisitor?: NodeVisitor): T | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor<Node>, context: TransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor<Node>, nodeVisitor: NodeVisitor = visitNode): T | undefined {
+    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
         if (node === undefined) {
             return undefined;
         }
@@ -406,7 +419,7 @@ namespace ts {
         return fn === undefined ? node : fn(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor);
     }
 
-    type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor<Node>, context: TransformationContext, nodesVisitor: NodesVisitor, nodeVisitor: NodeVisitor, tokenVisitor: Visitor<Node> | undefined) => T;
+    type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor: NodesVisitor, nodeVisitor: NodeVisitor, tokenVisitor: Visitor | undefined) => T;
 
     // A type that correlates a `SyntaxKind` to a `VisitEachChildFunction<T>`, for nodes in the `HasChildren` union.
     // This looks something like:
@@ -453,7 +466,7 @@ namespace ts {
             return context.factory.updateParameterDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
-                nodeVisitor(node.name, visitor, isBindingName),
+                Debug.checkDefined(nodeVisitor(node.name, visitor, isBindingName)),
                 nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                 nodeVisitor(node.type, visitor, isTypeNode),
                 nodeVisitor(node.initializer, visitor, isExpression));
@@ -476,7 +489,7 @@ namespace ts {
         [SyntaxKind.PropertyDeclaration]: function visitEachChildOfPropertyDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
             return context.factory.updatePropertyDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
-                nodeVisitor(node.name, visitor, isPropertyName),
+                Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
                 // QuestionToken and ExclamationToken are mutually exclusive in PropertyDeclaration
                 nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
                 nodeVisitor(node.type, visitor, isTypeNode),

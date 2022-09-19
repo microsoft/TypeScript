@@ -1096,7 +1096,7 @@ namespace ts {
                         if (jsxFragmentPragma) {
                             const chosenPragma = isArray(jsxFragmentPragma) ? jsxFragmentPragma[0] : jsxFragmentPragma;
                             file.localJsxFragmentFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
-                            visitNode(file.localJsxFragmentFactory, markAsSynthetic);
+                            visitNode(file.localJsxFragmentFactory, markAsSynthetic, isEntityName);
                             if (file.localJsxFragmentFactory) {
                                 return file.localJsxFragmentNamespace = getFirstIdentifier(file.localJsxFragmentFactory).escapedText;
                             }
@@ -1142,14 +1142,14 @@ namespace ts {
             if (jsxPragma) {
                 const chosenPragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
                 file.localJsxFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
-                visitNode(file.localJsxFactory, markAsSynthetic);
+                visitNode(file.localJsxFactory, markAsSynthetic, isEntityName);
                 if (file.localJsxFactory) {
                     return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
                 }
             }
         }
 
-        function markAsSynthetic(node: Node): VisitResult<Node> {
+        function markAsSynthetic<T extends Node>(node: T): VisitResult<T> {
             setTextRangePosEnd(node, -1, -1);
             return visitEachChild(node, markAsSynthetic, nullTransformationContext);
         }
@@ -5495,13 +5495,24 @@ namespace ts {
                         return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext, deepCloneOrReuseNodes)), node);
                     }
 
-                    function deepCloneOrReuseNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn>, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut>;
-                    function deepCloneOrReuseNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn> | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | undefined;
-                    function deepCloneOrReuseNodes<TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn> | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | undefined {
+                    function deepCloneOrReuseNodes<
+                        TIn extends Node,
+                        TArray extends NodeArray<TIn> | undefined,
+                        TVisited extends Node | undefined,
+                        TAssert extends NonNullable<TVisited>,
+                        TOut extends TArray extends undefined ? NodeArray<TAssert> | undefined
+                            : NodeArray<TAssert>,
+                    >(
+                        nodes: TArray,
+                        visitor: Visitor<TIn, TVisited> | undefined,
+                        test?: (node: Node) => node is TAssert,
+                        start?: number,
+                        count?: number,
+                    ): TOut {
                         if (nodes && nodes.length === 0) {
                             // Ensure we explicitly make a copy of an empty array; visitNodes will not do this unless the array has elements,
                             // which can lead to us reusing the same empty NodeArray more than once within the same AST during type noding.
-                            return setTextRange(factory.createNodeArray<TOut>(/*nodes*/ undefined, nodes.hasTrailingComma), nodes);
+                            return setTextRange(factory.createNodeArray(/*nodes*/ undefined, nodes.hasTrailingComma), nodes) as TOut;
                         }
                         return visitNodes(nodes, visitor, test, start, count);
                     }
@@ -6861,7 +6872,7 @@ namespace ts {
                             let newTypeNode: TypeNode | undefined;
                             return factory.createConstructorTypeNode(
                                 /*modifiers*/ undefined,
-                                visitNodes(node.typeParameters, visitExistingNodeTreeSymbols),
+                                visitNodes(node.typeParameters, visitExistingNodeTreeSymbols, isTypeParameterDeclaration),
                                 mapDefined(node.parameters, (p, i) => p.name && isIdentifier(p.name) && p.name.escapedText === "new" ? (newTypeNode = p.type, undefined) : factory.createParameterDeclaration(
                                     /*modifiers*/ undefined,
                                     getEffectiveDotDotDotForParameter(p),
@@ -6875,7 +6886,7 @@ namespace ts {
                         }
                         else {
                             return factory.createFunctionTypeNode(
-                                visitNodes(node.typeParameters, visitExistingNodeTreeSymbols),
+                                visitNodes(node.typeParameters, visitExistingNodeTreeSymbols, isTypeParameterDeclaration),
                                 map(node.parameters, (p, i) => factory.createParameterDeclaration(
                                     /*modifiers*/ undefined,
                                     getEffectiveDotDotDotForParameter(p),

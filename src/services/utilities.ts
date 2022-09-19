@@ -2548,11 +2548,11 @@ namespace ts {
         const nodeClone: (n: T) => T = replaceNode
             ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
             : getSynthesizedDeepClone;
-        const nodesClone: (ns: NodeArray<T>) => NodeArray<T> = replaceNode
+        const nodesClone: (ns: NodeArray<T> | undefined) => (NodeArray<T> | undefined) = replaceNode
             ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
             : ns => ns && getSynthesizedDeepClones(ns);
         const visited =
-            visitEachChild(node, nodeClone, nullTransformationContext, nodesClone, nodeClone);
+            visitEachChild(node, nodeClone, nullTransformationContext, nodesClone as NodesVisitor, nodeClone); // TODO(jakebailey): This is unfortunate.
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.

@@ -181,7 +181,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): VisitResult<Node> {
+        function visitor(node: Node): VisitResult<Node> | undefined {
             return saveStateAndInvoke(node, visitorWorker);
         }
 
@@ -190,7 +190,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitorWorker(node: Node): VisitResult<Node> {
+        function visitorWorker(node: Node): VisitResult<Node> | undefined {
             if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 return visitTypeScript(node);
             }
@@ -202,7 +202,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function sourceElementVisitor(node: Node): VisitResult<Node> {
+        function sourceElementVisitor(node: Node): VisitResult<Node> | undefined {
             return saveStateAndInvoke(node, sourceElementVisitorWorker);
         }
 
@@ -211,7 +211,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function sourceElementVisitorWorker(node: Node): VisitResult<Node> {
+        function sourceElementVisitorWorker(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -223,7 +223,7 @@ namespace ts {
             }
         }
 
-        function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node> {
+        function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node> | undefined {
             const parsed = getParseTreeNode(node);
             if (parsed !== node) {
                 // If the node has been transformed by a `before` transformer, perform no ellision on it
@@ -256,7 +256,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitor(node: Node): VisitResult<Node> {
+        function namespaceElementVisitor(node: Node): VisitResult<Node> | undefined {
             return saveStateAndInvoke(node, namespaceElementVisitorWorker);
         }
 
@@ -265,7 +265,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
+        function namespaceElementVisitorWorker(node: Node): VisitResult<Node> | undefined {
             if (node.kind === SyntaxKind.ExportDeclaration ||
                 node.kind === SyntaxKind.ImportDeclaration ||
                 node.kind === SyntaxKind.ImportClause ||
@@ -286,7 +286,7 @@ namespace ts {
          *
          * @param parent The class containing the elements to visit.
          */
-        function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node> {
+        function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node> | undefined {
             return node => saveStateAndInvoke(node, n => classElementVisitorWorker(n, parent));
         }
 
@@ -295,7 +295,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node> {
+        function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     return visitConstructor(node as ConstructorDeclaration);
@@ -333,11 +333,11 @@ namespace ts {
             }
         }
 
-        function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node> {
+        function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node> | undefined {
             return node => saveStateAndInvoke(node, n => objectLiteralElementVisitorWorker(n, parent));
         }
 
-        function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node> {
+        function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -362,7 +362,7 @@ namespace ts {
             }
         }
 
-        function modifierVisitor(node: Node): VisitResult<Node> {
+        function modifierVisitor(node: Node): VisitResult<Node> | undefined {
             if (isDecorator(node)) return undefined;
             if (modifierToFlag(node.kind) & ModifierFlags.TypeScriptModifier) {
                 return undefined;
@@ -379,7 +379,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitTypeScript(node: Node): VisitResult<Node> {
+        function visitTypeScript(node: Node): VisitResult<Node> | undefined {
             if (isStatement(node) && hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided, but some comments may be preserved.
                 // See the implementation of `getLeadingComments` in comments.ts for more details.
@@ -818,6 +818,7 @@ namespace ts {
                 const decorators: Decorator[] = [];
                 for (const parameterDecorator of parameterDecorators) {
                     const expression = visitNode(parameterDecorator.expression, visitor, isExpression);
+                    Debug.assert(expression);
                     const helper = emitHelpers().createParamHelper(expression, parameterOffset);
                     setTextRange(helper, parameterDecorator.expression);
                     setEmitFlags(helper, EmitFlags.NoComments);
@@ -969,6 +970,7 @@ namespace ts {
             //   - the property has a decorator.
             if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member))) {
                 const expression = visitNode(name.expression, visitor, isExpression);
+                Debug.assert(expression);
                 const innerExpression = skipPartiallyEmittedExpressions(expression);
                 if (!isSimpleInlineableExpression(innerExpression)) {
                     const generatedName = factory.getGeneratedNameForNode(name);
@@ -1007,7 +1009,7 @@ namespace ts {
         function visitExpressionWithTypeArguments(node: ExpressionWithTypeArguments): ExpressionWithTypeArguments {
             return factory.updateExpressionWithTypeArguments(
                 node,
-                visitNode(node.expression, visitor, isLeftHandSideExpression),
+                Debug.checkDefined(visitNode(node.expression, visitor, isLeftHandSideExpression)),
                 /*typeArguments*/ undefined
             );
         }
@@ -1036,7 +1038,7 @@ namespace ts {
                 return factory.updatePropertyDeclaration(
                     node,
                     concatenate<ModifierLike>(decorators, factory.createModifiersFromModifierFlags(ModifierFlags.Ambient)),
-                    visitNode(node.name, visitor, isPropertyName),
+                    Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
                     /*questionOrExclamationToken*/ undefined,
                     /*type*/ undefined,
                     /*initializer*/ undefined
@@ -1310,7 +1312,7 @@ namespace ts {
                 node,
                 elideNodes(factory, node.modifiers), // preserve positions, if available
                 node.dotDotDotToken,
-                visitNode(node.name, visitor, isBindingName),
+                Debug.checkDefined(visitNode(node.name, visitor, isBindingName)),
                 /*questionToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression)
@@ -1390,6 +1392,7 @@ namespace ts {
                 // Make sure we consider all nested cast expressions, e.g.:
                 // (<any><number><any>-A).x;
                 const expression = visitNode(node.expression, visitor, isExpression);
+                Debug.assert(expression);
 
                 // We have an expression of the form: (<Type>SubExpr). Emitting this as (SubExpr)
                 // is really not desirable. We would like to emit the subexpression as-is. Omitting
@@ -1416,16 +1419,19 @@ namespace ts {
 
         function visitAssertionExpression(node: AssertionExpression): Expression {
             const expression = visitNode(node.expression, visitor, isExpression);
+            Debug.assert(expression);
             return factory.createPartiallyEmittedExpression(expression, node);
         }
 
         function visitNonNullExpression(node: NonNullExpression): Expression {
             const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
+            Debug.assert(expression);
             return factory.createPartiallyEmittedExpression(expression, node);
         }
 
         function visitSatisfiesExpression(node: SatisfiesExpression): Expression {
             const expression = visitNode(node.expression, visitor, isExpression);
+            Debug.assert(expression);
             return factory.createPartiallyEmittedExpression(expression, node);
         }
 
@@ -1967,7 +1973,7 @@ namespace ts {
          *
          * @param node The import declaration node.
          */
-        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> | undefined {
             if (!node.importClause) {
                 // Do not elide a side-effect only import declaration.
                 //  import "foo";
@@ -1997,7 +2003,7 @@ namespace ts {
          *
          * @param node The import clause node.
          */
-        function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
+        function visitImportClause(node: ImportClause): VisitResult<ImportClause> | undefined {
             Debug.assert(!node.isTypeOnly);
             // Elide the import clause if we elide both its name and its named bindings.
             const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
@@ -2010,7 +2016,7 @@ namespace ts {
          *
          * @param node The named import bindings node.
          */
-        function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
+        function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> | undefined {
             if (node.kind === SyntaxKind.NamespaceImport) {
                 // Elide a namespace import if it is not referenced.
                 return shouldEmitAliasDeclaration(node) ? node : undefined;
@@ -2030,7 +2036,7 @@ namespace ts {
          *
          * @param node The import specifier node.
          */
-        function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
+        function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> | undefined {
             return !node.isTypeOnly && shouldEmitAliasDeclaration(node) ? node : undefined;
         }
 
@@ -2040,7 +2046,7 @@ namespace ts {
          *
          * @param node The export assignment node.
          */
-        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> | undefined {
             // Elide the export assignment if it does not reference a value.
             return resolver.isValueAliasDeclaration(node)
                 ? visitEachChild(node, visitor, context)
@@ -2052,7 +2058,7 @@ namespace ts {
          *
          * @param node The export declaration node.
          */
-        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> | undefined {
             if (node.isTypeOnly) {
                 return undefined;
             }
@@ -2090,7 +2096,7 @@ namespace ts {
          *
          * @param node The named exports node.
          */
-        function visitNamedExports(node: NamedExports, allowEmpty: boolean): VisitResult<NamedExports> {
+        function visitNamedExports(node: NamedExports, allowEmpty: boolean): VisitResult<NamedExports> | undefined {
             // Elide the named exports if all of its export specifiers were elided.
             const elements = visitNodes(node.elements, visitExportSpecifier, isExportSpecifier);
             return allowEmpty || some(elements) ? factory.updateNamedExports(node, elements) : undefined;
@@ -2100,7 +2106,7 @@ namespace ts {
             return factory.updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier));
         }
 
-        function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> {
+        function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> | undefined {
             return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node, allowEmpty);
         }
 
@@ -2109,7 +2115,7 @@ namespace ts {
          *
          * @param node The export specifier node.
          */
-        function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> {
+        function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> | undefined {
             // Elide an export specifier if it does not reference a value.
             return !node.isTypeOnly && resolver.isValueAliasDeclaration(node) ? node : undefined;
         }
@@ -2133,7 +2139,7 @@ namespace ts {
          *
          * @param node The import equals declaration node.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> | undefined {
             // Always elide type-only imports
             if (node.isTypeOnly) {
                 return undefined;

@@ -211,7 +211,7 @@ namespace ts {
             return visited;
         }
 
-        function visitor(node: Node): VisitResult<Node> {
+        function visitor(node: Node): VisitResult<Node> | undefined {
             if (!(node.transformFlags & TransformFlags.ContainsClassFields) &&
                 !(node.transformFlags & TransformFlags.ContainsLexicalThisOrSuper)) {
                 return node;
@@ -274,7 +274,7 @@ namespace ts {
         /**
          * Visits a node in an expression whose result is discarded.
          */
-        function discardedValueVisitor(node: Node): VisitResult<Node> {
+        function discardedValueVisitor(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
@@ -289,7 +289,7 @@ namespace ts {
         /**
          * Visits a node in a {@link HeritageClause}.
          */
-        function heritageClauseVisitor(node: Node): VisitResult<Node> {
+        function heritageClauseVisitor(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.HeritageClause:
                     return visitEachChild(node, heritageClauseVisitor, context);
@@ -303,7 +303,7 @@ namespace ts {
         /**
          * Visits the assignment target of a destructuring assignment.
          */
-        function assignmentTargetVisitor(node: Node): VisitResult<Node> {
+        function assignmentTargetVisitor(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
@@ -316,7 +316,7 @@ namespace ts {
         /**
          * Visits a member of a class.
          */
-        function classElementVisitor(node: Node): VisitResult<Node> {
+        function classElementVisitor(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     return visitConstructorDeclaration(node as ConstructorDeclaration);
@@ -387,6 +387,7 @@ namespace ts {
             const info = accessPrivateIdentifier(node.left);
             if (info) {
                 const receiver = visitNode(node.right, visitor, isExpression);
+                Debug.assert(receiver);
 
                 return setOriginalNode(
                     context.getEmitHelperFactory().createClassPrivateFieldInHelper(info.brandCheckIdentifier, receiver),
@@ -413,6 +414,7 @@ namespace ts {
 
         function visitComputedPropertyName(node: ComputedPropertyName) {
             let expression = visitNode(node.expression, visitor, isExpression);
+            Debug.assert(expression);
             if (some(pendingExpressions)) {
                 if (isParenthesizedExpression(expression)) {
                     expression = factory.updateParenthesizedExpression(expression, factory.inlineExpressions([...pendingExpressions, expression.expression]));
@@ -521,6 +523,7 @@ namespace ts {
                 const temp = factory.createTempVariable(hoistVariableDeclaration);
                 setSourceMapRange(temp, name.expression);
                 const expression = visitNode(name.expression, visitor, isExpression);
+                Debug.assert(expression);
                 const assignment = factory.createAssignment(temp, expression);
                 setSourceMapRange(assignment, name.expression);
                 getterName = factory.updateComputedPropertyName(name, factory.inlineExpressions([assignment, temp]));
@@ -731,6 +734,7 @@ namespace ts {
                     let info: PrivateIdentifierInfo | undefined;
                     if (info = accessPrivateIdentifier(operand.name)) {
                         const receiver = visitNode(operand.expression, visitor, isExpression);
+                        Debug.assert(receiver);
                         const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
 
                         let expression: Expression = createPrivateIdentifierAccess(info, readExpression);
@@ -1017,6 +1021,7 @@ namespace ts {
                                 setOriginalNode(superPropertyGet, node.left);
                                 setTextRange(superPropertyGet, node.left);
 
+                                Debug.assert(expression);
                                 expression = factory.createBinaryExpression(
                                     superPropertyGet,
                                     getNonAssignmentOperatorForCompoundAssignment(node.operatorToken.kind),
@@ -1027,10 +1032,12 @@ namespace ts {
 
                             const temp = valueIsDiscarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
                             if (temp) {
+                                Debug.assert(expression);
                                 expression = factory.createAssignment(temp, expression);
                                 setTextRange(temp, node);
                             }
 
+                            Debug.assert(expression);
                             expression = factory.createReflectSetCall(
                                 superClassReference,
                                 setterName,
@@ -2010,6 +2017,7 @@ namespace ts {
         function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean): Expression | undefined {
             if (isComputedPropertyName(name)) {
                 const expression = visitNode(name.expression, visitor, isExpression);
+                Debug.assert(expression);
                 const innerExpression = skipPartiallyEmittedExpressions(expression);
                 const inlinable = isSimpleInlineableExpression(innerExpression);
                 const alreadyTransformed = isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);

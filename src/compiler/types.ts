@@ -4506,11 +4506,11 @@ namespace ts {
 
     export interface CustomTransformers {
         /** Custom transformers to evaluate before built-in .js transformations. */
-        before?: (TransformerFactory<Node> | CustomTransformerFactory)[];
+        before?:  (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .js transformations. */
-        after?: (TransformerFactory<Node> | CustomTransformerFactory)[];
+        after?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .d.ts transformations. */
-        afterDeclarations?: (TransformerFactory<Node> | CustomTransformerFactory)[];
+        afterDeclarations?: (TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory)[];
     }
 
     /*@internal*/
@@ -8356,7 +8356,7 @@ namespace ts {
          * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
          * @param visitor Optional callback used to visit any custom prologue directives.
          */
-        /* @internal */ copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number;
+        /* @internal */ copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node> | undefined): number;
         /**
          * Copies only the standard (string-expression) prologue-directives into the target statement-array.
          * @param source origin statements array
@@ -8372,8 +8372,8 @@ namespace ts {
          * @param statementOffset The offset at which to begin the copy.
          * @param visitor Optional callback used to visit any custom prologue directives.
          */
-        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number;
-        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number | undefined;
+        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node> | undefined, filter?: (node: Statement) => boolean): number;
+        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node> | undefined, filter?: (node: Statement) => boolean): number | undefined;
         /* @internal */ ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement>;
         /* @internal */ liftToBlock(nodes: readonly Node[]): Statement;
         /**
@@ -8530,34 +8530,74 @@ namespace ts {
      * A function that is used to initialize and return a `Transformer` callback, which in turn
      * will be used to transform one or more nodes.
      */
-    export type TransformerFactory<T extends Node, U extends Node = T> = (context: TransformationContext) => Transformer<T, U>;
+    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>
 
     /**
      * A function that transforms a node.
      */
-    export type Transformer<T extends Node, U extends Node = T> = (node: T) => U; // TODO(jakebailey): This signature was totally wrong.  Is it right now?
+    export type Transformer<T extends Node> = (node: T) => T; // TODO(jakebailey): This signature is totally wrong.
 
-    // TODO(jakebailey): can we redefne NodeVisitor/NodesVisitor to not need overloads?
-    // Maybe <T extends Node | undefined> along with NonNullable<T>?
-
+    // Either a node, or a list of nodes to be be lifted via a lift function.
+    export type VisitResult<T extends Node | undefined, U extends Node = NonNullable<T>> = T | readonly U[];
+    
     /**
      * A function that accepts and possibly transforms a node.
      */
-    export type Visitor<TOut extends Node, TIn extends Node = TOut> = (node: TIn) => VisitResult<TOut>;
-
+    export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn> = (node: TIn) => VisitResult<TOut>;
+    
+    /**
+     * @see {visitNode}
+     */
     export interface NodeVisitor {
-        <TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(node: TIn, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut;
-        <TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(node: TIn | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | undefined;
+        <
+            TIn extends Node | undefined,
+            TVisited extends Node | undefined,
+            TAssert extends NonNullable<TVisited>,
+            TOut extends TIn extends undefined ? TAssert | undefined
+                : TVisited extends undefined ? TAssert | undefined
+                : TAssert,
+        >(
+            node: TIn,
+            visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
+            test?: (node: Node) => node is TAssert,
+            lift?: (node: readonly Node[]) => Node,
+        ): TOut;
     }
-
+    
+    /**
+     * @see {visitNodes}
+     */
     export interface NodesVisitor {
-        <TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn>, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut>;
-        <TIn extends Node, TMid extends Node = Node, TOut extends TMid = TMid>(nodes: NodeArray<TIn> | undefined, visitor: Visitor<TMid, TIn> | undefined, test?: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | undefined;
+        <
+            TIn extends Node,
+            TArray extends NodeArray<TIn> | undefined,
+            TVisited extends Node | undefined,
+            TAssert extends NonNullable<TVisited>,
+            TOut extends TArray extends undefined ? NodeArray<TAssert> | undefined
+                : NodeArray<TAssert>,
+        >(
+            nodes: TArray,
+            visitor: Visitor<TIn, TVisited> | undefined,
+            test?: (node: Node) => node is TAssert,
+            start?: number,
+            count?: number,
+        ): TOut;
     }
 
-    // Either a node, or a list of nodes to be be lifted via a lift function.
-    // TODO: 
-    export type VisitResult<T extends Node> = T | readonly Node[] | undefined;
+    declare const testNodeVisitor2: NodeVisitor;
+    declare const testNodesVisitor2: NodesVisitor;
+
+    export function _jakeTesting(node: Node, nodeVisitor: Visitor<Node, Expression>) {
+        const result = testNodeVisitor2(node, nodeVisitor, isAssertionExpression);
+        //     ^?
+        return result;
+    }
+
+    export function _jakeTesting2(nodes: NodeArray<Node>, nodeVisitor: Visitor<Node, Expression | undefined>) {
+        const result = testNodesVisitor2(nodes, nodeVisitor, isAssertionExpression);
+        //     ^?
+        return result;
+    }
 
     export interface Printer {
         /**

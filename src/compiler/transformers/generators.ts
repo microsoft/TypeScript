@@ -310,7 +310,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): VisitResult<Node> {
+        function visitor(node: Node): VisitResult<Node> | undefined {
             const transformFlags = node.transformFlags;
             if (inStatementContainingYield) {
                 return visitJavaScriptInStatementContainingYield(node);
@@ -334,7 +334,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitJavaScriptInStatementContainingYield(node: Node): VisitResult<Node> {
+        function visitJavaScriptInStatementContainingYield(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.DoStatement:
                     return visitDoStatement(node as DoStatement);
@@ -354,7 +354,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitJavaScriptInGeneratorFunctionBody(node: Node): VisitResult<Node> {
+        function visitJavaScriptInGeneratorFunctionBody(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                     return visitFunctionDeclaration(node as FunctionDeclaration);
@@ -423,7 +423,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitGenerator(node: Node): VisitResult<Node> {
+        function visitGenerator(node: Node): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                     return visitFunctionDeclaration(node as FunctionDeclaration);
@@ -693,7 +693,7 @@ namespace ts {
 
                         target = factory.updatePropertyAccessExpression(
                             left as PropertyAccessExpression,
-                            cacheExpression(visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression)),
+                            cacheExpression(Debug.checkDefined(visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression))),
                             (left as PropertyAccessExpression).name
                         );
                         break;
@@ -711,8 +711,8 @@ namespace ts {
                         //      _a[_b] = %sent%;
 
                         target = factory.updateElementAccessExpression(left as ElementAccessExpression,
-                            cacheExpression(visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression)),
-                            cacheExpression(visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression))
+                            cacheExpression(Debug.checkDefined(visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression))),
+                            cacheExpression(Debug.checkDefined(visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression)))
                         );
                         break;
 
@@ -1107,7 +1107,7 @@ namespace ts {
                 //      a = _a[%sent%]
 
                 return factory.updateElementAccessExpression(node,
-                    cacheExpression(visitNode(node.expression, visitor, isLeftHandSideExpression)),
+                    cacheExpression(Debug.checkDefined(visitNode(node.expression, visitor, isLeftHandSideExpression))),
                     visitNode(node.argumentExpression, visitor, isExpression));
             }
 
@@ -1130,7 +1130,7 @@ namespace ts {
                 return setOriginalNode(
                     setTextRange(
                         factory.createFunctionApplyCall(
-                            cacheExpression(visitNode(target, visitor, isLeftHandSideExpression)),
+                            cacheExpression(Debug.checkDefined(visitNode(target, visitor, isLeftHandSideExpression))),
                             thisArg,
                             visitElements(node.arguments)
                         ),

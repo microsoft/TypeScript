@@ -24,7 +24,7 @@ namespace ts {
                 }
                 return visitEachChild(node, visitor, context);
             }
-            return (file: SourceFile) => visitNode(file, visitor);
+            return (file: SourceFile) => visitNode(file, visitor, isSourceFile);
         }
 
         function replaceIdentifiersNamedOldNameWithNewName(context: TransformationContext) {
@@ -41,13 +41,13 @@ namespace ts {
         }
 
         function replaceIdentifiersNamedOldNameWithNewName2(context: TransformationContext) {
-            const visitor: Visitor<Node> = (node) => {
+            const visitor: Visitor = (node) => {
                 if (isIdentifier(node) && node.text === "oldName") {
                     return factory.createIdentifier("newName");
                 }
                 return visitEachChild(node, visitor, context);
             };
-            return (node: Node) => visitNode(node, visitor);
+            return (node: SourceFile) => visitNode(node, visitor, isSourceFile);
         }
 
         function createTaggedTemplateLiteral(): Transformer<SourceFile> {
@@ -552,7 +552,7 @@ module MyModule {
             return host.readFile("source.js")!.toString();
 
             function transformSourceFile(context: TransformationContext) {
-                const visitor: Visitor<Node> = (node) => {
+                const visitor: Visitor = (node) => {
                     if (isMethodDeclaration(node)) {
                         return factory.updateMethodDeclaration(
                             node,

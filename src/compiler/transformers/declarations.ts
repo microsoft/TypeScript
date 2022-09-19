@@ -60,7 +60,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeReferences: Set<[specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
+        let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment> | undefined>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -459,14 +459,14 @@ namespace ts {
             }
             else {
                 if (name.kind === SyntaxKind.ArrayBindingPattern) {
-                    return factory.updateArrayBindingPattern(name, visitNodes(name.elements, visitBindingElement));
+                    return factory.updateArrayBindingPattern(name, visitNodes(name.elements, visitBindingElement, isArrayBindingElement));
                 }
                 else {
-                    return factory.updateObjectBindingPattern(name, visitNodes(name.elements, visitBindingElement));
+                    return factory.updateObjectBindingPattern(name, visitNodes(name.elements, visitBindingElement, isBindingElement));
                 }
             }
 
-            function visitBindingElement<T extends ArrayBindingElement>(elem: T): T;
+            function visitBindingElement<T extends Node>(elem: T): T;
             function visitBindingElement(elem: ArrayBindingElement): ArrayBindingElement {
                 if (elem.kind === SyntaxKind.OmittedExpression) {
                     return elem;
@@ -869,7 +869,7 @@ namespace ts {
             }
         }
 
-        function visitDeclarationSubtree(input: Node): VisitResult<Node> {
+        function visitDeclarationSubtree(input: Node): VisitResult<Node> | undefined {
             if (shouldStripInternal(input)) return;
             if (isDeclaration(input)) {
                 if (isDeclarationAndNotVisible(input)) return;
@@ -1065,6 +1065,10 @@ namespace ts {
                         const trueType = visitNode(input.trueType, visitDeclarationSubtree, isTypeNode);
                         enclosingDeclaration = oldEnclosingDecl;
                         const falseType = visitNode(input.falseType, visitDeclarationSubtree, isTypeNode);
+                        Debug.assert(checkType);
+                        Debug.assert(extendsType);
+                        Debug.assert(trueType);
+                        Debug.assert(falseType);
                         return cleanup(factory.updateConditionalTypeNode(input, checkType, extendsType, trueType, falseType));
                     }
                     case SyntaxKind.FunctionType: {
@@ -1118,7 +1122,7 @@ namespace ts {
             return node.parent.kind === SyntaxKind.MethodDeclaration && hasEffectiveModifier(node.parent, ModifierFlags.Private);
         }
 
-        function visitDeclarationStatements(input: Node): VisitResult<Node> {
+        function visitDeclarationStatements(input: Node): VisitResult<Node> | undefined {
             if (!isPreservedDeclarationStatement(input)) {
                 // return undefined for unmatched kinds to omit them from the tree
                 return;
@@ -1237,7 +1241,7 @@ namespace ts {
                         input.name,
                         ensureTypeParams(input, input.typeParameters),
                         transformHeritageClauses(input.heritageClauses),
-                        visitNodes(input.members, visitDeclarationSubtree)
+                        visitNodes(input.members, visitDeclarationSubtree, isTypeElement)
                     ));
                 }
                 case SyntaxKind.FunctionDeclaration: {
@@ -1462,11 +1466,11 @@ namespace ts {
                             if (clause.token === SyntaxKind.ExtendsKeyword) {
                                 const oldDiag = getSymbolAccessibilityDiagnostic;
                                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(clause.types[0]);
-                                const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree))));
+                                const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode))));
                                 getSymbolAccessibilityDiagnostic = oldDiag;
                                 return newClause;
                             }
-                            return factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree));
+                            return factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree, isExpressionWithTypeArguments));
                         }));
                         return [statement, cleanup(factory.updateClassDeclaration(
                             input,
@@ -1616,7 +1620,7 @@ namespace ts {
         function transformHeritageClauses(nodes: NodeArray<HeritageClause> | undefined) {
             return factory.createNodeArray(filter(map(nodes, clause => factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => {
                 return isEntityNameExpression(t.expression) || (clause.token === SyntaxKind.ExtendsKeyword && t.expression.kind === SyntaxKind.NullKeyword);
-            })), visitDeclarationSubtree))), clause => clause.types && !!clause.types.length));
+            })), visitDeclarationSubtree, isExpressionWithTypeArguments))), clause => clause.types && !!clause.types.length));
         }
     }
 

@@ -374,15 +374,15 @@ namespace ts {
                 || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
         }
 
-        function visitor(node: Node): VisitResult<Node> {
+        function visitor(node: Node): VisitResult<Node> | undefined {
             return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ false) : node;
         }
 
-        function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> {
+        function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> | undefined {
             return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ true) : node;
         }
 
-        function classWrapperStatementVisitor(node: Node): VisitResult<Node> {
+        function classWrapperStatementVisitor(node: Node): VisitResult<Node> | undefined {
             if (shouldVisitNode(node)) {
                 const original = getOriginalNode(node);
                 if (isPropertyDeclaration(original) && hasStaticModifier(original)) {
@@ -399,14 +399,14 @@ namespace ts {
             return node;
         }
 
-        function callExpressionVisitor(node: Node): VisitResult<Node> {
+        function callExpressionVisitor(node: Node): VisitResult<Node> | undefined {
             if (node.kind === SyntaxKind.SuperKeyword) {
                 return visitSuperKeyword(/*isExpressionOfCall*/ true);
             }
             return visitor(node);
         }
 
-        function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node> {
+        function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.StaticKeyword:
                     return undefined; // elide static keyword
@@ -1715,6 +1715,7 @@ namespace ts {
             const sourceMapRange = getSourceMapRange(member);
             const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
             const propertyName = visitNode(member.name, visitor, isPropertyName);
+            Debug.assert(propertyName);
             let e: Expression;
             if (!isPrivateIdentifier(propertyName) && getUseDefineForClassFields(context.getCompilerOptions())) {
                 const name = isComputedPropertyName(propertyName) ? propertyName.expression
@@ -1771,6 +1772,7 @@ namespace ts {
             setSourceMapRange(target, firstAccessor.name);
 
             const visitedAccessorName = visitNode(firstAccessor.name, visitor, isPropertyName);
+            Debug.assert(visitedAccessorName);
             if (isPrivateIdentifier(visitedAccessorName)) {
                 return Debug.failBadSyntaxKind(visitedAccessorName, "Encountered unhandled private identifier while transforming ES2015.");
             }
@@ -2125,6 +2127,7 @@ namespace ts {
                 const visited = visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, isExpression);
                 if (result || visited !== element) {
                     result ||= node.elements.slice(0, i);
+                    Debug.assert(visited);
                     result.push(visited);
                 }
             }
@@ -2347,7 +2350,7 @@ namespace ts {
             convertedLoopState!.labels!.set(idText(node.label), false);
         }
 
-        function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
+        function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> | undefined {
             if (convertedLoopState && !convertedLoopState.labels) {
                 convertedLoopState.labels = new Map<string, boolean>();
             }
@@ -2500,6 +2503,7 @@ namespace ts {
             }
             else {
                 const statement = visitNode(node.statement, visitor, isStatement, factory.liftToBlock);
+                Debug.assert(statement);
                 if (isBlock(statement)) {
                     return factory.updateBlock(statement, setTextRange(factory.createNodeArray(concatenate(statements, statement.statements)), statement.statements));
                 }
@@ -2543,6 +2547,7 @@ namespace ts {
             // for-of bodies are always emitted as blocks.
 
             const expression = visitNode(node.expression, visitor, isExpression);
+            Debug.assert(expression);
 
             // In the case where the user wrote an identifier as the RHS, like this:
             //
@@ -2592,6 +2597,7 @@ namespace ts {
 
         function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts): Statement {
             const expression = visitNode(node.expression, visitor, isExpression);
+            Debug.assert(expression);
             const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
             const errorRecord = factory.createUniqueName("e");
@@ -3229,6 +3235,7 @@ namespace ts {
                 }
             }
 
+            Debug.assert(statement);
             if (isBlock(statement)) {
                 addRange(statements, statement.statements);
             }
@@ -4080,6 +4087,7 @@ namespace ts {
         function visitExpressionOfSpread(node: Expression): SpreadSegment {
             Debug.assertNode(node, isSpreadElement);
             let expression = visitNode(node.expression, visitor, isExpression);
+            Debug.assert(expression);
 
             // We don't need to pack already packed array literals, or existing calls to the `__read` helper.
             const isCallToReadHelper = isCallToHelper(expression, "___read" as __String);
@@ -4166,7 +4174,7 @@ namespace ts {
         function visitTemplateExpression(node: TemplateExpression): Expression {
             let expression: Expression = factory.createStringLiteral(node.head.text);
             for (const span of node.templateSpans) {
-                const args = [visitNode(span.expression, visitor, isExpression)];
+                const args = [Debug.checkDefined(visitNode(span.expression, visitor, isExpression))];
 
                 if (span.literal.text.length > 0) {
                     args.push(factory.createStringLiteral(span.literal.text));
