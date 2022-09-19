@@ -9219,7 +9219,7 @@ namespace ts {
                 if (container && (container.kind === SyntaxKind.Constructor || isJSConstructor(container))) {
                     return container as ConstructorDeclaration;
                 }
-            };
+            }
         }
 
         /** Create a synthetic property access flow node after the last statement of the file */
@@ -29892,7 +29892,7 @@ namespace ts {
                     return !!s && getMinArgumentCount(s) >= 1 && isTypeAssignableTo(keyedType, getTypeAtPosition(s, 0));
                 }
                 return false;
-            };
+            }
 
             const suggestedMethod = isAssignmentTarget(expr) ? "set" : "get";
             if (!hasProp(suggestedMethod)) {

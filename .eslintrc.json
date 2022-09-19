@@ -2,7 +2,6 @@
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "warnOnUnsupportedTypeScriptVersion": false,
-        "ecmaVersion": 6,
         "sourceType": "module"
     },
     "env": {
@@ -27,6 +26,7 @@
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "error",
+        "@typescript-eslint/no-array-constructor": "error",
 
         "brace-style": "off",
         "@typescript-eslint/brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
@@ -62,12 +62,14 @@
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
+        "@typescript-eslint/prefer-as-const": "error",
 
         "quotes": "off",
         "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
 
         "semi": "off",
         "@typescript-eslint/semi": "error",
+        "@typescript-eslint/no-extra-semi": "error",
 
         "space-before-function-paren": "off",
         "@typescript-eslint/space-before-function-paren": ["error", {
@@ -79,6 +81,8 @@
         "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "error",
+
+        "@typescript-eslint/no-extra-non-null-assertion": "error",
 
         // scripts/eslint/rules
         "local/object-literal-surrounding-space": "error",
@@ -143,6 +147,9 @@
         "quote-props": ["error", "consistent-as-needed"],
         "space-in-parens": "error",
         "unicode-bom": ["error", "never"],
-        "use-isnan": "error"
+        "use-isnan": "error",
+        "no-prototype-builtins": "error",
+        "no-self-assign": "error",
+        "no-dupe-else-if": "error"
     }
 }

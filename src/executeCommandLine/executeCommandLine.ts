@@ -431,7 +431,7 @@ namespace ts {
     function getHeader(sys: System, message: string) {
         const colors = createColors(sys);
         const header: string[] = [];
-        const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;;
+        const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
         const tsIconLength = 5;
 
         const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));

@@ -51,7 +51,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         finalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression,
         occurrences: Occurrence[],
         expression: ValidExpression,
-    };
+    }
 
     type ValidExpressionOrStatement = ValidExpression | ValidStatement;
 
@@ -119,7 +119,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | RefactorErrorInfo | undefined {
         if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken) {
             return { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_logical_AND_access_chains) };
-        };
+        }
         const finalExpression = getFinalExpressionInChain(expression.right);
 
         if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
