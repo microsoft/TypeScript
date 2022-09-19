@@ -1844,14 +1844,6 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
-        "category": "Error",
-        "code": 2360
-    },
-    "The right-hand side of an 'in' expression must not be a primitive.": {
-        "category": "Error",
-        "code": 2361
-    },
     "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2362
@@ -2844,6 +2836,10 @@
     "Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.": {
         "category": "Error",
         "code": 2637
+    },
+    "Type '{0}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.": {
+        "category": "Error",
+        "code": 2638
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
