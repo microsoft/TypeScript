@@ -195,7 +195,7 @@ namespace ts {
         }
 
         const result: readonly Node[] = updated ?? nodes;
-        Debug.assertEachNode(result, test)
+        Debug.assertEachNode(result, test);
         return result as readonly TAssert[];
     }
 
