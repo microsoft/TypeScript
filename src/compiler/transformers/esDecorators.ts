@@ -704,9 +704,10 @@ namespace ts {
                 const classExpression = factory.createClassExpression(/*modifiers*/ undefined, /*name*/ undefined, /*typeParameters*/ undefined, heritageClauses, members);
                 const classReferenceDeclaration = factory.createVariableDeclaration(classReference, /*exclamationToken*/ undefined, /*type*/ undefined, classExpression);
                 const classReferenceVarDeclList = factory.createVariableDeclarationList([classReferenceDeclaration]);
+                const returnExpr = classInfo.classThis ? factory.createAssignment(classReference, classInfo.classThis) : classReference;
                 classDefinitionStatements.push(
                     factory.createVariableStatement(/*modifiers*/ undefined, classReferenceVarDeclList),
-                    factory.createReturnStatement(classReference),
+                    factory.createReturnStatement(returnExpr),
                 );
             }
             else {
@@ -928,12 +929,12 @@ namespace ts {
                     propertyName = { computed: false, name: member.name };
                 }
                 else if (isPropertyNameLiteral(member.name)) {
-                    propertyName = { computed: true, name: member.name };
+                    propertyName = { computed: true, name: factory.createStringLiteralFromNode(member.name) };
                 }
                 else {
                     const expression = member.name.expression;
                     if (isPropertyNameLiteral(expression) && !isIdentifier(expression)) {
-                        propertyName = { computed: true, name: expression };
+                        propertyName = { computed: true, name: factory.createStringLiteralFromNode(expression) };
                     }
                     else {
                         enterName();

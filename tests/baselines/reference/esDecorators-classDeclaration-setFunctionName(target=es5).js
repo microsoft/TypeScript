@@ -45,7 +45,7 @@ var C = function () {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return C;
+    return C = _classThis;
 }();
 //// [b.js]
 "use strict";
@@ -70,7 +70,7 @@ var C = exports.C = function () {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return C;
+    return C = _classThis;
 }();
 //// [c.js]
 "use strict";
@@ -94,6 +94,6 @@ var default_1 = function () {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return default_1;
+    return default_1 = _classThis;
 }();
 exports.default = default_1;

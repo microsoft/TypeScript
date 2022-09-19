@@ -39,7 +39,7 @@ let C = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return C;
+    return C = _classThis;
 })();
 export {};
 //// [b.js]
@@ -58,7 +58,7 @@ export let C = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return C;
+    return C = _classThis;
 })();
 //// [c.js]
 export default (() => {
@@ -76,5 +76,5 @@ export default (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return default_1;
+    return default_1 = _classThis;
 })();

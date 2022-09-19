@@ -32,7 +32,7 @@ export default ((() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return class_1;
+    return class_1 = _classThis;
 })());
 //// [b.js]
 // 16.2.3.7 RS: Evaluation

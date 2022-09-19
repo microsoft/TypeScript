@@ -45,7 +45,7 @@ x = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return class_1;
+    return class_1 = _classThis;
 })();
 x = (() => {
     let _instanceExtraInitializers = [];
@@ -75,7 +75,7 @@ x &&= (() => {
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         }
     };
-    return class_2;
+    return class_2 = _classThis_1;
 })();
 x &&= (() => {
     let _instanceExtraInitializers_1 = [];
@@ -105,7 +105,7 @@ x ||= (() => {
             __runInitializers(_classThis_2, _classExtraInitializers_2);
         }
     };
-    return class_3;
+    return class_3 = _classThis_2;
 })();
 x ||= (() => {
     let _instanceExtraInitializers_2 = [];
@@ -135,7 +135,7 @@ x ??= (() => {
             __runInitializers(_classThis_3, _classExtraInitializers_3);
         }
     };
-    return class_4;
+    return class_4 = _classThis_3;
 })();
 x ??= (() => {
     let _instanceExtraInitializers_3 = [];

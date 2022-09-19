@@ -92,6 +92,7 @@
         "unittests/evaluation/autoAccessors.ts",
         "unittests/evaluation/awaiter.ts",
         "unittests/evaluation/destructuring.ts",
+        "unittests/evaluation/esDecorators.ts",
         "unittests/evaluation/externalModules.ts",
         "unittests/evaluation/forAwaitOf.ts",
         "unittests/evaluation/forOf.ts",

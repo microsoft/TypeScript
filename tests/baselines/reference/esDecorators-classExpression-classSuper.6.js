@@ -50,5 +50,5 @@ class C extends Base {
         get x() { return super.method(); }
         set x(v) { super.method(); }
     };
-    return C;
+    return C = _classThis;
 })());

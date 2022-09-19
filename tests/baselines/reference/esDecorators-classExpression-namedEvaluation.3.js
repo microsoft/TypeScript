@@ -34,7 +34,7 @@ declare let dec: any;
                 __runInitializers(_classThis, _classExtraInitializers);
             }
         };
-        return class_1;
+        return class_1 = _classThis;
     })();
 }
 {
@@ -66,7 +66,7 @@ declare let dec: any;
                 __runInitializers(_classThis_1, _classExtraInitializers_1);
             }
         };
-        return class_2;
+        return class_2 = _classThis_1;
     })();
 }
 {
@@ -100,7 +100,7 @@ declare let dec: any;
                 __runInitializers(_classThis_2, _classExtraInitializers_2);
             }
         };
-        return class_3;
+        return class_3 = _classThis_2;
     })();
 }
 {

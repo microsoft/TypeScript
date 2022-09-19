@@ -24,7 +24,7 @@ declare let dec: any, obj: any, x: any;
                 __runInitializers(_classThis, _classExtraInitializers);
             }
         };
-        return class_1;
+        return class_1 = _classThis;
     })()] = obj;
 [x = (() => {
         let _instanceExtraInitializers = [];

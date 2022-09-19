@@ -25,7 +25,7 @@ module.exports = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return class_1;
+    return class_1 = _classThis;
 })();
 //// [b.js]
 "use strict";

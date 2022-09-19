@@ -47,7 +47,7 @@ class C3 extends ((() => {}) as any) {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return C1;
+    return C1 = _classThis;
 })());
 // function expression in extends should not get an assigned name
 ((() => {
@@ -68,7 +68,7 @@ class C3 extends ((() => {}) as any) {
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         }
     };
-    return C2;
+    return C2 = _classThis_1;
 })());
 // arrow function in extends should not get an assigned name
 ((() => {
@@ -89,5 +89,5 @@ class C3 extends ((() => {}) as any) {
             __runInitializers(_classThis_2, _classExtraInitializers_2);
         }
     };
-    return C3;
+    return C3 = _classThis_2;
 })());

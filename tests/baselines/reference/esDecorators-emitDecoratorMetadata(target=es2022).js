@@ -91,7 +91,7 @@ let C = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return C;
+    return C = _classThis;
 })();
 ((() => {
     let _classDecorators_1 = [dec, __metadata("design:paramtypes", [Number])];
@@ -137,5 +137,5 @@ let C = (() => {
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         }
     };
-    return C;
+    return C = _classThis_1;
 })());

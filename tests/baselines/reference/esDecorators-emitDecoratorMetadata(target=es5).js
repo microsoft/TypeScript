@@ -105,7 +105,7 @@ var C = function () {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return C;
+    return C = _classThis;
 }();
 ((function () {
     var _a;
@@ -164,5 +164,5 @@ var C = function () {
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         })(),
         _a);
-    return C;
+    return C = _classThis_1;
 })());

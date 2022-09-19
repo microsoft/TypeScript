@@ -27,7 +27,7 @@ declare let dec: any;
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return class_1;
+    return class_1 = _classThis;
 })());
 ((() => {
     let _instanceExtraInitializers = [];
@@ -54,7 +54,7 @@ declare let dec: any;
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         }
     };
-    return C;
+    return C = _classThis_1;
 })());
 ((() => {
     let _instanceExtraInitializers_1 = [];

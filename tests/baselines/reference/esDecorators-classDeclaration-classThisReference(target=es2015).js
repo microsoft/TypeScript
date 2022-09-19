@@ -38,5 +38,5 @@ let C = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return C;
+    return C = _classThis;
 })();

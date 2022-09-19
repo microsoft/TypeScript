@@ -91,7 +91,7 @@ let C1 = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return C1;
+    return C1 = _classThis;
 })();
 let C2 = (() => {
     let _classDecorators_1 = [dec];
@@ -135,7 +135,7 @@ let C2 = (() => {
             __runInitializers(_classThis_1, _classExtraInitializers_1);
         }
     };
-    return C2;
+    return C2 = _classThis_1;
 })();
 let C3 = (() => {
     let _classDecorators_2 = [dec];
@@ -179,5 +179,5 @@ let C3 = (() => {
             __runInitializers(_classThis_2, _classExtraInitializers_2);
         }
     };
-    return C3;
+    return C3 = _classThis_2;
 })();

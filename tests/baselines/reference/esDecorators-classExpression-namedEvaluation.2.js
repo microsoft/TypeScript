@@ -49,7 +49,7 @@ let x, f;
                 __runInitializers(_classThis, _classExtraInitializers);
             }
         };
-        return class_1;
+        return class_1 = _classThis;
     })() });
 ({ x: (() => {
         let _instanceExtraInitializers = [];
@@ -77,7 +77,7 @@ let x, f;
                 __runInitializers(_classThis_1, _classExtraInitializers_1);
             }
         };
-        return class_2;
+        return class_2 = _classThis_1;
     })() });
 ({ "x": (() => {
         let _instanceExtraInitializers_1 = [];
@@ -105,7 +105,7 @@ let x, f;
                 __runInitializers(_classThis_2, _classExtraInitializers_2);
             }
         };
-        return class_3;
+        return class_3 = _classThis_2;
     })() });
 ({ 0: (() => {
         let _instanceExtraInitializers_2 = [];
@@ -133,7 +133,7 @@ let x, f;
                 __runInitializers(_classThis_3, _classExtraInitializers_3);
             }
         };
-        return class_4;
+        return class_4 = _classThis_3;
     })() });
 ({ ["x"]: (() => {
         let _instanceExtraInitializers_3 = [];
@@ -161,7 +161,7 @@ let x, f;
                 __runInitializers(_classThis_4, _classExtraInitializers_4);
             }
         };
-        return class_5;
+        return class_5 = _classThis_4;
     })() });
 ({ [0]: (() => {
         let _instanceExtraInitializers_4 = [];
@@ -189,7 +189,7 @@ let x, f;
                 __runInitializers(_classThis_5, _classExtraInitializers_5);
             }
         };
-        return class_6;
+        return class_6 = _classThis_5;
     })() });
 ({ [_b = __propKey(f())]: (() => {
         let _instanceExtraInitializers_5 = [];
@@ -218,7 +218,7 @@ let x, f;
                 __runInitializers(_classThis_6, _classExtraInitializers_6);
             }
         };
-        return class_7;
+        return class_7 = _classThis_6;
     })() });
 ({ "__proto__": (() => {
         let _classDecorators_7 = [dec];
@@ -233,7 +233,7 @@ let x, f;
                 __runInitializers(_classThis_7, _classExtraInitializers_7);
             }
         };
-        return class_8;
+        return class_8 = _classThis_7;
     })() });
 // "__proto__" in a computed property name *does* perform NamedEvaluation
 ({ ["__proto__"]: (() => {
@@ -249,5 +249,5 @@ let x, f;
                 __runInitializers(_classThis_8, _classExtraInitializers_8);
             }
         };
-        return class_9;
+        return class_9 = _classThis_8;
     })() });

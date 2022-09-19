@@ -41,5 +41,5 @@ const method = "method";
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return C;
+    return C = _classThis;
 })());

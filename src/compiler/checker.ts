@@ -1263,10 +1263,11 @@ namespace ts {
             return addDeprecatedSuggestionWorker(declaration, diagnostic);
         }
 
-        function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
+        function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags, type?: Type) {
             symbolCount++;
             const symbol = (new Symbol(flags | SymbolFlags.Transient, name) as TransientSymbol);
             symbol.checkFlags = checkFlags || 0;
+            if (type) symbol.type = type;
             return symbol;
         }
 
@@ -37371,6 +37372,30 @@ namespace ts {
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
+                    if (!legacyDecorators) {
+                        headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
+                        const expectedType = getTypeOfNode(node.parent);
+                        const param = createSymbol(SymbolFlags.FunctionScopedVariable, "value" as __String, /*checkFlags*/ undefined, expectedType);
+                        const initializerSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [param], expectedType);
+                        if (hasAccessorModifier(node.parent)) {
+                            const getSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, emptyArray, expectedType);
+                            const setSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [param], voidType);
+                            const members = createSymbolTable([
+                                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "get" as __String, /*checkFlags*/ undefined, getSignatureType),
+                                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "set" as __String, /*checkFlags*/ undefined, setSignatureType),
+                                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "init" as __String, /*checkFlags*/ undefined, initializerSignatureType)
+                            ]);
+
+                            const descriptorType = createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, emptyArray);
+                            expectedReturnType = getUnionType([descriptorType, voidType]);
+                        }
+                        else {
+                            expectedReturnType = getUnionType([initializerSignatureType, voidType]);
+                        }
+                        break;
+                    }
+                    // falls through
+
                 case SyntaxKind.Parameter:
                     headMessage = Diagnostics.Decorator_function_return_type_is_0_but_is_expected_to_be_void_or_any;
                     expectedReturnType = voidType;
@@ -37380,22 +37405,31 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
-                    const methodType = getTypeOfNode(node.parent);
-                    expectedReturnType = getUnionType([
-                        legacyDecorators ? createTypedPropertyDescriptorType(methodType) : methodType,
-                        voidType
-                    ]);
+                    const expectedType = legacyDecorators ?
+                        createTypedPropertyDescriptorType(getTypeOfNode(node.parent)) :
+                        getOrCreateTypeFromSignature(getSignatureFromDeclaration(node.parent as MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration));
+                    expectedReturnType = getUnionType([expectedType, voidType]);
                     break;
 
                 default:
                     return Debug.failBadSyntaxKind(node.parent);
             }
 
-            checkTypeAssignableTo(
-                returnType,
-                expectedReturnType,
-                node,
-                headMessage);
+            checkTypeAssignableTo(returnType, expectedReturnType, node, headMessage);
+        }
+
+        function createFunctionType(
+            typeParameters: readonly TypeParameter[] | undefined,
+            thisParameter: Symbol | undefined,
+            parameters: readonly Symbol[],
+            returnType: Type,
+            typePredicate?: TypePredicate,
+            minArgumentCount: number = parameters.length,
+            flags: SignatureFlags = SignatureFlags.None
+        ) {
+            const decl = factory.createFunctionTypeNode(/*typeParameters*/ undefined, emptyArray, factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
+            const signature = createSignature(decl, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, flags);
+            return getOrCreateTypeFromSignature(signature);
         }
 
         /**

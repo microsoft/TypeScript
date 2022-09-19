@@ -90,5 +90,5 @@ const x = "x";
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    return C;
+    return C = _classThis;
 })());

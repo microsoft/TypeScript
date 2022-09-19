@@ -39,5 +39,5 @@ let D = (() => {
         }
         static #method1() { }
     };
-    return D;
+    return D = _classThis;
 })();
