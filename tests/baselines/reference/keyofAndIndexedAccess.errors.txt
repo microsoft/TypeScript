@@ -1,3 +1,10 @@
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(205,24): error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
+  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
+    Type 'T[string]' is not assignable to type 'object'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(211,24): error TS2322: Type 'T[K]' is not assignable to type 'object'.
+  Type 'T[keyof T]' is not assignable to type 'object'.
+    Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
+      Type 'T[string]' is not assignable to type 'object'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(316,5): error TS2322: Type 'T' is not assignable to type '{}'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(317,5): error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
@@ -6,7 +13,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(318,5): error TS232
   Type 'T[keyof T]' is not assignable to type '{}'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts (3 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts (5 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -212,12 +219,21 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(318,5): error TS232
         for (let s in obj[key]) {
         }
         const b = "foo" in obj[key];
+                           ~~~~~~~~
+!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
+!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'object'.
     }
     
     function f55<T, K extends keyof T>(obj: T, key: K) {
         for (let s in obj[key]) {
         }
         const b = "foo" in obj[key];
+                           ~~~~~~~~
+!!! error TS2322: Type 'T[K]' is not assignable to type 'object'.
+!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'object'.
+!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type 'object'.
     }
     
     function f60<T>(source: T, target: T) {

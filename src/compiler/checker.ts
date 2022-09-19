@@ -728,6 +728,7 @@ namespace ts {
             isPropertyAccessible,
             getTypeOnlyAliasDeclaration,
             getMemberOverrideModifierStatus,
+            isTypeParameterPossiblyReferenced,
         };
 
         function runWithInferenceBlockedFromSourceNode<T>(node: Node | undefined, fn: () => T): T {
@@ -857,7 +858,8 @@ namespace ts {
         emptyTypeLiteralSymbol.members = createSymbolTable();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, emptyArray);
 
-        const unknownUnionType = strictNullChecks ? getUnionType([undefinedType, nullType, createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray)]) : unknownType;
+        const unknownEmptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
+        const unknownUnionType = strictNullChecks ? getUnionType([undefinedType, nullType, unknownEmptyObjectType]) : unknownType;
 
         const emptyGenericType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray) as ObjectType as GenericType;
         emptyGenericType.instantiations = new Map<string, TypeReference>();
@@ -997,6 +999,7 @@ namespace ts {
         let deferredGlobalOmitSymbol: Symbol | undefined;
         let deferredGlobalAwaitedSymbol: Symbol | undefined;
         let deferredGlobalBigIntType: ObjectType | undefined;
+        let deferredGlobalRecordSymbol: Symbol | undefined;
 
         const allPotentiallyUnusedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -1830,6 +1833,7 @@ namespace ts {
          * the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
          * the given name can be found.
          *
+         * @param nameNotFoundMessage If defined, we will report errors found during resolve.
          * @param isUse If true, this will count towards --noUnusedLocals / --noUnusedParameters.
          */
         function resolveName(
@@ -1840,8 +1844,8 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals = false,
-            getSpellingSuggstions = true): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggstions, getSymbol);
+            getSpellingSuggestions = true): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggestions, getSymbol);
         }
 
         function resolveNameHelper(
@@ -2014,7 +2018,9 @@ namespace ts {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
-                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                if (nameNotFoundMessage) {
+                                    error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                }
                                 return undefined;
                             }
                             break loop;
@@ -2052,7 +2058,9 @@ namespace ts {
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = lookup(getSymbolOfNode(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
-                                error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                if (nameNotFoundMessage) {
+                                    error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                }
                                 return undefined;
                             }
                         }
@@ -2262,7 +2270,7 @@ namespace ts {
                 }
                 return undefined;
             }
-            else if (checkAndReportErrorForInvalidInitializer()) {
+            else if (nameNotFoundMessage && checkAndReportErrorForInvalidInitializer()) {
                 return undefined;
             }
 
@@ -14321,6 +14329,11 @@ namespace ts {
             return (deferredGlobalBigIntType ||= getGlobalType("BigInt" as __String, /*arity*/ 0, /*reportErrors*/ false)) || emptyObjectType;
         }
 
+        function getGlobalRecordSymbol(): Symbol | undefined {
+            deferredGlobalRecordSymbol ||= getGlobalTypeAliasSymbol("Record" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
+            return deferredGlobalRecordSymbol === unknownSymbol ? undefined : deferredGlobalRecordSymbol;
+        }
+
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
@@ -17206,9 +17219,10 @@ namespace ts {
         }
 
         function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
-            // If the type parameter doesn't have exactly one declaration, if there are invening statement blocks
+            // If the type parameter doesn't have exactly one declaration, if there are intervening statement blocks
             // between the node and the type parameter declaration, if the node contains actual references to the
-            // type parameter, or if the node contains type queries, we consider the type parameter possibly referenced.
+            // type parameter, or if the node contains type queries that we can't prove couldn't contain references to the type parameter,
+            // we consider the type parameter possibly referenced.
             if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
                 const container = tp.symbol.declarations[0].parent;
                 for (let n = node; n !== container; n = n.parent) {
@@ -17227,6 +17241,28 @@ namespace ts {
                         return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
                             getTypeFromTypeNodeWorker(node as TypeNode) === tp; // use worker because we're looking for === equality
                     case SyntaxKind.TypeQuery:
+                        const entityName = (node as TypeQueryNode).exprName;
+                        const firstIdentifier = getFirstIdentifier(entityName);
+                        const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
+                        const tpDeclaration = tp.symbol.declarations![0]; // There is exactly one declaration, otherwise `containsReference` is not called
+                        let tpScope: Node;
+                        if (tpDeclaration.kind === SyntaxKind.TypeParameter) { // Type parameter is a regular type parameter, e.g. foo<T>
+                            tpScope = tpDeclaration.parent;
+                        }
+                        else if (tp.isThisType) {
+                             // Type parameter is the this type, and its declaration is the class declaration.
+                            tpScope = tpDeclaration;
+                        }
+                        else {
+                            // Type parameter's declaration was unrecognized.
+                            // This could happen if the type parameter comes from e.g. a JSDoc annotation, so we default to returning true.
+                            return true;
+                        }
+
+                        if (firstIdentifierSymbol.declarations) {
+                            return some(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tpScope)) ||
+                                some((node as TypeQueryNode).typeArguments, containsReference);
+                        }
                         return true;
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
@@ -25183,18 +25219,26 @@ namespace ts {
 
             function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
                 const prop = getPropertyOfType(type, propName);
-                if (prop) {
-                    return prop.flags & SymbolFlags.Optional ? true : assumeTrue;
-                }
-                return getApplicableIndexInfoForName(type, propName) ? true : !assumeTrue;
+                return prop ?
+                    !!(prop.flags & SymbolFlags.Optional) || assumeTrue :
+                    !!getApplicableIndexInfoForName(type, propName) || !assumeTrue;
             }
 
-            function narrowByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
-                if (type.flags & TypeFlags.Union
-                    || type.flags & TypeFlags.Object && declaredType !== type && !(declaredType === unknownType && isEmptyAnonymousObjectType(type))
-                    || isThisTypeParameter(type)
-                    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
+            function narrowByInKeyword(type: Type, nameType: StringLiteralType | NumberLiteralType | UniqueESSymbolType, assumeTrue: boolean) {
+                const name = getPropertyNameFromType(nameType);
+                const isKnownProperty = someType(type, t => isTypePresencePossible(t, name, /*assumeTrue*/ true));
+                if (isKnownProperty) {
+                    // If the check is for a known property (i.e. a property declared in some constituent of
+                    // the target type), we filter the target type by presence of absence of the property.
                     return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
+                }
+                if (assumeTrue) {
+                    // If the check is for an unknown property, we intersect the target type with `Record<X, unknown>`,
+                    // where X is the name of the property.
+                    const recordSymbol = getGlobalRecordSymbol();
+                    if (recordSymbol) {
+                        return getIntersectionType([type, getTypeAliasInstantiation(recordSymbol, [nameType, unknownType])]);
+                    }
                 }
                 return type;
             }
@@ -25255,15 +25299,14 @@ namespace ts {
                             return narrowTypeByPrivateIdentifierInInExpression(type, expr, assumeTrue);
                         }
                         const target = getReferenceCandidate(expr.right);
-                        const leftType = getTypeOfNode(expr.left);
-                        if (leftType.flags & TypeFlags.StringLiteral) {
-                            const name = escapeLeadingUnderscores((leftType as StringLiteralType).value);
+                        const leftType = getTypeOfExpression(expr.left);
+                        if (leftType.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
                             if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
-                                getAccessedPropertyName(reference) === name) {
+                                getAccessedPropertyName(reference) === getPropertyNameFromType(leftType as StringLiteralType | NumberLiteralType | UniqueESSymbolType)) {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
                             }
                             if (isMatchingReference(reference, target)) {
-                                return narrowByInKeyword(type, name, assumeTrue);
+                                return narrowByInKeyword(type, leftType as StringLiteralType | NumberLiteralType | UniqueESSymbolType, assumeTrue);
                             }
                         }
                         break;
@@ -25937,10 +25980,11 @@ namespace ts {
                         if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                             links.flags |= NodeCheckFlags.InCheckIdentifier;
                             const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
+                            const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
                             links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                            if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                            if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
                                 const pattern = declaration.parent;
-                                const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
+                                const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
                                 if (narrowedType.flags & TypeFlags.Never) {
                                     return neverType;
                                 }
@@ -33831,6 +33875,10 @@ namespace ts {
             return booleanType;
         }
 
+        function hasEmptyObjectIntersection(type: Type): boolean {
+            return someType(type, t => t === unknownEmptyObjectType || !!(t.flags & TypeFlags.Intersection) && some((t as IntersectionType).types, isEmptyAnonymousObjectType));
+        }
+
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
             if (leftType === silentNeverType || rightType === silentNeverType) {
                 return silentNeverType;
@@ -33847,43 +33895,20 @@ namespace ts {
                 }
             }
             else {
-                leftType = checkNonNullType(leftType, left);
-                // TypeScript 1.0 spec (April 2014): 4.15.5
-                // Require the left operand to be of type Any, the String primitive type, or the Number primitive type.
-                if (!(allTypesAssignableToKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) ||
-                    isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
-                    error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_a_private_identifier_or_of_type_any_string_number_or_symbol);
+                // The type of the lef operand must be assignable to string, number, or symbol.
+                checkTypeAssignableTo(checkNonNullType(leftType, left), stringNumberSymbolType, left);
+            }
+            // The type of the right operand must be assignable to 'object'.
+            if (checkTypeAssignableTo(checkNonNullType(rightType, right), nonPrimitiveType, right)) {
+                // The {} type is assignable to the object type, yet {} might represent a primitive type. Here we
+                // detect and error on {} that results from narrowing the unknown type, as well as intersections
+                // that include {} (we know that the other types in such intersections are assignable to object
+                // since we already checked for that).
+                if (hasEmptyObjectIntersection(rightType)) {
+                    error(right, Diagnostics.Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operator, typeToString(rightType));
                 }
             }
-            rightType = checkNonNullType(rightType, right);
-            // TypeScript 1.0 spec (April 2014): 4.15.5
-            // The in operator requires the right operand to be
-            //
-            //   1. assignable to the non-primitive type,
-            //   2. an unconstrained type parameter,
-            //   3. a union or intersection including one or more type parameters, whose constituents are all assignable to the
-            //      the non-primitive type, or are unconstrainted type parameters, or have constraints assignable to the
-            //      non-primitive type, or
-            //   4. a type parameter whose constraint is
-            //      i. an object type,
-            //     ii. the non-primitive type, or
-            //    iii. a union or intersection with at least one constituent assignable to an object or non-primitive type.
-            //
-            // The divergent behavior for type parameters and unions containing type parameters is a workaround for type
-            // parameters not being narrowable. If the right operand is a concrete type, we can error if there is any chance
-            // it is a primitive. But if the operand is a type parameter, it cannot be narrowed, so we don't issue an error
-            // unless *all* instantiations would result in an error.
-            //
             // The result is always of the Boolean primitive type.
-            const rightTypeConstraint = getConstraintOfType(rightType);
-            if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
-                rightTypeConstraint && (
-                    isTypeAssignableToKind(rightType, TypeFlags.UnionOrIntersection) && !allTypesAssignableToKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
-                    !maybeTypeOfKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object)
-                )
-            ) {
-                error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_not_be_a_primitive);
-            }
             return booleanType;
         }
 
@@ -43271,7 +43296,8 @@ namespace ts {
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
-                const symbol = getReferencedValueSymbol(node);
+                const symbol = getReferencedValueOrAliasSymbol(node);
+
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
                 if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) {
@@ -43673,6 +43699,30 @@ namespace ts {
             }
 
             return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+        }
+
+        /**
+         * Get either a value-meaning symbol or an alias symbol.
+         * Unlike `getReferencedValueSymbol`, if the cached resolved symbol is the unknown symbol,
+         * we call `resolveName` to find a symbol.
+         * This is because when caching the resolved symbol, we only consider value symbols, but here
+         * we want to also get an alias symbol if one exists.
+         */
+        function getReferencedValueOrAliasSymbol(reference: Identifier): Symbol | undefined {
+            const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
+            if (resolvedSymbol && resolvedSymbol !== unknownSymbol) {
+                return resolvedSymbol;
+            }
+
+            return resolveName(
+                reference,
+                reference.escapedText,
+                SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
+                /*nodeNotFoundMessage*/ undefined,
+                /*nameArg*/ undefined,
+                /*isUse*/ true,
+                /*excludeGlobals*/ undefined,
+                /*getSpellingSuggestions*/ undefined);
         }
 
         function getReferencedValueDeclaration(referenceIn: Identifier): Declaration | undefined {

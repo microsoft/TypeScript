@@ -13604,6 +13604,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_value_0_cannot_be_used_here_18050" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The value '{0}' cannot be used here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[W tym miejscu nie można użyć wartości „{0}”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer_1189" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The variable declaration of a 'for...in' statement cannot have an initializer.]]></Val>
@@ -15949,6 +15958,42 @@
           <Val><![CDATA['{0}' is not allowed as a variable declaration name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Element „{0}” nie jest dozwolony jako nazwa deklaracji zmiennej.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_of_type_unknown_18046" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is of type 'unknown'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element „{0}” jest typu „nieznany”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_null_18047" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'null'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element „{0}” prawdopodobnie ma wartość „null”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_null_or_undefined_18049" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'null' or 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element „{0}” prawdopodobnie ma wartość „null” lub jest „niezdefiniowany”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_possibly_undefined_18048" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is possibly 'undefined'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element „{0}” jest prawdopodobnie „niezdefiniowany”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

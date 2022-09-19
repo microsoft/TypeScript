@@ -4854,6 +4854,7 @@ namespace ts {
         /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, isWrite: boolean, containingType: Type, property: Symbol): boolean;
         /* @internal */ getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined;
         /* @internal */ getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus;
+        /* @internal */ isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node): boolean;
     }
 
     /* @internal */
