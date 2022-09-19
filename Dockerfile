@@ -1,4 +1,4 @@
-# We use this dockerfile to build a packed tarfile which we import in our `docker` tests
+# We use this dockerfile to build a packaged tar file that we import in our "docker" tests.
 FROM node:current
 COPY . /typescript
 WORKDIR /typescript
