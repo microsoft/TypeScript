@@ -1,6 +1,4 @@
 namespace ts {
-    // TODO(jakebailey): include type guard and non-type guard variants on visitNode and visitNodes
-
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
