@@ -3563,6 +3563,10 @@
         "category": "Error",
         "code": 2844
     },
+    "This condition will always return '{0}'.": {
+        "category": "Error",
+        "code": 2845
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -7356,7 +7360,14 @@
         "category": "Message",
         "code": 95173
     },
-
+    "Use `{0}`.": {
+        "category": "Message",
+        "code": 95174
+    },
+    "Use `Number.isNaN` in all conditions.": {
+        "category": "Message",
+        "code": 95175
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
