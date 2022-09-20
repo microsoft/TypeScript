@@ -70,11 +70,11 @@ namespace ts.codefix {
          * `MappedIndirect.ax` and `MappedIndirect.ay` have no declaration node attached (due to their mapped-type
          * parent):
          *
-         * >>> ```ts
-         * >>> type Base = { ax: number; ay: string };
-         * >>> type BaseKeys = keyof Base;
-         * >>> type MappedIndirect = { [K in BaseKeys]: boolean };
-         * >>> ```
+         * ```ts
+         * type Base = { ax: number; ay: string };
+         * type BaseKeys = keyof Base;
+         * type MappedIndirect = { [K in BaseKeys]: boolean };
+         * ```
          *
          * In such cases, we assume the declaration to be a `PropertySignature`.
          */

@@ -718,6 +718,7 @@ namespace ts {
         [SyntaxKind.JSDocProtectedTag]: forEachChildInJSDocTag,
         [SyntaxKind.JSDocReadonlyTag]: forEachChildInJSDocTag,
         [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
+        [SyntaxKind.JSDocOverrideTag]: forEachChildInJSDocTag,
         [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
     };
 
@@ -727,7 +728,7 @@ namespace ts {
         return visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type);
-    };
+    }
 
     function forEachChildInUnionOrIntersectionType<T>(node: UnionTypeNode | IntersectionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.types);
@@ -799,10 +800,10 @@ namespace ts {
     }
 
     function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNode(cbNode, node.name);
+        return visitNode(cbNode, node.name);
     }
 
-    function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocOverrideTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName)
             || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }

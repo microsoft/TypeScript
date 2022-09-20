@@ -185,7 +185,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
     function setProperties(target: any, properties: any) {
         for (const name in properties) {
-            if (properties.hasOwnProperty(name)) {
+            if (Object.prototype.hasOwnProperty.call(properties, name)) {
                 const value = properties[name];
                 if (typeof value === "object") {
                     setProperties(target[name], value);

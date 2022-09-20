@@ -45,7 +45,7 @@ b_1["default"];
 "use strict";
 exports.__esModule = true;
 var x = { x: "" };
-zzz;
+a_1["default"];
 var b_1 = require("./b");
 b_1["default"];
 var y = x;

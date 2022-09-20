@@ -59,7 +59,7 @@ namespace ts.formatting {
             // in other cases there should be no space between '?' and next token
             rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext, isNotPropertyAccessOnIntegerLiteral], RuleAction.DeleteSpace),
             rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.DeleteSpace),
@@ -411,23 +411,23 @@ namespace ts.formatting {
     }
 
     function isOptionEnabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => context.options && context.options.hasOwnProperty(optionName) && !!context.options[optionName];
+        return (context) => context.options && hasProperty(context.options, optionName) && !!context.options[optionName];
     }
 
     function isOptionDisabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => context.options && context.options.hasOwnProperty(optionName) && !context.options[optionName];
+        return (context) => context.options && hasProperty(context.options, optionName) && !context.options[optionName];
     }
 
     function isOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName];
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName];
     }
 
     function isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
     }
 
     function isOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !!context.options[optionName];
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !!context.options[optionName];
     }
 
     function isForContext(context: FormattingContext): boolean {
@@ -893,5 +893,11 @@ namespace ts.formatting {
 
     function isSemicolonInsertionContext(context: FormattingContext): boolean {
         return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
+    }
+
+    function isNotPropertyAccessOnIntegerLiteral(context: FormattingContext): boolean {
+        return !isPropertyAccessExpression(context.contextNode)
+            || !isNumericLiteral(context.contextNode.expression)
+            || context.contextNode.expression.getText().indexOf(".") !== -1;
     }
 }

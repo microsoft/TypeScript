@@ -62,7 +62,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts during emit)
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -241,7 +241,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -350,7 +350,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/a.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -486,7 +486,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts during emit)
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

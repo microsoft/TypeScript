@@ -5668,7 +5668,7 @@ namespace ts {
             setOriginalNode(clone, node);
 
             for (const key in node) {
-                if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
+                if (hasProperty(clone, key) || !hasProperty(node, key)) {
                     continue;
                 }
 

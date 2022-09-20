@@ -65,21 +65,21 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/tsconfig.json:
+  {}
+/a.ts:
+  {}
+/b.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /:
-  {"directoryName":""}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -90,19 +90,20 @@ export class B {
 
 //// [/a.js]
 var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
-    function accept(f) { if (f && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+    function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
     var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
     var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
     var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
-    var _;
+    var _, done = false;
     for (var i = decorators.length - 1; i >= 0; i--) {
         var context = {};
         for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
         for (var p in contextIn.access) context.access[p] = contextIn.access[p];
-        context.addInitializer = function (f) { extraInitializers.push(f); };
+        context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
         var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
         if (kind === "accessor") {
-            if (!result) continue;
+            if (result === void 0) continue;
+            if (result === null || typeof result !== "object") throw new TypeError("Object expected");
             if (_ = accept(result.get)) descriptor.get = _;
             if (_ = accept(result.set)) descriptor.set = _;
             if (_ = accept(result.init)) initializers.push(_);
@@ -112,7 +113,8 @@ var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, 
             else descriptor[key] = _;
         }
     }
-    if (target) Object.defineProperty(target, contextIn.key, descriptor);
+    if (target) Object.defineProperty(target, contextIn.name, descriptor);
+    done = true;
 };
 var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
     var useValue = arguments.length > 2;
@@ -142,7 +144,7 @@ export let A = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         })(),
         _a);
-    return A;
+    return A = _classThis;
 })();
 
 
@@ -182,21 +184,21 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/tsconfig.json:
+  {}
+/a.ts:
+  {}
+/b.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /:
-  {"directoryName":""}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -231,21 +233,21 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/tsconfig.json:
+  {}
+/a.ts:
+  {}
+/b.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /:
-  {"directoryName":""}
+  {}
 
 exitCode:: ExitStatus.undefined
 
