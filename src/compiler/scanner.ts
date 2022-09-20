@@ -2052,12 +2052,38 @@ namespace ts {
                             return token = SyntaxKind.Unknown;
                         }
 
-                        if (isIdentifierStart(codePointAt(text, pos + 1), languageVersion)) {
+                        const charAfterHash = codePointAt(text, pos + 1);
+                        if (charAfterHash === CharacterCodes.backslash) {
                             pos++;
-                            scanIdentifier(codePointAt(text, pos), languageVersion);
+                            const extendedCookedChar = peekExtendedUnicodeEscape();
+                            if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                                pos += 3;
+                                tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                                tokenValue = "#" + scanExtendedUnicodeEscape() + scanIdentifierParts();
+                                return token = SyntaxKind.PrivateIdentifier;
+                            }
+
+                            const cookedChar = peekUnicodeEscape();
+                            if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
+                                pos += 6;
+                                tokenFlags |= TokenFlags.UnicodeEscape;
+                                tokenValue = "#" + String.fromCharCode(cookedChar) + scanIdentifierParts();
+                                return token = SyntaxKind.PrivateIdentifier;
+                            }
+                            pos--;
+                        }
+
+                        if (isIdentifierStart(charAfterHash, languageVersion)) {
+                            pos++;
+                            // We're relying on scanIdentifier's behavior and adjusting the token kind after the fact.
+                            // Notably absent from this block is the fact that calling a function named "scanIdentifier",
+                            // but identifiers don't include '#', and that function doesn't deal with it at all.
+                            // This works because 'scanIdentifier' tries to reuse source characters and builds up substrings;
+                            // however, it starts at the 'tokenPos' which includes the '#', and will "accidentally" prepend the '#' for us.
+                            scanIdentifier(charAfterHash, languageVersion);
                         }
                         else {
-                            tokenValue = String.fromCharCode(codePointAt(text, pos));
+                            tokenValue = "#";
                             error(Diagnostics.Invalid_character, pos++, charSize(ch));
                         }
                         return token = SyntaxKind.PrivateIdentifier;
