@@ -15589,7 +15589,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                     }
                     errorIfWritingToReadonlyIndex(indexInfo);
-                                        // When accessing an enum object with its own type,
+                    // When accessing an enum object with its own type,
                     // e.g. E[E.A] for enum E { A }, undefined shouldn't
                     // be included in the result type
                     if ((accessFlags & AccessFlags.IncludeUndefined) &&
