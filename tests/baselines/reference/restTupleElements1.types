@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/tuple/restTupleElements1.ts ===
+=== /a.ts ===
 type T00 = [string?];
 >T00 : [(string | undefined)?]
 
@@ -26,14 +26,11 @@ type T07 = [...string[], string];  // Error
 type T08 = [...string];  // Error
 >T08 : any[]
 
-type T09 = [...string?];  // Error
->T09 : any[]
+type T09 = [string, ...[...string[]]];
+>T09 : [string, ...string[]]
 
-type T10 = [string, ...[...string[]]];
+type T10 = [string, ...[...[...string[]]]];
 >T10 : [string, ...string[]]
-
-type T11 = [string, ...[...[...string[]]]];
->T11 : [string, ...string[]]
 
 type T15 = [boolean, number, ...string[]];
 >T15 : [boolean, number, ...string[]]
@@ -248,4 +245,8 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >x : string
 >charCodeAt : (index: number) => number
 >0 : 0
+
+=== /b.ts ===
+type T = [...string?];  // Error
+>T : any[]
 

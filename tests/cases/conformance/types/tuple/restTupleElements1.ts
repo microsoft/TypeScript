@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 
+// @filename: /a.ts
 type T00 = [string?];
 type T01 = [string, string?];
 type T02 = [string?, string];  // Error
@@ -10,9 +11,8 @@ type T05 = [...[...[...string[]]]];
 type T06 = [string, ...string[]];
 type T07 = [...string[], string];  // Error
 type T08 = [...string];  // Error
-type T09 = [...string?];  // Error
-type T10 = [string, ...[...string[]]];
-type T11 = [string, ...[...[...string[]]]];
+type T09 = [string, ...[...string[]]];
+type T10 = [string, ...[...[...string[]]]];
 
 type T15 = [boolean, number, ...string[]];
 type L15 = T15["length"];  // number
@@ -69,3 +69,6 @@ declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]])
 
 f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
+
+// @filename: /b.ts
+type T = [...string?];  // Error

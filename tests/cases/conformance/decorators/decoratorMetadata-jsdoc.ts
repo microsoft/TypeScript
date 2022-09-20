@@ -2,13 +2,19 @@
 // @emitDecoratorMetadata: true
 // @target: es5
 // @module: commonjs
-declare var decorator: any;
 
-class X {
+// @filename: /a.ts
+declare var decorator: any;
+class C1 {
+    @decorator()
+    c?: *;
+}
+
+// @filename: /b.ts
+declare var decorator: any;
+class C2 {
     @decorator()
     a?: string?;
     @decorator()
     b?: string!;
-    @decorator()
-    c?: *;
 }

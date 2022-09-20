@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts ===
+=== /a.ts ===
 // grammar error from checker
 var ara: Array.<number> = [1,2,3];
 >ara : number[]
@@ -7,19 +7,11 @@ var ara: Array.<number> = [1,2,3];
 >2 : 2
 >3 : 3
 
-function f(x: ?number, y: Array.<number>) {
->f : (x: number | null, y: Array<number>) => number
->x : number | null
+function f1(y: Array.<number>) {
+>f1 : (y: Array<number>) => number
 >y : number[]
 
-    return x ? x + y[1] : y[0];
->x ? x + y[1] : y[0] : number
->x : number | null
->x + y[1] : number
->x : number
->y[1] : number
->y : number[]
->1 : 1
+    return y[0];
 >y[0] : number
 >y : number[]
 >0 : 0
@@ -62,6 +54,18 @@ var g: function(number, number): number = (n,m) => n + m;
 >n : number
 >m : number
 
+var anys: Array<*>;
+>anys : any[]
+
+=== /b.ts ===
+function f2(x: ?number) {
+>f2 : (x: number | null) => number | null
+>x : number | null
+
+    return x;
+>x : number | null
+}
+
 var most: !string = 'definite';
 >most : string
 >'definite' : "definite"
@@ -79,8 +83,4 @@ var nns: Array<?number>;
 
 var dns: Array<!number>;
 >dns : number[]
-
-var anys: Array<*>;
->anys : any[]
-
 

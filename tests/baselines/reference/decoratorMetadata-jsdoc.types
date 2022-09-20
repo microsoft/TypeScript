@@ -1,9 +1,24 @@
-=== tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts ===
+=== /a.ts ===
 declare var decorator: any;
 >decorator : any
 
-class X {
->X : X
+class C1 {
+>C1 : C1
+
+    @decorator()
+>decorator() : any
+>decorator : any
+
+    c?: *;
+>c : any
+}
+
+=== /b.ts ===
+declare var decorator: any;
+>decorator : any
+
+class C2 {
+>C2 : C2
 
     @decorator()
 >decorator() : any
@@ -18,11 +33,5 @@ class X {
 
     b?: string!;
 >b : string
-
-    @decorator()
->decorator() : any
->decorator : any
-
-    c?: *;
->c : any
 }
+
