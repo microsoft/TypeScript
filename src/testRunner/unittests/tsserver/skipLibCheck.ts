@@ -167,7 +167,7 @@ namespace ts.projectSystem {
             );
             const errorResult = session.executeCommand(getErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code);
         });
 
         it("should report semantic errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
@@ -194,7 +194,7 @@ namespace ts.projectSystem {
             );
             const errorResult = session.executeCommand(getErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code);
         });
 
         it("should report semantic errors for configured js project with checkJs=true and skipLibCheck=true", () => {
@@ -223,7 +223,7 @@ namespace ts.projectSystem {
             );
             const errorResult = session.executeCommand(getErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
+            assert.equal(errorResult[0].code, Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code);
         });
     });
 }

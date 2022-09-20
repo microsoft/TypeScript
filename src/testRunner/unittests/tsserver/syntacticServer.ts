@@ -26,7 +26,7 @@ import { something } from "something";
                 content: "{}"
             };
             const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-            const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
             return { host, session, file1, file2, file3, something, configFile };
         }
 

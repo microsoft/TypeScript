@@ -3116,6 +3116,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "string",
           "kind": "keyword",
           "kindModifiers": "",

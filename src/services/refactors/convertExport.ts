@@ -54,7 +54,7 @@ namespace ts.refactor {
         readonly exportName: Identifier; // This is exportNode.name except for VariableStatement_s.
         readonly wasDefault: boolean;
         readonly exportingModuleSymbol: Symbol;
-    };
+    }
 
     function getInfo(context: RefactorContext, considerPartialSpans = true): ExportInfo | RefactorErrorInfo | undefined {
         const { file, program } = context;

@@ -1,0 +1,188 @@
+=== tests/cases/conformance/controlFlow/controlFlowBindingElement.ts ===
+{
+    const data =  { param: 'value' };
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 1, 9))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 1, 19))
+
+    const {
+        param = (() => { throw new Error('param is not defined') })(),
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 3, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    } = data;
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 1, 9))
+    
+    console.log(param); // should not trigger 'Unreachable code detected.'    
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 3, 11))
+}
+
+
+{
+    const data =  { param: 'value' };
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 12, 9))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 12, 19))
+
+    let foo: string | undefined = "";
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 14, 7))
+
+    const {
+        param = (() => { throw new Error('param is not defined') })(),
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 15, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    } = data;
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 12, 9))
+    
+    foo;  // should be string  
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 14, 7))
+}
+
+{
+    const data =  { param: 'value' };
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 23, 9))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 23, 19))
+
+    let foo: string | undefined = "";
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 25, 7))
+
+    const {
+        param = (() => { foo = undefined })(),
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 26, 11))
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 25, 7))
+>undefined : Symbol(undefined)
+
+    } = data;
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 23, 9))
+    
+    foo;  // should be string | undefined
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 25, 7))
+}
+
+{
+    const data =  { param: 'value' };
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 34, 9))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 34, 19))
+
+    let foo: string | undefined = "";
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 36, 7))
+
+    const {
+        param = (() => { return "" + 1 })(),
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 37, 11))
+
+    } = data;
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 34, 9))
+    
+    foo;  // should be string
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 36, 7))
+}
+
+{
+    interface Window {
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 44, 1))
+
+        window: Window;
+>window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 45, 22))
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 44, 1))
+    }
+
+    let foo: string | undefined;
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 49, 7))
+
+    let window = {} as Window;
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 50, 7))
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 44, 1))
+
+    window.window = window;
+>window.window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 45, 22))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 50, 7))
+>window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 45, 22))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 50, 7))
+
+    const { [(() => { foo = ""; return 'window' as const })()]:
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 49, 7))
+>const : Symbol(const)
+
+        { [(() => { return 'window' as const })()]: bar } } = window;
+>const : Symbol(const)
+>bar : Symbol(bar, Decl(controlFlowBindingElement.ts, 54, 9))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 50, 7))
+
+    foo;  // should be string
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 49, 7))
+}
+
+{
+    interface Window {
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 59, 1))
+
+        window: Window;
+>window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 60, 22))
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 59, 1))
+    }
+
+    let foo: string | undefined;
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 64, 7))
+
+    let window = {} as Window;
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 65, 7))
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 59, 1))
+
+    window.window = window;
+>window.window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 60, 22))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 65, 7))
+>window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 60, 22))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 65, 7))
+
+    const { [(() => {  return 'window' as const })()]:
+>const : Symbol(const)
+
+        { [(() => { foo = ""; return 'window' as const })()]: bar } } = window;
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 64, 7))
+>const : Symbol(const)
+>bar : Symbol(bar, Decl(controlFlowBindingElement.ts, 69, 9))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 65, 7))
+
+    foo;  // should be string
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 64, 7))
+}
+
+{
+    interface Window {
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 74, 1))
+
+        window: Window;
+>window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 75, 22))
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 74, 1))
+    }
+
+    let foo: string | undefined;
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 79, 7))
+
+    let window = {} as Window;
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 80, 7))
+>Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 74, 1))
+
+    window.window = window;
+>window.window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 75, 22))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 80, 7))
+>window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 75, 22))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 80, 7))
+
+    const { [(() => { return 'window' as const })()]:
+>const : Symbol(const)
+
+        { [(() => { return 'window' as const })()]: bar = (() => { foo = ""; return window; })() } } = window;
+>const : Symbol(const)
+>bar : Symbol(bar, Decl(controlFlowBindingElement.ts, 84, 9))
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 79, 7))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 80, 7))
+>window : Symbol(window, Decl(controlFlowBindingElement.ts, 80, 7))
+
+    foo;  // should be string | undefined
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 79, 7))
+}
+

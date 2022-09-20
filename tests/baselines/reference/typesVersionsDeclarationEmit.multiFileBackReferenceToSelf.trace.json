@@ -22,7 +22,7 @@
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/other.tsx' does not exist.",
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/other.d.ts' exist - use it as a name resolution result.",
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/package.json' exists according to earlier cached lookups.",
-    "======== Module name '../other' was successfully resolved to 'tests/cases/conformance/declarationEmit/node_modules/ext/other.d.ts' with Package ID 'ext/ther.d.ts@1.0.0'. ========",
+    "======== Module name '../other' was successfully resolved to 'tests/cases/conformance/declarationEmit/node_modules/ext/other.d.ts' with Package ID 'ext/other.d.ts@1.0.0'. ========",
     "======== Resolving module 'ext' from 'tests/cases/conformance/declarationEmit/main.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
     "Loading module 'ext' from 'node_modules' folder, target file type 'TypeScript'.",
@@ -41,7 +41,7 @@
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.tsx' does not exist.",
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts' exist - use it as a name resolution result.",
     "Resolving real path for 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts', result 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts'.",
-    "======== Module name 'ext' was successfully resolved to 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts' with Package ID 'ext/s3.1/index.d.ts@1.0.0'. ========",
+    "======== Module name 'ext' was successfully resolved to 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts' with Package ID 'ext/ts3.1/index.d.ts@1.0.0'. ========",
     "======== Resolving module 'ext/other' from 'tests/cases/conformance/declarationEmit/main.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
     "Loading module 'ext/other' from 'node_modules' folder, target file type 'TypeScript'.",
@@ -53,5 +53,5 @@
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.tsx' does not exist.",
     "File 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts' exist - use it as a name resolution result.",
     "Resolving real path for 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts', result 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts'.",
-    "======== Module name 'ext/other' was successfully resolved to 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts' with Package ID 'ext/s3.1/other.d.ts@1.0.0'. ========"
+    "======== Module name 'ext/other' was successfully resolved to 'tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts' with Package ID 'ext/ts3.1/other.d.ts@1.0.0'. ========"
 ]

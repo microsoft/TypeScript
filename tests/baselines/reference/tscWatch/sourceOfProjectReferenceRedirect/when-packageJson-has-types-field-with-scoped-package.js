@@ -66,42 +66,41 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/b/src/bar.ts (used version)
 /user/username/projects/myproject/packages/a/src/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/A/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/B/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/a/src/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/A/src/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/B/src/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {"fileName":"/user/username/projects/myproject/packages/B/src/bar.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/packages/a/node_modules:
-  {"fileName":"/user/username/projects/myproject/packages/A/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
-  {"fileName":"/user/username/projects/myproject/packages/node_modules","pollingInterval":500}
-/user/username/projects/myproject/packages/b/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/B/package.json","pollingInterval":250}
+  {"pollingInterval":500}
 /user/username/projects/myproject/packages/a/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/packages/A/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/packages/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/packages/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/a/src/index.ts:
+  {}
+/user/username/projects/myproject/packages/b/src/index.ts:
+  {}
+/user/username/projects/myproject/packages/b/src/bar.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/b/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/b/src:
-  {"directoryName":"/user/username/projects/myproject/packages/b/src"}
+  {}
 /user/username/projects/myproject/packages/a/src:
-  {"directoryName":"/user/username/projects/myproject/packages/A/src"}
-  {"directoryName":"/user/username/projects/myproject/packages/a/src"}
+  {}
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
