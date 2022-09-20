@@ -1149,10 +1149,10 @@ namespace ts.textChanges {
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    export function createWriter(newLine: string): TextChangesWriter {
+    export function createWriter(newLine: string, indentation?: string | number): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
-        const writer = createTextWriter(newLine);
+        const writer = createTextWriter(newLine, indentation);
         const onBeforeEmitNode: PrintHandlers["onBeforeEmitNode"] = node => {
             if (node) {
                 setPos(node, lastNonTriviaPosition);

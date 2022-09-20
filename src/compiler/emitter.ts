@@ -898,6 +898,7 @@ namespace ts {
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
         const bundledHelpers = new Map<string, boolean>();
+        const indentation = printerOptions.indentation;
 
         let currentSourceFile: SourceFile | undefined;
         let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
@@ -1155,7 +1156,7 @@ namespace ts {
         }
 
         function beginPrint() {
-            return ownWriter || (ownWriter = createTextWriter(newLine));
+            return ownWriter || (ownWriter = createTextWriter(newLine, indentation));
         }
 
         function endPrint() {

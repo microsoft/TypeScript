@@ -4121,6 +4121,28 @@ namespace ts {
         return indentStrings[level];
     }
 
+    export function setIndentString(indentation?: string | number) {
+        let singleLevel;
+        if (typeof indentation === "string") {
+            singleLevel = indentation;
+        }
+        else if (typeof indentation === "number") {
+            if (indentation < 0 || indentation > 9) {
+                indentation = 4;
+            }
+            singleLevel = "".padStart(indentation, " ");
+        }
+        else {
+            singleLevel = "    ";
+        }
+        if (indentStrings[1] !== singleLevel) {
+            const cacheLength = indentStrings.length;
+            //... clear current cache and repopulate with new indentation
+            indentStrings.splice(1, cacheLength - 1, singleLevel);
+            getIndentString(cacheLength);
+        }
+    }
+
     export function getIndentSize() {
         return indentStrings[1].length;
     }
@@ -4129,13 +4151,16 @@ namespace ts {
         return stringContains(version, "-dev") || stringContains(version, "-insiders");
     }
 
-    export function createTextWriter(newLine: string): EmitTextWriter {
+    export function createTextWriter(newLine: string, indentation?: string | number): EmitTextWriter {
         let output: string;
         let indent: number;
         let lineStart: boolean;
         let lineCount: number;
         let linePos: number;
         let hasTrailingComment = false;
+        if (indentation || indentation === 0) {
+            setIndentString(indentation);
+        }
 
         function updateLineCountAndPosFor(s: string) {
             const lineStartsOfS = computeLineStarts(s);

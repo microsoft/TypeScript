@@ -1,0 +1,270 @@
+=== tests/cases/compiler/node_modules/typescript/index.d.ts ===
+declare module "typescript" {
+>"typescript" : typeof import("typescript")
+
+    export = ts;
+>ts : typeof ts
+}
+
+=== tests/cases/compiler/writerOptionalIndentation.ts ===
+import * as ts from "typescript";
+>ts : typeof ts
+
+const nl = ts.sys.newLine;
+>nl : string
+>ts.sys.newLine : string
+>ts.sys : ts.System
+>ts : typeof ts
+>sys : ts.System
+>newLine : string
+
+type ExpectedResults = {
+>ExpectedResults : { [indentation: string]: string; [indentation: number]: string; }
+
+    [indentation: string | number]: string;
+>indentation : string | number
+}
+
+const expectedResults: ExpectedResults = {
+>expectedResults : ExpectedResults
+>{    0: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`,    1: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`,    2: `export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}`,    3: `export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}`,    4: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`,    6: `export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}`,    10: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`,    "a": `export function abc(): string {${nl}alet abc: string = \"abc\";${nl}areturn abc;${nl}}${nl}`,    ".": `export function abc(): string {${nl}.let abc: string = \"abc\";${nl}.return abc;${nl}}${nl}`,    "\t": `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`,    "\t\t": `export function abc(): string {${nl}\t\tlet abc: string = \"abc\";${nl}\t\treturn abc;${nl}}${nl}`} : { 0: string; 1: string; 2: string; 3: string; 4: string; 6: string; 10: string; a: string; ".": string; "\t": string; "\t\t": string; }
+
+    0: `export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}`,
+>0 : string
+>`export function abc(): string {${nl}let abc: string = \"abc\";${nl}return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    1: `export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}`,
+>1 : string
+>`export function abc(): string {${nl} let abc: string = \"abc\";${nl} return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    2: `export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}`,
+>2 : string
+>`export function abc(): string {${nl}  let abc: string = \"abc\";${nl}  return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    3: `export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}`,
+>3 : string
+>`export function abc(): string {${nl}   let abc: string = \"abc\";${nl}   return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    4: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`,
+>4 : string
+>`export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    6: `export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}`,
+>6 : string
+>`export function abc(): string {${nl}      let abc: string = \"abc\";${nl}      return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    10: `export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}`,
+>10 : string
+>`export function abc(): string {${nl}    let abc: string = \"abc\";${nl}    return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    "a": `export function abc(): string {${nl}alet abc: string = \"abc\";${nl}areturn abc;${nl}}${nl}`,
+>"a" : string
+>`export function abc(): string {${nl}alet abc: string = \"abc\";${nl}areturn abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    ".": `export function abc(): string {${nl}.let abc: string = \"abc\";${nl}.return abc;${nl}}${nl}`,
+>"." : string
+>`export function abc(): string {${nl}.let abc: string = \"abc\";${nl}.return abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    "\t": `export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}`,
+>"\t" : string
+>`export function abc(): string {${nl}\tlet abc: string = \"abc\";${nl}\treturn abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+    "\t\t": `export function abc(): string {${nl}\t\tlet abc: string = \"abc\";${nl}\t\treturn abc;${nl}}${nl}`
+>"\t\t" : string
+>`export function abc(): string {${nl}\t\tlet abc: string = \"abc\";${nl}\t\treturn abc;${nl}}${nl}` : string
+>nl : string
+>nl : string
+>nl : string
+>nl : string
+
+};
+
+
+let sourceFile = ts.createSourceFile(
+>sourceFile : ts.SourceFile
+>ts.createSourceFile(    "writerOptionalIndentationTest.ts",    `      export   function abc (   )    :        string        {          let abc :   string   =    "abc";      return     abc        }    `,    ts.ScriptTarget.ESNext) : ts.SourceFile
+>ts.createSourceFile : (fileName: string, sourceText: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions, setParentNodes?: boolean | undefined, scriptKind?: ts.ScriptKind | undefined) => ts.SourceFile
+>ts : typeof ts
+>createSourceFile : (fileName: string, sourceText: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions, setParentNodes?: boolean | undefined, scriptKind?: ts.ScriptKind | undefined) => ts.SourceFile
+
+    "writerOptionalIndentationTest.ts",
+>"writerOptionalIndentationTest.ts" : "writerOptionalIndentationTest.ts"
+
+    `
+>`      export   function abc (   )    :        string        {          let abc :   string   =    "abc";      return     abc        }    ` : "\n      export \n  function abc (   )    :\n        string\n        {\n          let abc :   string   =    \"abc\";\n      return     abc\n        }\n    "
+
+      export 
+  function abc (   )    :
+        string
+        {
+          let abc :   string   =    "abc";
+      return     abc
+        }
+    `,
+    ts.ScriptTarget.ESNext
+>ts.ScriptTarget.ESNext : ts.ScriptTarget.ESNext
+>ts.ScriptTarget : typeof ts.ScriptTarget
+>ts : typeof ts
+>ScriptTarget : typeof ts.ScriptTarget
+>ESNext : ts.ScriptTarget.ESNext
+
+);
+
+function testIndentation(indentation?: string | number): void {
+>testIndentation : (indentation?: string | number) => void
+>indentation : string | number | undefined
+
+    let printer;
+>printer : any
+
+    if (indentation !== undefined) {
+>indentation !== undefined : boolean
+>indentation : string | number | undefined
+>undefined : undefined
+
+        printer = ts.createPrinter({indentation});
+>printer = ts.createPrinter({indentation}) : ts.Printer
+>printer : any
+>ts.createPrinter({indentation}) : ts.Printer
+>ts.createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
+>ts : typeof ts
+>createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
+>{indentation} : { indentation: string | number; }
+>indentation : string | number
+
+    } else {
+        printer = ts.createPrinter();
+>printer = ts.createPrinter() : ts.Printer
+>printer : any
+>ts.createPrinter() : ts.Printer
+>ts.createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
+>ts : typeof ts
+>createPrinter : (printerOptions?: ts.PrinterOptions | undefined, handlers?: ts.PrintHandlers | undefined) => ts.Printer
+
+        indentation = 4;
+>indentation = 4 : 4
+>indentation : string | number | undefined
+>4 : 4
+    }
+    let result = printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile);
+>result : string
+>printer.printNode(ts.EmitHint.Unspecified, sourceFile, sourceFile) : string
+>printer.printNode : (hint: ts.EmitHint, node: ts.Node, sourceFile: ts.SourceFile) => string
+>printer : ts.Printer
+>printNode : (hint: ts.EmitHint, node: ts.Node, sourceFile: ts.SourceFile) => string
+>ts.EmitHint.Unspecified : ts.EmitHint.Unspecified
+>ts.EmitHint : typeof ts.EmitHint
+>ts : typeof ts
+>EmitHint : typeof ts.EmitHint
+>Unspecified : ts.EmitHint.Unspecified
+>sourceFile : ts.SourceFile
+>sourceFile : ts.SourceFile
+
+    if (result !== expectedResults[indentation]) {
+>result !== expectedResults[indentation] : boolean
+>result : string
+>expectedResults[indentation] : string
+>expectedResults : ExpectedResults
+>indentation : string | number
+
+        let workIndentationSize = indentation === undefined ? "<default>" : indentation;
+>workIndentationSize : string | number
+>indentation === undefined ? "<default>" : indentation : string | number
+>indentation === undefined : boolean
+>indentation : string | number
+>undefined : undefined
+>"<default>" : "<default>"
+>indentation : string | number
+
+        throw new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation]}${nl}Have:-${nl}${result}`);
+>new Error(`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation]}${nl}Have:-${nl}${result}`) : Error
+>Error : ErrorConstructor
+>`writerOptionalIndentation - Failed indentation for >>${workIndentationSize}<<${nl}Expected:-${nl}${expectedResults[indentation]}${nl}Have:-${nl}${result}` : string
+>workIndentationSize : string | number
+>nl : string
+>nl : string
+>expectedResults[indentation] : string
+>expectedResults : ExpectedResults
+>indentation : string | number
+>nl : string
+>nl : string
+>result : string
+    }
+}
+
+testIndentation(); //... testing with no indentationSize - uses default of 4 spaces
+>testIndentation() : void
+>testIndentation : (indentation?: string | number | undefined) => void
+
+for (let indentation in expectedResults) {
+>indentation : string
+>expectedResults : ExpectedResults
+
+    let test = parseInt(indentation);
+>test : number
+>parseInt(indentation) : number
+>parseInt : (string: string, radix?: number | undefined) => number
+>indentation : string
+
+    if (indentation === "0" || test > 0) {
+>indentation === "0" || test > 0 : boolean
+>indentation === "0" : boolean
+>indentation : string
+>"0" : "0"
+>test > 0 : boolean
+>test : number
+>0 : 0
+
+        testIndentation(test);
+>testIndentation(test) : void
+>testIndentation : (indentation?: string | number | undefined) => void
+>test : number
+    }
+    else {
+      testIndentation(indentation);
+>testIndentation(indentation) : void
+>testIndentation : (indentation?: string | number | undefined) => void
+>indentation : string
+    }
+}
+
