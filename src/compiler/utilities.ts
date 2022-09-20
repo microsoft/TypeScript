@@ -4132,6 +4132,9 @@ namespace ts {
             }
             singleLevel = "".padStart(indentation, " ");
         }
+        else if (indentation === false) {
+            singleLevel = "";
+        }
         else {
             singleLevel = "    ";
         }
@@ -4158,7 +4161,7 @@ namespace ts {
         let lineCount: number;
         let linePos: number;
         let hasTrailingComment = false;
-        if (indentation || indentation === 0) {
+        if (indentation !== undefined) {
             setIndentString(indentation);
         }
 
