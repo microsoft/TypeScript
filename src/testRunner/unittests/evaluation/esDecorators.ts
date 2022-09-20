@@ -1,5 +1,5 @@
 describe("unittests:: evaluation:: esDecorators", () => {
-    const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2022 };
+    const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2021 };
     const exec = (array: TemplateStringsArray) => evaluator.evaluateTypeScript(array[0], options);
 
     describe("target", () => {
