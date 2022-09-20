@@ -24,4 +24,4 @@ exports.f = f;
 
 //// [b.d.ts]
 export { X };
-export declare function f(): globalThis.X;
+export declare function f(): X;
