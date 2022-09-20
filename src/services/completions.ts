@@ -4309,9 +4309,14 @@ namespace ts.Completions {
         }
         // ImportKeyword was necessarily on one line; ImportSpecifier was necessarily parented in an ImportDeclaration
         Debug.assert(top.kind !== SyntaxKind.ImportKeyword && top.kind !== SyntaxKind.ImportSpecifier);
+        // Guess which point in the import might actually be a later statement parsed as part of the import
+        // during parser recovery - either in the middle of named imports, or the module specifier.
+        const potentialSplitPoint = top.kind === SyntaxKind.ImportDeclaration
+            ? getPotentiallyInvalidImportSpecifier(top.importClause?.namedBindings) ?? top.moduleSpecifier
+            : top.moduleReference;
         const withoutModuleSpecifier: TextRange = {
             pos: top.getFirstToken()!.getStart(),
-            end: top.kind === SyntaxKind.ImportDeclaration ? top.moduleSpecifier.pos : top.moduleReference.pos,
+            end: potentialSplitPoint.pos,
         };
         // The module specifier/reference was previously found to be missing, empty, or
         // not a string literal - in this last case, it's likely that statement on a following
@@ -4327,15 +4332,38 @@ namespace ts.Completions {
         }
     }
 
+    // Tries to identify the first named import that is not really a named import, but rather
+    // just parser recovery for a situation like:
+    //   import { Foo|
+    //   interface Bar {}
+    // in which `Foo`, `interface`, and `Bar` are all parsed as import specifiers. The caller
+    // will also check if this token is on a separate line from the rest of the import.
+    function getPotentiallyInvalidImportSpecifier(namedBindings: NamedImportBindings | undefined) {
+        return find(
+            tryCast(namedBindings, isNamedImports)?.elements,
+            e => !e.propertyName &&
+                isStringANonContextualKeyword(e.name.text) &&
+                findPrecedingToken(e.name.pos, namedBindings!.getSourceFile(), namedBindings)?.kind !== SyntaxKind.CommaToken);
+    }
+
     function couldBeTypeOnlyImportSpecifier(importSpecifier: Node, contextToken: Node | undefined): importSpecifier is ImportSpecifier {
         return isImportSpecifier(importSpecifier)
             && (importSpecifier.isTypeOnly || contextToken === importSpecifier.name && isTypeKeywordTokenOrIdentifier(contextToken));
     }
 
     function canCompleteFromNamedBindings(namedBindings: NamedImportBindings) {
-        return isModuleSpecifierMissingOrEmpty(namedBindings.parent.parent.moduleSpecifier)
-            && (isNamespaceImport(namedBindings) || namedBindings.elements.length < 2)
-            && !namedBindings.parent.name;
+        if (!isModuleSpecifierMissingOrEmpty(namedBindings.parent.parent.moduleSpecifier) || namedBindings.parent.name) {
+            return false;
+        }
+        if (isNamedImports(namedBindings)) {
+            // We can only complete on named imports if there are no other named imports already,
+            // but parser recovery sometimes puts later statements in the named imports list, so
+            // we try to only consider the probably-valid ones.
+            const invalidNamedImport = getPotentiallyInvalidImportSpecifier(namedBindings);
+            const validImports = invalidNamedImport ? namedBindings.elements.indexOf(invalidNamedImport) : namedBindings.elements.length;
+            return validImports < 2;
+        }
+        return true;
     }
 
     function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression) {

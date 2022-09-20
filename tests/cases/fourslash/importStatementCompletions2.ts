@@ -7,13 +7,21 @@
 //// [|import Butt/*0*/|]
 ////
 //// interface Props {}
+//// const x = 0
 
 // @Filename: /index2.ts
 //// [|import { Butt/*1*/ }|]
 ////
 //// interface Props {}
+//// const x = 0
 
-[0, 1].forEach(marker => {
+// @Filename: /index3.ts
+//// [|import { Butt/*2*/|]
+////
+//// interface Props {}
+//// const x = 0
+
+[0, 1, 2].forEach(marker => {
   verify.completions({
     marker: `${marker}`,
     isNewIdentifierLocation: true,
