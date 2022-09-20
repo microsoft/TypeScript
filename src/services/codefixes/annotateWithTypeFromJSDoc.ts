@@ -64,7 +64,7 @@ namespace ts.codefix {
                     const transformedType = transformJSDocType(returnType);
                     Debug.assertNode(transformedType, isTypeNode);
                     changes.tryInsertTypeAnnotation(sourceFile, decl, transformedType);
-                };
+                }
             }
         }
         else {
