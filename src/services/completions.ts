@@ -1107,7 +1107,7 @@ namespace ts.Completions {
 
         return { isSnippet, insertText, labelDetails };
 
-    };
+    }
 
     function createObjectLiteralMethod(
         symbol: Symbol,
@@ -1171,7 +1171,7 @@ namespace ts.Completions {
                         /*modifiers*/ undefined,
                         typedParam.dotDotDotToken,
                         typedParam.name,
-                        typedParam.questionToken,
+                        /*questionToken*/ undefined,
                         /*type*/ undefined,
                         typedParam.initializer,
                     ));
@@ -3949,6 +3949,7 @@ namespace ts.Completions {
     function isClassMemberCompletionKeyword(kind: SyntaxKind) {
         switch (kind) {
             case SyntaxKind.AbstractKeyword:
+            case SyntaxKind.AccessorKeyword:
             case SyntaxKind.ConstructorKeyword:
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
@@ -4334,7 +4335,7 @@ namespace ts.Completions {
 
     function isArrowFunctionBody(node: Node) {
         return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
-    };
+    }
 
     /** True if symbol is a type or a module containing at least one type. */
     function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Map<SymbolId, true>()): boolean {

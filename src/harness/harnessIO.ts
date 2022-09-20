@@ -335,7 +335,7 @@ namespace Harness {
 
         export function setCompilerOptionsFromHarnessSetting(settings: TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
             for (const name in settings) {
-                if (settings.hasOwnProperty(name)) {
+                if (ts.hasProperty(settings, name)) {
                     const value = settings[name];
                     if (value === undefined) {
                         throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
@@ -1496,7 +1496,7 @@ namespace Harness {
 
     export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
         const flc = ts.getBaseFileName(filename).toLowerCase();
-        return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
+        return ts.find(["tsconfig.json" as const, "jsconfig.json" as const], x => x === flc);
     }
 
     if (Error) (Error as any).stackTraceLimit = 100;

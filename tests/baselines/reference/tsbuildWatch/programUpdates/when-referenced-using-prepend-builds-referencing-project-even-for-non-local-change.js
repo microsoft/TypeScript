@@ -57,23 +57,23 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -291,23 +291,23 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -410,23 +410,23 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -575,23 +575,23 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -677,23 +677,23 @@ Output::
 
 
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

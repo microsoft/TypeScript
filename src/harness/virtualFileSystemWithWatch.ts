@@ -283,13 +283,11 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export interface TestFileWatcher {
         cb: FileWatcherCallback;
-        fileName: string;
         pollingInterval: PollingInterval;
     }
 
     export interface TestFsWatcher {
         cb: FsWatchCallback;
-        directoryName: string;
         inode: number | undefined;
     }
 
@@ -310,7 +308,6 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export enum Tsc_WatchFile {
         DynamicPolling = "DynamicPriorityPolling",
-        SingleFileWatcherPerName = "SingleFileWatcherPerName"
     }
 
     export enum Tsc_WatchDirectory {
@@ -388,12 +385,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 // We dont have polling watch file
                 // it is essentially fsWatch but lets get that separate from fsWatch and
                 // into watchedFiles for easier testing
-                pollingWatchFile: tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
-                    createSingleFileWatcherPerName(
-                        this.watchFileWorker.bind(this),
-                        this.useCaseSensitiveFileNames
-                    ) :
-                    this.watchFileWorker.bind(this),
+                pollingWatchFileWorker: this.watchFileWorker.bind(this),
                 getModifiedTime: this.getModifiedTime.bind(this),
                 setTimeout: this.setTimeout.bind(this),
                 clearTimeout: this.clearTimeout.bind(this),
@@ -498,7 +490,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 this.fs.get(getDirectoryPath(currentEntry.path))!.modifiedTime = this.now();
                 if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                     const directoryFullPath = getDirectoryPath(currentEntry.fullPath);
-                    this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, currentEntry.modifiedTime, /*useFileNameInCallback*/ true);
+                    this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, currentEntry.modifiedTime);
                     this.invokeFsWatchesCallbacks(directoryFullPath, "rename", currentEntry.modifiedTime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
                     this.invokeRecursiveFsWatches(directoryFullPath, "rename", currentEntry.modifiedTime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
                 }
@@ -679,7 +671,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             return createWatcher(
                 this.watchedFiles,
                 this.toFullPath(fileName),
-                { fileName, cb, pollingInterval }
+                { cb, pollingInterval }
             );
         }
 
@@ -696,7 +688,6 @@ interface Array<T> { length: number; [n: number]: T; }`
                 recursive ? this.fsWatchesRecursive : this.fsWatches,
                 path,
                 {
-                    directoryName: fileOrDirectory,
                     cb,
                     inode: this.inodes?.get(path)
                 }
@@ -705,8 +696,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             return result;
         }
 
-        invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, modifiedTime?: Date, useFileNameInCallback?: boolean) {
-            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind, modifiedTime));
+        invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, modifiedTime: Date | undefined) {
+            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb }) => cb(fileFullPath, eventKind, modifiedTime));
         }
 
         private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, entryFullPath: string | undefined, useTildeSuffix: boolean | undefined) {
@@ -1050,11 +1041,11 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         serializeWatches(baseline: string[] = []) {
-            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
+            serializeMultiMap(baseline, "PolledWatches", this.watchedFiles);
             baseline.push("");
-            serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
+            serializeMultiMap(baseline, "FsWatches", this.fsWatches);
             baseline.push("");
-            serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, serializeTestFsWatcher);
+            serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive);
             baseline.push("");
             return baseline;
         }
@@ -1158,19 +1149,12 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    function serializeTestFsWatcher({ directoryName, inode }: TestFsWatcher) {
-        return {
-            directoryName,
-            inode,
-        };
-    }
-
-    function serializeMultiMap<T, U>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, valueMapper: (value: T) => U) {
+    function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>) {
         baseline.push(`${caption}::`);
         multiMap.forEach((values, key) => {
             baseline.push(`${key}:`);
             for (const value of values) {
-                baseline.push(`  ${JSON.stringify(valueMapper(value))}`);
+                baseline.push(`  ${JSON.stringify(value)}`);
             }
         });
     }

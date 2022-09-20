@@ -44,7 +44,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/file1.ts (used version)
 /users/username/projects/project/file2.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -136,7 +136,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/file2.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

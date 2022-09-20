@@ -5,9 +5,9 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(81,11): error TS2
 tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(156,16): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(167,9): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(156,16): error TS18048: 'obj' is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(167,9): error TS18048: 'iSpec' is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts (8 errors) ====
@@ -180,7 +180,7 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2
     function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
         const x1 = obj[key];  // Error
                    ~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'obj' is possibly 'undefined'.
         const x2 = obj && obj[key];
     }
     
@@ -193,10 +193,10 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2
             let iSpec = null! as InternalSpec;
             iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
             ~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'iSpec' is possibly 'undefined'.
             iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
             ~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'iSpec' is possibly 'undefined'.
             if (iSpec === undefined) {
                 return;
             }

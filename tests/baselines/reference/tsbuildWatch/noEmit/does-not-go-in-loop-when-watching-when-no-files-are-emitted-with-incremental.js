@@ -58,19 +58,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.js (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.js:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -152,19 +152,19 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.js:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -205,19 +205,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.js (computed .d.ts)
 /user/username/projects/myproject/b.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.js:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

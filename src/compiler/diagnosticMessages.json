@@ -899,6 +899,14 @@
         "category": "Error",
         "code": 1274
     },
+    "'accessor' modifier can only appear on a property declaration.": {
+        "category": "Error",
+        "code": 1275
+    },
+    "An 'accessor' property cannot be declared optional.": {
+        "category": "Error",
+        "code": 1276
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1835,14 +1843,6 @@
     "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.": {
         "category": "Error",
         "code": 2359
-    },
-    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
-        "category": "Error",
-        "code": 2360
-    },
-    "The right-hand side of an 'in' expression must not be a primitive.": {
-        "category": "Error",
-        "code": 2361
     },
     "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
@@ -2836,6 +2836,10 @@
     "Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.": {
         "category": "Error",
         "code": 2637
+    },
+    "Type '{0}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.": {
+        "category": "Error",
+        "code": 2638
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -7496,5 +7500,29 @@
     "'{0}' is automatically exported here.": {
         "category": "Message",
         "code": 18044
+    },
+    "Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.": {
+        "category": "Error",
+        "code": 18045
+    },
+    "'{0}' is of type 'unknown'.": {
+        "category": "Error",
+        "code": 18046
+    },
+    "'{0}' is possibly 'null'.": {
+        "category": "Error",
+        "code": 18047
+    },
+    "'{0}' is possibly 'undefined'.": {
+        "category": "Error",
+        "code": 18048
+    },
+    "'{0}' is possibly 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 18049
+    },
+    "The value '{0}' cannot be used here.": {
+        "category": "Error",
+        "code": 18050
     }
 }

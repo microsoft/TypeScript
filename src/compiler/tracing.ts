@@ -25,7 +25,7 @@ namespace ts { // eslint-disable-line local/one-namespace-per-file
         // The actual constraint is that JSON.stringify be able to serialize it without throwing.
         interface Args {
             [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
-        };
+        }
 
         /** Starts tracing for the given project. */
         export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {

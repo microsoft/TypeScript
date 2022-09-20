@@ -94,7 +94,7 @@ namespace Playback { // eslint-disable-line local/one-namespace-per-file
     function memoize<T>(func: (s: string) => T): Memoized<T> {
         let lookup: { [s: string]: T } = {};
         const run: Memoized<T> = ((s: string) => {
-            if (lookup.hasOwnProperty(s)) return lookup[s];
+            if (ts.hasProperty(lookup, s)) return lookup[s];
             return lookup[s] = func(s);
         }) as Memoized<T>;
         run.reset = () => {

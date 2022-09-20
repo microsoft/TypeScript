@@ -174,29 +174,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/logic/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -501,29 +501,29 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -645,29 +645,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -856,29 +856,29 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -992,29 +992,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1205,29 +1205,29 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1357,29 +1357,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
