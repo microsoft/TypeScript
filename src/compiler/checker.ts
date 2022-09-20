@@ -23660,7 +23660,7 @@ namespace ts {
                     }
                 }
 
-                if (hasOnlyExpressionInitializer(declaration)) {
+                if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node.argumentExpression)) {
                     const initializer = getEffectiveInitializer(declaration);
                     return initializer && tryGetNameFromType(getTypeOfExpression(initializer));
                 }
