@@ -3266,15 +3266,18 @@ namespace ts {
                     return undefined;
                 }
 
-                // Optimization - avoid creating `seenSymbols` Set in most cases
-                if (target === symbol) {
+                // Optimizations - try to avoid creating or adding to
+                // `seenSymbols` if possible
+                if (target === symbol || seenSymbols?.has(target)) {
                     break;
                 }
-                else if (target.flags & SymbolFlags.Alias && !seenSymbols) {
-                    seenSymbols = new Set([symbol, target]);
-                }
-                else if (seenSymbols?.has(target)) {
-                    break;
+                if (target.flags & SymbolFlags.Alias) {
+                    if (seenSymbols) {
+                        seenSymbols.add(target);
+                    }
+                    else {
+                        seenSymbols = new Set([symbol, target]);
+                    }
                 }
                 flags |= target.flags;
                 symbol = target;
