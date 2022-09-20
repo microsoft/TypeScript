@@ -399,8 +399,6 @@ namespace ts {
         }
     }
 
-    // TODO(jakebailey): I've changed this signature in an incompatible way.
-    // The original signatures didn't seem to make any sense, but I'm willing to be wrong.
     export function getOriginalNode(node: Node): Node;
     export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     export function getOriginalNode(node: Node | undefined): Node | undefined;
