@@ -4049,7 +4049,7 @@ declare namespace ts {
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
         noEmitHelpers?: boolean;
-        indentation?: string | number;
+        indentation?: string | number | boolean;
     }
     export interface GetEffectiveTypeRootsHost {
         directoryExists?(directoryName: string): boolean;
