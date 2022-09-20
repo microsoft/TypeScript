@@ -1107,7 +1107,7 @@ namespace ts.Completions {
 
         return { isSnippet, insertText, labelDetails };
 
-    };
+    }
 
     function createObjectLiteralMethod(
         symbol: Symbol,
@@ -4335,7 +4335,7 @@ namespace ts.Completions {
 
     function isArrowFunctionBody(node: Node) {
         return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
-    };
+    }
 
     /** True if symbol is a type or a module containing at least one type. */
     function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Map<SymbolId, true>()): boolean {

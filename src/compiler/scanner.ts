@@ -361,7 +361,7 @@ namespace ts {
 
     /* @internal */
     export function computeLineStarts(text: string): number[] {
-        const result: number[] = new Array();
+        const result: number[] = [];
         let pos = 0;
         let lineStart = 0;
         while (pos < text.length) {

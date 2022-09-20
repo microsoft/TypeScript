@@ -279,7 +279,7 @@ namespace ts {
             if (typeof func !== "function") {
                 return "";
             }
-            else if (func.hasOwnProperty("name")) {
+            else if (hasProperty(func, "name")) {
                 return (func as any).name;
             }
             else {
@@ -625,7 +625,7 @@ namespace ts {
             ];
 
             for (const ctor of nodeConstructors) {
-                if (!ctor.prototype.hasOwnProperty("__debugKind")) {
+                if (!hasProperty(ctor, "__debugKind")) {
                     Object.defineProperties(ctor.prototype, {
                         // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                         __tsDebuggerDisplay: {
