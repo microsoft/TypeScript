@@ -27775,10 +27775,10 @@ namespace ts {
             return getStrictOptionValue(compilerOptions, "noImplicitAny")
                 ? reduceLeft(
                     signatures,
-                    (left, right) =>
+                    (left: Signature | undefined, right) =>
                         left === right || !left ? left
-                        : compareTypeParametersIdentical(left.typeParameters, right.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right)
-                        : undefined!) // TODO(jakebailey): This is suspect. Can't pass initialValue as reduceLeft checks argument length.
+                        : compareTypeParametersIdentical(left.typeParameters, right!.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right!)
+                        : undefined)
                 : undefined;
         }
 
