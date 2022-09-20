@@ -1,23 +1,17 @@
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty10.ts]
-enum E {
-    A = "A",
-    B = "B"
-}
+interface Foo { bar: any; }
+const bar: { [id: string]: number } = {};
 
-declare const m: { [K in E]: string | null };
-
-if (m[E.A] !== null) {
-    m[E.A].toString(); // string
+(foo: Foo) => {
+	bar[id]++;
+	const id = foo.bar;
 }
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty10.js]
 "use strict";
-var E;
-(function (E) {
-    E["A"] = "A";
-    E["B"] = "B";
-})(E || (E = {}));
-if (m[E.A] !== null) {
-    m[E.A].toString(); // string
-}
+var bar = {};
+(function (foo) {
+    bar[id]++;
+    var id = foo.bar;
+});

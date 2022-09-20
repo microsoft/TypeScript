@@ -90,7 +90,9 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
 
     b.x;
+>b.x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 >b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 
     c.x;
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
@@ -105,7 +107,9 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
 
     b.x = 1;
+>b.x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 >b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 
     c.x = 1;  // Error, cannot write to index signature through constraint
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))

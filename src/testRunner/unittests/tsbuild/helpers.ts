@@ -12,7 +12,8 @@ namespace ts {
         host.readFile = path => {
             const value = originalReadFile.call(host, path);
             if (!value || !isBuildInfoFile(path)) return value;
-            const buildInfo = getBuildInfo(value);
+            const buildInfo = getBuildInfo(path, value);
+            if (!buildInfo) return value;
             buildInfo.version = fakes.version;
             return getBuildInfoText(buildInfo);
         };
@@ -263,7 +264,7 @@ interface Symbol {
                         toFileName(s) :
                         [toFileName(s[0]), s[1]]
                 ),
-                dtsChangeTime: buildInfo.program.dtsChangeTime,
+                latestChangedDtsFile: buildInfo.program.latestChangedDtsFile,
             };
         }
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
@@ -330,7 +331,8 @@ interface Symbol {
         if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
         if (!sys.fileExists(buildInfoPath)) return;
 
-        const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
+        const buildInfo = getBuildInfo(buildInfoPath, (originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
+        if (!buildInfo) return sys.writeFile(`${buildInfoPath}.baseline.txt`, "Error reading valid buildinfo file");
         generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 
         if (!outFile(options)) return;
@@ -544,7 +546,7 @@ interface Symbol {
                     options: { ...readableBuildInfo.program.options, noEmit: undefined },
                     exportedModulesMap: undefined,
                     affectedFilesPendingEmit: undefined,
-                    dtsChangeTime: readableBuildInfo.program.dtsChangeTime ? "FakeTime" : undefined,
+                    latestChangedDtsFile: readableBuildInfo.program.latestChangedDtsFile ? "FakeFileName" : undefined,
                 },
                 size: undefined, // Size doesnt need to be equal
             },  /*replacer*/ undefined, 2),

@@ -778,19 +778,24 @@ namespace ts {
         return [] as any as SortedArray<T>; // TODO: GH#19873
     }
 
-    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): void {
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): boolean {
         if (array.length === 0) {
             array.push(insert);
-            return;
+            return true;
         }
 
         const insertIndex = binarySearch(array, insert, identity, compare);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
+            return true;
         }
-        else if (allowDuplicates) {
+
+        if (allowDuplicates) {
             array.splice(insertIndex, 0, insert);
+            return true;
         }
+
+        return false;
     }
 
     export function sortAndDeduplicate<T>(array: readonly string[]): SortedReadonlyArray<string>;
@@ -1111,6 +1116,13 @@ namespace ts {
         return array && array.length === 1
             ? array[0]
             : undefined;
+    }
+
+    /**
+     * Returns the only element of an array if it contains only one element; throws otherwise.
+     */
+    export function single<T>(array: readonly T[]): T {
+        return Debug.checkDefined(singleOrUndefined(array));
     }
 
     /**
@@ -1492,6 +1504,47 @@ namespace ts {
         return createMultiMap() as UnderscoreEscapedMultiMap<T>;
     }
 
+    export function createQueue<T>(items?: readonly T[]): Queue<T> {
+        const elements: (T | undefined)[] = items?.slice() || [];
+        let headIndex = 0;
+
+        function isEmpty() {
+            return headIndex === elements.length;
+        }
+
+        function enqueue(...items: T[]) {
+            elements.push(...items);
+        }
+
+        function dequeue(): T {
+            if (isEmpty()) {
+                throw new Error("Queue is empty");
+            }
+
+            const result = elements[headIndex] as T;
+            elements[headIndex] = undefined; // Don't keep referencing dequeued item
+            headIndex++;
+
+            // If more than half of the queue is empty, copy the remaining elements to the
+            // front and shrink the array (unless we'd be saving fewer than 100 slots)
+            if (headIndex > 100 && headIndex > (elements.length >> 1)) {
+                const newLength = elements.length - headIndex;
+                elements.copyWithin(/*target*/ 0, /*start*/ headIndex);
+
+                elements.length = newLength;
+                headIndex = 0;
+            }
+
+            return result;
+        }
+
+        return {
+            enqueue,
+            dequeue,
+            isEmpty,
+        };
+    }
+
     /**
      * Creates a Set with custom equality and hash code functionality.  This is useful when you
      * want to use something looser than object identity - e.g. "has the same span".
@@ -1682,6 +1735,11 @@ namespace ts {
 
     /** Does nothing. */
     export function noop(_?: unknown): void { }
+
+    export const noopPush: Push<any> = {
+        push: noop,
+        length: 0
+    };
 
     /** Do nothing and return false */
     export function returnFalse(): false {
@@ -2064,7 +2122,7 @@ namespace ts {
      *         and 1 insertion/deletion at 3 characters)
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
-        const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+        const maximumLengthDifference = Math.max(2, Math.floor(name.length * 0.34));
         let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
         for (const candidate of candidates) {

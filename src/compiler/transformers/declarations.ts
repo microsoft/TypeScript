@@ -218,9 +218,9 @@ namespace ts {
         }
 
         function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
-            const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile)!;
+            const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile);
             const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
-            if (augmentingDeclarations) {
+            if (primaryDeclaration && augmentingDeclarations) {
                 for (const augmentations of augmentingDeclarations) {
                     context.addDiagnostic(addRelatedInfo(
                         createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
@@ -1217,14 +1217,18 @@ namespace ts {
 
             const previousNeedsDeclare = needsDeclare;
             switch (input.kind) {
-                case SyntaxKind.TypeAliasDeclaration: // Type aliases get `declare`d if need be (for legacy support), but that's all
-                    return cleanup(factory.updateTypeAliasDeclaration(
+                case SyntaxKind.TypeAliasDeclaration: {
+                    needsDeclare = false;
+                    const clean = cleanup(factory.updateTypeAliasDeclaration(
                         input,
                         ensureModifiers(input),
                         input.name,
                         visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
                         visitNode(input.type, visitDeclarationSubtree, isTypeNode)
                     ));
+                    needsDeclare = previousNeedsDeclare;
+                    return clean;
+                }
                 case SyntaxKind.InterfaceDeclaration: {
                     return cleanup(factory.updateInterfaceDeclaration(
                         input,

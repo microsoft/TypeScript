@@ -10,7 +10,7 @@ namespace ts.projectSystem {
             const testsConfig = TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/tsconfig.json");
             const testsIndex = TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/index.ts");
             const host = createServerHost([libFile, coreConfig, coreIndex, coreAnotherModule, coreSomeDecl, logicConfig, logicIndex, testsConfig, testsIndex]);
-            const logger = createLoggerWithInMemoryLogs();
+            const logger = createLoggerWithInMemoryLogs(host);
             const service = createProjectService(host, { logger });
             service.openClientFile(testsIndex.path);
 
@@ -78,7 +78,7 @@ X;`,
 export class A {}`
                 };
                 const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(cTs.path);
                 return { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };
             }
@@ -194,7 +194,7 @@ X;`,
 export class A {}`
                 };
                 const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
-                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openClientFile(cTs.path);
                 return { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };
             }

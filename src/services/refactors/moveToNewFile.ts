@@ -62,7 +62,7 @@ namespace ts.refactor {
 
         const currentDirectory = getDirectoryPath(oldFile.fileName);
         const extension = extensionFromPath(oldFile.fileName);
-        const newModuleName = makeUniqueModuleName(getNewModuleName(usage.movedSymbols), extension, currentDirectory, host);
+        const newModuleName = makeUniqueModuleName(getNewModuleName(usage.oldFileImportsFromNewFile, usage.movedSymbols), extension, currentDirectory, host);
         const newFileNameWithExtension = newModuleName + extension;
 
         // If previous file was global, this is easy.
@@ -97,7 +97,7 @@ namespace ts.refactor {
         // Filters imports and prologue directives out of the range of statements to move.
         // Imports will be copied to the new file anyway, and may still be needed in the old file.
         // Prologue directives will be copied to the new file and should be left in the old file.
-        return !isPureImport(statement) && !isPrologueDirective(statement);;
+        return !isPureImport(statement) && !isPrologueDirective(statement);
     }
 
     function isPureImport(node: Node): boolean {
@@ -478,8 +478,8 @@ namespace ts.refactor {
         }
     }
 
-    function getNewModuleName(movedSymbols: ReadonlySymbolSet): string {
-        return movedSymbols.forEachEntry(symbolNameNoDefault) || "newFile";
+    function getNewModuleName(importsFromNewFile: ReadonlySymbolSet, movedSymbols: ReadonlySymbolSet): string {
+        return importsFromNewFile.forEachEntry(symbolNameNoDefault) || movedSymbols.forEachEntry(symbolNameNoDefault) || "newFile";
     }
 
     interface UsageInfo {
