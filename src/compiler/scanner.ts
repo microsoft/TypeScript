@@ -2054,6 +2054,11 @@ namespace ts {
 
                         if (isIdentifierStart(codePointAt(text, pos + 1), languageVersion)) {
                             pos++;
+                            // We're relying on scanIdentifier's behavior and adjusting the token kind after the fact.
+                            // Notably absent from this block is the fact that calling a function named "scanIdentifier",
+                            // but identifiers don't include '#', and that function doesn't deal with it at all.
+                            // This works because 'scanIdentifier' tries to reuse source characters and builds up substrings;
+                            // however, it starts at the 'tokenPos' which includes the '#', and will "accidentally" prepend the '#' for us.
                             scanIdentifier(codePointAt(text, pos), languageVersion);
                         }
                         else {
