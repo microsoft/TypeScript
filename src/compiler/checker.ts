@@ -12531,7 +12531,7 @@ namespace ts {
                             const isInstantiation = (getTargetSymbol(prop) || prop) === (getTargetSymbol(singleProp) || singleProp);
                             // If the symbols are instances of one another with identical types - consider the symbols
                             // equivalent and just use the first one, which thus allows us to avoid eliding private
-                            // members when intersecting a (this-)instantiations of a class with it's raw base or another instance
+                            // members when intersecting a (this-)instantiations of a class with its raw base or another instance
                             if (isInstantiation && compareProperties(singleProp, prop, (a, b) => a === b ? Ternary.True : Ternary.False) === Ternary.True) {
                                 // If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
                                 // to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
@@ -12579,7 +12579,12 @@ namespace ts {
                     }
                 }
             }
-            if (!singleProp || isUnion && (propSet || checkFlags & CheckFlags.Partial) && checkFlags & (CheckFlags.ContainsPrivate | CheckFlags.ContainsProtected)) {
+            if (!singleProp ||
+                isUnion &&
+                (propSet || checkFlags & CheckFlags.Partial) &&
+                checkFlags & (CheckFlags.ContainsPrivate | CheckFlags.ContainsProtected) &&
+                !(propSet && getCommonDeclarationsOfSymbols(arrayFrom(propSet.values())))
+            ) {
                 // No property was found, or, in a union, a property has a private or protected declaration in one
                 // constituent, but is missing or has a different declaration in another constituent.
                 return undefined;
@@ -12683,6 +12688,28 @@ namespace ts {
                 }
             }
             return property;
+        }
+
+        function getCommonDeclarationsOfSymbols(symbols: readonly Symbol[]) {
+            let commonDeclarations: Set<Node> | undefined;
+            for (const symbol of symbols) {
+                if (!symbol.declarations) {
+                    return undefined;
+                }
+                if (!commonDeclarations) {
+                    commonDeclarations = new Set(symbol.declarations);
+                    continue;
+                }
+                commonDeclarations.forEach(declaration => {
+                    if (!contains(symbol.declarations, declaration)) {
+                        commonDeclarations!.delete(declaration);
+                    }
+                });
+                if (commonDeclarations.size === 0) {
+                    return undefined;
+                }
+            }
+            return commonDeclarations;
         }
 
         function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
