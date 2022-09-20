@@ -1149,7 +1149,7 @@ namespace ts.textChanges {
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    export function createWriter(newLine: string, indentation?: string | number): TextChangesWriter {
+    export function createWriter(newLine: string, indentation?: string | number | boolean): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
         const writer = createTextWriter(newLine, indentation);

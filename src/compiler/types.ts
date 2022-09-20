@@ -8770,7 +8770,7 @@ namespace ts {
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
         noEmitHelpers?: boolean;
-        indentation?: string | number;
+        indentation?: string | number | boolean;
         /*@internal*/ module?: CompilerOptions["module"];
         /*@internal*/ target?: CompilerOptions["target"];
         /*@internal*/ sourceMap?: boolean;

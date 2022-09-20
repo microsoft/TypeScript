@@ -4121,7 +4121,7 @@ namespace ts {
         return indentStrings[level];
     }
 
-    export function setIndentString(indentation?: string | number) {
+    export function setIndentString(indentation?: string | number | boolean) {
         let singleLevel;
         if (typeof indentation === "string") {
             singleLevel = indentation;
@@ -4154,7 +4154,7 @@ namespace ts {
         return stringContains(version, "-dev") || stringContains(version, "-insiders");
     }
 
-    export function createTextWriter(newLine: string, indentation?: string | number): EmitTextWriter {
+    export function createTextWriter(newLine: string, indentation?: string | number | boolean): EmitTextWriter {
         let output: string;
         let indent: number;
         let lineStart: boolean;
