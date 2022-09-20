@@ -2054,7 +2054,7 @@ namespace ts {
 
                         const charAfterHash = codePointAt(text, pos + 1);
                         if (charAfterHash === CharacterCodes.backslash) {
-                            pos++
+                            pos++;
                             const extendedCookedChar = peekExtendedUnicodeEscape();
                             if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
                                 pos += 3;
@@ -2062,7 +2062,7 @@ namespace ts {
                                 tokenValue = "#" + scanExtendedUnicodeEscape() + scanIdentifierParts();
                                 return token = SyntaxKind.PrivateIdentifier;
                             }
-    
+
                             const cookedChar = peekUnicodeEscape();
                             if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                                 pos += 6;
