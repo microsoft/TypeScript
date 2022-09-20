@@ -1,0 +1,148 @@
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(2,5): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(2,6): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(5,14): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(5,15): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(5,15): error TS2663: Cannot find name '\u0078'. Did you mean the instance member 'this.\u0078'?
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(9,14): error TS2339: Property '#x' does not exist on type 'PrivateIdentifierWithEscape1'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts(9,14): error TS2339: Property '#xx' does not exist on type 'PrivateIdentifierWithEscape2'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,5): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,6): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,14): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,15): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,15): error TS2663: Cannot find name '\u{78}'. Did you mean the instance member 'this.\u{78}'?
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(9,14): error TS2339: Property '#x' does not exist on type 'PrivateIdentifierWithExtendedEscape1'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(9,14): error TS2339: Property '#xx' does not exist on type 'PrivateIdentifierWithExtendedEscape2'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithEscape1.ts (0 errors) ====
+    export class IdentifierNameWithEscape1 {
+        \u0078: number;
+    
+        constructor() {
+            this.\u0078 = 0;
+        }
+    
+        doThing() {
+            this.x = 42;
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithEscape2.ts (0 errors) ====
+    export class IdentifierNameWithEscape2 {
+        x\u0078: number;
+    
+        constructor() {
+            this.x\u0078 = 0;
+        }
+    
+        doThing() {
+            this.xx = 42;
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts (0 errors) ====
+    export class IdentifierNameWithExtendedEscape1 {
+        \u{78}: number;
+    
+        constructor() {
+            this.\u{78} = 0;
+        }
+    
+        doThing() {
+            this.x = 42;
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts (0 errors) ====
+    export class IdentifierNameWithExtendedEscape2 {
+        x\u{78}: number;
+    
+        constructor() {
+            this.x\u{78} = 0;
+        }
+    
+        doThing() {
+            this.xx = 42;
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts (6 errors) ====
+    export class PrivateIdentifierWithEscape1 {
+        #\u0078: number;
+        ~
+!!! error TS1127: Invalid character.
+         ~~~~~~
+!!! error TS1005: ';' expected.
+    
+        constructor() {
+            this.#\u0078 = 0;
+                 ~
+!!! error TS1127: Invalid character.
+                  ~~~~~~
+!!! error TS1005: ';' expected.
+                  ~~~~~~
+!!! error TS2663: Cannot find name '\u0078'. Did you mean the instance member 'this.\u0078'?
+        }
+    
+        doThing() {
+            this.#x = 42;
+                 ~~
+!!! error TS2339: Property '#x' does not exist on type 'PrivateIdentifierWithEscape1'.
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts (1 errors) ====
+    export class PrivateIdentifierWithEscape2 {
+        #x\u0078: number;
+    
+        constructor() {
+            this.#x\u0078 = 0;
+        }
+    
+        doThing() {
+            this.#xx = 42;
+                 ~~~
+!!! error TS2339: Property '#xx' does not exist on type 'PrivateIdentifierWithEscape2'.
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts (6 errors) ====
+    export class PrivateIdentifierWithExtendedEscape1 {
+        #\u{78}: number;
+        ~
+!!! error TS1127: Invalid character.
+         ~~~~~~
+!!! error TS1005: ';' expected.
+    
+        constructor() {
+            this.#\u{78} = 0;
+                 ~
+!!! error TS1127: Invalid character.
+                  ~~~~~~
+!!! error TS1005: ';' expected.
+                  ~~~~~~
+!!! error TS2663: Cannot find name '\u{78}'. Did you mean the instance member 'this.\u{78}'?
+        }
+    
+        doThing() {
+            this.#x = 42;
+                 ~~
+!!! error TS2339: Property '#x' does not exist on type 'PrivateIdentifierWithExtendedEscape1'.
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts (1 errors) ====
+    export class PrivateIdentifierWithExtendedEscape2 {
+        #x\u{78}: number;
+    
+        constructor() {
+            this.#x\u{78} = 0;
+        }
+    
+        doThing() {
+            this.#xx = 42;
+                 ~~~
+!!! error TS2339: Property '#xx' does not exist on type 'PrivateIdentifierWithExtendedEscape2'.
+        }
+    }
+    
