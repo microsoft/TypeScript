@@ -189,27 +189,27 @@ doThing();
 }
 //// [PrivateIdentifierNameWithEscape1.js]
 "use strict";
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var _PrivateIdentifierWithEscape1_;
+var _PrivateIdentifierWithEscape1_x;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrivateIdentifierWithEscape1 = void 0;
 var PrivateIdentifierWithEscape1 = /** @class */ (function () {
     function PrivateIdentifierWithEscape1() {
-        _PrivateIdentifierWithEscape1_.set(this, void 0);
-        __classPrivateFieldGet(this, _PrivateIdentifierWithEscape1_, "f");
-        \u0078 = 0;
+        _PrivateIdentifierWithEscape1_x.set(this, void 0);
+        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 0, "f");
     }
     PrivateIdentifierWithEscape1.prototype.doThing = function () {
-        this. = 42;
+        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 42, "f");
     };
     return PrivateIdentifierWithEscape1;
 }());
 exports.PrivateIdentifierWithEscape1 = PrivateIdentifierWithEscape1;
-_PrivateIdentifierWithEscape1_ = new WeakMap();
+_PrivateIdentifierWithEscape1_x = new WeakMap();
 //// [PrivateIdentifierNameWithEscape2.js]
 "use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {

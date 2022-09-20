@@ -115,15 +115,13 @@ export class PrivateIdentifierWithEscape1 {
 >PrivateIdentifierWithEscape1 : PrivateIdentifierWithEscape1
 
     #\u0078: number;
-># : any
->\u0078 : number
+>#\u0078 : number
 
     constructor() {
         this.#\u0078 = 0;
->this.# : any
+>this.#\u0078 = 0 : 0
+>this.#\u0078 : number
 >this : this
->\u0078 = 0 : 0
->\u0078 : any
 >0 : 0
     }
 
@@ -132,7 +130,7 @@ export class PrivateIdentifierWithEscape1 {
 
         this.#x = 42;
 >this.#x = 42 : 42
->this.#x : any
+>this.#x : number
 >this : this
 >42 : 42
     }
@@ -169,15 +167,13 @@ export class PrivateIdentifierWithExtendedEscape1 {
 >PrivateIdentifierWithExtendedEscape1 : PrivateIdentifierWithExtendedEscape1
 
     #\u{78}: number;
-># : any
->\u{78} : number
+>#\u{78} : number
 
     constructor() {
         this.#\u{78} = 0;
->this.# : any
+>this.#\u{78} = 0 : 0
+>this.#\u{78} : number
 >this : this
->\u{78} = 0 : 0
->\u{78} : any
 >0 : 0
     }
 
@@ -186,7 +182,7 @@ export class PrivateIdentifierWithExtendedEscape1 {
 
         this.#x = 42;
 >this.#x = 42 : 42
->this.#x : any
+>this.#x : number
 >this : this
 >42 : 42
     }

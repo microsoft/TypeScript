@@ -84,12 +84,11 @@ export class PrivateIdentifierWithEscape1 {
 >PrivateIdentifierWithEscape1 : Symbol(PrivateIdentifierWithEscape1, Decl(PrivateIdentifierNameWithEscape1.ts, 0, 0))
 
     #\u0078: number;
-># : Symbol(PrivateIdentifierWithEscape1[#], Decl(PrivateIdentifierNameWithEscape1.ts, 0, 43))
->\u0078 : Symbol(PrivateIdentifierWithEscape1[\u0078], Decl(PrivateIdentifierNameWithEscape1.ts, 1, 5))
+>#\u0078 : Symbol(PrivateIdentifierWithEscape1[#\u0078], Decl(PrivateIdentifierNameWithEscape1.ts, 0, 43))
 
     constructor() {
         this.#\u0078 = 0;
->this.# : Symbol(PrivateIdentifierWithEscape1[#], Decl(PrivateIdentifierNameWithEscape1.ts, 0, 43))
+>this.#\u0078 : Symbol(PrivateIdentifierWithEscape1[#\u0078], Decl(PrivateIdentifierNameWithEscape1.ts, 0, 43))
 >this : Symbol(PrivateIdentifierWithEscape1, Decl(PrivateIdentifierNameWithEscape1.ts, 0, 0))
     }
 
@@ -97,6 +96,7 @@ export class PrivateIdentifierWithEscape1 {
 >doThing : Symbol(PrivateIdentifierWithEscape1.doThing, Decl(PrivateIdentifierNameWithEscape1.ts, 5, 5))
 
         this.#x = 42;
+>this.#x : Symbol(PrivateIdentifierWithEscape1[#\u0078], Decl(PrivateIdentifierNameWithEscape1.ts, 0, 43))
 >this : Symbol(PrivateIdentifierWithEscape1, Decl(PrivateIdentifierNameWithEscape1.ts, 0, 0))
     }
 }

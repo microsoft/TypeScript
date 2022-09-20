@@ -30,12 +30,7 @@ tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedE
 tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(8,15): error TS1005: ';' expected.
 tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(9,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(11,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(2,5): error TS1127: Invalid character.
-tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(2,6): error TS1005: ';' expected.
-tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(5,14): error TS1127: Invalid character.
-tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(5,15): error TS1005: ';' expected.
-tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(5,15): error TS2663: Cannot find name '\u0078'. Did you mean the instance member 'this.\u0078'?
-tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(9,14): error TS2339: Property '#x' does not exist on type 'PrivateIdentifierWithEscape1'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,5): error TS1127: Invalid character.
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,6): error TS1127: Invalid character.
@@ -189,28 +184,18 @@ tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEx
     ~
 !!! error TS1128: Declaration or statement expected.
     
-==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts (6 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts (1 errors) ====
     export class PrivateIdentifierWithEscape1 {
         #\u0078: number;
-        ~
-!!! error TS1127: Invalid character.
-         ~~~~~~
-!!! error TS1005: ';' expected.
+        ~~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
     
         constructor() {
             this.#\u0078 = 0;
-                 ~
-!!! error TS1127: Invalid character.
-                  ~~~~~~
-!!! error TS1005: ';' expected.
-                  ~~~~~~
-!!! error TS2663: Cannot find name '\u0078'. Did you mean the instance member 'this.\u0078'?
         }
     
         doThing() {
             this.#x = 42;
-                 ~~
-!!! error TS2339: Property '#x' does not exist on type 'PrivateIdentifierWithEscape1'.
         }
     }
     
