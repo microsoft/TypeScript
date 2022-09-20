@@ -118,6 +118,7 @@ export class PrivateIdentifierWithEscape2 {
 >doThing : Symbol(PrivateIdentifierWithEscape2.doThing, Decl(PrivateIdentifierNameWithEscape2.ts, 5, 5))
 
         this.#xx = 42;
+>this.#xx : Symbol(PrivateIdentifierWithEscape2.#x\u0078, Decl(PrivateIdentifierNameWithEscape2.ts, 0, 43))
 >this : Symbol(PrivateIdentifierWithEscape2, Decl(PrivateIdentifierNameWithEscape2.ts, 0, 0))
     }
 }

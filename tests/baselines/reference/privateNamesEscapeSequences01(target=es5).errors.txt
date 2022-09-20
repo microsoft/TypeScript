@@ -37,7 +37,6 @@ tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEs
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(5,15): error TS2663: Cannot find name '\u0078'. Did you mean the instance member 'this.\u0078'?
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(9,14): error TS2339: Property '#x' does not exist on type 'PrivateIdentifierWithEscape1'.
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
-tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts(9,14): error TS2339: Property '#xx' does not exist on type 'PrivateIdentifierWithEscape2'.
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,5): error TS1127: Invalid character.
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,6): error TS1127: Invalid character.
 tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,7): error TS1434: Unexpected keyword or identifier.
@@ -215,7 +214,7 @@ tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEx
         }
     }
     
-==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts (2 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts (1 errors) ====
     export class PrivateIdentifierWithEscape2 {
         #x\u0078: number;
         ~~~~~~~~
@@ -227,8 +226,6 @@ tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEx
     
         doThing() {
             this.#xx = 42;
-                 ~~~
-!!! error TS2339: Property '#xx' does not exist on type 'PrivateIdentifierWithEscape2'.
         }
     }
     

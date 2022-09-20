@@ -166,17 +166,17 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var _PrivateIdentifierWithEscape2_x\u0078;
+var _PrivateIdentifierWithEscape2_xx;
 export class PrivateIdentifierWithEscape2 {
     constructor() {
-        _PrivateIdentifierWithEscape2_x\u0078.set(this, void 0);
-        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_x\u0078, 0, "f");
+        _PrivateIdentifierWithEscape2_xx.set(this, void 0);
+        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 0, "f");
     }
     doThing() {
-        this. = 42;
+        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 42, "f");
     }
 }
-_PrivateIdentifierWithEscape2_x\u0078 = new WeakMap();
+_PrivateIdentifierWithEscape2_xx = new WeakMap();
 //// [PrivateIdentifierNameWithExtendedEscape1.js]
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
@@ -202,14 +202,14 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var _PrivateIdentifierWithExtendedEscape2_x\u{78};
+var _PrivateIdentifierWithExtendedEscape2_xx;
 export class PrivateIdentifierWithExtendedEscape2 {
     constructor() {
-        _PrivateIdentifierWithExtendedEscape2_x\u{78}.set(this, void 0);
-        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_x\u{78}, 0, "f");
+        _PrivateIdentifierWithExtendedEscape2_xx.set(this, void 0);
+        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 0, "f");
     }
     doThing() {
-        this. = 42;
+        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 42, "f");
     }
 }
-_PrivateIdentifierWithExtendedEscape2_x\u{78} = new WeakMap();
+_PrivateIdentifierWithExtendedEscape2_xx = new WeakMap();

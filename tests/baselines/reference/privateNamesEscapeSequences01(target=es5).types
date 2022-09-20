@@ -173,7 +173,7 @@ export class PrivateIdentifierWithEscape2 {
 
         this.#xx = 42;
 >this.#xx = 42 : 42
->this.#xx : any
+>this.#xx : number
 >this : this
 >42 : 42
     }
