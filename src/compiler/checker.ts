@@ -14952,12 +14952,6 @@ namespace ts {
                         includes & TypeFlags.IncludesWildcard ? wildcardType : anyType :
                         includes & TypeFlags.Null || containsType(typeSet, unknownType) ? unknownType : nonNullUnknownType;
                 }
-                if (includes & TypeFlags.Undefined) {
-                    const missingIndex = binarySearch(typeSet, missingType, getTypeId, compareValues);
-                    if (missingIndex >= 0 && containsType(typeSet, undefinedType)) {
-                        orderedRemoveItemAt(typeSet, missingIndex);
-                    }
-                }
                 if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
                     removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
                 }
