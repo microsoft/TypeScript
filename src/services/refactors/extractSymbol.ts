@@ -1450,7 +1450,7 @@ namespace ts.refactor.extractSymbol {
                     if (!returnValueProperty) {
                         returnValueProperty = "__return";
                     }
-                    assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor)));
+                    assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor, isExpression)));
                 }
                 if (assignments.length === 1) {
                     return factory.createReturnStatement(assignments[0].name as Expression);

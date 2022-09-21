@@ -1136,29 +1136,40 @@ namespace ts.textChanges {
         return newNode;
     }
 
-    function assignPositionsToNodeArray<
-        TIn extends Node,
-        TArray extends NodeArray<TIn> | undefined,
-        TVisited extends Node | undefined,
-        TAssert extends NonNullable<TVisited>,
-        TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined
-            : NodeArray<TAssert>,
-    >(
-        nodes: TArray,
+    /**
+     * @see {NodesVisitor}
+     * @see {visitNodes}
+     */
+    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(
+        nodes: TInArray,
         visitor: Visitor<TIn, TVisited> | undefined,
-        test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
+        test: (node: Node) => node is TOut,
         start?: number,
         count?: number,
-    ): TOutArray {
+    ): NodeArray<TOut> | (TInArray & undefined);
+    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+        nodes: TInArray,
+        visitor: Visitor<TIn, TVisited> | undefined,
+        test?: (node: Node) => boolean,
+        start?: number,
+        count?: number,
+    ): NodeArray<Node> | (TInArray & undefined);
+    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+        nodes: TInArray,
+        visitor: Visitor<TIn, TVisited> | undefined,
+        test?: (node: Node) => boolean,
+        start?: number,
+        count?: number,
+    ): NodeArray<Node> | undefined {
         const visited = visitNodes(nodes, visitor, test, start, count);
         if (!visited) {
-            return visited as TOutArray;
+            return visited;
         }
         Debug.assert(nodes);
         // clone nodearray if necessary
-        const nodeArray = visited as NodeArray<Node> === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
+        const nodeArray = visited === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
         setTextRangePosEnd(nodeArray, getPos(nodes), getEnd(nodes));
-        return nodeArray as TOutArray;
+        return nodeArray;
     }
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}

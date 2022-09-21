@@ -47,7 +47,7 @@ namespace ts {
                     value = node.right;
                 }
                 else {
-                    return visitNode(value, visitor, isExpression);
+                    return Debug.checkDefined(visitNode(value, visitor, isExpression));
                 }
             }
         }
@@ -117,7 +117,7 @@ namespace ts {
             const expression = createAssignmentCallback
                 ? createAssignmentCallback(target as Identifier, value, location)
                 : setTextRange(
-                    context.factory.createAssignment(visitNode(target as Expression, visitor, isExpression), value),
+                    context.factory.createAssignment(Debug.checkDefined(visitNode(target as Expression, visitor, isExpression)), value),
                     location
                 );
             expression.original = original;
@@ -200,7 +200,7 @@ namespace ts {
                 bindingOrAssignmentElementContainsNonLiteralComputedName(node))) {
                 // If the right-hand value of the assignment is also an assignment target then
                 // we need to cache the right-hand value.
-                initializer = ensureIdentifier(flattenContext, visitNode(initializer, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, initializer);
+                initializer = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(initializer, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, initializer);
                 node = context.factory.updateVariableDeclaration(node, node.name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
             }
         }
@@ -476,7 +476,7 @@ namespace ts {
      */
     function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
         if (isComputedPropertyName(propertyName)) {
-            const argumentExpression = ensureIdentifier(flattenContext, visitNode(propertyName.expression, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
+            const argumentExpression = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(propertyName.expression, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
             return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
         }
         else if (isStringOrNumericLiteralLike(propertyName)) {

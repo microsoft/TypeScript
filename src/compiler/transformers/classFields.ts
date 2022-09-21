@@ -630,7 +630,7 @@ namespace ts {
         }
 
         function createPrivateIdentifierAccess(info: PrivateIdentifierInfo, receiver: Expression): Expression {
-            return createPrivateIdentifierAccessHelper(info, visitNode(receiver, visitor, isExpression));
+            return createPrivateIdentifierAccessHelper(info, Debug.checkDefined(visitNode(receiver, visitor, isExpression)));
         }
 
         function createPrivateIdentifierAccessHelper(info: PrivateIdentifierInfo, receiver: Expression): Expression {
@@ -714,7 +714,7 @@ namespace ts {
                     // converts `super[x]` into `Reflect.get(_baseTemp, x, _classTemp)`
                     const superProperty = factory.createReflectGetCall(
                         superClassReference,
-                        visitNode(node.argumentExpression, visitor, isExpression),
+                        Debug.checkDefined(visitNode(node.argumentExpression, visitor, isExpression)),
                         classConstructor
                     );
                     setOriginalNode(superProperty, node.expression);
@@ -788,7 +788,7 @@ namespace ts {
                             }
                             else {
                                 getterName = factory.createTempVariable(hoistVariableDeclaration);
-                                setterName = factory.createAssignment(getterName, visitNode(operand.argumentExpression, visitor, isExpression));
+                                setterName = factory.createAssignment(getterName, Debug.checkDefined(visitNode(operand.argumentExpression, visitor, isExpression)));
                             }
                         }
                         if (setterName && getterName) {
@@ -825,7 +825,7 @@ namespace ts {
         function visitExpressionStatement(node: ExpressionStatement) {
             return factory.updateExpressionStatement(
                 node,
-                visitNode(node.expression, discardedValueVisitor, isExpression)
+                Debug.checkDefined(visitNode(node.expression, discardedValueVisitor, isExpression))
             );
         }
 
@@ -849,17 +849,17 @@ namespace ts {
                 if (isCallChain(node)) {
                     return factory.updateCallChain(
                         node,
-                        factory.createPropertyAccessChain(visitNode(target, visitor), node.questionDotToken, "call"),
+                        factory.createPropertyAccessChain(Debug.checkDefined(visitNode(target, visitor, isExpression)), node.questionDotToken, "call"),
                         /*questionDotToken*/ undefined,
                         /*typeArguments*/ undefined,
-                        [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
+                        [Debug.checkDefined(visitNode(thisArg, visitor, isExpression)), ...visitNodes(node.arguments, visitor, isExpression)]
                     );
                 }
                 return factory.updateCallExpression(
                     node,
-                    factory.createPropertyAccessExpression(visitNode(target, visitor), "call"),
+                    factory.createPropertyAccessExpression(Debug.checkDefined(visitNode(target, visitor, isExpression)), "call"),
                     /*typeArguments*/ undefined,
-                    [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
+                    [Debug.checkDefined(visitNode(thisArg, visitor, isExpression)), ...visitNodes(node.arguments, visitor, isExpression)]
                 );
             }
 
@@ -872,7 +872,7 @@ namespace ts {
 
                 // converts `super.f(...)` into `Reflect.get(_baseTemp, "f", _classTemp).call(_classTemp, ...)`
                 const invocation = factory.createFunctionCallCall(
-                    visitNode(node.expression, visitor, isExpression),
+                    Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
                     currentClassLexicalEnvironment.classConstructor,
                     visitNodes(node.arguments, visitor, isExpression)
                 );
@@ -892,12 +892,12 @@ namespace ts {
                 return factory.updateTaggedTemplateExpression(
                     node,
                     factory.createCallExpression(
-                        factory.createPropertyAccessExpression(visitNode(target, visitor), "bind"),
+                        factory.createPropertyAccessExpression(Debug.checkDefined(visitNode(target, visitor, isExpression)), "bind"),
                         /*typeArguments*/ undefined,
-                        [visitNode(thisArg, visitor, isExpression)]
+                        [Debug.checkDefined(visitNode(thisArg, visitor, isExpression))]
                     ),
                     /*typeArguments*/ undefined,
-                    visitNode(node.template, visitor, isTemplateLiteral)
+                    Debug.checkDefined(visitNode(node.template, visitor, isTemplateLiteral))
                 );
             }
             if (shouldTransformSuperInStaticInitializers &&
@@ -907,7 +907,7 @@ namespace ts {
 
                 // converts `` super.f`x` `` into `` Reflect.get(_baseTemp, "f", _classTemp).bind(_classTemp)`x` ``
                 const invocation = factory.createFunctionBindCall(
-                    visitNode(node.tag, visitor, isExpression),
+                    Debug.checkDefined(visitNode(node.tag, visitor, isExpression)),
                     currentClassLexicalEnvironment.classConstructor,
                     []
                 );
@@ -917,7 +917,7 @@ namespace ts {
                     node,
                     invocation,
                     /*typeArguments*/ undefined,
-                    visitNode(node.template, visitor, isTemplateLiteral)
+                    Debug.checkDefined(visitNode(node.template, visitor, isTemplateLiteral))
                 );
             }
             return visitEachChild(node, visitor, context);
@@ -954,9 +954,9 @@ namespace ts {
                 pendingExpressions = undefined;
                 node = factory.updateBinaryExpression(
                     node,
-                    visitNode(node.left, assignmentTargetVisitor),
+                    Debug.checkDefined(visitNode(node.left, assignmentTargetVisitor, isExpression)),
                     node.operatorToken,
-                    visitNode(node.right, visitor)
+                    Debug.checkDefined(visitNode(node.right, visitor, isExpression))
                 );
                 const expr = some(pendingExpressions) ?
                     factory.inlineExpressions(compact([...pendingExpressions, node])) :
@@ -993,7 +993,7 @@ namespace ts {
                             node,
                             visitInvalidSuperProperty(node.left),
                             node.operatorToken,
-                            visitNode(node.right, visitor, isExpression));
+                            Debug.checkDefined(visitNode(node.right, visitor, isExpression)));
                     }
                     if (classConstructor && superClassReference) {
                         let setterName =
@@ -1066,8 +1066,8 @@ namespace ts {
         }
 
         function createPrivateIdentifierAssignment(info: PrivateIdentifierInfo, receiver: Expression, right: Expression, operator: AssignmentOperator): Expression {
-            receiver = visitNode(receiver, visitor, isExpression);
-            right = visitNode(right, visitor, isExpression);
+            receiver = Debug.checkDefined(visitNode(receiver, visitor, isExpression));
+            right = Debug.checkDefined(visitNode(right, visitor, isExpression));
 
             if (isCompoundAssignment(operator)) {
                 const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
@@ -1152,7 +1152,7 @@ namespace ts {
                     node,
                     factory.createAssignment(
                         temp,
-                        visitNode(node.expression, visitor, isExpression)
+                        Debug.checkDefined(visitNode(node.expression, visitor, isExpression))
                     ),
                     /*typeArguments*/ undefined
                 );
@@ -1873,7 +1873,7 @@ namespace ts {
                 factory.updateElementAccessExpression(
                     node,
                     factory.createVoidZero(),
-                    visitNode(node.argumentExpression, visitor, isExpression));
+                    Debug.checkDefined(visitNode(node.argumentExpression, visitor, isExpression)));
         }
 
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
@@ -2345,7 +2345,7 @@ namespace ts {
             // differently inside the function.
             if (isThisProperty(node) || isSuperProperty(node) || !isSimpleCopiableExpression(node.expression)) {
                 receiver = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
-                getPendingExpressions().push(factory.createBinaryExpression(receiver, SyntaxKind.EqualsToken, visitNode(node.expression, visitor, isExpression)));
+                getPendingExpressions().push(factory.createBinaryExpression(receiver, SyntaxKind.EqualsToken, Debug.checkDefined(visitNode(node.expression, visitor, isExpression))));
             }
             return factory.createAssignmentTargetWrapper(
                 parameter,
@@ -2398,7 +2398,7 @@ namespace ts {
                             node,
                             wrapped,
                             node.operatorToken,
-                            visitNode(node.right, visitor, isExpression)
+                            Debug.checkDefined(visitNode(node.right, visitor, isExpression))
                         );
                     }
                     else if (isSpreadElement(node)) {
@@ -2452,16 +2452,16 @@ namespace ts {
                     const initializer = getInitializerOfBindingOrAssignmentElement(node);
                     return factory.updatePropertyAssignment(
                         node,
-                        visitNode(node.name, visitor, isPropertyName),
+                        Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
                         wrapped ?
-                            initializer ? factory.createAssignment(wrapped, visitNode(initializer, visitor)) : wrapped :
-                            visitNode(node.initializer, assignmentTargetVisitor, isExpression)
+                            initializer ? factory.createAssignment(wrapped, Debug.checkDefined(visitNode(initializer, visitor, isExpression))) : wrapped :
+                            Debug.checkDefined(visitNode(node.initializer, assignmentTargetVisitor, isExpression))
                     );
                 }
                 if (isSpreadAssignment(node)) {
                     return factory.updateSpreadAssignment(
                         node,
-                        wrapped || visitNode(node.expression, assignmentTargetVisitor, isExpression)
+                        wrapped || Debug.checkDefined(visitNode(node.expression, assignmentTargetVisitor, isExpression))
                     );
                 }
                 Debug.assert(wrapped === undefined, "Should not have generated a wrapped target");

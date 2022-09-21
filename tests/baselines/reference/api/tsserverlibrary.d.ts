@@ -3964,30 +3964,32 @@ declare namespace ts {
      * A function that walks a node using the given visitor, lifting node arrays into single nodes,
      * returning an node which satisfies the test.
      *
-     * This type is complicated, but intends to encode the following behaviors:
+     * - If the input node is undefined, then the output is undefined.
+     * - If the visitor returns undefined, then the output is undefined.
+     * - If the output node is not undefined, then it will satisfy the test function.
+     * - In order to obtain a return type that is more specific than `Node`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
      *
-     *   - If the input node is potentially undefined, the output is potentially undefined.
-     *   - If the visitor can return undefined, the output is potentially undefined.
-     *   - If the output node is not undefined, then it will satisfy the test.
-     *
-     * @see {visitNode}
+     * For the canonical implementation of this type, @see {visitNode}.
      */
     export interface NodeVisitor {
-        <TIn extends Node | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOut extends TIn extends undefined ? TAssert | undefined : TVisited extends undefined ? TAssert | undefined : TAssert>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean), lift?: (node: readonly Node[]) => Node): TOut;
+        <TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | (TIn & undefined) | (TVisited & undefined);
+        <TIn extends Node | undefined, TVisited extends Node | undefined>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => Node): Node | (TIn & undefined) | (TVisited & undefined);
     }
     /**
      * A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
      *
-     * This type is complicated, but intends to encode the following behaviors:
+     * - If the input node array is undefined, the output is undefined.
+     * - If the visitor can return undefined, the node it visits in the array will be reused.
+     * - If the output node array is not undefined, then its contents will satisfy the test.
+     * - In order to obtain a return type that is more specific than `NodeArray<Node>`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
      *
-     *   - If the input node array is potentially undefined, the output is potentially undefined.
-     *   - If the visitor can return undefined, the output may not be undefined; these nodes will be left in the output.
-     *   - If the output node array is not undefined, then its contents will satisfy the test.
-     *
-     * @see {visitNodes}
+     * For the canonical implementation of this type, @see {visitNodes}.
      */
     export interface NodesVisitor {
-        <TIn extends Node, TArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined : NodeArray<TAssert>>(nodes: TArray, visitor: Visitor<TIn, TVisited> | undefined, test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean), start?: number, count?: number): TOutArray;
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
     }
     export interface Printer {
         /**
@@ -5084,7 +5086,8 @@ declare namespace ts {
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOut extends TIn extends undefined ? TAssert | undefined : TVisited extends undefined ? TAssert | undefined : TAssert>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean), lift?: (node: readonly Node[]) => Node): TOut;
+    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | (TIn & undefined) | (TVisited & undefined);
+    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited> | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => Node): Node | (TIn & undefined) | (TVisited & undefined);
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
@@ -5094,7 +5097,10 @@ declare namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodes<TIn extends Node, TArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TAssert extends NonNullable<TVisited>, TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined : NodeArray<TAssert>>(nodes: TArray, visitor: Visitor<TIn, TVisited> | undefined, test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean), start?: number, count?: number): TOutArray;
+    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
+    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
+    function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): readonly Node[] | (TInArray & undefined);
+    function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test: ((node: Node) => boolean) | undefined, start: number, count: number): readonly Node[];
     /**
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.

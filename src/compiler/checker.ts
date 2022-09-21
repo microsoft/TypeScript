@@ -5503,24 +5503,35 @@ namespace ts {
                         return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext, deepCloneOrReuseNodes)), node);
                     }
 
-                    function deepCloneOrReuseNodes<
-                        TIn extends Node,
-                        TArray extends NodeArray<TIn> | undefined,
-                        TVisited extends Node | undefined,
-                        TAssert extends NonNullable<TVisited>,
-                        TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined
-                            : NodeArray<TAssert>,
-                    >(
-                        nodes: TArray,
+                    /**
+                     * @see {NodesVisitor}
+                     * @see {visitNodes}
+                     */
+                    function deepCloneOrReuseNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(
+                        nodes: TInArray,
                         visitor: Visitor<TIn, TVisited> | undefined,
-                        test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
+                        test: (node: Node) => node is TOut,
                         start?: number,
                         count?: number,
-                    ): TOutArray {
+                    ): NodeArray<TOut> | (TInArray & undefined);
+                    function deepCloneOrReuseNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+                        nodes: TInArray,
+                        visitor: Visitor<TIn, TVisited> | undefined,
+                        test?: (node: Node) => boolean,
+                        start?: number,
+                        count?: number,
+                    ): NodeArray<Node> | (TInArray & undefined);
+                    function deepCloneOrReuseNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+                        nodes: TInArray,
+                        visitor: Visitor<TIn, TVisited> | undefined,
+                        test?: (node: Node) => boolean,
+                        start?: number,
+                        count?: number,
+                    ): NodeArray<Node> | undefined {
                         if (nodes && nodes.length === 0) {
                             // Ensure we explicitly make a copy of an empty array; visitNodes will not do this unless the array has elements,
                             // which can lead to us reusing the same empty NodeArray more than once within the same AST during type noding.
-                            return setTextRange(factory.createNodeArray(/*nodes*/ undefined, nodes.hasTrailingComma), nodes) as TOutArray;
+                            return setTextRange(factory.createNodeArray(/*nodes*/ undefined, nodes.hasTrailingComma), nodes);
                         }
                         return visitNodes(nodes, visitor, test, start, count);
                     }
@@ -6834,16 +6845,16 @@ namespace ts {
                         return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
                     }
                     if (isJSDocNullableType(node)) {
-                        return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), factory.createLiteralTypeNode(factory.createNull())]);
+                        return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode), factory.createLiteralTypeNode(factory.createNull())]);
                     }
                     if (isJSDocOptionalType(node)) {
-                        return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols), factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+                        return factory.createUnionTypeNode([visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode), factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
                     }
                     if (isJSDocNonNullableType(node)) {
                         return visitNode(node.type, visitExistingNodeTreeSymbols);
                     }
                     if (isJSDocVariadicType(node)) {
-                        return factory.createArrayTypeNode(visitNode(node.type, visitExistingNodeTreeSymbols));
+                        return factory.createArrayTypeNode(visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
                     }
                     if (isJSDocTypeLiteral(node)) {
                         return factory.createTypeLiteralNode(map(node.jsDocPropertyTags, t => {
@@ -6872,7 +6883,7 @@ namespace ts {
                                 /*questionToken*/ undefined,
                                 visitNode(node.typeArguments![0], visitExistingNodeTreeSymbols, isTypeNode)
                             )],
-                            visitNode(node.typeArguments![1], visitExistingNodeTreeSymbols)
+                            visitNode(node.typeArguments![1], visitExistingNodeTreeSymbols, isTypeNode)
                         )]);
                     }
                     if (isJSDocFunctionType(node)) {
@@ -6886,10 +6897,10 @@ namespace ts {
                                     getEffectiveDotDotDotForParameter(p),
                                     getNameForJSDocFunctionParameter(p, i),
                                     p.questionToken,
-                                    visitNode(p.type, visitExistingNodeTreeSymbols),
+                                    visitNode(p.type, visitExistingNodeTreeSymbols, isTypeNode),
                                     /*initializer*/ undefined
                                 )),
-                                visitNode(newTypeNode || node.type, visitExistingNodeTreeSymbols) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                                visitNode(newTypeNode || node.type, visitExistingNodeTreeSymbols, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                             );
                         }
                         else {
@@ -6900,10 +6911,10 @@ namespace ts {
                                     getEffectiveDotDotDotForParameter(p),
                                     getNameForJSDocFunctionParameter(p, i),
                                     p.questionToken,
-                                    visitNode(p.type, visitExistingNodeTreeSymbols),
+                                    visitNode(p.type, visitExistingNodeTreeSymbols, isTypeNode),
                                     /*initializer*/ undefined
                                 )),
-                                visitNode(node.type, visitExistingNodeTreeSymbols) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                                visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                             );
                         }
                     }

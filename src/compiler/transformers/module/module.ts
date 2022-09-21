@@ -1207,10 +1207,10 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
+                deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
             }
             else {
-                statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
+                statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
             }
 
             return singleOrMany(statements);
@@ -1402,7 +1402,7 @@ namespace ts {
         function transformInitializedVariable(node: InitializedVariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
-                    visitNode(node, visitor),
+                    visitNode(node, visitor, isInitializedVariable),
                     /*visitor*/ undefined,
                     context,
                     FlattenLevel.All,
@@ -1419,7 +1419,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    node.initializer ? visitNode(node.initializer, visitor) : factory.createVoidZero()
+                    node.initializer ? visitNode(node.initializer, visitor, isExpression) : factory.createVoidZero()
                 );
             }
         }

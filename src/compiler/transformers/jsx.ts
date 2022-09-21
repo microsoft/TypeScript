@@ -349,7 +349,7 @@ namespace ts {
         }
 
         function transformJsxSpreadAttributeToSpreadAssignment(node: JsxSpreadAttribute) {
-            return factory.createSpreadAssignment(visitNode(node.expression, visitor, isExpression));
+            return factory.createSpreadAssignment(Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
         }
 
         function transformJsxAttributesToObjectProps(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
@@ -415,7 +415,7 @@ namespace ts {
                 if (node.expression === undefined) {
                     return factory.createTrue();
                 }
-                return visitNode(node.expression, visitor, isExpression);
+                return Debug.checkDefined(visitNode(node.expression, visitor, isExpression));
             }
             if (isJsxElement(node)) {
                 return visitJsxElement(node, /*isChild*/ false);

@@ -322,7 +322,7 @@ namespace ts {
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.asteriskToken,
-                visitNode(node.name, visitor, isPropertyName),
+                Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
                 /*questionToken*/ undefined,
                 /*typeParameters*/ undefined,
                 visitNodes(node.parameters, visitor, isParameter),
@@ -335,7 +335,7 @@ namespace ts {
             return finishClassElement(factory.updateGetAccessorDeclaration(
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                visitNode(node.name, visitor, isPropertyName),
+                Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
                 visitNodes(node.parameters, visitor, isParameter),
                 /*type*/ undefined,
                 visitNode(node.body, visitor, isBlock)
@@ -346,7 +346,7 @@ namespace ts {
             return finishClassElement(factory.updateSetAccessorDeclaration(
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                visitNode(node.name, visitor, isPropertyName),
+                Debug.checkDefined(visitNode(node.name, visitor, isPropertyName)),
                 visitNodes(node.parameters, visitor, isParameter),
                 visitNode(node.body, visitor, isBlock)
             ), node);

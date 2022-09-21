@@ -844,7 +844,7 @@ namespace ts {
 
             // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
             // (and remove them from the set to examine for outter declarations)
-            return visitNodes(statements, visitLateVisibilityMarkedStatements);
+            return visitNodes(statements, visitLateVisibilityMarkedStatements, isStatement);
 
             function visitLateVisibilityMarkedStatements(statement: Statement) {
                 if (isLateVisibilityPaintedStatement(statement)) {
@@ -1038,7 +1038,7 @@ namespace ts {
                             input,
                             ensureModifiers(input),
                             updateParamsList(input, input.parameters),
-                            visitNode(input.type, visitDeclarationSubtree) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                            visitNode(input.type, visitDeclarationSubtree, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                         ));
                     }
                     case SyntaxKind.VariableDeclaration: {
@@ -1072,10 +1072,10 @@ namespace ts {
                         return cleanup(factory.updateConditionalTypeNode(input, checkType, extendsType, trueType, falseType));
                     }
                     case SyntaxKind.FunctionType: {
-                        return cleanup(factory.updateFunctionTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                        return cleanup(factory.updateFunctionTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration), updateParamsList(input, input.parameters), Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode))));
                     }
                     case SyntaxKind.ConstructorType: {
-                        return cleanup(factory.updateConstructorTypeNode(input, ensureModifiers(input), visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                        return cleanup(factory.updateConstructorTypeNode(input, ensureModifiers(input), visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration), updateParamsList(input, input.parameters), Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode))));
                     }
                     case SyntaxKind.ImportType: {
                         if (!isLiteralImportTypeNode(input)) return cleanup(input);
@@ -1229,7 +1229,7 @@ namespace ts {
                         ensureModifiers(input),
                         input.name,
                         visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
-                        visitNode(input.type, visitDeclarationSubtree, isTypeNode)
+                        Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode))
                     ));
                     needsDeclare = previousNeedsDeclare;
                     return clean;
@@ -1355,7 +1355,7 @@ namespace ts {
                                 lateStatements = factory.createNodeArray([...lateStatements, createEmptyExports(factory)]);
                             }
                             else {
-                                lateStatements = visitNodes(lateStatements, stripExportModifiers);
+                                lateStatements = visitNodes(lateStatements, stripExportModifiers, isStatement);
                             }
                         }
                         const body = factory.updateModuleBlock(inner, lateStatements);

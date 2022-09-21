@@ -103,7 +103,7 @@ namespace ts {
             return transformSourceFile(`let a: () => void`, [
                 context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
                     return visitEachChild(node, visitor, context);
-                })
+                }, isSourceFile)
             ]);
         });
 
@@ -114,7 +114,7 @@ namespace ts {
                         return factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
                     }
                     return visitEachChild(node, visitor, context);
-                })
+                }, isSourceFile)
             ]);
         });
 

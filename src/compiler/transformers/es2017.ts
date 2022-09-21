@@ -223,8 +223,8 @@ namespace ts {
                 node,
                 isVariableDeclarationListWithCollidingName(node.initializer)
                     ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
-                    : visitNode(node.initializer, visitor, isForInitializer),
-                visitNode(node.expression, visitor, isExpression),
+                    : Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+                    Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
                 visitIterationBody(node.statement, asyncBodyVisitor, context)
             );
         }
@@ -235,8 +235,8 @@ namespace ts {
                 visitNode(node.awaitModifier, visitor, isAwaitKeyword),
                 isVariableDeclarationListWithCollidingName(node.initializer)
                     ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
-                    : visitNode(node.initializer, visitor, isForInitializer),
-                visitNode(node.expression, visitor, isExpression),
+                    : Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
                 visitIterationBody(node.statement, asyncBodyVisitor, context)
             );
         }
@@ -552,7 +552,7 @@ namespace ts {
                 return factory.updateBlock(body, visitNodes(body.statements, asyncBodyVisitor, isStatement, start));
             }
             else {
-                return factory.converters.convertToFunctionBlock(visitNode(body, asyncBodyVisitor, isConciseBody));
+                return factory.converters.convertToFunctionBlock(Debug.checkDefined(visitNode(body, asyncBodyVisitor, isConciseBody)));
             }
         }
 

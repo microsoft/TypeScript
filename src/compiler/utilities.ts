@@ -5556,8 +5556,8 @@ namespace ts {
         return filter(node.declarations, isInitializedVariable);
     }
 
-    function isInitializedVariable(node: VariableDeclaration): node is InitializedVariableDeclaration {
-        return node.initializer !== undefined;
+    export function isInitializedVariable(node: Node): node is InitializedVariableDeclaration {
+        return isVariableDeclaration(node) && node.initializer !== undefined;
     }
 
     export function isWatchSet(options: CompilerOptions) {

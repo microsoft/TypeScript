@@ -108,15 +108,15 @@ namespace ts.codefix {
     }
 
     function transformJSDocOptionalType(node: JSDocOptionalType) {
-        return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType), factory.createTypeReferenceNode("undefined", emptyArray)]);
+        return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType, isTypeNode), factory.createTypeReferenceNode("undefined", emptyArray)]);
     }
 
     function transformJSDocNullableType(node: JSDocNullableType) {
-        return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType), factory.createTypeReferenceNode("null", emptyArray)]);
+        return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType, isTypeNode), factory.createTypeReferenceNode("null", emptyArray)]);
     }
 
     function transformJSDocVariadicType(node: JSDocVariadicType) {
-        return factory.createArrayTypeNode(visitNode(node.type, transformJSDocType));
+        return factory.createArrayTypeNode(visitNode(node.type, transformJSDocType, isTypeNode));
     }
 
     function transformJSDocFunctionType(node: JSDocFunctionType) {
@@ -130,7 +130,7 @@ namespace ts.codefix {
         const isRest = node.type!.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1; // TODO: GH#18217
         const name = node.name || (isRest ? "rest" : "arg" + index);
         const dotdotdot = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
-        return factory.createParameterDeclaration(node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
+        return factory.createParameterDeclaration(node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType, isTypeNode), node.initializer);
     }
 
     function transformJSDocTypeReference(node: TypeReferenceNode) {
@@ -159,7 +159,7 @@ namespace ts.codefix {
                 args = factory.createNodeArray([factory.createTypeReferenceNode("any", emptyArray)]);
             }
             else {
-                args = visitNodes(node.typeArguments, transformJSDocType);
+                args = visitNodes(node.typeArguments, transformJSDocType, isTypeNode);
             }
         }
         return factory.createTypeReferenceNode(name, args);

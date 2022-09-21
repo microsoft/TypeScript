@@ -978,7 +978,7 @@ namespace ts {
                     return factory.updateComputedPropertyName(name, factory.createAssignment(generatedName, expression));
                 }
             }
-            return visitNode(name, visitor, isPropertyName);
+            return Debug.checkDefined(visitNode(name, visitor, isPropertyName));
         }
 
         /**
@@ -1051,7 +1051,7 @@ namespace ts {
                 visitPropertyNameOfClassElement(node),
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
-                visitNode(node.initializer, visitor)
+                visitNode(node.initializer, visitor, isExpression)
             );
         }
 
@@ -1366,7 +1366,7 @@ namespace ts {
                 return setTextRange(
                     factory.createAssignment(
                         getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
-                        visitNode(node.initializer, visitor, isExpression)
+                        Debug.checkDefined(visitNode(node.initializer, visitor, isExpression))
                     ),
                     /*location*/ node
                 );
@@ -1376,7 +1376,7 @@ namespace ts {
         function visitVariableDeclaration(node: VariableDeclaration) {
             const updated = factory.updateVariableDeclaration(
                 node,
-                visitNode(node.name, visitor, isBindingName),
+                Debug.checkDefined(visitNode(node.name, visitor, isBindingName)),
                 /*exclamationToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression));
@@ -1438,7 +1438,7 @@ namespace ts {
         function visitCallExpression(node: CallExpression) {
             return factory.updateCallExpression(
                 node,
-                visitNode(node.expression, visitor, isExpression),
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
                 /*typeArguments*/ undefined,
                 visitNodes(node.arguments, visitor, isExpression));
         }
@@ -1446,7 +1446,7 @@ namespace ts {
         function visitNewExpression(node: NewExpression) {
             return factory.updateNewExpression(
                 node,
-                visitNode(node.expression, visitor, isExpression),
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
                 /*typeArguments*/ undefined,
                 visitNodes(node.arguments, visitor, isExpression));
         }
@@ -1454,25 +1454,25 @@ namespace ts {
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
             return factory.updateTaggedTemplateExpression(
                 node,
-                visitNode(node.tag, visitor, isExpression),
+                Debug.checkDefined(visitNode(node.tag, visitor, isExpression)),
                 /*typeArguments*/ undefined,
-                visitNode(node.template, visitor, isTemplateLiteral));
+                Debug.checkDefined(visitNode(node.template, visitor, isTemplateLiteral)));
         }
 
         function visitJsxSelfClosingElement(node: JsxSelfClosingElement) {
             return factory.updateJsxSelfClosingElement(
                 node,
-                visitNode(node.tagName, visitor, isJsxTagNameExpression),
+                Debug.checkDefined(visitNode(node.tagName, visitor, isJsxTagNameExpression)),
                 /*typeArguments*/ undefined,
-                visitNode(node.attributes, visitor, isJsxAttributes));
+                Debug.checkDefined(visitNode(node.attributes, visitor, isJsxAttributes)));
         }
 
         function visitJsxJsxOpeningElement(node: JsxOpeningElement) {
             return factory.updateJsxOpeningElement(
                 node,
-                visitNode(node.tagName, visitor, isJsxTagNameExpression),
+                Debug.checkDefined(visitNode(node.tagName, visitor, isJsxTagNameExpression)),
                 /*typeArguments*/ undefined,
-                visitNode(node.attributes, visitor, isJsxAttributes));
+                Debug.checkDefined(visitNode(node.attributes, visitor, isJsxAttributes)));
         }
 
         /**
@@ -1653,7 +1653,7 @@ namespace ts {
             else {
                 enableSubstitutionForNonQualifiedEnumMembers();
                 if (member.initializer) {
-                    return visitNode(member.initializer, visitor, isExpression);
+                    return Debug.checkDefined(visitNode(member.initializer, visitor, isExpression));
                 }
                 else {
                     return factory.createVoidZero();
@@ -2103,7 +2103,7 @@ namespace ts {
         }
 
         function visitNamespaceExports(node: NamespaceExport): VisitResult<NamespaceExport> {
-            return factory.updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier));
+            return factory.updateNamespaceExport(node, Debug.checkDefined(visitNode(node.name, visitor, isIdentifier)));
         }
 
         function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> | undefined {

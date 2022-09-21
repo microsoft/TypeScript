@@ -89,7 +89,7 @@ namespace ts {
             context => node => visitNode(node, function visitor(node: Node): Node {
                 if (isStringLiteral(node) && node.text === "change") return factory.createStringLiteral("changed");
                 return visitEachChild(node, visitor, context);
-            })
+            }, isSourceFile)
         ]}, {
             target: ScriptTarget.ES5,
             module: ModuleKind.ES2015,
@@ -124,7 +124,7 @@ namespace ts {
                             return node;
                         }
                         return visitEachChild(node, visitor, context);
-                    })
+                    }, isSourceFile)
                 ]
             },
             { sourceMap: true }
@@ -153,7 +153,7 @@ namespace ts {
                                 return newNode;
                             }
                             return visitEachChild(node, visitor, context);
-                        });
+                        }, isSourceFile);
                         return {
                             transformSourceFile,
                             transformBundle: node => factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends),

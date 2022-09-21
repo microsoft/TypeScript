@@ -1356,7 +1356,7 @@ namespace ts {
             return factory.updateLabeledStatement(
                 node,
                 node.label,
-                visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)
+                Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
             );
         }
 
@@ -1369,7 +1369,7 @@ namespace ts {
             return factory.updateWithStatement(
                 node,
                 visitNode(node.expression, visitor, isExpression),
-                visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)
+                Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
             );
         }
 
@@ -1382,7 +1382,7 @@ namespace ts {
             return factory.updateSwitchStatement(
                 node,
                 visitNode(node.expression, visitor, isExpression),
-                visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock)
+                Debug.checkDefined(visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock))
             );
         }
 
@@ -1447,7 +1447,7 @@ namespace ts {
             node = factory.updateCatchClause(
                 node,
                 node.variableDeclaration,
-                visitNode(node.block, topLevelNestedVisitor, isBlock)
+                Debug.checkDefined(visitNode(node.block, topLevelNestedVisitor, isBlock))
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;

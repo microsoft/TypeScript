@@ -610,7 +610,7 @@ namespace ts {
                             factory.createPropertyAssignment(
                                 factory.createIdentifier("value"),
                                 node.expression
-                                    ? visitNode(node.expression, visitor, isExpression)
+                                    ? Debug.checkDefined(visitNode(node.expression, visitor, isExpression))
                                     : factory.createVoidZero()
                             )
                         ]
@@ -844,7 +844,7 @@ namespace ts {
                     outer,
                     /*typeArguments*/ undefined,
                     extendsClauseElement
-                        ? [visitNode(extendsClauseElement.expression, visitor, isExpression)]
+                        ? [Debug.checkDefined(visitNode(extendsClauseElement.expression, visitor, isExpression))]
                         : []
                 )
             );
@@ -1354,7 +1354,7 @@ namespace ts {
                         factory.createExpressionStatement(
                             factory.createAssignment(
                                 factory.getGeneratedNameForNode(parameter),
-                                visitNode(initializer, visitor, isExpression)
+                                Debug.checkDefined(visitNode(initializer, visitor, isExpression))
                             )
                         ),
                         EmitFlags.CustomPrologue
@@ -1374,7 +1374,7 @@ namespace ts {
          * @param initializer The initializer for the parameter.
          */
         function insertDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
-            initializer = visitNode(initializer, visitor, isExpression);
+            initializer = Debug.checkDefined(visitNode(initializer, visitor, isExpression));
             const statement = factory.createIfStatement(
                 factory.createTypeCheck(factory.cloneNode(name), "undefined"),
                 setEmitFlags(
@@ -2105,9 +2105,9 @@ namespace ts {
             if (node.operatorToken.kind === SyntaxKind.CommaToken) {
                 return factory.updateBinaryExpression(
                     node,
-                    visitNode(node.left, visitorWithUnusedExpressionResult, isExpression),
+                    Debug.checkDefined(visitNode(node.left, visitorWithUnusedExpressionResult, isExpression)),
                     node.operatorToken,
-                    visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression)
+                    Debug.checkDefined(visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression))
                 );
             }
             return visitEachChild(node, visitor, context);
@@ -2160,7 +2160,7 @@ namespace ts {
                             );
                         }
                         else {
-                            assignment = factory.createBinaryExpression(decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
+                            assignment = factory.createBinaryExpression(decl.name, SyntaxKind.EqualsToken, Debug.checkDefined(visitNode(decl.initializer, visitor, isExpression)));
                             setTextRange(assignment, decl);
                         }
 
@@ -2357,7 +2357,7 @@ namespace ts {
             const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
             return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
                 ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
-                : factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock), node, convertedLoopState && resetLabel);
+                : factory.restoreEnclosingLabel(Debug.checkDefined(visitNode(statement, visitor, isStatement, factory.liftToBlock)), node, convertedLoopState && resetLabel);
         }
 
         function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
@@ -2403,7 +2403,7 @@ namespace ts {
                 visitNode(node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
                 visitNode(node.incrementor, visitorWithUnusedExpressionResult, isExpression),
-                visitNode(node.statement, visitor, isStatement, factory.liftToBlock)
+                Debug.checkDefined(visitNode(node.statement, visitor, isStatement, factory.liftToBlock))
             );
         }
 
@@ -2494,7 +2494,7 @@ namespace ts {
                 }
                 else {
                     setTextRangeEnd(assignment, initializer.end);
-                    statements.push(setTextRange(factory.createExpressionStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(initializer, -1)));
+                    statements.push(setTextRange(factory.createExpressionStatement(Debug.checkDefined(visitNode(assignment, visitor, isExpression))), moveRangeEnd(initializer, -1)));
                 }
             }
 
@@ -2878,7 +2878,7 @@ namespace ts {
                 }
             }
             else {
-                const clone = convertIterationStatementCore(node, initializerFunction, visitNode(node.statement, visitor, isStatement, factory.liftToBlock));
+                const clone = convertIterationStatementCore(node, initializerFunction, Debug.checkDefined(visitNode(node.statement, visitor, isStatement, factory.liftToBlock)));
                 loop = factory.restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
             }
 
@@ -2913,16 +2913,16 @@ namespace ts {
             return factory.updateForOfStatement(
                 node,
                 /*awaitModifier*/ undefined,
-                visitNode(node.initializer, visitor, isForInitializer),
-                visitNode(node.expression, visitor, isExpression),
+                Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
                 convertedLoopBody);
         }
 
         function convertForInStatement(node: ForInStatement, convertedLoopBody: Statement) {
             return factory.updateForInStatement(
                 node,
-                visitNode(node.initializer, visitor, isForInitializer),
-                visitNode(node.expression, visitor, isExpression),
+                Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
                 convertedLoopBody);
         }
 
@@ -2930,13 +2930,13 @@ namespace ts {
             return factory.updateDoStatement(
                 node,
                 convertedLoopBody,
-                visitNode(node.expression, visitor, isExpression));
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
         }
 
         function convertWhileStatement(node: WhileStatement, convertedLoopBody: Statement) {
             return factory.updateWhileStatement(
                 node,
-                visitNode(node.expression, visitor, isExpression),
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
                 convertedLoopBody);
         }
 
@@ -3142,11 +3142,11 @@ namespace ts {
                                     /*typeParameters*/ undefined,
                                     /*parameters*/ undefined,
                                     /*type*/ undefined,
-                                    visitNode(
+                                    Debug.checkDefined(visitNode(
                                         factory.createBlock(statements, /*multiLine*/ true),
                                         visitor,
                                         isBlock
-                                    )
+                                    ))
                                 ),
                                 emitFlags
                             )
@@ -3216,7 +3216,7 @@ namespace ts {
                 if (node.incrementor) {
                     statements.push(factory.createIfStatement(
                         currentState.conditionVariable,
-                        factory.createExpressionStatement(visitNode(node.incrementor, visitor, isExpression)),
+                        factory.createExpressionStatement(Debug.checkDefined(visitNode(node.incrementor, visitor, isExpression))),
                         factory.createExpressionStatement(factory.createAssignment(currentState.conditionVariable, factory.createTrue()))
                     ));
                 }
@@ -3229,8 +3229,8 @@ namespace ts {
 
                 if (shouldConvertConditionOfForStatement(node)) {
                     statements.push(factory.createIfStatement(
-                        factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, visitNode(node.condition, visitor, isExpression)),
-                        visitNode(factory.createBreakStatement(), visitor, isStatement)
+                        factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, Debug.checkDefined(visitNode(node.condition, visitor, isExpression))),
+                        Debug.checkDefined(visitNode(factory.createBreakStatement(), visitor, isStatement))
                     ));
                 }
             }
@@ -3528,9 +3528,9 @@ namespace ts {
                 createMemberAccessForPropertyName(
                     factory,
                     receiver,
-                    visitNode(property.name, visitor, isPropertyName)
+                    Debug.checkDefined(visitNode(property.name, visitor, isPropertyName))
                 ),
-                visitNode(property.initializer, visitor, isExpression)
+                Debug.checkDefined(visitNode(property.initializer, visitor, isExpression))
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {
@@ -3551,7 +3551,7 @@ namespace ts {
                 createMemberAccessForPropertyName(
                     factory,
                     receiver,
-                    visitNode(property.name, visitor, isPropertyName)
+                    Debug.checkDefined(visitNode(property.name, visitor, isPropertyName))
                 ),
                 factory.cloneNode(property.name)
             );
@@ -3574,7 +3574,7 @@ namespace ts {
                 createMemberAccessForPropertyName(
                     factory,
                     receiver,
-                    visitNode(method.name, visitor, isPropertyName)
+                    Debug.checkDefined(visitNode(method.name, visitor, isPropertyName))
                 ),
                 transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined, container)
             );
@@ -3725,7 +3725,7 @@ namespace ts {
 
             return factory.updateCallExpression(
                 node,
-                visitNode(node.expression, callExpressionVisitor, isExpression),
+                Debug.checkDefined(visitNode(node.expression, callExpressionVisitor, isExpression)),
                 /*typeArguments*/ undefined,
                 visitNodes(node.arguments, visitor, isExpression)
             );
@@ -3923,8 +3923,8 @@ namespace ts {
                     //      _super.prototype.m.apply(this, a.concat([b]))
 
                     resultingCall = factory.createFunctionApplyCall(
-                        visitNode(target, callExpressionVisitor, isExpression),
-                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
+                        Debug.checkDefined(visitNode(target, callExpressionVisitor, isExpression)),
+                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : Debug.checkDefined(visitNode(thisArg, visitor, isExpression)),
                         transformAndSpreadElements(node.arguments, /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false)
                     );
                 }
@@ -3940,8 +3940,8 @@ namespace ts {
                     //      _super.prototype.m.call(this, a)
                     resultingCall = setTextRange(
                         factory.createFunctionCallCall(
-                            visitNode(target, callExpressionVisitor, isExpression),
-                            node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
+                            Debug.checkDefined(visitNode(target, callExpressionVisitor, isExpression)),
+                            node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : Debug.checkDefined(visitNode(thisArg, visitor, isExpression)),
                             visitNodes(node.arguments, visitor, isExpression)
                         ),
                         node
@@ -3981,7 +3981,7 @@ namespace ts {
                 const { target, thisArg } = factory.createCallBinding(factory.createPropertyAccessExpression(node.expression, "bind"), hoistVariableDeclaration);
                 return factory.createNewExpression(
                     factory.createFunctionApplyCall(
-                        visitNode(target, visitor, isExpression),
+                        Debug.checkDefined(visitNode(target, visitor, isExpression)),
                         thisArg,
                         transformAndSpreadElements(factory.createNodeArray([factory.createVoidZero(), ...node.arguments!]), /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false)
                     ),

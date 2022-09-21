@@ -8550,60 +8550,55 @@ namespace ts {
      * A function that walks a node using the given visitor, lifting node arrays into single nodes,
      * returning an node which satisfies the test.
      *
-     * This type is complicated, but intends to encode the following behaviors:
+     * - If the input node is undefined, then the output is undefined.
+     * - If the visitor returns undefined, then the output is undefined.
+     * - If the output node is not undefined, then it will satisfy the test function.
+     * - In order to obtain a return type that is more specific than `Node`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
      *
-     *   - If the input node is potentially undefined, the output is potentially undefined.
-     *   - If the visitor can return undefined, the output is potentially undefined.
-     *   - If the output node is not undefined, then it will satisfy the test.
-     *
-     * @see {visitNode}
+     * For the canonical implementation of this type, @see {visitNode}.
      */
     export interface NodeVisitor {
-        // TODO(jakebailey): Was previously declared as an interface; I don't konw if changing it to a type is safe. Same for NodesVisitor.
-        // This form is nice, thuogh, because you can copy and paste the signature without changing the return `:` to `=>`.
-        // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        <
-            TIn extends Node | undefined,
-            TVisited extends Node | undefined,
-            TAssert extends NonNullable<TVisited>,
-            TOut extends TIn extends undefined ? TAssert | undefined
-                : TVisited extends undefined ? TAssert | undefined
-                : TAssert,
-        >(
+        <TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(
             node: TIn,
             visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
-            test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
+            test: (node: Node) => node is TOut,
             lift?: (node: readonly Node[]) => Node,
-        ): TOut;
+        ): TOut | (TIn & undefined) | (TVisited & undefined);
+        <TIn extends Node | undefined, TVisited extends Node | undefined>(
+            node: TIn,
+            visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
+            test?: (node: Node) => boolean,
+            lift?: (node: readonly Node[]) => Node,
+        ): Node | (TIn & undefined)| (TVisited & undefined);
     }
 
     /**
      * A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
      *
-     * This type is complicated, but intends to encode the following behaviors:
+     * - If the input node array is undefined, the output is undefined.
+     * - If the visitor can return undefined, the node it visits in the array will be reused.
+     * - If the output node array is not undefined, then its contents will satisfy the test.
+     * - In order to obtain a return type that is more specific than `NodeArray<Node>`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
      *
-     *   - If the input node array is potentially undefined, the output is potentially undefined.
-     *   - If the visitor can return undefined, the output may not be undefined; these nodes will be left in the output.
-     *   - If the output node array is not undefined, then its contents will satisfy the test.
-     *
-     * @see {visitNodes}
+     * For the canonical implementation of this type, @see {visitNodes}.
      */
     export interface NodesVisitor {
-        // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        <
-            TIn extends Node,
-            TArray extends NodeArray<TIn> | undefined,
-            TVisited extends Node | undefined,
-            TAssert extends NonNullable<TVisited>,
-            TOutArray extends TArray extends undefined ? NodeArray<TAssert> | undefined
-                : NodeArray<TAssert>,
-        >(
-            nodes: TArray,
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(
+            nodes: TInArray,
             visitor: Visitor<TIn, TVisited> | undefined,
-            test?: ((node: Node) => node is TAssert) | ((node: Node) => boolean),
+            test: (node: Node) => node is TOut,
             start?: number,
             count?: number,
-        ): TOutArray;
+        ): NodeArray<TOut> | (TInArray & undefined);
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+            nodes: TInArray,
+            visitor: Visitor<TIn, TVisited> | undefined,
+            test?: (node: Node) => boolean,
+            start?: number,
+            count?: number,
+        ): NodeArray<Node> | (TInArray & undefined);
     }
 
     export interface Printer {

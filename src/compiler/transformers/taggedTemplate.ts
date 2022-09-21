@@ -39,7 +39,7 @@ namespace ts {
             for (const templateSpan of template.templateSpans) {
                 cookedStrings.push(createTemplateCooked(templateSpan.literal));
                 rawStrings.push(getRawLiteral(templateSpan.literal, currentSourceFile));
-                templateArguments.push(visitNode(templateSpan.expression, visitor, isExpression));
+                templateArguments.push(Debug.checkDefined(visitNode(templateSpan.expression, visitor, isExpression)));
             }
         }
 
