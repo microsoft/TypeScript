@@ -14784,11 +14784,11 @@ namespace ts {
                             includes |= TypeFlags.IncludesNonWideningType;
                             if (flags & TypeFlags.Undefined) {
                                 if (!undefinedVariant) undefinedVariant = type;
-                                else undefinedVariant = undefinedType; // multiple of the missing, optional, or base undefined types combine to just normal undefined
+                                else if (undefinedVariant !== type) undefinedVariant = undefinedType; // multiple of the missing, optional, or base undefined types combine to just normal undefined
                             }
                             else if (flags & TypeFlags.Null) {
                                 if (!nullVariant) nullVariant = type;
-                                else nullVariant = nullType;
+                                else if (nullVariant !== type) nullVariant = nullType;
                             }
                         }
                     }
@@ -25185,32 +25185,6 @@ namespace ts {
                 return result;
             }
 
-            /**
-             * This function preserves the non-strict mode behavior of `undefined` and `null` evaporating on contact with a union
-             * It uses `filterType` rather than `getTypeWithFacts` because `getTypeWithFacts` would consider generic constraints, which
-             * the old non-strict union-creation behavior never did.
-             */
-            function filterNullAndUndefinedFromUnionIfNotStrict(type: Type) {
-                if (strictNullChecks(reference)) {
-                    return type;
-                }
-                if (!(type.flags & TypeFlags.Union)) {
-                    return type;
-                }
-                let containedNull: Type | undefined;
-                const filtered = filterType(type, t => {
-                    if (t.flags & TypeFlags.Null) {
-                        containedNull = t;
-                    }
-                    return !(t.flags & TypeFlags.Nullable);
-                });
-                if (!(filtered.flags & TypeFlags.Never)) {
-                    return filtered;
-                }
-                // only null/undefined union members - if both are present, historically, this makes the union evaluate to `null`
-                return containedNull || type;
-            }
-
             // At flow control branch or loop junctions, if the type along every antecedent code path
             // is an evolving array type, we construct a combined evolving array type. Otherwise we
             // finalize all evolving array types.
@@ -25218,7 +25192,7 @@ namespace ts {
                 if (isEvolvingArrayTypeList(types)) {
                     return getEvolvingArrayType(getUnionType(map(types, getElementTypeOfEvolvingArrayType)));
                 }
-                const result = filterNullAndUndefinedFromUnionIfNotStrict(recombineUnknownType(getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction)));
+                const result = recombineUnknownType(getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction));
                 if (result !== declaredType && result.flags & declaredType.flags & TypeFlags.Union && arraysEqual((result as UnionType).types, (declaredType as UnionType).types)) {
                     return declaredType;
                 }
