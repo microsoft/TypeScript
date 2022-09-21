@@ -1,0 +1,51 @@
+=== tests/cases/compiler/booleanReturningFunctionAsTypePredicate.ts ===
+interface Node {
+    kind: number;
+>kind : number
+}
+
+interface Expression extends Node {
+    kind: 1234;
+>kind : 1234
+}
+
+
+declare const notATypeGuard: (node: Node) => boolean;
+>notATypeGuard : (node: Node) => boolean
+>node : Node
+
+declare const isExpression: (node: Node) => node is Expression;
+>isExpression : (node: Node) => node is Expression
+>node : Node
+
+
+declare function visitNode<T extends Node>(node: Node, test?: (node: Node) => node is T): T;
+>visitNode : <T extends Node>(node: Node, test?: ((node: Node) => node is T) | undefined) => T
+>node : Node
+>test : ((node: Node) => node is T) | undefined
+>node : Node
+
+declare const aNode: Node;
+>aNode : Node
+
+
+const x = visitNode(aNode);
+>x : Node
+>visitNode(aNode) : Node
+>visitNode : <T extends Node>(node: Node, test?: ((node: Node) => node is T) | undefined) => T
+>aNode : Node
+
+const y = visitNode(aNode, isExpression);
+>y : Expression
+>visitNode(aNode, isExpression) : Expression
+>visitNode : <T extends Node>(node: Node, test?: ((node: Node) => node is T) | undefined) => T
+>aNode : Node
+>isExpression : (node: Node) => node is Expression
+
+const z = visitNode(aNode, notATypeGuard);
+>z : Node
+>visitNode(aNode, notATypeGuard) : Node
+>visitNode : <T extends Node>(node: Node, test?: ((node: Node) => node is T) | undefined) => T
+>aNode : Node
+>notATypeGuard : (node: Node) => boolean
+

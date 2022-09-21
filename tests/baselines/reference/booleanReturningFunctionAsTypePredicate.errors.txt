@@ -1,0 +1,30 @@
+tests/cases/compiler/booleanReturningFunctionAsTypePredicate.ts(21,28): error TS2345: Argument of type '(node: Node) => boolean' is not assignable to parameter of type '(node: Node) => node is Node'.
+  Signature '(node: Node): boolean' must be a type predicate.
+
+
+==== tests/cases/compiler/booleanReturningFunctionAsTypePredicate.ts (1 errors) ====
+    interface Node {
+        kind: number;
+    }
+    
+    interface Expression extends Node {
+        kind: 1234;
+    }
+    
+    
+    declare const notATypeGuard: (node: Node) => boolean;
+    declare const isExpression: (node: Node) => node is Expression;
+    
+    
+    declare function visitNode<T extends Node>(node: Node, test?: (node: Node) => node is T): T;
+    
+    declare const aNode: Node;
+    
+    
+    const x = visitNode(aNode);
+    const y = visitNode(aNode, isExpression);
+    const z = visitNode(aNode, notATypeGuard);
+                               ~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(node: Node) => boolean' is not assignable to parameter of type '(node: Node) => node is Node'.
+!!! error TS2345:   Signature '(node: Node): boolean' must be a type predicate.
+    

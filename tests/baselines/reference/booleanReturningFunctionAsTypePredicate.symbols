@@ -1,0 +1,65 @@
+=== tests/cases/compiler/booleanReturningFunctionAsTypePredicate.ts ===
+interface Node {
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 0))
+
+    kind: number;
+>kind : Symbol(Node.kind, Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 16))
+}
+
+interface Expression extends Node {
+>Expression : Symbol(Expression, Decl(booleanReturningFunctionAsTypePredicate.ts, 2, 1))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 0))
+
+    kind: 1234;
+>kind : Symbol(Expression.kind, Decl(booleanReturningFunctionAsTypePredicate.ts, 4, 35))
+}
+
+
+declare const notATypeGuard: (node: Node) => boolean;
+>notATypeGuard : Symbol(notATypeGuard, Decl(booleanReturningFunctionAsTypePredicate.ts, 9, 13))
+>node : Symbol(node, Decl(booleanReturningFunctionAsTypePredicate.ts, 9, 30))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 0))
+
+declare const isExpression: (node: Node) => node is Expression;
+>isExpression : Symbol(isExpression, Decl(booleanReturningFunctionAsTypePredicate.ts, 10, 13))
+>node : Symbol(node, Decl(booleanReturningFunctionAsTypePredicate.ts, 10, 29))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 0))
+>node : Symbol(node, Decl(booleanReturningFunctionAsTypePredicate.ts, 10, 29))
+>Expression : Symbol(Expression, Decl(booleanReturningFunctionAsTypePredicate.ts, 2, 1))
+
+
+declare function visitNode<T extends Node>(node: Node, test?: (node: Node) => node is T): T;
+>visitNode : Symbol(visitNode, Decl(booleanReturningFunctionAsTypePredicate.ts, 10, 63))
+>T : Symbol(T, Decl(booleanReturningFunctionAsTypePredicate.ts, 13, 27))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 0))
+>node : Symbol(node, Decl(booleanReturningFunctionAsTypePredicate.ts, 13, 43))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 0))
+>test : Symbol(test, Decl(booleanReturningFunctionAsTypePredicate.ts, 13, 54))
+>node : Symbol(node, Decl(booleanReturningFunctionAsTypePredicate.ts, 13, 63))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 0))
+>node : Symbol(node, Decl(booleanReturningFunctionAsTypePredicate.ts, 13, 63))
+>T : Symbol(T, Decl(booleanReturningFunctionAsTypePredicate.ts, 13, 27))
+>T : Symbol(T, Decl(booleanReturningFunctionAsTypePredicate.ts, 13, 27))
+
+declare const aNode: Node;
+>aNode : Symbol(aNode, Decl(booleanReturningFunctionAsTypePredicate.ts, 15, 13))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(booleanReturningFunctionAsTypePredicate.ts, 0, 0))
+
+
+const x = visitNode(aNode);
+>x : Symbol(x, Decl(booleanReturningFunctionAsTypePredicate.ts, 18, 5))
+>visitNode : Symbol(visitNode, Decl(booleanReturningFunctionAsTypePredicate.ts, 10, 63))
+>aNode : Symbol(aNode, Decl(booleanReturningFunctionAsTypePredicate.ts, 15, 13))
+
+const y = visitNode(aNode, isExpression);
+>y : Symbol(y, Decl(booleanReturningFunctionAsTypePredicate.ts, 19, 5))
+>visitNode : Symbol(visitNode, Decl(booleanReturningFunctionAsTypePredicate.ts, 10, 63))
+>aNode : Symbol(aNode, Decl(booleanReturningFunctionAsTypePredicate.ts, 15, 13))
+>isExpression : Symbol(isExpression, Decl(booleanReturningFunctionAsTypePredicate.ts, 10, 13))
+
+const z = visitNode(aNode, notATypeGuard);
+>z : Symbol(z, Decl(booleanReturningFunctionAsTypePredicate.ts, 20, 5))
+>visitNode : Symbol(visitNode, Decl(booleanReturningFunctionAsTypePredicate.ts, 10, 63))
+>aNode : Symbol(aNode, Decl(booleanReturningFunctionAsTypePredicate.ts, 15, 13))
+>notATypeGuard : Symbol(notATypeGuard, Decl(booleanReturningFunctionAsTypePredicate.ts, 9, 13))
+
