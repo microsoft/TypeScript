@@ -1,5 +1,8 @@
 /index.ts(2,51): error TS1453: `resolution-mode` should be either `require` or `import`.
+/index.ts(3,31): error TS4125: 'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /index.ts(5,78): error TS1453: `resolution-mode` should be either `require` or `import`.
+/index.ts(6,14): error TS2841: The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+/index.ts(6,58): error TS4125: 'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other.ts(3,22): error TS1005: 'assert' expected.
 /other.ts(3,39): error TS1005: ';' expected.
@@ -89,17 +92,23 @@
     export interface ImportInterface {}
 ==== /node_modules/pkg/require.d.ts (0 errors) ====
     export interface RequireInterface {}
-==== /index.ts (2 errors) ====
+==== /index.ts (5 errors) ====
     export type LocalInterface =
         & import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface
                                                       ~~~~~~~~
 !!! error TS1453: `resolution-mode` should be either `require` or `import`.
         & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: 'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
     
     export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
                                                                                  ~~~~~~~~
 !!! error TS1453: `resolution-mode` should be either `require` or `import`.
     export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+                 ~
+!!! error TS2841: The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4125: 'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== /other.ts (27 errors) ====
     // missing assert:
     export type LocalInterface =

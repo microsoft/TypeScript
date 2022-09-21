@@ -2924,6 +2924,8 @@ declare namespace ts.server.protocol {
          * interface Y { foo:number; }
          */
         memberVariableElement = "property",
+        /** class X { [public|private]* accessor foo: number; } */
+        memberAccessorVariableElement = "accessor",
         /**
          * class X { constructor() { } }
          * class X { static { } }
