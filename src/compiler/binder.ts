@@ -2732,7 +2732,10 @@ namespace ts {
         }
 
         function bindPropertyWorker(node: PropertyDeclaration | PropertySignature) {
-            return bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
+            const isAutoAccessor = isAutoAccessorPropertyDeclaration(node);
+            const includes = isAutoAccessor ? SymbolFlags.Accessor : SymbolFlags.Property;
+            const excludes = isAutoAccessor ? SymbolFlags.AccessorExcludes : SymbolFlags.PropertyExcludes;
+            return bindPropertyOrMethodOrAccessor(node, includes | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), excludes);
         }
 
         function bindAnonymousTypeWorker(node: TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral) {
@@ -3041,7 +3044,7 @@ namespace ts {
                 return;
             }
             const rootExpr = getLeftmostAccessExpression(node.left);
-            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)?.flags! & SymbolFlags.Alias) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them

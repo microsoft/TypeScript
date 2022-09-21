@@ -49,23 +49,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main.ts (used version)
 /user/username/projects/myproject/other.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/main.ts:
-  {"fileName":"/user/username/projects/myproject/main.ts","pollingInterval":250}
-/user/username/projects/myproject/other.ts:
-  {"fileName":"/user/username/projects/myproject/other.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/main.ts:
+  {}
+/user/username/projects/myproject/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -100,23 +100,23 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/main.ts:
-  {"fileName":"/user/username/projects/myproject/main.ts","pollingInterval":250}
-/user/username/projects/myproject/other.ts:
-  {"fileName":"/user/username/projects/myproject/other.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/main.ts:
+  {}
+/user/username/projects/myproject/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

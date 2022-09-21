@@ -320,6 +320,7 @@ namespace ts {
             case SyntaxKind.SetKeyword:
             case SyntaxKind.ConstructorKeyword:
             case SyntaxKind.StaticKeyword:
+            case SyntaxKind.AccessorKeyword:
                 return true; // Allow things like "public get", "public constructor" and "public static".
             default:
                 return false; // Any other keyword following "public" is actually an identifier, not a real keyword.

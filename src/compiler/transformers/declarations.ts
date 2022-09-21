@@ -218,9 +218,9 @@ namespace ts {
         }
 
         function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
-            const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile)!;
+            const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile);
             const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
-            if (augmentingDeclarations) {
+            if (primaryDeclaration && augmentingDeclarations) {
                 for (const augmentations of augmentingDeclarations) {
                     context.addDiagnostic(addRelatedInfo(
                         createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),

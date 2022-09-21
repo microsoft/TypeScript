@@ -76,7 +76,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([root, imported]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             projectService.openClientFile(root.path);
             const project = projectService.inferredProjects[0];
@@ -134,7 +134,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([root]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             const logCacheAndClear = createLoggerTrackingHostCalls(host);
             projectService.openClientFile(root.path);
@@ -195,7 +195,7 @@ namespace ts.projectSystem {
             };
             const projectFiles = [clientFile, anotherModuleFile, moduleFile, tsconfigFile];
             const host = createServerHost(projectFiles);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([clientFile], session);
             const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
@@ -273,7 +273,7 @@ namespace ts.projectSystem {
                     };
                     const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
                     const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
-                    const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                    const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                     projectService.openClientFile(file1.path);
 
                     const logCacheAndClear = createLoggerTrackingHostCalls(host);
@@ -383,7 +383,7 @@ namespace ts.projectSystem {
 `
                 });
                 const host = createServerHost([app, libFile, tsconfigJson, packageJson]);
-                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
                 projectService.openClientFile(app.path);
 

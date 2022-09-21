@@ -940,7 +940,7 @@ namespace ts.server {
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
                 for (const key in raw.simpleMap) {
-                    if (raw.simpleMap.hasOwnProperty(key)) {
+                    if (hasProperty(raw.simpleMap, key)) {
                         this.legacySafelist.set(key, raw.simpleMap[key].toLowerCase());
                     }
                 }
@@ -4068,7 +4068,7 @@ namespace ts.server {
 
         /*@internal*/
         requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
-            if (!this.host.importServicePlugin && !this.host.require) {
+            if (!this.host.importPlugin && !this.host.require) {
                 this.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
@@ -4080,7 +4080,7 @@ namespace ts.server {
             }
 
             // If the host supports dynamic import, begin enabling the plugin asynchronously.
-            if (this.host.importServicePlugin) {
+            if (this.host.importPlugin) {
                 const importPromise = project.beginEnablePluginAsync(pluginConfigEntry, searchPaths, pluginConfigOverrides);
                 this.pendingPluginEnablements ??= new Map();
                 let promises = this.pendingPluginEnablements.get(project);

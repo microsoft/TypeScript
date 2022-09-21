@@ -216,14 +216,14 @@ fn5();
                 compilerOptions: { composite: true, declarationMap: true }
             }));
             onHostCreate?.(host);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             return { host, session };
         }
 
         function createSessionWithProjectReferences(onHostCreate?: OnHostCreate) {
             const host = createHostWithSolutionBuild(files, [mainConfig.path]);
             onHostCreate?.(host);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             return { host, session };
         }
 
@@ -239,7 +239,7 @@ fn5();
                 references: [{ path: "../dependency" }]
             }));
             onHostCreate?.(host);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             return { host, session };
         }
 
@@ -815,7 +815,7 @@ ${dependencyTs.content}`);
 
                 it("when projects are not built", () => {
                     const host = createServerHost(files);
-                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([mainTs, randomFile], session);
                     verifyAllFnAction(
                         session,
@@ -1619,7 +1619,7 @@ ${dependencyTs.content}`);
 
                 it("when projects are not built", () => {
                     const host = createServerHost(files);
-                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([dependencyTs, randomFile], session);
                     verifyAllFnAction(
                         session,
@@ -2659,7 +2659,7 @@ ${dependencyTs.content}`);
 
                 it("when projects are not built", () => {
                     const host = createServerHost(files);
-                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                     openFilesForSession([mainTs, dependencyTs, randomFile], session);
                     verifyAllFnAction(
                         session,

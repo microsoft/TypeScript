@@ -150,25 +150,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/anothermodule.d.ts (used version)
 /user/username/projects/sample1/logic/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 /user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

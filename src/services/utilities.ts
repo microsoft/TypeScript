@@ -1659,7 +1659,7 @@ namespace ts {
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
      *
-     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
+     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)`
      * @param predicate Additional predicate to test on the comment range.
      */
     export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined {
