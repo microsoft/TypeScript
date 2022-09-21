@@ -17,7 +17,7 @@
                 "@typescript-eslint/unified-signatures": "off",
 
                 // scripts/eslint/rules
-                "no-keywords": "off",
+                "local/no-keywords": "off",
 
                 // eslint
                 "no-var": "off"

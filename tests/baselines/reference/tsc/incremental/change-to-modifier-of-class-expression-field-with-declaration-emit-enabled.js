@@ -59,7 +59,7 @@ declare const wrapper: () => {
         message: string;
     };
 };
-declare type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
+type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
 
@@ -78,7 +78,7 @@ var wrapper = function () { return Messageable(); };
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileInfos":[{"version":"5700251342-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-13324779423-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ndeclare type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n"},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-4882119183-export {};\r\n"}],"options":{"declaration":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileInfos":[{"version":"5700251342-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-26007269167-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n"},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-4882119183-export {};\r\n"}],"options":{"declaration":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -101,7 +101,7 @@ var wrapper = function () { return Messageable(); };
       },
       "./messageableperson.ts": {
         "version": "31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;",
-        "signature": "-13324779423-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ndeclare type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n"
+        "signature": "-26007269167-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n"
       },
       "./main.ts": {
         "version": "4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}",
@@ -124,7 +124,7 @@ var wrapper = function () { return Messageable(); };
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1693
+  "size": 1685
 }
 
 
@@ -168,7 +168,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 //// [/src/project/main.js] file written with same contents
 //// [/src/project/MessageablePerson.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileInfos":[{"version":"5700251342-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"3462418372-const Messageable = () => {\n    return class MessageableClass {\n        protected message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-4323958125-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ndeclare type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n(116,7)Error4094: Property 'message' of exported class expression may not be private or protected."},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-4882119183-export {};\r\n"}],"options":{"declaration":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"./main.ts","start":131,"length":7,"messageText":"Property 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.","category":1,"code":2445}]],2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileInfos":[{"version":"5700251342-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"3462418372-const Messageable = () => {\n    return class MessageableClass {\n        protected message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-16190189821-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n(116,7)Error4094: Property 'message' of exported class expression may not be private or protected."},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-4882119183-export {};\r\n"}],"options":{"declaration":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"./main.ts","start":131,"length":7,"messageText":"Property 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.","category":1,"code":2445}]],2]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -191,7 +191,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       },
       "./messageableperson.ts": {
         "version": "3462418372-const Messageable = () => {\n    return class MessageableClass {\n        protected message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;",
-        "signature": "-4323958125-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ndeclare type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n(116,7)Error4094: Property 'message' of exported class expression may not be private or protected."
+        "signature": "-16190189821-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n(116,7)Error4094: Property 'message' of exported class expression may not be private or protected."
       },
       "./main.ts": {
         "version": "4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}",
@@ -226,7 +226,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1985
+  "size": 1978
 }
 
 
@@ -255,7 +255,7 @@ exitCode:: ExitStatus.Success
 //// [/src/project/MessageablePerson.d.ts] file written with same contents
 //// [/src/project/MessageablePerson.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileInfos":[{"version":"5700251342-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-13324779423-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ndeclare type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n"},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-4882119183-export {};\r\n"}],"options":{"declaration":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileInfos":[{"version":"5700251342-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-26007269167-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n"},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-4882119183-export {};\r\n"}],"options":{"declaration":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -278,7 +278,7 @@ exitCode:: ExitStatus.Success
       },
       "./messageableperson.ts": {
         "version": "31173349369-const Messageable = () => {\n    return class MessageableClass {\n        public message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;",
-        "signature": "-13324779423-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ndeclare type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n"
+        "signature": "-26007269167-declare const wrapper: () => {\r\n    new (): {\r\n        message: string;\r\n    };\r\n};\r\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\r\nexport default MessageablePerson;\r\n"
       },
       "./main.ts": {
         "version": "4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}",
@@ -301,6 +301,6 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1693
+  "size": 1685
 }
 

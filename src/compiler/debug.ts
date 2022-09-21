@@ -30,6 +30,7 @@ namespace ts {
         export let currentLogLevel = LogLevel.Warning;
         export let isDebugging = false;
         export let loggingHost: LoggingHost | undefined;
+        export let enableDeprecationWarnings = true;
         /* eslint-enable prefer-const */
 
         type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
@@ -278,7 +279,7 @@ namespace ts {
             if (typeof func !== "function") {
                 return "";
             }
-            else if (func.hasOwnProperty("name")) {
+            else if (hasProperty(func, "name")) {
                 return (func as any).name;
             }
             else {
@@ -438,7 +439,7 @@ namespace ts {
         let flowNodeProto: FlowNodeBase | undefined;
 
         function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
-            if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line no-in-operator
+            if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
                 Object.defineProperties(flowNode, {
                     // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                     __tsDebuggerDisplay: {
@@ -487,7 +488,7 @@ namespace ts {
         let nodeArrayProto: NodeArray<Node> | undefined;
 
         function attachNodeArrayDebugInfoWorker(array: NodeArray<Node>) {
-            if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line no-in-operator
+            if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line local/no-in-operator
                 Object.defineProperties(array, {
                     __tsDebuggerDisplay: {
                         value(this: NodeArray<Node>, defaultValue: string) {
@@ -624,7 +625,7 @@ namespace ts {
             ];
 
             for (const ctor of nodeConstructors) {
-                if (!ctor.prototype.hasOwnProperty("__debugKind")) {
+                if (!hasProperty(ctor.prototype, "__debugKind")) {
                     Object.defineProperties(ctor.prototype, {
                         // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                         __tsDebuggerDisplay: {
@@ -732,7 +733,7 @@ namespace ts {
         function createWarningDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
             let hasWrittenDeprecation = false;
             return () => {
-                if (!hasWrittenDeprecation) {
+                if (enableDeprecationWarnings && !hasWrittenDeprecation) {
                     log.warn(formatDeprecationMessage(name, /*error*/ false, errorAfter, since, message));
                     hasWrittenDeprecation = true;
                 }

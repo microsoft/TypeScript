@@ -29,25 +29,24 @@
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 8, 12))
 }
 {
-    let a: 0 | 1 = 0;
+    let a: 0 | 1 | 2 = 1;
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 12, 7))
 
-    const [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
+    const [{ [a]: b } = [9, a = 0, 5] as const] = [];
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 12, 7))
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 13, 12))
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 12, 7))
 >const : Symbol(const)
->const : Symbol(const)
 
-    const bb: 0 | 8 = b;
+    const bb: 0 | 9 = b;
 >bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 14, 9))
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 13, 12))
 }
 {
-    let a: 0 | 1 = 1;
+    let a: 0 | 1 = 0;
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 17, 7))
 
-    const [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
+    const [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 17, 7))
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 18, 12))
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 17, 7))
@@ -57,4 +56,19 @@
     const bb: 0 | 8 = b;
 >bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 19, 9))
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 18, 12))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 22, 7))
+
+    const [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 22, 7))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 23, 12))
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 22, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 24, 9))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 23, 12))
 }

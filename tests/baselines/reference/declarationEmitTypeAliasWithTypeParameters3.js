@@ -14,7 +14,7 @@ function bar() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters3.d.ts]
-declare type Foo<T> = {
+type Foo<T> = {
     foo<U>(): Foo<U>;
 };
 declare function bar(): Foo<number>;

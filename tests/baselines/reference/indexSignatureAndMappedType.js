@@ -61,7 +61,7 @@ declare function f2<T>(x: {
 declare function f3<T, U, K extends string>(x: {
     [key: string]: T;
 }, y: Record<K, U>): void;
-declare type Dictionary = {
+type Dictionary = {
     [key: string]: string;
 };
 interface IBaseEntity {

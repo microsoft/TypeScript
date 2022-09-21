@@ -162,7 +162,7 @@ namespace ts {
         return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
     }
 
-    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
         if (!sourceFile.resolvedModules) {
             sourceFile.resolvedModules = createModeAwareCache();
         }
@@ -563,7 +563,7 @@ namespace ts {
 
     interface ScriptTargetFeatures {
         [key: string]: { [key: string]: string[] | undefined };
-    };
+    }
 
     export function getScriptTargetFeatures(): ScriptTargetFeatures {
         return {
@@ -853,6 +853,10 @@ namespace ts {
         return false;
     }
 
+    export function isAmbientPropertyDeclaration(node: PropertyDeclaration) {
+        return !!(node.flags & NodeFlags.Ambient) || hasSyntacticModifier(node, ModifierFlags.Ambient);
+    }
+
     export function isBlockScope(node: Node, parentNode: Node | undefined): boolean {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
@@ -996,7 +1000,7 @@ namespace ts {
         switch (name.kind) {
             case SyntaxKind.Identifier:
             case SyntaxKind.PrivateIdentifier:
-                return name.escapedText;
+                return name.autoGenerateFlags ? undefined : name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -1995,6 +1999,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.SatisfiesExpression:
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
@@ -2095,6 +2100,8 @@ namespace ts {
                 return (parent as ExpressionWithTypeArguments).expression === node && !isPartOfTypeNode(parent);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return (parent as ShorthandPropertyAssignment).objectAssignmentInitializer === node;
+            case SyntaxKind.SatisfiesExpression:
+                return node === (parent as SatisfiesExpression).expression;
             default:
                 return isExpressionNode(parent);
         }
@@ -3404,7 +3411,7 @@ namespace ts {
                 return false;
         }
     }
-    export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
+    export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral | PrivateIdentifier): string {
         return isMemberName(node) ? idText(node) : node.text;
     }
 
@@ -3801,6 +3808,7 @@ namespace ts {
                 return OperatorPrecedence.Member;
 
             case SyntaxKind.AsExpression:
+            case SyntaxKind.SatisfiesExpression:
                 return OperatorPrecedence.Relational;
 
             case SyntaxKind.ThisKeyword:
@@ -3859,6 +3867,7 @@ namespace ts {
             case SyntaxKind.InstanceOfKeyword:
             case SyntaxKind.InKeyword:
             case SyntaxKind.AsKeyword:
+            case SyntaxKind.SatisfiesKeyword:
                 return OperatorPrecedence.Relational;
             case SyntaxKind.LessThanLessThanToken:
             case SyntaxKind.GreaterThanGreaterThanToken:
@@ -3944,7 +3953,7 @@ namespace ts {
                 diagnostics = nonFileDiagnostics;
             }
 
-            insertSorted(diagnostics, diagnostic, compareDiagnostics);
+            insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -4917,6 +4926,10 @@ namespace ts {
         return hasSyntacticModifier(node, ModifierFlags.Ambient);
     }
 
+    export function hasAccessorModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Accessor);
+    }
+
     export function hasEffectiveReadonlyModifier(node: Node): boolean {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
@@ -5026,6 +5039,7 @@ namespace ts {
             case SyntaxKind.ProtectedKeyword: return ModifierFlags.Protected;
             case SyntaxKind.PrivateKeyword: return ModifierFlags.Private;
             case SyntaxKind.AbstractKeyword: return ModifierFlags.Abstract;
+            case SyntaxKind.AccessorKeyword: return ModifierFlags.Accessor;
             case SyntaxKind.ExportKeyword: return ModifierFlags.Export;
             case SyntaxKind.DeclareKeyword: return ModifierFlags.Ambient;
             case SyntaxKind.ConstKeyword: return ModifierFlags.Const;
@@ -5038,10 +5052,6 @@ namespace ts {
             case SyntaxKind.Decorator: return ModifierFlags.Decorator;
         }
         return ModifierFlags.None;
-    }
-
-    export function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
-        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
     }
 
     export function isLogicalOperator(token: SyntaxKind): boolean {
@@ -5360,20 +5370,16 @@ namespace ts {
         return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
+    export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined } | string): object | undefined {
+        const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
+        if (!jsonText) return undefined;
+        // gracefully handle if readFile fails or returns not JSON
+        const result = parseConfigFileTextToJson(path, jsonText);
+        return !result.error ? result.config : undefined;
+    }
+
     export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
-        try {
-            const jsonText = host.readFile(path);
-            if (!jsonText) return {};
-            const result = parseConfigFileTextToJson(path, jsonText);
-            if (result.error) {
-                return {};
-            }
-            return result.config;
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            return {};
-        }
+        return readJsonOrUndefined(path, host) || {};
     }
 
     export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {
@@ -5552,7 +5558,7 @@ namespace ts {
 
     export function isWatchSet(options: CompilerOptions) {
         // Firefox has Object.prototype.watch
-        return options.watch && options.hasOwnProperty("watch");
+        return options.watch && hasProperty(options, "watch");
     }
 
     export function closeFileWatcher(watcher: FileWatcher) {
@@ -5934,7 +5940,8 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.NonNullExpression:
                 case SyntaxKind.PartiallyEmittedExpression:
-                    node = (node as CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression).expression;
+                case SyntaxKind.SatisfiesExpression:
+                    node = (node as CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression | SatisfiesExpression).expression;
                     continue;
             }
 
@@ -7546,7 +7553,7 @@ namespace ts {
             case SyntaxKind.Decorator: {
                 const { parent } = node as Decorator;
                 return canHaveDecorators(parent) ? parent.modifiers :
-                    canHaveIllegalDecorators(parent) ? parent.decorators :
+                    canHaveIllegalDecorators(parent) ? parent.illegalDecorators :
                     undefined;
             }
             case SyntaxKind.HeritageClause:

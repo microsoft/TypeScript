@@ -10,7 +10,7 @@ const triggeredPR = process.env.SOURCE_ISSUE || process.env.SYSTEM_PULLREQUEST_P
  * This program should be invoked as `node ./scripts/update-experimental-branches <GithubAccessToken>`
  * TODO: the following is racey - if two experiment-enlisted PRs trigger simultaneously and witness one another in an unupdated state, they'll both produce
  * a new experimental branch, but each will be missing a change from the other. There's no _great_ way to fix this beyond setting the maximum concurrency
- * of this task to 1 (so only one job is allowed to update experiments at a time). 
+ * of this task to 1 (so only one job is allowed to update experiments at a time).
  */
 async function main() {
     const gh = new Octokit({
