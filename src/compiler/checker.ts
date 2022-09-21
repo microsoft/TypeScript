@@ -863,7 +863,8 @@ namespace ts {
         emptyTypeLiteralSymbol.members = createSymbolTable();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, emptyArray);
 
-        const unknownUnionType = getUnionType([undefinedType, nullType, createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray)]);
+        const unknownEmptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
+        const unknownUnionType = getUnionType([undefinedType, nullType, unknownEmptyObjectType]);
 
         const emptyGenericType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray) as ObjectType as GenericType;
         emptyGenericType.instantiations = new Map<string, TypeReference>();
@@ -1003,6 +1004,8 @@ namespace ts {
         let deferredGlobalOmitSymbol: Symbol | undefined;
         let deferredGlobalAwaitedSymbol: Symbol | undefined;
         let deferredGlobalBigIntType: ObjectType | undefined;
+        let deferredGlobalNaNSymbol: Symbol | undefined;
+        let deferredGlobalRecordSymbol: Symbol | undefined;
 
         const allPotentiallyUnusedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -9233,7 +9236,7 @@ namespace ts {
                 if (container && (container.kind === SyntaxKind.Constructor || isJSConstructor(container))) {
                     return container as ConstructorDeclaration;
                 }
-            };
+            }
         }
 
         /** Create a synthetic property access flow node after the last statement of the file */
@@ -12549,7 +12552,7 @@ namespace ts {
                             const isInstantiation = (getTargetSymbol(prop) || prop) === (getTargetSymbol(singleProp) || singleProp);
                             // If the symbols are instances of one another with identical types - consider the symbols
                             // equivalent and just use the first one, which thus allows us to avoid eliding private
-                            // members when intersecting a (this-)instantiations of a class with it's raw base or another instance
+                            // members when intersecting a (this-)instantiations of a class with its raw base or another instance
                             if (isInstantiation && compareProperties(singleProp, prop, (a, b) => a === b ? Ternary.True : Ternary.False) === Ternary.True) {
                                 // If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
                                 // to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
@@ -12597,7 +12600,12 @@ namespace ts {
                     }
                 }
             }
-            if (!singleProp || isUnion && (propSet || checkFlags & CheckFlags.Partial) && checkFlags & (CheckFlags.ContainsPrivate | CheckFlags.ContainsProtected)) {
+            if (!singleProp ||
+                isUnion &&
+                (propSet || checkFlags & CheckFlags.Partial) &&
+                checkFlags & (CheckFlags.ContainsPrivate | CheckFlags.ContainsProtected) &&
+                !(propSet && getCommonDeclarationsOfSymbols(arrayFrom(propSet.values())))
+            ) {
                 // No property was found, or, in a union, a property has a private or protected declaration in one
                 // constituent, but is missing or has a different declaration in another constituent.
                 return undefined;
@@ -12701,6 +12709,28 @@ namespace ts {
                 }
             }
             return property;
+        }
+
+        function getCommonDeclarationsOfSymbols(symbols: readonly Symbol[]) {
+            let commonDeclarations: Set<Node> | undefined;
+            for (const symbol of symbols) {
+                if (!symbol.declarations) {
+                    return undefined;
+                }
+                if (!commonDeclarations) {
+                    commonDeclarations = new Set(symbol.declarations);
+                    continue;
+                }
+                commonDeclarations.forEach(declaration => {
+                    if (!contains(symbol.declarations, declaration)) {
+                        commonDeclarations!.delete(declaration);
+                    }
+                });
+                if (commonDeclarations.size === 0) {
+                    return undefined;
+                }
+            }
+            return commonDeclarations;
         }
 
         function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
@@ -14335,6 +14365,15 @@ namespace ts {
             return (deferredGlobalBigIntType ||= getGlobalType("BigInt" as __String, /*arity*/ 0, /*reportErrors*/ false)) || emptyObjectType;
         }
 
+        function getGlobalNaNSymbol(): Symbol | undefined {
+            return (deferredGlobalNaNSymbol ||= getGlobalValueSymbol("NaN" as __String, /*reportErrors*/ false));
+        }
+
+        function getGlobalRecordSymbol(): Symbol | undefined {
+            deferredGlobalRecordSymbol ||= getGlobalTypeAliasSymbol("Record" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
+            return deferredGlobalRecordSymbol === unknownSymbol ? undefined : deferredGlobalRecordSymbol;
+        }
+
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
@@ -14642,7 +14681,7 @@ namespace ts {
                 if (flags & (ElementFlags.Optional | ElementFlags.Rest)) {
                     lastOptionalOrRestIndex = expandedFlags.length;
                 }
-                expandedTypes.push(type);
+                expandedTypes.push(flags & ElementFlags.Optional ? addOptionality(type, currentNode, /*isProperty*/ true) : type);
                 expandedFlags.push(flags);
                 if (expandedDeclarations && declaration) {
                     expandedDeclarations.push(declaration);
@@ -21740,7 +21779,8 @@ namespace ts {
          * outside `strictNullChecks` mode.
          */
         function getOptionalType(type: Type, context: Node | undefined, isProperty = false): Type {
-            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, isProperty ? getMissingOrUndefinedType(context) : undefinedType]);
+            const missingOrUndefined = isProperty ? missingType : undefinedType;
+            return type.flags & TypeFlags.Undefined || type.flags & TypeFlags.Union && (type as UnionType).types[0] === missingOrUndefined ? type : getUnionType([type, isProperty ? getMissingOrUndefinedType(context) : undefinedType]);
         }
 
         function getGlobalNonNullableTypeInstantiation(type: Type) {
@@ -23708,7 +23748,7 @@ namespace ts {
                     }
                 }
 
-                if (hasOnlyExpressionInitializer(declaration)) {
+                if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node.argumentExpression)) {
                     const initializer = getEffectiveInitializer(declaration);
                     return initializer && tryGetNameFromType(getTypeOfExpression(initializer));
                 }
@@ -25306,18 +25346,26 @@ namespace ts {
 
             function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
                 const prop = getPropertyOfType(type, propName);
-                if (prop) {
-                    return prop.flags & SymbolFlags.Optional ? true : assumeTrue;
-                }
-                return getApplicableIndexInfoForName(type, propName) ? true : !assumeTrue;
+                return prop ?
+                    !!(prop.flags & SymbolFlags.Optional) || assumeTrue :
+                    !!getApplicableIndexInfoForName(type, propName) || !assumeTrue;
             }
 
-            function narrowByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
-                if (type.flags & TypeFlags.Union
-                    || type.flags & TypeFlags.Object && declaredType !== type && !(declaredType === unknownType && isEmptyAnonymousObjectType(type))
-                    || isThisTypeParameter(type)
-                    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
+            function narrowByInKeyword(type: Type, nameType: StringLiteralType | NumberLiteralType | UniqueESSymbolType, assumeTrue: boolean) {
+                const name = getPropertyNameFromType(nameType);
+                const isKnownProperty = someType(type, t => isTypePresencePossible(t, name, /*assumeTrue*/ true));
+                if (isKnownProperty) {
+                    // If the check is for a known property (i.e. a property declared in some constituent of
+                    // the target type), we filter the target type by presence of absence of the property.
                     return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
+                }
+                if (assumeTrue) {
+                    // If the check is for an unknown property, we intersect the target type with `Record<X, unknown>`,
+                    // where X is the name of the property.
+                    const recordSymbol = getGlobalRecordSymbol();
+                    if (recordSymbol) {
+                        return getIntersectionType([type, getTypeAliasInstantiation(recordSymbol, [nameType, unknownType])]);
+                    }
                 }
                 return type;
             }
@@ -25378,15 +25426,14 @@ namespace ts {
                             return narrowTypeByPrivateIdentifierInInExpression(type, expr, assumeTrue);
                         }
                         const target = getReferenceCandidate(expr.right);
-                        const leftType = getTypeOfNode(expr.left);
-                        if (leftType.flags & TypeFlags.StringLiteral) {
-                            const name = escapeLeadingUnderscores((leftType as StringLiteralType).value);
+                        const leftType = getTypeOfExpression(expr.left);
+                        if (leftType.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
                             if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
-                                getAccessedPropertyName(reference) === name) {
+                                getAccessedPropertyName(reference) === getPropertyNameFromType(leftType as StringLiteralType | NumberLiteralType | UniqueESSymbolType)) {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined, expr);
                             }
                             if (isMatchingReference(reference, target)) {
-                                return narrowByInKeyword(type, name, assumeTrue);
+                                return narrowByInKeyword(type, leftType as StringLiteralType | NumberLiteralType | UniqueESSymbolType, assumeTrue);
                             }
                         }
                         break;
@@ -30007,7 +30054,7 @@ namespace ts {
                     return !!s && getMinArgumentCount(s) >= 1 && isTypeAssignableTo(keyedType, getTypeAtPosition(s, 0));
                 }
                 return false;
-            };
+            }
 
             const suggestedMethod = isAssignmentTarget(expr) ? "set" : "get";
             if (!hasProp(suggestedMethod)) {
@@ -33978,6 +34025,10 @@ namespace ts {
             return booleanType;
         }
 
+        function hasEmptyObjectIntersection(type: Type): boolean {
+            return someType(type, t => t === unknownEmptyObjectType || !!(t.flags & TypeFlags.Intersection) && some((t as IntersectionType).types, isEmptyAnonymousObjectType));
+        }
+
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
             if (leftType === silentNeverType || rightType === silentNeverType) {
                 return silentNeverType;
@@ -33994,43 +34045,20 @@ namespace ts {
                 }
             }
             else {
-                leftType = checkNonNullType(leftType, left);
-                // TypeScript 1.0 spec (April 2014): 4.15.5
-                // Require the left operand to be of type Any, the String primitive type, or the Number primitive type.
-                if (!(allTypesAssignableToKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) ||
-                    isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
-                    error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_a_private_identifier_or_of_type_any_string_number_or_symbol);
+                // The type of the lef operand must be assignable to string, number, or symbol.
+                checkTypeAssignableTo(checkNonNullType(leftType, left), stringNumberSymbolType, left);
+            }
+            // The type of the right operand must be assignable to 'object'.
+            if (checkTypeAssignableTo(checkNonNullType(rightType, right), nonPrimitiveType, right)) {
+                // The {} type is assignable to the object type, yet {} might represent a primitive type. Here we
+                // detect and error on {} that results from narrowing the unknown type, as well as intersections
+                // that include {} (we know that the other types in such intersections are assignable to object
+                // since we already checked for that).
+                if (hasEmptyObjectIntersection(rightType)) {
+                    error(right, Diagnostics.Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operator, typeToString(rightType));
                 }
             }
-            rightType = checkNonNullType(rightType, right);
-            // TypeScript 1.0 spec (April 2014): 4.15.5
-            // The in operator requires the right operand to be
-            //
-            //   1. assignable to the non-primitive type,
-            //   2. an unconstrained type parameter,
-            //   3. a union or intersection including one or more type parameters, whose constituents are all assignable to the
-            //      the non-primitive type, or are unconstrainted type parameters, or have constraints assignable to the
-            //      non-primitive type, or
-            //   4. a type parameter whose constraint is
-            //      i. an object type,
-            //     ii. the non-primitive type, or
-            //    iii. a union or intersection with at least one constituent assignable to an object or non-primitive type.
-            //
-            // The divergent behavior for type parameters and unions containing type parameters is a workaround for type
-            // parameters not being narrowable. If the right operand is a concrete type, we can error if there is any chance
-            // it is a primitive. But if the operand is a type parameter, it cannot be narrowed, so we don't issue an error
-            // unless *all* instantiations would result in an error.
-            //
             // The result is always of the Boolean primitive type.
-            const rightTypeConstraint = getConstraintOfType(rightType);
-            if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
-                rightTypeConstraint && (
-                    isTypeAssignableToKind(rightType, TypeFlags.UnionOrIntersection) && !allTypesAssignableToKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
-                    !maybeTypeOfKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object)
-                )
-            ) {
-                error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_not_be_a_primitive);
-            }
             return booleanType;
         }
 
@@ -34603,6 +34631,7 @@ namespace ts {
                         const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
+                    checkNaNEquality(errorNode, operator, left, right);
                     reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                     return booleanType;
 
@@ -34834,6 +34863,29 @@ namespace ts {
                     default:
                         return undefined;
                 }
+            }
+
+            function checkNaNEquality(errorNode: Node | undefined, operator: SyntaxKind, left: Expression, right: Expression) {
+                const isLeftNaN = isGlobalNaN(skipParentheses(left));
+                const isRightNaN = isGlobalNaN(skipParentheses(right));
+                if (isLeftNaN || isRightNaN) {
+                    const err = error(errorNode, Diagnostics.This_condition_will_always_return_0,
+                        tokenToString(operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.EqualsEqualsToken ? SyntaxKind.FalseKeyword : SyntaxKind.TrueKeyword));
+                    if (isLeftNaN && isRightNaN) return;
+                    const operatorString = operator === SyntaxKind.ExclamationEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken ? tokenToString(SyntaxKind.ExclamationToken) : "";
+                    const location = isLeftNaN ? right : left;
+                    const expression = skipParentheses(location);
+                    addRelatedInfo(err, createDiagnosticForNode(location, Diagnostics.Did_you_mean_0,
+                        `${operatorString}Number.isNaN(${isEntityNameExpression(expression) ? entityNameToString(expression) : "..."})`));
+                }
+            }
+
+            function isGlobalNaN(expr: Expression): boolean {
+                if (isIdentifier(expr) && expr.escapedText === "NaN") {
+                    const globalNaNSymbol = getGlobalNaNSymbol();
+                    return !!globalNaNSymbol && globalNaNSymbol === getResolvedSymbol(expr);
+                }
+                return false;
             }
         }
 
@@ -41501,7 +41553,7 @@ namespace ts {
                     }
                     else {
                         Debug.assert(node.kind !== SyntaxKind.VariableDeclaration);
-                        const importDeclaration = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) as ImportDeclaration | ImportEqualsDeclaration | undefined;
+                        const importDeclaration = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration));
                         const moduleSpecifier = (importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration)?.text) ?? "...";
                         const importedIdentifier = unescapeLeadingUnderscores(isIdentifier(errorNode) ? errorNode.escapedText : symbol.escapedName);
                         error(

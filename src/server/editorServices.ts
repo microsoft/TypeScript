@@ -940,7 +940,7 @@ namespace ts.server {
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
                 for (const key in raw.simpleMap) {
-                    if (raw.simpleMap.hasOwnProperty(key)) {
+                    if (hasProperty(raw.simpleMap, key)) {
                         this.legacySafelist.set(key, raw.simpleMap[key].toLowerCase());
                     }
                 }
