@@ -51,14 +51,22 @@ export class IdentifierNameWithExtendedEscape1 {
 >IdentifierNameWithExtendedEscape1 : Symbol(IdentifierNameWithExtendedEscape1, Decl(IdentifierNameWithExtendedEscape1.ts, 0, 0))
 
     \u{78}: number;
->u : Symbol(IdentifierNameWithExtendedEscape1.u, Decl(IdentifierNameWithExtendedEscape1.ts, 1, 5))
+>\u{78} : Symbol(IdentifierNameWithExtendedEscape1[\u{78}], Decl(IdentifierNameWithExtendedEscape1.ts, 0, 48))
 
     constructor() {
         this.\u{78} = 0;
+>this.\u{78} : Symbol(IdentifierNameWithExtendedEscape1[\u{78}], Decl(IdentifierNameWithExtendedEscape1.ts, 0, 48))
+>this : Symbol(IdentifierNameWithExtendedEscape1, Decl(IdentifierNameWithExtendedEscape1.ts, 0, 0))
+>\u{78} : Symbol(IdentifierNameWithExtendedEscape1[\u{78}], Decl(IdentifierNameWithExtendedEscape1.ts, 0, 48))
     }
 
     doThing() {
+>doThing : Symbol(IdentifierNameWithExtendedEscape1.doThing, Decl(IdentifierNameWithExtendedEscape1.ts, 5, 5))
+
         this.x = 42;
+>this.x : Symbol(IdentifierNameWithExtendedEscape1[\u{78}], Decl(IdentifierNameWithExtendedEscape1.ts, 0, 48))
+>this : Symbol(IdentifierNameWithExtendedEscape1, Decl(IdentifierNameWithExtendedEscape1.ts, 0, 0))
+>x : Symbol(IdentifierNameWithExtendedEscape1[\u{78}], Decl(IdentifierNameWithExtendedEscape1.ts, 0, 48))
     }
 }
 
@@ -67,15 +75,22 @@ export class IdentifierNameWithExtendedEscape2 {
 >IdentifierNameWithExtendedEscape2 : Symbol(IdentifierNameWithExtendedEscape2, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 0))
 
     x\u{78}: number;
->x : Symbol(IdentifierNameWithExtendedEscape2.x, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 48))
->u : Symbol(IdentifierNameWithExtendedEscape2.u, Decl(IdentifierNameWithExtendedEscape2.ts, 1, 6))
+>x\u{78} : Symbol(IdentifierNameWithExtendedEscape2.x\u{78}, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 48))
 
     constructor() {
         this.x\u{78} = 0;
+>this.x\u{78} : Symbol(IdentifierNameWithExtendedEscape2.x\u{78}, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 48))
+>this : Symbol(IdentifierNameWithExtendedEscape2, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 0))
+>x\u{78} : Symbol(IdentifierNameWithExtendedEscape2.x\u{78}, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 48))
     }
 
     doThing() {
+>doThing : Symbol(IdentifierNameWithExtendedEscape2.doThing, Decl(IdentifierNameWithExtendedEscape2.ts, 5, 5))
+
         this.xx = 42;
+>this.xx : Symbol(IdentifierNameWithExtendedEscape2.x\u{78}, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 48))
+>this : Symbol(IdentifierNameWithExtendedEscape2, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 0))
+>xx : Symbol(IdentifierNameWithExtendedEscape2.x\u{78}, Decl(IdentifierNameWithExtendedEscape2.ts, 0, 48))
     }
 }
 
@@ -128,15 +143,20 @@ export class PrivateIdentifierWithExtendedEscape1 {
 >PrivateIdentifierWithExtendedEscape1 : Symbol(PrivateIdentifierWithExtendedEscape1, Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 0, 0))
 
     #\u{78}: number;
-># : Symbol(PrivateIdentifierWithExtendedEscape1[#], Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 0, 51))
->u : Symbol(PrivateIdentifierWithExtendedEscape1.u, Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 1, 6))
+>#\u{78} : Symbol(PrivateIdentifierWithExtendedEscape1[#\u{78}], Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 0, 51))
 
     constructor() {
         this.#\u{78} = 0;
+>this.#\u{78} : Symbol(PrivateIdentifierWithExtendedEscape1[#\u{78}], Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 0, 51))
+>this : Symbol(PrivateIdentifierWithExtendedEscape1, Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 0, 0))
     }
 
     doThing() {
+>doThing : Symbol(PrivateIdentifierWithExtendedEscape1.doThing, Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 5, 5))
+
         this.#x = 42;
+>this.#x : Symbol(PrivateIdentifierWithExtendedEscape1[#\u{78}], Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 0, 51))
+>this : Symbol(PrivateIdentifierWithExtendedEscape1, Decl(PrivateIdentifierNameWithExtendedEscape1.ts, 0, 0))
     }
 }
 
@@ -145,15 +165,20 @@ export class PrivateIdentifierWithExtendedEscape2 {
 >PrivateIdentifierWithExtendedEscape2 : Symbol(PrivateIdentifierWithExtendedEscape2, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 0, 0))
 
     #x\u{78}: number;
->#x : Symbol(PrivateIdentifierWithExtendedEscape2.#x, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 0, 51))
->u : Symbol(PrivateIdentifierWithExtendedEscape2.u, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 1, 7))
+>#x\u{78} : Symbol(PrivateIdentifierWithExtendedEscape2.#x\u{78}, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 0, 51))
 
     constructor() {
         this.#x\u{78} = 0;
+>this.#x\u{78} : Symbol(PrivateIdentifierWithExtendedEscape2.#x\u{78}, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 0, 51))
+>this : Symbol(PrivateIdentifierWithExtendedEscape2, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 0, 0))
     }
 
     doThing() {
+>doThing : Symbol(PrivateIdentifierWithExtendedEscape2.doThing, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 5, 5))
+
         this.#xx = 42;
+>this.#xx : Symbol(PrivateIdentifierWithExtendedEscape2.#x\u{78}, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 0, 51))
+>this : Symbol(PrivateIdentifierWithExtendedEscape2, Decl(PrivateIdentifierNameWithExtendedEscape2.ts, 0, 0))
     }
 }
 

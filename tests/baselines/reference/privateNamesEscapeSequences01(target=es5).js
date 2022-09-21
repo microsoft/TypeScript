@@ -139,54 +139,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierNameWithExtendedEscape1 = void 0;
 var IdentifierNameWithExtendedEscape1 = /** @class */ (function () {
     function IdentifierNameWithExtendedEscape1() {
+        this.\u{78} = 0;
     }
+    IdentifierNameWithExtendedEscape1.prototype.doThing = function () {
+        this.x = 42;
+    };
     return IdentifierNameWithExtendedEscape1;
 }());
 exports.IdentifierNameWithExtendedEscape1 = IdentifierNameWithExtendedEscape1;
-{
-    78;
-}
-number;
-constructor();
-{
-    this.;
-    u;
-    {
-        78;
-    }
-    0;
-}
-doThing();
-{
-    this.x = 42;
-}
 //// [IdentifierNameWithExtendedEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierNameWithExtendedEscape2 = void 0;
 var IdentifierNameWithExtendedEscape2 = /** @class */ (function () {
     function IdentifierNameWithExtendedEscape2() {
+        this.x\u{78} = 0;
     }
+    IdentifierNameWithExtendedEscape2.prototype.doThing = function () {
+        this.xx = 42;
+    };
     return IdentifierNameWithExtendedEscape2;
 }());
 exports.IdentifierNameWithExtendedEscape2 = IdentifierNameWithExtendedEscape2;
-{
-    78;
-}
-number;
-constructor();
-{
-    this.x;
-    u;
-    {
-        78;
-    }
-    0;
-}
-doThing();
-{
-    this.xx = 42;
-}
 //// [PrivateIdentifierNameWithEscape1.js]
 "use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
@@ -235,61 +209,47 @@ exports.PrivateIdentifierWithEscape2 = PrivateIdentifierWithEscape2;
 _PrivateIdentifierWithEscape2_xx = new WeakMap();
 //// [PrivateIdentifierNameWithExtendedEscape1.js]
 "use strict";
-var _PrivateIdentifierWithExtendedEscape1_;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var _PrivateIdentifierWithExtendedEscape1_x;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrivateIdentifierWithExtendedEscape1 = void 0;
 var PrivateIdentifierWithExtendedEscape1 = /** @class */ (function () {
     function PrivateIdentifierWithExtendedEscape1() {
-        _PrivateIdentifierWithExtendedEscape1_.set(this, void 0);
+        _PrivateIdentifierWithExtendedEscape1_x.set(this, void 0);
+        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 0, "f");
     }
+    PrivateIdentifierWithExtendedEscape1.prototype.doThing = function () {
+        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 42, "f");
+    };
     return PrivateIdentifierWithExtendedEscape1;
 }());
 exports.PrivateIdentifierWithExtendedEscape1 = PrivateIdentifierWithExtendedEscape1;
-_PrivateIdentifierWithExtendedEscape1_ = new WeakMap();
-{
-    78;
-}
-number;
-constructor();
-{
-    this.;
-    u;
-    {
-        78;
-    }
-    0;
-}
-doThing();
-{
-    this. = 42;
-}
+_PrivateIdentifierWithExtendedEscape1_x = new WeakMap();
 //// [PrivateIdentifierNameWithExtendedEscape2.js]
 "use strict";
-var _PrivateIdentifierWithExtendedEscape2_x;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var _PrivateIdentifierWithExtendedEscape2_xx;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrivateIdentifierWithExtendedEscape2 = void 0;
 var PrivateIdentifierWithExtendedEscape2 = /** @class */ (function () {
     function PrivateIdentifierWithExtendedEscape2() {
-        _PrivateIdentifierWithExtendedEscape2_x.set(this, void 0);
+        _PrivateIdentifierWithExtendedEscape2_xx.set(this, void 0);
+        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 0, "f");
     }
+    PrivateIdentifierWithExtendedEscape2.prototype.doThing = function () {
+        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 42, "f");
+    };
     return PrivateIdentifierWithExtendedEscape2;
 }());
 exports.PrivateIdentifierWithExtendedEscape2 = PrivateIdentifierWithExtendedEscape2;
-_PrivateIdentifierWithExtendedEscape2_x = new WeakMap();
-{
-    78;
-}
-number;
-constructor();
-{
-    this.;
-    u;
-    {
-        78;
-    }
-    0;
-}
-doThing();
-{
-    this. = 42;
-}
+_PrivateIdentifierWithExtendedEscape2_xx = new WeakMap();

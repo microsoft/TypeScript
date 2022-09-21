@@ -59,32 +59,25 @@ export class IdentifierNameWithExtendedEscape1 {
 >IdentifierNameWithExtendedEscape1 : IdentifierNameWithExtendedEscape1
 
     \u{78}: number;
->u : any
->78 : 78
->number : any
+>\u{78} : number
 
     constructor() {
->constructor() : any
->constructor : any
-
         this.\u{78} = 0;
->this. : any
->this : undefined
-> : any
->u : any
->78 : 78
+>this.\u{78} = 0 : 0
+>this.\u{78} : number
+>this : this
+>\u{78} : number
 >0 : 0
     }
 
     doThing() {
->doThing() : any
->doThing : any
+>doThing : () => void
 
         this.x = 42;
 >this.x = 42 : 42
->this.x : any
->this : undefined
->x : any
+>this.x : number
+>this : this
+>x : number
 >42 : 42
     }
 }
@@ -94,33 +87,25 @@ export class IdentifierNameWithExtendedEscape2 {
 >IdentifierNameWithExtendedEscape2 : IdentifierNameWithExtendedEscape2
 
     x\u{78}: number;
->x : any
->u : any
->78 : 78
->number : any
+>x\u{78} : number
 
     constructor() {
->constructor() : any
->constructor : any
-
         this.x\u{78} = 0;
->this.x : any
->this : undefined
->x : any
->u : any
->78 : 78
+>this.x\u{78} = 0 : 0
+>this.x\u{78} : number
+>this : this
+>x\u{78} : number
 >0 : 0
     }
 
     doThing() {
->doThing() : any
->doThing : any
+>doThing : () => void
 
         this.xx = 42;
 >this.xx = 42 : 42
->this.xx : any
->this : undefined
->xx : any
+>this.xx : number
+>this : this
+>xx : number
 >42 : 42
     }
 }
@@ -182,31 +167,23 @@ export class PrivateIdentifierWithExtendedEscape1 {
 >PrivateIdentifierWithExtendedEscape1 : PrivateIdentifierWithExtendedEscape1
 
     #\u{78}: number;
-># : any
->u : any
->78 : 78
->number : any
+>#\u{78} : number
 
     constructor() {
->constructor() : any
->constructor : any
-
         this.#\u{78} = 0;
->this.# : any
->this : undefined
->u : any
->78 : 78
+>this.#\u{78} = 0 : 0
+>this.#\u{78} : number
+>this : this
 >0 : 0
     }
 
     doThing() {
->doThing() : any
->doThing : any
+>doThing : () => void
 
         this.#x = 42;
 >this.#x = 42 : 42
->this.#x : any
->this : undefined
+>this.#x : number
+>this : this
 >42 : 42
     }
 }
@@ -216,31 +193,23 @@ export class PrivateIdentifierWithExtendedEscape2 {
 >PrivateIdentifierWithExtendedEscape2 : PrivateIdentifierWithExtendedEscape2
 
     #x\u{78}: number;
->#x : any
->u : any
->78 : 78
->number : any
+>#x\u{78} : number
 
     constructor() {
->constructor() : any
->constructor : any
-
         this.#x\u{78} = 0;
->this.#x : any
->this : undefined
->u : any
->78 : 78
+>this.#x\u{78} = 0 : 0
+>this.#x\u{78} : number
+>this : this
 >0 : 0
     }
 
     doThing() {
->doThing() : any
->doThing : any
+>doThing : () => void
 
         this.#xx = 42;
 >this.#xx = 42 : 42
->this.#xx : any
->this : undefined
+>this.#xx : number
+>this : this
 >42 : 42
     }
 }
