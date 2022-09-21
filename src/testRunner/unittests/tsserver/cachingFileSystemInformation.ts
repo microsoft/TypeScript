@@ -146,7 +146,7 @@ namespace ts.projectSystem {
             logCacheAndClear(projectService.logger);
 
             host.writeFile(imported.path, imported.content);
-            projectService.runQueuedTimeoutCallbacks();
+            host.runQueuedTimeoutCallbacks();
             logSemanticDiagnostics(projectService, project, root);
             logCacheAndClear(projectService.logger);
             baselineTsserverLogs("cachingFileSystemInformation", "loads missing files from disk", projectService);
@@ -280,7 +280,7 @@ namespace ts.projectSystem {
 
                     // Create file cookie.ts
                     host.writeFile(file3.path, file3.content);
-                    projectService.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
                     logCacheAndClear(projectService.logger);
 
                     projectService.openClientFile(file3.path);
@@ -479,15 +479,15 @@ namespace ts.projectSystem {
                     if (npmInstallComplete || timeoutDuringPartialInstallation) {
                         if (timeoutQueueLengthWhenRunningTimeouts) {
                             // Expected project update
-                            projectService.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts + 1); // Scheduled invalidation of resolutions
-                            projectService.runQueuedTimeoutCallbacks(); // Actual update
+                            host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts + 1); // Scheduled invalidation of resolutions
+                            host.runQueuedTimeoutCallbacks(); // Actual update
                         }
                         else {
-                            projectService.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
+                            host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
                         }
                     }
                     else {
-                        projectService.checkTimeoutQueueLength(3);
+                        host.checkTimeoutQueueLength(3);
                     }
                 }
             }

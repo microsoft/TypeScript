@@ -92,6 +92,22 @@ ScriptInfos:
 path: /user/someuser/projects/somefolder/untitled:untitled-1 fileName: untitled:Untitled-1
 path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
 
+Checking timeout queue length: 0
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+/user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/someuser/projects/somefolder/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 16   [00:00:47.000] request:
     {
       "command": "geterr",

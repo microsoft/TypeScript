@@ -63,7 +63,7 @@ namespace ts.projectSystem {
             // Completion at an import statement will calculate and cache module specifiers
             triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
             host.writeFile("/node_modules/.staging/mobx-12345678/package.json", "{}");
-            session.runQueuedTimeoutCallbacks();
+            host.runQueuedTimeoutCallbacks();
             assert.equal(moduleSpecifierCache.count(), 0);
             baselineTsserverLogs("moduleSpecifierCache", "invalidates module specifiers when changes happen in contained node_modules directories", session);
         });

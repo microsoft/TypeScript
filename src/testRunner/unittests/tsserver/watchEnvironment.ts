@@ -39,7 +39,7 @@ namespace ts.projectSystem {
                     content: ""
                 };
                 host.writeFile(file2.path, file2.content);
-                session.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
                 session.executeCommandSeq<protocol.CompletionsRequest>({
                     command: protocol.CommandTypes.CompletionInfo,
                     arguments: protocolFileLocationFromSubstring(index, '"', { index: 1 })
@@ -149,7 +149,7 @@ namespace ts.projectSystem {
             emacsIgnoredFileFromIgnoreDirectory
         ].forEach(ignoredEntity => {
             host.ensureFileOrFolder(ignoredEntity);
-            session.checkTimeoutQueueLength(0);
+            host.checkTimeoutQueueLength(0);
         });
 
         baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);

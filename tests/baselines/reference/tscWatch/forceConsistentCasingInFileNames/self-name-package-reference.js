@@ -30,11 +30,11 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-Found 'package.json' at '/users/name/projects/web/package.json'.
+Found 'package.json' at '/Users/name/projects/web/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module '@this/package' from '/Users/name/projects/web/index.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
-File '/users/name/projects/web/package.json' exists according to earlier cached lookups.
+File '/Users/name/projects/web/package.json' exists according to earlier cached lookups.
 File '/Users/name/projects/web/index.ts' exist - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/index.ts', result '/Users/name/projects/web/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/Users/name/projects/web/index.ts'. ========

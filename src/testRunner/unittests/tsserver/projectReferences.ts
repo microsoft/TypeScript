@@ -1257,16 +1257,16 @@ bar;`
                 // Add new class to referenced project
                 const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
 
                 // Add excluded file to referenced project
                 host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-                session.checkTimeoutQueueLengthAndRun(0);
+                host.checkTimeoutQueueLengthAndRun(0);
 
                 // Add output from new class to referenced project
                 const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(0);
+                host.checkTimeoutQueueLengthAndRun(0);
                 baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open`, session);
             });
 
@@ -1277,14 +1277,14 @@ bar;`
                 // Add new class to referenced project
                 const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(3);
+                host.checkTimeoutQueueLengthAndRun(3);
                 // Add excluded file to referenced project
                 host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-                session.checkTimeoutQueueLengthAndRun(0);
+                host.checkTimeoutQueueLengthAndRun(0);
                 // Add output from new class to referenced project
                 const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(0);
+                host.checkTimeoutQueueLengthAndRun(0);
                 baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open`, session);
             });
 
@@ -1294,20 +1294,20 @@ bar;`
                 // Add new class to referenced project
                 const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 // Add output of new class to referenced project
                 const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 // Add excluded file to referenced project
                 host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-                session.checkTimeoutQueueLengthAndRun(0);
+                host.checkTimeoutQueueLengthAndRun(0);
                 // Delete output from new class to referenced project
                 host.deleteFile(class3Dts);
-                session.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 // Write back output of new class to referenced project
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`, session);
             });
 
@@ -1318,20 +1318,20 @@ bar;`
                 // Add new class to referenced project
                 const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(3);
+                host.checkTimeoutQueueLengthAndRun(3);
                 // Add output of new class to referenced project
                 const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 // Add excluded file to referenced project
                 host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
-                session.checkTimeoutQueueLengthAndRun(0);
+                host.checkTimeoutQueueLengthAndRun(0);
                 // Delete output from new class to referenced project
                 host.deleteFile(class3Dts);
-                session.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 // Write back output of new class to referenced project
                 host.writeFile(class3Dts, `declare class class3 {}`);
-                session.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(2);
                 baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`, session);
             });
         });

@@ -1271,6 +1271,7 @@ namespace FourSlashInterface {
 
         export const classElementKeywords: readonly ExpectedCompletionEntryObject[] = [
             "abstract",
+            "accessor",
             "async",
             "constructor",
             "declare",
@@ -1899,11 +1900,11 @@ namespace FourSlashInterface {
     };
     export interface DiagnosticIgnoredInterpolations {
         template: string
-    };
+    }
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
     export interface RenameOptions {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
-    };
+    }
 }

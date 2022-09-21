@@ -138,7 +138,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(file1.path);
 
             installer.installAll(/*expectedCount*/ 1);
-            projectService.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("typingsInstaller", "configured projects", projectService);
         });
 
@@ -1035,7 +1035,7 @@ namespace ts.projectSystem {
 
             installer.installAll(/*expectedCount*/ 1);
 
-            projectService.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("typingsInstaller", "configured projects discover from bower_components", projectService);
         });
 
@@ -1212,7 +1212,7 @@ namespace ts.projectSystem {
             for (const name of typeNames) {
                 assert.isTrue(host.fileExists(typePath(name)), `typings for '${name}' should be created`);
             }
-            service.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("typingsInstaller", "redo resolutions pointing to js on typing install", service);
         });
 

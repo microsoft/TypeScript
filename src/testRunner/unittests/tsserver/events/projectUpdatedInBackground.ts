@@ -442,7 +442,7 @@ namespace ts.projectSystem {
 
                         file3.content += "export class d {}";
                         host.writeFile(file3.path, file3.content);
-                        session.checkTimeoutQueueLengthAndRun(2);
+                        host.checkTimeoutQueueLengthAndRun(2);
 
                         // Since this is first event
                         verifyProjectsUpdatedInBackgroundEventHandler([{
@@ -453,8 +453,8 @@ namespace ts.projectSystem {
                         }]);
 
                         host.writeFile(file2.path, file2.content);
-                        session.runQueuedTimeoutCallbacks(); // For invalidation
-                        session.runQueuedTimeoutCallbacks(); // For actual update
+                        host.runQueuedTimeoutCallbacks(); // For invalidation
+                        host.runQueuedTimeoutCallbacks(); // For actual update
 
                         verifyProjectsUpdatedInBackgroundEventHandler(useSlashRootAsSomeNotRootFolderInUserDirectory ? [{
                             eventName: server.ProjectsUpdatedInBackgroundEvent,

@@ -2737,7 +2737,7 @@ namespace FourSlash {
                 const identifier = this.classificationToIdentifier(a.classificationType as number);
                 const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
                 replacement.push(`    c2.semanticToken("${identifier}", "${text}"), `);
-            };
+            }
             replacement.push(");");
 
             throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
