@@ -11,12 +11,19 @@
     "./yep": {
       "types": "./types/foo.d.ts",
       "default": "./dist/foo.js"
+    },
+    "./versioned-yep": {
+      "types@>=4": "./types/foo.d.ts"
+    },
+    "./versioned-nah": {
+      "types@<4": "./types/foo.d.ts"
     }
   },
   "typesVersions": {
     "*": {
       "foo": ["./types/foo.d.ts"],
-      "nope": ["./types/foo.d.ts"]
+      "nope": ["./types/foo.d.ts"],
+      "versioned-nah": ["./types/foo.d.ts"]
     }
   }
 }
@@ -45,10 +52,14 @@ export {};
 import {} from "exports-and-types-versions/foo";
 import {} from "exports-and-types-versions/nope";
 import {} from "exports-and-types-versions/yep";
+import {} from "exports-and-types-versions/versioned-yep";
+import {} from "exports-and-types-versions/versioned-nah";
 import {} from "just-types-versions/foo";
 
 // @Filename: /main.mts
 import {} from "exports-and-types-versions/foo";
 import {} from "exports-and-types-versions/nope";
 import {} from "exports-and-types-versions/yep";
+import {} from "exports-and-types-versions/versioned-yep";
+import {} from "exports-and-types-versions/versioned-nah";
 import {} from "just-types-versions/foo";
