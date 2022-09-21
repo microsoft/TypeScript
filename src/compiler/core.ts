@@ -1738,9 +1738,6 @@ namespace ts {
         return typeof x === "number";
     }
 
-    // TODO(jakebailey): This should be TOut <= TIn <= TParam, but this does not infer correctly.
-    // https://github.com/microsoft/TypeScript/issues/49924
-
     export function tryCast<TOut extends TParam, TIn extends TParam, TParam = any>(value: TIn | undefined, test: (value: TParam) => value is TOut): TOut | undefined;
     export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
     export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {

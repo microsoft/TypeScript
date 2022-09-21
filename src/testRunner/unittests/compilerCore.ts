@@ -21,7 +21,7 @@ namespace ts {
                 assert.isFalse(equalOwnProperties({}, { a: 0 }, trythyTest), "missing left falsey property");
                 assert.isFalse(equalOwnProperties({ a: 1 }, {}, trythyTest), "missing right truthy property");
                 assert.isFalse(equalOwnProperties({ a: 0 }, {}, trythyTest), "missing right falsey property");
-                assert.isTrue(equalOwnProperties({ a: 1 }, { a: "foo" as any }, trythyTest), "valid equality"); // TODO(jakebailey): remove this test? we figure this out at compile time.
+                assert.isTrue(equalOwnProperties({ a: 1 }, { a: "foo" as any }, trythyTest), "valid equality");
             });
             it("all equal", () => {
                 assert.isFalse(equalOwnProperties({}, { a: 1 }, () => true), "missing left property");
