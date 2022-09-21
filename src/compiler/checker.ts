@@ -14660,7 +14660,7 @@ namespace ts {
                 if (flags & (ElementFlags.Optional | ElementFlags.Rest)) {
                     lastOptionalOrRestIndex = expandedFlags.length;
                 }
-                expandedTypes.push(type);
+                expandedTypes.push(flags & ElementFlags.Optional ? addOptionality(type, /*isProperty*/ true) : type);
                 expandedFlags.push(flags);
                 if (expandedDeclarations && declaration) {
                     expandedDeclarations.push(declaration);
@@ -21705,7 +21705,8 @@ namespace ts {
 
         function getOptionalType(type: Type, isProperty = false): Type {
             Debug.assert(strictNullChecks);
-            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, isProperty ? missingType : undefinedType]);
+            const missingOrUndefined = isProperty ? missingType : undefinedType;
+            return type.flags & TypeFlags.Undefined || type.flags & TypeFlags.Union && (type as UnionType).types[0] === missingOrUndefined ? type : getUnionType([type, missingOrUndefined]);
         }
 
         function getGlobalNonNullableTypeInstantiation(type: Type) {
