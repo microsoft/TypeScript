@@ -3955,7 +3955,6 @@ declare namespace ts {
      * A function that transforms a node.
      */
     export type Transformer<TIn extends Node, TOut extends Node | undefined = TIn> = (node: TIn) => TOut;
-    export type VisitResult<T extends Node | undefined> = T | readonly Node[];
     /**
      * A function that accepts and possibly transforms a node.
      */
@@ -3991,6 +3990,7 @@ declare namespace ts {
         <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
         <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
     }
+    export type VisitResult<T extends Node | undefined> = T | readonly Node[];
     export interface Printer {
         /**
          * Print a node and its subtree as-is, without any emit transformations.

@@ -8538,9 +8538,6 @@ namespace ts {
      */
     export type Transformer<TIn extends Node, TOut extends Node | undefined = TIn> = (node: TIn) => TOut;
 
-    // Either a node, or a list of nodes to be be lifted via a lift function.
-    export type VisitResult<T extends Node | undefined> = T | readonly Node[];
-
     /**
      * A function that accepts and possibly transforms a node.
      */
@@ -8570,7 +8567,7 @@ namespace ts {
             visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
             test?: (node: Node) => boolean,
             lift?: (node: readonly Node[]) => Node,
-        ): Node | (TIn & undefined)| (TVisited & undefined);
+        ): Node | (TIn & undefined) | (TVisited & undefined);
     }
 
     /**
@@ -8600,6 +8597,9 @@ namespace ts {
             count?: number,
         ): NodeArray<Node> | (TInArray & undefined);
     }
+
+    // Either a node, or a list of nodes to be be lifted via a lift function.
+    export type VisitResult<T extends Node | undefined> = T | readonly Node[];
 
     export interface Printer {
         /**

@@ -18,7 +18,7 @@ namespace ts {
         visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
         test?: (node: Node) => boolean,
         lift?: (node: readonly Node[]) => Node,
-    ): Node | (TIn & undefined)| (TVisited & undefined);
+    ): Node | (TIn & undefined) | (TVisited & undefined);
     export function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined>(
         node: TIn,
         visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
