@@ -999,6 +999,7 @@ namespace ts {
         let deferredGlobalOmitSymbol: Symbol | undefined;
         let deferredGlobalAwaitedSymbol: Symbol | undefined;
         let deferredGlobalBigIntType: ObjectType | undefined;
+        let deferredGlobalNaNSymbol: Symbol | undefined;
         let deferredGlobalRecordSymbol: Symbol | undefined;
 
         const allPotentiallyUnusedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
@@ -14367,6 +14368,10 @@ namespace ts {
             return (deferredGlobalBigIntType ||= getGlobalType("BigInt" as __String, /*arity*/ 0, /*reportErrors*/ false)) || emptyObjectType;
         }
 
+        function getGlobalNaNSymbol(): Symbol | undefined {
+            return (deferredGlobalNaNSymbol ||= getGlobalValueSymbol("NaN" as __String, /*reportErrors*/ false));
+        }
+
         function getGlobalRecordSymbol(): Symbol | undefined {
             deferredGlobalRecordSymbol ||= getGlobalTypeAliasSymbol("Record" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
             return deferredGlobalRecordSymbol === unknownSymbol ? undefined : deferredGlobalRecordSymbol;
@@ -14679,7 +14684,7 @@ namespace ts {
                 if (flags & (ElementFlags.Optional | ElementFlags.Rest)) {
                     lastOptionalOrRestIndex = expandedFlags.length;
                 }
-                expandedTypes.push(type);
+                expandedTypes.push(flags & ElementFlags.Optional ? addOptionality(type, /*isProperty*/ true) : type);
                 expandedFlags.push(flags);
                 if (expandedDeclarations && declaration) {
                     expandedDeclarations.push(declaration);
@@ -21724,7 +21729,8 @@ namespace ts {
 
         function getOptionalType(type: Type, isProperty = false): Type {
             Debug.assert(strictNullChecks);
-            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, isProperty ? missingType : undefinedType]);
+            const missingOrUndefined = isProperty ? missingType : undefinedType;
+            return type.flags & TypeFlags.Undefined || type.flags & TypeFlags.Union && (type as UnionType).types[0] === missingOrUndefined ? type : getUnionType([type, missingOrUndefined]);
         }
 
         function getGlobalNonNullableTypeInstantiation(type: Type) {
@@ -23684,7 +23690,7 @@ namespace ts {
                     }
                 }
 
-                if (hasOnlyExpressionInitializer(declaration)) {
+                if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node.argumentExpression)) {
                     const initializer = getEffectiveInitializer(declaration);
                     return initializer && tryGetNameFromType(getTypeOfExpression(initializer));
                 }
@@ -34519,6 +34525,7 @@ namespace ts {
                         const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
+                    checkNaNEquality(errorNode, operator, left, right);
                     reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                     return booleanType;
 
@@ -34750,6 +34757,29 @@ namespace ts {
                     default:
                         return undefined;
                 }
+            }
+
+            function checkNaNEquality(errorNode: Node | undefined, operator: SyntaxKind, left: Expression, right: Expression) {
+                const isLeftNaN = isGlobalNaN(skipParentheses(left));
+                const isRightNaN = isGlobalNaN(skipParentheses(right));
+                if (isLeftNaN || isRightNaN) {
+                    const err = error(errorNode, Diagnostics.This_condition_will_always_return_0,
+                        tokenToString(operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.EqualsEqualsToken ? SyntaxKind.FalseKeyword : SyntaxKind.TrueKeyword));
+                    if (isLeftNaN && isRightNaN) return;
+                    const operatorString = operator === SyntaxKind.ExclamationEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken ? tokenToString(SyntaxKind.ExclamationToken) : "";
+                    const location = isLeftNaN ? right : left;
+                    const expression = skipParentheses(location);
+                    addRelatedInfo(err, createDiagnosticForNode(location, Diagnostics.Did_you_mean_0,
+                        `${operatorString}Number.isNaN(${isEntityNameExpression(expression) ? entityNameToString(expression) : "..."})`));
+                }
+            }
+
+            function isGlobalNaN(expr: Expression): boolean {
+                if (isIdentifier(expr) && expr.escapedText === "NaN") {
+                    const globalNaNSymbol = getGlobalNaNSymbol();
+                    return !!globalNaNSymbol && globalNaNSymbol === getResolvedSymbol(expr);
+                }
+                return false;
             }
         }
 
@@ -41409,7 +41439,7 @@ namespace ts {
                     }
                     else {
                         Debug.assert(node.kind !== SyntaxKind.VariableDeclaration);
-                        const importDeclaration = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) as ImportDeclaration | ImportEqualsDeclaration | undefined;
+                        const importDeclaration = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration));
                         const moduleSpecifier = (importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration)?.text) ?? "...";
                         const importedIdentifier = unescapeLeadingUnderscores(isIdentifier(errorNode) ? errorNode.escapedText : symbol.escapedName);
                         error(

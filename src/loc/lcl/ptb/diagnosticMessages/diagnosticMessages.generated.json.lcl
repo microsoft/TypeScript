@@ -13217,15 +13217,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_a_private_identifier_or_of_type_any_string_number_or__2360" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O lado esquerdo de uma expressão 'em' deve ser um identificador privado ou do tipo 'qualquer', 'cadeia de caracteres', 'número' ou 'símbolo'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_paramete_2358" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.]]></Val>
@@ -13411,15 +13402,6 @@
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[O lado direito de uma operação aritmética deve ser do tipo 'any', 'number', 'bigint' ou um tipo enumerado.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";The_right_hand_side_of_an_in_expression_must_not_be_a_primitive_2361" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The right-hand side of an 'in' expression must not be a primitive.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O lado direito de uma expressão 'in' não pode ser um primitivo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14344,6 +14326,15 @@
           <Val><![CDATA[Type '{0}' is not generic.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[O tipo '{0}' não é genérico.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operato_2638" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo '{0}' pode representar um valor primitivo, que não é permitido como operando direito do operador 'in'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

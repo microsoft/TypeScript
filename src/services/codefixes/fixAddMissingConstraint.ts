@@ -94,15 +94,6 @@ namespace ts.codefix {
         }
     }
 
-    function findAncestorMatchingSpan(sourceFile: SourceFile, span: TextSpan): Node {
-        const end = textSpanEnd(span);
-        let token = getTokenAtPosition(sourceFile, span.start);
-        while (token.end < end) {
-            token = token.parent;
-        }
-        return token;
-    }
-
     function tryGetConstraintFromDiagnosticMessage(messageText: string | DiagnosticMessageChain) {
         const [_, constraint] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/`extends (.*)`/) || [];
         return constraint;

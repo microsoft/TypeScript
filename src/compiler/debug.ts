@@ -625,7 +625,7 @@ namespace ts {
             ];
 
             for (const ctor of nodeConstructors) {
-                if (!hasProperty(ctor, "__debugKind")) {
+                if (!hasProperty(ctor.prototype, "__debugKind")) {
                     Object.defineProperties(ctor.prototype, {
                         // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                         __tsDebuggerDisplay: {
