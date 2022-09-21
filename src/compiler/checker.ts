@@ -359,7 +359,7 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
-        const strictNullChecks = (context: Node | undefined) => getStrictOptionValue(context && getSourceFileOfNode(context), compilerOptions, "strictNullChecks");
+        const strictNullChecks = (_context: Node | undefined) => true; //getStrictOptionValue(context && getSourceFileOfNode(context), compilerOptions, "strictNullChecks");
         const strictFunctionTypes = (file: SourceFile | undefined) => getStrictOptionValue(file, compilerOptions, "strictFunctionTypes");
         const strictBindCallApply = (file: SourceFile | undefined) => getStrictOptionValue(file, compilerOptions, "strictBindCallApply");
         const strictPropertyInitialization = (file: SourceFile) => getStrictOptionValue(file, compilerOptions, "strictPropertyInitialization");
