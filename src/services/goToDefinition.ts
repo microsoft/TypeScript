@@ -16,7 +16,7 @@ namespace ts.GoToDefinition {
         const { parent } = node;
         const typeChecker = program.getTypeChecker();
 
-        if (node.kind === SyntaxKind.OverrideKeyword || (isJSDocOverrideTag(node) && rangeContainsPosition(node.tagName, position))) {
+        if (node.kind === SyntaxKind.OverrideKeyword || (isIdentifier(node) && isJSDocOverrideTag(parent) && parent.tagName === node)) {
             return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
         }
 

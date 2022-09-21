@@ -44,6 +44,9 @@ namespace ts {
         return visitedNode as T;
     }
 
+    /* @internal */
+    export function visitNodes<T extends Node, U extends T>(nodes: NodeArray<T>, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): NodeArray<U>;
+
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
@@ -54,6 +57,9 @@ namespace ts {
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
     export function visitNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
+
+    /* @internal */
+    export function visitNodes<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): NodeArray<U> | undefined;
 
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
@@ -116,7 +122,14 @@ namespace ts {
     }
 
     /* @internal */
-    export function visitArray<T extends Node, U extends T>(nodes: readonly T[] | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): readonly U[] | undefined {
+    export function visitArray<T extends Node, U extends T>(nodes: T[] | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): U[] | undefined;
+    /* @internal */
+    export function visitArray<T extends Node, U extends T>(nodes: readonly T[] | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number): readonly U[] | undefined;
+    /* @internal */
+    export function visitArray<T extends Node>(nodes: T[] | undefined, visitor: Visitor, test: (node: Node) => node is T, start?: number, count?: number): T[] | undefined;
+    /* @internal */
+    export function visitArray<T extends Node>(nodes: readonly T[] | undefined, visitor: Visitor, test: (node: Node) => node is T, start?: number, count?: number): readonly T[] | undefined;
+    export function visitArray<T extends Node, U extends T>(nodes: readonly T[] | undefined, visitor: Visitor, test: (node: Node) => node is U, start?: number, count?: number) {
         if (nodes === undefined) {
             return nodes;
         }

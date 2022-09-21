@@ -935,7 +935,7 @@ namespace ts.Completions.StringCompletions {
                 const dependencies: object | undefined = (contents as any)[key];
                 if (!dependencies) continue;
                 for (const dep in dependencies) {
-                    if (dependencies.hasOwnProperty(dep) && !startsWith(dep, "@types/")) {
+                    if (hasProperty(dependencies, dep) && !startsWith(dep, "@types/")) {
                         result.push(dep);
                     }
                 }
