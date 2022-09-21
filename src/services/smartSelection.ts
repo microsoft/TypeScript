@@ -25,8 +25,8 @@ namespace ts.SmartSelectionRange {
 
                 if (positionShouldSnapToNode(sourceFile, pos, node)) {
                     if (isFunctionBody(node)
-                        && isFunctionLikeDeclaration(parentNode) && !positionsAreOnSameLine(node.getStart(), node.getEnd(), sourceFile)) {
-                        pushSelectionRange(node.getStart(), node.getEnd());
+                        && isFunctionLikeDeclaration(parentNode) && !positionsAreOnSameLine(node.getStart(sourceFile), node.getEnd(), sourceFile)) {
+                        pushSelectionRange(node.getStart(sourceFile), node.getEnd());
                     }
 
                     // 1. Blocks are effectively redundant with SyntaxLists.
