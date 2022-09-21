@@ -18337,10 +18337,17 @@ namespace ts {
                         result &= compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, reportErrors, errorReporter, compareTypes);
                     }
                     else if (isIdentifierTypePredicate(targetTypePredicate)) {
-                        if (reportErrors) {
-                            errorReporter!(Diagnostics.Signature_0_must_be_a_type_predicate, signatureToString(source));
+                        // If the target type predicate doesn't change the type of the parameter, then allow a boolean returning function
+                        // to be compatible.
+                        if (getTypeOfSymbol(target.parameters[targetTypePredicate.parameterIndex]) === targetTypePredicate.type) {
+                            result &= compareTypes(sourceReturnType, booleanType);
                         }
-                        return Ternary.False;
+                        else {
+                            if (reportErrors) {
+                                errorReporter!(Diagnostics.Signature_0_must_be_a_type_predicate, signatureToString(source));
+                            }
+                            return Ternary.False;
+                        }
                     }
                 }
                 else {
