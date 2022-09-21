@@ -19,7 +19,7 @@ namespace ts {
 
             it("verify getOutputFileNames", () => {
                 const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
-                ;
+
                 assert.deepEqual(
                     getOutputFileNames(
                         parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, noop)!,

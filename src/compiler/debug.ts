@@ -30,6 +30,7 @@ namespace ts {
         export let currentLogLevel = LogLevel.Warning;
         export let isDebugging = false;
         export let loggingHost: LoggingHost | undefined;
+        export let enableDeprecationWarnings = true;
         /* eslint-enable prefer-const */
 
         type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
@@ -278,7 +279,7 @@ namespace ts {
             if (typeof func !== "function") {
                 return "";
             }
-            else if (func.hasOwnProperty("name")) {
+            else if (hasProperty(func, "name")) {
                 return (func as any).name;
             }
             else {
@@ -438,7 +439,7 @@ namespace ts {
         let flowNodeProto: FlowNodeBase | undefined;
 
         function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
-            if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line no-in-operator
+            if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
                 Object.defineProperties(flowNode, {
                     // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                     __tsDebuggerDisplay: {
@@ -487,7 +488,7 @@ namespace ts {
         let nodeArrayProto: NodeArray<Node> | undefined;
 
         function attachNodeArrayDebugInfoWorker(array: NodeArray<Node>) {
-            if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line no-in-operator
+            if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line local/no-in-operator
                 Object.defineProperties(array, {
                     __tsDebuggerDisplay: {
                         value(this: NodeArray<Node>, defaultValue: string) {
@@ -624,7 +625,7 @@ namespace ts {
             ];
 
             for (const ctor of nodeConstructors) {
-                if (!ctor.prototype.hasOwnProperty("__debugKind")) {
+                if (!hasProperty(ctor.prototype, "__debugKind")) {
                     Object.defineProperties(ctor.prototype, {
                         // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                         __tsDebuggerDisplay: {
@@ -732,7 +733,7 @@ namespace ts {
         function createWarningDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
             let hasWrittenDeprecation = false;
             return () => {
-                if (!hasWrittenDeprecation) {
+                if (enableDeprecationWarnings && !hasWrittenDeprecation) {
                     log.warn(formatDeprecationMessage(name, /*error*/ false, errorAfter, since, message));
                     hasWrittenDeprecation = true;
                 }
@@ -780,6 +781,37 @@ namespace ts {
                 result += " (unreliable)";
             }
             return result;
+        }
+
+        export type DebugType = Type & { __debugTypeToString(): string }; // eslint-disable-line @typescript-eslint/naming-convention
+        export class DebugTypeMapper {
+            declare kind: TypeMapKind;
+            __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
+                type<TypeMapper>(this);
+                switch (this.kind) {
+                    case TypeMapKind.Function: return this.debugInfo?.() || "(function mapper)";
+                    case TypeMapKind.Simple: return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
+                    case TypeMapKind.Array: return zipWith<DebugType, DebugType | string, unknown>(
+                        this.sources as readonly DebugType[],
+                        this.targets as readonly DebugType[] || map(this.sources, () => "any"),
+                        (s, t) => `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`).join(", ");
+                    case TypeMapKind.Deferred: return zipWith(
+                        this.sources,
+                        this.targets,
+                        (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`).join(", ");
+                    case TypeMapKind.Merged:
+                    case TypeMapKind.Composite: return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
+m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
+                    default: return assertNever(this);
+                }
+            }
+        }
+
+        export function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
+            if (isDebugging) {
+                return Object.setPrototypeOf(mapper, DebugTypeMapper.prototype);
+            }
+            return mapper;
         }
     }
 }

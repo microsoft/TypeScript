@@ -61,7 +61,7 @@ namespace ts.projectSystem {
 export const ghijkl = a.abcdef;`
             };
             const host = createServerHost([configFile1, file1, configFile2, file2]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1, file2], session);
 
             const request = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "abcdef", file: file1.path });
@@ -107,7 +107,7 @@ export const ghijkl = a.abcdef;`
 export const ghijkl = a.abcdef;`
             };
             const host = createServerHost([configFile1, file1, configFile2, file2, solutionConfig]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1], session);
 
             const request = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "abcdef" });

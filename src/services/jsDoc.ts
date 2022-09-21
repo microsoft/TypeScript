@@ -357,8 +357,12 @@ namespace ts.JsDoc {
         }
 
         const { commentOwner, parameters, hasReturn } = commentOwnerInfo;
-        const commentOwnerJSDoc = hasJSDocNodes(commentOwner) && commentOwner.jsDoc ? lastOrUndefined(commentOwner.jsDoc) : undefined;
-        if (commentOwner.getStart(sourceFile) < position || commentOwnerJSDoc && commentOwnerJSDoc !== existingDocComment) {
+        const commentOwnerJsDoc = hasJSDocNodes(commentOwner) && commentOwner.jsDoc ? commentOwner.jsDoc : undefined;
+        const lastJsDoc = lastOrUndefined(commentOwnerJsDoc);
+        if (commentOwner.getStart(sourceFile) < position
+            || lastJsDoc
+                && existingDocComment
+                && lastJsDoc !== existingDocComment) {
             return undefined;
         }
 
@@ -378,7 +382,11 @@ namespace ts.JsDoc {
         // * if the caret was directly in front of the object, then we add an extra line and indentation.
         const openComment = "/**";
         const closeComment = " */";
-        if (tags) {
+
+        // If any of the existing jsDoc has tags, ignore adding new ones.
+        const hasTag = (commentOwnerJsDoc || []).some(jsDoc => !!jsDoc.tags);
+
+        if (tags && !hasTag) {
             const preamble = openComment + newLine + indentationStr + " * ";
             const endLine = tokenStart === position ? newLine + indentationStr : "";
             const result = preamble + newLine + tags + indentationStr + closeComment + endLine;

@@ -247,20 +247,6 @@ namespace ts.server {
 
         // Override sys.write because fs.writeSync is not reliable on Node 4
         sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
-        // REVIEW: for now this implementation uses polling.
-        // The advantage of polling is that it works reliably
-        // on all os and with network mounted files.
-        // For 90 referenced files, the average time to detect
-        // changes is 2*msInterval (by default 5 seconds).
-        // The overhead of this is .04 percent (1/2500) with
-        // average pause of < 1 millisecond (and max
-        // pause less than 1.5 milliseconds); question is
-        // do we anticipate reference sets in the 100s and
-        // do we care about waiting 10-20 seconds to detect
-        // changes for large reference sets? If so, do we want
-        // to increase the chunk size or decrease the interval
-        // time dynamically to match the large reference set?
-        sys.defaultWatchFileKind = () => WatchFileKind.FixedChunkSizePolling;
 
         /* eslint-disable no-restricted-globals */
         sys.setTimeout = setTimeout;

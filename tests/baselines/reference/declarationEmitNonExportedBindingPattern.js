@@ -38,11 +38,11 @@ var c = getNested().a.b.c;
 declare const foo: {
     test: number;
 };
-export declare type AliasType = typeof foo;
+export type AliasType = typeof foo;
 declare const renamed: {
     test: number;
 };
-export declare type AliasType2 = typeof renamed;
+export type AliasType2 = typeof renamed;
 declare const c: string;
-export declare type AliasType3 = typeof c;
+export type AliasType3 = typeof c;
 export {};

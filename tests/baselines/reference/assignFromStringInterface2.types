@@ -37,12 +37,12 @@ interface NotString {
 >localeCompare : (that: string) => number
 >that : string
 
-    match(regexp: string): string[];
->match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
+    match(regexp: string): RegExpMatchArray;
+>match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
 >regexp : string
 
-    match(regexp: RegExp): string[];
->match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
+    match(regexp: RegExp): RegExpMatchArray;
+>match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
 >regexp : RegExp
 
     replace(searchValue: string, replaceValue: string): string;
@@ -137,22 +137,22 @@ var a: String;
 var b: NotString;
 >b : NotString
 
-a = x; 
+a = x;
 >a = x : string
 >a : String
 >x : string
 
-a = b; 
+a = b;
 >a = b : NotString
 >a : String
 >b : NotString
 
-b = a; 
+b = a;
 >b = a : String
 >b : NotString
 >a : String
 
-b = x; 
+b = x;
 >b = x : string
 >b : NotString
 >x : string

@@ -26,6 +26,13 @@ class A {
 
 //// [privateNameStaticFieldDestructuredBinding.js]
 class A {
+    static #field = 1;
+    testObject() {
+        return { x: 10, y: 6 };
+    }
+    testArray() {
+        return [10, 11];
+    }
     constructor() {
         this.otherClass = A;
         let y;
@@ -36,13 +43,6 @@ class A {
         ({ a: A.#field = 1, b: [A.#field = 1] } = { b: [] });
         [A.#field = 2] = [];
         [this.otherClass.#field = 2] = [];
-    }
-    static #field = 1;
-    testObject() {
-        return { x: 10, y: 6 };
-    }
-    testArray() {
-        return [10, 11];
     }
     static test(_a) {
         [_a.#field] = [2];

@@ -245,39 +245,39 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/animals/index.ts (used version)
 /user/username/projects/demo/core/utilities.ts (used version)
 
-WatchedFiles::
-/user/username/projects/demo/core/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/tsconfig-base.json:
-  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
-/user/username/projects/demo/core/utilities.ts:
-  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/demo/animals/package.json:
-  {"fileName":"/user/username/projects/demo/animals/package.json","pollingInterval":250}
-/user/username/projects/demo/animals/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/animals/animal.ts:
-  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
-/user/username/projects/demo/animals/dog.ts:
-  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
-/user/username/projects/demo/animals/index.ts:
-  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
-/user/username/projects/demo/zoo/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/zoo/zoo.ts:
-  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
-/user/username/projects/demo/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/demo/core/tsconfig.json:
+  {}
+/user/username/projects/demo/tsconfig-base.json:
+  {}
+/user/username/projects/demo/core/utilities.ts:
+  {}
+/user/username/projects/demo/animals/tsconfig.json:
+  {}
+/user/username/projects/demo/animals/animal.ts:
+  {}
+/user/username/projects/demo/animals/dog.ts:
+  {}
+/user/username/projects/demo/animals/index.ts:
+  {}
+/user/username/projects/demo/zoo/tsconfig.json:
+  {}
+/user/username/projects/demo/zoo/zoo.ts:
+  {}
+/user/username/projects/demo/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/demo/core:
-  {"directoryName":"/user/username/projects/demo/core"}
+  {}
 /user/username/projects/demo/animals:
-  {"directoryName":"/user/username/projects/demo/animals"}
+  {}
 /user/username/projects/demo/zoo:
-  {"directoryName":"/user/username/projects/demo/zoo"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -521,39 +521,39 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/animals/dog.ts (computed .d.ts)
 /user/username/projects/demo/animals/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/demo/core/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/tsconfig-base.json:
-  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
-/user/username/projects/demo/core/utilities.ts:
-  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/demo/animals/package.json:
-  {"fileName":"/user/username/projects/demo/animals/package.json","pollingInterval":250}
-/user/username/projects/demo/animals/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/animals/animal.ts:
-  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
-/user/username/projects/demo/animals/dog.ts:
-  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
-/user/username/projects/demo/animals/index.ts:
-  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
-/user/username/projects/demo/zoo/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/zoo/zoo.ts:
-  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
-/user/username/projects/demo/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/demo/core/tsconfig.json:
+  {}
+/user/username/projects/demo/tsconfig-base.json:
+  {}
+/user/username/projects/demo/core/utilities.ts:
+  {}
+/user/username/projects/demo/animals/tsconfig.json:
+  {}
+/user/username/projects/demo/animals/animal.ts:
+  {}
+/user/username/projects/demo/animals/dog.ts:
+  {}
+/user/username/projects/demo/animals/index.ts:
+  {}
+/user/username/projects/demo/zoo/tsconfig.json:
+  {}
+/user/username/projects/demo/zoo/zoo.ts:
+  {}
+/user/username/projects/demo/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/demo/core:
-  {"directoryName":"/user/username/projects/demo/core"}
+  {}
 /user/username/projects/demo/animals:
-  {"directoryName":"/user/username/projects/demo/animals"}
+  {}
 /user/username/projects/demo/zoo:
-  {"directoryName":"/user/username/projects/demo/zoo"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

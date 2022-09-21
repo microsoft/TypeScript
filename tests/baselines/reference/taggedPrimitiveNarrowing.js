@@ -33,7 +33,7 @@ function getHashLength2(hash) {
 
 
 //// [taggedPrimitiveNarrowing.d.ts]
-declare type Hash = string & {
+type Hash = string & {
     __hash: true;
 };
 declare function getHashLength(hash: Hash): number;

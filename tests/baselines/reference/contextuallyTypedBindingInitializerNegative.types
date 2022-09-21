@@ -5,7 +5,7 @@ interface Show {
 >x : number
 }
 function f({ show: showRename = v => v }: Show) {}
->f : ({ show }: Show) => void
+>f : ({ show: showRename }: Show) => void
 >show : any
 >showRename : (x: number) => string
 >v => v : (v: number) => number
@@ -32,7 +32,7 @@ interface Nested {
 >nested : Show
 }
 function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
->ff : ({ nested }: Nested) => void
+>ff : ({ nested: nestedRename }: Nested) => void
 >nested : any
 >nestedRename : Show
 >{ show: v => v } : { show: (v: number) => number; }
