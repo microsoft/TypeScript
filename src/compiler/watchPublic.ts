@@ -112,6 +112,8 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
+        /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
+        hasInvalidatedResolution?(filePath: Path): boolean;
         /**
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
@@ -371,6 +373,10 @@ namespace ts {
             maybeBind(host, host.getModuleResolutionCache) :
             (() => resolutionCache.getModuleResolutionCache());
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
+        // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolution
+        const customHasInvalidatedResolution = userProvidedResolution ?
+            maybeBind(host, host.hasInvalidatedResolution) || returnTrue :
+            returnFalse;
 
         builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
         synchronizeProgram();
@@ -443,8 +449,7 @@ namespace ts {
                 }
             }
 
-            // All resolutions are invalid if user provided resolutions
-            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
+            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(customHasInvalidatedResolution);
             const {
                 originalReadFile, originalFileExists, originalDirectoryExists,
                 originalCreateDirectory, originalWriteFile,
