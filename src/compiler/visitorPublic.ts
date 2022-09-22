@@ -214,7 +214,7 @@ namespace ts {
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
             const visited = node !== undefined ? (visitor ? visitor(node) : node) : undefined;
-            if (updated !== undefined || visited === undefined || visited !== node as VisitResult<Node>) {
+            if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
                     updated = nodes.slice(0, i);

@@ -3457,7 +3457,7 @@ namespace ts {
      * 
      * If you are looking to test that a `Node` is a `ParameterDeclaration`, use `isParameter`.
      */
-    export function isParameterDeclaration(node: VariableLikeDeclaration): boolean {
+    export function isParameterDeclaration(node: Declaration): boolean {
         const root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;
     }

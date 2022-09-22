@@ -5187,8 +5187,7 @@ namespace ts {
 
                 if (objectFlags & ObjectFlags.Reference) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    Debug.type<TypeReference>(type);
-                    return type.node ? visitAndTransformType(type, typeReferenceToTypeNode) : typeReferenceToTypeNode(type);
+                    return (type as TypeReference).node ? visitAndTransformType(type as TypeReference, typeReferenceToTypeNode) : typeReferenceToTypeNode(type as TypeReference);
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
@@ -7426,7 +7425,7 @@ namespace ts {
                 }
 
                 function includePrivateSymbol(symbol: Symbol) {
-                    if (some(symbol.declarations, isParameter)) return;
+                    if (some(symbol.declarations, isParameterDeclaration)) return;
                     Debug.assertIsDefined(deferredPrivatesStack[deferredPrivatesStack.length - 1]);
                     getUnusedName(unescapeLeadingUnderscores(symbol.escapedName), symbol); // Call to cache unique name for symbol
                     // Blanket moving (import) aliases into the root private context should work, since imports are not valid within namespaces
