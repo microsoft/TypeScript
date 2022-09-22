@@ -211,7 +211,7 @@ namespace ts {
             return visited;
         }
 
-        function visitor(node: Node): VisitResult<Node> | undefined {
+        function visitor(node: Node): VisitResult<Node | undefined> {
             if (!(node.transformFlags & TransformFlags.ContainsClassFields) &&
                 !(node.transformFlags & TransformFlags.ContainsLexicalThisOrSuper)) {
                 return node;
@@ -274,7 +274,7 @@ namespace ts {
         /**
          * Visits a node in an expression whose result is discarded.
          */
-        function discardedValueVisitor(node: Node): VisitResult<Node> | undefined {
+        function discardedValueVisitor(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
@@ -289,7 +289,7 @@ namespace ts {
         /**
          * Visits a node in a {@link HeritageClause}.
          */
-        function heritageClauseVisitor(node: Node): VisitResult<Node> | undefined {
+        function heritageClauseVisitor(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.HeritageClause:
                     return visitEachChild(node, heritageClauseVisitor, context);
@@ -303,7 +303,7 @@ namespace ts {
         /**
          * Visits the assignment target of a destructuring assignment.
          */
-        function assignmentTargetVisitor(node: Node): VisitResult<Node> | undefined {
+        function assignmentTargetVisitor(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
@@ -316,7 +316,7 @@ namespace ts {
         /**
          * Visits a member of a class.
          */
-        function classElementVisitor(node: Node): VisitResult<Node> | undefined {
+        function classElementVisitor(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     return visitConstructorDeclaration(node as ConstructorDeclaration);

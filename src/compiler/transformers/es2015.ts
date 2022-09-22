@@ -374,15 +374,15 @@ namespace ts {
                 || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
         }
 
-        function visitor(node: Node): VisitResult<Node> | undefined {
+        function visitor(node: Node): VisitResult<Node | undefined> {
             return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ false) : node;
         }
 
-        function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> | undefined {
+        function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node | undefined> {
             return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ true) : node;
         }
 
-        function classWrapperStatementVisitor(node: Node): VisitResult<Node> | undefined {
+        function classWrapperStatementVisitor(node: Node): VisitResult<Node | undefined> {
             if (shouldVisitNode(node)) {
                 const original = getOriginalNode(node);
                 if (isPropertyDeclaration(original) && hasStaticModifier(original)) {
@@ -399,14 +399,14 @@ namespace ts {
             return node;
         }
 
-        function callExpressionVisitor(node: Node): VisitResult<Node> | undefined {
+        function callExpressionVisitor(node: Node): VisitResult<Node | undefined> {
             if (node.kind === SyntaxKind.SuperKeyword) {
                 return visitSuperKeyword(/*isExpressionOfCall*/ true);
             }
             return visitor(node);
         }
 
-        function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node> | undefined {
+        function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.StaticKeyword:
                     return undefined; // elide static keyword

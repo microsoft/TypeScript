@@ -103,7 +103,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): VisitResult<Node> | undefined {
+        function visitor(node: Node): VisitResult<Node | undefined> {
             if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
                 return node;
             }
@@ -151,7 +151,7 @@ namespace ts {
             }
         }
 
-        function asyncBodyVisitor(node: Node): VisitResult<Node> | undefined {
+        function asyncBodyVisitor(node: Node): VisitResult<Node | undefined> {
             if (isNodeWithPossibleHoistedDeclaration(node)) {
                 switch (node.kind) {
                     case SyntaxKind.VariableStatement:

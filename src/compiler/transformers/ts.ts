@@ -181,7 +181,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): VisitResult<Node> | undefined {
+        function visitor(node: Node): VisitResult<Node | undefined> {
             return saveStateAndInvoke(node, visitorWorker);
         }
 
@@ -190,7 +190,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitorWorker(node: Node): VisitResult<Node> | undefined {
+        function visitorWorker(node: Node): VisitResult<Node | undefined> {
             if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 return visitTypeScript(node);
             }
@@ -202,7 +202,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function sourceElementVisitor(node: Node): VisitResult<Node> | undefined {
+        function sourceElementVisitor(node: Node): VisitResult<Node | undefined> {
             return saveStateAndInvoke(node, sourceElementVisitorWorker);
         }
 
@@ -211,7 +211,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function sourceElementVisitorWorker(node: Node): VisitResult<Node> | undefined {
+        function sourceElementVisitorWorker(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -223,7 +223,7 @@ namespace ts {
             }
         }
 
-        function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node> | undefined {
+        function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
             const parsed = getParseTreeNode(node);
             if (parsed !== node) {
                 // If the node has been transformed by a `before` transformer, perform no ellision on it
@@ -256,7 +256,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitor(node: Node): VisitResult<Node> | undefined {
+        function namespaceElementVisitor(node: Node): VisitResult<Node | undefined> {
             return saveStateAndInvoke(node, namespaceElementVisitorWorker);
         }
 
@@ -265,7 +265,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitorWorker(node: Node): VisitResult<Node> | undefined {
+        function namespaceElementVisitorWorker(node: Node): VisitResult<Node | undefined> {
             if (node.kind === SyntaxKind.ExportDeclaration ||
                 node.kind === SyntaxKind.ImportDeclaration ||
                 node.kind === SyntaxKind.ImportClause ||
@@ -286,7 +286,7 @@ namespace ts {
          *
          * @param parent The class containing the elements to visit.
          */
-        function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node> | undefined {
+        function getClassElementVisitor(parent: ClassLikeDeclaration): (node: Node) => VisitResult<Node | undefined> {
             return node => saveStateAndInvoke(node, n => classElementVisitorWorker(n, parent));
         }
 
@@ -295,7 +295,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node> | undefined {
+        function classElementVisitorWorker(node: Node, parent: ClassLikeDeclaration): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     return visitConstructor(node as ConstructorDeclaration);
@@ -333,11 +333,11 @@ namespace ts {
             }
         }
 
-        function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node> | undefined {
+        function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node | undefined> {
             return node => saveStateAndInvoke(node, n => objectLiteralElementVisitorWorker(n, parent));
         }
 
-        function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node> | undefined {
+        function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -362,7 +362,7 @@ namespace ts {
             }
         }
 
-        function modifierVisitor(node: Node): VisitResult<Node> | undefined {
+        function modifierVisitor(node: Node): VisitResult<Node | undefined> {
             if (isDecorator(node)) return undefined;
             if (modifierToFlag(node.kind) & ModifierFlags.TypeScriptModifier) {
                 return undefined;
@@ -379,7 +379,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitTypeScript(node: Node): VisitResult<Node> | undefined {
+        function visitTypeScript(node: Node): VisitResult<Node | undefined> {
             if (isStatement(node) && hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided, but some comments may be preserved.
                 // See the implementation of `getLeadingComments` in comments.ts for more details.

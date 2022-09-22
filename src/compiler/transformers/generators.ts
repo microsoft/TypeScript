@@ -310,7 +310,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): VisitResult<Node> | undefined {
+        function visitor(node: Node): VisitResult<Node | undefined> {
             const transformFlags = node.transformFlags;
             if (inStatementContainingYield) {
                 return visitJavaScriptInStatementContainingYield(node);
@@ -334,7 +334,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitJavaScriptInStatementContainingYield(node: Node): VisitResult<Node> | undefined {
+        function visitJavaScriptInStatementContainingYield(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.DoStatement:
                     return visitDoStatement(node as DoStatement);
@@ -354,7 +354,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitJavaScriptInGeneratorFunctionBody(node: Node): VisitResult<Node> | undefined {
+        function visitJavaScriptInGeneratorFunctionBody(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                     return visitFunctionDeclaration(node as FunctionDeclaration);
@@ -423,7 +423,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitGenerator(node: Node): VisitResult<Node> | undefined {
+        function visitGenerator(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.FunctionDeclaration:
                     return visitFunctionDeclaration(node as FunctionDeclaration);

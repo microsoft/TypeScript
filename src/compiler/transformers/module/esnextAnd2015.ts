@@ -66,7 +66,7 @@ namespace ts {
             }
         }
 
-        function visitor(node: Node): VisitResult<Node> | undefined {
+        function visitor(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
                     // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call

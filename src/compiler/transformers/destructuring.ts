@@ -11,7 +11,7 @@ namespace ts {
         createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
         createObjectBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ObjectBindingOrAssignmentPattern;
         createArrayBindingOrAssignmentElement: (node: Identifier) => BindingOrAssignmentElement;
-        visitor?: (node: Node) => VisitResult<Node> | undefined;
+        visitor?: (node: Node) => VisitResult<Node | undefined>;
     }
 
     export const enum FlattenLevel {
@@ -32,7 +32,7 @@ namespace ts {
      */
     export function flattenDestructuringAssignment(
         node: VariableDeclaration | DestructuringAssignment,
-        visitor: ((node: Node) => VisitResult<Node> | undefined) | undefined,
+        visitor: ((node: Node) => VisitResult<Node | undefined>) | undefined,
         context: TransformationContext,
         level: FlattenLevel,
         needsValue?: boolean,
@@ -172,7 +172,7 @@ namespace ts {
      */
     export function flattenDestructuringBinding(
         node: VariableDeclaration | ParameterDeclaration,
-        visitor: (node: Node) => VisitResult<Node> | undefined,
+        visitor: (node: Node) => VisitResult<Node | undefined>,
         context: TransformationContext,
         level: FlattenLevel,
         rval?: Expression,

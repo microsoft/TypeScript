@@ -8357,7 +8357,7 @@ namespace ts {
          * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
          * @param visitor Optional callback used to visit any custom prologue directives.
          */
-        /* @internal */ copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node> | undefined): number;
+        /* @internal */ copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node | undefined>): number;
         /**
          * Copies only the standard (string-expression) prologue-directives into the target statement-array.
          * @param source origin statements array
@@ -8373,8 +8373,8 @@ namespace ts {
          * @param statementOffset The offset at which to begin the copy.
          * @param visitor Optional callback used to visit any custom prologue directives.
          */
-        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node> | undefined, filter?: (node: Statement) => boolean): number;
-        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node> | undefined, filter?: (node: Statement) => boolean): number | undefined;
+        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number;
+        /* @internal */ copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number | undefined;
         /* @internal */ ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement>;
         /* @internal */ liftToBlock(nodes: readonly Node[]): Statement;
         /**

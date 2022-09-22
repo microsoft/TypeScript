@@ -577,7 +577,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function topLevelVisitor(node: Node): VisitResult<Node> | undefined {
+        function topLevelVisitor(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(node as ImportDeclaration);
@@ -1162,7 +1162,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function topLevelNestedVisitor(node: Node): VisitResult<Node> | undefined {
+        function topLevelNestedVisitor(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(node as VariableStatement);
@@ -1667,7 +1667,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function modifierVisitor(node: Node): VisitResult<Node> | undefined {
+        function modifierVisitor(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.ExportKeyword:
                 case SyntaxKind.DefaultKeyword:

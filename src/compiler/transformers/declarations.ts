@@ -869,7 +869,7 @@ namespace ts {
             }
         }
 
-        function visitDeclarationSubtree(input: Node): VisitResult<Node> | undefined {
+        function visitDeclarationSubtree(input: Node): VisitResult<Node | undefined> {
             if (shouldStripInternal(input)) return;
             if (isDeclaration(input)) {
                 if (isDeclarationAndNotVisible(input)) return;
@@ -1122,7 +1122,7 @@ namespace ts {
             return node.parent.kind === SyntaxKind.MethodDeclaration && hasEffectiveModifier(node.parent, ModifierFlags.Private);
         }
 
-        function visitDeclarationStatements(input: Node): VisitResult<Node> | undefined {
+        function visitDeclarationStatements(input: Node): VisitResult<Node | undefined> {
             if (!isPreservedDeclarationStatement(input)) {
                 // return undefined for unmatched kinds to omit them from the tree
                 return;

@@ -31,11 +31,11 @@ namespace ts {
             return visited;
         }
 
-        function modifierVisitor(node: Node): VisitResult<Node> | undefined {
+        function modifierVisitor(node: Node): VisitResult<Node | undefined> {
             return isDecorator(node) ? undefined : node;
         }
 
-        function visitor(node: Node): VisitResult<Node> | undefined {
+        function visitor(node: Node): VisitResult<Node | undefined> {
             if (!(node.transformFlags & TransformFlags.ContainsDecorators)) {
                 return node;
             }

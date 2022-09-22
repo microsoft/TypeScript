@@ -114,7 +114,7 @@ namespace ts {
             return visited;
         }
 
-        function visitor(node: Node): VisitResult<Node> | undefined {
+        function visitor(node: Node): VisitResult<Node | undefined> {
             if (node.transformFlags & TransformFlags.ContainsJsx) {
                 return visitorWorker(node);
             }
@@ -123,7 +123,7 @@ namespace ts {
             }
         }
 
-        function visitorWorker(node: Node): VisitResult<Node> | undefined {
+        function visitorWorker(node: Node): VisitResult<Node | undefined> {
             switch (node.kind) {
                 case SyntaxKind.JsxElement:
                     return visitJsxElement(node as JsxElement, /*isChild*/ false);
