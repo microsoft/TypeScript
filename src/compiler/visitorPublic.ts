@@ -56,8 +56,6 @@ namespace ts {
         return visitedNode;
     }
 
-    ((_: NodeVisitor) => {})(visitNode); // Check that visitNode is a NodeVisitor.
-
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
@@ -136,8 +134,6 @@ namespace ts {
         // of type TOut.
         return nodes;
     }
-
-    ((_: NodesVisitor) => {})(visitNodes); // Check that visitNode is a NodeVisitor.
 
     /* @internal */
     export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TOut extends Node>(
