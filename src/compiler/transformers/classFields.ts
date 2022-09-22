@@ -2359,7 +2359,7 @@ namespace ts {
         }
 
         function visitArrayAssignmentTarget(node: Node) {
-            Debug.assertNode(node, isBindingOrAssignmentElement); // TODO(jakebailey): assertNode does not work on Expressions due to branding, so param is Node.
+            Debug.assertNode(node, isBindingOrAssignmentElement);
             const target = getTargetOfBindingOrAssignmentElement(node);
             if (target) {
                 let wrapped: LeftHandSideExpression | undefined;
