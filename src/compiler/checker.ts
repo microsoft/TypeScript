@@ -17588,8 +17588,13 @@ namespace ts {
         }
 
         function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
-            // TODO(anhans): A block should be context-sensitive if it has a context-sensitive return value.
-            return !node.typeParameters && !getEffectiveReturnTypeNode(node) && !!node.body && node.body.kind !== SyntaxKind.Block && isContextSensitive(node.body);
+            if (node.typeParameters || getEffectiveReturnTypeNode(node) || !node.body) {
+                return false;
+            }
+            if (node.body.kind !== SyntaxKind.Block) {
+                return isContextSensitive(node.body);
+            }
+            return !!forEachReturnStatement(node.body as Block, (statement) => !!statement.expression && isContextSensitive(statement.expression));
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
