@@ -2,6 +2,12 @@ namespace ts {
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
+     * - If the input node is undefined, then the output is undefined.
+     * - If the visitor returns undefined, then the output is undefined.
+     * - If the output node is not undefined, then it will satisfy the test function.
+     * - In order to obtain a return type that is more specific than `Node`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
+     * 
      * @param node The Node to visit.
      * @param visitor The callback used to visit the Node.
      * @param test A callback to execute to verify the Node is valid.
@@ -54,6 +60,12 @@ namespace ts {
 
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     * 
+     * - If the input node array is undefined, the output is undefined.
+     * - If the visitor can return undefined, the node it visits in the array will be reused.
+     * - If the output node array is not undefined, then its contents will satisfy the test.
+     * - In order to obtain a return type that is more specific than `NodeArray<Node>`, a test
+     *   function _must_ be provided, and that function must be a type predicate.
      *
      * @param nodes The NodeArray to visit.
      * @param visitor The callback used to visit a Node.
