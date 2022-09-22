@@ -5111,8 +5111,7 @@ declare namespace ts {
      */
     function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
     function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
-    function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): readonly Node[] | (TInArray & undefined);
-    function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test: ((node: Node) => boolean) | undefined, start: number, count: number): readonly Node[];
+    function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): readonly Node[] | (TInArray & undefined);
     /**
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.

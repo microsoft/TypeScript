@@ -25,9 +25,9 @@ namespace ts {
         test?: (node: Node) => boolean,
         lift?: (node: readonly Node[]) => Node,
     ): Node | (TIn & undefined) | (TVisited & undefined);
-    export function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined>(
-        node: TIn,
-        visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
+    export function visitNode(
+        node: Node,
+        visitor: Visitor<Node, Node | undefined> | undefined,
         test?: (node: Node) => boolean,
         lift?: (node: readonly Node[]) => Node,
     ): Node | undefined {
@@ -87,9 +87,9 @@ namespace ts {
         start?: number,
         count?: number,
     ): NodeArray<Node> | (TInArray & undefined);
-    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
-        nodes: TInArray,
-        visitor: Visitor<TIn, Node | undefined> | undefined,
+    export function visitNodes(
+        nodes: NodeArray<Node> | undefined,
+        visitor: Visitor<Node, Node | undefined> | undefined,
         test?: (node: Node) => boolean,
         start?: number,
         count?: number,
@@ -140,23 +140,23 @@ namespace ts {
     ((_: NodesVisitor) => {})(visitNodes); // Check that visitNode is a NodeVisitor.
 
     /* @internal */
-    export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TVisited extends Node | undefined, TOut extends Node>(
+    export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TOut extends Node>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test: (node: Node) => node is TOut,
         start?: number,
         count?: number,
     ): readonly TOut[] | (TInArray & undefined);
-    export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TVisited extends Node | undefined>(
+    export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test?: (node: Node) => boolean,
         start?: number,
         count?: number,
     ): readonly Node[] | (TInArray & undefined);
-    export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TVisited extends Node | undefined>(
-        nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+    export function visitArray(
+        nodes: readonly Node[] | undefined,
+        visitor: Visitor<Node, Node | undefined> | undefined,
         test?: (node: Node) => boolean,
         start?: number,
         count?: number,
@@ -180,23 +180,24 @@ namespace ts {
     }
 
     /* @internal */
-    export function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TVisited extends Node | undefined, TOut extends Node>(
+    export function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TOut extends Node>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test: (node: Node) => node is TOut,
         start: number,
         count: number,
     ): readonly TOut[];
-    export function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TVisited extends Node | undefined>(
+    /* @internal */
+    export function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[]>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test: ((node: Node) => boolean) | undefined,
         start: number,
         count: number,
     ): readonly Node[];
-    export function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TVisited extends Node | undefined>(
-        nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+    export function visitArrayWorker(
+        nodes: readonly Node[],
+        visitor: Visitor<Node, Node | undefined> | undefined,
         test: ((node: Node) => boolean) | undefined,
         start: number,
         count: number,
