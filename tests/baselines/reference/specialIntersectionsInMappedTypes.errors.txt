@@ -1,0 +1,21 @@
+tests/cases/compiler/specialIntersectionsInMappedTypes.ts(14,1): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/compiler/specialIntersectionsInMappedTypes.ts (1 errors) ====
+    // Repro from #50683
+    
+    type Alignment = (string & {}) | "left" | "center" | "right";
+    type Alignments = Record<Alignment, string>;
+    
+    const a: Alignments = {
+        left: "align-left",
+        center: "align-center",
+        right: "align-right",
+        other: "align-other",
+    };
+    
+    a.left.length;
+    a.other.length;  // Error expected here
+    ~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
