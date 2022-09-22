@@ -2358,7 +2358,8 @@ namespace ts {
             );
         }
 
-        function visitArrayAssignmentTarget(node: ArrayBindingOrAssignmentElement) {
+        function visitArrayAssignmentTarget(node: Node) {
+            Debug.assertNode(node, isBindingOrAssignmentElement); // TODO(jakebailey): assertNode does not work on Expressions due to branding, so param is Node.
             const target = getTargetOfBindingOrAssignmentElement(node);
             if (target) {
                 let wrapped: LeftHandSideExpression | undefined;
@@ -2481,7 +2482,7 @@ namespace ts {
                 // [ { set value(x) { this.#myProp = x; } }.value ] = [ "hello" ];
                 return factory.updateArrayLiteralExpression(
                     node,
-                    visitNodes(node.elements as NodeArray<ArrayBindingOrAssignmentElement>, visitArrayAssignmentTarget, isExpression) // TODO(jakebailey): Should elements be NodeArray<ArrayBindingOrAssignmentElement>?
+                    visitNodes(node.elements, visitArrayAssignmentTarget, isExpression)
                 );
             }
             else {
