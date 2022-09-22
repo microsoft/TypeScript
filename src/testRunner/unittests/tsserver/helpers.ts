@@ -461,7 +461,7 @@ namespace ts.projectSystem {
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
             typingsInstaller: undefined!, // TODO: GH#18217
-            byteLength: Utils.byteLength,
+            byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: opts.logger || createHasErrorMessageLogger(),
             canUseEvents: false

@@ -46,7 +46,7 @@ namespace ts.server {
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: projectSystem.nullLogger(),
                 canUseEvents: true
@@ -345,7 +345,7 @@ namespace ts.server {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
                 const msg: protocol.Request = { seq: 0, type: "request", command: "" };
                 const strmsg = JSON.stringify(msg);
-                const len = 1 + Utils.byteLength(strmsg, "utf8");
+                const len = 1 + Buffer.byteLength(strmsg, "utf8");
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
                 session.send = Session.prototype.send;
@@ -468,7 +468,7 @@ namespace ts.server {
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined!, // TODO: GH#18217
-                    byteLength: Utils.byteLength,
+                    byteLength: Buffer.byteLength,
                     hrtime: process.hrtime,
                     logger: projectSystem.nullLogger(),
                     canUseEvents: true
@@ -515,7 +515,7 @@ namespace ts.server {
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined!, // TODO: GH#18217
-                    byteLength: Utils.byteLength,
+                    byteLength: Buffer.byteLength,
                     hrtime: process.hrtime,
                     logger: projectSystem.createHasErrorMessageLogger(),
                     canUseEvents: true
@@ -583,7 +583,7 @@ namespace ts.server {
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,
                     typingsInstaller: undefined!, // TODO: GH#18217
-                    byteLength: Utils.byteLength,
+                    byteLength: Buffer.byteLength,
                     hrtime: process.hrtime,
                     logger: projectSystem.createHasErrorMessageLogger(),
                     canUseEvents: true

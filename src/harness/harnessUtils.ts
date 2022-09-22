@@ -3,11 +3,6 @@ namespace Utils {
         return ts.sys.bufferFrom!(s).toString("utf8");
     }
 
-    export function byteLength(s: string, encoding?: string): number {
-        // stub implementation if Buffer is not available (in-browser case)
-        return Buffer.byteLength(s, encoding as ts.BufferEncoding | undefined);
-    }
-
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
         const vm = require("vm");
         if (nodeContext) {

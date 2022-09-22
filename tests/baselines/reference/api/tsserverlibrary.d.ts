@@ -4207,6 +4207,7 @@ declare namespace ts {
     }
     export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
+    export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
     export interface System {
         args: string[];
         newLine: string;
@@ -10706,7 +10707,7 @@ declare namespace ts.server {
     }
     type CommandNames = protocol.CommandTypes;
     const CommandNames: any;
-    function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
+    function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
     type Event = <T extends object>(body: T, eventName: string) => void;
     interface EventSender {
         event: Event;
@@ -10717,7 +10718,7 @@ declare namespace ts.server {
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
-        byteLength: (buf: string, encoding?: string) => number;
+        byteLength: (buf: string, encoding?: BufferEncoding) => number;
         hrtime: (start?: [number, number]) => [number, number];
         logger: Logger;
         /**
@@ -10747,7 +10748,7 @@ declare namespace ts.server {
         protected host: ServerHost;
         private readonly cancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
-        protected byteLength: (buf: string, encoding?: string) => number;
+        protected byteLength: (buf: string, encoding?: BufferEncoding) => number;
         private hrtime;
         protected logger: Logger;
         protected canUseEvents: boolean;

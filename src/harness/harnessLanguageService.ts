@@ -1001,7 +1001,7 @@ namespace Harness.LanguageService {
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
-                byteLength: Utils.byteLength,
+                byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger: serverHost,
                 canUseEvents: true

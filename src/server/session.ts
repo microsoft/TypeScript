@@ -127,7 +127,7 @@ namespace ts.server {
     export type CommandNames = protocol.CommandTypes;
     export const CommandNames = (protocol as any).CommandTypes;
 
-    export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+    export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
         const json = JSON.stringify(msg);
@@ -737,7 +737,7 @@ namespace ts.server {
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
-        byteLength: (buf: string, encoding?: string) => number;
+        byteLength: (buf: string, encoding?: BufferEncoding) => number;
         hrtime: (start?: [number, number]) => [number, number];
         logger: Logger;
         /**
@@ -772,7 +772,7 @@ namespace ts.server {
         protected host: ServerHost;
         private readonly cancellationToken: ServerCancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
-        protected byteLength: (buf: string, encoding?: string) => number;
+        protected byteLength: (buf: string, encoding?: BufferEncoding) => number;
         private hrtime: (start?: [number, number]) => [number, number];
         protected logger: Logger;
 

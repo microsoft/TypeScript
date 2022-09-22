@@ -691,7 +691,7 @@ namespace ts.server {
                     cancellationToken,
                     ...options,
                     typingsInstaller: typingsInstaller || nullTypingsInstaller,
-                    byteLength: Buffer.byteLength as (buf: string, encoding?: string | undefined) => number,
+                    byteLength: Buffer.byteLength,
                     hrtime: process.hrtime,
                     logger,
                     canUseEvents: true,
