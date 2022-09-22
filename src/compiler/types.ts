@@ -8541,7 +8541,7 @@ namespace ts {
     /**
      * A function that accepts and possibly transforms a node.
      */
-    export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn> = (node: TIn) => VisitResult<TOut>;
+    export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn | undefined> = (node: TIn) => VisitResult<TOut>;
 
     /**
      * A function that walks a node using the given visitor, lifting node arrays into single nodes,

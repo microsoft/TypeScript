@@ -41,7 +41,7 @@ namespace ts {
         }
 
         function replaceIdentifiersNamedOldNameWithNewName2(context: TransformationContext) {
-            const visitor: Visitor = (node) => {
+            const visitor = (node: Node): Node => {
                 if (isIdentifier(node) && node.text === "oldName") {
                     return factory.createIdentifier("newName");
                 }
@@ -552,7 +552,7 @@ module MyModule {
             return host.readFile("source.js")!.toString();
 
             function transformSourceFile(context: TransformationContext) {
-                const visitor: Visitor = (node) => {
+                const visitor = (node: Node): Node => {
                     if (isMethodDeclaration(node)) {
                         return factory.updateMethodDeclaration(
                             node,

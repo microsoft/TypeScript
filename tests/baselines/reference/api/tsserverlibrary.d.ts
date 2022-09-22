@@ -3958,7 +3958,7 @@ declare namespace ts {
     /**
      * A function that accepts and possibly transforms a node.
      */
-    export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn> = (node: TIn) => VisitResult<TOut>;
+    export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn | undefined> = (node: TIn) => VisitResult<TOut>;
     /**
      * A function that walks a node using the given visitor, lifting node arrays into single nodes,
      * returning an node which satisfies the test.
@@ -5116,32 +5116,32 @@ declare namespace ts {
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.
      */
-    function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor?: NodesVisitor): NodeArray<Statement>;
+    function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor?: NodesVisitor): NodeArray<Statement>;
     /**
      * Starts a new lexical environment and visits a parameter list, suspending the lexical
      * environment upon completion.
      */
-    function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
-    function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
+    function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
+    function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
     /**
      * Resumes a suspended lexical environment and visits a function body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    function visitFunctionBody(node: FunctionBody, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): FunctionBody;
+    function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext): FunctionBody;
     /**
      * Resumes a suspended lexical environment and visits a function body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): FunctionBody | undefined;
+    function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext): FunctionBody | undefined;
     /**
      * Resumes a suspended lexical environment and visits a concise body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    function visitFunctionBody(node: ConciseBody, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): ConciseBody;
+    function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
     /**
      * Visits an iteration body, adding any block-scoped variables required by the transformation.
      */
-    function visitIterationBody(body: Statement, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): Statement;
+    function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -5149,7 +5149,7 @@ declare namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    function visitEachChild<T extends Node>(node: T, visitor: Visitor<Node, Node | undefined>, context: TransformationContext): T;
+    function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -5157,7 +5157,7 @@ declare namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor<Node, Node | undefined>, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+    function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 }
 declare namespace ts {
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;

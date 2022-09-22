@@ -5506,7 +5506,7 @@ namespace ts {
 
                     function deepCloneOrReuseNodes(
                         nodes: NodeArray<Node> | undefined,
-                        visitor: Visitor<Node, Node | undefined> | undefined,
+                        visitor: Visitor | undefined,
                         test?: (node: Node) => boolean,
                         start?: number,
                         count?: number,
