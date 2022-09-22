@@ -374,7 +374,9 @@ namespace ts {
             (() => resolutionCache.getModuleResolutionCache());
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
         // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolution
-        const userProvidedHasInvalidatedResolution = maybeBind(host, host.hasInvalidatedResolution) || returnTrue;
+        const customHasInvalidatedResolution = userProvidedResolution ?
+            maybeBind(host, host.hasInvalidatedResolution) || returnTrue :
+            returnFalse;
 
         builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
         synchronizeProgram();
@@ -447,9 +449,7 @@ namespace ts {
                 }
             }
 
-            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(
-                userProvidedResolution ? userProvidedHasInvalidatedResolution : undefined
-            );
+            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(customHasInvalidatedResolution);
             const {
                 originalReadFile, originalFileExists, originalDirectoryExists,
                 originalCreateDirectory, originalWriteFile,
