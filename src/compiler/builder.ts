@@ -176,7 +176,7 @@ namespace ts {
         const canCopyEmitSignatures = compilerOptions.composite &&
             oldState?.emitSignatures &&
             !outFilePath &&
-            !compilerOptionsAffectDeclarationPath(compilerOptions, oldCompilerOptions!);
+            !compilerOptionsAffectDeclarationPath(compilerOptions, oldState.compilerOptions);
         if (useOldState) {
             // Copy old state's changed files set
             oldState!.changedFilesSet?.forEach(value => state.changedFilesSet.add(value));
