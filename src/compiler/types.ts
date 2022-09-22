@@ -8582,16 +8582,16 @@ namespace ts {
      * For the canonical implementation of this type, @see {visitNodes}.
      */
     export interface NodesVisitor {
-        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(
             nodes: TInArray,
-            visitor: Visitor<TIn, TVisited> | undefined,
+            visitor: Visitor<TIn, Node | undefined> | undefined,
             test: (node: Node) => node is TOut,
             start?: number,
             count?: number,
         ): NodeArray<TOut> | (TInArray & undefined);
-        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
             nodes: TInArray,
-            visitor: Visitor<TIn, TVisited> | undefined,
+            visitor: Visitor<TIn, Node | undefined> | undefined,
             test?: (node: Node) => boolean,
             start?: number,
             count?: number,

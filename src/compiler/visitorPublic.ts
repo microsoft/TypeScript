@@ -61,23 +61,23 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(
+    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test: (node: Node) => node is TOut,
         start?: number,
         count?: number,
     ): NodeArray<TOut> | (TInArray & undefined);
-    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test?: (node: Node) => boolean,
         start?: number,
         count?: number,
     ): NodeArray<Node> | (TInArray & undefined);
-    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test?: (node: Node) => boolean,
         start?: number,
         count?: number,

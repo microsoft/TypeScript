@@ -1140,23 +1140,23 @@ namespace ts.textChanges {
      * @see {NodesVisitor}
      * @see {visitNodes}
      */
-    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(
+    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test: (node: Node) => node is TOut,
         start?: number,
         count?: number,
     ): NodeArray<TOut> | (TInArray & undefined);
-    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test?: (node: Node) => boolean,
         start?: number,
         count?: number,
     ): NodeArray<Node> | (TInArray & undefined);
-    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(
+    function assignPositionsToNodeArray<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
         nodes: TInArray,
-        visitor: Visitor<TIn, TVisited> | undefined,
+        visitor: Visitor<TIn, Node | undefined> | undefined,
         test?: (node: Node) => boolean,
         start?: number,
         count?: number,

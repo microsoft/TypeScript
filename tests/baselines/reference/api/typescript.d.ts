@@ -3987,8 +3987,8 @@ declare namespace ts {
      * For the canonical implementation of this type, @see {visitNodes}.
      */
     export interface NodesVisitor {
-        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
-        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
+        <TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
     }
     export type VisitResult<T extends Node | undefined> = T | readonly Node[];
     export interface Printer {
@@ -5097,8 +5097,8 @@ declare namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
-    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
+    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
+    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
     function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): readonly Node[] | (TInArray & undefined);
     function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TVisited extends Node | undefined>(nodes: TInArray, visitor: Visitor<TIn, TVisited> | undefined, test: ((node: Node) => boolean) | undefined, start: number, count: number): readonly Node[];
     /**
