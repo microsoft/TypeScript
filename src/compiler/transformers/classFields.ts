@@ -2358,7 +2358,7 @@ namespace ts {
             );
         }
 
-        function visitArrayAssignmentTarget(node: BindingOrAssignmentElement) {
+        function visitArrayAssignmentTarget(node: ArrayBindingOrAssignmentElement) {
             const target = getTargetOfBindingOrAssignmentElement(node);
             if (target) {
                 let wrapped: LeftHandSideExpression | undefined;
@@ -2481,7 +2481,7 @@ namespace ts {
                 // [ { set value(x) { this.#myProp = x; } }.value ] = [ "hello" ];
                 return factory.updateArrayLiteralExpression(
                     node,
-                    visitNodes(node.elements as NodeArray<Extract<BindingOrAssignmentElement, Expression>>, visitArrayAssignmentTarget, isExpression) // TODO(jakebailey): the elements property's type looks to be wrong.
+                    visitNodes(node.elements as NodeArray<ArrayBindingOrAssignmentElement>, visitArrayAssignmentTarget, isExpression) // TODO(jakebailey): Should elements be NodeArray<ArrayBindingOrAssignmentElement>?
                 );
             }
             else {

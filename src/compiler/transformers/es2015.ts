@@ -2194,11 +2194,16 @@ namespace ts {
                     enableSubstitutionsForBlockScopedBindings();
                 }
 
+                // TODO(jakebailey): should this be...
+                // const declarations = visitNodes(node.declarations, node.flags & NodeFlags.Let
+                //     ? visitVariableDeclarationInLetDeclarationList
+                //     : visitVariableDeclaration, isVariableDeclaration);
+
                 const declarations = flatMap(node.declarations, node.flags & NodeFlags.Let
                     ? visitVariableDeclarationInLetDeclarationList
                     : visitVariableDeclaration);
 
-                Debug.assertEachNode(declarations, isVariableDeclaration); // TODO(jakebailey): side effect of VisitResult.
+                Debug.assertEachNode(declarations, isVariableDeclaration);
 
                 const declarationList = factory.createVariableDeclarationList(declarations);
                 setOriginalNode(declarationList, node);
