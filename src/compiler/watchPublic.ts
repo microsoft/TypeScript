@@ -373,6 +373,7 @@ namespace ts {
             maybeBind(host, host.getModuleResolutionCache) :
             (() => resolutionCache.getModuleResolutionCache());
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
+        // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolution
         const userProvidedHasInvalidatedResolution = maybeBind(host, host.hasInvalidatedResolution) || returnTrue;
 
         builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
@@ -446,7 +447,6 @@ namespace ts {
                 }
             }
 
-            // All resolutions are invalid if user provided resolutions
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(
                 userProvidedResolution ? userProvidedHasInvalidatedResolution : undefined
             );
