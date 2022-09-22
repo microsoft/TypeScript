@@ -139,7 +139,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> | undefined {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
             let statements: Statement[] | undefined;
@@ -181,7 +181,7 @@ namespace ts {
             return statements;
         }
 
-        function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment> | undefined {
+        function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | undefined> {
             // Elide `export=` as it is not legal with --module ES6
             return node.isExportEquals ? undefined : node;
         }

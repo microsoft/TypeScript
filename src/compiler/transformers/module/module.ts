@@ -891,7 +891,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> | undefined {
+        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
             let statements: Statement[] | undefined;
             const namespaceDeclaration = getNamespaceDeclarationNode(node);
             if (moduleKind !== ModuleKind.AMD) {
@@ -1011,7 +1011,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> | undefined {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
             Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
             let statements: Statement[] | undefined;
@@ -1087,7 +1087,7 @@ namespace ts {
          *
          * @param The node to visit.
          */
-        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> | undefined {
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
             if (!node.moduleSpecifier) {
                 // Elide export declarations with no module specifier as they are handled
                 // elsewhere.
@@ -1197,7 +1197,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> | undefined {
+        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
             if (node.isExportEquals) {
                 return undefined;
             }
@@ -1221,7 +1221,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> | undefined {
+        function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement | undefined> {
             let statements: Statement[] | undefined;
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
@@ -1263,7 +1263,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> | undefined {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement | undefined> {
             let statements: Statement[] | undefined;
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
@@ -1303,7 +1303,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitVariableStatement(node: VariableStatement): VisitResult<Statement> | undefined {
+        function visitVariableStatement(node: VariableStatement): VisitResult<Statement | undefined> {
             let statements: Statement[] | undefined;
             let variables: VariableDeclaration[] | undefined;
             let expressions: Expression[] | undefined;

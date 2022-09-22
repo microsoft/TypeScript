@@ -2348,7 +2348,7 @@ namespace ts {
             convertedLoopState!.labels!.set(idText(node.label), false);
         }
 
-        function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> | undefined {
+        function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement | undefined> {
             if (convertedLoopState && !convertedLoopState.labels) {
                 convertedLoopState.labels = new Map<string, boolean>();
             }

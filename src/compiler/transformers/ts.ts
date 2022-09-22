@@ -1973,7 +1973,7 @@ namespace ts {
          *
          * @param node The import declaration node.
          */
-        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> | undefined {
+        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
             if (!node.importClause) {
                 // Do not elide a side-effect only import declaration.
                 //  import "foo";
@@ -2046,7 +2046,7 @@ namespace ts {
          *
          * @param node The export assignment node.
          */
-        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> | undefined {
+        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
             // Elide the export assignment if it does not reference a value.
             return resolver.isValueAliasDeclaration(node)
                 ? visitEachChild(node, visitor, context)
@@ -2058,7 +2058,7 @@ namespace ts {
          *
          * @param node The export declaration node.
          */
-        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> | undefined {
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
             if (node.isTypeOnly) {
                 return undefined;
             }
@@ -2139,7 +2139,7 @@ namespace ts {
          *
          * @param node The import equals declaration node.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> | undefined {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
             // Always elide type-only imports
             if (node.isTypeOnly) {
                 return undefined;
