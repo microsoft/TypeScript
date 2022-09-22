@@ -539,7 +539,6 @@ module MyModule {
             const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true);
             const transformed = transform(createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ScriptTarget.ES3), [transformSourceFile]);
             const transformedSourceFile = transformed.transformed[0];
-            Debug.assertNode(transformedSourceFile, isSourceFile);
             transformed.dispose();
             const host = new fakes.CompilerHost(fs);
             host.getSourceFile = () => transformedSourceFile;

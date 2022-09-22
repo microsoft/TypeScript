@@ -50,29 +50,19 @@ namespace ts.codefix {
             for (const param of decl.parameters) {
                 if (!param.type) {
                     const paramType = getJSDocType(param);
-                    if (paramType) {
-                        const transformedType = transformJSDocType(paramType);
-                        Debug.assertNode(transformedType, isTypeNode);
-                        changes.tryInsertTypeAnnotation(sourceFile, param, transformedType);
-                    }
+                    if (paramType) changes.tryInsertTypeAnnotation(sourceFile, param, visitNode(paramType, transformJSDocType, isTypeNode));
                 }
             }
             if (needParens) changes.insertNodeAfter(sourceFile, last(decl.parameters), factory.createToken(SyntaxKind.CloseParenToken));
             if (!decl.type) {
                 const returnType = getJSDocReturnType(decl);
-                if (returnType) {
-                    const transformedType = transformJSDocType(returnType);
-                    Debug.assertNode(transformedType, isTypeNode);
-                    changes.tryInsertTypeAnnotation(sourceFile, decl, transformedType);
-                }
+                if (returnType) changes.tryInsertTypeAnnotation(sourceFile, decl, visitNode(returnType, transformJSDocType, isTypeNode));
             }
         }
         else {
             const jsdocType = Debug.checkDefined(getJSDocType(decl), "A JSDocType for this declaration should exist"); // If not defined, shouldn't have been an error to fix
             Debug.assert(!decl.type, "The JSDocType decl should have a type"); // If defined, shouldn't have been an error to fix.
-            const transformedType = transformJSDocType(jsdocType);
-            Debug.assertNode(transformedType, isTypeNode);
-            changes.tryInsertTypeAnnotation(sourceFile, decl, transformedType);
+            changes.tryInsertTypeAnnotation(sourceFile, decl, visitNode(jsdocType, transformJSDocType, isTypeNode));
         }
     }
 
