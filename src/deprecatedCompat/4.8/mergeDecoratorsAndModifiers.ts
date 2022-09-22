@@ -400,7 +400,7 @@ namespace ts {
                     (name === undefined || typeof name === "string" || isPropertyName(name)) &&
                     (questionToken === undefined || typeof questionToken === "object" && isQuestionToken(questionToken)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (parameters === undefined || isArrayOf(parameters, isParameter)) &&
+                    (parameters === undefined || every<Node>(parameters, isParameter)) &&
                     (type === undefined || !isArray(type)) &&
                     (body === undefined || isBlock(body)),
 
@@ -409,7 +409,7 @@ namespace ts {
                     (asteriskToken === undefined || typeof asteriskToken === "object" && isAsteriskToken(asteriskToken)) &&
                     (name === undefined || typeof name === "string" || isPropertyName(name)) &&
                     (questionToken === undefined || !isArray(questionToken)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
                     (parameters === undefined || isArray(parameters)) &&
                     (type === undefined || isTypeNode(type)) &&
                     (body === undefined || isBlock(body)),
@@ -436,7 +436,7 @@ namespace ts {
                     (name === undefined || typeof name === "string" || isPropertyName(name)) &&
                     (questionToken === undefined || typeof questionToken === "object" && isQuestionToken(questionToken)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (parameters === undefined || isArrayOf(parameters, isParameter)) &&
+                    (parameters === undefined || every<Node>(parameters, isParameter)) &&
                     (type === undefined || !isArray(type)) &&
                     (body === undefined || isBlock(body)),
 
@@ -445,7 +445,7 @@ namespace ts {
                     (asteriskToken === undefined || typeof asteriskToken === "object" && isAsteriskToken(asteriskToken)) &&
                     (name === undefined || typeof name === "string" || isPropertyName(name)) &&
                     (questionToken === undefined || !isArray(questionToken)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
                     (parameters === undefined || isArray(parameters)) &&
                     (type === undefined || isTypeNode(type)) &&
                     (body === undefined || isBlock(body)),
@@ -468,13 +468,13 @@ namespace ts {
             .bind({
                 0: ([modifiers, parameters, body, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
-                    (parameters === undefined || isArrayOf(parameters, isParameter)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
+                    (parameters === undefined || every<Node>(parameters, isParameter)) &&
                     (body === undefined || !isArray(body)),
 
                 1: ([decorators, modifiers, parameters, body]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (parameters === undefined || isArray(parameters)) &&
                     (body === undefined || isBlock(body)),
             })
@@ -496,13 +496,13 @@ namespace ts {
             .bind({
                 0: ([, modifiers, parameters, body, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
-                    (parameters === undefined || isArrayOf(parameters, isParameter)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
+                    (parameters === undefined || every<Node>(parameters, isParameter)) &&
                     (body === undefined || !isArray(body)),
 
                 1: ([, decorators, modifiers, parameters, body]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (parameters === undefined || isArray(parameters)) &&
                     (body === undefined || isBlock(body)),
             })
@@ -640,13 +640,13 @@ namespace ts {
             .bind({
                 0: ([modifiers, parameters, type, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
-                    (parameters === undefined || isArrayOf(parameters, isParameter)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
+                    (parameters === undefined || every<Node>(parameters, isParameter)) &&
                     (type === undefined || !isArray(type)),
 
                 1: ([decorators, modifiers, parameters, type]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (parameters === undefined || isArray(parameters)) &&
                     (type === undefined || isTypeNode(type)),
             })
@@ -668,13 +668,13 @@ namespace ts {
             .bind({
                 0: ([, modifiers, parameters, type, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
-                    (parameters === undefined || isArrayOf(parameters, isParameter)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
+                    (parameters === undefined || every<Node>(parameters, isParameter)) &&
                     (type === undefined || !isArray(type)),
 
                 1: ([, decorators, modifiers, parameters, type]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (parameters === undefined || isArray(parameters)) &&
                     (type === undefined || isTypeNode(type)),
             })
@@ -750,14 +750,14 @@ namespace ts {
                     (other === undefined) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
-                    (members === undefined || isArrayOf(members, isClassElement)),
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
+                    (members === undefined || every<Node>(members, isClassElement)),
 
                 1: ([, modifiers, name, typeParameters, heritageClauses, members]) =>
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
                     (members === undefined || isArray(members)),
             })
             .deprecate({
@@ -780,14 +780,14 @@ namespace ts {
                     (other === undefined) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
-                    (members === undefined || isArrayOf(members, isClassElement)),
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
+                    (members === undefined || every<Node>(members, isClassElement)),
 
                 1: ([, , modifiers, name, typeParameters, heritageClauses, members]) =>
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
                     (members === undefined || isArray(members)),
             })
             .deprecate({
@@ -811,7 +811,7 @@ namespace ts {
                     (asteriskToken === undefined || !isArray(asteriskToken)) &&
                     (name === undefined || typeof name === "string" || isIdentifier(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (parameters === undefined || isArrayOf(parameters, isParameter)) &&
+                    (parameters === undefined || every<Node>(parameters, isParameter)) &&
                     (type === undefined || !isArray(type)) &&
                     (body === undefined || isBlock(body)),
 
@@ -819,7 +819,7 @@ namespace ts {
                     (modifiers === undefined || isArray(modifiers)) &&
                     (asteriskToken === undefined || typeof asteriskToken !== "string" && isAsteriskToken(asteriskToken)) &&
                     (name === undefined || !isArray(name)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
                     (parameters === undefined || isArray(parameters)) &&
                     (type === undefined || isTypeNode(type)) &&
                     (body === undefined || isBlock(body)),
@@ -845,7 +845,7 @@ namespace ts {
                     (asteriskToken === undefined || !isArray(asteriskToken)) &&
                     (name === undefined || isIdentifier(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (parameters === undefined || isArrayOf(parameters, isParameter)) &&
+                    (parameters === undefined || every<Node>(parameters, isParameter)) &&
                     (type === undefined || !isArray(type)) &&
                     (body === undefined || isBlock(body)),
 
@@ -853,7 +853,7 @@ namespace ts {
                     (modifiers === undefined || isArray(modifiers)) &&
                     (asteriskToken === undefined || typeof asteriskToken !== "string" && isAsteriskToken(asteriskToken)) &&
                     (name === undefined || !isArray(name)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
                     (parameters === undefined || isArray(parameters)) &&
                     (type === undefined || isTypeNode(type)) &&
                     (body === undefined || isBlock(body)),
@@ -878,8 +878,8 @@ namespace ts {
                     (other === undefined) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
-                    (members === undefined || isArrayOf(members, isClassElement)),
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
+                    (members === undefined || every<Node>(members, isClassElement)),
 
                 1: () => true,
             })
@@ -903,14 +903,14 @@ namespace ts {
                     (other === undefined) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
-                    (members === undefined || isArrayOf(members, isClassElement)),
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
+                    (members === undefined || every<Node>(members, isClassElement)),
 
                 1: ([, , modifiers, name, typeParameters, heritageClauses, members]) =>
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
                     (members === undefined || isArray(members)),
             })
             .deprecate({
@@ -931,18 +931,18 @@ namespace ts {
             .bind({
                 0: ([modifiers, name, typeParameters, heritageClauses, members, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
-                    (members === undefined || isArrayOf(members, isTypeElement)),
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
+                    (members === undefined || every<Node>(members, isTypeElement)),
 
                 1: ([decorators, modifiers, name, typeParameters, heritageClauses, members]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
                     (members === undefined || every(members, isTypeElement)),
             })
             .deprecate({
@@ -963,18 +963,18 @@ namespace ts {
             .bind({
                 0: ([, modifiers, name, typeParameters, heritageClauses, members, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
-                    (members === undefined || isArrayOf(members, isTypeElement)),
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
+                    (members === undefined || every<Node>(members, isTypeElement)),
 
                 1: ([, decorators, modifiers, name, typeParameters, heritageClauses, members]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
-                    (typeParameters === undefined || isArrayOf(typeParameters, isTypeParameterDeclaration)) &&
-                    (heritageClauses === undefined || isArrayOf(heritageClauses, isHeritageClause)) &&
+                    (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
+                    (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
                     (members === undefined || every(members, isTypeElement)),
             })
             .deprecate({
@@ -995,13 +995,13 @@ namespace ts {
             .bind({
                 0: ([modifiers, name, typeParameters, type, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
                     (type === undefined || !isArray(type)),
 
                 1: ([decorators, modifiers, name, typeParameters, type]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
@@ -1025,13 +1025,13 @@ namespace ts {
             .bind({
                 0: ([, modifiers, name, typeParameters, type, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
                     (type === undefined || !isArray(type)),
 
                 1: ([, decorators, modifiers, name, typeParameters, type]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
                     (typeParameters === undefined || isArray(typeParameters)) &&
@@ -1055,12 +1055,12 @@ namespace ts {
             .bind({
                 0: ([modifiers, name, members, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (name === undefined || !isArray(name)) &&
                     (members === undefined || isArray(members)),
 
                 1: ([decorators, modifiers, name, members]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
                     (members === undefined || isArray(members)),
@@ -1083,12 +1083,12 @@ namespace ts {
             .bind({
                 0: ([, modifiers, name, members, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (name === undefined || !isArray(name)) &&
                     (members === undefined || isArray(members)),
 
                 1: ([, decorators, modifiers, name, members]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name === undefined || !isArray(name)) &&
                     (members === undefined || isArray(members)),
@@ -1111,13 +1111,13 @@ namespace ts {
             .bind({
                 0: ([modifiers, name, body, flags, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (name !== undefined && !isArray(name)) &&
                     (body === undefined || isModuleBody(body)) &&
                     (flags === undefined || typeof flags === "number"),
 
                 1: ([decorators, modifiers, name, body, flags]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name !== undefined && isModuleName(name)) &&
                     (body === undefined || typeof body === "object") &&
@@ -1141,12 +1141,12 @@ namespace ts {
             .bind({
                 0: ([, modifiers, name, body, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (name === undefined || !isArray(name)) &&
                     (body === undefined || isModuleBody(body)),
 
                 1: ([, decorators, modifiers, name, body]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (name !== undefined && isModuleName(name)) &&
                     (body === undefined || isModuleBody(body)),
@@ -1169,13 +1169,13 @@ namespace ts {
             .bind({
                 0: ([modifiers, isTypeOnly, name, moduleReference, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (isTypeOnly === undefined || typeof isTypeOnly === "boolean") &&
                     (typeof name !== "boolean") &&
                     (typeof moduleReference !== "string"),
 
                 1: ([decorators, modifiers, isTypeOnly, name, moduleReference]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (isTypeOnly === undefined || typeof isTypeOnly === "boolean") &&
                     (typeof name === "string" || isIdentifier(name)) &&
@@ -1199,13 +1199,13 @@ namespace ts {
             .bind({
                 0: ([, modifiers, isTypeOnly, name, moduleReference, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (isTypeOnly === undefined || typeof isTypeOnly === "boolean") &&
                     (typeof name !== "boolean") &&
                     (typeof moduleReference !== "string"),
 
                 1: ([, decorators, modifiers, isTypeOnly, name, moduleReference]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (isTypeOnly === undefined || typeof isTypeOnly === "boolean") &&
                     (typeof name === "string" || isIdentifier(name)) &&
@@ -1229,13 +1229,13 @@ namespace ts {
             .bind({
                 0: ([modifiers, importClause, moduleSpecifier, assertClause, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (importClause === undefined || !isArray(importClause)) &&
                     (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&
                     (assertClause === undefined || isAssertClause(assertClause)),
 
                 1: ([decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (importClause === undefined || isImportClause(importClause)) &&
                     (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&
@@ -1259,13 +1259,13 @@ namespace ts {
             .bind({
                 0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (importClause === undefined || !isArray(importClause)) &&
                     (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&
                     (assertClause === undefined || isAssertClause(assertClause)),
 
                 1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (importClause === undefined || isImportClause(importClause)) &&
                     (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&
@@ -1289,12 +1289,12 @@ namespace ts {
             .bind({
                 0: ([modifiers, isExportEquals, expression, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (isExportEquals === undefined || typeof isExportEquals === "boolean") &&
                     (typeof expression === "object"),
 
                 1: ([decorators, modifiers, isExportEquals, expression]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (isExportEquals === undefined || typeof isExportEquals === "boolean") &&
                     (expression !== undefined && isExpression(expression)),
@@ -1317,11 +1317,11 @@ namespace ts {
             .bind({
                 0: ([, modifiers, expression, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (expression !== undefined && !isArray(expression)),
 
                 1: ([, decorators, modifiers, expression]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (expression !== undefined && isExpression(expression)),
             })
@@ -1343,14 +1343,14 @@ namespace ts {
             .bind({
                 0: ([modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (typeof isTypeOnly === "boolean") &&
                     (typeof exportClause !== "boolean") &&
                     (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&
                     (assertClause === undefined || isAssertClause(assertClause)),
 
                 1: ([decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (typeof isTypeOnly === "boolean") &&
                     (exportClause === undefined || isNamedExportBindings(exportClause)) &&
@@ -1375,14 +1375,14 @@ namespace ts {
             .bind({
                 0: ([, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || isArrayOf(modifiers, isModifier)) &&
+                    (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                     (typeof isTypeOnly === "boolean") &&
                     (typeof exportClause !== "boolean") &&
                     (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&
                     (assertClause === undefined || isAssertClause(assertClause)),
 
                 1: ([, decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause]) =>
-                    (decorators === undefined || isArrayOf(decorators, isDecorator)) &&
+                    (decorators === undefined || every<Node>(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (typeof isTypeOnly === "boolean") &&
                     (exportClause === undefined || isNamedExportBindings(exportClause)) &&

@@ -165,15 +165,6 @@ namespace ts {
         return true;
     }
 
-    /**
-     * Equivalent to every, but can discriminate between unions of arrays.
-     */
-    export function isArrayOf<T>(array: readonly any[], callback: (element: any, index: number) => element is T): array is readonly T[];
-    export function isArrayOf<T>(array: readonly any[] | undefined, callback: (element: any, index: number) => element is T): array is readonly T[] | undefined;
-    export function isArrayOf(array: readonly any[] | undefined, callback: (element: any, index: number) => boolean): boolean {
-        return every(array, callback);
-    }
-
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
     export function find<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
     export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
