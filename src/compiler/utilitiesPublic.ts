@@ -270,7 +270,8 @@ namespace ts {
     }
 
     // TODO(jakebailey): It is very weird that we have BindingElement and ArrayBindingElement;
-    // we should have ObjectBindingElement and ArrayBindingElement, which are both BindingElement.
+    // we should have ObjectBindingElement and ArrayBindingElement, which are both BindingElement,
+    // just like BindingPattern is a ObjectBindingPattern or a ArrayBindingPattern.
     export function isEmptyBindingElement(node: BindingElement | ArrayBindingElement): boolean {
         if (isOmittedExpression(node)) {
             return true;
