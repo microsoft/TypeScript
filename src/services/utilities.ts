@@ -2545,6 +2545,12 @@ namespace ts {
     }
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
+        const nodeClone: <T extends Node>(n: T) => T = replaceNode
+            ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
+            : getSynthesizedDeepClone;
+        const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
+            ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
+            : ns => ns && getSynthesizedDeepClones(ns);
         const visited =
             visitEachChild(node, nodeClone, nullTransformationContext, nodesClone, nodeClone);
 
@@ -2562,20 +2568,6 @@ namespace ts {
         // would have made.
         (visited as Mutable<T>).parent = undefined!;
         return visited;
-
-        function nodeClone<T extends Node>(node: T): T {
-            return replaceNode
-                ? getSynthesizedDeepCloneWithReplacements(node, /*includeTrivia*/ true, replaceNode)
-                : getSynthesizedDeepClone(node);
-        }
-
-        function nodesClone<T extends Node>(nodes: NodeArray<T>): NodeArray<T>;
-        function nodesClone<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
-        function nodesClone<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
-            return replaceNode
-                ? nodes && getSynthesizedDeepClonesWithReplacements(nodes, /*includeTrivia*/ true, replaceNode)
-                : nodes && getSynthesizedDeepClones(nodes);
-        }
     }
 
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;

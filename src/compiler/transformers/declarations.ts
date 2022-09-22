@@ -850,8 +850,7 @@ namespace ts {
                 if (isLateVisibilityPaintedStatement(statement)) {
                     const key = getOriginalNodeId(statement);
                     if (lateStatementReplacementMap.has(key)) {
-                        const result = lateStatementReplacementMap.get(key);
-                        Debug.type<readonly Statement[]>(result);
+                        const result = lateStatementReplacementMap.get(key) as Statement | readonly Statement[] | undefined;
                         lateStatementReplacementMap.delete(key);
                         if (result) {
                             if (isArray(result) ? some(result, needsScopeMarker) : needsScopeMarker(result)) {
