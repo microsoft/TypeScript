@@ -95,6 +95,7 @@ namespace ts.projectSystem {
         function msg(s: string, type = server.Msg.Err, write: (s: string) => void) {
             s = `[${nowString()}] ${s}`;
             if (!inGroup || firstInGroup) s = padStringRight(type + " " + seq.toString(), "          ") + s;
+            if (Debug.isDebugging) console.log(s);
             write(s);
             if (!inGroup) seq++;
         }
