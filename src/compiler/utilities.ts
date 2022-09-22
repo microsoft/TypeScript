@@ -3454,7 +3454,7 @@ namespace ts {
      * This function returns true if the this node's root declaration is a parameter.
      * For example, passing a `ParameterDeclaration` will return true, as will passing a
      * binding element that is a child of a `ParameterDeclaration`.
-     * 
+     *
      * If you are looking to test that a `Node` is a `ParameterDeclaration`, use `isParameter`.
      */
     export function isParameterDeclaration(node: Declaration): boolean {
