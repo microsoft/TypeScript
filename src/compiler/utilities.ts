@@ -5633,7 +5633,6 @@ namespace ts {
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.BinaryExpression:
                 return kind === AccessKind.ReadWrite ? writeOrReadWrite() : kind;
-                break;
             default:
                 return kind;
         }
