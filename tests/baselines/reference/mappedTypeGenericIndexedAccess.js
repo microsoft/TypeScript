@@ -69,7 +69,7 @@ var onSomeEvent = function (p) { var _a; return (_a = typeHandlers[p.t]) === nul
 
 
 //// [mappedTypeGenericIndexedAccess.d.ts]
-declare type Types = {
+type Types = {
     first: {
         a1: true;
     };
@@ -87,7 +87,7 @@ declare class Test {
     constructor();
     addEntry<T extends keyof Types>(name: T, entry: Types[T]): void;
 }
-declare type TypesMap = {
+type TypesMap = {
     [0]: {
         foo: 'bar';
     };
@@ -95,10 +95,10 @@ declare type TypesMap = {
         a: 'b';
     };
 };
-declare type P<T extends keyof TypesMap> = {
+type P<T extends keyof TypesMap> = {
     t: T;
 } & TypesMap[T];
-declare type TypeHandlers = {
+type TypeHandlers = {
     [T in keyof TypesMap]?: (p: P<T>) => void;
 };
 declare const typeHandlers: TypeHandlers;

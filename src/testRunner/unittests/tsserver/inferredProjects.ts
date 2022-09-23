@@ -14,7 +14,7 @@ namespace ts.projectSystem {
                 content: `export let x: number`
             };
             const host = createServerHost([appFile, moduleFile, libFile]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.openClientFile(appFile.path);
             baselineTsserverLogs("inferredProjects", "create inferred project", projectService);
         });

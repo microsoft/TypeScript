@@ -1,0 +1,16 @@
+=== tests/cases/compiler/evolvingArrayResolvedAssert.ts ===
+var C = [];
+>C : Symbol(C, Decl(evolvingArrayResolvedAssert.ts, 0, 3))
+
+for (var a in C) {
+>a : Symbol(a, Decl(evolvingArrayResolvedAssert.ts, 1, 8))
+>C : Symbol(C, Decl(evolvingArrayResolvedAssert.ts, 0, 3))
+
+    if (C.hasOwnProperty(a)) {
+>C.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(evolvingArrayResolvedAssert.ts, 0, 3))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(evolvingArrayResolvedAssert.ts, 1, 8))
+    }
+}
+

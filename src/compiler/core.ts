@@ -778,19 +778,24 @@ namespace ts {
         return [] as any as SortedArray<T>; // TODO: GH#19873
     }
 
-    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): void {
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): boolean {
         if (array.length === 0) {
             array.push(insert);
-            return;
+            return true;
         }
 
         const insertIndex = binarySearch(array, insert, identity, compare);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
+            return true;
         }
-        else if (allowDuplicates) {
+
+        if (allowDuplicates) {
             array.splice(insertIndex, 0, insert);
+            return true;
         }
+
+        return false;
     }
 
     export function sortAndDeduplicate<T>(array: readonly string[]): SortedReadonlyArray<string>;
@@ -1111,6 +1116,13 @@ namespace ts {
         return array && array.length === 1
             ? array[0]
             : undefined;
+    }
+
+    /**
+     * Returns the only element of an array if it contains only one element; throws otherwise.
+     */
+    export function single<T>(array: readonly T[]): T {
+        return Debug.checkDefined(singleOrUndefined(array));
     }
 
     /**
@@ -1724,6 +1736,11 @@ namespace ts {
     /** Does nothing. */
     export function noop(_?: unknown): void { }
 
+    export const noopPush: Push<any> = {
+        push: noop,
+        length: 0
+    };
+
     /** Do nothing and return false */
     export function returnFalse(): false {
         return false;
@@ -2105,7 +2122,7 @@ namespace ts {
      *         and 1 insertion/deletion at 3 characters)
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
-        const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+        const maximumLengthDifference = Math.max(2, Math.floor(name.length * 0.34));
         let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
         for (const candidate of candidates) {
@@ -2354,6 +2371,9 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
+    export function or<P, R1 extends P, R2 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2): (p: P) => p is R1 | R2;
+    export function or<P, R1 extends P, R2 extends P, R3 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2, f3: (p3: P) => p3 is R3): (p: P) => p is R1 | R2 | R3;
+    export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U;
     export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U {
         return (...args) => {
             let lastResult: U;

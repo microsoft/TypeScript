@@ -31,7 +31,7 @@ const obj = new Derived(); // nothing printed
 >new Derived() : Derived
 >Derived : typeof Derived
 
-console.log(obj.x); // 1
+console.log(obj.x); // number
 >console.log(obj.x) : void
 >console.log : (...data: any[]) => void
 >console : Console

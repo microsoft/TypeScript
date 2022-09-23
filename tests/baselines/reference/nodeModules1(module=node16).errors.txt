@@ -1,19 +1,19 @@
-tests/cases/conformance/node/index.cts(2,21): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(3,21): error TS1471: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(6,21): error TS1471: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(9,21): error TS1471: Module './subfolder2/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(11,22): error TS1471: Module './subfolder2/another/index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(12,22): error TS1471: Module './subfolder2/another/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(15,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(16,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(23,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(24,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(25,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(51,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(52,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(59,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(60,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(61,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(2,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
+tests/cases/conformance/node/index.cts(3,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
+tests/cases/conformance/node/index.cts(6,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
+tests/cases/conformance/node/index.cts(9,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/index.mjs")' call instead.
+tests/cases/conformance/node/index.cts(11,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.js")' call instead.
+tests/cases/conformance/node/index.cts(12,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.mjs")' call instead.
+tests/cases/conformance/node/index.cts(15,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./")' call instead.
+tests/cases/conformance/node/index.cts(16,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index")' call instead.
+tests/cases/conformance/node/index.cts(23,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another")' call instead.
+tests/cases/conformance/node/index.cts(24,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/")' call instead.
+tests/cases/conformance/node/index.cts(25,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index")' call instead.
+tests/cases/conformance/node/index.cts(51,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.cts(52,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.cts(59,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.cts(60,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.cts(61,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 tests/cases/conformance/node/index.cts(75,21): error TS2307: Cannot find module './' or its corresponding type declarations.
 tests/cases/conformance/node/index.cts(76,21): error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
 tests/cases/conformance/node/index.cts(77,21): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
@@ -36,11 +36,11 @@ tests/cases/conformance/node/index.mts(21,22): error TS2835: Relative import pat
 tests/cases/conformance/node/index.mts(22,22): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 tests/cases/conformance/node/index.mts(23,22): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 tests/cases/conformance/node/index.mts(24,22): error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
-tests/cases/conformance/node/index.mts(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.mts(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.mts(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.mts(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.mts(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.mts(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.mts(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.mts(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.mts(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.mts(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 tests/cases/conformance/node/index.mts(74,21): error TS2307: Cannot find module './' or its corresponding type declarations.
 tests/cases/conformance/node/index.mts(75,21): error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
 tests/cases/conformance/node/index.mts(76,21): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
@@ -63,11 +63,11 @@ tests/cases/conformance/node/index.ts(21,22): error TS2835: Relative import path
 tests/cases/conformance/node/index.ts(22,22): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 tests/cases/conformance/node/index.ts(23,22): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 tests/cases/conformance/node/index.ts(24,22): error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
-tests/cases/conformance/node/index.ts(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.ts(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.ts(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.ts(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.ts(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.ts(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.ts(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.ts(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.ts(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+tests/cases/conformance/node/index.ts(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 tests/cases/conformance/node/index.ts(74,21): error TS2307: Cannot find module './' or its corresponding type declarations.
 tests/cases/conformance/node/index.ts(75,21): error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
 tests/cases/conformance/node/index.ts(76,21): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
@@ -191,10 +191,10 @@ tests/cases/conformance/node/index.ts(84,21): error TS2835: Relative import path
     // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
     import m24 = require("./");
                          ~~~~
-!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m25 = require("./index");
                          ~~~~~~~~~
-!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m26 = require("./subfolder");
     import m27 = require("./subfolder/");
     import m28 = require("./subfolder/index");
@@ -203,13 +203,13 @@ tests/cases/conformance/node/index.ts(84,21): error TS2835: Relative import path
     import m31 = require("./subfolder2/index");
     import m32 = require("./subfolder2/another");
                          ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m33 = require("./subfolder2/another/");
                          ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m34 = require("./subfolder2/another/index");
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     void m24;
     void m25;
     void m26;
@@ -264,35 +264,35 @@ tests/cases/conformance/node/index.ts(84,21): error TS2835: Relative import path
     // ESM-format imports below should issue errors
     import * as m1 from "./index.js";
                         ~~~~~~~~~~~~
-!!! error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
     import * as m2 from "./index.mjs";
                         ~~~~~~~~~~~~~
-!!! error TS1471: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
     import * as m3 from "./index.cjs";
     import * as m4 from "./subfolder/index.js";
     import * as m5 from "./subfolder/index.mjs";
                         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
     import * as m6 from "./subfolder/index.cjs";
     import * as m7 from "./subfolder2/index.js";
     import * as m8 from "./subfolder2/index.mjs";
                         ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/index.mjs")' call instead.
     import * as m9 from "./subfolder2/index.cjs";
     import * as m10 from "./subfolder2/another/index.js";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.js")' call instead.
     import * as m11 from "./subfolder2/another/index.mjs";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.mjs")' call instead.
     import * as m12 from "./subfolder2/another/index.cjs";
     // The next ones should _mostly_ work - cjs format files have index resolution and extension resolution (except for those which resolve to an esm format file)
     import * as m13 from "./";
                          ~~~~
-!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./")' call instead.
     import * as m14 from "./index";
                          ~~~~~~~~~
-!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index")' call instead.
     import * as m15 from "./subfolder";
     import * as m16 from "./subfolder/";
     import * as m17 from "./subfolder/index";
@@ -301,13 +301,13 @@ tests/cases/conformance/node/index.ts(84,21): error TS2835: Relative import path
     import * as m20 from "./subfolder2/index";
     import * as m21 from "./subfolder2/another";
                          ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another")' call instead.
     import * as m22 from "./subfolder2/another/";
                          ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/")' call instead.
     import * as m23 from "./subfolder2/another/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index")' call instead.
     void m1;
     void m2;
     void m3;
@@ -335,10 +335,10 @@ tests/cases/conformance/node/index.ts(84,21): error TS2835: Relative import path
     // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
     import m24 = require("./");
                          ~~~~
-!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m25 = require("./index");
                          ~~~~~~~~~
-!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m26 = require("./subfolder");
     import m27 = require("./subfolder/");
     import m28 = require("./subfolder/index");
@@ -347,13 +347,13 @@ tests/cases/conformance/node/index.ts(84,21): error TS2835: Relative import path
     import m31 = require("./subfolder2/index");
     import m32 = require("./subfolder2/another");
                          ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m33 = require("./subfolder2/another/");
                          ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m34 = require("./subfolder2/another/index");
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     void m24;
     void m25;
     void m26;
@@ -477,10 +477,10 @@ tests/cases/conformance/node/index.ts(84,21): error TS2835: Relative import path
     // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
     import m24 = require("./");
                          ~~~~
-!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m25 = require("./index");
                          ~~~~~~~~~
-!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m26 = require("./subfolder");
     import m27 = require("./subfolder/");
     import m28 = require("./subfolder/index");
@@ -489,13 +489,13 @@ tests/cases/conformance/node/index.ts(84,21): error TS2835: Relative import path
     import m31 = require("./subfolder2/index");
     import m32 = require("./subfolder2/another");
                          ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m33 = require("./subfolder2/another/");
                          ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m34 = require("./subfolder2/another/index");
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     void m24;
     void m25;
     void m26;

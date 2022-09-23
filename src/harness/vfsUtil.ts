@@ -916,7 +916,6 @@ namespace vfs {
                 if (this._shadowRoot) {
                     this._copyShadowLinks(this._shadowRoot._getRootLinks(), this._lazy.links);
                 }
-                this._lazy.links = this._lazy.links;
             }
             return this._lazy.links;
         }
@@ -1578,7 +1577,7 @@ namespace vfs {
             const entry = normalizeFileSetEntry(container[name]);
             const file = dirname ? vpath.combine(dirname, name) : name;
             // eslint-disable-next-line no-null/no-null
-            if (entry === null || entry === undefined || entry instanceof Unlink || entry instanceof Rmdir) {
+            if (entry === null || entry === undefined || entry instanceof Unlink) {
                 text += `//// [${file}] unlink\r\n`;
             }
             else if (entry instanceof Rmdir) {

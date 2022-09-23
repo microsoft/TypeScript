@@ -68,11 +68,11 @@ namespace ts.projectSystem {
                 content: "{}"
             };
             const host = createServerHost([f1, f2, f3, libFile, config]);
-            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(f1.path);
             const project = service.configuredProjects.get(config.path)!;
-            service.logger.logs.push(`languageServiceEnabled: ${project.languageServiceEnabled}`);
-            service.logger.logs.push(`lastFileExceededProgramSize: ${project.lastFileExceededProgramSize}`);
+            service.logger.info(`languageServiceEnabled: ${project.languageServiceEnabled}`);
+            service.logger.info(`lastFileExceededProgramSize: ${project.lastFileExceededProgramSize}`);
             baselineTsserverLogs("projectLanguageServiceStateEvent", "large file size is determined correctly", service);
         });
     });

@@ -46,3 +46,5 @@ function base64VLQFormatEncode(value) {
     return result;
 }
 exports.base64VLQFormatEncode = base64VLQFormatEncode;
+
+/** @typedef {object} RawSourceMap */

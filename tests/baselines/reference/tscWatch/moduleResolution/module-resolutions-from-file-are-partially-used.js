@@ -51,16 +51,6 @@ File '/user/username/projects/package.json' does not exist.
 File '/user/username/package.json' does not exist.
 File '/user/package.json' does not exist.
 File '/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -121,12 +111,7 @@ Explicitly specified module resolution kind: 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/a', target file type 'TypeScript'.
 File '/user/username/projects/myproject/a.ts' exist - use it as a name resolution result.
 ======== Module name './a' was successfully resolved to '/user/username/projects/myproject/a.ts'. ========
-Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -160,31 +145,37 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/index.ts:
-  {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg/import.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/index.ts:
+  {}
+/user/username/projects/myproject/node_modules/pkg/import.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/node_modules/pkg/package.json:
+  {}
+/user/username/projects/myproject/node_modules/pkg1/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -213,31 +204,25 @@ Output::
 >> Screen clear
 [[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist.
-Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
-'package.json' does not have a 'typesVersions' field.
-File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/a.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
@@ -246,27 +231,25 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg' from 'node_modules' folder, target file type 'TypeScript'.
-Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
-'package.json' does not have a 'typesVersions' field.
+File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
-Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg/package.json'.
-'package.json' does not have a 'typesVersions' field.
-File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module 'pkg' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'.
 Reusing resolution of module './a' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/a.ts'.
 Reusing resolution of module 'pkg1' from '/user/username/projects/myproject/index.ts' of old program, it was not resolved.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 [96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
@@ -293,31 +276,37 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/index.ts:
-  {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg/import.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg/import.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/index.ts:
+  {}
+/user/username/projects/myproject/node_modules/pkg/import.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/node_modules/pkg/package.json:
+  {}
+/user/username/projects/myproject/node_modules/pkg1/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

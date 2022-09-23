@@ -39,6 +39,26 @@ function f12({ kind, payload }: Action) {
     }
 }
 
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
+function f14<T extends Action>(t: T) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
 type Action2 =
     | { kind: 'A', payload: number | undefined }
     | { kind: 'B', payload: string | undefined };
@@ -327,3 +347,46 @@ function foo({
     test8 = value1.test8,
     test9 = value1.test9
 }) {}
+
+// Repro from #49772
+
+function fa1(x: [true, number] | [false, string]) {
+    const [guard, value] = x;
+    if (guard) {
+        for (;;) {
+            value;  // number
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+        }
+    }
+}
+
+function fa2(x: { guard: true, value: number } | { guard: false, value: string }) {
+    const { guard, value } = x;
+    if (guard) {
+        for (;;) {
+            value;  // number
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+        }
+    }
+}
+
+const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
+    if (guard) {
+        for (;;) {
+            value;  // number
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+        }
+    }
+}

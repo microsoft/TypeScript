@@ -35,7 +35,7 @@ Output::
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:27 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -57,19 +57,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (used version)
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/solution/app/tsconfig.json:
+  {}
+/user/username/projects/solution/app/filewitherror.ts:
+  {}
+/user/username/projects/solution/app/filewithouterror.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -83,14 +83,14 @@ export class myClass2 { }
 
 Output::
 >> Screen clear
-[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
 [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
 
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:31 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -108,19 +108,19 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/solution/app/tsconfig.json:
+  {}
+/user/username/projects/solution/app/filewitherror.ts:
+  {}
+/user/username/projects/solution/app/filewithouterror.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

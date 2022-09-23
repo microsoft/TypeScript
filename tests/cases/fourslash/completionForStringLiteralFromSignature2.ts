@@ -4,4 +4,4 @@
 ////declare function f(a: string, b: number): void;
 ////f("/**/", 0);
 
-verify.completions({ marker: "", exact: [], isNewIdentifierLocation: true });
+verify.completions({ marker: "", exact: [], isNewIdentifierLocation: false });

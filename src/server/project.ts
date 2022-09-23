@@ -256,12 +256,12 @@ namespace ts.server {
 
         /*@internal*/
         public static async importServicePluginAsync(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): Promise<{} | undefined> {
-            Debug.assertIsDefined(host.importServicePlugin);
+            Debug.assertIsDefined(host.importPlugin);
             const resolvedPath = combinePaths(initialDir, "node_modules");
             log(`Dynamically importing ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             let result: ModuleImportResult;
             try {
-                result = await host.importServicePlugin(resolvedPath, moduleName);
+                result = await host.importPlugin(resolvedPath, moduleName);
             }
             catch (e) {
                 result = { module: undefined, error: e };
@@ -558,7 +558,7 @@ namespace ts.server {
                 cb,
                 PollingInterval.High,
                 this.projectService.getWatchOptions(this),
-                WatchType.PackageJson,
+                WatchType.AffectingFileLocation,
                 this
             );
         }
@@ -1172,7 +1172,7 @@ namespace ts.server {
         }
 
         private updateGraphWorker() {
-            const oldProgram = this.program;
+            const oldProgram = this.languageService.getCurrentProgram();
             Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
@@ -1181,7 +1181,7 @@ namespace ts.server {
             this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;
             tracing?.push(tracing.Phase.Session, "finishCachingPerDirectoryResolution");
-            this.resolutionCache.finishCachingPerDirectoryResolution();
+            this.resolutionCache.finishCachingPerDirectoryResolution(this.program, oldProgram);
             tracing?.pop();
 
             Debug.assert(oldProgram === undefined || this.program !== undefined);
@@ -1607,7 +1607,7 @@ namespace ts.server {
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void {
             const host = this.projectService.host;
 
-            if (!host.require && !host.importServicePlugin) {
+            if (!host.require && !host.importPlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
@@ -1658,7 +1658,7 @@ namespace ts.server {
          */
         /*@internal*/
         async beginEnablePluginAsync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): Promise<BeginEnablePluginResult> {
-            Debug.assertIsDefined(this.projectService.host.importServicePlugin);
+            Debug.assertIsDefined(this.projectService.host.importPlugin);
 
             let errorLogs: string[] | undefined;
             const log = (message: string) => this.projectService.logger.info(message);
@@ -1721,7 +1721,7 @@ namespace ts.server {
                 const pluginModule = pluginModuleFactory({ typescript: ts });
                 const newLS = pluginModule.create(info);
                 for (const k of Object.keys(this.languageService)) {
-                    // eslint-disable-next-line no-in-operator
+                    // eslint-disable-next-line local/no-in-operator
                     if (!(k in newLS)) {
                         this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
                         (newLS as any)[k] = (this.languageService as any)[k];
@@ -1751,7 +1751,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
             if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
             return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
         }
@@ -1762,7 +1762,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsForAutoImport(rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsForAutoImport(rootDir?: string): readonly ProjectPackageJsonInfo[] {
             const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
             this.packageJsonsForAutoImport = new Set(packageJsons.map(p => p.fileName));
             return packageJsons;
@@ -2177,7 +2177,6 @@ namespace ts.server {
                 }
             }
 
-            type PackageJsonInfo = NonNullable<ReturnType<typeof resolvePackageNameToPackageJson>>;
             function getRootNamesFromPackageJson(packageJson: PackageJsonInfo, program: Program, symlinkCache: SymlinkCache, resolveJs?: boolean) {
                 const entrypoints = getEntrypointsFromPackageJsonInfo(
                     packageJson,
@@ -2523,8 +2522,7 @@ namespace ts.server {
         /*@internal*/
         enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): void {
             const host = this.projectService.host;
-
-            if (!host.require && !host.importServicePlugin) {
+            if (!host.require && !host.importPlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
