@@ -113,7 +113,7 @@ namespace ts {
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
         /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
-        hasInvalidatedResolution?(filePath: Path): boolean;
+        hasInvalidatedResolutions?(filePath: Path): boolean;
         /**
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
@@ -373,9 +373,9 @@ namespace ts {
             maybeBind(host, host.getModuleResolutionCache) :
             (() => resolutionCache.getModuleResolutionCache());
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
-        // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolution
-        const customHasInvalidatedResolution = userProvidedResolution ?
-            maybeBind(host, host.hasInvalidatedResolution) || returnTrue :
+        // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolutions
+        const customHasInvalidatedResolutions = userProvidedResolution ?
+            maybeBind(host, host.hasInvalidatedResolutions) || returnTrue :
             returnFalse;
 
         builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
@@ -449,12 +449,12 @@ namespace ts {
                 }
             }
 
-            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(customHasInvalidatedResolution);
+            const hasInvalidatedResolutions = resolutionCache.createHasInvalidatedResolutions(customHasInvalidatedResolutions);
             const {
                 originalReadFile, originalFileExists, originalDirectoryExists,
                 originalCreateDirectory, originalWriteFile,
             } = changeCompilerHostLikeToUseCache(compilerHost, toPath);
-            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileName => compilerHost.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
                     if (reportFileChangeDetectedOnCreateProgram) {
                         reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
@@ -467,7 +467,7 @@ namespace ts {
                 if (reportFileChangeDetectedOnCreateProgram) {
                     reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
                 }
-                createNewProgram(hasInvalidatedResolution);
+                createNewProgram(hasInvalidatedResolutions);
             }
 
             reportFileChangeDetectedOnCreateProgram = false;
@@ -484,7 +484,7 @@ namespace ts {
             return builderProgram;
         }
 
-        function createNewProgram(hasInvalidatedResolution: HasInvalidatedResolution) {
+        function createNewProgram(hasInvalidatedResolutions: HasInvalidatedResolutions) {
             // Compile the program
             writeLog("CreatingProgramWith::");
             writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
@@ -495,7 +495,7 @@ namespace ts {
             hasChangedCompilerOptions = false;
             hasChangedConfigFileParsingErrors = false;
             resolutionCache.startCachingPerDirectoryResolution();
-            compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
+            compilerHost.hasInvalidatedResolutions = hasInvalidatedResolutions;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
             const oldProgram = getCurrentProgram();
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);

@@ -50,7 +50,7 @@ namespace ts.tscWatch {
             });
         });
 
-        describe("hasInvalidatedResolution", () => {
+        describe("hasInvalidatedResolutions", () => {
             function verifyWatch(subScenario: string, implementHasInvalidatedResolution: boolean) {
                 it(subScenario, () => {
                     const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem({
@@ -70,7 +70,7 @@ namespace ts.tscWatch {
                     host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) =>
                         moduleNames.map(m => resolveModuleName(m, containingFile, options, host).resolvedModule);
                     // Invalidate resolutions only when ts file is created
-                    if (implementHasInvalidatedResolution) host.hasInvalidatedResolution = () => sys.fileExists(`${projectRoot}/other.ts`);
+                    if (implementHasInvalidatedResolution) host.hasInvalidatedResolutions = () => sys.fileExists(`${projectRoot}/other.ts`);
                     const watch = createWatchProgram(host);
                     runWatchBaseline({
                         scenario: "watchApi",
@@ -104,8 +104,8 @@ namespace ts.tscWatch {
                     });
                 });
             }
-            verifyWatch("host implements does not implement hasInvalidatedResolution", /*implementHasInvalidatedResolution*/ false);
-            verifyWatch("host implements hasInvalidatedResolution", /*implementHasInvalidatedResolution*/ true);
+            verifyWatch("host implements does not implement hasInvalidatedResolutions", /*implementHasInvalidatedResolution*/ false);
+            verifyWatch("host implements hasInvalidatedResolutions", /*implementHasInvalidatedResolution*/ true);
         });
     });
 
