@@ -139,7 +139,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierNameWithExtendedEscape1 = void 0;
 var IdentifierNameWithExtendedEscape1 = /** @class */ (function () {
     function IdentifierNameWithExtendedEscape1() {
-        this.\u{78} = 0;
+        this.x = 0;
     }
     IdentifierNameWithExtendedEscape1.prototype.doThing = function () {
         this.x = 42;
@@ -153,7 +153,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierNameWithExtendedEscape2 = void 0;
 var IdentifierNameWithExtendedEscape2 = /** @class */ (function () {
     function IdentifierNameWithExtendedEscape2() {
-        this.x\u{78} = 0;
+        this.xx = 0;
     }
     IdentifierNameWithExtendedEscape2.prototype.doThing = function () {
         this.xx = 42;
