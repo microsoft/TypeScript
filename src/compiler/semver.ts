@@ -202,6 +202,10 @@ namespace ts {
             return undefined;
         }
 
+        /**
+         * Tests whether a version matches the range. This is equivalent to `satisfies(version, range, { includePrerelease: true })`.
+         * in `node-semver`.
+         */
         test(version: Version | string) {
             if (typeof version === "string") version = new Version(version);
             return testDisjunction(version, this._alternatives);
@@ -329,7 +333,9 @@ namespace ts {
                     break;
                 case "<":
                 case ">=":
-                    comparators.push(createComparator(operator, version));
+                    comparators.push(
+                        isWildcard(minor) || isWildcard(patch) ? createComparator(operator, version.with({ prerelease: "0" })) :
+                        createComparator(operator, version));
                     break;
                 case "<=":
                 case ">":
@@ -341,8 +347,8 @@ namespace ts {
                 case "=":
                 case undefined:
                     if (isWildcard(minor) || isWildcard(patch)) {
-                        comparators.push(createComparator(">=", version));
-                        comparators.push(createComparator("<", version.increment(isWildcard(minor) ? "major" : "minor")));
+                        comparators.push(createComparator(">=", version.with({ prerelease: "0" })));
+                        comparators.push(createComparator("<", version.increment(isWildcard(minor) ? "major" : "minor").with({ prerelease: "0" })));
                     }
                     else {
                         comparators.push(createComparator("=", version));
