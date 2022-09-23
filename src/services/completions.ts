@@ -600,10 +600,18 @@ namespace ts.Completions {
         formatContext: formatting.FormatContext | undefined): { entry: CompletionEntry, importAdder: codefix.ImportAdder } | undefined {
         const caseClause = tryCast(contextToken.parent, isCaseClause);
         if (caseClause) {
+            // Only offer this completion if we're not positioned *after* a default clause
+            const clauses = caseClause.parent.clauses;
+            const defaultClauseIndex = findIndex(clauses, isDefaultClause);
+            const currentIndex = findIndex(clauses, c => c === caseClause);
+            if (defaultClauseIndex !== -1 && currentIndex > defaultClauseIndex) {
+                return undefined;
+            }
             const checker = program.getTypeChecker();
-            // >> TODO: only offer if we're not positioned *after* a default clause
             const switchType = getSwitchedType(caseClause, checker);
-            if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) { // >> TODO: does this work for enum members?
+            // >> TODO: use `isTypeLiteral` from checker?
+            // >> that considers unions of literals, all unit types, and also booleans.
+            if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) {// >> TODO: does this work for enum members? aliases?
                 const printer = createSnippetPrinter({
                     removeComments: true,
                     module: options.module,
@@ -611,45 +619,80 @@ namespace ts.Completions {
                     newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
                 });
 
-                // const existingClauses = new Map<SymbolId, true>(mapDefined(caseClause.parent.clauses, clause => {
-                //     if (isDefaultClause(clause)) {
-                //         return undefined;
-                //     }
-                //     const symbol = checker.getSymbolAtLocation(clause.expression); // >> TODO: what if it's a literal?
-                //     if (symbol) {
-                //         return [getSymbolId(symbol), true];
-                //     }
-                //     return undefined;
-                // }));
+
+                // >> TODO: not sure if this is fast enough for filtering existing cases
+                // const existingSymbols = new Map<SymbolId, true>();
+                // const existingLiterals: (number | string | PseudoBigInt)[] = [];
+                // existingLiterals;
+                const existingValues: (string | number | PseudoBigInt)[] = [];
+
+                for (const clause of clauses) {
+                    if (isDefaultClause(clause)) {
+                        continue;
+                    }
+                    if (isLiteralExpression(clause.expression)) {
+                        const expression = clause.expression;
+                        switch (expression.kind) {
+                            case SyntaxKind.StringLiteral:
+                                existingValues.push(expression.text);
+                                continue;
+                            case SyntaxKind.NumericLiteral:
+                                existingValues.push(parseInt(expression.text)); // ??
+                                continue;
+                            case SyntaxKind.BigIntLiteral:
+                            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                                continue;
+                            default:
+                                return undefined;
+                        }
+                    }
+                    else {
+                        const symbol = checker.getSymbolAtLocation(clause.expression);
+                        if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
+                            // TODO: check that it's an enum member symbol
+                            const enumValue = checker.getConstantValue(symbol.valueDeclaration);
+                            if (enumValue) {
+                                existingValues.push(enumValue);
+                            }
+                            else {
+                                return undefined
+                            }
+                        }
+                    }
+                    return undefined; // We couldn't recognize all existing case clauses, so fail.
+                }
+
 
                 const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
-                let hasUnrecognizedType = false;
-                let elements: Expression[] = mapDefined(switchType.types as LiteralType[], type => {
+                const elements: Expression[] = [];
+                for (const type of switchType.types as LiteralType[]) {
                     if (type.flags & TypeFlags.EnumLiteral) {
                         Debug.assert(type.symbol, "TODO: should this hold always?");
                         Debug.assert(type.symbol.parent, "TODO: should this hold always too?");
-                        // if (!existingClauses.has(getSymbolId(type.symbol))) {
-                            // const target = getEmitScriptTarget(options);
-                            // >> TODO: figure out if need an import action
-                            // const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseClause.parent, target);
-                            // if (typeNode) {
-                            //     const typeNodeText = printer.printSnippetList(
-                            //         ListFormat.None,
-                            //         factory.createNodeArray([typeNode]),
-                            //         sourceFile);
-                            //     typeNodeText;
-
-                            //     const expr = foo(typeNode, target);
-                            //     if (expr) {
-                            //         return [typeNodeText, expr]; // >> TODO: how do we convert this?
-                            //     }
-
-                            // }
-                            const expr = checker.symbolToExpression(type.symbol, SymbolFlags.EnumMember, caseClause.parent, /*flags*/ undefined);
-                            if (expr) {
-                                return expr;
-                            }
+                        // if (existingSymbols.has(getSymbolId(type.symbol))) {
+                        //     continue;
                         // }
+                        const target = getEmitScriptTarget(options);
+                        // >> TODO: figure out if need an import action
+                        const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseClause.parent, target);
+                        if (typeNode) {
+                            const typeNodeText = printer.printSnippetList(
+                                ListFormat.None,
+                                factory.createNodeArray([typeNode]),
+                                sourceFile);
+                            typeNodeText;
+
+                            const expr = foo(typeNode, target);
+                            if (expr) {
+                                elements.push(expr);
+                            }
+                        }
+                        // >> TODO: what if expression has import node?
+                        // const expr = checker.symbolToExpression(type.symbol, SymbolFlags.EnumMember, caseClause.parent, /*flags*/ undefined);
+                        // if (expr) {
+                        //     return expr;
+                        // }
+                    // }
                     }
                     else {
                         // const text = completionNameForLiteral(sourceFile, preferences, type.value);
@@ -658,13 +701,12 @@ namespace ts.Completions {
                             : typeof type.value === "number"
                                 ? factory.createNumericLiteral(type.value)
                                 : factory.createStringLiteral(type.value);
-                        return literal;
+                        elements.push(literal);
                     }
-                    hasUnrecognizedType = true;
                     return undefined;
-                });
+                }
 
-                if (hasUnrecognizedType || elements.length === 0) {
+                if (elements.length === 0) {
                     return undefined;
                 }
 
@@ -676,18 +718,18 @@ namespace ts.Completions {
                 // }));
 
                 // elements = filter(elements, element => !existingClauses.has(element[0]));
-                const clauses = mapDefined(elements, element => {
+                const newClauses = mapDefined(elements, element => {
                     return factory.createCaseClause(element, []);
                 });
                 const insertText = formatContext
                     ? printer.printAndFormatSnippetList(
                         ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
-                        factory.createNodeArray(clauses),
+                        factory.createNodeArray(newClauses),
                         sourceFile,
                         formatContext)
                     : printer.printSnippetList(
                         ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
-                        factory.createNodeArray(clauses),
+                        factory.createNodeArray(newClauses),
                         sourceFile);
 
                 const firstClause = printer.printSnippetList(ListFormat.SingleLine, factory.createNodeArray([first(clauses)!]), sourceFile);
@@ -710,31 +752,32 @@ namespace ts.Completions {
         return undefined;
     }
 
-    // function foo(typeNode: TypeNode, languageVersion: ScriptTarget): Expression | undefined {
-    //     switch (typeNode.kind) {
-    //         case SyntaxKind.TypeReference:
-    //             const typeName = (typeNode as TypeReferenceNode).typeName;
-    //             return bar(typeName);
-    //         // case SyntaxKind.ImportType: // >> TODO: We shouldn't have any import type
-    //         case SyntaxKind.IndexedAccessType:
-    //             return undefined; // >> TODO: do we need this case?
-    //     }
+    function foo(typeNode: TypeNode, languageVersion: ScriptTarget): Expression | undefined {
+        switch (typeNode.kind) {
+            case SyntaxKind.TypeReference:
+                const typeName = (typeNode as TypeReferenceNode).typeName;
+                return bar(typeName);
+            case SyntaxKind.ImportType:
+                Debug.fail(`We should not get an import type after calling 'codefix.typeToAutoImportableTypeNode'.`);
+            case SyntaxKind.IndexedAccessType:
+                return undefined; // >> TODO: do we need this case?
+        }
 
-    //     return undefined;
+        return undefined;
 
-    //     function bar(entityName: EntityName): Expression {
-    //         if (isIdentifier(entityName)) {
-    //             return entityName;
-    //         }
-    //         const realName = unescapeLeadingUnderscores(entityName.right.escapedText);
-    //         if (canUsePropertyAccess(realName, languageVersion)) {
-    //             return factory.createPropertyAccessExpression(bar(entityName.left), realName);
-    //         }
-    //         else {
-    //             return factory.createElementAccessExpression(bar(entityName.left), factory.createStringLiteral(`"${realName}"`)); // >> TODO: this is wrong
-    //         }
-    //     }
-    // }
+        function bar(entityName: EntityName): Expression {
+            if (isIdentifier(entityName)) {
+                return entityName;
+            }
+            const realName = unescapeLeadingUnderscores(entityName.right.escapedText);
+            if (canUsePropertyAccess(realName, languageVersion)) {
+                return factory.createPropertyAccessExpression(bar(entityName.left), realName);
+            }
+            else {
+                return factory.createElementAccessExpression(bar(entityName.left), factory.createStringLiteral(`"${realName}"`)); // >> TODO: this is wrong
+            }
+        }
+    }
 
     function isMemberCompletionKind(kind: CompletionKind): boolean {
         switch (kind) {
