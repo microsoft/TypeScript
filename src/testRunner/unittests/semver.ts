@@ -38,6 +38,7 @@ namespace ts {
                 });
                 it("parts", () => {
                     assertVersion(new Version(1, 2, 3, "pre.4", "build.5"), [1, 2, 3, ["pre", "4"], ["build", "5"]]);
+                    assertVersion(new Version(1, 2, 3, ["pre", "4"], ["build", "5"]), [1, 2, 3, ["pre", "4"], ["build", "5"]]);
                     assertVersion(new Version(1, 2, 3), [1, 2, 3]);
                     assertVersion(new Version(1, 2), [1, 2, 0]);
                     assertVersion(new Version(1), [1, 0, 0]);
@@ -167,6 +168,7 @@ namespace ts {
                 ["<=2", "2.0.0"],
                 ["<=2.1", "2.1.0"],
                 ["<=2.0.1", "2.0.1"],
+                ["<=4.8", "4.9.0-beta", false],
                 ["<=*", "0.0.0"],
                 ["<=*", "1.0.0"],
             ]);
