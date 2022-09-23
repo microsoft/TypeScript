@@ -1300,7 +1300,7 @@ namespace ts {
 
             // Get a fresh cache of the host information
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
-            const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const hasInvalidatedResolutions: HasInvalidatedResolutions = host.hasInvalidatedResolutions || returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             const projectReferences = host.getProjectReferences?.();
             let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
@@ -1332,7 +1332,7 @@ namespace ts {
                 },
                 onReleaseOldSourceFile,
                 onReleaseParsedCommandLine,
-                hasInvalidatedResolution,
+                hasInvalidatedResolutions,
                 hasChangedAutomaticTypeDirectiveNames,
                 trace: maybeBind(host, host.trace),
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
@@ -1369,7 +1369,7 @@ namespace ts {
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
             }
 
