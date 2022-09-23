@@ -2076,7 +2076,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(args.fileName);
             const formatContext = formatting.getFormatContext(formatOptions, host);
 
-            const mode = args.mode ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined)
+            const mode = args.mode ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined);
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, mode);
         }
 
