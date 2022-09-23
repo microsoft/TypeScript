@@ -643,11 +643,16 @@ namespace ts {
         }
 
         function visitIdentifier(node: Identifier): Identifier {
-            if (!convertedLoopState) {
-                return node;
+            if (convertedLoopState) {
+                if (resolver.isArgumentsLocalBinding(node)) {
+                    return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = factory.createUniqueName("arguments"));
+                }
             }
-            if (resolver.isArgumentsLocalBinding(node)) {
-                return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = factory.createUniqueName("arguments"));
+            if (node.hasExtendedUnicodeEscape) {
+                return setTextRange(
+                    factory.createIdentifier(unescapeLeadingUnderscores(node.escapedText)),
+                    node
+                );
             }
             return node;
         }
