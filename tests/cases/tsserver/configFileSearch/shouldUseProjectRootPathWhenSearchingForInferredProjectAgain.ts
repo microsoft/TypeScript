@@ -1,4 +1,4 @@
-/// <reference path="../../../../built/local/run.d.ts"/>
+/// <reference path="../../dynamicRunner.ts"/>
 const projectDir = "/a/b/projects/project";
 const configFileLocation = `${projectDir}/src`;
 const f1 = {

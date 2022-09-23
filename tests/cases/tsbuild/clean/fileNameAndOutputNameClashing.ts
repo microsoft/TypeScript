@@ -1,4 +1,4 @@
-/// <reference path="../../../../built/local/run.d.ts"/>
+/// <reference path="../../dynamicRunner.ts"/>
 ts.verifyTsc({
     scenario: "clean",
     subScenario: `file name and output name clashing`,

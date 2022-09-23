@@ -1,4 +1,4 @@
-/// <reference path="../../../../built/local/run.d.ts" />
+/// <reference path="../../dynamicRunner.ts"/>
 ts.tscWatch.verifyTscWatch({
     scenario: "nodenext watch emit",
     subScenario: "esm-mode file is edited",

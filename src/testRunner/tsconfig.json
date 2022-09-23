@@ -3,8 +3,8 @@
     "compilerOptions": {
         "outFile": "../../built/local/run.js",
         "composite": false,
-        "declaration": true,
-        "declarationMap": true,
+        "declaration": false,
+        "declarationMap": false,
         "types": [
             "node", "mocha", "chai"
         ],

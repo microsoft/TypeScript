@@ -1,4 +1,4 @@
-///<reference path="../../../../built/local/run.d.ts" />
+/// <reference path="../../dynamicRunner.ts"/>
 ts.tscWatch.verifyTscWatch({
     scenario: "noEmit",
     subScenario: "does not go in loop when watching when no files are emitted",

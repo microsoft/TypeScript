@@ -1,4 +1,4 @@
-/// <reference path="../../../../built/local/run.d.ts"/>
+/// <reference path="../../dynamicRunner.ts"/>
 ts.verifyTsc({
     scenario: "forceConsistentCasingInFileNames",
     subScenario: "with relative and non relative file resolutions",

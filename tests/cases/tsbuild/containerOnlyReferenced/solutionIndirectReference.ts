@@ -1,4 +1,4 @@
-///<reference path="../../../../built/local/run.d.ts"/>
+/// <reference path="../../dynamicRunner.ts"/>
 ts.verifyTscWithEdits({
     scenario: "containerOnlyReferenced",
     subScenario: "when solution is referenced indirectly",
