@@ -511,7 +511,7 @@ namespace ts {
             return !!(this.flags & TypeFlags.UnionOrIntersection);
         }
         isLiteral(): this is LiteralType {
-            return !!(this.flags & TypeFlags.StringOrNumberLiteral);
+            return !!(this.flags & TypeFlags.Literal);
         }
         isStringLiteral(): this is StringLiteralType {
             return !!(this.flags & TypeFlags.StringLiteral);
