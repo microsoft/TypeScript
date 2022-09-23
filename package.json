@@ -29,13 +29,13 @@
         "node": ">=4.2.0"
     },
     "files": [
-        "./bin",
-        "./lib",
-        "!./lib/enu",
-        "./LICENSE.txt",
-        "./README.md",
-        "./SECURITY.md",
-        "./ThirdPartyNoticeText.txt",
+        "bin",
+        "lib",
+        "!lib/enu",
+        "LICENSE.txt",
+        "README.md",
+        "SECURITY.md",
+        "ThirdPartyNoticeText.txt",
         "!**/.gitattributes"
     ],
     "devDependencies": {
