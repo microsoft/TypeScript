@@ -16498,7 +16498,7 @@ namespace ts {
             if (!links.resolvedType) {
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                if ((node.symbol === undefined || getMembersOfSymbol(node.symbol).size === 0) && !aliasSymbol) {
+                if (getMembersOfSymbol(node.symbol).size === 0 && !aliasSymbol) {
                     links.resolvedType = emptyTypeLiteralType;
                 }
                 else {
