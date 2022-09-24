@@ -936,7 +936,7 @@ namespace ts {
             return isProgramUptoDate(
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
-                /*hasInvalidatedResolution*/ returnFalse,
+                /*hasInvalidatedResolutions*/ returnFalse,
                 /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
                 /*getParsedCommandLine*/ returnUndefined,
                 /*projectReferences*/ undefined
