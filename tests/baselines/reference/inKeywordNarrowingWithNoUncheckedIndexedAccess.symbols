@@ -1,0 +1,39 @@
+=== tests/cases/compiler/inKeywordNarrowingWithNoUncheckedIndexedAccess.ts ===
+declare function invariant(condition: boolean): asserts condition;
+>invariant : Symbol(invariant, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 0))
+>condition : Symbol(condition, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 27))
+>condition : Symbol(condition, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 27))
+
+function f1(obj: Record<string, string>) {
+>f1 : Symbol(f1, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 66))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 2, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  invariant("test" in obj);
+>invariant : Symbol(invariant, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 0))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 2, 12))
+
+  return obj.test
+>obj.test : Symbol(test)
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 2, 12))
+>test : Symbol(test)
+}
+
+function f2(obj: Record<string, string>) {
+>f2 : Symbol(f2, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 5, 1))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 7, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  if ("test" in obj) {
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 7, 12))
+
+    return obj.test
+>obj.test : Symbol(test)
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 7, 12))
+>test : Symbol(test)
+  }
+  return "default"
+}
+
+
+

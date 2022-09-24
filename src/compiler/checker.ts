@@ -25251,17 +25251,33 @@ namespace ts {
                 if (isKnownProperty) {
                     // If the check is for a known property (i.e. a property declared in some constituent of
                     // the target type), we filter the target type by presence of absence of the property.
-                    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
+                    const filtered = filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
+                    // without `noUncheckedIndexedAccess` we can't narrow any further
+                    // `{ [x: PropertyKey]: T }[prop]` already returns `T`
+                    // `{ prop?: T }[prop]` always implies `T | undefined`
+                    if (!compilerOptions.noUncheckedIndexedAccess) {
+                        return filtered;
+                    }
+                    return mapType(filtered, t => {
+                        if (getPropertyOfType(type, name)) {
+                            return t;
+                        }
+                        return intersectWithNarrowingRecordType(type, nameType, getApplicableIndexInfoForName(type, name)!.type);
+                    });
                 }
                 if (assumeTrue) {
                     // If the check is for an unknown property, we intersect the target type with `Record<X, unknown>`,
                     // where X is the name of the property.
-                    const recordSymbol = getGlobalRecordSymbol();
-                    if (recordSymbol) {
-                        return getIntersectionType([type, getTypeAliasInstantiation(recordSymbol, [nameType, unknownType])]);
-                    }
+                    return intersectWithNarrowingRecordType(type, nameType, unknownType);
                 }
                 return type;
+
+                function intersectWithNarrowingRecordType(type: Type, nameType: StringLiteralType | NumberLiteralType | UniqueESSymbolType, propType: Type) {
+                    const recordSymbol = getGlobalRecordSymbol();
+                    return recordSymbol
+                        ? getIntersectionType([type, getTypeAliasInstantiation(recordSymbol, [nameType, propType])])
+                        : type;
+                }
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
