@@ -25254,7 +25254,6 @@ namespace ts {
                     const filtered = filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                     // without `noUncheckedIndexedAccess` we can't narrow any further
                     // `{ [x: PropertyKey]: T }[prop]` already returns `T`
-                    // `{ prop?: T }[prop]` always implies `T | undefined`
                     if (!compilerOptions.noUncheckedIndexedAccess) {
                         return filtered;
                     }
