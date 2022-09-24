@@ -1,4 +1,20 @@
-//// [tests/cases/conformance/classes/members/privateNames/privateNamesEscapeSequences01.ts] ////
+//// [tests/cases/compiler/unicodeEscapesInNames01.ts] ////
+
+//// [identifierVariableWithEscape1.ts]
+export let \u0078 = 10;
+x++;
+
+//// [identifierVariableWithEscape2.ts]
+export let x\u0078 = 10;
+xx++;
+
+//// [identifierVariableWithExtendedEscape1.ts]
+export let \u{78} = 10;
+x++;
+
+//// [identifierVariableWithExtendedEscape2.ts]
+export let x\u{78} = 10;
+xx++;
 
 //// [IdentifierNameWithEscape1.ts]
 export class IdentifierNameWithEscape1 {
@@ -105,6 +121,18 @@ export class PrivateIdentifierWithExtendedEscape2 {
 }
 
 
+//// [identifierVariableWithEscape1.js]
+export let \u0078 = 10;
+x++;
+//// [identifierVariableWithEscape2.js]
+export let x\u0078 = 10;
+xx++;
+//// [identifierVariableWithExtendedEscape1.js]
+export let \u{78} = 10;
+x++;
+//// [identifierVariableWithExtendedEscape2.js]
+export let x\u{78} = 10;
+xx++;
 //// [IdentifierNameWithEscape1.js]
 export class IdentifierNameWithEscape1 {
     constructor() {
