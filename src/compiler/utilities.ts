@@ -2745,6 +2745,15 @@ namespace ts {
                 result = addRange(result, (noCache ? getJSDocTypeParameterTagsNoCache : getJSDocTypeParameterTags)(node as TypeParameterDeclaration));
                 break;
             }
+            if (isBindingElement(node) && isIdentifier(node.name)) {
+                const root = getRootDeclaration(node);
+                if (isParameter(root) && isObjectBindingPattern(root.name)) {
+                    const tags = (noCache ? getJSDocTags : getJSDocTagsNoCache)(root.parent);
+                    const name = node.name.escapedText;
+                    result = addRange(result, filter(tags, tag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name));
+                    break;
+                }
+            }
             node = getNextJSDocCommentLocation(node);
         }
         return result || emptyArray;
