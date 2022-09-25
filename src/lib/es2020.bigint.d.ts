@@ -163,7 +163,7 @@ interface BigInt64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
+    every<U>(predicate: (this: U, value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: U): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -182,7 +182,7 @@ interface BigInt64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: bigint, index: number, array: BigInt64Array) => any, thisArg?: any): BigInt64Array;
+    filter<U>(predicate: (this: U, value: bigint, index: number, array: BigInt64Array) => any, thisArg?: U): BigInt64Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -193,7 +193,7 @@ interface BigInt64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): bigint | undefined;
+    find<U>(predicate: (this: U, value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: U): bigint | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -204,7 +204,7 @@ interface BigInt64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): number;
+    findIndex<U>(predicate: (this: U, value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: U): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -213,7 +213,7 @@ interface BigInt64Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: bigint, index: number, array: BigInt64Array) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: bigint, index: number, array: BigInt64Array) => void, thisArg?: U): void;
 
     /**
      * Determines whether an array includes a certain element, returning true or false as appropriate.
@@ -259,7 +259,7 @@ interface BigInt64Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: bigint, index: number, array: BigInt64Array) => bigint, thisArg?: any): BigInt64Array;
+    map<U>(callbackfn: (this: U, value: bigint, index: number, array: BigInt64Array) => bigint, thisArg?: U): BigInt64Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -334,7 +334,7 @@ interface BigInt64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
+    some<U>(predicate: (this: U, value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: U): boolean;
 
     /**
      * Sorts the array.
@@ -391,7 +391,7 @@ interface BigInt64ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: ArrayLike<bigint>): BigInt64Array;
-    from<U>(arrayLike: ArrayLike<U>, mapfn: (v: U, k: number) => bigint, thisArg?: any): BigInt64Array;
+    from<U, V>(arrayLike: ArrayLike<U>, mapfn: (this: V, v: U, k: number) => bigint, thisArg?: V): BigInt64Array;
 }
 
 declare var BigInt64Array: BigInt64ArrayConstructor;
@@ -435,7 +435,7 @@ interface BigUint64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
+    every<U>(predicate: (this: U, value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: U): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -454,7 +454,7 @@ interface BigUint64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: bigint, index: number, array: BigUint64Array) => any, thisArg?: any): BigUint64Array;
+    filter<U>(predicate: (this: U, value: bigint, index: number, array: BigUint64Array) => any, thisArg?: U): BigUint64Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -465,7 +465,7 @@ interface BigUint64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): bigint | undefined;
+    find<U>(predicate: (this: U, value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: U): bigint | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -476,7 +476,7 @@ interface BigUint64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): number;
+    findIndex<U>(predicate: (this: U, value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: U): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -485,7 +485,7 @@ interface BigUint64Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: bigint, index: number, array: BigUint64Array) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: bigint, index: number, array: BigUint64Array) => void, thisArg?: U): void;
 
     /**
      * Determines whether an array includes a certain element, returning true or false as appropriate.
@@ -531,7 +531,7 @@ interface BigUint64Array {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: bigint, index: number, array: BigUint64Array) => bigint, thisArg?: any): BigUint64Array;
+    map<U>(callbackfn: (this: U, value: bigint, index: number, array: BigUint64Array) => bigint, thisArg?: U): BigUint64Array;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -606,7 +606,7 @@ interface BigUint64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
+    some<U>(predicate: (this: U, value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: U): boolean;
 
     /**
      * Sorts the array.
@@ -663,7 +663,7 @@ interface BigUint64ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from(arrayLike: ArrayLike<bigint>): BigUint64Array;
-    from<U>(arrayLike: ArrayLike<U>, mapfn: (v: U, k: number) => bigint, thisArg?: any): BigUint64Array;
+    from<U, V>(arrayLike: ArrayLike<U>, mapfn: (this: V, v: U, k: number) => bigint, thisArg?: V): BigUint64Array;
 }
 
 declare var BigUint64Array: BigUint64ArrayConstructor;
