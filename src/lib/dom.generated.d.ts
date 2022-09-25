@@ -2344,7 +2344,7 @@ declare var AudioParam: {
 };
 
 interface AudioParamMap {
-    forEach(callbackfn: (value: AudioParam, key: string, parent: AudioParamMap) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: AudioParam, key: string, parent: AudioParamMap) => void, thisArg?: U): void;
 }
 
 declare var AudioParamMap: {
@@ -4248,7 +4248,7 @@ interface DOMTokenList {
      * Throws an "InvalidCharacterError" DOMException if token contains any spaces.
      */
     toggle(token: string, force?: boolean): boolean;
-    forEach(callbackfn: (value: string, key: number, parent: DOMTokenList) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: string, key: number, parent: DOMTokenList) => void, thisArg?: U): void;
     [index: number]: string;
 }
 
@@ -5182,7 +5182,7 @@ declare var Event: {
 };
 
 interface EventCounts {
-    forEach(callbackfn: (value: number, key: string, parent: EventCounts) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: number, key: string, parent: EventCounts) => void, thisArg?: U): void;
 }
 
 declare var EventCounts: {
@@ -5481,7 +5481,7 @@ interface FontFaceSet extends EventTarget {
     readonly status: FontFaceSetLoadStatus;
     check(font: string, text?: string): boolean;
     load(font: string, text?: string): Promise<FontFace[]>;
-    forEach(callbackfn: (value: FontFace, key: FontFace, parent: FontFaceSet) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: FontFace, key: FontFace, parent: FontFaceSet) => void, thisArg?: U): void;
     addEventListener<K extends keyof FontFaceSetEventMap>(type: K, listener: (this: FontFaceSet, ev: FontFaceSetEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof FontFaceSetEventMap>(type: K, listener: (this: FontFaceSet, ev: FontFaceSetEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -5514,7 +5514,7 @@ interface FormData {
     getAll(name: string): FormDataEntryValue[];
     has(name: string): boolean;
     set(name: string, value: string | Blob, fileName?: string): void;
-    forEach(callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: U): void;
 }
 
 declare var FormData: {
@@ -8541,7 +8541,7 @@ interface Headers {
     get(name: string): string | null;
     has(name: string): boolean;
     set(name: string, value: string): void;
-    forEach(callbackfn: (value: string, key: string, parent: Headers) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: string, key: string, parent: Headers) => void, thisArg?: U): void;
 }
 
 declare var Headers: {
@@ -9395,7 +9395,7 @@ interface MediaKeyStatusMap {
     readonly size: number;
     get(keyId: BufferSource): MediaKeyStatus | undefined;
     has(keyId: BufferSource): boolean;
-    forEach(callbackfn: (value: MediaKeyStatus, key: BufferSource, parent: MediaKeyStatusMap) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: MediaKeyStatus, key: BufferSource, parent: MediaKeyStatusMap) => void, thisArg?: U): void;
 }
 
 declare var MediaKeyStatusMap: {
@@ -10173,7 +10173,7 @@ interface NodeList {
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: Node, key: number, parent: NodeList) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: Node, key: number, parent: NodeList) => void, thisArg?: U): void;
     [index: number]: Node;
 }
 
@@ -10189,7 +10189,7 @@ interface NodeListOf<TNode extends Node> extends NodeList {
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: TNode, key: number, parent: NodeListOf<TNode>) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: TNode, key: number, parent: NodeListOf<TNode>) => void, thisArg?: U): void;
     [index: number]: TNode;
 }
 
@@ -11402,7 +11402,7 @@ declare var RTCSessionDescription: {
 };
 
 interface RTCStatsReport {
-    forEach(callbackfn: (value: any, key: string, parent: RTCStatsReport) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: any, key: string, parent: RTCStatsReport) => void, thisArg?: U): void;
 }
 
 declare var RTCStatsReport: {
@@ -14424,7 +14424,7 @@ interface URLSearchParams {
     sort(): void;
     /** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. */
     toString(): string;
-    forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: string, key: string, parent: URLSearchParams) => void, thisArg?: U): void;
 }
 
 declare var URLSearchParams: {

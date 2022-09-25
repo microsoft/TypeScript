@@ -1676,7 +1676,7 @@ interface FontFaceSet extends EventTarget {
     readonly status: FontFaceSetLoadStatus;
     check(font: string, text?: string): boolean;
     load(font: string, text?: string): Promise<FontFace[]>;
-    forEach(callbackfn: (value: FontFace, key: FontFace, parent: FontFaceSet) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: FontFace, key: FontFace, parent: FontFaceSet) => void, thisArg?: U): void;
     addEventListener<K extends keyof FontFaceSetEventMap>(type: K, listener: (this: FontFaceSet, ev: FontFaceSetEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof FontFaceSetEventMap>(type: K, listener: (this: FontFaceSet, ev: FontFaceSetEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -1709,7 +1709,7 @@ interface FormData {
     getAll(name: string): FormDataEntryValue[];
     has(name: string): boolean;
     set(name: string, value: string | Blob, fileName?: string): void;
-    forEach(callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: U): void;
 }
 
 declare var FormData: {
@@ -1729,7 +1729,7 @@ interface Headers {
     get(name: string): string | null;
     has(name: string): boolean;
     set(name: string, value: string): void;
-    forEach(callbackfn: (value: string, key: string, parent: Headers) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: string, key: string, parent: Headers) => void, thisArg?: U): void;
 }
 
 declare var Headers: {
@@ -3210,7 +3210,7 @@ interface URLSearchParams {
     sort(): void;
     /** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. */
     toString(): string;
-    forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void;
+    forEach<U>(callbackfn: (this: U, value: string, key: string, parent: URLSearchParams) => void, thisArg?: U): void;
 }
 
 declare var URLSearchParams: {
