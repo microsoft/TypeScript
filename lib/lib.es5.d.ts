@@ -2404,7 +2404,7 @@ interface Uint8ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number): Uint8Array;
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this:U, v: T, k: number) => number, thisArg: V): Uint8Array;
+    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this:U, v: T, k: number) => number, thisArg: U): Uint8Array;
 
 }
 declare var Uint8Array: Uint8ArrayConstructor;
