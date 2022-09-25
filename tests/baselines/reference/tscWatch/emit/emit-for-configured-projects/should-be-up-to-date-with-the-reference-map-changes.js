@@ -67,29 +67,29 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -163,29 +163,29 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -236,29 +236,29 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (computed .d.ts)
 /a/b/file1consumer2.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -305,29 +305,29 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -348,7 +348,7 @@ export let y = Foo();
 
 Output::
 >> Screen clear
-[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
@@ -365,7 +365,7 @@ Output::
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:01:15 AM[0m] Found 3 errors. Watching for file changes.
+[[90m12:01:16 AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -390,29 +390,29 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer2.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -436,9 +436,9 @@ export var T: number;export function Foo() { };
 
 Output::
 >> Screen clear
-[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:23 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -463,29 +463,29 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer2.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

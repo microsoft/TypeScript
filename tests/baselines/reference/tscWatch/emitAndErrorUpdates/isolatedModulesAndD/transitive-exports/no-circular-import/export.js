@@ -33,7 +33,7 @@ export class Data {
 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["app.ts"],"compilerOptions":{"baseUrl":".","isolatedModules":true,"declaration":true}}
+{"files":["app.ts"],"compilerOptions":{"baseUrl":"."}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -49,7 +49,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js --w
+/a/lib/tsc.js --w --isolatedModules --d
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] Starting compilation in watch mode...
@@ -59,7 +59,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","isolatedModules":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -81,36 +81,36 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (used version)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/app.ts:
-  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/data.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/app.ts:
+  {}
+/user/username/projects/myproject/lib2/public.ts:
+  {}
+/user/username/projects/myproject/lib2/data.ts:
+  {}
+/user/username/projects/myproject/lib1/public.ts:
+  {}
+/user/username/projects/myproject/lib1/tools/public.ts:
+  {}
+/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -129,7 +129,11 @@ export interface ITest {
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -149,7 +153,11 @@ export * from "./tools.interface";
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -194,7 +202,11 @@ export declare class Data {
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -255,7 +267,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","isolatedModules":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -276,35 +288,35 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/app.ts:
-  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/data.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/app.ts:
+  {}
+/user/username/projects/myproject/lib2/public.ts:
+  {}
+/user/username/projects/myproject/lib2/data.ts:
+  {}
+/user/username/projects/myproject/lib1/public.ts:
+  {}
+/user/username/projects/myproject/lib1/tools/public.ts:
+  {}
+/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -339,7 +351,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","isolatedModules":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -360,35 +372,35 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/app.ts:
-  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/data.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/app.ts:
+  {}
+/user/username/projects/myproject/lib2/public.ts:
+  {}
+/user/username/projects/myproject/lib2/data.ts:
+  {}
+/user/username/projects/myproject/lib1/public.ts:
+  {}
+/user/username/projects/myproject/lib1/tools/public.ts:
+  {}
+/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -429,7 +441,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","isolatedModules":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -450,35 +462,35 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/app.ts:
-  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/data.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/app.ts:
+  {}
+/user/username/projects/myproject/lib2/public.ts:
+  {}
+/user/username/projects/myproject/lib2/data.ts:
+  {}
+/user/username/projects/myproject/lib1/public.ts:
+  {}
+/user/username/projects/myproject/lib1/tools/public.ts:
+  {}
+/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

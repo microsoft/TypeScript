@@ -38,10 +38,10 @@ function gen() {
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = "abc";
+                _a = "abc".concat;
                 return [4 /*yield*/, 10];
             case 1:
-                x = _a + (_b.sent()) + "def";
+                x = _a.apply("abc", [_b.sent(), "def"]);
                 return [2 /*return*/];
         }
     });

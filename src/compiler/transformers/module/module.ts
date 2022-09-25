@@ -193,8 +193,8 @@ namespace ts {
                                             /*name*/ undefined,
                                             /*typeParameters*/ undefined,
                                             [
-                                                factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                                factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                                 ...importAliasNames
                                             ],
                                             /*type*/ undefined,
@@ -225,7 +225,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
+                [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
                 /*type*/ undefined,
                 setTextRange(
                     factory.createBlock(
@@ -333,8 +333,8 @@ namespace ts {
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,
                                         [
-                                            factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                            factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                             ...importAliasNames
                                         ],
                                         /*type*/ undefined,
@@ -374,7 +374,7 @@ namespace ts {
             for (const amdDependency of node.amdDependencies) {
                 if (amdDependency.name) {
                     aliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
-                    importAliasNames.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name));
+                    importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name));
                 }
                 else {
                     unaliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
@@ -396,7 +396,7 @@ namespace ts {
                         // This is so that when printer will not substitute the identifier
                         setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
                         aliasedModuleNames.push(externalModuleName);
-                        importAliasNames.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
+                        importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
                     }
                     else {
                         unaliasedModuleNames.push(externalModuleName);
@@ -556,7 +556,7 @@ namespace ts {
                 case SyntaxKind.PartiallyEmittedExpression:
                     return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
                 case SyntaxKind.CallExpression:
-                    if (isImportCall(node)) {
+                    if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
                         return visitImportCallExpression(node);
                     }
                     break;
@@ -772,8 +772,8 @@ namespace ts {
             const resolve = factory.createUniqueName("resolve");
             const reject = factory.createUniqueName("reject");
             const parameters = [
-                factory.createParameterDeclaration(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
-                factory.createParameterDeclaration(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
+                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
+                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
             ];
             const body = factory.createBlock([
                 factory.createExpressionStatement(
@@ -814,7 +814,7 @@ namespace ts {
             }
 
             const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
-            if (compilerOptions.esModuleInterop) {
+            if (getESModuleInterop(compilerOptions)) {
                 return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [emitHelpers().createImportStarCallbackHelper()]);
             }
             return promise;
@@ -828,7 +828,7 @@ namespace ts {
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             const promiseResolveCall = factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
             let requireCall: Expression = factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
-            if (compilerOptions.esModuleInterop) {
+            if (getESModuleInterop(compilerOptions)) {
                 requireCall = emitHelpers().createImportStarHelper(requireCall);
             }
 
@@ -864,7 +864,7 @@ namespace ts {
         }
 
         function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
-            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+            if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getExportNeedsImportStarHelper(node)) {
@@ -874,7 +874,7 @@ namespace ts {
         }
 
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+            if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getImportNeedsImportStarHelper(node)) {
@@ -1134,7 +1134,7 @@ namespace ts {
                     }
                     else {
                         const exportNeedsImportDefault =
-                            !!compilerOptions.esModuleInterop &&
+                            !!getESModuleInterop(compilerOptions) &&
                             !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
                             idText(specifier.propertyName || specifier.name) === "default";
                         const exportedValue = factory.createPropertyAccessExpression(
@@ -1228,7 +1228,6 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             factory.createFunctionDeclaration(
-                                /*decorators*/ undefined,
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 node.asteriskToken,
                                 factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
@@ -1271,8 +1270,7 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             factory.createClassDeclaration(
-                                /*decorators*/ undefined,
-                                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                                visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                                 factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
                                 visitNodes(node.heritageClauses, visitor),
@@ -1853,7 +1851,7 @@ namespace ts {
             if (isIdentifier(node.expression)) {
                 const expression = substituteExpressionIdentifier(node.expression);
                 noSubstitution[getNodeId(expression)] = true;
-                if (!isIdentifier(expression)) {
+                if (!isIdentifier(expression) && !(getEmitFlags(node.expression) & EmitFlags.HelperName)) {
                     return addEmitFlags(
                         factory.updateCallExpression(node,
                             expression,
@@ -1872,7 +1870,7 @@ namespace ts {
             if (isIdentifier(node.tag)) {
                 const tag = substituteExpressionIdentifier(node.tag);
                 noSubstitution[getNodeId(tag)] = true;
-                if (!isIdentifier(tag)) {
+                if (!isIdentifier(tag) && !(getEmitFlags(node.tag) & EmitFlags.HelperName)) {
                     return addEmitFlags(
                         factory.updateTaggedTemplateExpression(node,
                             tag,

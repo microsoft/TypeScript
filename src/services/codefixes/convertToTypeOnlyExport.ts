@@ -4,14 +4,14 @@ namespace ts.codefix {
     const fixId = "convertToTypeOnlyExport";
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToConvertToTypeOnlyExport(context) {
             const changes = textChanges.ChangeTracker.with(context, t => fixSingleExportDeclaration(t, getExportSpecifierForDiagnosticSpan(context.span, context.sourceFile), context));
             if (changes.length) {
                 return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_type_only_export, fixId, Diagnostics.Convert_all_re_exported_types_to_type_only_exports)];
             }
         },
         fixIds: [fixId],
-        getAllCodeActions: context => {
+        getAllCodeActions: function getAllCodeActionsToConvertToTypeOnlyExport(context) {
             const fixedExportDeclarations = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
@@ -40,7 +40,6 @@ namespace ts.codefix {
         else {
             const valueExportDeclaration = factory.updateExportDeclaration(
                 exportDeclaration,
-                exportDeclaration.decorators,
                 exportDeclaration.modifiers,
                 /*isTypeOnly*/ false,
                 factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
@@ -48,7 +47,6 @@ namespace ts.codefix {
                 /*assertClause*/ undefined
             );
             const typeExportDeclaration = factory.createExportDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ true,
                 factory.createNamedExports(typeExportSpecifiers),

@@ -5,4 +5,5 @@ class Foo {
     public banana (x: break) { }
 >banana : Symbol(Foo.banana, Decl(parserErrorRecovery_ParameterList6.ts, 0, 11))
 >x : Symbol(x, Decl(parserErrorRecovery_ParameterList6.ts, 1, 19))
+>break : Symbol(break)
 }

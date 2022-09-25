@@ -16,7 +16,7 @@ edit.applyRefactor({
     /*RENAME*/newFunction(xs);
 }
 
-function newFunction(xs: any) {
+function newFunction(xs: AsyncIterable<number>) {
     for await (const x of xs) {
         x * 2;
     }

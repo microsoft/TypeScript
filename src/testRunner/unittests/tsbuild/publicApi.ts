@@ -2,7 +2,7 @@ namespace ts {
     describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
         let sys: TscCompileSystem;
         before(() => {
-            const initialFs = getFsWithTime(loadProjectFromFiles({
+            const inputFs = loadProjectFromFiles({
                 "/src/tsconfig.json": JSON.stringify({
                     references: [
                         { path: "./shared/tsconfig.json" },
@@ -29,9 +29,7 @@ export class c2 { }
 export enum e2 { }
 // leading
 export function f22() { } // trailing`,
-            })).fs.makeReadonly();
-            const inputFs = initialFs.shadow();
-            inputFs.makeReadonly();
+            }).makeReadonly();
             const fs = inputFs.shadow();
 
             // Create system
@@ -48,13 +46,13 @@ export function f22() { } // trailing`,
                 writtenFiles.add(path);
                 return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
             };
-            const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined, originalWriteFile);
+            const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
             const buildHost = createSolutionBuilderHost(
                 sys,
                     /*createProgram*/ undefined,
                 createDiagnosticReporter(sys, /*pretty*/ true),
                 createBuilderStatusReporter(sys, /*pretty*/ true),
-                errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine))
+                (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
             );
             buildHost.afterProgramEmitAndDiagnostics = cb;
             buildHost.afterEmitBundle = cb;
@@ -70,7 +68,7 @@ export function f22() { } // trailing`,
                 const baseFsPatch = inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
                 const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
                 return {
-                    file: `tsbuild/$publicAPI/${BuildKind.Initial}/${"build with custom transformers".split(" ").join("-")}.js`,
+                    file: `tsbuild/publicAPI/build-with-custom-transformers.js`,
                     text: `Input::
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 

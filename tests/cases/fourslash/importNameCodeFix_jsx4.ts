@@ -23,7 +23,7 @@
 goTo.file("/a.tsx");
 verify.codeFix({
     index: 0,
-    description: [ts.Diagnostics.Import_default_0_from_module_1.message, "React", "react"],
+    description: [ts.Diagnostics.Import_0_from_1.message, "React", "react"],
     newFileContent:
 `import React from "react";
 import { Text } from "react-native";

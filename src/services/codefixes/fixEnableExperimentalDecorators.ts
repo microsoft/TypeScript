@@ -6,7 +6,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions: (context) => {
+        getCodeActions: function getCodeActionsToEnableExperimentalDecorators(context) {
             const { configFile } = context.program.getCompilerOptions();
             if (configFile === undefined) {
                 return undefined;

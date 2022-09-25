@@ -37,7 +37,7 @@ function RangeParser(): string`
 verify.applyCodeActionFromCompletion("0", {
     name: "RangeParser",
     source: "/node_modules/@types/range-parser/index",
-    description: `Import 'RangeParser' from module "range-parser"`,
+    description: `Add import from "range-parser"`,
     newFileContent: `import RangeParser = require("range-parser");
 
 R`,

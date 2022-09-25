@@ -3,13 +3,6 @@ namespace ts.codefix {
     const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
     const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
-    export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
-    function diagnosticToString(diag: DiagnosticAndArguments): string {
-        return isArray(diag)
-            ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
-            : getLocaleSpecificMessage(diag);
-    }
-
     export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments) {
         return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
     }

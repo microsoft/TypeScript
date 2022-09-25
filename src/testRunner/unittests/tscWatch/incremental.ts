@@ -28,12 +28,11 @@ namespace ts.tscWatch {
             { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
             incremental: boolean
         ) {
-            const { sys, baseline, oldSnap } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
             if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
             const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || emptyArray)];
             baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
             let oldPrograms: readonly CommandLineProgram[] = emptyArray;
-            const { cb, getPrograms } = commandLineCallbacks(sys);
             build(oldSnap);
 
             if (modifyFs) {
@@ -163,16 +162,19 @@ namespace ts.tscWatch {
                         version: system.createHash(libFile.content),
                         signature: system.createHash(libFile.content),
                         affectsGlobalScope: true,
+                        impliedFormat: undefined,
                     });
                     assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
                         signature: system.createHash(file1.content),
                         affectsGlobalScope: undefined,
+                        impliedFormat: undefined,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path as Path), {
                         version: system.createHash(fileModified.content),
                         signature: system.createHash(fileModified.content),
                         affectsGlobalScope: undefined,
+                        impliedFormat: undefined,
                     });
 
                     assert.deepEqual(state.compilerOptions, {
@@ -371,6 +373,19 @@ export const Fragment: unique symbol;
                     host.writeFile(`${project}/src/types/classnames.d.ts`, `export {}; declare module "classnames" { interface Result {} }`);
                 },
             });
+        });
+
+        verifyTscWatch({
+            scenario: "incremental",
+            subScenario: "tsbuildinfo has error",
+            sys: () => createWatchedSystem({
+                "/src/project/main.ts": "export const x = 10;",
+                "/src/project/tsconfig.json": "{}",
+                "/src/project/tsconfig.tsbuildinfo": "Some random string",
+                [libFile.path]: libFile.content,
+            }),
+            commandLineArgs: ["--p", "src/project", "-i", "-w"],
+            changes: emptyArray
         });
     });
 }

@@ -8,8 +8,8 @@ const replacementSpan = test.ranges()[0]
 verify.completions({
     marker: "",
     exact: [
+        "catch",
         "then",
-        "catch"
     ],
     preferences: {
         includeInsertTextCompletions: false,

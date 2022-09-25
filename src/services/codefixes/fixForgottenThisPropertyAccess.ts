@@ -4,7 +4,7 @@ namespace ts.codefix {
     const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;
     const errorCodes = [
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
-        Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies.code,
+        Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression.code,
         didYouMeanStaticMemberCode,
     ];
     registerCodeFix({
@@ -32,7 +32,7 @@ namespace ts.codefix {
 
     function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
-        if (isIdentifier(node)) {
+        if (isIdentifier(node) || isPrivateIdentifier(node)) {
             return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined };
         }
     }

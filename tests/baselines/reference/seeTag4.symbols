@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/seeTag4.js ===
+/**
+ * @typedef {any} A
+ */
+
+/**
+ * @see {@link A}
+ * @see {@linkcode A}
+ * @see {@linkplain A}
+ */
+let foo;
+>foo : Symbol(foo, Decl(seeTag4.js, 9, 3))
+

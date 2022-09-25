@@ -157,7 +157,7 @@ namespace ts {
             return getTypeAliasDeclarationVisibilityError;
         }
         else {
-            return Debug.assertNever(node, `Attempted to set a declaration diagnostic context for unhandled node kind: ${(ts as any).SyntaxKind[(node as any).kind]}`);
+            return Debug.assertNever(node, `Attempted to set a declaration diagnostic context for unhandled node kind: ${Debug.formatSyntaxKind((node as Node).kind)}`);
         }
 
         function getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -386,7 +386,7 @@ namespace ts {
                         Diagnostics.Parameter_0_of_accessor_has_or_is_using_private_name_1;
 
                 default:
-                    return Debug.fail(`Unknown parent for parameter: ${(ts as any).SyntaxKind[node.parent.kind]}`);
+                    return Debug.fail(`Unknown parent for parameter: ${Debug.formatSyntaxKind(node.parent.kind)}`);
             }
         }
 

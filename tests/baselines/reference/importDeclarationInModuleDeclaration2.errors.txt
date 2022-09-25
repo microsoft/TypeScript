@@ -1,0 +1,9 @@
+tests/cases/compiler/check.js(2,5): error TS1473: An import declaration can only be used at the top level of a module.
+
+
+==== tests/cases/compiler/check.js (1 errors) ====
+    function container() {
+        import "fs";
+        ~~~~~~
+!!! error TS1473: An import declaration can only be used at the top level of a module.
+    }

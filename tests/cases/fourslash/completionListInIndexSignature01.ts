@@ -17,6 +17,6 @@
 const exact = completion.globalsPlus(["C"]);
 verify.completions(
     { marker: ["1", "2", "3", "6"], exact, isNewIdentifierLocation: true },
-    { marker: "4", exact: ["str", ...exact], isNewIdentifierLocation: true },
-    { marker: "5", exact: ["xyz", ...exact], isNewIdentifierLocation: true },
+    { marker: "4", unsorted: ["str", ...exact], isNewIdentifierLocation: true },
+    { marker: "5", unsorted: ["xyz", ...exact], isNewIdentifierLocation: true },
 );

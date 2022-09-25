@@ -22,6 +22,9 @@ interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
 interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
 type T17 = Awaited<BadPromise1>; // error
 
+// https://github.com/microsoft/TypeScript/issues/46934
+type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
+
 // https://github.com/microsoft/TypeScript/issues/33562
 type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
 declare function MaybePromise<T>(value: T): MaybePromise<T>;
@@ -37,6 +40,22 @@ async function main() {
         MaybePromise('2'),
         MaybePromise(true),
     ])
+}
+
+// https://github.com/microsoft/TypeScript/issues/45924
+class Api<D = {}> {
+	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
+	async post<T = D>() { return this.request<T>(); }
+	async request<D>(): Promise<D> { throw new Error(); }
+}
+
+declare const api: Api;
+interface Obj { x: number }
+
+async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
+	// Per #45924, this was failing due to incorrect inference both above and here.
+	// Should not error.
+	return api.post();
 }
 
 // helps with tests where '.types' just prints out the type alias name
@@ -55,4 +74,15 @@ async function main() {
         MaybePromise('2'),
         MaybePromise(true),
     ]);
+}
+// https://github.com/microsoft/TypeScript/issues/45924
+class Api {
+    // Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
+    async post() { return this.request(); }
+    async request() { throw new Error(); }
+}
+async function fn() {
+    // Per #45924, this was failing due to incorrect inference both above and here.
+    // Should not error.
+    return api.post();
 }

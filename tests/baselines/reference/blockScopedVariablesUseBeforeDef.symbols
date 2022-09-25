@@ -213,3 +213,46 @@ function foo14() {
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 101, 7))
 }
 
+function foo15() {
+>foo15 : Symbol(foo15, Decl(blockScopedVariablesUseBeforeDef.ts, 102, 1))
+
+    // https://github.com/microsoft/TypeScript/issues/42678
+    const [
+        a,
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 106, 11))
+
+        b,
+>b : Symbol(b, Decl(blockScopedVariablesUseBeforeDef.ts, 107, 10))
+
+    ] = ((): [number, number] => {
+        (() => console.log(a))();  // should error
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 106, 11))
+
+        console.log(a);            // should error
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 106, 11))
+
+        const b = () => a;         // should be ok
+>b : Symbol(b, Decl(blockScopedVariablesUseBeforeDef.ts, 112, 13))
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 106, 11))
+
+        return [
+            0,
+            0,
+        ];
+    })();    
+}
+
+function foo16() {
+>foo16 : Symbol(foo16, Decl(blockScopedVariablesUseBeforeDef.ts, 118, 1))
+
+    let [a] = (() => a)();
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 121, 9))
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 121, 9))
+}
+

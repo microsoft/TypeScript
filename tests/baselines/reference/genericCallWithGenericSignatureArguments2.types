@@ -257,12 +257,12 @@ module TU {
 >A : F.A
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
->foo3 : <T>(x: T, a: (x: T) => T, b: (x: any) => any) => (x: T) => T
+>foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
 >x : T
 >a : (x: T) => T
 >x : T
->b : (x: any) => any
->x : any
+>b : (x: U) => U
+>x : U
 
         var r: (x: T) => T;
 >r : (x: T) => T
@@ -275,7 +275,7 @@ module TU {
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A);
 >r7 : (x: E) => E
 >foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
->foo3 : <T>(x: T, a: (x: T) => T, b: (x: any) => any) => (x: T) => T
+>foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
 >E.A : E
 >E : typeof E
 >A : E
@@ -284,8 +284,8 @@ module TU {
 >E.A : E
 >E : typeof E
 >A : E
->(x) => F.A : (x: any) => F
->x : any
+>(x) => F.A : (x: U) => F
+>x : U
 >F.A : F
 >F : typeof F
 >A : F

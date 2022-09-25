@@ -209,7 +209,7 @@ namespace Harness.Parallel.Worker {
             const errors: ErrorInfo[] = [];
             const passes: TestInfo[] = [];
             const start = +new Date();
-            const runner = new Mocha.Runner(suite, /*delay*/ false);
+            const runner = new Mocha.Runner(suite, { delay: false });
 
             runner
                 .on("start", () => {

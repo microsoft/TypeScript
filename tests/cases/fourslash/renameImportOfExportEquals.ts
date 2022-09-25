@@ -1,17 +1,17 @@
 /// <reference path='fourslash.ts' />
 
-////[|declare namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}N|] {
-////    [|export var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|]: number;|]
+////[|declare namespace /*N*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}N|] {
+////    [|export var /*x*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|]: number;|]
 ////}|]
 ////declare module "mod" {
 ////    [|export = [|{| "contextRangeIndex": 4 |}N|];|]
 ////}
 ////declare module "a" {
-////    [|import * as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}N|] from "mod";|]
+////    [|import * as /*a*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}N|] from "mod";|]
 ////    [|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 8 |}N|] };|] // Renaming N here would rename
 ////}
 ////declare module "b" {
-////    [|import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}N|] } from "a";|]
+////    [|import { /*b*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}N|] } from "a";|]
 ////    export const y: typeof [|N|].[|x|];
 ////}
 
@@ -21,14 +21,7 @@ const aRanges = [a0, a1];
 const bRanges = [b0, b1];
 const xRanges = [x0, x1];
 
-const nGroup = { definition: "namespace N", ranges: nRanges };
-const aGroup = { definition: "(alias) namespace N\nimport N", ranges: aRanges };
-const bGroup = { definition: "(alias) namespace N\nimport N", ranges: [b0, b1] };
-
-verify.referenceGroups(nRanges, [nGroup, aGroup, bGroup]);
-verify.referenceGroups([a0, a1], [aGroup, nGroup, bGroup]);
-verify.referenceGroups(bRanges, [bGroup, aGroup, nGroup]);
-verify.singleReferenceGroup("var N.x: number", xRanges);
+verify.baselineFindAllReferences('N', 'a', 'b', 'x')
 
 verify.renameLocations(nRanges, [N0, N1, a0, { range: a1, suffixText: " as N" }]);
 verify.renameLocations(a0, [a0, { range: a1, suffixText: " as N" }]);

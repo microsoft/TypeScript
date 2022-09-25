@@ -1,0 +1,33 @@
+=== tests/cases/compiler/substitutionTypeForIndexedAccessType2.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(substitutionTypeForIndexedAccessType2.ts, 0, 0))
+
+  foo: string|undefined
+>foo : Symbol(Foo.foo, Decl(substitutionTypeForIndexedAccessType2.ts, 0, 15))
+}
+
+type Str<T extends string> = T
+>Str : Symbol(Str, Decl(substitutionTypeForIndexedAccessType2.ts, 2, 1))
+>T : Symbol(T, Decl(substitutionTypeForIndexedAccessType2.ts, 4, 9))
+>T : Symbol(T, Decl(substitutionTypeForIndexedAccessType2.ts, 4, 9))
+
+type Bar<T> = 
+>Bar : Symbol(Bar, Decl(substitutionTypeForIndexedAccessType2.ts, 4, 30))
+>T : Symbol(T, Decl(substitutionTypeForIndexedAccessType2.ts, 6, 9))
+
+  T extends Foo
+>T : Symbol(T, Decl(substitutionTypeForIndexedAccessType2.ts, 6, 9))
+>Foo : Symbol(Foo, Decl(substitutionTypeForIndexedAccessType2.ts, 0, 0))
+
+    ? T['foo'] extends string
+>T : Symbol(T, Decl(substitutionTypeForIndexedAccessType2.ts, 6, 9))
+
+      // Type 'T["foo"]' does not satisfy the constraint 'string'.
+      //  Type 'string | undefined' is not assignable to type 'string'.
+      //   Type 'undefined' is not assignable to type 'string'.(2344)
+      ? Str<T['foo']>
+>Str : Symbol(Str, Decl(substitutionTypeForIndexedAccessType2.ts, 2, 1))
+>T : Symbol(T, Decl(substitutionTypeForIndexedAccessType2.ts, 6, 9))
+
+      : never
+    : never

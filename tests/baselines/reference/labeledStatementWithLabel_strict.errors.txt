@@ -8,9 +8,9 @@ tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_s
 tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(9,1): error TS1344: 'A label is not allowed here.
 tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(10,1): error TS1344: 'A label is not allowed here.
 tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(12,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(12,8): error TS1235: A namespace declaration is only allowed in a namespace or module.
+tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(12,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(13,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(13,8): error TS1235: A namespace declaration is only allowed in a namespace or module.
+tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(13,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed here.
 
 
@@ -48,12 +48,12 @@ tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_s
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.
            ~~~~~~
-!!! error TS1235: A namespace declaration is only allowed in a namespace or module.
+!!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
     label: namespace N {}
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.
            ~~~~~~~~~
-!!! error TS1235: A namespace declaration is only allowed in a namespace or module.
+!!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
     label: type T = {}
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.

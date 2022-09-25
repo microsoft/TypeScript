@@ -26,7 +26,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
-    description: `Add default import 'foo' to existing import declaration from "./a"`,
+    description: `Update import from "./a"`,
     newFileContent: `import foo, { x } from "./a";
 f;`,
 });

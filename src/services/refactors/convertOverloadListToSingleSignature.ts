@@ -10,11 +10,11 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     };
     registerRefactor(refactorName, {
         kinds: [functionOverloadAction.kind],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToConvertOverloadsToOneSignature,
+        getAvailableActions: getRefactorActionsToConvertOverloadsToOneSignature
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program } = context;
         const info = getConvertableOverloadListAtPosition(file, startPosition, program);
         if (!info) return emptyArray;
@@ -26,7 +26,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         }];
     }
 
-    function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorContext): RefactorEditInfo | undefined {
         const { file, startPosition, program } = context;
         const signatureDecls = getConvertableOverloadListAtPosition(file, startPosition, program);
         if (!signatureDecls) return undefined;
@@ -51,7 +51,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.MethodDeclaration: {
                 updated = factory.updateMethodDeclaration(
                     lastDeclaration,
-                    lastDeclaration.decorators,
                     lastDeclaration.modifiers,
                     lastDeclaration.asteriskToken,
                     lastDeclaration.name,
@@ -75,7 +74,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.Constructor: {
                 updated = factory.updateConstructorDeclaration(
                     lastDeclaration,
-                    lastDeclaration.decorators,
                     lastDeclaration.modifiers,
                     getNewParametersForCombinedSignature(signatureDecls),
                     lastDeclaration.body
@@ -94,7 +92,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             case SyntaxKind.FunctionDeclaration: {
                 updated = factory.updateFunctionDeclaration(
                     lastDeclaration,
-                    lastDeclaration.decorators,
                     lastDeclaration.modifiers,
                     lastDeclaration.asteriskToken,
                     lastDeclaration.name,
@@ -126,7 +123,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }
             return factory.createNodeArray([
                 factory.createParameterDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     factory.createToken(SyntaxKind.DotDotDotToken),
                     "args",
@@ -189,6 +185,10 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
         if (!containingDecl) {
             return;
         }
+        if (isFunctionLikeDeclaration(containingDecl) && containingDecl.body && rangeContainsPosition(containingDecl.body, startPosition)) {
+            return;
+        }
+
         const checker = program.getTypeChecker();
         const signatureSymbol = containingDecl.symbol;
         if (!signatureSymbol) {
@@ -209,7 +209,7 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
             return;
         }
         const signatureDecls = decls as (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[];
-        if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.decorators || !!p.modifiers || !isIdentifier(p.name)))) {
+        if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.modifiers || !isIdentifier(p.name)))) {
             return;
         }
         const signatures = mapDefined(signatureDecls, d => checker.getSignatureFromDeclaration(d));

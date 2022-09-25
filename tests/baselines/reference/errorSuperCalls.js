@@ -93,9 +93,10 @@ var __extends = (this && this.__extends) || (function () {
 //super call in class constructor with no base type
 var NoBase = /** @class */ (function () {
     function NoBase() {
-        _this = _super.call(this) || this;
+        var _this = _super.call(this) || this;
         //super call in class member initializer with no base type
         this.p = _this = _super.call(this) || this;
+        return _this;
     }
     //super call in class member function with no base type
     NoBase.prototype.fn = function () {

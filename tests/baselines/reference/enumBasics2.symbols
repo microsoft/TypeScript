@@ -1,0 +1,53 @@
+=== tests/cases/compiler/enumBasics2.ts ===
+enum Foo {
+>Foo : Symbol(Foo, Decl(enumBasics2.ts, 0, 0))
+
+  a = 2,
+>a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+
+  b = 3,
+>b : Symbol(Foo.b, Decl(enumBasics2.ts, 1, 8))
+
+  x = a.b,       // should error
+>x : Symbol(Foo.x, Decl(enumBasics2.ts, 2, 8))
+>a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+
+  y = b.a,       // should error
+>y : Symbol(Foo.y, Decl(enumBasics2.ts, 3, 10))
+>b : Symbol(Foo.b, Decl(enumBasics2.ts, 1, 8))
+
+  z = y.x * a.x, // should error
+>z : Symbol(Foo.z, Decl(enumBasics2.ts, 4, 10))
+>y : Symbol(Foo.y, Decl(enumBasics2.ts, 3, 10))
+>a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+}
+
+enum Bar {
+>Bar : Symbol(Bar, Decl(enumBasics2.ts, 6, 1))
+
+  a = (1).valueOf(),   // ok
+>a : Symbol(Bar.a, Decl(enumBasics2.ts, 8, 10))
+>(1).valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+>valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+
+  b = Foo.a,           // ok
+>b : Symbol(Bar.b, Decl(enumBasics2.ts, 9, 20))
+>Foo.a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+>Foo : Symbol(Foo, Decl(enumBasics2.ts, 0, 0))
+>a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+
+  c = Foo.a.valueOf(), // ok
+>c : Symbol(Bar.c, Decl(enumBasics2.ts, 10, 12))
+>Foo.a.valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+>Foo.a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+>Foo : Symbol(Foo, Decl(enumBasics2.ts, 0, 0))
+>a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+>valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+
+  d = Foo.a.a,         // should error
+>d : Symbol(Bar.d, Decl(enumBasics2.ts, 11, 22))
+>Foo.a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+>Foo : Symbol(Foo, Decl(enumBasics2.ts, 0, 0))
+>a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
+}
+

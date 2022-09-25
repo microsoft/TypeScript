@@ -1,0 +1,41 @@
+=== tests/cases/compiler/mixinOverMappedTypeNoCrash.ts ===
+export type ClassInterface<C> = {
+>ClassInterface : ClassInterface<C>
+
+    [key in keyof C]: C[key];
+}
+
+type InstanceInterface<I> = {
+>InstanceInterface : InstanceInterface<I>
+
+    new(...args: any[]): I
+>args : any[]
+
+    prototype: I
+>prototype : I
+}
+
+type Constructor<I extends Object, C = any> = ClassInterface<C> & InstanceInterface<I>
+>Constructor : Constructor<I, C>
+
+function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
+>cloneClass : <T extends Constructor<{}, any>>(OriginalClass: T) => T
+>OriginalClass : T
+
+    class AnotherOriginalClass extends OriginalClass {
+>AnotherOriginalClass : AnotherOriginalClass
+>OriginalClass : {}
+
+        constructor(...args: any[]) {
+>args : any[]
+
+            super(...args)
+>super(...args) : void
+>super : T
+>...args : any
+>args : any[]
+        }
+    }
+    return AnotherOriginalClass
+>AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass; prototype: cloneClass<any>.AnotherOriginalClass; } & T
+}

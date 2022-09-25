@@ -7,7 +7,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToUseBigintLiteral(context) {
             const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
             if (changes.length > 0) {
                 return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_a_bigint_numeric_literal, fixId, Diagnostics.Convert_all_to_bigint_numeric_literals)];

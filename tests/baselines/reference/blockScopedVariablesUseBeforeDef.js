@@ -103,6 +103,26 @@ function foo14() {
     let x
 }
 
+function foo15() {
+    // https://github.com/microsoft/TypeScript/issues/42678
+    const [
+        a,
+        b,
+    ] = ((): [number, number] => {
+        (() => console.log(a))();  // should error
+        console.log(a);            // should error
+        const b = () => a;         // should be ok
+        return [
+            0,
+            0,
+        ];
+    })();    
+}
+
+function foo16() {
+    let [a] = (() => a)();
+}
+
 
 //// [blockScopedVariablesUseBeforeDef.js]
 function foo0() {
@@ -218,4 +238,19 @@ function foo14() {
         a: x
     };
     var x;
+}
+function foo15() {
+    // https://github.com/microsoft/TypeScript/issues/42678
+    var _a = (function () {
+        (function () { return console.log(a); })(); // should error
+        console.log(a); // should error
+        var b = function () { return a; }; // should be ok
+        return [
+            0,
+            0,
+        ];
+    })(), a = _a[0], b = _a[1];
+}
+function foo16() {
+    var a = (function () { return a; })()[0];
 }

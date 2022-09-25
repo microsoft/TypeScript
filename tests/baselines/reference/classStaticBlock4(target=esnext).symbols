@@ -1,0 +1,39 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts ===
+class C {
+>C : Symbol(C, Decl(classStaticBlock4.ts, 0, 0))
+
+    static s1 = 1;
+>s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
+
+    static {
+        this.s1;
+>this.s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
+>this : Symbol(C, Decl(classStaticBlock4.ts, 0, 0))
+>s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
+
+        C.s1;
+>C.s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
+>C : Symbol(C, Decl(classStaticBlock4.ts, 0, 0))
+>s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
+
+        this.s2;
+>this.s2 : Symbol(C.s2, Decl(classStaticBlock4.ts, 9, 5))
+>this : Symbol(C, Decl(classStaticBlock4.ts, 0, 0))
+>s2 : Symbol(C.s2, Decl(classStaticBlock4.ts, 9, 5))
+
+        C.s2;
+>C.s2 : Symbol(C.s2, Decl(classStaticBlock4.ts, 9, 5))
+>C : Symbol(C, Decl(classStaticBlock4.ts, 0, 0))
+>s2 : Symbol(C.s2, Decl(classStaticBlock4.ts, 9, 5))
+    }
+
+    static s2 = 2;
+>s2 : Symbol(C.s2, Decl(classStaticBlock4.ts, 9, 5))
+
+    static ss2 = this.s1;
+>ss2 : Symbol(C.ss2, Decl(classStaticBlock4.ts, 11, 18))
+>this.s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
+>this : Symbol(C, Decl(classStaticBlock4.ts, 0, 0))
+>s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
+}
+

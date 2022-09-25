@@ -73,7 +73,7 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "hello " + a + " bye", {
+    Object.defineProperty(C.prototype, "hello ".concat(a, " bye"), {
         get: function () { return 0; },
         enumerable: false,
         configurable: true

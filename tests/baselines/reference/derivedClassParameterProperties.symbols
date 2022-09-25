@@ -18,7 +18,7 @@ class Derived extends Base {
         var a = 1;
 >a : Symbol(a, Decl(derivedClassParameterProperties.ts, 8, 11))
 
-        super(); // ok
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
     }
 }
@@ -33,7 +33,7 @@ class Derived2 extends Base {
         var a = 1;
 >a : Symbol(a, Decl(derivedClassParameterProperties.ts, 15, 11))
 
-        super(); // error
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
     }
 }
@@ -45,7 +45,7 @@ class Derived3 extends Base {
     constructor(public y: string) {
 >y : Symbol(Derived3.y, Decl(derivedClassParameterProperties.ts, 21, 16))
 
-        super(); // ok
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
         var a = 1;
@@ -66,7 +66,7 @@ class Derived4 extends Base {
         var b = 2;
 >b : Symbol(b, Decl(derivedClassParameterProperties.ts, 30, 11))
 
-        super(); // error
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
     }
 }
@@ -81,7 +81,7 @@ class Derived5 extends Base {
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 37, 16))
 
-        super(); // ok
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
         var b = 2;
@@ -107,7 +107,7 @@ class Derived6 extends Base {
         var b = 2;
 >b : Symbol(b, Decl(derivedClassParameterProperties.ts, 47, 11))
 
-        super(); // error: "super" has to be called before "this" accessing
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
     }
 }
@@ -135,7 +135,7 @@ class Derived7 extends Base {
 >this : Symbol(Derived7, Decl(derivedClassParameterProperties.ts, 50, 1))
 >b : Symbol(Derived7.b, Decl(derivedClassParameterProperties.ts, 53, 10))
 
-        super(); // error
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
     }
 }
@@ -153,7 +153,7 @@ class Derived8 extends Base {
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 65, 16))
 
-        super(); // ok
+        super();
 >super : Symbol(Base, Decl(derivedClassParameterProperties.ts, 0, 0))
 
         this.a = 3;
@@ -200,7 +200,7 @@ class Derived9<T> extends Base2<T> {
 >this : Symbol(Derived9, Decl(derivedClassParameterProperties.ts, 73, 24))
 >b : Symbol(Derived9.b, Decl(derivedClassParameterProperties.ts, 76, 10))
 
-        super(); // error
+        super();
 >super : Symbol(Base2, Decl(derivedClassParameterProperties.ts, 70, 1))
     }
 }
@@ -220,7 +220,7 @@ class Derived10<T> extends Base2<T> {
     constructor(y: string) {
 >y : Symbol(y, Decl(derivedClassParameterProperties.ts, 88, 16))
 
-        super(); // ok
+        super();
 >super : Symbol(Base2, Decl(derivedClassParameterProperties.ts, 70, 1))
 
         this.a = 3;

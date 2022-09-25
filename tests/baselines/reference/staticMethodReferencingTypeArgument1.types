@@ -20,28 +20,28 @@ module Editor {
 >MakeHead : () => List<T>
 
             var entry: List<T> = new List<T>(true, null); // can't access T here
->entry : List<any>
->new List<T>(true, null) : List<any>
+>entry : List<T>
+>new List<T>(true, null) : List<T>
 >List : typeof List
 >true : true
 >null : null
 
             entry.prev = entry;
->entry.prev = entry : List<any>
->entry.prev : List<any>
->entry : List<any>
->prev : List<any>
->entry : List<any>
+>entry.prev = entry : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>entry : List<T>
 
             entry.next = entry;
->entry.next = entry : List<any>
->entry.next : List<any>
->entry : List<any>
->next : List<any>
->entry : List<any>
+>entry.next = entry : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>entry : List<T>
 
             return entry;
->entry : List<any>
+>entry : List<T>
         }
     }
 }

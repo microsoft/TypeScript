@@ -1,0 +1,15 @@
+/index.ts(1,21): error TS1444: 'ComponentProps' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+
+
+==== /exports.ts (0 errors) ====
+    export function Component() {}
+    export interface ComponentProps {}
+    
+==== /index.ts (1 errors) ====
+    import { Component, ComponentProps } from "./exports.js";
+                        ~~~~~~~~~~~~~~
+!!! error TS1444: 'ComponentProps' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+    
+==== /index.fixed.ts (0 errors) ====
+    import { Component, type ComponentProps } from "./exports.js";
+    

@@ -21,6 +21,6 @@ function B2() {
 
 /** @type {B} */
 var notOK = 0;
->notOK : any
+>notOK : B
 >0 : 0
 

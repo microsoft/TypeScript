@@ -10,8 +10,8 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    exact: completion.globalsPlus([
         { name: "foo", kind: "alias", kindModifiers: "export,declare", text: "(alias) const foo: number\nimport foo = N.foo" },
-        ...completion.globalsPlus([{ name: "N", kind: "module", kindModifiers: "declare", text: "namespace N" }]),
-    ],
+        { name: "N", kind: "module", kindModifiers: "declare", text: "namespace N" },
+    ]),
 });

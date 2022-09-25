@@ -35,4 +35,4 @@ var notOK = 0;
 declare function B1(): void;
 declare function B2(): void;
 /** @type {B} */
-declare var notOK: any;
+declare var notOK: B;

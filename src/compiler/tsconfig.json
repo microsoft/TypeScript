@@ -6,7 +6,6 @@
     },
 
     "references": [
-        { "path": "../shims" }
     ],
 
     "files": [
@@ -49,6 +48,8 @@
         "transformers/taggedTemplate.ts",
         "transformers/ts.ts",
         "transformers/classFields.ts",
+        "transformers/typeSerializer.ts",
+        "transformers/legacyDecorators.ts",
         "transformers/es2017.ts",
         "transformers/es2018.ts",
         "transformers/es2019.ts",
@@ -64,6 +65,7 @@
         "transformers/module/module.ts",
         "transformers/module/system.ts",
         "transformers/module/esnextAnd2015.ts",
+        "transformers/module/node.ts",
         "transformers/declarations/diagnostics.ts",
         "transformers/declarations.ts",
         "transformer.ts",

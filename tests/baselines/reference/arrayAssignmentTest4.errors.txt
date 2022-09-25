@@ -1,4 +1,4 @@
-tests/cases/compiler/arrayAssignmentTest4.ts(22,1): error TS2740: Type '() => any' is missing the following properties from type 'any[]': pop, push, concat, join, and 15 more.
+tests/cases/compiler/arrayAssignmentTest4.ts(22,1): error TS2322: Type '() => any' is not assignable to type 'any[]'.
 tests/cases/compiler/arrayAssignmentTest4.ts(23,1): error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
 
 
@@ -26,7 +26,7 @@ tests/cases/compiler/arrayAssignmentTest4.ts(23,1): error TS2740: Type 'C3' is m
     
     arr_any = function () { return null;} // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type '() => any' is missing the following properties from type 'any[]': pop, push, concat, join, and 15 more.
+!!! error TS2322: Type '() => any' is not assignable to type 'any[]'.
     arr_any = c3; // should be an error - is
     ~~~~~~~
 !!! error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.

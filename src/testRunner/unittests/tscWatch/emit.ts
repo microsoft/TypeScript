@@ -6,21 +6,12 @@ namespace ts.tscWatch {
                 scenario,
                 subScenario: `emit with outFile or out setting/${subScenario}`,
                 commandLineArgs: ["--w", "-p", "/a/tsconfig.json"],
-                sys: () => {
-                    const config: File = {
-                        path: "/a/tsconfig.json",
-                        content: JSON.stringify({ compilerOptions: { out, outFile } })
-                    };
-                    const f1: File = {
-                        path: "/a/a.ts",
-                        content: "let x = 1"
-                    };
-                    const f2: File = {
-                        path: "/a/b.ts",
-                        content: "let y = 1"
-                    };
-                    return createWatchedSystem([f1, f2, config, libFile]);
-                },
+                sys: () => createWatchedSystem({
+                    "/a/a.ts": "let x = 1",
+                    "/a/b.ts": "let y = 1",
+                    "/a/tsconfig.json": JSON.stringify({ compilerOptions: { out, outFile } }),
+                    [libFile.path]: libFile.content,
+                }),
                 changes: [
                     {
                         caption: "Make change in the file",

@@ -48,6 +48,6 @@ originalZZZ;
 >originalZZZ : 123
 
 const y: originalZZZ = x;
->y : any
+>y : originalZZZ
 >x : zzz
 

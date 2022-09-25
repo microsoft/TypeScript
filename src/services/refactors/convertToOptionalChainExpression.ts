@@ -10,11 +10,11 @@ namespace ts.refactor.convertToOptionalChainExpression {
     };
     registerRefactor(refactorName, {
         kinds: [toOptionalChainAction.kind],
-        getAvailableActions,
-        getEditsForAction
+        getEditsForAction: getRefactorEditsToConvertToOptionalChain,
+        getAvailableActions: getRefactorActionsToConvertToOptionalChain,
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertToOptionalChain(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
@@ -36,7 +36,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return emptyArray;
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertToOptionalChain(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const info = getInfo(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
         const edits = textChanges.ChangeTracker.with(context, t =>
@@ -51,7 +51,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         finalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression,
         occurrences: Occurrence[],
         expression: ValidExpression,
-    };
+    }
 
     type ValidExpressionOrStatement = ValidExpression | ValidStatement;
 
@@ -119,7 +119,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | RefactorErrorInfo | undefined {
         if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken) {
             return { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_logical_AND_access_chains) };
-        };
+        }
         const finalExpression = getFinalExpressionInChain(expression.right);
 
         if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };

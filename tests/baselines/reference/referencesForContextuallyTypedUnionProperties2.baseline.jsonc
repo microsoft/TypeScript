@@ -1,0 +1,189 @@
+// === /tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts ===
+// interface A {
+//     a: number;
+//     common: string;
+// }
+// 
+// interface B {
+//     /*FIND ALL REFS*/[|b|]: number;
+//     common: number;
+// }
+// 
+// // Assignment
+// var v1: A | B = { a: 0, common: "" };
+// var v2: A | B = { [|b|]: 0, common: 3 };
+// 
+// // Function call
+// function consumer(f:  A | B) { }
+// consumer({ a: 0, [|b|]: 0, common: 1 });
+// 
+// // Type cast
+// var c = <A | B> { common: 0, [|b|]: 0 };
+// 
+// // Array literal
+// var ar: Array<A|B> = [{ a: 0, common: "" }, { [|b|]: 0, common: 0 }];
+// 
+// // Nested object literal
+// var ob: { aorb: A|B } = { aorb: { [|b|]: 0, common: 0 } };
+// 
+// // Widened type
+// var w: A|B = { [|b|]:undefined, common: undefined };
+// 
+// // Untped -- should not be included
+// var u1 = { a: 0, b: 0, common: "" };
+// var u2 = { b: 0, common: 0 };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts",
+      "kind": "property",
+      "name": "(property) B.b: number",
+      "textSpan": {
+        "start": 70,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "B",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "b",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 70,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts",
+        "contextSpan": {
+          "start": 70,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 174,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts",
+        "contextSpan": {
+          "start": 174,
+          "length": 4
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 261,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts",
+        "contextSpan": {
+          "start": 261,
+          "length": 4
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 324,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts",
+        "contextSpan": {
+          "start": 324,
+          "length": 4
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 396,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts",
+        "contextSpan": {
+          "start": 396,
+          "length": 4
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 476,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts",
+        "contextSpan": {
+          "start": 476,
+          "length": 4
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 529,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedUnionProperties2.ts",
+        "contextSpan": {
+          "start": 529,
+          "length": 11
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]

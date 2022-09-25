@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////interface I<[|{| "isWriteAccess": true, "isDefinition": true |}T|]> { a: [|T|] }
-////interface I<[|{| "isWriteAccess": true, "isDefinition": true |}T|]> { b: [|T|] }
+////interface I</*1*/T> { a: /*2*/T }
+////interface I</*3*/T> { b: /*4*/T }
 
-verify.singleReferenceGroup("(type parameter) T in I<T>");
+verify.baselineFindAllReferences('1', '2', '3', '4');

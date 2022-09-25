@@ -52,3 +52,43 @@ for (const n in f4()) {}
 >n : Symbol(n, Decl(neverTypeErrors1.ts, 23, 10))
 >f4 : Symbol(f4, Decl(neverTypeErrors1.ts, 17, 1))
 
+function f5() {
+>f5 : Symbol(f5, Decl(neverTypeErrors1.ts, 23, 24))
+
+    let x: never[] = [];  // Ok
+>x : Symbol(x, Decl(neverTypeErrors1.ts, 26, 7))
+}
+
+// Repro from #46032
+
+interface A {
+>A : Symbol(A, Decl(neverTypeErrors1.ts, 27, 1))
+
+    foo: "a";
+>foo : Symbol(A.foo, Decl(neverTypeErrors1.ts, 31, 13))
+}
+
+interface B {
+>B : Symbol(B, Decl(neverTypeErrors1.ts, 33, 1))
+
+    foo: "b";
+>foo : Symbol(B.foo, Decl(neverTypeErrors1.ts, 35, 13))
+}
+
+type Union = A & B;
+>Union : Symbol(Union, Decl(neverTypeErrors1.ts, 37, 1))
+>A : Symbol(A, Decl(neverTypeErrors1.ts, 27, 1))
+>B : Symbol(B, Decl(neverTypeErrors1.ts, 33, 1))
+
+function func(): { value: Union[] } {
+>func : Symbol(func, Decl(neverTypeErrors1.ts, 39, 19))
+>value : Symbol(value, Decl(neverTypeErrors1.ts, 41, 18))
+>Union : Symbol(Union, Decl(neverTypeErrors1.ts, 37, 1))
+
+    return {
+        value: [],
+>value : Symbol(value, Decl(neverTypeErrors1.ts, 42, 12))
+
+    };
+}
+

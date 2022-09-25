@@ -206,6 +206,13 @@ namespace ts {
                 assertListEqual(actualCoalescedExports, expectedCoalescedExports);
             });
 
+            it("Sort specifiers - type-only", () => {
+                const sortedImports = parseImports(`import { type z, y, type x, c, type b, a } from "lib";`);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = parseImports(`import { a, c, y, type b, type x, type z } from "lib";`);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
+
             it("Combine namespace re-exports", () => {
                 const sortedExports = parseExports(
                     `export * from "lib";`,
@@ -671,23 +678,6 @@ import "lib1";
                 },
                 { path: "/lib1.ts", content: "" },
                 { path: "/lib2.ts", content: "" });
-
-                testOrganizeImports("SortComments",
-                /*skipDestructiveCodeActions*/ false,
-                {
-                    path: "/test.ts",
-                    content: `
-// Header
-import "lib3";
-// Comment2
-import "lib2";
-// Comment1
-import "lib1";
-`,
-                },
-                { path: "/lib1.ts", content: "" },
-                { path: "/lib2.ts", content: "" },
-                { path: "/lib3.ts", content: "" });
 
             testOrganizeImports("AmbientModule",
                 /*skipDestructiveCodeActions*/ false,

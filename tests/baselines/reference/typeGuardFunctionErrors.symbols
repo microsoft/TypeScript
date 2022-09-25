@@ -34,6 +34,7 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 >hasTypeGuardTypeInsideTypeGuardType : Symbol(hasTypeGuardTypeInsideTypeGuardType, Decl(typeGuardFunctionErrors.ts, 14, 1))
 >x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 16, 45))
 >x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 16, 45))
+>x : Symbol(x)
 >is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
@@ -42,6 +43,7 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 
 function hasMissingIsKeyword(): x {
 >hasMissingIsKeyword : Symbol(hasMissingIsKeyword, Decl(typeGuardFunctionErrors.ts, 18, 1))
+>x : Symbol(x)
 
     return true;
 }
@@ -225,18 +227,21 @@ assign3 = function(p1, p2, p3): p1 is A {
 // Type predicates in non-return type positions
 var b1: b is A;
 >b1 : Symbol(b1, Decl(typeGuardFunctionErrors.ts, 94, 3))
+>b : Symbol(b)
 >is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 94, 12))
 
 function b2(a: b is A) {};
 >b2 : Symbol(b2, Decl(typeGuardFunctionErrors.ts, 94, 15))
 >a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 95, 12))
+>b : Symbol(b)
 >is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 95, 16))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 95, 19))
 
 function b3(): A | b is A {
 >b3 : Symbol(b3, Decl(typeGuardFunctionErrors.ts, 95, 26))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+>b : Symbol(b)
 >is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
@@ -290,6 +295,7 @@ interface I2 {
 
     [index: number]: p1 is C;
 >index : Symbol(index, Decl(typeGuardFunctionErrors.ts, 118, 5))
+>p1 : Symbol(p1)
 >is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 }

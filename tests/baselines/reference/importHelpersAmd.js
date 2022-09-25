@@ -36,9 +36,9 @@ define(["require", "exports", "tslib", "./a", "./a"], function (require, exports
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
-    (0, tslib_1.__exportStar)(a_2, exports);
+    tslib_1.__exportStar(a_2, exports);
     var B = /** @class */ (function (_super) {
-        (0, tslib_1.__extends)(B, _super);
+        tslib_1.__extends(B, _super);
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }

@@ -511,7 +511,7 @@ export class A {
             }]
         });
 
-        it("correctly migrate files between projects", () => {
+        it("two watch programs are not affected by each other", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
                 content: `
@@ -526,16 +526,46 @@ export class A {
                 path: "/a/d/f3.ts",
                 content: "export let y = 1;"
             };
-            const host = createWatchedSystem([file1, file2, file3]);
-            const watch = createWatchOfFilesAndCompilerOptions([file2.path, file3.path], host);
-            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, file1, file2, file3]));
+            const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles: [file2.path, file3.path],
+                system: sys,
+                options: { allowNonTsExtensions: true },
+                cb,
+                watchOptions: undefined
+            });
+            createWatchProgram(host);
+            baseline.push(`${sys.getExecutingFilePath()} --w ${file2.path} ${file3.path}`);
+            watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: emptyArray,
+                sys,
+                oldSnap,
+            });
 
-            const watch2 = createWatchOfFilesAndCompilerOptions([file1.path], host);
-            checkProgramActualFiles(watch2.getCurrentProgram().getProgram(), [file1.path, file2.path, file3.path]);
+            const {cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
+            const oldSnap2 = sys.snap();
+            baseline.push("createing separate watcher");
+            createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles:[file1.path],
+                system: sys,
+                options: { allowNonTsExtensions: true },
+                cb: cb2,
+                watchOptions: undefined
+            }));
+            watchBaseline({
+                baseline,
+                getPrograms: getPrograms2,
+                oldPrograms: emptyArray,
+                sys,
+                oldSnap: oldSnap2,
+            });
 
-            // Previous program shouldnt be updated
-            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
-            host.checkTimeoutQueueLength(0);
+            sys.checkTimeoutQueueLength(0);
+            baseline.push(`First program is not updated:: ${getPrograms() === emptyArray}`);
+            baseline.push(`Second program is not updated:: ${getPrograms2() === emptyArray}`);
+            Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
         });
 
         verifyTscWatch({
@@ -588,6 +618,39 @@ export class A {
 
         verifyTscWatch({
             scenario,
+            subScenario: "correctly parses wild card directories from implicit glob when two keys differ only in directory seperator",
+            commandLineArgs: ["-w", "--extendedDiagnostics"],
+            sys: () => {
+                const file1 = {
+                    path: `${projectRoot}/f1.ts`,
+                    content: "export const x = 1"
+                };
+                const file2 = {
+                    path: `${projectRoot}/f2.ts`,
+                    content: "export const y = 1"
+                };
+                const configFile = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] })
+                };
+                return createWatchedSystem([file1, file2, libFile, configFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Add new file",
+                    change: sys => sys.writeFile(`${projectRoot}/new-file.ts`, "export const z = 1;"),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                },
+                {
+                    caption: "Import new file",
+                    change: sys => sys.prependFile(`${projectRoot}/f1.ts`, `import { z } from "./new-file";`),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                }
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "can correctly update configured project when set of root files has changed through include",
             commandLineArgs: ["-w", "-p", "."],
             sys: () => {
@@ -633,6 +696,34 @@ export class A {
                 {
                     caption: "Modify config to set outFile option",
                     change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                }
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "file in files is deleted",
+            commandLineArgs: ["-w", "-p", configFilePath],
+            sys: () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x = 1"
+                };
+                const file2 = {
+                    path: "/a/b/f2.ts",
+                    content: "let y = 1"
+                };
+                const configFile = {
+                    path: configFilePath,
+                    content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })
+                };
+                return createWatchedSystem([file1, file2, libFile, configFile]);
+            },
+            changes: [
+                {
+                    caption: "Delete f2",
+                    change: sys => sys.deleteFile("/a/b/f2.ts"),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
@@ -997,9 +1088,25 @@ declare const eval: any`
                 path: "/a/compile",
                 content: "let x = 1"
             };
-            const host = createWatchedSystem([f, libFile]);
-            const watch = createWatchOfFilesAndCompilerOptions([f.path], host, { allowNonTsExtensions: true });
-            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [f.path, libFile.path]);
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([f, libFile]));
+            const watch = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles: [f.path],
+                system: sys,
+                options: { allowNonTsExtensions: true },
+                cb,
+                watchOptions: undefined
+            }));
+            runWatchBaseline({
+                scenario,
+                subScenario: "should support files without extensions",
+                commandLineArgs: ["--w", f.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: emptyArray,
+                watchOrSolution: watch
+            });
         });
 
         verifyTscWatch({
@@ -1811,6 +1918,30 @@ import { x } from "../b";`),
                 {
                     caption: "Add output of class3",
                     change: sys => sys.writeFile(`${projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "when creating extensionless file",
+            commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+            sys: () => {
+                const module1: File = {
+                    path: `${projectRoot}/index.ts`,
+                    content: ``
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: `{}`
+                };
+                return createWatchedSystem([module1, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Create foo in project root",
+                    change: sys => sys.writeFile(`${projectRoot}/foo`, ``),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
             ]

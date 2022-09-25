@@ -17,6 +17,7 @@ interface Derived2 extends Derived { baz: string; }
 
 var a: A;
 >a : Symbol(a, Decl(assignmentCompatWithStringIndexer3.ts, 6, 3))
+>A : Symbol(A)
 
 var b1: { [x: string]: string; }
 >b1 : Symbol(b1, Decl(assignmentCompatWithStringIndexer3.ts, 7, 3))

@@ -1,0 +1,30 @@
+=== tests/cases/compiler/narrowingTypeofObject.ts ===
+interface F { (): string }
+>F : Symbol(F, Decl(narrowingTypeofObject.ts, 0, 0))
+
+function test(x: number & { _foo: string }) {
+>test : Symbol(test, Decl(narrowingTypeofObject.ts, 0, 26))
+>x : Symbol(x, Decl(narrowingTypeofObject.ts, 2, 14))
+>_foo : Symbol(_foo, Decl(narrowingTypeofObject.ts, 2, 27))
+
+    if (typeof x === 'object') {
+>x : Symbol(x, Decl(narrowingTypeofObject.ts, 2, 14))
+
+        x; 
+>x : Symbol(x, Decl(narrowingTypeofObject.ts, 2, 14))
+    }
+}
+
+function f1(x: F & { foo: number }) {
+>f1 : Symbol(f1, Decl(narrowingTypeofObject.ts, 6, 1))
+>x : Symbol(x, Decl(narrowingTypeofObject.ts, 8, 12))
+>F : Symbol(F, Decl(narrowingTypeofObject.ts, 0, 0))
+>foo : Symbol(foo, Decl(narrowingTypeofObject.ts, 8, 20))
+
+    if (typeof x !== "object") {
+>x : Symbol(x, Decl(narrowingTypeofObject.ts, 8, 12))
+
+        x;
+>x : Symbol(x, Decl(narrowingTypeofObject.ts, 8, 12))
+    }
+}

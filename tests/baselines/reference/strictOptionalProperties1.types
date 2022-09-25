@@ -414,7 +414,7 @@ function f6() {
 // Example from #13195
 
 type Props = {
->Props : Props
+>Props : { foo: string; bar: string; }
 
     foo: string;
 >foo : string
@@ -424,7 +424,7 @@ type Props = {
 }
 
 type InputProps = {
->InputProps : InputProps
+>InputProps : { foo?: string; bar: string; }
 
     foo?: string;
 >foo : string | undefined
@@ -653,7 +653,7 @@ function expectNotUndefined<T>(value: Undefinable<T>): T {
 >'value is undefined' : "value is undefined"
     }
     return value;
->value : T
+>value : T & ({} | null)
 }
 
 interface Bar {
@@ -779,4 +779,36 @@ a = e;  // Error
 >a = e : string | boolean | undefined
 >a : { [x: string]: string | number; }
 >e : string | boolean | undefined
+
+// Repro from #46004
+
+interface PropsFromReact {
+    onClick?: () => void;
+>onClick : (() => void) | undefined
+}
+
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+>onClick : (() => void) | undefined
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+>TheTypeFromMaterialUI : PropsFromReact & PropsFromMaterialUI
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+>value : string
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+>UA : undefined
+
+type UB = { x?: never }['x'];  // undefined from missing property
+>UB : undefined
+>x : undefined
+
+type UC = UA & UB;  // undefined
+>UC : undefined
 

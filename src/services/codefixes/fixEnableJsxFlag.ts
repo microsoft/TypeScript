@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToFixEnableJsxFlag(context) {
             const { configFile } = context.program.getCompilerOptions();
             if (configFile === undefined) {
                 return undefined;

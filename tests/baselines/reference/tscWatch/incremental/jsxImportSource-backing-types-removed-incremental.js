@@ -60,7 +60,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -73,7 +73,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 
@@ -147,7 +147,7 @@ Output::
 [7m [0m [91m                         ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in index.tsx[90m:1[0m
 
 
 
@@ -164,7 +164,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

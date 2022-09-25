@@ -1,0 +1,12 @@
+=== tests/cases/compiler/a.js ===
+function f(x) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 0, 11))
+
+  arguments;
+>arguments : Symbol(arguments)
+}
+
+f(1, 2, 3);
+>f : Symbol(f, Decl(a.js, 0, 0))
+

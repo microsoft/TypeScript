@@ -1,0 +1,72 @@
+// === /tests/cases/fourslash/Foo.js ===
+// /** @type {function (/*FIND ALL REFS*/[|new|]: string, string): string} */
+// var f;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/Foo.js",
+      "kind": "parameter",
+      "name": "(parameter) new: string",
+      "textSpan": {
+        "start": 21,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "new",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 11
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 21,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/Foo.js",
+        "contextSpan": {
+          "start": 21,
+          "length": 11
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  }
+]

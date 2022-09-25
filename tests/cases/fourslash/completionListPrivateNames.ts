@@ -26,7 +26,7 @@
 
 
 
-verify.completions({ marker: "1", exact: ["#z", "t", "y"] });
-verify.completions({ marker: "2", exact: ["#z", "#u", "v"] });
-verify.completions({ marker: "3", exact: ["#z", "t", "y"] });
+verify.completions({ marker: "1", unsorted: ["#z", "t", "y"] });
+verify.completions({ marker: "2", unsorted: ["#z", "#u", "v"] });
+verify.completions({ marker: "3", unsorted: ["#z", "t", "y"] });
 verify.completions({ marker: "4", exact: ["y"] });

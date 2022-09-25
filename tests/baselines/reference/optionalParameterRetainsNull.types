@@ -9,7 +9,7 @@ let a = {
 >{  test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }} : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined): void; }
 
   test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }
->test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
+>test : <K extends keyof Bar>(a: K, b?: Bar[K] | null) => void
 >a : K
 >b : Bar[K] | null | undefined
 >null : null

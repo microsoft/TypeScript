@@ -52,7 +52,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/index.ts (used version)
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -154,7 +154,7 @@ Output::
 [7m [0m [91m                                                  ~~~[0m
 
 
-Found 1 error.
+Found 1 error in src/index.ts[90m:1[0m
 
 
 
@@ -175,7 +175,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 /users/username/projects/project/src/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

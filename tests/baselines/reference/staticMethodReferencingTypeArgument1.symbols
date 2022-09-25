@@ -25,11 +25,14 @@ module Editor {
         static MakeHead(): List<T> {
 >MakeHead : Symbol(List.MakeHead, Decl(staticMethodReferencingTypeArgument1.ts, 6, 9))
 >List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>T : Symbol(T)
 
             var entry: List<T> = new List<T>(true, null); // can't access T here
 >entry : Symbol(entry, Decl(staticMethodReferencingTypeArgument1.ts, 9, 15))
 >List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>T : Symbol(T)
 >List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>T : Symbol(T)
 
             entry.prev = entry;
 >entry.prev : Symbol(List.prev, Decl(staticMethodReferencingTypeArgument1.ts, 2, 22))

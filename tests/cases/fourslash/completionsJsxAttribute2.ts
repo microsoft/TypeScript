@@ -21,7 +21,7 @@
 ////<div aria-foo /*4*/></div>;
 
 
-verify.completions({ marker: "1", exact: ["bar", "aria-foo"] });
-verify.completions({ marker: "2", exact: ["bar", "aria-foo"] });
-verify.completions({ marker: "3", exact: ["foo", "aria-foo"] });
-verify.completions({ marker: "4", exact: ["foo", "bar"] });
+verify.completions({ marker: "1", exact: ["aria-foo", "bar"] });
+verify.completions({ marker: "2", exact: ["aria-foo", "bar"] });
+verify.completions({ marker: "3", exact: ["aria-foo", "foo"] });
+verify.completions({ marker: "4", exact: ["bar", "foo"] });

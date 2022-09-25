@@ -27,7 +27,7 @@ import { Constructor } from "@loopback/context";
 >Constructor : any
 
 export type ControllerClass = Constructor<any>;
->ControllerClass : ControllerClass
+>ControllerClass : (...args: any[]) => any
 
 === tests/cases/compiler/monorepo/core/src/usage.ts ===
 import { ControllerClass } from './application';

@@ -1,0 +1,268 @@
+// === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts ===
+// interface I {
+//     /*FIND ALL REFS*/[|property1|]: number;
+//     property2: string;
+// }
+// 
+// var foo: I;
+// var [ { [|property1|]: prop1 }, { [|property1|], property2 } ] = [foo, foo];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+      "kind": "property",
+      "name": "(property) I.property1: number",
+      "textSpan": {
+        "start": 18,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 18,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 18,
+          "length": 9
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+        "contextSpan": {
+          "start": 18,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 9
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+        "contextSpan": {
+          "start": 75,
+          "length": 68
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 105,
+          "length": 9
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+        "contextSpan": {
+          "start": 75,
+          "length": 68
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts ===
+// interface I {
+//     [|property1|]: number;
+//     property2: string;
+// }
+// 
+// var foo: I;
+// var [ { [|property1|]: prop1 }, { /*FIND ALL REFS*/[|property1|], property2 } ] = [foo, foo];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+      "kind": "property",
+      "name": "(property) I.property1: number",
+      "textSpan": {
+        "start": 18,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 18,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 18,
+          "length": 9
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+        "contextSpan": {
+          "start": 18,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 9
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+        "contextSpan": {
+          "start": 75,
+          "length": 68
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+      "kind": "var",
+      "name": "var property1: number",
+      "textSpan": {
+        "start": 105,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "property1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 75,
+        "length": 68
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 105,
+          "length": 9
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName03.ts",
+        "contextSpan": {
+          "start": 75,
+          "length": 68
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  }
+]

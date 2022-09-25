@@ -282,7 +282,7 @@ namespace Harness.SourceMapRecorder {
             const sourceMapData = sourceMapDataList[i];
             let prevSourceFile: ts.SourceFile | undefined;
             let currentFile: documents.TextDocument;
-            if (ts.endsWith(sourceMapData.sourceMap.file, ts.Extension.Dts)) {
+            if (ts.isDeclarationFileName(sourceMapData.sourceMap.file)) {
                 if (sourceMapDataList.length > jsFiles.length) {
                     currentFile = declarationFiles[Math.floor(i / 2)]; // When both kinds of source map are present, they alternate js/dts
                 }

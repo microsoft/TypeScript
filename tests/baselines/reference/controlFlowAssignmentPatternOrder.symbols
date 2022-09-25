@@ -14,6 +14,7 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 3, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 4, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 3, 7))
+>const : Symbol(const)
 
     const bb: 0 = b;
 >bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 6, 9))
@@ -31,6 +32,7 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 9, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 10, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 9, 7))
+>const : Symbol(const)
 
     const bb: 9 = b;
 >bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 12, 9))
@@ -48,6 +50,8 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 15, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 16, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 15, 7))
+>const : Symbol(const)
+>const : Symbol(const)
 
     const bb: 0 | 8 = b;
 >bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 18, 9))
@@ -65,6 +69,8 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 21, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 22, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 21, 7))
+>const : Symbol(const)
+>const : Symbol(const)
 
     const bb: 0 | 8 = b;
 >bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 24, 9))
@@ -83,6 +89,7 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 28, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 29, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 28, 7))
+>const : Symbol(const)
 >f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
 
     const bb: 0 = b;
@@ -101,6 +108,7 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 34, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 35, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 34, 7))
+>const : Symbol(const)
 >f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
 
     const bb: 9 = b;
@@ -119,6 +127,8 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 40, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 41, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 40, 7))
+>const : Symbol(const)
+>const : Symbol(const)
 >f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
 
     const bb: 0 | 8 = b;
@@ -137,6 +147,8 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 46, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 47, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 46, 7))
+>const : Symbol(const)
+>const : Symbol(const)
 >f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
 
     const bb: 0 | 8 = b;
@@ -157,6 +169,7 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 53, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 54, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 53, 7))
+>const : Symbol(const)
 
     const bb: 0 = b;
 >bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 56, 9))
@@ -175,6 +188,7 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 59, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 60, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 59, 7))
+>const : Symbol(const)
 
     const bb: 9 = b;
 >bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 62, 9))
@@ -193,6 +207,8 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 65, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 66, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 65, 7))
+>const : Symbol(const)
+>const : Symbol(const)
 
     const bb: 0 | 8 = b;
 >bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 68, 9))
@@ -211,6 +227,8 @@ declare function f(): void;
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 71, 7))
 >b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 72, 7))
 >a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 71, 7))
+>const : Symbol(const)
+>const : Symbol(const)
 
     const bb: 0 | 8 = b;
 >bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 74, 9))

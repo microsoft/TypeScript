@@ -142,7 +142,7 @@ type NeededInfo<MyNamespaceSchema = {}> = {
 };
 
 export type MyInfo = NeededInfo<ToB<{ initialize: any }>>;
->MyInfo : MyInfo
+>MyInfo : { ASchema: ToA<ToB<{ initialize: any; }>>; }
 >initialize : any
 
 const tmp1: MyInfo = null!;

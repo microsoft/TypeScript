@@ -1,4 +1,4 @@
-namespace Playback {
+namespace Playback { // eslint-disable-line local/one-namespace-per-file
     interface FileInformation {
         contents?: string;
         contentsPath?: string;
@@ -94,7 +94,7 @@ namespace Playback {
     function memoize<T>(func: (s: string) => T): Memoized<T> {
         let lookup: { [s: string]: T } = {};
         const run: Memoized<T> = ((s: string) => {
-            if (lookup.hasOwnProperty(s)) return lookup[s];
+            if (ts.hasProperty(lookup, s)) return lookup[s];
             return lookup[s] = func(s);
         }) as Memoized<T>;
         run.reset = () => {
@@ -361,7 +361,7 @@ namespace Playback {
 
     function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
-            // eslint-disable-next-line only-arrow-functions
+            // eslint-disable-next-line local/only-arrow-functions
             return (function () {
                 if (replayLog !== undefined) {
                     return replay.apply(undefined, arguments);
@@ -445,3 +445,7 @@ namespace Playback {
         return wrapper;
     }
 }
+
+// empty modules for the module migration script
+namespace ts.server { } // eslint-disable-line local/one-namespace-per-file
+namespace Harness { } // eslint-disable-line local/one-namespace-per-file

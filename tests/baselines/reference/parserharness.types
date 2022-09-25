@@ -20,7 +20,7 @@
 ///<reference path='diff.ts'/>
 
 declare var assert: Harness.Assert;
->assert : any
+>assert : Harness.Assert
 >Harness : any
 
 declare var it;
@@ -33,7 +33,7 @@ declare var run;
 >run : any
 
 declare var IO: IIO;
->IO : any
+>IO : IIO
 
 declare var __dirname; // Node-specific
 >__dirname : any
@@ -100,7 +100,7 @@ var typescriptServiceFileName = filePath(IO.getExecutingFilePath()) + "typescrip
 >filePath : (fullPath: string) => string
 >IO.getExecutingFilePath() : any
 >IO.getExecutingFilePath : any
->IO : any
+>IO : IIO
 >getExecutingFilePath : any
 >"typescriptServices.js" : "typescriptServices.js"
 
@@ -108,7 +108,7 @@ var typescriptServiceFile = IO.readFile(typescriptServiceFileName);
 >typescriptServiceFile : any
 >IO.readFile(typescriptServiceFileName) : any
 >IO.readFile : any
->IO : any
+>IO : IIO
 >readFile : any
 >typescriptServiceFileName : string
 
@@ -296,7 +296,7 @@ module Harness {
 >bug : string
 >assert.bug(bug) : any
 >assert.bug : any
->assert : any
+>assert : Harness.Assert
 >bug : any
 >bug : string
             }
@@ -824,7 +824,7 @@ module Harness {
 >content : any
 >IO.readFile(Harness.userSpecifiedroot + path) : any
 >IO.readFile : any
->IO : any
+>IO : IIO
 >readFile : any
 >Harness.userSpecifiedroot + path : string
 >Harness.userSpecifiedroot : string
@@ -1251,7 +1251,7 @@ module Harness {
                 IO.printLine('Global error: ' + e);
 >IO.printLine('Global error: ' + e) : any
 >IO.printLine : any
->IO : any
+>IO : IIO
 >printLine : any
 >'Global error: ' + e : string
 >'Global error: ' : "Global error: "
@@ -1539,7 +1539,7 @@ module Harness {
 >false : false
 >bugs : any
 >assert.bugIds : any
->assert : any
+>assert : Harness.Assert
 >bugIds : any
 
                     // Report all bugs affecting this scenario
@@ -1547,7 +1547,7 @@ module Harness {
 >assert.bugIds.forEach(desc => emitLog('bug', metadata, desc)) : any
 >assert.bugIds.forEach : any
 >assert.bugIds : any
->assert : any
+>assert : Harness.Assert
 >bugIds : any
 >forEach : any
 >desc => emitLog('bug', metadata, desc) : (desc: any) => void
@@ -1681,7 +1681,7 @@ module Harness {
 >passed : any
 >bugs : any
 >assert.bugIds : any
->assert : any
+>assert : Harness.Assert
 >bugIds : any
 
             // Report all bugs affecting this scenario
@@ -1689,7 +1689,7 @@ module Harness {
 >assert.bugIds.forEach(desc => emitLog('bug', metadata, desc)) : any
 >assert.bugIds.forEach : any
 >assert.bugIds : any
->assert : any
+>assert : Harness.Assert
 >bugIds : any
 >forEach : any
 >desc => emitLog('bug', metadata, desc) : (desc: any) => void
@@ -1766,7 +1766,7 @@ module Harness {
                 assert.bugIds = [];
 >assert.bugIds = [] : undefined[]
 >assert.bugIds : any
->assert : any
+>assert : Harness.Assert
 >bugIds : any
 >[] : undefined[]
 
@@ -2652,7 +2652,7 @@ module Harness {
 
             /** create file gets the whole path to create, so this works as expected with the --out parameter */
             public createFile(s: string, useUTF8?: boolean): ITextWriter {
->createFile : (s: string, useUTF8?: boolean) => any
+>createFile : (s: string, useUTF8?: boolean) => ITextWriter
 >s : string
 >useUTF8 : boolean
 
@@ -2664,7 +2664,7 @@ module Harness {
 >s : string
 
                     return <ITextWriter>this.fileCollection[s];
-><ITextWriter>this.fileCollection[s] : any
+><ITextWriter>this.fileCollection[s] : ITextWriter
 >this.fileCollection[s] : any
 >this.fileCollection : {}
 >this : this
@@ -2831,10 +2831,10 @@ module Harness {
         export var libText = IO ? IO.readFile(libFolder + "lib.d.ts") : '';
 >libText : any
 >IO ? IO.readFile(libFolder + "lib.d.ts") : '' : any
->IO : any
+>IO : IIO
 >IO.readFile(libFolder + "lib.d.ts") : any
 >IO.readFile : any
->IO : any
+>IO : IIO
 >readFile : any
 >libFolder + "lib.d.ts" : string
 >libFolder : string
@@ -2864,14 +2864,14 @@ module Harness {
         }
 
         export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
->makeDefaultCompilerForTest : (c?: any) => any
->c : any
+>makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
+>c : TypeScript.TypeScriptCompiler
 >TypeScript : any
 
             var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
 >compiler : any
 >c || new TypeScript.TypeScriptCompiler(stderr) : any
->c : any
+>c : TypeScript.TypeScriptCompiler
 >new TypeScript.TypeScriptCompiler(stderr) : any
 >TypeScript.TypeScriptCompiler : any
 >TypeScript : any
@@ -2978,7 +2978,7 @@ module Harness {
         }
 
         var compiler: TypeScript.TypeScriptCompiler;
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >TypeScript : any
 
         recreate();
@@ -3004,7 +3004,7 @@ module Harness {
                     compiler.pullTypeCheck(true);
 >compiler.pullTypeCheck(true) : any
 >compiler.pullTypeCheck : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >pullTypeCheck : any
 >true : true
 
@@ -3018,7 +3018,7 @@ module Harness {
                     compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true);
 >compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true) : any
 >compiler.pullUpdateUnit : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >pullUpdateUnit : any
 >new TypeScript.StringSourceText("") : any
 >TypeScript.StringSourceText : any
@@ -3031,7 +3031,7 @@ module Harness {
                     compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), filename, true);
 >compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), filename, true) : any
 >compiler.pullUpdateUnit : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >pullUpdateUnit : any
 >new TypeScript.StringSourceText(code) : any
 >TypeScript.StringSourceText : any
@@ -3046,7 +3046,7 @@ module Harness {
                 compiler.reTypeCheck();
 >compiler.reTypeCheck() : any
 >compiler.reTypeCheck : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >reTypeCheck : any
             }
         }
@@ -3098,7 +3098,7 @@ module Harness {
 
                 compileString(testCode, 'test.ts', function (compilerResult) {
 >compileString(testCode, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: any[]) => void
+>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >testCode : any
 >'test.ts' : "test.ts"
 >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
@@ -3716,7 +3716,7 @@ module Harness {
 
                 compileString(code, 'test.ts', function (compilerResult) {
 >compileString(code, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: any[]) => void
+>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >'test.ts' : "test.ts"
 >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
@@ -3768,7 +3768,7 @@ module Harness {
 >compiler.scripts.members.length : any
 >compiler.scripts.members : any
 >compiler.scripts : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >scripts : any
 >members : any
 >length : any
@@ -3780,7 +3780,7 @@ module Harness {
 >compiler.scripts.members[m] : any
 >compiler.scripts.members : any
 >compiler.scripts : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >scripts : any
 >members : any
 >m : number
@@ -3795,7 +3795,7 @@ module Harness {
 >TypeScript.NullLogger : any
 >TypeScript : any
 >NullLogger : any
-><TypeScript.Script>script : any
+><TypeScript.Script>script : TypeScript.Script
 >TypeScript : any
 >script : any
 >new TypeScript.StringSourceText(code) : any
@@ -3814,7 +3814,7 @@ module Harness {
 >TypeScript.ScopeTraversal : any
 >TypeScript : any
 >ScopeTraversal : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >getScopeEntries : any
 >enclosingScopeContext : any
 
@@ -3865,7 +3865,7 @@ module Harness {
 >compiler.scripts.members.length : any
 >compiler.scripts.members : any
 >compiler.scripts : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >scripts : any
 >members : any
 >length : any
@@ -3873,13 +3873,13 @@ module Harness {
 >m : number
 
                         var script2 = <TypeScript.Script>compiler.scripts.members[m];
->script2 : any
-><TypeScript.Script>compiler.scripts.members[m] : any
+>script2 : TypeScript.Script
+><TypeScript.Script>compiler.scripts.members[m] : TypeScript.Script
 >TypeScript : any
 >compiler.scripts.members[m] : any
 >compiler.scripts.members : any
 >compiler.scripts : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >scripts : any
 >members : any
 >m : number
@@ -3888,7 +3888,7 @@ module Harness {
 >script2.locationInfo.filename !== 'lib.d.ts' : boolean
 >script2.locationInfo.filename : any
 >script2.locationInfo : any
->script2 : any
+>script2 : TypeScript.Script
 >locationInfo : any
 >filename : any
 >'lib.d.ts' : "lib.d.ts"
@@ -3903,17 +3903,17 @@ module Harness {
 >tyInfo : any
 >compiler.pullGetTypeInfoAtPosition(targetPosition, script2) : any
 >compiler.pullGetTypeInfoAtPosition : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >pullGetTypeInfoAtPosition : any
 >targetPosition : number
->script2 : any
+>script2 : TypeScript.Script
 
                                 var name = this.getTypeInfoName(tyInfo.ast);
 >name : string
 >this.getTypeInfoName(tyInfo.ast) : string
->this.getTypeInfoName : (ast: any) => string
+>this.getTypeInfoName : (ast: TypeScript.AST) => string
 >this : this
->getTypeInfoName : (ast: any) => string
+>getTypeInfoName : (ast: TypeScript.AST) => string
 >tyInfo.ast : any
 >tyInfo : any
 >ast : any
@@ -3987,17 +3987,17 @@ module Harness {
 >tyInfo : any
 >compiler.pullGetTypeInfoAtPosition(pos, script2) : any
 >compiler.pullGetTypeInfoAtPosition : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >pullGetTypeInfoAtPosition : any
 >pos : number
->script2 : any
+>script2 : TypeScript.Script
 
                                     var name = this.getTypeInfoName(tyInfo.ast);
 >name : string
 >this.getTypeInfoName(tyInfo.ast) : string
->this.getTypeInfoName : (ast: any) => string
+>this.getTypeInfoName : (ast: TypeScript.AST) => string
 >this : this
->getTypeInfoName : (ast: any) => string
+>getTypeInfoName : (ast: TypeScript.AST) => string
 >tyInfo.ast : any
 >tyInfo : any
 >ast : any
@@ -4120,8 +4120,8 @@ module Harness {
             }
 
             private getTypeInfoName(ast : TypeScript.AST) {
->getTypeInfoName : (ast: any) => string
->ast : any
+>getTypeInfoName : (ast: TypeScript.AST) => string
+>ast : TypeScript.AST
 >TypeScript : any
 
                 var name = '';
@@ -4130,7 +4130,7 @@ module Harness {
 
                 switch (ast.nodeType) {
 >ast.nodeType : any
->ast : any
+>ast : TypeScript.AST
 >nodeType : any
 
                     case TypeScript.NodeType.Name: // Type Name?
@@ -4217,7 +4217,7 @@ module Harness {
 >(<any>ast).text : any
 >(<any>ast) : any
 ><any>ast : any
->ast : any
+>ast : TypeScript.AST
 >text : any
 
                         break;
@@ -4232,10 +4232,10 @@ module Harness {
 >name = (<TypeScript.RegexLiteral>ast).text : any
 >name : string
 >(<TypeScript.RegexLiteral>ast).text : any
->(<TypeScript.RegexLiteral>ast) : any
-><TypeScript.RegexLiteral>ast : any
+>(<TypeScript.RegexLiteral>ast) : TypeScript.RegexLiteral
+><TypeScript.RegexLiteral>ast : TypeScript.RegexLiteral
 >TypeScript : any
->ast : any
+>ast : TypeScript.AST
 >text : any
 
                         break;
@@ -4252,7 +4252,7 @@ module Harness {
 >(<any>ast).text : any
 >(<any>ast) : any
 ><any>ast : any
->ast : any
+>ast : TypeScript.AST
 >text : any
 
                         break;
@@ -4267,10 +4267,10 @@ module Harness {
 >name = (<TypeScript.NumberLiteral>ast).text : any
 >name : string
 >(<TypeScript.NumberLiteral>ast).text : any
->(<TypeScript.NumberLiteral>ast) : any
-><TypeScript.NumberLiteral>ast : any
+>(<TypeScript.NumberLiteral>ast) : TypeScript.NumberLiteral
+><TypeScript.NumberLiteral>ast : TypeScript.NumberLiteral
 >TypeScript : any
->ast : any
+>ast : TypeScript.AST
 >text : any
 
                         break;
@@ -4295,10 +4295,10 @@ module Harness {
 >name : string
 >(<TypeScript.InterfaceDeclaration>ast).name.actualText : any
 >(<TypeScript.InterfaceDeclaration>ast).name : any
->(<TypeScript.InterfaceDeclaration>ast) : any
-><TypeScript.InterfaceDeclaration>ast : any
+>(<TypeScript.InterfaceDeclaration>ast) : TypeScript.InterfaceDeclaration
+><TypeScript.InterfaceDeclaration>ast : TypeScript.InterfaceDeclaration
 >TypeScript : any
->ast : any
+>ast : TypeScript.AST
 >name : any
 >actualText : any
 
@@ -4315,10 +4315,10 @@ module Harness {
 >name : string
 >(<TypeScript.ModuleDeclaration>ast).name.actualText : any
 >(<TypeScript.ModuleDeclaration>ast).name : any
->(<TypeScript.ModuleDeclaration>ast) : any
-><TypeScript.ModuleDeclaration>ast : any
+>(<TypeScript.ModuleDeclaration>ast) : TypeScript.ModuleDeclaration
+><TypeScript.ModuleDeclaration>ast : TypeScript.ModuleDeclaration
 >TypeScript : any
->ast : any
+>ast : TypeScript.AST
 >name : any
 >actualText : any
 
@@ -4335,10 +4335,10 @@ module Harness {
 >name : string
 >(<TypeScript.ClassDeclaration>ast).name.actualText : any
 >(<TypeScript.ClassDeclaration>ast).name : any
->(<TypeScript.ClassDeclaration>ast) : any
-><TypeScript.ClassDeclaration>ast : any
+>(<TypeScript.ClassDeclaration>ast) : TypeScript.ClassDeclaration
+><TypeScript.ClassDeclaration>ast : TypeScript.ClassDeclaration
 >TypeScript : any
->ast : any
+>ast : TypeScript.AST
 >name : any
 >actualText : any
 
@@ -4356,18 +4356,18 @@ module Harness {
 >!(<TypeScript.FuncDecl>ast).name ? "" : (<TypeScript.FuncDecl>ast).name.actualText : any
 >!(<TypeScript.FuncDecl>ast).name : boolean
 >(<TypeScript.FuncDecl>ast).name : any
->(<TypeScript.FuncDecl>ast) : any
-><TypeScript.FuncDecl>ast : any
+>(<TypeScript.FuncDecl>ast) : TypeScript.FuncDecl
+><TypeScript.FuncDecl>ast : TypeScript.FuncDecl
 >TypeScript : any
->ast : any
+>ast : TypeScript.AST
 >name : any
 >"" : ""
 >(<TypeScript.FuncDecl>ast).name.actualText : any
 >(<TypeScript.FuncDecl>ast).name : any
->(<TypeScript.FuncDecl>ast) : any
-><TypeScript.FuncDecl>ast : any
+>(<TypeScript.FuncDecl>ast) : TypeScript.FuncDecl
+><TypeScript.FuncDecl>ast : TypeScript.FuncDecl
 >TypeScript : any
->ast : any
+>ast : TypeScript.AST
 >name : any
 >actualText : any
 
@@ -4377,7 +4377,7 @@ module Harness {
                         var a = <any>ast;
 >a : any
 ><any>ast : any
->ast : any
+>ast : TypeScript.AST
 
                         name = (a.id) ? (a.id.actualText) : (a.name) ? a.name.actualText : (a.text) ? a.text : '';
 >name = (a.id) ? (a.id.actualText) : (a.name) ? a.name.actualText : (a.text) ? a.text : '' : any
@@ -4453,7 +4453,7 @@ module Harness {
                     assert.equal(actualType.type, expectedType);
 >assert.equal(actualType.type, expectedType) : any
 >assert.equal : any
->assert : any
+>assert : Harness.Assert
 >equal : any
 >actualType.type : any
 >actualType : Type
@@ -4478,7 +4478,7 @@ module Harness {
 >compilationContext : CompilationContext
 >Harness : any
 >Compiler : any
->references : any[]
+>references : TypeScript.IFileReference[]
 >TypeScript : any
 
             reset();
@@ -4489,7 +4489,7 @@ module Harness {
 >compiler.settings.generateDeclarationFiles = true : true
 >compiler.settings.generateDeclarationFiles : any
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 >generateDeclarationFiles : any
 >true : true
@@ -4498,7 +4498,7 @@ module Harness {
 >oldOutputOption : any
 >compiler.settings.outputOption : any
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 >outputOption : any
 
@@ -4506,7 +4506,7 @@ module Harness {
 >oldEmitterIOHost : any
 >compiler.emitSettings.ioHost : any
 >compiler.emitSettings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >emitSettings : any
 >ioHost : any
 
@@ -4526,18 +4526,18 @@ module Harness {
                 }
 
                 addUnit(code, unitName, false, false, references);
->addUnit(code, unitName, false, false, references) : any
->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: any[]) => any
+>addUnit(code, unitName, false, false, references) : TypeScript.Script
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >code : string
 >unitName : string
 >false : false
 >false : false
->references : any[]
+>references : TypeScript.IFileReference[]
 
                 compiler.reTypeCheck();
 >compiler.reTypeCheck() : any
 >compiler.reTypeCheck : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >reTypeCheck : any
 
                 var outputs = {};
@@ -4548,7 +4548,7 @@ module Harness {
 >compiler.settings.outputOption = "" : ""
 >compiler.settings.outputOption : any
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 >outputOption : any
 >"" : ""
@@ -4556,7 +4556,7 @@ module Harness {
                 compiler.parseEmitOption(
 >compiler.parseEmitOption(                    {                        createFile: (fn: string) => {                            outputs[fn] = new Harness.Compiler.WriterAggregator();                            return outputs[fn];                        },                        directoryExists: (path: string) => true,                        fileExists: (path: string) => true,                        resolvePath: (path: string) => path                    }) : any
 >compiler.parseEmitOption : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >parseEmitOption : any
                     {
 >{                        createFile: (fn: string) => {                            outputs[fn] = new Harness.Compiler.WriterAggregator();                            return outputs[fn];                        },                        directoryExists: (path: string) => true,                        fileExists: (path: string) => true,                        resolvePath: (path: string) => path                    } : { createFile: (fn: string) => any; directoryExists: (path: string) => boolean; fileExists: (path: string) => boolean; resolvePath: (path: string) => string; }
@@ -4606,7 +4606,7 @@ module Harness {
                 compiler.emitDeclarations();
 >compiler.emitDeclarations() : any
 >compiler.emitDeclarations : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >emitDeclarations : any
 
                 var results: string = null;
@@ -4690,7 +4690,7 @@ module Harness {
 >compiler.settings.generateDeclarationFiles = false : false
 >compiler.settings.generateDeclarationFiles : any
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 >generateDeclarationFiles : any
 >false : false
@@ -4699,7 +4699,7 @@ module Harness {
 >compiler.settings.outputOption = oldOutputOption : any
 >compiler.settings.outputOption : any
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 >outputOption : any
 >oldOutputOption : any
@@ -4707,7 +4707,7 @@ module Harness {
                 compiler.parseEmitOption(oldEmitterIOHost);
 >compiler.parseEmitOption(oldEmitterIOHost) : any
 >compiler.parseEmitOption : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >parseEmitOption : any
 >oldEmitterIOHost : any
 
@@ -4758,7 +4758,7 @@ module Harness {
 >filename : string
 >file : WriterAggregator
 >errorLines : string[]
->scripts : any[]
+>scripts : TypeScript.Script[]
 >TypeScript : any
 
                 var lines = [];
@@ -5008,9 +5008,9 @@ module Harness {
 
             compiler = makeDefaultCompilerForTest();
 >compiler = makeDefaultCompilerForTest() : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >makeDefaultCompilerForTest() : any
->makeDefaultCompilerForTest : (c?: any) => any
+>makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
 
             if (usePull) {
 >usePull : boolean
@@ -5018,7 +5018,7 @@ module Harness {
                 compiler.pullTypeCheck(true);
 >compiler.pullTypeCheck(true) : any
 >compiler.pullTypeCheck : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >pullTypeCheck : any
 >true : true
             }
@@ -5026,7 +5026,7 @@ module Harness {
                 compiler.typeCheck();
 >compiler.typeCheck() : any
 >compiler.typeCheck : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >typeCheck : any
             }
         }
@@ -5051,7 +5051,7 @@ module Harness {
 >compiler.units.map((value) => value.filename) : any
 >compiler.units.map : any
 >compiler.units : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >units : any
 >map : any
 >(value) => value.filename : (value: any) => any
@@ -5094,7 +5094,7 @@ module Harness {
 >compiler.errorReporter.hasErrors = false : false
 >compiler.errorReporter.hasErrors : any
 >compiler.errorReporter : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >errorReporter : any
 >hasErrors : any
 >false : false
@@ -5114,16 +5114,16 @@ module Harness {
         }
 
         export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => any
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >code : string
 >unitName : string
 >isResident : boolean
 >isDeclareFile : boolean
->references : any[]
+>references : TypeScript.IFileReference[]
 >TypeScript : any
 
             var script: TypeScript.Script = null;
->script : any
+>script : TypeScript.Script
 >TypeScript : any
 >null : null
 
@@ -5146,7 +5146,7 @@ module Harness {
 >i : number
 >compiler.units.length : any
 >compiler.units : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >units : any
 >length : any
 >i++ : number
@@ -5157,7 +5157,7 @@ module Harness {
 >compiler.units[i].filename : any
 >compiler.units[i] : any
 >compiler.units : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >units : any
 >i : number
 >filename : any
@@ -5170,14 +5170,14 @@ module Harness {
 >uName : string
 
                     script = <TypeScript.Script>compiler.scripts.members[i];
->script = <TypeScript.Script>compiler.scripts.members[i] : any
->script : any
-><TypeScript.Script>compiler.scripts.members[i] : any
+>script = <TypeScript.Script>compiler.scripts.members[i] : TypeScript.Script
+>script : TypeScript.Script
+><TypeScript.Script>compiler.scripts.members[i] : TypeScript.Script
 >TypeScript : any
 >compiler.scripts.members[i] : any
 >compiler.scripts.members : any
 >compiler.scripts : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >scripts : any
 >members : any
 >i : number
@@ -5185,7 +5185,7 @@ module Harness {
             }
             if (!script) {
 >!script : boolean
->script : any
+>script : TypeScript.Script
 
                 // TODO: make this toggleable, shouldn't be necessary once typecheck bugs are cleaned up
                 // but without it subsequent tests are treated as edits, making for somewhat useful stress testing
@@ -5193,15 +5193,15 @@ module Harness {
                 //compiler.addUnit("", uName, isResident, references); // equivalent to compiler.deleteUnit(...)
                 script = compiler.addUnit(code, uName, isResident, references);
 >script = compiler.addUnit(code, uName, isResident, references) : any
->script : any
+>script : TypeScript.Script
 >compiler.addUnit(code, uName, isResident, references) : any
 >compiler.addUnit : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >addUnit : any
 >code : string
 >uName : string
 >isResident : boolean
->references : any[]
+>references : TypeScript.IFileReference[]
 
                 needsFullTypeCheck = true;
 >needsFullTypeCheck = true : true
@@ -5210,7 +5210,7 @@ module Harness {
             }
 
             return script;
->script : any
+>script : TypeScript.Script
         }
 
         export function updateUnit(code: string, unitName: string, setRecovery?: boolean) {
@@ -5227,7 +5227,7 @@ module Harness {
                 compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), unitName, setRecovery);
 >compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), unitName, setRecovery) : any
 >compiler.pullUpdateUnit : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >pullUpdateUnit : any
 >new TypeScript.StringSourceText(code) : any
 >TypeScript.StringSourceText : any
@@ -5241,7 +5241,7 @@ module Harness {
                 compiler.updateUnit(code, unitName, setRecovery);
 >compiler.updateUnit(code, unitName, setRecovery) : any
 >compiler.updateUnit : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >updateUnit : any
 >code : string
 >unitName : string
@@ -5250,15 +5250,15 @@ module Harness {
         }
 
         export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
+>compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >path : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->settingsCallback : (settings?: any) => void
->settings : any
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
+>settings : TypeScript.CompilationSettings
 >TypeScript : any
 >context : CompilationContext
->references : any[]
+>references : TypeScript.IFileReference[]
 >TypeScript : any
 
             path = switchToForwardSlashes(path);
@@ -5286,26 +5286,26 @@ module Harness {
 
             compileUnit(code, filename, callback, settingsCallback, context, references);
 >compileUnit(code, filename, callback, settingsCallback, context, references) : void
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: any[]) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : any
 >filename : string
 >callback : (res: CompilerResult) => void
->settingsCallback : (settings?: any) => void
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 >context : CompilationContext
->references : any[]
+>references : TypeScript.IFileReference[]
         }
 
         export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >filename : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->settingsCallback : (settings?: any) => void
->settings : any
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
+>settings : TypeScript.CompilationSettings
 >TypeScript : any
 >context : CompilationContext
->references : any[]
+>references : TypeScript.IFileReference[]
 >TypeScript : any
 
             // not recursive
@@ -5340,7 +5340,7 @@ module Harness {
 >clone(compiler.settings, oldCompilerSettings) : void
 >clone : (source: any, target: any) => void
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 >oldCompilerSettings : any
 
@@ -5351,14 +5351,14 @@ module Harness {
 >TypeScript : any
 >EmitOptions : any
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 
             clone(compiler.emitSettings, oldEmitSettings);
 >clone(compiler.emitSettings, oldEmitSettings) : void
 >clone : (source: any, target: any) => void
 >compiler.emitSettings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >emitSettings : any
 >oldEmitSettings : any
 
@@ -5369,55 +5369,55 @@ module Harness {
 >moduleGenTarget : any
 
             if (settingsCallback) {
->settingsCallback : (settings?: any) => void
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 
                 settingsCallback(compiler.settings);
 >settingsCallback(compiler.settings) : void
->settingsCallback : (settings?: any) => void
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 
                 compiler.emitSettings = new TypeScript.EmitOptions(compiler.settings);
 >compiler.emitSettings = new TypeScript.EmitOptions(compiler.settings) : any
 >compiler.emitSettings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >emitSettings : any
 >new TypeScript.EmitOptions(compiler.settings) : any
 >TypeScript.EmitOptions : any
 >TypeScript : any
 >EmitOptions : any
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
             }
             try {
                 compileString(code, filename, callback, context, references);
 >compileString(code, filename, callback, context, references) : void
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: any[]) => void
+>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >filename : string
 >callback : (res: CompilerResult) => void
 >context : CompilationContext
->references : any[]
+>references : TypeScript.IFileReference[]
 
             } finally {
                 // If settingsCallback exists, assume that it modified the global compiler instance's settings in some way.
                 // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
                 if (settingsCallback) {
->settingsCallback : (settings?: any) => void
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 
                     compiler.settings = oldCompilerSettings;
 >compiler.settings = oldCompilerSettings : any
 >compiler.settings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >settings : any
 >oldCompilerSettings : any
 
                     compiler.emitSettings = oldEmitSettings;
 >compiler.emitSettings = oldEmitSettings : any
 >compiler.emitSettings : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >emitSettings : any
 >oldEmitSettings : any
 
@@ -5490,7 +5490,7 @@ module Harness {
 
             compileUnit(lastUnit.content, unitName, callback, settingsCallback, compilationContext, lastUnit.references);
 >compileUnit(lastUnit.content, unitName, callback, settingsCallback, compilationContext, lastUnit.references) : void
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: any) => void, context?: CompilationContext, references?: any[]) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >lastUnit.content : string
 >lastUnit : TestCaseParser.TestUnitData
 >content : string
@@ -5498,9 +5498,9 @@ module Harness {
 >callback : (res: CompilerResult) => void
 >settingsCallback : () => void
 >compilationContext : CompilationContext
->lastUnit.references : any[]
+>lastUnit.references : TypeScript.IFileReference[]
 >lastUnit : TestCaseParser.TestUnitData
->references : any[]
+>references : TypeScript.IFileReference[]
         }
 
         export function emitToOutfile(outfile: WriterAggregator) {
@@ -5510,23 +5510,23 @@ module Harness {
             compiler.emitToOutfile(outfile);
 >compiler.emitToOutfile(outfile) : any
 >compiler.emitToOutfile : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >emitToOutfile : any
 >outfile : WriterAggregator
         }
 
         export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
->emit : (ioHost: any, usePullEmitter?: boolean) => void
->ioHost : any
+>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
+>ioHost : TypeScript.EmitterIOHost
 >TypeScript : any
 >usePullEmitter : boolean
 
             compiler.emit(ioHost, usePullEmitter);
 >compiler.emit(ioHost, usePullEmitter) : any
 >compiler.emit : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >emit : any
->ioHost : any
+>ioHost : TypeScript.EmitterIOHost
 >usePullEmitter : boolean
         }
 
@@ -5538,11 +5538,11 @@ module Harness {
 >res : CompilerResult
 >Compiler : any
 >context : CompilationContext
->references : any[]
+>references : TypeScript.IFileReference[]
 >TypeScript : any
 
             var scripts: TypeScript.Script[] = [];
->scripts : any[]
+>scripts : TypeScript.Script[]
 >TypeScript : any
 >[] : undefined[]
 
@@ -5585,16 +5585,16 @@ module Harness {
 
             scripts.push(addUnit(code, uName, false, isDeclareFile, references));
 >scripts.push(addUnit(code, uName, false, isDeclareFile, references)) : number
->scripts.push : (...items: any[]) => number
->scripts : any[]
->push : (...items: any[]) => number
->addUnit(code, uName, false, isDeclareFile, references) : any
->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: any[]) => any
+>scripts.push : (...items: TypeScript.Script[]) => number
+>scripts : TypeScript.Script[]
+>push : (...items: TypeScript.Script[]) => number
+>addUnit(code, uName, false, isDeclareFile, references) : TypeScript.Script
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >code : string
 >uName : string
 >false : false
 >isDeclareFile : boolean
->references : any[]
+>references : TypeScript.IFileReference[]
 
             compile(code, uName);
 >compile(code, uName) : void
@@ -5614,13 +5614,13 @@ module Harness {
 >errors : any
 >compiler.pullGetErrorsForFile(uName) : any
 >compiler.pullGetErrorsForFile : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >pullGetErrorsForFile : any
 >uName : string
 
                 emit(stdout, true);
 >emit(stdout, true) : void
->emit : (ioHost: any, usePullEmitter?: boolean) => void
+>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
 >stdout : EmitterIOHost
 >true : true
             }
@@ -5634,7 +5634,7 @@ module Harness {
 
                 emit(stdout, false);
 >emit(stdout, false) : void
->emit : (ioHost: any, usePullEmitter?: boolean) => void
+>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
 >stdout : EmitterIOHost
 >false : false
 
@@ -5642,7 +5642,7 @@ module Harness {
                 compiler.emitDeclarations();
 >compiler.emitDeclarations() : any
 >compiler.emitDeclarations : any
->compiler : any
+>compiler : TypeScript.TypeScriptCompiler
 >emitDeclarations : any
             }
 
@@ -5666,7 +5666,7 @@ module Harness {
 >stdout : EmitterIOHost
 >toArray : () => { filename: string; file: WriterAggregator; }[]
 >errors : any
->scripts : any[]
+>scripts : TypeScript.Script[]
         }
 
         /** Returns a set of functions which can be later executed to add and remove given dependencies to the compiler so that
@@ -5709,8 +5709,8 @@ module Harness {
 >dep : TestCaseParser.TestUnitData
 
                         addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));
->addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name)) : any
->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: any[]) => any
+>addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name)) : TypeScript.Script
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >dep.content : string
 >dep : TestCaseParser.TestUnitData
 >content : string
@@ -5809,7 +5809,7 @@ module Harness {
 >originalFilePath : string
 
             references: TypeScript.IFileReference[];
->references : any[]
+>references : TypeScript.IFileReference[]
 >TypeScript : any
         }
 
@@ -5914,7 +5914,7 @@ module Harness {
 >null : null
 
             var refs: TypeScript.IFileReference[] = [];
->refs : any[]
+>refs : TypeScript.IFileReference[]
 >TypeScript : any
 >[] : undefined[]
 
@@ -6000,9 +6000,9 @@ module Harness {
 
                         refs.push(ref);
 >refs.push(ref) : number
->refs.push : (...items: any[]) => number
->refs : any[]
->push : (...items: any[]) => number
+>refs.push : (...items: TypeScript.IFileReference[]) => number
+>refs : TypeScript.IFileReference[]
+>push : (...items: TypeScript.IFileReference[]) => number
 >ref : { minChar: number; limChar: number; startLine: number; startCol: number; path: string; isResident: boolean; }
                     }
                 } else if (testMetaData) {
@@ -6078,9 +6078,9 @@ module Harness {
 
                         // Store result file
                         var newTestFile =
->newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: any[]; }
+>newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
                             {
->{                                content: currentFileContent,                                name: currentFileName,                                fileOptions: currentFileOptions,                                originalFilePath: filename,                                references: refs                            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: any[]; }
+>{                                content: currentFileContent,                                name: currentFileName,                                fileOptions: currentFileOptions,                                originalFilePath: filename,                                references: refs                            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 
                                 content: currentFileContent,
 >content : string
@@ -6099,8 +6099,8 @@ module Harness {
 >filename : string
 
                                 references: refs
->references : any[]
->refs : any[]
+>references : TypeScript.IFileReference[]
+>refs : TypeScript.IFileReference[]
 
                             };
                         files.push(newTestFile);
@@ -6108,7 +6108,7 @@ module Harness {
 >files.push : (...items: TestUnitData[]) => number
 >files : TestUnitData[]
 >push : (...items: TestUnitData[]) => number
->newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: any[]; }
+>newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 
                         // Reset local data
                         currentFileContent = null;
@@ -6130,7 +6130,7 @@ module Harness {
 
                         refs = [];
 >refs = [] : undefined[]
->refs : any[]
+>refs : TypeScript.IFileReference[]
 >[] : undefined[]
 
                     } else {
@@ -6188,8 +6188,8 @@ module Harness {
 
             // EOF, push whatever remains
             var newTestFile = {
->newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: any[]; }
->{                content: currentFileContent || '',                name: currentFileName,                fileOptions: currentFileOptions,                originalFilePath: filename,                references: refs            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: any[]; }
+>newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
+>{                content: currentFileContent || '',                name: currentFileName,                fileOptions: currentFileOptions,                originalFilePath: filename,                references: refs            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 
                 content: currentFileContent || '',
 >content : string
@@ -6210,8 +6210,8 @@ module Harness {
 >filename : string
 
                 references: refs
->references : any[]
->refs : any[]
+>references : TypeScript.IFileReference[]
+>refs : TypeScript.IFileReference[]
 
             };
             files.push(newTestFile);
@@ -6219,7 +6219,7 @@ module Harness {
 >files.push : (...items: TestUnitData[]) => number
 >files : TestUnitData[]
 >push : (...items: TestUnitData[]) => number
->newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: any[]; }
+>newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 
             return { settings: settings, testUnitData: files };
 >{ settings: settings, testUnitData: files } : { settings: CompilerSetting[]; testUnitData: TestUnitData[]; }
@@ -6237,9 +6237,9 @@ module Harness {
 >version : number
 
         public editRanges: { length: number; editRange: TypeScript.ScriptEditRange; }[] = [];
->editRanges : { length: number; editRange: any; }[]
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
->editRange : any
+>editRange : TypeScript.ScriptEditRange
 >TypeScript : any
 >[] : undefined[]
 
@@ -6264,9 +6264,9 @@ module Harness {
 
             this.editRanges = [];
 >this.editRanges = [] : undefined[]
->this.editRanges : { length: number; editRange: any; }[]
+>this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
->editRanges : { length: number; editRange: any; }[]
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >[] : undefined[]
 
             this.content = content;
@@ -6336,11 +6336,11 @@ module Harness {
             // Store edit range + new length of script
             this.editRanges.push({
 >this.editRanges.push({                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            }) : number
->this.editRanges.push : (...items: { length: number; editRange: any; }[]) => number
->this.editRanges : { length: number; editRange: any; }[]
+>this.editRanges.push : (...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => number
+>this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
->editRanges : { length: number; editRange: any; }[]
->push : (...items: { length: number; editRange: any; }[]) => number
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>push : (...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => number
 >{                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            } : { length: number; editRange: any; }
 
                 length: this.content.length,
@@ -6373,30 +6373,30 @@ module Harness {
             if (this.editRanges.length > this.maxScriptVersions) {
 >this.editRanges.length > this.maxScriptVersions : boolean
 >this.editRanges.length : number
->this.editRanges : { length: number; editRange: any; }[]
+>this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
->editRanges : { length: number; editRange: any; }[]
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
 >this.maxScriptVersions : number
 >this : this
 >maxScriptVersions : number
 
                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
->this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: any; }[]
->this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: any; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: any; }[]): { length: number; editRange: any; }[]; }
->this.editRanges : { length: number; editRange: any; }[]
+>this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
+>this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
->editRanges : { length: number; editRange: any; }[]
->splice : { (start: number, deleteCount?: number): { length: number; editRange: any; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: any; }[]): { length: number; editRange: any; }[]; }
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
 >0 : 0
 >this.maxScriptVersions - this.editRanges.length : number
 >this.maxScriptVersions : number
 >this : this
 >maxScriptVersions : number
 >this.editRanges.length : number
->this.editRanges : { length: number; editRange: any; }[]
+>this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
->editRanges : { length: number; editRange: any; }[]
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
             }
 
@@ -6409,7 +6409,7 @@ module Harness {
         }
 
         public getEditRangeSinceVersion(version: number): TypeScript.ScriptEditRange {
->getEditRangeSinceVersion : (version: number) => any
+>getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 >version : number
 >TypeScript : any
 
@@ -6429,9 +6429,9 @@ module Harness {
 >initialEditRangeIndex : number
 >this.editRanges.length - (this.version - version) : number
 >this.editRanges.length : number
->this.editRanges : { length: number; editRange: any; }[]
+>this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
->editRanges : { length: number; editRange: any; }[]
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
 >(this.version - version) : number
 >this.version - version : number
@@ -6448,9 +6448,9 @@ module Harness {
 >initialEditRangeIndex >= this.editRanges.length : boolean
 >initialEditRangeIndex : number
 >this.editRanges.length : number
->this.editRanges : { length: number; editRange: any; }[]
+>this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
->editRanges : { length: number; editRange: any; }[]
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
 
                 // Too far away from what we know
@@ -6464,13 +6464,13 @@ module Harness {
             }
 
             var entries = this.editRanges.slice(initialEditRangeIndex);
->entries : { length: number; editRange: any; }[]
->this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: any; }[]
->this.editRanges.slice : (start?: number, end?: number) => { length: number; editRange: any; }[]
->this.editRanges : { length: number; editRange: any; }[]
+>entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>this.editRanges.slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
->editRanges : { length: number; editRange: any; }[]
->slice : (start?: number, end?: number) => { length: number; editRange: any; }[]
+>editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >initialEditRangeIndex : number
 
             var minDistFromStart = entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current));
@@ -6478,15 +6478,15 @@ module Harness {
 >entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current)) : any
 >entries.map(x => x.editRange.minChar).reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >entries.map(x => x.editRange.minChar) : any[]
->entries.map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
->entries : { length: number; editRange: any; }[]
->map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
->x => x.editRange.minChar : (x: { length: number; editRange: any; }) => any
->x : { length: number; editRange: any; }
+>entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
+>entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
+>x => x.editRange.minChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
+>x : { length: number; editRange: TypeScript.ScriptEditRange; }
 >x.editRange.minChar : any
->x.editRange : any
->x : { length: number; editRange: any; }
->editRange : any
+>x.editRange : TypeScript.ScriptEditRange
+>x : { length: number; editRange: TypeScript.ScriptEditRange; }
+>editRange : TypeScript.ScriptEditRange
 >minChar : any
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >(prev, current) => Math.min(prev, current) : (prev: any, current: any) => number
@@ -6504,19 +6504,19 @@ module Harness {
 >entries.map(x => x.length - x.editRange.limChar).reduce((prev, current) => Math.min(prev, current)) : number
 >entries.map(x => x.length - x.editRange.limChar).reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >entries.map(x => x.length - x.editRange.limChar) : number[]
->entries.map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
->entries : { length: number; editRange: any; }[]
->map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
->x => x.length - x.editRange.limChar : (x: { length: number; editRange: any; }) => number
->x : { length: number; editRange: any; }
+>entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
+>entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
+>x => x.length - x.editRange.limChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => number
+>x : { length: number; editRange: TypeScript.ScriptEditRange; }
 >x.length - x.editRange.limChar : number
 >x.length : number
->x : { length: number; editRange: any; }
+>x : { length: number; editRange: TypeScript.ScriptEditRange; }
 >length : number
 >x.editRange.limChar : any
->x.editRange : any
->x : { length: number; editRange: any; }
->editRange : any
+>x.editRange : TypeScript.ScriptEditRange
+>x : { length: number; editRange: TypeScript.ScriptEditRange; }
+>editRange : TypeScript.ScriptEditRange
 >limChar : any
 >reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >(prev, current) => Math.min(prev, current) : (prev: number, current: number) => number
@@ -6534,15 +6534,15 @@ module Harness {
 >entries.map(x => x.editRange.delta).reduce((prev, current) => prev + current) : any
 >entries.map(x => x.editRange.delta).reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >entries.map(x => x.editRange.delta) : any[]
->entries.map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
->entries : { length: number; editRange: any; }[]
->map : <U>(callbackfn: (value: { length: number; editRange: any; }, index: number, array: { length: number; editRange: any; }[]) => U, thisArg?: any) => U[]
->x => x.editRange.delta : (x: { length: number; editRange: any; }) => any
->x : { length: number; editRange: any; }
+>entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
+>entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
+>x => x.editRange.delta : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
+>x : { length: number; editRange: TypeScript.ScriptEditRange; }
 >x.editRange.delta : any
->x.editRange : any
->x : { length: number; editRange: any; }
->editRange : any
+>x.editRange : TypeScript.ScriptEditRange
+>x : { length: number; editRange: TypeScript.ScriptEditRange; }
+>editRange : TypeScript.ScriptEditRange
 >delta : any
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >(prev, current) => prev + current : (prev: any, current: any) => any
@@ -6560,8 +6560,8 @@ module Harness {
 >minDistFromStart : any
 >entries[0].length - minDistFromEnd : number
 >entries[0].length : number
->entries[0] : { length: number; editRange: any; }
->entries : { length: number; editRange: any; }[]
+>entries[0] : { length: number; editRange: TypeScript.ScriptEditRange; }
+>entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >0 : 0
 >length : number
 >minDistFromEnd : number
@@ -6574,7 +6574,7 @@ module Harness {
 >Services : any
 
         private ls: Services.ILanguageServiceShim = null;
->ls : any
+>ls : Services.ILanguageServiceShim
 >Services : any
 >null : null
 
@@ -6920,15 +6920,15 @@ module Harness {
 >scriptVersion : number
 
             var range = this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion);
->range : any
->this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion) : any
->this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => any
+>range : TypeScript.ScriptEditRange
+>this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion) : TypeScript.ScriptEditRange
+>this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
 >this : this
 >scripts : ScriptInfo[]
 >scriptIndex : number
->getEditRangeSinceVersion : (version: number) => any
+>getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 >scriptVersion : number
 
             var result = (range.minChar + "," + range.limChar + "," + range.delta);
@@ -6939,15 +6939,15 @@ module Harness {
 >range.minChar + "," + range.limChar : string
 >range.minChar + "," : string
 >range.minChar : any
->range : any
+>range : TypeScript.ScriptEditRange
 >minChar : any
 >"," : ","
 >range.limChar : any
->range : any
+>range : TypeScript.ScriptEditRange
 >limChar : any
 >"," : ","
 >range.delta : any
->range : any
+>range : TypeScript.ScriptEditRange
 >delta : any
 
             return result;
@@ -6958,7 +6958,7 @@ module Harness {
          *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
          */
         public getLanguageService(): Services.ILanguageServiceShim {
->getLanguageService : () => any
+>getLanguageService : () => Services.ILanguageServiceShim
 >Services : any
 
             var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
@@ -6981,9 +6981,9 @@ module Harness {
 
             this.ls = ls;
 >this.ls = ls : any
->this.ls : any
+>this.ls : Services.ILanguageServiceShim
 >this : this
->ls : any
+>ls : Services.ILanguageServiceShim
 >ls : any
 
             return ls;
@@ -6992,9 +6992,9 @@ module Harness {
 
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: TypeScript.ISourceText): TypeScript.Script {
->parseSourceText : (fileName: string, sourceText: any) => any
+>parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
 >fileName : string
->sourceText : any
+>sourceText : TypeScript.ISourceText
 >TypeScript : any
 >TypeScript : any
 
@@ -7029,7 +7029,7 @@ module Harness {
 >parser.parse : any
 >parser : any
 >parse : any
->sourceText : any
+>sourceText : TypeScript.ISourceText
 >fileName : string
 >0 : 0
 
@@ -7039,7 +7039,7 @@ module Harness {
 
         /** Parse a file on disk given its filename */
         public parseFile(fileName: string) {
->parseFile : (fileName: string) => any
+>parseFile : (fileName: string) => TypeScript.Script
 >fileName : string
 
             var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName))
@@ -7050,15 +7050,15 @@ module Harness {
 >StringSourceText : any
 >IO.readFile(fileName) : any
 >IO.readFile : any
->IO : any
+>IO : IIO
 >readFile : any
 >fileName : string
 
             return this.parseSourceText(fileName, sourceText);
->this.parseSourceText(fileName, sourceText) : any
->this.parseSourceText : (fileName: string, sourceText: any) => any
+>this.parseSourceText(fileName, sourceText) : TypeScript.Script
+>this.parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
 >this : this
->parseSourceText : (fileName: string, sourceText: any) => any
+>parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
 >fileName : string
 >sourceText : any
         }
@@ -7078,9 +7078,9 @@ module Harness {
 >this.ls.languageService.getScriptAST(fileName) : any
 >this.ls.languageService.getScriptAST : any
 >this.ls.languageService : any
->this.ls : any
+>this.ls : Services.ILanguageServiceShim
 >this : this
->ls : any
+>ls : Services.ILanguageServiceShim
 >languageService : any
 >getScriptAST : any
 >fileName : string
@@ -7088,14 +7088,14 @@ module Harness {
             assert.notNull(script);
 >assert.notNull(script) : any
 >assert.notNull : any
->assert : any
+>assert : Harness.Assert
 >notNull : any
 >script : any
 
             assert.is(line >= 1);
 >assert.is(line >= 1) : any
 >assert.is : any
->assert : any
+>assert : Harness.Assert
 >is : any
 >line >= 1 : boolean
 >line : number
@@ -7104,7 +7104,7 @@ module Harness {
             assert.is(col >= 1);
 >assert.is(col >= 1) : any
 >assert.is : any
->assert : any
+>assert : Harness.Assert
 >is : any
 >col >= 1 : boolean
 >col : number
@@ -7113,7 +7113,7 @@ module Harness {
             assert.is(line <= script.locationInfo.lineMap.length);
 >assert.is(line <= script.locationInfo.lineMap.length) : any
 >assert.is : any
->assert : any
+>assert : Harness.Assert
 >is : any
 >line <= script.locationInfo.lineMap.length : boolean
 >line : number
@@ -7144,7 +7144,7 @@ module Harness {
          * @param col 0 based index
         */
         public positionToZeroBasedLineCol(fileName: string, position: number): TypeScript.ILineCol {
->positionToZeroBasedLineCol : (fileName: string, position: number) => any
+>positionToZeroBasedLineCol : (fileName: string, position: number) => TypeScript.ILineCol
 >fileName : string
 >position : number
 >TypeScript : any
@@ -7154,9 +7154,9 @@ module Harness {
 >this.ls.languageService.getScriptAST(fileName) : any
 >this.ls.languageService.getScriptAST : any
 >this.ls.languageService : any
->this.ls : any
+>this.ls : Services.ILanguageServiceShim
 >this : this
->ls : any
+>ls : Services.ILanguageServiceShim
 >languageService : any
 >getScriptAST : any
 >fileName : string
@@ -7164,7 +7164,7 @@ module Harness {
             assert.notNull(script);
 >assert.notNull(script) : any
 >assert.notNull : any
->assert : any
+>assert : Harness.Assert
 >notNull : any
 >script : any
 
@@ -7180,7 +7180,7 @@ module Harness {
             assert.is(result.line >= 0);
 >assert.is(result.line >= 0) : any
 >assert.is : any
->assert : any
+>assert : Harness.Assert
 >is : any
 >result.line >= 0 : boolean
 >result.line : any
@@ -7191,7 +7191,7 @@ module Harness {
             assert.is(result.col >= 0);
 >assert.is(result.col >= 0) : any
 >assert.is : any
->assert : any
+>assert : Harness.Assert
 >is : any
 >result.col >= 0 : boolean
 >result.col : any
@@ -7208,7 +7208,7 @@ module Harness {
 >checkEdits : (sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) => void
 >sourceFileName : string
 >baselineFileName : string
->edits : any[]
+>edits : Services.TextEdit[]
 >Services : any
 
             var script = readFile(sourceFileName);
@@ -7220,11 +7220,11 @@ module Harness {
             var formattedScript = this.applyEdits(script, edits);
 >formattedScript : string
 >this.applyEdits(script, edits) : string
->this.applyEdits : (content: string, edits: any[]) => string
+>this.applyEdits : (content: string, edits: Services.TextEdit[]) => string
 >this : this
->applyEdits : (content: string, edits: any[]) => string
+>applyEdits : (content: string, edits: Services.TextEdit[]) => string
 >script : any
->edits : any[]
+>edits : Services.TextEdit[]
 
             var baseline = readFile(baselineFileName);
 >baseline : any
@@ -7235,7 +7235,7 @@ module Harness {
             assert.noDiff(formattedScript, baseline);
 >assert.noDiff(formattedScript, baseline) : any
 >assert.noDiff : any
->assert : any
+>assert : Harness.Assert
 >noDiff : any
 >formattedScript : string
 >baseline : any
@@ -7243,7 +7243,7 @@ module Harness {
             assert.equal(formattedScript, baseline);
 >assert.equal(formattedScript, baseline) : any
 >assert.equal : any
->assert : any
+>assert : Harness.Assert
 >equal : any
 >formattedScript : string
 >baseline : any
@@ -7254,7 +7254,7 @@ module Harness {
         public applyEdits(content: string, edits: Services.TextEdit[]): string {
 >applyEdits : (content: string, edits: Services.TextEdit[]) => string
 >content : string
->edits : any[]
+>edits : Services.TextEdit[]
 >Services : any
 
             var result = content;
@@ -7262,19 +7262,19 @@ module Harness {
 >content : string
 
             edits = this.normalizeEdits(edits);
->edits = this.normalizeEdits(edits) : any[]
->edits : any[]
->this.normalizeEdits(edits) : any[]
->this.normalizeEdits : (edits: any[]) => any[]
+>edits = this.normalizeEdits(edits) : Services.TextEdit[]
+>edits : Services.TextEdit[]
+>this.normalizeEdits(edits) : Services.TextEdit[]
+>this.normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
 >this : this
->normalizeEdits : (edits: any[]) => any[]
->edits : any[]
+>normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
+>edits : Services.TextEdit[]
 
             for (var i = edits.length - 1; i >= 0; i--) {
 >i : number
 >edits.length - 1 : number
 >edits.length : number
->edits : any[]
+>edits : Services.TextEdit[]
 >length : number
 >1 : 1
 >i >= 0 : boolean
@@ -7284,9 +7284,9 @@ module Harness {
 >i : number
 
                 var edit = edits[i];
->edit : any
->edits[i] : any
->edits : any[]
+>edit : Services.TextEdit
+>edits[i] : Services.TextEdit
+>edits : Services.TextEdit[]
 >i : number
 
                 var prefix = result.substring(0, edit.minChar);
@@ -7297,13 +7297,13 @@ module Harness {
 >substring : (start: number, end?: number) => string
 >0 : 0
 >edit.minChar : any
->edit : any
+>edit : Services.TextEdit
 >minChar : any
 
                 var middle = edit.text;
 >middle : any
 >edit.text : any
->edit : any
+>edit : Services.TextEdit
 >text : any
 
                 var suffix = result.substring(edit.limChar);
@@ -7313,7 +7313,7 @@ module Harness {
 >result : string
 >substring : (start: number, end?: number) => string
 >edit.limChar : any
->edit : any
+>edit : Services.TextEdit
 >limChar : any
 
                 result = prefix + middle + suffix;
@@ -7332,20 +7332,20 @@ module Harness {
         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
         private normalizeEdits(edits: Services.TextEdit[]): Services.TextEdit[] {
 >normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
->edits : any[]
+>edits : Services.TextEdit[]
 >Services : any
 >Services : any
 
             var result: Services.TextEdit[] = [];
->result : any[]
+>result : Services.TextEdit[]
 >Services : any
 >[] : undefined[]
 
             function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
 >mapEdits : (edits: Services.TextEdit[]) => {    edit: Services.TextEdit;    index: number;}[]
->edits : any[]
+>edits : Services.TextEdit[]
 >Services : any
->edit : any
+>edit : Services.TextEdit
 >Services : any
 >index : number
 
@@ -7359,7 +7359,7 @@ module Harness {
 >i < edits.length : boolean
 >i : number
 >edits.length : number
->edits : any[]
+>edits : Services.TextEdit[]
 >length : number
 >i++ : number
 >i : number
@@ -7369,10 +7369,10 @@ module Harness {
 >result.push : (...items: any[]) => number
 >result : any[]
 >push : (...items: any[]) => number
->{ edit: edits[i], index: i } : { edit: any; index: number; }
->edit : any
->edits[i] : any
->edits : any[]
+>{ edit: edits[i], index: i } : { edit: Services.TextEdit; index: number; }
+>edit : Services.TextEdit
+>edits[i] : Services.TextEdit
+>edits : Services.TextEdit[]
 >i : number
 >index : number
 >i : number
@@ -7382,29 +7382,29 @@ module Harness {
             }
 
             var temp = mapEdits(edits).sort(function (a, b) {
->temp : { edit: any; index: number; }[]
->mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: any; index: number; }[]
->mapEdits(edits).sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
->mapEdits(edits) : { edit: any; index: number; }[]
->mapEdits : (edits: any[]) => { edit: any; index: number; }[]
->edits : any[]
->sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
->function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number
->a : { edit: any; index: number; }
->b : { edit: any; index: number; }
+>temp : { edit: Services.TextEdit; index: number; }[]
+>mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: Services.TextEdit; index: number; }[]
+>mapEdits(edits).sort : (compareFn?: (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number) => { edit: Services.TextEdit; index: number; }[]
+>mapEdits(edits) : { edit: Services.TextEdit; index: number; }[]
+>mapEdits : (edits: Services.TextEdit[]) => { edit: Services.TextEdit; index: number; }[]
+>edits : Services.TextEdit[]
+>sort : (compareFn?: (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number) => { edit: Services.TextEdit; index: number; }[]
+>function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number
+>a : { edit: Services.TextEdit; index: number; }
+>b : { edit: Services.TextEdit; index: number; }
 
                 var result = a.edit.minChar - b.edit.minChar;
 >result : number
 >a.edit.minChar - b.edit.minChar : number
 >a.edit.minChar : any
->a.edit : any
->a : { edit: any; index: number; }
->edit : any
+>a.edit : Services.TextEdit
+>a : { edit: Services.TextEdit; index: number; }
+>edit : Services.TextEdit
 >minChar : any
 >b.edit.minChar : any
->b.edit : any
->b : { edit: any; index: number; }
->edit : any
+>b.edit : Services.TextEdit
+>b : { edit: Services.TextEdit; index: number; }
+>edit : Services.TextEdit
 >minChar : any
 
                 if (result == 0)
@@ -7417,10 +7417,10 @@ module Harness {
 >result : number
 >a.index - b.index : number
 >a.index : number
->a : { edit: any; index: number; }
+>a : { edit: Services.TextEdit; index: number; }
 >index : number
 >b.index : number
->b : { edit: any; index: number; }
+>b : { edit: Services.TextEdit; index: number; }
 >index : number
 
                 return result;
@@ -7440,31 +7440,31 @@ module Harness {
 >current < temp.length : boolean
 >current : number
 >temp.length : number
->temp : { edit: any; index: number; }[]
+>temp : { edit: Services.TextEdit; index: number; }[]
 >length : number
 
                 var currentEdit = temp[current].edit;
->currentEdit : any
->temp[current].edit : any
->temp[current] : { edit: any; index: number; }
->temp : { edit: any; index: number; }[]
+>currentEdit : Services.TextEdit
+>temp[current].edit : Services.TextEdit
+>temp[current] : { edit: Services.TextEdit; index: number; }
+>temp : { edit: Services.TextEdit; index: number; }[]
 >current : number
->edit : any
+>edit : Services.TextEdit
 
                 // Last edit
                 if (next >= temp.length) {
 >next >= temp.length : boolean
 >next : number
 >temp.length : number
->temp : { edit: any; index: number; }[]
+>temp : { edit: Services.TextEdit; index: number; }[]
 >length : number
 
                     result.push(currentEdit);
 >result.push(currentEdit) : number
->result.push : (...items: any[]) => number
->result : any[]
->push : (...items: any[]) => number
->currentEdit : any
+>result.push : (...items: Services.TextEdit[]) => number
+>result : Services.TextEdit[]
+>push : (...items: Services.TextEdit[]) => number
+>currentEdit : Services.TextEdit
 
                     current++;
 >current++ : number
@@ -7473,21 +7473,21 @@ module Harness {
                     continue;
                 }
                 var nextEdit = temp[next].edit;
->nextEdit : any
->temp[next].edit : any
->temp[next] : { edit: any; index: number; }
->temp : { edit: any; index: number; }[]
+>nextEdit : Services.TextEdit
+>temp[next].edit : Services.TextEdit
+>temp[next] : { edit: Services.TextEdit; index: number; }
+>temp : { edit: Services.TextEdit; index: number; }[]
 >next : number
->edit : any
+>edit : Services.TextEdit
 
                 var gap = nextEdit.minChar - currentEdit.limChar;
 >gap : number
 >nextEdit.minChar - currentEdit.limChar : number
 >nextEdit.minChar : any
->nextEdit : any
+>nextEdit : Services.TextEdit
 >minChar : any
 >currentEdit.limChar : any
->currentEdit : any
+>currentEdit : Services.TextEdit
 >limChar : any
 
                 // non-overlapping edits
@@ -7498,10 +7498,10 @@ module Harness {
 
                     result.push(currentEdit);
 >result.push(currentEdit) : number
->result.push : (...items: any[]) => number
->result : any[]
->push : (...items: any[]) => number
->currentEdit : any
+>result.push : (...items: Services.TextEdit[]) => number
+>result : Services.TextEdit[]
+>push : (...items: Services.TextEdit[]) => number
+>currentEdit : Services.TextEdit
 
                     current = next;
 >current = next : number
@@ -7520,10 +7520,10 @@ module Harness {
                 if (currentEdit.limChar >= nextEdit.limChar) {
 >currentEdit.limChar >= nextEdit.limChar : boolean
 >currentEdit.limChar : any
->currentEdit : any
+>currentEdit : Services.TextEdit
 >limChar : any
 >nextEdit.limChar : any
->nextEdit : any
+>nextEdit : Services.TextEdit
 >limChar : any
 
                     next++;
@@ -7541,7 +7541,7 @@ module Harness {
             }
 
             return result;
->result : any[]
+>result : Services.TextEdit[]
         }
 
         public getHostSettings(): string {
@@ -7813,9 +7813,9 @@ module Harness {
 
             Compiler.compileString(code, unitName, function (res) {
 >Compiler.compileString(code, unitName, function (res) {                runJSString(res.code, callback);            }) : void
->Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: any[]) => void
+>Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
 >Compiler : typeof Compiler
->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: any[]) => void
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >unitName : string
 >function (res) {                runJSString(res.code, callback);            } : (res: Compiler.CompilerResult) => void
@@ -8014,14 +8014,14 @@ module Harness {
             if (IO.fileExists(reportFilename)) {
 >IO.fileExists(reportFilename) : any
 >IO.fileExists : any
->IO : any
+>IO : IIO
 >fileExists : any
 >reportFilename : string
 
                 IO.deleteFile(reportFilename);
 >IO.deleteFile(reportFilename) : any
 >IO.deleteFile : any
->IO : any
+>IO : IIO
 >deleteFile : any
 >reportFilename : string
             }
@@ -8038,7 +8038,7 @@ module Harness {
             if (IO.fileExists(reportFilename)) {
 >IO.fileExists(reportFilename) : any
 >IO.fileExists : any
->IO : any
+>IO : IIO
 >fileExists : any
 >reportFilename : string
 
@@ -8047,7 +8047,7 @@ module Harness {
 >reportContent : string
 >IO.readFile(reportFilename) : any
 >IO.readFile : any
->IO : any
+>IO : IIO
 >readFile : any
 >reportFilename : string
 
@@ -8080,26 +8080,26 @@ module Harness {
             IO.createDirectory(IO.dirName(IO.dirName(actualFilename)));
 >IO.createDirectory(IO.dirName(IO.dirName(actualFilename))) : any
 >IO.createDirectory : any
->IO : any
+>IO : IIO
 >createDirectory : any
 >IO.dirName(IO.dirName(actualFilename)) : any
 >IO.dirName : any
->IO : any
+>IO : IIO
 >dirName : any
 >IO.dirName(actualFilename) : any
 >IO.dirName : any
->IO : any
+>IO : IIO
 >dirName : any
 >actualFilename : string
 
             IO.createDirectory(IO.dirName(actualFilename));
 >IO.createDirectory(IO.dirName(actualFilename)) : any
 >IO.createDirectory : any
->IO : any
+>IO : IIO
 >createDirectory : any
 >IO.dirName(actualFilename) : any
 >IO.dirName : any
->IO : any
+>IO : IIO
 >dirName : any
 >actualFilename : string
 
@@ -8107,14 +8107,14 @@ module Harness {
             if (IO.fileExists(actualFilename)) {
 >IO.fileExists(actualFilename) : any
 >IO.fileExists : any
->IO : any
+>IO : IIO
 >fileExists : any
 >actualFilename : string
 
                 IO.deleteFile(actualFilename);
 >IO.deleteFile(actualFilename) : any
 >IO.deleteFile : any
->IO : any
+>IO : IIO
 >deleteFile : any
 >actualFilename : string
             }
@@ -8145,7 +8145,7 @@ module Harness {
                 IO.writeFile(actualFilename, actual);
 >IO.writeFile(actualFilename, actual) : any
 >IO.writeFile : any
->IO : any
+>IO : IIO
 >writeFile : any
 >actualFilename : string
 >actual : string
@@ -8196,7 +8196,7 @@ module Harness {
             if (IO.fileExists(refFilename)) {
 >IO.fileExists(refFilename) : any
 >IO.fileExists : any
->IO : any
+>IO : IIO
 >fileExists : any
 >refFilename : string
 
@@ -8205,7 +8205,7 @@ module Harness {
 >expected : string
 >IO.readFile(refFilename) : any
 >IO.readFile : any
->IO : any
+>IO : IIO
 >readFile : any
 >refFilename : string
             }
@@ -8346,7 +8346,7 @@ module Harness {
                 IO.writeFile(reportFilename, reportContentSoFar);
 >IO.writeFile(reportFilename, reportContentSoFar) : any
 >IO.writeFile : any
->IO : any
+>IO : IIO
 >writeFile : any
 >reportFilename : string
 >reportContentSoFar : string

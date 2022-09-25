@@ -1,20 +1,20 @@
 /// <reference path="./fourslash.ts" />
 
 ////interface IFoo {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}a|]: string;|]
+////    /*1*/a: string;
 ////}
 ////class C<T extends IFoo> {
 ////    method() {
 ////        var x: T = {
-////            [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}a|]: ""|]
+////            a: ""
 ////        };
-////        x.[|a|];
+////        x.a;
 ////    }
 ////}
 ////
 ////
 ////var x: IFoo = {
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}a|]: "ss"|]
+////    a: "ss"
 ////};
 
-verify.singleReferenceGroup("(property) IFoo.a: string", "a");
+verify.baselineFindAllReferences('1')

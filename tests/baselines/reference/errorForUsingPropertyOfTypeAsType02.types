@@ -8,7 +8,7 @@ namespace Test1 {
 >x : T
 
         let a: T.abc = x.abc;
->a : any
+>a : T.abc
 >T : any
 >x.abc : number
 >x : T

@@ -34,6 +34,7 @@ function foo5<T extends RegExp>(test: T) { } // valid
 function foo6<T extends hm>(test: T) { }
 >foo6 : Symbol(foo6, Decl(typeParameterConstraints1.ts, 4, 44))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 5, 14))
+>hm : Symbol(hm)
 >test : Symbol(test, Decl(typeParameterConstraints1.ts, 5, 28))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 5, 14))
 

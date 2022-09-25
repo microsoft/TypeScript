@@ -1,6 +1,5 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameHashCharName.ts ===
 #
-># : any
 
 class C {
 >C : C

@@ -8,7 +8,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToFixIncorrectNamedTupleSyntax(context) {
             const { sourceFile, span } = context;
             const namedTupleMember = getNamedTupleMember(sourceFile, span.start);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, namedTupleMember));

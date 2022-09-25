@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.JSX_expressions_must_have_one_parent_element.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToWrapJsxInFragment(context) {
             const { sourceFile, span } = context;
             const node = findNodeToFix(sourceFile, span.start);
             if (!node) return undefined;

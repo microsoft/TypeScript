@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/tslib/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -62,7 +62,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.x = void 0;
 var tslib_1 = require("tslib");
-exports.x = (0, tslib_1.__assign)({});
+exports.x = tslib_1.__assign({});
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -133,7 +133,7 @@ Output::
 [7m [0m [91m                  ~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in index.tsx[90m:1[0m
 
 
 
@@ -150,7 +150,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

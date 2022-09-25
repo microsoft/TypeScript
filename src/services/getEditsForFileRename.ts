@@ -156,7 +156,7 @@ namespace ts {
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
                         : undefined;
                 });
         }
@@ -184,14 +184,15 @@ namespace ts {
     ): ToImport | undefined {
         if (importedModuleSymbol) {
             // `find` should succeed because we checked for ambient modules before calling this function.
-            const oldFileName = find(importedModuleSymbol.declarations!, isSourceFile)!.fileName;
+            const oldFileName = find(importedModuleSymbol.declarations, isSourceFile)!.fileName;
             const newFileName = oldToNew(oldFileName);
             return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }
         else {
+            const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
             const resolved = host.resolveModuleNames
-                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
-                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
+                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode)
+                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
             return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
         }
     }

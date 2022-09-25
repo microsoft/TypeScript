@@ -13,6 +13,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(34,14): erro
         var o: object = t; // expect error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! related TS2208 tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts:1:18: This type parameter might need an `extends object` constraint.
     }
     var a = {};
     var b = "42";

@@ -1,11 +1,11 @@
 === tests/cases/conformance/types/literal/booleanLiteralTypes2.ts ===
 type A1 = true | false;
->A1 : A1
+>A1 : boolean
 >true : true
 >false : false
 
 type A2 = false | true;
->A2 : A2
+>A2 : boolean
 >false : false
 >true : true
 
@@ -244,7 +244,7 @@ function f13(x: true | false) {
 }
 
 type Item =
->Item : Item
+>Item : { kind: true; a: string; } | { kind: false; b: string; }
 
     { kind: true, a: string } |
 >kind : true

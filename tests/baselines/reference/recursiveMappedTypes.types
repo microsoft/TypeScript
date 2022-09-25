@@ -25,7 +25,7 @@ export type Circular<T> = {[P in keyof T]: Circular<T>};
 >Circular : Circular<T>
 
 type tup = [number, number, number, number];
->tup : tup
+>tup : [number, number, number, number]
 
 function foo(arg: Circular<tup>): tup {
 >foo : (arg: any) => tup
@@ -44,10 +44,10 @@ type DeepMap<T extends unknown[], R> = {
 };
 
 type tpl = [string, [string, [string]]];
->tpl : tpl
+>tpl : [string, [string, [string]]]
 
 type arr = string[][];
->arr : arr
+>arr : string[][]
 
 type t1 = DeepMap<tpl, number>;  // [number, [number, [number]]]
 >t1 : [number, [number, [number]]]
@@ -123,7 +123,7 @@ export interface ListWidget {
 }
 
 type ListChild = Child<ListWidget>
->ListChild : ListChild
+>ListChild : { [x: string]: any; }
 
 declare let x: ListChild;
 >x : ListChild

@@ -56,3 +56,4 @@ class C2 {
 >b2 : Symbol(b2, Decl(classStaticBlock10.ts, 24, 13))
     }
 }
+

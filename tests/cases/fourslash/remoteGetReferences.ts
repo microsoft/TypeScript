@@ -86,19 +86,19 @@
 ////
 //////Remotes
 //////Type test
-////var remoteclsTest: [|remotefooCls|];
+////var remoteclsTest: /*1*/remotefooCls;
 ////
 //////Arguments
-////remoteclsTest = new [|remotefooCls|]([|remoteglobalVar|]);
-////remotefoo([|remoteglobalVar|]);
+////remoteclsTest = new /*2*/remotefooCls(/*3*/remoteglobalVar);
+////remotefoo(/*4*/remoteglobalVar);
 ////
 //////Increments
-////[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
+/////*5*/remotefooCls./*6*/remoteclsSVar++;
 ////remotemodTest.remotemodVar++;
-////[|{| "isWriteAccess": true |}remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+/////*7*/remoteglobalVar = /*8*/remoteglobalVar + /*9*/remoteglobalVar;
 ////
 //////ETC - Other cases
-////[|{| "isWriteAccess": true |}remoteglobalVar|] = 3;
+/////*10*/remoteglobalVar = 3;
 ////
 //////Find References misses method param
 ////var
@@ -119,30 +119,30 @@
 ////});
 
 // @Filename: remoteGetReferences_2.ts
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 10 |}remoteglobalVar|]: number = 2;|]
+/////*11*/var /*12*/remoteglobalVar: number = 2;
 ////
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 12 |}remotefooCls|] {
+/////*13*/class /*14*/remotefooCls {
 ////	//Declare
-////	[|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 14 |}remoteclsVar|] = 1;|]
-////	[|static [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 16 |}remoteclsSVar|] = 1;|]
+////	/*15*/remoteclsVar = 1;
+////	/*16*/static /*17*/remoteclsSVar = 1;
 ////
 ////	constructor(public remoteclsParam: number) {
 ////		//Increments
-////		[|{| "isWriteAccess": true |}remoteglobalVar|]++;
-////		this.[|{| "isWriteAccess": true |}remoteclsVar|]++;
-////		[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
+////		/*18*/remoteglobalVar++;
+////		this./*19*/remoteclsVar++;
+////		/*20*/remotefooCls./*21*/remoteclsSVar++;
 ////		this.remoteclsParam++;
 ////		remotemodTest.remotemodVar++;
 ////	}
-////}|]
+////}
 ////
 ////function remotefoo(remotex: number) {
 ////	//Declare
 ////	var remotefnVar = 1;
 ////
 ////	//Increments
-////	[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
-////	[|{| "isWriteAccess": true |}remoteglobalVar|]++;
+////	/*22*/remotefooCls./*23*/remoteclsSVar++;
+////	/*24*/remoteglobalVar++;
 ////	remotemodTest.remotemodVar++;
 ////	remotefnVar++;
 ////
@@ -155,8 +155,8 @@
 ////	export var remotemodVar: number;
 ////
 ////	//Increments
-////	[|{| "isWriteAccess": true |}remoteglobalVar|]++;
-////	[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
+////	/*25*/remoteglobalVar++;
+////	/*26*/remotefooCls./*27*/remoteclsSVar++;
 ////	remotemodVar++;
 ////
 ////	class remotetestCls {
@@ -167,8 +167,8 @@
 ////        static remoteboo = remotefoo;
 ////
 ////		//Increments
-////		[|{| "isWriteAccess": true |}remoteglobalVar|]++;
-////		[|remotefooCls|].[|{| "isWriteAccess": true |}remoteclsSVar|]++;
+////		/*28*/remoteglobalVar++;
+////		/*29*/remotefooCls./*30*/remoteclsSVar++;
 ////		remotemodVar++;
 ////    }
 ////
@@ -177,36 +177,7 @@
 ////	}
 ////}
 
-test.rangesByText().forEach((ranges, text) => {
-    // Definitions
-    if (text === "var remoteglobalVar: number = 2;" ||
-        text === `class remotefooCls {
-	//Declare
-	remoteclsVar = 1;
-	static remoteclsSVar = 1;
-
-	constructor(public remoteclsParam: number) {
-		//Increments
-		remoteglobalVar++;
-		this.remoteclsVar++;
-		remotefooCls.remoteclsSVar++;
-		this.remoteclsParam++;
-		remotemodTest.remotemodVar++;
-	}
-}` ||
-        text == "remoteclsVar = 1;" ||
-        text === "static remoteclsSVar = 1;"
-    ) return;
-
-    const definition = (() => {
-        switch (text) {
-            case "remotefooCls": return "class remotefooCls";
-            case "remoteglobalVar": return "var remoteglobalVar: number";
-            case "remoteclsSVar": return "(property) remotefooCls.remoteclsSVar: number";
-            case "remoteclsVar": return "(property) remotefooCls.remoteclsVar: number";
-            default: throw new Error(text);
-        }
-    })();
-
-    verify.singleReferenceGroup(definition, ranges);
-});
+verify.baselineFindAllReferences(
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30');

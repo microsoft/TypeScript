@@ -33,4 +33,6 @@ module C {
 
     function hello(): b.B { return null; }
 >hello : Symbol(hello, Decl(importedModuleAddToGlobal.ts, 13, 17))
+>b : Symbol(b)
+>B : Symbol(b.B)
 }

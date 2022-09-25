@@ -4,7 +4,7 @@ namespace ts {
     // Compound nodes
 
     export function createEmptyExports(factory: NodeFactory) {
-        return factory.createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
+        return factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
     }
 
     export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
@@ -197,7 +197,7 @@ namespace ts {
                         get: getAccessor && setTextRange(
                             setOriginalNode(
                                 factory.createFunctionExpression(
-                                    getAccessor.modifiers,
+                                    getModifiers(getAccessor),
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
                                     /*typeParameters*/ undefined,
@@ -212,7 +212,7 @@ namespace ts {
                         set: setAccessor && setTextRange(
                             setOriginalNode(
                                 factory.createFunctionExpression(
-                                    setAccessor.modifiers,
+                                    getModifiers(setAccessor),
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
                                     /*typeParameters*/ undefined,
@@ -267,7 +267,7 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             factory.createFunctionExpression(
-                                method.modifiers,
+                                getModifiers(method),
                                 method.asteriskToken,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
@@ -437,6 +437,7 @@ namespace ts {
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
+            case SyntaxKind.SatisfiesExpression:
                 return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
             case SyntaxKind.NonNullExpression:
                 return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
@@ -481,7 +482,7 @@ namespace ts {
         if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
             let namedBindings: NamedImportBindings | undefined;
             const moduleKind = getEmitModuleKind(compilerOptions);
-            if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
+            if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
                 // use named imports
                 const helpers = getEmitHelpers(sourceFile);
                 if (helpers) {
@@ -500,8 +501,8 @@ namespace ts {
                         // NOTE: We don't need to care about global import collisions as this is a module.
                         namedBindings = nodeFactory.createNamedImports(
                             map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
-                                ? nodeFactory.createImportSpecifier(/*propertyName*/ undefined, nodeFactory.createIdentifier(name))
-                                : nodeFactory.createImportSpecifier(nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))
+                                ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
+                                : nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))
                             )
                         );
                         const parseNode = getOriginalNode(sourceFile, isSourceFile);
@@ -519,7 +520,6 @@ namespace ts {
             }
             if (namedBindings) {
                 const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
                     nodeFactory.createStringLiteral(externalHelpersModuleNameText),
@@ -539,9 +539,9 @@ namespace ts {
             }
 
             const moduleKind = getEmitModuleKind(compilerOptions);
-            let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
+            let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
-                && moduleKind < ModuleKind.ES2015;
+                && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {
@@ -865,31 +865,48 @@ namespace ts {
         }
     }
 
-    export function canHaveModifiers(node: Node): node is HasModifiers {
+    export function canHaveIllegalType(node: Node): node is HasIllegalType {
         const kind = node.kind;
-        return kind === SyntaxKind.Parameter
-            || kind === SyntaxKind.PropertySignature
-            || kind === SyntaxKind.PropertyDeclaration
-            || kind === SyntaxKind.MethodSignature
-            || kind === SyntaxKind.MethodDeclaration
-            || kind === SyntaxKind.Constructor
+        return kind === SyntaxKind.Constructor
+            || kind === SyntaxKind.SetAccessor;
+    }
+
+    export function canHaveIllegalTypeParameters(node: Node): node is HasIllegalTypeParameters {
+        const kind = node.kind;
+        return kind === SyntaxKind.Constructor
             || kind === SyntaxKind.GetAccessor
-            || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.IndexSignature
-            || kind === SyntaxKind.FunctionExpression
-            || kind === SyntaxKind.ArrowFunction
-            || kind === SyntaxKind.ClassExpression
-            || kind === SyntaxKind.VariableStatement
+            || kind === SyntaxKind.SetAccessor;
+    }
+
+    export function canHaveIllegalDecorators(node: Node): node is HasIllegalDecorators {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAssignment
+            || kind === SyntaxKind.ShorthandPropertyAssignment
             || kind === SyntaxKind.FunctionDeclaration
-            || kind === SyntaxKind.ClassDeclaration
+            || kind === SyntaxKind.Constructor
+            || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
+            || kind === SyntaxKind.MissingDeclaration
+            || kind === SyntaxKind.VariableStatement
             || kind === SyntaxKind.InterfaceDeclaration
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.EnumDeclaration
             || kind === SyntaxKind.ModuleDeclaration
             || kind === SyntaxKind.ImportEqualsDeclaration
             || kind === SyntaxKind.ImportDeclaration
-            || kind === SyntaxKind.ExportAssignment
-            || kind === SyntaxKind.ExportDeclaration;
+            || kind === SyntaxKind.NamespaceExportDeclaration
+            || kind === SyntaxKind.ExportDeclaration
+            || kind === SyntaxKind.ExportAssignment;
+    }
+
+    export function canHaveIllegalModifiers(node: Node): node is HasIllegalModifiers {
+        const kind = node.kind;
+        return kind === SyntaxKind.ClassStaticBlockDeclaration
+            || kind === SyntaxKind.PropertyAssignment
+            || kind === SyntaxKind.ShorthandPropertyAssignment
+            || kind === SyntaxKind.FunctionType
+            || kind === SyntaxKind.MissingDeclaration
+            || kind === SyntaxKind.NamespaceExportDeclaration;
     }
 
     export const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration) as (node: Node) => node is TypeNode | TypeParameterDeclaration;
@@ -1214,5 +1231,154 @@ namespace ts {
             Debug.assertEqual(stackIndex, 0);
             return resultHolder.value;
         }
+    }
+
+    /**
+     * If `nodes` is not undefined, creates an empty `NodeArray` that preserves the `pos` and `end` of `nodes`.
+     * @internal
+     */
+    export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T>): NodeArray<T>;
+    export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
+    export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        if (nodes === undefined) return undefined;
+        if (nodes.length === 0) return nodes;
+        return setTextRange(factory.createNodeArray([], nodes.hasTrailingComma), nodes);
+    }
+
+    /**
+     * Gets the node from which a name should be generated.
+     */
+    export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
+        if (name.autoGenerateFlags & GeneratedIdentifierFlags.Node) {
+            const autoGenerateId = name.autoGenerateId;
+            let node = name as Node;
+            let original = node.original;
+            while (original) {
+                node = original;
+
+                // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
+                if (isMemberName(node)
+                    && !!(node.autoGenerateFlags! & GeneratedIdentifierFlags.Node)
+                    && node.autoGenerateId !== autoGenerateId) {
+                    break;
+                }
+
+                original = node.original;
+            }
+            // otherwise, return the original node for the source
+            return node;
+        }
+        return name;
+    }
+
+    /**
+     * Formats a prefix or suffix of a generated name.
+     */
+    export function formatGeneratedNamePart(part: string | undefined): string;
+    /**
+     * Formats a prefix or suffix of a generated name. If the part is a {@link GeneratedNamePart}, calls {@link generateName} to format the source node.
+     */
+    export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
+    export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string {
+        return typeof part === "object" ? formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
+            typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part :
+            "";
+    }
+
+    function formatIdentifier(name: string | Identifier | PrivateIdentifier, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+        return typeof name === "string" ? name :
+            formatIdentifierWorker(name, Debug.checkDefined(generateName));
+    }
+
+    function formatIdentifierWorker(node: Identifier | PrivateIdentifier, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+        return isGeneratedPrivateIdentifier(node) ? generateName(node).slice(1) :
+            isGeneratedIdentifier(node) ? generateName(node) :
+            isPrivateIdentifier(node) ? (node.escapedText as string).slice(1) :
+            idText(node);
+    }
+
+    /**
+     * Formats a generated name.
+     * @param privateName When `true`, inserts a `#` character at the start of the result.
+     * @param prefix The prefix (if any) to include before the base name.
+     * @param baseName The base name for the generated name.
+     * @param suffix The suffix (if any) to include after the base name.
+     */
+    export function formatGeneratedName(privateName: boolean, prefix: string | undefined, baseName: string, suffix: string | undefined): string;
+    /**
+     * Formats a generated name.
+     * @param privateName When `true`, inserts a `#` character at the start of the result.
+     * @param prefix The prefix (if any) to include before the base name.
+     * @param baseName The base name for the generated name.
+     * @param suffix The suffix (if any) to include after the base name.
+     * @param generateName Called to format the source node of {@link prefix} when it is a {@link GeneratedNamePart}.
+     */
+    export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
+    export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+        prefix = formatGeneratedNamePart(prefix, generateName!);
+        suffix = formatGeneratedNamePart(suffix, generateName!);
+        baseName = formatIdentifier(baseName, generateName);
+        return `${privateName ? "#" : ""}${prefix}${baseName}${suffix}`;
+    }
+
+
+    /**
+     * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
+     */
+    export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined) {
+        return factory.updatePropertyDeclaration(
+            node,
+            modifiers,
+            factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage"),
+            /*questionOrExclamationToken*/ undefined,
+            /*type*/ undefined,
+            initializer
+        );
+    }
+
+    /**
+     * Creates a {@link GetAccessorDeclaration} that reads from a private backing field.
+     */
+    export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
+        return factory.createGetAccessorDeclaration(
+            modifiers,
+            name,
+            [],
+            /*type*/ undefined,
+            factory.createBlock([
+                factory.createReturnStatement(
+                    factory.createPropertyAccessExpression(
+                        factory.createThis(),
+                        factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
+                    )
+                )
+            ])
+        );
+    }
+
+    /**
+     * Creates a {@link SetAccessorDeclaration} that writes to a private backing field.
+     */
+    export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
+        return factory.createSetAccessorDeclaration(
+            modifiers,
+            name,
+            [factory.createParameterDeclaration(
+                /*modifiers*/ undefined,
+                /*dotdotDotToken*/ undefined,
+                "value"
+            )],
+            factory.createBlock([
+                factory.createExpressionStatement(
+                    factory.createAssignment(
+                        factory.createPropertyAccessExpression(
+                            factory.createThis(),
+                            factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
+                        ),
+                        factory.createIdentifier("value")
+                    )
+                )
+            ])
+        );
     }
 }

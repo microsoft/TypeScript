@@ -1,0 +1,18 @@
+=== tests/cases/compiler/node_modules/pkg/index.d.ts ===
+export const item = 4;
+>item : Symbol(item, Decl(index.d.ts, 0, 12))
+
+=== tests/cases/compiler/pkg/index.d.ts ===
+export const item = 4;
+>item : Symbol(item, Decl(index.d.ts, 0, 12))
+
+=== tests/cases/compiler/index.ts ===
+import { item } from "pkg"; // should work (`index.js` is assumed to be the entrypoint for packages found via nonrelative import)
+>item : Symbol(item, Decl(index.ts, 0, 8))
+
+import { item as item2 } from "./pkg";  // shouldn't work (`index.js` is _not_ assumed to be the entrypoint for packages found via relative import)
+>item2 : Symbol(item2, Decl(index.ts, 1, 8))
+
+import { item as item3 } from "./node_modules/pkg" // _even if they're in a node_modules folder_
+>item3 : Symbol(item3, Decl(index.ts, 2, 8))
+

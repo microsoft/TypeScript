@@ -19,6 +19,10 @@ namespace ts.projectSystem {
         path: "/ambient.d.ts",
         content: "declare module 'ambient' {}"
     };
+    const mobxPackageJson: File = {
+        path: "/node_modules/mobx/package.json",
+        content: `{ "name": "mobx", "version": "1.0.0" }`
+    };
     const mobxDts: File = {
         path: "/node_modules/mobx/index.d.ts",
         content: "export declare function observable(): unknown;"
@@ -83,8 +87,8 @@ namespace ts.projectSystem {
             // transient symbols are recreated with every new checker.
             const programBefore = project.getCurrentProgram()!;
             let sigintPropBefore: readonly SymbolExportInfo[] | undefined;
-            exportMapCache.forEach(bTs.path as Path, (info, name) => {
-                if (name === "SIGINT") sigintPropBefore = info;
+            exportMapCache.search(bTs.path as Path, /*preferCapitalized*/ false, returnTrue, (info, symbolName) => {
+                if (symbolName === "SIGINT") sigintPropBefore = info;
             });
             assert.ok(sigintPropBefore);
             assert.ok(sigintPropBefore![0].symbol.flags & SymbolFlags.Transient);
@@ -109,8 +113,8 @@ namespace ts.projectSystem {
 
             // Get same info from cache again
             let sigintPropAfter: readonly SymbolExportInfo[] | undefined;
-            exportMapCache.forEach(bTs.path as Path, (info, name) => {
-                if (name === "SIGINT") sigintPropAfter = info;
+            exportMapCache.search(bTs.path as Path, /*preferCapitalized*/ false, returnTrue, (info, symbolName) => {
+                if (symbolName === "SIGINT") sigintPropAfter = info;
             });
             assert.ok(sigintPropAfter);
             assert.notEqual(symbolIdBefore, getSymbolId(sigintPropAfter![0].symbol));
@@ -118,7 +122,7 @@ namespace ts.projectSystem {
     });
 
     function setup() {
-        const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxDts, exportEqualsMappedType]);
+        const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
         const session = createSession(host);
         openFilesForSession([aTs, bTs], session);
         const projectService = session.getProjectService();

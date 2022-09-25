@@ -1,0 +1,13 @@
+=== /a.js ===
+export class A {}
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+=== /b.js ===
+import { A } from "./a";
+>A : Symbol(A, Decl(b.js, 0, 8))
+
+/** {@link A} */
+export class B {}
+>B : Symbol(B, Decl(b.js, 0, 24))
+
+

@@ -28,7 +28,7 @@ import { Foo } from "unknown";
 >Foo : any
 
 export interface I<T> { x: Foo<T>; }
->x : any
+>x : Foo<T>
 
 === /call.ts ===
 import { foo } from "unknown";

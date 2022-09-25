@@ -22,7 +22,7 @@
 goTo.file("index.ts");
 verify.codeFix({
   errorCode: ts.Diagnostics.Cannot_find_name_0.code,
-  description: ignoreInterpolations(ts.Diagnostics.Import_0_from_module_1),
+  description: ignoreInterpolations(ts.Diagnostics.Add_import_from_0),
   newFileContent:
 `import type { DisplayStyle } from "./Presenter";
 import type Presenter from "./Presenter";

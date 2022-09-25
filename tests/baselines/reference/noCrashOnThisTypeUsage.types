@@ -5,7 +5,7 @@ interface IListenable {
 >null : null
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
->observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean | undefined) => void
+>observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
 >handler : (change: any, oldValue?: any) => void
 >change : any
 >oldValue : any
@@ -62,7 +62,7 @@ export class ObservableValue<T> {
 >[] : never[]
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}
->observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean | undefined) => void
+>observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
 >handler : (change: any, oldValue?: any) => void
 >change : any
 >oldValue : any

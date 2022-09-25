@@ -1,0 +1,13 @@
+=== tests/cases/conformance/salsa/plainJSGrammarErrors2.js ===
+
+No type information for this code.=== /a.js ===
+export default 1;
+No type information for this code.
+No type information for this code.=== /b.js ===
+/**
+ * @deprecated
+ */
+export { default as A } from "./a";
+>default : Symbol(default, Decl(a.js, 0, 0))
+>A : Symbol(A, Decl(b.js, 3, 8))
+

@@ -141,7 +141,6 @@ namespace ts {
                     case SyntaxKind.FunctionDeclaration:
                         Debug.type<FunctionDeclaration>(node);
                         return factory.updateFunctionDeclaration(node,
-                            nodesVisitor(node.decorators, visitor, isDecorator),
                             nodesVisitor(node.modifiers, visitor, isModifier),
                             nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
                             nodeVisitor(node.name, visitor, isIdentifier),
@@ -152,7 +151,6 @@ namespace ts {
                     case SyntaxKind.MethodDeclaration:
                         Debug.type<MethodDeclaration>(node);
                         return factory.updateMethodDeclaration(node,
-                            nodesVisitor(node.decorators, visitor, isDecorator),
                             nodesVisitor(node.modifiers, visitor, isModifier),
                             nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
                             nodeVisitor(node.name, visitor, isPropertyName),
@@ -164,7 +162,6 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                         Debug.type<GetAccessorDeclaration>(node);
                         return factory.updateGetAccessorDeclaration(node,
-                            nodesVisitor(node.decorators, visitor, isDecorator),
                             nodesVisitor(node.modifiers, visitor, isModifier),
                             nodeVisitor(node.name, visitor, isPropertyName),
                             visitParameterList(node.parameters, visitor, context, nodesVisitor),
@@ -174,7 +171,6 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                         Debug.type<SetAccessorDeclaration>(node);
                         return factory.updateSetAccessorDeclaration(node,
-                            nodesVisitor(node.decorators, visitor, isDecorator),
                             nodesVisitor(node.modifiers, visitor, isModifier),
                             nodeVisitor(node.name, visitor, isPropertyName),
                             visitParameterList(node.parameters, visitor, context, nodesVisitor),
@@ -182,7 +178,6 @@ namespace ts {
                     case SyntaxKind.Constructor:
                         Debug.type<ConstructorDeclaration>(node);
                         return factory.updateConstructorDeclaration(node,
-                            nodesVisitor(node.decorators, visitor, isDecorator),
                             nodesVisitor(node.modifiers, visitor, isModifier),
                             visitParameterList(node.parameters, visitor, context, nodesVisitor),
                             visitFunctionBody(node.body!, visitor, context, nodeVisitor));
@@ -279,7 +274,6 @@ namespace ts {
                 () => {
                     if (isClassDeclaration(node)) {
                         return factory.updateClassDeclaration(node,
-                            nodesVisitor(node.decorators, visitor, isDecorator),
                             nodesVisitor(node.modifiers, visitor, isModifier),
                             nodeVisitor(node.name, visitor, isIdentifier),
                             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
@@ -288,7 +282,6 @@ namespace ts {
                     }
                     else {
                         return factory.updateClassExpression(node,
-                            nodesVisitor(node.decorators, visitor, isDecorator),
                             nodesVisitor(node.modifiers, visitor, isModifier),
                             nodeVisitor(node.name, visitor, isIdentifier),
                             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
@@ -306,7 +299,7 @@ namespace ts {
             const declarations = context.endLexicalEnvironment() || [];
             if (!declarations.length) return updated;
             return factory.updatePropertyDeclaration(
-                node, node.decorators, node.modifiers,
+                node, node.modifiers,
                 node.name, node.questionToken || node.exclamationToken, node.type,
                 factory.createImmediatelyInvokedArrowFunction(declarations.concat(factory.createReturnStatement(updated.initializer)))
             );
@@ -441,7 +434,7 @@ namespace ts {
                 const name = node.name!;
                 // node.name may be undefined in export default class { ... }.
                 hoistedVars.push(name);
-                return factory.createAssignment(name, factory.createClassExpression(node.decorators, node.modifiers, node.name, node.typeParameters, node.heritageClauses, node.members));
+                return factory.createAssignment(name, factory.createClassExpression(node.modifiers, node.name, node.typeParameters, node.heritageClauses, node.members));
             }
             function visitCaseBlock(node: CaseBlock) {
                 return visitEachChild(node, visitDefaultOrCaseBlock, context);
@@ -560,7 +553,6 @@ namespace ts {
                         /** generics */ undefined,
                         [
                             factory.createParameterDeclaration(
-                                /** decorators */ undefined,
                                 /** modifiers */ undefined,
                                 /** ... */ undefined,
                                 param0
@@ -580,7 +572,7 @@ namespace ts {
                     () => createFunctionExpression(node, /** async */ false, /** yield */ false),
                     prop => createCall(prop, []));
 
-            };
+            }
         }
         function visitCallExpression(node: CallExpression) {
             if (!currentDoContext?.hasYield) return visitEachChild(node, visitor, context);
@@ -596,7 +588,6 @@ namespace ts {
                             /** generics */ undefined,
                             [
                                 factory.createParameterDeclaration(
-                                    /** decorators */ undefined,
                                     /** modifiers */ undefined,
                                     /** ... */ undefined,
                                     param0
@@ -609,7 +600,6 @@ namespace ts {
                                 /** generics */ undefined,
                                 [
                                     factory.createParameterDeclaration(
-                                        /** decorators */ undefined,
                                         /** modifiers */ undefined,
                                         /** ... */ factory.createToken(SyntaxKind.DotDotDotToken),
                                         rest
@@ -636,7 +626,6 @@ namespace ts {
                             /** generics */ undefined,
                             [
                                 factory.createParameterDeclaration(
-                                    /** decorators */ undefined,
                                     /** modifiers */ undefined,
                                     /** ... */ factory.createToken(SyntaxKind.DotDotDotToken),
                                     rest
@@ -647,7 +636,7 @@ namespace ts {
                             createCall(inner, [factory.createSpreadElement(rest)])
                         ),
                         prop => createCall(prop, node.arguments));
-                };
+                }
             }
             return visitEachChild(node, visitor, context);
         }

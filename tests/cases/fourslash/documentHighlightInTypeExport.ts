@@ -30,12 +30,12 @@
 //// let [|A|]: [|A|] = 1;
 //// export type { [|A|] as [|B|] };
 
-{ // properly handle type only
+{ // type-only exports may still export values to be imported and used in type contexts
     const [AType, ALet, ADecl, AExport, asB] = test.rangesInFile("/3.ts");
     verify.documentHighlightsOf(AType, [AType, ADecl, AExport, asB]);
     verify.documentHighlightsOf(ADecl, [AType, ADecl, AExport, asB]);
-    verify.documentHighlightsOf(AExport, [AType, ADecl, AExport, asB]);
-    verify.documentHighlightsOf(ALet, [ALet]);
+    verify.documentHighlightsOf(AExport, [AType, ALet, ADecl, AExport, asB]);
+    verify.documentHighlightsOf(ALet, [ALet, AExport, asB]);
     verify.documentHighlightsOf(asB, [asB]);
 }
 

@@ -54,7 +54,7 @@ exports.CKind = exports.BKind = exports.AKind = void 0;
 var kindCache = {};
 function register(kind) {
     if (kindCache[kind]) {
-        throw new Error("Class with kind \"" + kind + "\" is already registered.");
+        throw new Error("Class with kind \"".concat(kind, "\" is already registered."));
     }
     kindCache[kind] = true;
 }

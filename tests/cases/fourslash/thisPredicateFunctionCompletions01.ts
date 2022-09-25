@@ -42,9 +42,9 @@
 
 const common: ReadonlyArray<string> = ["isFile", "isDirectory", "isNetworked", "path"];
 verify.completions(
-    { marker: "1", exact: ["content", ...common] },
-    { marker: "2", exact: ["host", "content", ...common] },
-    { marker: "3", exact: ["children", ...common] },
-    { marker: "4", exact: ["host", "children", ...common] },
-    { marker: "5", exact: ["host", ...common] },
+    { marker: "1", unsorted: ["content", ...common] },
+    { marker: "2", unsorted: ["host", "content", ...common] },
+    { marker: "3", unsorted: ["children", ...common] },
+    { marker: "4", unsorted: ["host", "children", ...common] },
+    { marker: "5", unsorted: ["host", ...common] },
 );

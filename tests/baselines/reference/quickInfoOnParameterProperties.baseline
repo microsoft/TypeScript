@@ -59,6 +59,17 @@
           "text": "this is the name of blabla \n- use blabla",
           "kind": "text"
         }
+      ],
+      "tags": [
+        {
+          "name": "example",
+          "text": [
+            {
+              "text": "blabla",
+              "kind": "text"
+            }
+          ]
+        }
       ]
     }
   },
@@ -121,6 +132,17 @@
         {
           "text": "this is the name of blabla \n- use blabla",
           "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "example",
+          "text": [
+            {
+              "text": "blabla",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

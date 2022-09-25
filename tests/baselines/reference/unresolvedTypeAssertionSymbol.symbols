@@ -4,6 +4,7 @@ var x = 1;
 
 var y = <asdf>x;
 >y : Symbol(y, Decl(unresolvedTypeAssertionSymbol.ts, 1, 3))
+>asdf : Symbol(asdf)
 >x : Symbol(x, Decl(unresolvedTypeAssertionSymbol.ts, 0, 3))
  
 

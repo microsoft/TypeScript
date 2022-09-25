@@ -23,7 +23,7 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
 >value : Symbol(value, Decl(customAsyncIterator.ts, 4, 15))
 
             throw new Error("ConstantIterator.prototype.next may not take any values");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
         }
         return { value: this.constant, done: false };
 >value : Symbol(value, Decl(customAsyncIterator.ts, 8, 16))

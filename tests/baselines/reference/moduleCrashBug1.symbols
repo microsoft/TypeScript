@@ -26,6 +26,7 @@ module editor {
 
 var m : _modes;
 >m : Symbol(m, Decl(moduleCrashBug1.ts, 17, 3))
+>_modes : Symbol(_modes)
 
 
 

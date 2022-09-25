@@ -192,7 +192,7 @@ var G = /** @class */ (function (_super) {
 }(D));
 var H = /** @class */ (function () {
     function H() {
-        _this = _super.call(this) || this;
+        return _super.call(this) || this;
     } // ERROR - no super call allowed
     return H;
 }());

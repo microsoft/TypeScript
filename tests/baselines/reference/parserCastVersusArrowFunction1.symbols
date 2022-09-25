@@ -5,6 +5,7 @@ var v = <T>() => 1;
 
 var v = <T>a;
 >v : Symbol(v, Decl(parserCastVersusArrowFunction1.ts, 0, 3), Decl(parserCastVersusArrowFunction1.ts, 1, 3), Decl(parserCastVersusArrowFunction1.ts, 3, 3), Decl(parserCastVersusArrowFunction1.ts, 4, 3), Decl(parserCastVersusArrowFunction1.ts, 5, 3) ... and 3 more)
+>T : Symbol(T)
 
 var v = <T>(a) => 1;
 >v : Symbol(v, Decl(parserCastVersusArrowFunction1.ts, 0, 3), Decl(parserCastVersusArrowFunction1.ts, 1, 3), Decl(parserCastVersusArrowFunction1.ts, 3, 3), Decl(parserCastVersusArrowFunction1.ts, 4, 3), Decl(parserCastVersusArrowFunction1.ts, 5, 3) ... and 3 more)
@@ -25,10 +26,13 @@ var v = <T>(a = 1, b = 2) => 1;
 
 var v = <T>(a);
 >v : Symbol(v, Decl(parserCastVersusArrowFunction1.ts, 0, 3), Decl(parserCastVersusArrowFunction1.ts, 1, 3), Decl(parserCastVersusArrowFunction1.ts, 3, 3), Decl(parserCastVersusArrowFunction1.ts, 4, 3), Decl(parserCastVersusArrowFunction1.ts, 5, 3) ... and 3 more)
+>T : Symbol(T)
 
 var v = <T>(a, b);
 >v : Symbol(v, Decl(parserCastVersusArrowFunction1.ts, 0, 3), Decl(parserCastVersusArrowFunction1.ts, 1, 3), Decl(parserCastVersusArrowFunction1.ts, 3, 3), Decl(parserCastVersusArrowFunction1.ts, 4, 3), Decl(parserCastVersusArrowFunction1.ts, 5, 3) ... and 3 more)
+>T : Symbol(T)
 
 var v = <T>(a = 1, b = 2);
 >v : Symbol(v, Decl(parserCastVersusArrowFunction1.ts, 0, 3), Decl(parserCastVersusArrowFunction1.ts, 1, 3), Decl(parserCastVersusArrowFunction1.ts, 3, 3), Decl(parserCastVersusArrowFunction1.ts, 4, 3), Decl(parserCastVersusArrowFunction1.ts, 5, 3) ... and 3 more)
+>T : Symbol(T)
 

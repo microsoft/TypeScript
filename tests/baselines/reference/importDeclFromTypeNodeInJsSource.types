@@ -5,7 +5,7 @@ declare module "events" {
 >"events" : typeof import("events")
 
     namespace EventEmitter {
->EventEmitter : typeof EventEmitter
+>EventEmitter : typeof import("events")
 
         class EventEmitter {
 >EventEmitter : EventEmitter

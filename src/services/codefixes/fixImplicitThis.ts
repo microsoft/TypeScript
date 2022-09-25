@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixImplicitThis(context) {
             const { sourceFile, program, span } = context;
             let diagnostic: DiagnosticAndArguments | undefined;
             const changes = textChanges.ChangeTracker.with(context, t => {
@@ -20,15 +20,15 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticAndArguments | undefined {
         const token = getTokenAtPosition(sourceFile, pos);
-        Debug.assert(token.kind === SyntaxKind.ThisKeyword);
+        if (!isThis(token)) return undefined;
 
         const fn = getThisContainer(token, /*includeArrowFunctions*/ false);
         if (!isFunctionDeclaration(fn) && !isFunctionExpression(fn)) return undefined;
 
         if (!isSourceFile(getThisContainer(fn, /*includeArrowFunctions*/ false))) { // 'this' is defined outside, convert to arrow function
-            const fnKeyword = Debug.assertDefined(findChildOfKind(fn, SyntaxKind.FunctionKeyword, sourceFile));
+            const fnKeyword = Debug.checkDefined(findChildOfKind(fn, SyntaxKind.FunctionKeyword, sourceFile));
             const { name } = fn;
-            const body = Debug.assertDefined(fn.body); // Should be defined because the function contained a 'this' expression
+            const body = Debug.checkDefined(fn.body); // Should be defined because the function contained a 'this' expression
             if (isFunctionExpression(fn)) {
                 if (name && FindAllReferences.Core.isSymbolReferencedInFile(name, checker, sourceFile, body)) {
                     // Function expression references itself. To fix we would have to extract it to a const.

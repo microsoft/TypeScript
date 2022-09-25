@@ -20,10 +20,10 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type
   Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
 tests/cases/compiler/objectLiteralExcessProperties.ts(37,25): error TS2304: Cannot find name 'IFoo'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(39,11): error TS2322: Type '{ name: string; }' is not assignable to type 'T'.
-  '{ name: string; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'any'.
+  '{ name: string; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'IFoo'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(41,11): error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type 'T & { prop: boolean; }'.
   Type '{ name: string; prop: boolean; }' is not assignable to type 'T'.
-    '{ name: string; prop: boolean; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'any'.
+    '{ name: string; prop: boolean; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'IFoo'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(43,43): error TS2322: Type '{ name: string; prop: true; }' is not assignable to type 'T | { prop: boolean; }'.
   Object literal may only specify known properties, and 'name' does not exist in type '{ prop: boolean; }'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(45,76): error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type '(T & { prop: boolean; }) | { name: string; }'.
@@ -107,13 +107,13 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(49,44): error TS2322: Type
         const obj1: T = { name: "test" };
               ~~~~
 !!! error TS2322: Type '{ name: string; }' is not assignable to type 'T'.
-!!! error TS2322:   '{ name: string; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'any'.
+!!! error TS2322:   '{ name: string; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'IFoo'.
         // No excess property checks on intersections involving generics
         const obj2: T & { prop: boolean } = { name: "test", prop: true };
               ~~~~
 !!! error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type 'T & { prop: boolean; }'.
 !!! error TS2322:   Type '{ name: string; prop: boolean; }' is not assignable to type 'T'.
-!!! error TS2322:     '{ name: string; prop: boolean; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'any'.
+!!! error TS2322:     '{ name: string; prop: boolean; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'IFoo'.
         // Excess property checks only on non-generic parts of unions
         const obj3: T | { prop: boolean } = { name: "test", prop: true };
                                               ~~~~~~~~~~~~

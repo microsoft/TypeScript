@@ -1,0 +1,16 @@
+=== tests/cases/compiler/functionToFunctionWithPropError.ts ===
+declare let x: { (): string; prop: number };
+>x : Symbol(x, Decl(functionToFunctionWithPropError.ts, 0, 11))
+>prop : Symbol(prop, Decl(functionToFunctionWithPropError.ts, 0, 28))
+
+declare let y: { (): string; }
+>y : Symbol(y, Decl(functionToFunctionWithPropError.ts, 1, 11))
+
+x = y;
+>x : Symbol(x, Decl(functionToFunctionWithPropError.ts, 0, 11))
+>y : Symbol(y, Decl(functionToFunctionWithPropError.ts, 1, 11))
+
+y = x;
+>y : Symbol(y, Decl(functionToFunctionWithPropError.ts, 1, 11))
+>x : Symbol(x, Decl(functionToFunctionWithPropError.ts, 0, 11))
+

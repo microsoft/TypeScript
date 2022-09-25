@@ -347,3 +347,51 @@ class C11 {
     }
 }
 
+const a = 'a';
+>a : "a"
+>'a' : "a"
+
+const b = Symbol();
+>b : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+class C12 {
+>C12 : C12
+
+    [a]: number;
+>[a] : number
+>a : "a"
+
+    [b]: number;
+>[b] : number
+>b : unique symbol
+
+    ['c']: number;
+>['c'] : number
+>'c' : "c"
+
+    constructor() {
+        this[a] = 1;
+>this[a] = 1 : 1
+>this[a] : number
+>this : this
+>a : "a"
+>1 : 1
+
+        this[b] = 1;
+>this[b] = 1 : 1
+>this[b] : number
+>this : this
+>b : unique symbol
+>1 : 1
+
+        this['c'] = 1;
+>this['c'] = 1 : 1
+>this['c'] : number
+>this : this
+>'c' : "c"
+>1 : 1
+    }
+}
+

@@ -109,6 +109,7 @@ function i<T extends M.E>(x: T) { }
 
 var j = <C>null;
 >j : Symbol(j, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 35, 3))
+>C : Symbol(C)
 
 var k = <M.E>null;
 >k : Symbol(k, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 36, 3))

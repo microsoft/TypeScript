@@ -21,9 +21,12 @@ namespace ts {
          * the SourceFile if was not found in the registry.
          *
          * @param fileName The name of the file requested
-         * @param compilationSettings Some compilation settings like target affects the
+         * @param compilationSettingsOrHost Some compilation settings like target affects the
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
-         * multiple copies of the same file for different compilation settings.
+         * multiple copies of the same file for different compilation settings. A minimal
+         * resolution cache is needed to fully define a source file's shape when
+         * the compilation settings include `module: node16`+, so providing a cache host
+         * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file. Only used if the file was not found
          * in the registry and a new one was created.
          * @param version Current version of the file. Only used if the file was not found
@@ -31,19 +34,23 @@ namespace ts {
          */
         acquireDocument(
             fileName: string,
-            compilationSettings: CompilerOptions,
+            compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            scriptKind?: ScriptKind): SourceFile;
+            scriptKind?: ScriptKind,
+            sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        ): SourceFile;
 
         acquireDocumentWithKey(
             fileName: string,
             path: Path,
-            compilationSettings: CompilerOptions,
+            compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost,
             key: DocumentRegistryBucketKey,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            scriptKind?: ScriptKind): SourceFile;
+            scriptKind?: ScriptKind,
+            sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        ): SourceFile;
 
         /**
          * Request an updated version of an already existing SourceFile with a given fileName
@@ -51,27 +58,34 @@ namespace ts {
          * to get an updated SourceFile.
          *
          * @param fileName The name of the file requested
-         * @param compilationSettings Some compilation settings like target affects the
+         * @param compilationSettingsOrHost Some compilation settings like target affects the
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
-         * multiple copies of the same file for different compilation settings.
+         * multiple copies of the same file for different compilation settings. A minimal
+         * resolution cache is needed to fully define a source file's shape when
+         * the compilation settings include `module: node16`+, so providing a cache host
+         * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file.
          * @param version Current version of the file.
          */
         updateDocument(
             fileName: string,
-            compilationSettings: CompilerOptions,
+            compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            scriptKind?: ScriptKind): SourceFile;
+            scriptKind?: ScriptKind,
+            sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        ): SourceFile;
 
         updateDocumentWithKey(
             fileName: string,
             path: Path,
-            compilationSettings: CompilerOptions,
+            compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost,
             key: DocumentRegistryBucketKey,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            scriptKind?: ScriptKind): SourceFile;
+            scriptKind?: ScriptKind,
+            sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        ): SourceFile;
 
         getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
         /**
@@ -82,9 +96,10 @@ namespace ts {
          *
          * @param fileName The name of the file to be released
          * @param compilationSettings The compilation settings used to acquire the file
+         * @param scriptKind The script kind of the file to be released
          */
-        /**@deprecated pass scriptKind for correctness */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
+        /**@deprecated pass scriptKind and impliedNodeFormat for correctness */
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind): void;
         /**
          * Informs the DocumentRegistry that a file is not needed any longer.
          *
@@ -94,12 +109,13 @@ namespace ts {
          * @param fileName The name of the file to be released
          * @param compilationSettings The compilation settings used to acquire the file
          * @param scriptKind The script kind of the file to be released
+         * @param impliedNodeFormat The implied source file format of the file to be released
          */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind): void; // eslint-disable-line @typescript-eslint/unified-signatures
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void; // eslint-disable-line @typescript-eslint/unified-signatures
         /**
-         * @deprecated pass scriptKind for correctness */
-        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
-        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind): void; // eslint-disable-line @typescript-eslint/unified-signatures
+         * @deprecated pass scriptKind for and impliedNodeFormat correctness */
+        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
+        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void; // eslint-disable-line @typescript-eslint/unified-signatures
 
         /*@internal*/
         getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind): [string, number | undefined][];
@@ -109,8 +125,8 @@ namespace ts {
 
     /*@internal*/
     export interface ExternalDocumentCache {
-        setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile): void;
-        getDocument(key: DocumentRegistryBucketKey, path: Path): SourceFile | undefined;
+        setDocument(key: DocumentRegistryBucketKeyWithMode, path: Path, sourceFile: SourceFile): void;
+        getDocument(key: DocumentRegistryBucketKeyWithMode, path: Path): SourceFile | undefined;
     }
 
     export type DocumentRegistryBucketKey = string & { __bucketKey: any };
@@ -134,10 +150,12 @@ namespace ts {
     }
 
     /*@internal*/
+    export type DocumentRegistryBucketKeyWithMode = string & { __documentRegistryBucketKeyWithMode: any; };
+    /*@internal*/
     export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets = new Map<DocumentRegistryBucketKey, ESMap<Path, BucketEntry>>();
+        const buckets = new Map<DocumentRegistryBucketKeyWithMode, ESMap<Path, BucketEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function reportStats() {
@@ -165,24 +183,31 @@ namespace ts {
             return JSON.stringify(bucketInfoArray, undefined, 2);
         }
 
-        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+        function getCompilationSettings(settingsOrHost: CompilerOptions | MinimalResolutionCacheHost) {
+            if (typeof settingsOrHost.getCompilationSettings === "function") {
+                return (settingsOrHost as MinimalResolutionCacheHost).getCompilationSettings();
+            }
+            return settingsOrHost as CompilerOptions;
+        }
+
+        function acquireDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            const key = getKeyForCompilationSettings(compilationSettings);
-            return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind);
+            const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
+            return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
         }
 
-        function acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind);
+        function acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind, languageVersionOrOptions);
         }
 
-        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+        function updateDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            const key = getKeyForCompilationSettings(compilationSettings);
-            return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind);
+            const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
+            return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
         }
 
-        function updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ false, scriptKind);
+        function updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+            return acquireOrUpdateDocument(fileName, path, getCompilationSettings(compilationSettings), key, scriptSnapshot, version, /*acquiring*/ false, scriptKind, languageVersionOrOptions);
         }
 
         function getDocumentRegistryEntry(bucketEntry: BucketEntry, scriptKind: ScriptKind | undefined) {
@@ -194,19 +219,51 @@ namespace ts {
         function acquireOrUpdateDocument(
             fileName: string,
             path: Path,
-            compilationSettings: CompilerOptions,
+            compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost,
             key: DocumentRegistryBucketKey,
             scriptSnapshot: IScriptSnapshot,
             version: string,
             acquiring: boolean,
-            scriptKind?: ScriptKind): SourceFile {
+            scriptKind: ScriptKind | undefined,
+            languageVersionOrOptions: CreateSourceFileOptions | ScriptTarget | undefined,
+        ): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
-            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
-            const bucket = getOrUpdate(buckets, key, () => new Map());
+            const compilationSettings = getCompilationSettings(compilationSettingsOrHost);
+            const host: MinimalResolutionCacheHost | undefined = compilationSettingsOrHost === compilationSettings ? undefined : compilationSettingsOrHost as MinimalResolutionCacheHost;
+            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
+            const sourceFileOptions: CreateSourceFileOptions = typeof languageVersionOrOptions === "object" ?
+                languageVersionOrOptions :
+                {
+                    languageVersion: scriptTarget,
+                    impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
+                    setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings)
+                };
+            sourceFileOptions.languageVersion = scriptTarget;
+            const oldBucketCount = buckets.size;
+            const keyWithMode = getDocumentRegistryBucketKeyWithMode(key, sourceFileOptions.impliedNodeFormat);
+            const bucket = getOrUpdate(buckets, keyWithMode, () => new Map());
+            if (tracing) {
+                if (buckets.size > oldBucketCount) {
+                    // It is interesting, but not definitively problematic if a build requires multiple document registry buckets -
+                    // perhaps they are for two projects that don't have any overlap.
+                    // Bonus: these events can help us interpret the more interesting event below.
+                    tracing.instant(tracing.Phase.Session, "createdDocumentRegistryBucket", { configFilePath: compilationSettings.configFilePath, key: keyWithMode });
+                }
+
+                // It is fairly suspicious to have one path in two buckets - you'd expect dependencies to have similar configurations.
+                // If this occurs unexpectedly, the fix is likely to synchronize the project settings.
+                // Skip .d.ts files to reduce noise (should also cover most of node_modules).
+                const otherBucketKey = !isDeclarationFileName(path) &&
+                    forEachEntry(buckets, (bucket, bucketKey) => bucketKey !== keyWithMode && bucket.has(path) && bucketKey);
+                if (otherBucketKey) {
+                    tracing.instant(tracing.Phase.Session, "documentRegistryBucketOverlap", { path, key1: otherBucketKey, key2: keyWithMode });
+                }
+            }
+
             const bucketEntry = bucket.get(path);
             let entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
             if (!entry && externalCache) {
-                const sourceFile = externalCache.getDocument(key, path);
+                const sourceFile = externalCache.getDocument(keyWithMode, path);
                 if (sourceFile) {
                     Debug.assert(acquiring);
                     entry = {
@@ -219,9 +276,9 @@ namespace ts {
 
             if (!entry) {
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, /*setNodeParents*/ false, scriptKind);
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, sourceFileOptions, version, /*setNodeParents*/ false, scriptKind);
                 if (externalCache) {
-                    externalCache.setDocument(key, path, sourceFile);
+                    externalCache.setDocument(keyWithMode, path, sourceFile);
                 }
                 entry = {
                     sourceFile,
@@ -237,7 +294,7 @@ namespace ts {
                     entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
                         scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
                     if (externalCache) {
-                        externalCache.setDocument(key, path, entry.sourceFile);
+                        externalCache.setDocument(keyWithMode, path, entry.sourceFile);
                     }
                 }
 
@@ -270,14 +327,14 @@ namespace ts {
             }
         }
 
-        function releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind): void {
+        function releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind, impliedNodeFormat?: SourceFile["impliedNodeFormat"]): void {
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
             const key = getKeyForCompilationSettings(compilationSettings);
-            return releaseDocumentWithKey(path, key, scriptKind);
+            return releaseDocumentWithKey(path, key, scriptKind, impliedNodeFormat);
         }
 
-        function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void {
-            const bucket = Debug.checkDefined(buckets.get(key));
+        function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind, impliedNodeFormat?: SourceFile["impliedNodeFormat"]): void {
+            const bucket = Debug.checkDefined(buckets.get(getDocumentRegistryBucketKeyWithMode(key, impliedNodeFormat)));
             const bucketEntry = bucket.get(path)!;
             const entry = getDocumentRegistryEntry(bucketEntry, scriptKind)!;
             entry.languageServiceRefCount--;
@@ -317,7 +374,27 @@ namespace ts {
         };
     }
 
+    function compilerOptionValueToString(value: unknown): string {
+        if (value === null || typeof value !== "object") { // eslint-disable-line no-null/no-null
+            return "" + value;
+        }
+        if (isArray(value)) {
+            return `[${map(value, e => compilerOptionValueToString(e))?.join(",")}]`;
+        }
+        let str = "{";
+        for (const key in value) {
+            if (hasProperty(value, key)) {
+                str += `${key}: ${compilerOptionValueToString((value as any)[key])}`;
+            }
+        }
+        return str + "}";
+    }
+
     function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-        return sourceFileAffectingCompilerOptions.map(option => getCompilerOptionValue(settings, option)).join("|") as DocumentRegistryBucketKey;
+        return sourceFileAffectingCompilerOptions.map(option => compilerOptionValueToString(getCompilerOptionValue(settings, option))).join("|") + (settings.pathsBasePath ? `|${settings.pathsBasePath}` : undefined) as DocumentRegistryBucketKey;
+    }
+
+    function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ModuleKind.ESNext | ModuleKind.CommonJS | undefined) {
+        return (mode ? `${key}|${mode}` : key) as DocumentRegistryBucketKeyWithMode;
     }
 }

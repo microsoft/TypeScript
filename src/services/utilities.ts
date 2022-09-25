@@ -99,13 +99,6 @@ namespace ts {
             || isImportSpecifier(parent)
             || isImportClause(parent)
             || isImportEqualsDeclaration(parent) && node === parent.name) {
-            let decl: Node = parent;
-            while (decl) {
-                if (isImportEqualsDeclaration(decl) || isImportClause(decl) || isExportDeclaration(decl)) {
-                    return decl.isTypeOnly ? SemanticMeaning.Type : SemanticMeaning.All;
-                }
-                decl = decl.parent;
-            }
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
@@ -207,7 +200,7 @@ namespace ts {
             case SyntaxKind.ImportType:
                 return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(node.parent as ExpressionWithTypeArguments);
+                return isPartOfTypeNode(node.parent);
         }
 
         return false;
@@ -775,7 +768,7 @@ namespace ts {
         if (isFunctionDeclaration(node)) {
             // for class and function declarations, use the `default` modifier
             // when the declaration is unnamed.
-            const defaultModifier = find(node.modifiers!, isDefaultModifier);
+            const defaultModifier = find(node.modifiers, isDefaultModifier);
             if (defaultModifier) return defaultModifier;
         }
         if (isFunctionExpression(node)) {
@@ -813,6 +806,8 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     return getAdjustedLocationForFunction(node as FunctionDeclaration | FunctionExpression);
+                case SyntaxKind.Constructor:
+                    return node;
             }
         }
         if (isNamedDeclaration(node)) {
@@ -908,7 +903,7 @@ namespace ts {
         //
         // NOTE: If the node is a modifier, we don't adjust its location if it is the `default` modifier as that is handled
         // specially by `getSymbolAtLocation`.
-        if (isModifier(node) && (forRename || node.kind !== SyntaxKind.DefaultKeyword) ? contains(parent.modifiers, node) :
+        if (isModifier(node) && (forRename || node.kind !== SyntaxKind.DefaultKeyword) ? canHaveModifiers(parent) && contains(parent.modifiers, node) :
             node.kind === SyntaxKind.ClassKeyword ? isClassDeclaration(parent) || isClassExpression(node) :
                 node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) || isFunctionExpression(node) :
                     node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
@@ -1124,29 +1119,96 @@ namespace ts {
     /** Get the token whose text contains the position */
     function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean): Node {
         let current: Node = sourceFile;
+        let foundToken: Node | undefined;
         outer: while (true) {
             // find the child that contains 'position'
-            for (const child of current.getChildren(sourceFile)) {
-                const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, /*includeJsDoc*/ true);
-                if (start > position) {
-                    // If this child begins after position, then all subsequent children will as well.
-                    break;
+
+            const children = current.getChildren(sourceFile);
+            const i = binarySearchKey(children, position, (_, i) => i, (middle, _) => {
+                // This last callback is more of a selector than a comparator -
+                // `EqualTo` causes the `middle` result to be returned
+                // `GreaterThan` causes recursion on the left of the middle
+                // `LessThan` causes recursion on the right of the middle
+
+                // Let's say you have 3 nodes, spanning positons
+                // pos: 1, end: 3
+                // pos: 3, end: 3
+                // pos: 3, end: 5
+                // and you're looking for the token at positon 3 - all 3 of these nodes are overlapping with position 3.
+                // In fact, there's a _good argument_ that node 2 shouldn't even be allowed to exist - depending on if
+                // the start or end of the ranges are considered inclusive, it's either wholly subsumed by the first or the last node.
+                // Unfortunately, such nodes do exist. :( - See fourslash/completionsImport_tsx.tsx - empty jsx attributes create
+                // a zero-length node.
+                // What also you may not expect is that which node we return depends on the includePrecedingTokenAtEndPosition flag.
+                // Specifically, if includePrecedingTokenAtEndPosition is set, we return the 1-3 node, while if it's unset, we
+                // return the 3-5 node. (The zero length node is never correct.) This is because the includePrecedingTokenAtEndPosition
+                // flag causes us to return the first node whose end position matches the position and which produces and acceptable token
+                // kind. Meanwhile, if includePrecedingTokenAtEndPosition is unset, we look for the first node whose start is <= the
+                // position and whose end is greater than the position.
+
+
+                // There are more sophisticated end tests later, but this one is very fast
+                // and allows us to skip a bunch of work
+                const end = children[middle].getEnd();
+                if (end < position) {
+                    return Comparison.LessThan;
                 }
 
-                const end = child.getEnd();
-                if (position < end || (position === end && (child.kind === SyntaxKind.EndOfFileToken || includeEndPosition))) {
-                    current = child;
-                    continue outer;
+                const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
+                if (start > position) {
+                    return Comparison.GreaterThan;
                 }
-                else if (includePrecedingTokenAtEndPosition && end === position) {
-                    const previousToken = findPrecedingToken(position, sourceFile, child);
-                    if (previousToken && includePrecedingTokenAtEndPosition(previousToken)) {
-                        return previousToken;
+
+                // first element whose start position is before the input and whose end position is after or equal to the input
+                if (nodeContainsPosition(children[middle], start, end)) {
+                    if (children[middle - 1]) {
+                        // we want the _first_ element that contains the position, so left-recur if the prior node also contains the position
+                        if (nodeContainsPosition(children[middle - 1])) {
+                            return Comparison.GreaterThan;
+                        }
                     }
+                    return Comparison.EqualTo;
                 }
+
+                // this complex condition makes us left-recur around a zero-length node when includePrecedingTokenAtEndPosition is set, rather than right-recur on it
+                if (includePrecedingTokenAtEndPosition && start === position && children[middle - 1] && children[middle - 1].getEnd() === position && nodeContainsPosition(children[middle - 1])) {
+                    return Comparison.GreaterThan;
+                }
+                return Comparison.LessThan;
+            });
+
+            if (foundToken) {
+                return foundToken;
+            }
+            if (i >= 0 && children[i]) {
+                current = children[i];
+                continue outer;
             }
 
             return current;
+        }
+
+        function nodeContainsPosition(node: Node, start?: number, end?: number) {
+            end ??= node.getEnd();
+            if (end < position) {
+                return false;
+            }
+            start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
+            if (start > position) {
+                // If this child begins after position, then all subsequent children will as well.
+                return false;
+            }
+            if (position < end || (position === end && (node.kind === SyntaxKind.EndOfFileToken || includeEndPosition))) {
+                return true;
+            }
+            else if (includePrecedingTokenAtEndPosition && end === position) {
+                const previousToken = findPrecedingToken(position, sourceFile, node);
+                if (previousToken && includePrecedingTokenAtEndPosition(previousToken)) {
+                    foundToken = previousToken;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
@@ -1206,8 +1268,10 @@ namespace ts {
      * Finds the rightmost token satisfying `token.end <= position`,
      * excluding `JsxText` tokens containing only whitespace.
      */
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
-        const result = find(startNode || sourceFile);
+    export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode: Node, excludeJsdoc?: boolean): Node | undefined;
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined;
+    export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
+        const result = find((startNode || sourceFile) as Node);
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
@@ -1247,7 +1311,7 @@ namespace ts {
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
-                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile);
+                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile, n.kind);
                         return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
@@ -1263,7 +1327,7 @@ namespace ts {
             // the only known case is when position is at the end of the file.
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
-            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
+            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile, n.kind);
             return candidate && findRightmostToken(candidate, sourceFile);
         }
     }
@@ -1272,7 +1336,7 @@ namespace ts {
         return isToken(n) && !isWhiteSpaceOnlyJsxText(n);
     }
 
-    function findRightmostToken(n: Node, sourceFile: SourceFile): Node | undefined {
+    function findRightmostToken(n: Node, sourceFile: SourceFileLike): Node | undefined {
         if (isNonWhitespaceToken(n)) {
             return n;
         }
@@ -1282,19 +1346,21 @@ namespace ts {
             return n;
         }
 
-        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile, n.kind);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
 
     /**
      * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
      */
-    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFile): Node | undefined {
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
         for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
             const child = children[i];
 
             if (isWhiteSpaceOnlyJsxText(child)) {
-                Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                if (i === 0 && (parentKind === SyntaxKind.JsxText || parentKind === SyntaxKind.JsxSelfClosingElement)) {
+                    Debug.fail("`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                }
             }
             else if (nodeHasTokens(children[i], sourceFile)) {
                 return children[i];
@@ -1593,7 +1659,7 @@ namespace ts {
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
      *
-     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
+     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)`
      * @param predicate Additional predicate to test on the comment range.
      */
     export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined {
@@ -1795,6 +1861,10 @@ namespace ts {
         return node.kind === SyntaxKind.TypeKeyword;
     }
 
+    export function isTypeKeywordTokenOrIdentifier(node: Node) {
+        return isTypeKeywordToken(node) || isIdentifier(node) && node.text === "type";
+    }
+
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
         return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
@@ -1836,11 +1906,11 @@ namespace ts {
     export function programContainsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
     }
-    export function programContainsEs6Modules(program: Program): boolean {
+    export function programContainsEsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
-    export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
-        return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
+    export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
+        return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
     export function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
@@ -1853,6 +1923,7 @@ namespace ts {
             useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
             getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
             getModuleSpecifierCache: maybeBind(host, host.getModuleSpecifierCache),
+            getPackageJsonInfoCache: () => program.getModuleResolutionCache()?.getPackageJsonInfoCache(),
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
@@ -1869,13 +1940,20 @@ namespace ts {
         };
     }
 
+    export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
+        return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    }
+
+    export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
+        return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    }
+
     export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
         return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
     }
 
     export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
         return factory.createImportDeclaration(
-            /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
                 ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
@@ -1970,7 +2048,7 @@ namespace ts {
     }
 
     export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined {
-        return node.modifiers && find(node.modifiers, m => m.kind === kind);
+        return canHaveModifiers(node) ? find(node.modifiers, (m): m is Modifier => m.kind === kind) : undefined;
     }
 
     export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean): void {
@@ -2046,6 +2124,48 @@ namespace ts {
         }
 
         return true;
+    }
+
+    export function getMappedLocation(location: DocumentPosition, sourceMapper: SourceMapper, fileExists: ((path: string) => boolean) | undefined): DocumentPosition | undefined {
+        const mapsTo = sourceMapper.tryGetSourcePosition(location);
+        return mapsTo && (!fileExists || fileExists(normalizePath(mapsTo.fileName)) ? mapsTo : undefined);
+    }
+
+    export function getMappedDocumentSpan(documentSpan: DocumentSpan, sourceMapper: SourceMapper, fileExists?: (path: string) => boolean): DocumentSpan | undefined {
+        const { fileName, textSpan } = documentSpan;
+        const newPosition = getMappedLocation({ fileName, pos: textSpan.start }, sourceMapper, fileExists);
+        if (!newPosition) return undefined;
+        const newEndPosition = getMappedLocation({ fileName, pos: textSpan.start + textSpan.length }, sourceMapper, fileExists);
+        const newLength = newEndPosition
+            ? newEndPosition.pos - newPosition.pos
+            : textSpan.length; // This shouldn't happen
+        return {
+            fileName: newPosition.fileName,
+            textSpan: {
+                start: newPosition.pos,
+                length: newLength,
+            },
+            originalFileName: documentSpan.fileName,
+            originalTextSpan: documentSpan.textSpan,
+            contextSpan: getMappedContextSpan(documentSpan, sourceMapper, fileExists),
+            originalContextSpan: documentSpan.contextSpan
+        };
+    }
+
+    export function getMappedContextSpan(documentSpan: DocumentSpan, sourceMapper: SourceMapper, fileExists?: (path: string) => boolean): TextSpan | undefined {
+        const contextSpanStart = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start },
+            sourceMapper,
+            fileExists
+        );
+        const contextSpanEnd = documentSpan.contextSpan && getMappedLocation(
+            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start + documentSpan.contextSpan.length },
+            sourceMapper,
+            fileExists
+        );
+        return contextSpanStart && contextSpanEnd ?
+            { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos } :
+            undefined;
     }
 
     // #endregion
@@ -2229,9 +2349,9 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.linkText);
     }
 
-    export function linkNamePart(name: EntityName | JSDocMemberName, target: Declaration): JSDocLinkDisplayPart {
+    export function linkNamePart(text: string, target: Declaration): JSDocLinkDisplayPart {
         return {
-            text: getTextOfNode(name),
+            text,
             kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
             target: {
                 fileName: getSourceFileOfNode(target).fileName,
@@ -2250,21 +2370,49 @@ namespace ts {
             : "linkplain";
         const parts = [linkPart(`{@${prefix} `)];
         if (!link.name) {
-            if (link.text) parts.push(linkTextPart(link.text));
+            if (link.text) {
+                parts.push(linkTextPart(link.text));
+            }
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
+            const suffix = findLinkNameEnd(link.text);
+            const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
+            const text = skipSeparatorFromLinkText(link.text.slice(suffix));
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
-                parts.push(linkNamePart(link.name, decl));
-                if (link.text) parts.push(linkTextPart(link.text));
+                parts.push(linkNamePart(name, decl));
+                if (text) parts.push(linkTextPart(text));
             }
             else {
-                parts.push(linkTextPart(getTextOfNode(link.name) + " " + link.text));
+                parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + text));
             }
         }
         parts.push(linkPart("}"));
         return parts;
+    }
+
+    function skipSeparatorFromLinkText(text: string) {
+        let pos = 0;
+        if (text.charCodeAt(pos++) === CharacterCodes.bar) {
+            while (pos < text.length && text.charCodeAt(pos) === CharacterCodes.space) pos++;
+            return text.slice(pos);
+        }
+        return text;
+    }
+
+    function findLinkNameEnd(text: string) {
+        if (text.indexOf("()") === 0) return 2;
+        if (text[0] !== "<") return 0;
+        let brackets = 0;
+        let i = 0;
+        while (i < text.length) {
+            if (text[i] === "<") brackets++;
+            if (text[i] === ">") brackets--;
+            i++;
+            if (!brackets) return i;
+        }
+        return 0;
     }
 
     const carriageReturnLineFeed = "\r\n";
@@ -2307,6 +2455,14 @@ namespace ts {
         flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
             typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
+        });
+    }
+
+    export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
+        const file = enclosingDeclaration.getSourceFile();
+        return mapToDisplayParts(writer => {
+            const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+            printer.writeNode(EmitHint.Unspecified, node, file, writer);
         });
     }
 
@@ -2366,7 +2522,7 @@ namespace ts {
      * and code fixes (because those are triggered by explicit user actions).
      */
     export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
-        const clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>);
+        const clone = node && getSynthesizedDeepCloneWorker(node);
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
         return clone;
     }
@@ -2501,7 +2657,7 @@ namespace ts {
             Debug.assert(fileName === renameFilename);
             for (const change of textChanges) {
                 const { span, newText } = change;
-                const index = indexInTextChange(newText, name);
+                const index = indexInTextChange(newText, escapeString(name));
                 if (index !== -1) {
                     lastPos = span.start + delta + index;
 
@@ -2648,7 +2804,7 @@ namespace ts {
         return typeIsAccessible ? res : undefined;
     }
 
-    export function syntaxRequiresTrailingCommaOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingCommaOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.CallSignature
             || kind === SyntaxKind.ConstructSignature
             || kind === SyntaxKind.IndexSignature
@@ -2656,7 +2812,7 @@ namespace ts {
             || kind === SyntaxKind.MethodSignature;
     }
 
-    export function syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.FunctionDeclaration
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.MethodDeclaration
@@ -2664,7 +2820,7 @@ namespace ts {
             || kind === SyntaxKind.SetAccessor;
     }
 
-    export function syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.ModuleDeclaration;
     }
 
@@ -2753,13 +2909,29 @@ namespace ts {
         forEachChild(sourceFile, function visit(node): boolean | undefined {
             if (syntaxRequiresTrailingSemicolonOrASI(node.kind)) {
                 const lastToken = node.getLastToken(sourceFile);
-                if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
+                if (lastToken?.kind === SyntaxKind.SemicolonToken) {
                     withSemicolon++;
                 }
                 else {
                     withoutSemicolon++;
                 }
             }
+            else if (syntaxRequiresTrailingCommaOrSemicolonOrASI(node.kind)) {
+                const lastToken = node.getLastToken(sourceFile);
+                if (lastToken?.kind === SyntaxKind.SemicolonToken) {
+                    withSemicolon++;
+                }
+                else if (lastToken && lastToken.kind !== SyntaxKind.CommaToken) {
+                    const lastTokenLine = getLineAndCharacterOfPosition(sourceFile, lastToken.getStart(sourceFile)).line;
+                    const nextTokenLine = getLineAndCharacterOfPosition(sourceFile, getSpanOfTokenAtPosition(sourceFile, lastToken.end).start).line;
+                    // Avoid counting missing semicolon in single-line objects:
+                    // `function f(p: { x: string /*no semicolon here is insignificant*/ }) {`
+                    if (lastTokenLine !== nextTokenLine) {
+                        withoutSemicolon++;
+                    }
+                }
+            }
+
             if (withSemicolon + withoutSemicolon >= nStatementsToObserve) {
                 return true;
             }
@@ -2767,7 +2939,7 @@ namespace ts {
             return forEachChild(node, visit);
         });
 
-        // One statement missing a semicolon isn’t sufficient evidence to say the user
+        // One statement missing a semicolon isn't sufficient evidence to say the user
         // doesn’t want semicolons, because they may not even be done writing that statement.
         if (withSemicolon === 0 && withoutSemicolon <= 1) {
             return true;
@@ -2832,15 +3004,15 @@ namespace ts {
         return packageJson;
     }
 
-    export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly PackageJsonInfo[] {
+    export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly ProjectPackageJsonInfo[] {
         if (!host.fileExists) {
             return [];
         }
 
-        const packageJsons: PackageJsonInfo[] = [];
+        const packageJsons: ProjectPackageJsonInfo[] = [];
         forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
             const packageJsonFileName = combinePaths(ancestor, "package.json");
-            if (host.fileExists!(packageJsonFileName)) {
+            if (host.fileExists(packageJsonFileName)) {
                 const info = createPackageJsonInfo(packageJsonFileName, host);
                 if (info) {
                     packageJsons.push(info);
@@ -2851,7 +3023,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): PackageJsonInfo | undefined {
+    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): ProjectPackageJsonInfo | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -2860,7 +3032,7 @@ namespace ts {
         const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
         const stringContent = host.readFile(fileName) || "";
         const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
-        const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
+        const info: Pick<ProjectPackageJsonInfo, typeof dependencyKeys[number]> = {};
         if (content) {
             for (const key of dependencyKeys) {
                 const dependencies = content[key];
@@ -2998,7 +3170,7 @@ namespace ts {
             }
             const specifier = moduleSpecifiers.getNodeModulesPackageName(
                 host.getCompilationSettings(),
-                fromFile.path,
+                fromFile,
                 importedFileName,
                 moduleSpecifierResolutionHost,
                 preferences,
@@ -3120,13 +3292,34 @@ namespace ts {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
 
-    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined) {
-        if (!(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default)) {
-            // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
-            return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget);
+    export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined): string | [lowercase: string, capitalized: string] {
+        if (needsNameFromDeclaration(symbol)) {
+            const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
+            if (fromDeclaration) return fromDeclaration;
+            const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ false);
+            const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ true);
+            if (fileNameCase === capitalized) return fileNameCase;
+            return [fileNameCase, capitalized];
         }
         return symbol.name;
+    }
+
+    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
+        if (needsNameFromDeclaration(symbol)) {
+            // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
+            return getDefaultLikeExportNameFromDeclaration(symbol)
+                || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
+        }
+        return symbol.name;
+
+    }
+
+    function needsNameFromDeclaration(symbol: Symbol) {
+        return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
+    }
+
+    function getDefaultLikeExportNameFromDeclaration(symbol: Symbol) {
+        return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined);
     }
 
     function getSymbolParentOrFail(symbol: Symbol) {
@@ -3199,6 +3392,33 @@ namespace ts {
             }
         });
         return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
+    }
+
+    export function getNewLineKind(newLineCharacter: string): NewLineKind {
+        return newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
+    }
+
+    export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+    export function diagnosticToString(diag: DiagnosticAndArguments): string {
+        return isArray(diag)
+            ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
+            : getLocaleSpecificMessage(diag);
+    }
+
+    /**
+     * Get format code settings for a code writing context (e.g. when formatting text changes or completions code).
+     */
+    export function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+        const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
+        const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
+        return {
+            ...options,
+            semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
+        };
+    }
+
+    export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
     }
 
     // #endregion

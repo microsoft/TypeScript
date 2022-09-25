@@ -1,0 +1,7 @@
+=== tests/cases/conformance/types/import/importWithTypeArguments.ts ===
+import<T>
+>T : Symbol(T)
+
+const a = import<string, number>
+>a : Symbol(a, Decl(importWithTypeArguments.ts, 1, 5))
+

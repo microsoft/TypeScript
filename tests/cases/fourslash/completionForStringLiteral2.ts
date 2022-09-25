@@ -15,11 +15,11 @@ const replacementSpan0 = test.ranges()[0]
 
 verify.completions(
     { marker: "1", exact: [
-        { name: "foo", replacementSpan: replacementSpan0 },
         { name: "bar", replacementSpan: replacementSpan0 },
+        { name: "foo", replacementSpan: replacementSpan0 },
         { name: "some other name", replacementSpan: replacementSpan0 }
     ] },
-    { marker: "2", exact: [ "foo", "bar", "some other name" ] },
+    { marker: "2", exact: [ "bar", "foo", "some other name" ] },
     { marker: "3", exact: {
         name: "a",
         replacementSpan: test.ranges()[1]

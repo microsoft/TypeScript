@@ -137,7 +137,8 @@ interface ReadonlyMap<K, V> {
 }
 
 interface MapConstructor {
-    new <K, V>(iterable: Iterable<readonly [K, V]>): Map<K, V>;
+    new(): Map<any, any>;
+    new <K, V>(iterable?: Iterable<readonly [K, V]> | null): Map<K, V>;
 }
 
 interface WeakMap<K extends object, V> { }

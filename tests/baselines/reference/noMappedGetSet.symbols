@@ -1,0 +1,9 @@
+=== tests/cases/compiler/noMappedGetSet.ts ===
+type OH_NO = {
+>OH_NO : Symbol(OH_NO, Decl(noMappedGetSet.ts, 0, 0))
+
+    get [K in WAT](): string
+>[K in WAT] : Symbol([K in WAT], Decl(noMappedGetSet.ts, 0, 14))
+
+};
+

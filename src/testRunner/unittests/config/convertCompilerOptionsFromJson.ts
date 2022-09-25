@@ -184,7 +184,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
+                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -414,6 +414,70 @@ namespace ts {
                         noImplicitAny: false,
                         sourceMap: false,
                         lib: []
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert empty string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [".ios", ""]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [".ios", ""]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert empty string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [""]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [""]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert trailing-whitespace string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: ["   "]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: ["   "]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert empty option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: []
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: []
                     },
                     errors: []
                 }

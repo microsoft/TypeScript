@@ -12,3 +12,4 @@ class C2 {
     static #x;
 >#x : Symbol(C2.#x, Decl(privateNameStaticFieldNoInitializer.ts, 4, 10))
 }
+

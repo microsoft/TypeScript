@@ -59,15 +59,19 @@ const testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
 
 const testAsyncGenerator: AsyncGenerator<any> = null as any;
 >testAsyncGenerator : Symbol(testAsyncGenerator, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 19, 5))
+>AsyncGenerator : Symbol(AsyncGenerator)
 
 const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
 >testAsyncGeneratorFunction : Symbol(testAsyncGeneratorFunction, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 20, 5))
+>AsyncGeneratorFunction : Symbol(AsyncGeneratorFunction)
 
 const testAsyncIterable: AsyncIterable<any> = null as any;
 >testAsyncIterable : Symbol(testAsyncIterable, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 21, 5))
+>AsyncIterable : Symbol(AsyncIterable)
 
 const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
 >testAsyncIterableIterator : Symbol(testAsyncIterableIterator, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 22, 5))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator)
 
 const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
 >testNumberFormatFormatToParts : Symbol(testNumberFormatFormatToParts, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 23, 5))

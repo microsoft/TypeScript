@@ -16,7 +16,7 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(20,27): err
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(21,35): error TS2583: Cannot find name 'AsyncGeneratorFunction'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(22,26): error TS2583: Cannot find name 'AsyncIterable'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(23,34): error TS2583: Cannot find name 'AsyncIterableIterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(24,70): error TS2550: Property 'formatToParts' does not exist on type 'NumberFormat'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(24,70): error TS2550: Property 'formatToParts' does not exist on type 'NumberFormat'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(27,26): error TS2550: Property 'flat' does not exist on type 'undefined[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(28,29): error TS2550: Property 'flatMap' does not exist on type 'undefined[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(29,49): error TS2550: Property 'fromEntries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2019' or later.
@@ -95,7 +95,7 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,33): err
 !!! error TS2583: Cannot find name 'AsyncIterableIterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
     const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
                                                                          ~~~~~~~~~~~~~
-!!! error TS2550: Property 'formatToParts' does not exist on type 'NumberFormat'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
+!!! error TS2550: Property 'formatToParts' does not exist on type 'NumberFormat'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
     
     // es2019
     const testArrayFlat = [].flat();

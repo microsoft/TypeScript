@@ -7,11 +7,11 @@ namespace ts.InlayHints {
         return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
     };
 
-    function shouldShowParameterNameHints(preferences: InlayHintsOptions) {
+    function shouldShowParameterNameHints(preferences: UserPreferences) {
         return preferences.includeInlayParameterNameHints === "literals" || preferences.includeInlayParameterNameHints === "all";
     }
 
-    function shouldShowLiteralParameterNameHintsOnly(preferences: InlayHintsOptions) {
+    function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
         return preferences.includeInlayParameterNameHints === "literals";
     }
 
@@ -47,7 +47,7 @@ namespace ts.InlayHints {
                 return;
             }
 
-            if (isTypeNode(node)) {
+            if (isTypeNode(node) && !isExpressionWithTypeArguments(node)) {
                 return;
             }
 
@@ -147,7 +147,7 @@ namespace ts.InlayHints {
         }
 
         function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-            if (!decl.initializer || isBindingPattern(decl.name)) {
+            if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
                 return;
             }
 
@@ -163,6 +163,10 @@ namespace ts.InlayHints {
 
             const typeDisplayString = printTypeInSingleLine(declarationType);
             if (typeDisplayString) {
+                const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false && equateStringsCaseInsensitive(decl.name.getText(), typeDisplayString);
+                if (isVariableNameMatchesType) {
+                    return;
+                }
                 addTypeHints(typeDisplayString, decl.name.end);
             }
         }
@@ -294,8 +298,11 @@ namespace ts.InlayHints {
 
             for (let i = 0; i < node.parameters.length && i < signature.parameters.length; ++i) {
                 const param = node.parameters[i];
-                const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
+                if (!isHintableDeclaration(param)) {
+                    continue;
+                }
 
+                const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
                 if (effectiveTypeAnnotation) {
                     continue;
                 }
@@ -305,7 +312,7 @@ namespace ts.InlayHints {
                     continue;
                 }
 
-                addTypeHints(typeDisplayString, param.end);
+                addTypeHints(typeDisplayString, param.questionToken ? param.questionToken.end : param.name.end);
             }
         }
 
@@ -344,6 +351,14 @@ namespace ts.InlayHints {
 
         function isUndefined(name: __String) {
             return name === "undefined";
+        }
+
+        function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
+            if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
+                const initializer = skipParentheses(node.initializer);
+                return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
+            }
+            return true;
         }
     }
 }

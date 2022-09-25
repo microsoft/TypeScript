@@ -10,7 +10,7 @@ type InferFromMapped<T> = T extends Mapped<infer R> ? R : never;
 // Object literal type and associated mapped type
 // Note that in the real code we don't have a direct reference to LiteralType
 type LiteralType = {
->LiteralType : LiteralType
+>LiteralType : { first: "first"; second: "second"; }
 
 	first: "first";
 >first : "first"
@@ -19,7 +19,7 @@ type LiteralType = {
 >second : "second"
 }
 type MappedLiteralType = {
->MappedLiteralType : MappedLiteralType
+>MappedLiteralType : { first: {    name: "first";}; second: {    name: "second";}; }
 
 	first: { name: "first" },
 >first : { name: "first"; }

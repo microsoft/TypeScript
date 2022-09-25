@@ -14,10 +14,10 @@ interface D { x: 3; }
 >x : 3
 
 type AB = A | B;
->AB : AB
+>AB : A | B
 
 type CD = C | D;
->CD : CD
+>CD : C | D
 
 declare let x: AB, y: CD;
 >x : AB

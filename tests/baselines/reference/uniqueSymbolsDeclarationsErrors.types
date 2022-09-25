@@ -76,7 +76,7 @@ export interface InterfaceWithPrivateNamedMethods {
 }
 
 export type TypeLiteralWithPrivateNamedProperties = {
->TypeLiteralWithPrivateNamedProperties : TypeLiteralWithPrivateNamedProperties
+>TypeLiteralWithPrivateNamedProperties : { [s]: any; }
 
     [s]: any;
 >[s] : any
@@ -84,7 +84,7 @@ export type TypeLiteralWithPrivateNamedProperties = {
 }
 
 export type TypeLiteralWithPrivateNamedMethods = {
->TypeLiteralWithPrivateNamedMethods : TypeLiteralWithPrivateNamedMethods
+>TypeLiteralWithPrivateNamedMethods : { [s](): any; }
 
     [s](): any;
 >[s] : () => any

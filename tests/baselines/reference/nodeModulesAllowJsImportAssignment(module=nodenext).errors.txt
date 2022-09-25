@@ -1,0 +1,49 @@
+tests/cases/conformance/node/allowJs/file.js(4,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/file.js(6,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.js(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.js(4,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/subfolder/index.js(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/subfolder/index.js(4,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+
+
+==== tests/cases/conformance/node/allowJs/subfolder/index.js (2 errors) ====
+    // cjs format file
+    import fs = require("fs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
+    fs.readFile;
+    export import fs2 = require("fs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
+==== tests/cases/conformance/node/allowJs/index.js (2 errors) ====
+    // esm format file
+    import fs = require("fs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
+    fs.readFile;
+    export import fs2 = require("fs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
+==== tests/cases/conformance/node/allowJs/file.js (2 errors) ====
+    // esm format file
+    const __require = null;
+    const _createRequire = null;
+    import fs = require("fs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
+    fs.readFile;
+    export import fs2 = require("fs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
+==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module"
+    }
+==== tests/cases/conformance/node/allowJs/subfolder/package.json (0 errors) ====
+    {
+        "type": "commonjs"
+    }
+==== tests/cases/conformance/node/allowJs/types.d.ts (0 errors) ====
+    declare module "fs";

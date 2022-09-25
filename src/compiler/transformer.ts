@@ -3,11 +3,15 @@ namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
+            case ModuleKind.ES2022:
             case ModuleKind.ES2020:
             case ModuleKind.ES2015:
                 return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
+            case ModuleKind.Node16:
+            case ModuleKind.NodeNext:
+                return transformNodeModule;
             default:
                 return transformModule;
         }
@@ -44,6 +48,7 @@ namespace ts {
         addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
         transformers.push(transformTypeScript);
+        transformers.push(transformLegacyDecorators);
         transformers.push(transformClassFields);
 
         if (getJSXTransformEnabled(compilerOptions)) {
@@ -562,7 +567,7 @@ namespace ts {
     }
 
     export const nullTransformationContext: TransformationContext = {
-        factory,
+        factory: factory, // eslint-disable-line object-shorthand
         getCompilerOptions: () => ({}),
         getEmitResolver: notImplemented,
         getEmitHost: notImplemented,

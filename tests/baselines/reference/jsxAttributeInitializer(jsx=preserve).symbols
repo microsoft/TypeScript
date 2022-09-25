@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsx/a.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(a.tsx, 0, 11))
+
+<div>
+    <div attr=<div /> />
+>attr : Symbol(attr, Decl(a.tsx, 3, 8))
+
+    <div attr=<div>foo</div> />
+>attr : Symbol(attr, Decl(a.tsx, 4, 8))
+
+    <div attr=<><div>foo</div></> />
+>attr : Symbol(attr, Decl(a.tsx, 5, 8))
+
+    <div attr= />
+>attr : Symbol(attr, Decl(a.tsx, 6, 8))
+
+</div>
+

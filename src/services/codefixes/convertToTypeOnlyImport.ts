@@ -4,7 +4,7 @@ namespace ts.codefix {
     const fixId = "convertToTypeOnlyImport";
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToConvertToTypeOnlyImport(context) {
             const changes = textChanges.ChangeTracker.with(context, t => {
                 const importDeclaration = getImportDeclarationForDiagnosticSpan(context.span, context.sourceFile);
                 fixSingleImportDeclaration(t, importDeclaration, context);
@@ -14,7 +14,7 @@ namespace ts.codefix {
             }
         },
         fixIds: [fixId],
-        getAllCodeActions: context => {
+        getAllCodeActions: function getAllCodeActionsToConvertToTypeOnlyImport(context) {
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const importDeclaration = getImportDeclarationForDiagnosticSpan(diag, context.sourceFile);
                 fixSingleImportDeclaration(changes, importDeclaration, context);
@@ -40,7 +40,6 @@ namespace ts.codefix {
             changes.deleteNodeRangeExcludingEnd(context.sourceFile, importClause.name, importDeclaration.importClause.namedBindings);
             changes.insertNodeBefore(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
                 importDeclaration,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 factory.createImportClause(
                     /*isTypeOnly*/ true,

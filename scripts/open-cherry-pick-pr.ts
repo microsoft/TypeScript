@@ -3,9 +3,9 @@
 /// <reference types="node" />
 
 import { Octokit } from "@octokit/rest";
-const {runSequence} = require("./run-sequence");
-import fs = require("fs");
-import path = require("path");
+import { runSequence } from "./run-sequence";
+import * as fs from "fs";
+import * as path from "path";
 
 const userName = process.env.GH_USERNAME;
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "RyanCavanaugh"];
@@ -33,9 +33,9 @@ async function main() {
 
     const inputPR = (await gh.pulls.get({ pull_number: +process.env.SOURCE_ISSUE, owner: "microsoft", repo: "TypeScript" })).data;
     let remoteName = "origin";
-    if (inputPR.base.repo.git_url !== `git:github.com/microsoft/TypeScript`) {
+    if (inputPR.base.repo.git_url !== `git:github.com/microsoft/TypeScript` && inputPR.base.repo.git_url !== `git://github.com/microsoft/TypeScript`) {
         runSequence([
-            ["git", ["remote", "add", "nonlocal", inputPR.base.repo.git_url]]
+            ["git", ["remote", "add", "nonlocal", inputPR.base.repo.git_url.replace(/^git:(?:\/\/)?/, "https://")]]
         ]);
         remoteName = "nonlocal";
     }

@@ -36,7 +36,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         fixIds: [fixIdAddReturnStatement, fixRemoveBracesFromArrowFunctionBody, fixIdWrapTheBlockWithParen],
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToCorrectReturnValue(context) {
             const { program, sourceFile, span: { start }, errorCode } = context;
             const info = getInfo(program.getTypeChecker(), sourceFile, start, errorCode);
             if (!info) return undefined;

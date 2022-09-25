@@ -13,7 +13,10 @@ module TypeScript {
         walk(ast: AST, parent: AST): AST;
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >ast : Symbol(ast, Decl(parserRealSource12.ts, 7, 13))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 7, 22))
+>AST : Symbol(AST)
+>AST : Symbol(AST)
 
         options: AstWalkOptions;
 >options : Symbol(IAstWalker.options, Decl(parserRealSource12.ts, 7, 41))
@@ -58,9 +61,12 @@ module TypeScript {
 
         (ast: AST, parent: AST, walker: IAstWalker): AST;
 >ast : Symbol(ast, Decl(parserRealSource12.ts, 24, 9))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 24, 18))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 24, 31))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
+>AST : Symbol(AST)
     }
 
     export interface IAstWalkChildren {
@@ -68,7 +74,9 @@ module TypeScript {
 
         (preAst: AST, parent: AST, walker: IAstWalker): void;
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 28, 9))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 28, 21))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 28, 34))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
     }
@@ -101,7 +109,10 @@ module TypeScript {
         public walk(ast: AST, parent: AST): AST {
 >walk : Symbol(AstWalker.walk, Decl(parserRealSource12.ts, 38, 9))
 >ast : Symbol(ast, Decl(parserRealSource12.ts, 40, 20))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 40, 29))
+>AST : Symbol(AST)
+>AST : Symbol(AST)
 
             var preAst = this.pre(ast, parent, this);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 41, 15))
@@ -218,6 +229,7 @@ module TypeScript {
         public walk(ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): AST {
 >walk : Symbol(AstWalkerFactory.walk, Decl(parserRealSource12.ts, 74, 9))
 >ast : Symbol(ast, Decl(parserRealSource12.ts, 76, 20))
+>AST : Symbol(AST)
 >pre : Symbol(pre, Decl(parserRealSource12.ts, 76, 29))
 >IAstWalkCallback : Symbol(IAstWalkCallback, Decl(parserRealSource12.ts, 21, 5))
 >post : Symbol(post, Decl(parserRealSource12.ts, 76, 52))
@@ -225,6 +237,7 @@ module TypeScript {
 >options : Symbol(options, Decl(parserRealSource12.ts, 76, 77))
 >AstWalkOptions : Symbol(AstWalkOptions, Decl(parserRealSource12.ts, 10, 5))
 >state : Symbol(state, Decl(parserRealSource12.ts, 76, 103))
+>AST : Symbol(AST)
 
             return this.getWalker(pre, post, options, state).walk(ast, null)
 >this.getWalker(pre, post, options, state).walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1192,7 +1205,9 @@ module TypeScript {
         export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
 >walkNone : Symbol(walkNone, Decl(parserRealSource12.ts, 219, 28))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 220, 33))
+>ASTList : Symbol(ASTList)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 220, 49))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 220, 62))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1202,7 +1217,9 @@ module TypeScript {
         export function walkListChildren(preAst: ASTList, parent: AST, walker: IAstWalker): void {
 >walkListChildren : Symbol(walkListChildren, Decl(parserRealSource12.ts, 222, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 224, 41))
+>ASTList : Symbol(ASTList)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 224, 57))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 224, 70))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1273,7 +1290,9 @@ module TypeScript {
         export function walkUnaryExpressionChildren(preAst: UnaryExpression, parent: AST, walker: IAstWalker): void {
 >walkUnaryExpressionChildren : Symbol(walkUnaryExpressionChildren, Decl(parserRealSource12.ts, 240, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 242, 52))
+>UnaryExpression : Symbol(UnaryExpression)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 242, 76))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 242, 89))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1304,7 +1323,9 @@ module TypeScript {
         export function walkBinaryExpressionChildren(preAst: BinaryExpression, parent: AST, walker: IAstWalker): void {
 >walkBinaryExpressionChildren : Symbol(walkBinaryExpressionChildren, Decl(parserRealSource12.ts, 249, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 251, 53))
+>BinaryExpression : Symbol(BinaryExpression)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 251, 78))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 251, 91))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1376,7 +1397,9 @@ module TypeScript {
         export function walkTypeReferenceChildren(preAst: TypeReference, parent: AST, walker: IAstWalker): void {
 >walkTypeReferenceChildren : Symbol(walkTypeReferenceChildren, Decl(parserRealSource12.ts, 267, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 269, 50))
+>TypeReference : Symbol(TypeReference)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 269, 72))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 269, 85))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1396,7 +1419,9 @@ module TypeScript {
         export function walkCallExpressionChildren(preAst: CallExpression, parent: AST, walker: IAstWalker): void {
 >walkCallExpressionChildren : Symbol(walkCallExpressionChildren, Decl(parserRealSource12.ts, 273, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>CallExpression : Symbol(CallExpression)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 275, 74))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1425,6 +1450,7 @@ module TypeScript {
 
                 preAst.arguments = <ASTList> walker.walk(preAst.arguments, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 275, 51))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 275, 87))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1456,7 +1482,9 @@ module TypeScript {
         export function walkTrinaryExpressionChildren(preAst: ConditionalExpression, parent: AST, walker: IAstWalker): void {
 >walkTrinaryExpressionChildren : Symbol(walkTrinaryExpressionChildren, Decl(parserRealSource12.ts, 285, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 287, 54))
+>ConditionalExpression : Symbol(ConditionalExpression)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 287, 84))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 287, 97))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1508,7 +1536,9 @@ module TypeScript {
         export function walkFuncDeclChildren(preAst: FuncDecl, parent: AST, walker: IAstWalker): void {
 >walkFuncDeclChildren : Symbol(walkFuncDeclChildren, Decl(parserRealSource12.ts, 297, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>FuncDecl : Symbol(FuncDecl)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 299, 62))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1517,6 +1547,7 @@ module TypeScript {
 
                 preAst.name = <Identifier>walker.walk(preAst.name, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>Identifier : Symbol(Identifier)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1534,6 +1565,7 @@ module TypeScript {
 
                 preAst.arguments = <ASTList>walker.walk(preAst.arguments, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1567,6 +1599,7 @@ module TypeScript {
 
                 preAst.bod = <ASTList>walker.walk(preAst.bod, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 299, 45))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 299, 75))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1578,7 +1611,9 @@ module TypeScript {
         export function walkBoundDeclChildren(preAst: BoundDecl, parent: AST, walker: IAstWalker): void {
 >walkBoundDeclChildren : Symbol(walkBoundDeclChildren, Decl(parserRealSource12.ts, 312, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>BoundDecl : Symbol(BoundDecl)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 314, 64))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1587,6 +1622,7 @@ module TypeScript {
 
                 preAst.id = <Identifier>walker.walk(preAst.id, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 314, 46))
+>Identifier : Symbol(Identifier)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 314, 77))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1625,7 +1661,9 @@ module TypeScript {
         export function walkReturnStatementChildren(preAst: ReturnStatement, parent: AST, walker: IAstWalker): void {
 >walkReturnStatementChildren : Symbol(walkReturnStatementChildren, Decl(parserRealSource12.ts, 324, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 326, 52))
+>ReturnStatement : Symbol(ReturnStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 326, 76))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 326, 89))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1645,7 +1683,9 @@ module TypeScript {
         export function walkForStatementChildren(preAst: ForStatement, parent: AST, walker: IAstWalker): void {
 >walkForStatementChildren : Symbol(walkForStatementChildren, Decl(parserRealSource12.ts, 330, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 332, 49))
+>ForStatement : Symbol(ForStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 332, 70))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 332, 83))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1716,7 +1756,9 @@ module TypeScript {
         export function walkForInStatementChildren(preAst: ForInStatement, parent: AST, walker: IAstWalker): void {
 >walkForInStatementChildren : Symbol(walkForInStatementChildren, Decl(parserRealSource12.ts, 348, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 350, 51))
+>ForInStatement : Symbol(ForInStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 350, 74))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 350, 87))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1764,7 +1806,9 @@ module TypeScript {
         export function walkIfStatementChildren(preAst: IfStatement, parent: AST, walker: IAstWalker): void {
 >walkIfStatementChildren : Symbol(walkIfStatementChildren, Decl(parserRealSource12.ts, 358, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 360, 48))
+>IfStatement : Symbol(IfStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 360, 68))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 360, 81))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1813,7 +1857,9 @@ module TypeScript {
         export function walkWhileStatementChildren(preAst: WhileStatement, parent: AST, walker: IAstWalker): void {
 >walkWhileStatementChildren : Symbol(walkWhileStatementChildren, Decl(parserRealSource12.ts, 368, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 370, 51))
+>WhileStatement : Symbol(WhileStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 370, 74))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 370, 87))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1846,7 +1892,9 @@ module TypeScript {
         export function walkDoWhileStatementChildren(preAst: DoWhileStatement, parent: AST, walker: IAstWalker): void {
 >walkDoWhileStatementChildren : Symbol(walkDoWhileStatementChildren, Decl(parserRealSource12.ts, 375, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 377, 53))
+>DoWhileStatement : Symbol(DoWhileStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 377, 78))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 377, 91))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1879,7 +1927,9 @@ module TypeScript {
         export function walkBlockChildren(preAst: Block, parent: AST, walker: IAstWalker): void {
 >walkBlockChildren : Symbol(walkBlockChildren, Decl(parserRealSource12.ts, 382, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 384, 42))
+>Block : Symbol(Block)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 384, 56))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 384, 69))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1888,6 +1938,7 @@ module TypeScript {
 
                 preAst.statements = <ASTList>walker.walk(preAst.statements, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 384, 42))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 384, 69))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1899,7 +1950,9 @@ module TypeScript {
         export function walkCaseStatementChildren(preAst: CaseStatement, parent: AST, walker: IAstWalker): void {
 >walkCaseStatementChildren : Symbol(walkCaseStatementChildren, Decl(parserRealSource12.ts, 388, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+>CaseStatement : Symbol(CaseStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 390, 72))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 390, 85))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1925,6 +1978,7 @@ module TypeScript {
 
                 preAst.body = <ASTList>walker.walk(preAst.body, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 390, 50))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 390, 85))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1936,7 +1990,9 @@ module TypeScript {
         export function walkSwitchStatementChildren(preAst: SwitchStatement, parent: AST, walker: IAstWalker): void {
 >walkSwitchStatementChildren : Symbol(walkSwitchStatementChildren, Decl(parserRealSource12.ts, 398, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+>SwitchStatement : Symbol(SwitchStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 400, 76))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 400, 89))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1962,6 +2018,7 @@ module TypeScript {
 
                 preAst.caseList = <ASTList>walker.walk(preAst.caseList, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 400, 52))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 400, 89))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -1973,7 +2030,9 @@ module TypeScript {
         export function walkTryChildren(preAst: Try, parent: AST, walker: IAstWalker): void {
 >walkTryChildren : Symbol(walkTryChildren, Decl(parserRealSource12.ts, 408, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 410, 40))
+>Try : Symbol(Try)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 410, 52))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 410, 65))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -1993,7 +2052,9 @@ module TypeScript {
         export function walkTryCatchChildren(preAst: TryCatch, parent: AST, walker: IAstWalker): void {
 >walkTryCatchChildren : Symbol(walkTryCatchChildren, Decl(parserRealSource12.ts, 414, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>TryCatch : Symbol(TryCatch)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 416, 62))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 416, 75))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2002,6 +2063,7 @@ module TypeScript {
 
                 preAst.tryNode = <Try>walker.walk(preAst.tryNode, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>Try : Symbol(Try)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 416, 75))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2019,6 +2081,7 @@ module TypeScript {
 
                 preAst.catchNode = <Catch>walker.walk(preAst.catchNode, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 416, 45))
+>Catch : Symbol(Catch)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 416, 75))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2030,7 +2093,9 @@ module TypeScript {
         export function walkTryFinallyChildren(preAst: TryFinally, parent: AST, walker: IAstWalker): void {
 >walkTryFinallyChildren : Symbol(walkTryFinallyChildren, Decl(parserRealSource12.ts, 424, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+>TryFinally : Symbol(TryFinally)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 426, 66))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 426, 79))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2056,6 +2121,7 @@ module TypeScript {
 
                 preAst.finallyNode = <Finally>walker.walk(preAst.finallyNode, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 426, 47))
+>Finally : Symbol(Finally)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 426, 79))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2067,7 +2133,9 @@ module TypeScript {
         export function walkFinallyChildren(preAst: Finally, parent: AST, walker: IAstWalker): void {
 >walkFinallyChildren : Symbol(walkFinallyChildren, Decl(parserRealSource12.ts, 434, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 436, 44))
+>Finally : Symbol(Finally)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 436, 60))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 436, 73))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2087,7 +2155,9 @@ module TypeScript {
         export function walkCatchChildren(preAst: Catch, parent: AST, walker: IAstWalker): void {
 >walkCatchChildren : Symbol(walkCatchChildren, Decl(parserRealSource12.ts, 440, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+>Catch : Symbol(Catch)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 442, 56))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 442, 69))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2096,6 +2166,7 @@ module TypeScript {
 
                 preAst.param = <VarDecl>walker.walk(preAst.param, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 442, 42))
+>VarDecl : Symbol(VarDecl)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 442, 69))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2124,12 +2195,15 @@ module TypeScript {
         export function walkRecordChildren(preAst: NamedDeclaration, parent: AST, walker: IAstWalker): void {
 >walkRecordChildren : Symbol(walkRecordChildren, Decl(parserRealSource12.ts, 450, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+>NamedDeclaration : Symbol(NamedDeclaration)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 452, 68))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 452, 81))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
             preAst.name = <Identifier>walker.walk(preAst.name, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+>Identifier : Symbol(Identifier)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 452, 81))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2146,6 +2220,7 @@ module TypeScript {
 
                 preAst.members = <ASTList>walker.walk(preAst.members, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 452, 43))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 452, 81))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2158,7 +2233,9 @@ module TypeScript {
         export function walkNamedTypeChildren(preAst: TypeDeclaration, parent: AST, walker: IAstWalker): void {
 >walkNamedTypeChildren : Symbol(walkNamedTypeChildren, Decl(parserRealSource12.ts, 458, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 460, 46))
+>TypeDeclaration : Symbol(TypeDeclaration)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 460, 70))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 460, 83))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2172,7 +2249,9 @@ module TypeScript {
         export function walkClassDeclChildren(preAst: ClassDeclaration, parent: AST, walker: IAstWalker): void {
 >walkClassDeclChildren : Symbol(walkClassDeclChildren, Decl(parserRealSource12.ts, 462, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>ClassDeclaration : Symbol(ClassDeclaration)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 464, 71))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2192,6 +2271,7 @@ module TypeScript {
 
                 preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2209,6 +2289,7 @@ module TypeScript {
 
                 preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 464, 46))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 464, 84))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2220,7 +2301,9 @@ module TypeScript {
         export function walkScriptChildren(preAst: Script, parent: AST, walker: IAstWalker): void {
 >walkScriptChildren : Symbol(walkScriptChildren, Decl(parserRealSource12.ts, 474, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 476, 43))
+>Script : Symbol(Script)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 476, 58))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 476, 71))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2229,6 +2312,7 @@ module TypeScript {
 
                 preAst.bod = <ASTList>walker.walk(preAst.bod, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 476, 43))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 476, 71))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2240,7 +2324,9 @@ module TypeScript {
         export function walkTypeDeclChildren(preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker): void {
 >walkTypeDeclChildren : Symbol(walkTypeDeclChildren, Decl(parserRealSource12.ts, 480, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>InterfaceDeclaration : Symbol(InterfaceDeclaration)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 482, 74))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2261,6 +2347,7 @@ module TypeScript {
 
                 preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2278,6 +2365,7 @@ module TypeScript {
 
                 preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 482, 45))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 482, 87))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2289,7 +2377,9 @@ module TypeScript {
         export function walkModuleDeclChildren(preAst: ModuleDeclaration, parent: AST, walker: IAstWalker): void {
 >walkModuleDeclChildren : Symbol(walkModuleDeclChildren, Decl(parserRealSource12.ts, 493, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 495, 47))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 495, 73))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 495, 86))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2303,7 +2393,9 @@ module TypeScript {
         export function walkImportDeclChildren(preAst: ImportDeclaration, parent: AST, walker: IAstWalker): void {
 >walkImportDeclChildren : Symbol(walkImportDeclChildren, Decl(parserRealSource12.ts, 497, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+>ImportDeclaration : Symbol(ImportDeclaration)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 499, 73))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 499, 86))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2312,6 +2404,7 @@ module TypeScript {
 
                 preAst.id = <Identifier>walker.walk(preAst.id, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 499, 47))
+>Identifier : Symbol(Identifier)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 499, 86))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
@@ -2334,7 +2427,9 @@ module TypeScript {
         export function walkWithStatementChildren(preAst: WithStatement, parent: AST, walker: IAstWalker): void {
 >walkWithStatementChildren : Symbol(walkWithStatementChildren, Decl(parserRealSource12.ts, 506, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 508, 50))
+>WithStatement : Symbol(WithStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 508, 72))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 508, 85))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2371,7 +2466,9 @@ module TypeScript {
         export function walkLabelChildren(preAst: Label, parent: AST, walker: IAstWalker): void {
 >walkLabelChildren : Symbol(walkLabelChildren, Decl(parserRealSource12.ts, 516, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 518, 42))
+>Label : Symbol(Label)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 518, 56))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 518, 69))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
@@ -2381,12 +2478,15 @@ module TypeScript {
         export function walkLabeledStatementChildren(preAst: LabeledStatement, parent: AST, walker: IAstWalker): void {
 >walkLabeledStatementChildren : Symbol(walkLabeledStatementChildren, Decl(parserRealSource12.ts, 520, 9))
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+>LabeledStatement : Symbol(LabeledStatement)
 >parent : Symbol(parent, Decl(parserRealSource12.ts, 522, 78))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 522, 91))
 >IAstWalker : Symbol(IAstWalker, Decl(parserRealSource12.ts, 5, 19))
 
             preAst.labels = <ASTList>walker.walk(preAst.labels, preAst);
 >preAst : Symbol(preAst, Decl(parserRealSource12.ts, 522, 53))
+>ASTList : Symbol(ASTList)
 >walker.walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))
 >walker : Symbol(walker, Decl(parserRealSource12.ts, 522, 91))
 >walk : Symbol(IAstWalker.walk, Decl(parserRealSource12.ts, 6, 33))

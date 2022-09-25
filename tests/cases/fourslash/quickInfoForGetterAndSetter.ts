@@ -17,7 +17,7 @@
 //// }
 
 goTo.marker("1");
-verify.quickInfoIs("(property) Test.value: any", "Getter text");
+verify.quickInfoIs("(getter) Test.value: any", "Getter text");
 
 goTo.marker("2");
-verify.quickInfoIs("(property) Test.value: any", "Setter text");
+verify.quickInfoIs("(setter) Test.value: any", "Setter text");

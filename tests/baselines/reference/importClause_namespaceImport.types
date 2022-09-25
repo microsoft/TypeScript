@@ -27,7 +27,7 @@ types.Value;
 >Value : {}
 
 let v: types.Value;
->v : any
+>v : types.Value
 >types : any
 
 const a: types.A = {};

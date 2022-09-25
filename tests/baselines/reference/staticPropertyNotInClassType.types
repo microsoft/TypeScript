@@ -89,7 +89,7 @@ module Generic {
 >b : U
 
         static foo: T; // not reflected in class type
->foo : any
+>foo : T
     }
 
     module C {

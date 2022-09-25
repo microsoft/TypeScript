@@ -1,0 +1,244 @@
+// === /tests/cases/fourslash/foo.ts ===
+// export function /*FIND ALL REFS*/[|bar|]() { return "bar"; }
+// import('./foo').then(({ [|bar|] }) => undefined);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/foo.ts",
+      "kind": "function",
+      "name": "function bar(): string",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 39
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/foo.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 39
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/foo.ts",
+        "contextSpan": {
+          "start": 62,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/foo.ts ===
+// export function [|bar|]() { return "bar"; }
+// import('./foo').then(({ /*FIND ALL REFS*/[|bar|] }) => undefined);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/foo.ts",
+      "kind": "function",
+      "name": "function bar(): string",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 39
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/foo.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 39
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/foo.ts",
+      "kind": "parameter",
+      "name": "(parameter) bar: () => string",
+      "textSpan": {
+        "start": 64,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 62,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/foo.ts",
+        "contextSpan": {
+          "start": 62,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  }
+]

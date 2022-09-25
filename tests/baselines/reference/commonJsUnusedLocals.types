@@ -5,8 +5,8 @@ const x = 0;
 
 exports.y = 1;
 >exports.y = 1 : 1
->exports.y : number
+>exports.y : 1
 >exports : typeof import("/a")
->y : number
+>y : 1
 >1 : 1
 

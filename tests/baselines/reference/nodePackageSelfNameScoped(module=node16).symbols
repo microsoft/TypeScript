@@ -1,0 +1,24 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import * as self from "@scope/package";
+>self : Symbol(self, Decl(index.ts, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.ts, 1, 6))
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+import * as self from "@scope/package";
+>self : Symbol(self, Decl(index.mts, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.mts, 1, 6))
+
+=== tests/cases/conformance/node/index.cts ===
+// cjs format file
+import * as self from "@scope/package";
+>self : Symbol(self, Decl(index.cts, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.cts, 1, 6))
+

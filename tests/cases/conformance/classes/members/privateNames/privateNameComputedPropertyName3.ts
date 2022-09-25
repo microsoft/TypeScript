@@ -1,4 +1,4 @@
-// @target: esnext, es2015
+// @target: esnext, es2022, es2015
 
 class Foo {
     #name;

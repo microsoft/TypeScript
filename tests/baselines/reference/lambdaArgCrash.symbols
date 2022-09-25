@@ -44,6 +44,7 @@ class ItemSetEvent extends Event {
 >add : Symbol(ItemSetEvent.add, Decl(lambdaArgCrash.ts, 24, 34))
 >listener : Symbol(listener, Decl(lambdaArgCrash.ts, 26, 6))
 >items : Symbol(items, Decl(lambdaArgCrash.ts, 26, 17))
+>ItemSet : Symbol(ItemSet)
 
 	 	super.add(listener);
 >super.add : Symbol(Event.add, Decl(lambdaArgCrash.ts, 10, 2))

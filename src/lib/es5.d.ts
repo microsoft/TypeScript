@@ -52,13 +52,13 @@ declare function decodeURIComponent(encodedURIComponent: string): string;
 
 /**
  * Encodes a text string as a valid Uniform Resource Identifier (URI)
- * @param uri A value representing an encoded URI.
+ * @param uri A value representing an unencoded URI.
  */
 declare function encodeURI(uri: string): string;
 
 /**
  * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
- * @param uriComponent A value representing an encoded URI component.
+ * @param uriComponent A value representing an unencoded URI component.
  */
 declare function encodeURIComponent(uriComponent: string | number | boolean): string;
 
@@ -96,7 +96,7 @@ interface PropertyDescriptor {
 }
 
 interface PropertyDescriptorMap {
-    [s: string]: PropertyDescriptor;
+    [key: PropertyKey]: PropertyDescriptor;
 }
 
 interface Object {
@@ -196,15 +196,15 @@ interface ObjectConstructor {
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
-     * @param o Object on which to lock the attributes.
+     * @param f Object on which to lock the attributes.
      */
-    freeze<T>(a: T[]): readonly T[];
+    freeze<T extends Function>(f: T): T;
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
      * @param o Object on which to lock the attributes.
      */
-    freeze<T extends Function>(f: T): T;
+    freeze<T extends {[idx: string]: U | null | undefined | object}, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
@@ -300,7 +300,7 @@ declare var Function: FunctionConstructor;
 /**
  * Extracts the type of the 'this' parameter of a function type, or 'unknown' if the function type has no 'this' parameter.
  */
-type ThisParameterType<T> = T extends (this: infer U, ...args: any[]) => any ? U : unknown;
+type ThisParameterType<T> = T extends (this: infer U, ...args: never) => any ? U : unknown;
 
 /**
  * Removes the 'this' parameter from a function type.
@@ -882,7 +882,17 @@ interface Date {
 interface DateConstructor {
     new(): Date;
     new(value: number | string): Date;
-    new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
+    /**
+     * Creates a new Date.
+     * @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
+     * @param monthIndex The month as a number between 0 and 11 (January to December).
+     * @param date The date as a number between 1 and 31.
+     * @param hours Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
+     * @param minutes Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
+     * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
+     * @param ms A number from 0 to 999 that specifies the milliseconds.
+     */
+    new(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
     (): string;
     readonly prototype: Date;
     /**
@@ -893,27 +903,47 @@ interface DateConstructor {
     /**
      * Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
      * @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
-     * @param month The month as a number between 0 and 11 (January to December).
+     * @param monthIndex The month as a number between 0 and 11 (January to December).
      * @param date The date as a number between 1 and 31.
      * @param hours Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
      * @param minutes Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
      * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
-    UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+    UTC(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
     now(): number;
 }
 
 declare var Date: DateConstructor;
 
 interface RegExpMatchArray extends Array<string> {
+    /**
+     * The index of the search at which the result was found.
+     */
     index?: number;
+    /**
+     * A copy of the search string.
+     */
     input?: string;
+    /**
+     * The first match. This will always be present because `null` will be returned if there are no matches.
+     */
+    0: string;
 }
 
 interface RegExpExecArray extends Array<string> {
+    /**
+     * The index of the search at which the result was found.
+     */
     index: number;
+    /**
+     * A copy of the search string.
+     */
     input: string;
+    /**
+     * The first match. This will always be present because `null` will be returned if there are no matches.
+     */
+    0: string;
 }
 
 interface RegExp {
@@ -945,7 +975,7 @@ interface RegExp {
 
     // Non-standard extensions
     /** @deprecated A legacy feature for browser compatibility */
-    compile(): this;
+    compile(pattern: string, flags?: string): this;
 }
 
 interface RegExpConstructor {
@@ -1494,8 +1524,8 @@ interface Promise<T> {
  */
 type Awaited<T> =
     T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
-        T extends object & { then(onfulfilled: infer F): any } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
-            F extends ((value: infer V) => any) ? // if the argument to `then` is callable, extracts the argument
+        T extends object & { then(onfulfilled: infer F, ...args: infer _): any } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
+            F extends ((value: infer V, ...args: infer _) => any) ? // if the argument to `then` is callable, extracts the first argument
                 Awaited<V> : // recursively unwrap the value
                 never : // the argument to `then` was not callable
         T; // non-object or non-thenable
@@ -1558,7 +1588,7 @@ type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 /**
  * Exclude null and undefined from T
  */
-type NonNullable<T> = T extends null | undefined ? never : T;
+type NonNullable<T> = T & {};
 
 /**
  * Obtain the parameters of a function type in a tuple
@@ -1663,6 +1693,7 @@ interface DataView {
      * Gets the Float32 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getFloat32(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1670,6 +1701,7 @@ interface DataView {
      * Gets the Float64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getFloat64(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1684,12 +1716,14 @@ interface DataView {
      * Gets the Int16 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getInt16(byteOffset: number, littleEndian?: boolean): number;
     /**
      * Gets the Int32 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getInt32(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1704,6 +1738,7 @@ interface DataView {
      * Gets the Uint16 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getUint16(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1711,6 +1746,7 @@ interface DataView {
      * Gets the Uint32 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getUint32(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1718,8 +1754,7 @@ interface DataView {
      * Stores an Float32 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setFloat32(byteOffset: number, value: number, littleEndian?: boolean): void;
 
@@ -1727,8 +1762,7 @@ interface DataView {
      * Stores an Float64 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setFloat64(byteOffset: number, value: number, littleEndian?: boolean): void;
 
@@ -1743,8 +1777,7 @@ interface DataView {
      * Stores an Int16 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setInt16(byteOffset: number, value: number, littleEndian?: boolean): void;
 
@@ -1752,8 +1785,7 @@ interface DataView {
      * Stores an Int32 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setInt32(byteOffset: number, value: number, littleEndian?: boolean): void;
 
@@ -1768,8 +1800,7 @@ interface DataView {
      * Stores an Uint16 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setUint16(byteOffset: number, value: number, littleEndian?: boolean): void;
 
@@ -1777,8 +1808,7 @@ interface DataView {
      * Stores an Uint32 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setUint32(byteOffset: number, value: number, littleEndian?: boolean): void;
 }
@@ -2006,7 +2036,7 @@ interface Int8Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -2288,7 +2318,7 @@ interface Uint8Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -2570,7 +2600,7 @@ interface Uint8ClampedArray {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -2850,7 +2880,7 @@ interface Int16Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -3133,7 +3163,7 @@ interface Uint16Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -3415,7 +3445,7 @@ interface Int32Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -3696,7 +3726,7 @@ interface Uint32Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -3978,7 +4008,7 @@ interface Float32Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -4261,7 +4291,7 @@ interface Float64Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -4355,7 +4385,6 @@ declare namespace Intl {
         localeMatcher?: string | undefined;
         style?: string | undefined;
         currency?: string | undefined;
-        currencyDisplay?: string | undefined;
         currencySign?: string | undefined;
         useGrouping?: boolean | undefined;
         minimumIntegerDigits?: number | undefined;
@@ -4370,7 +4399,6 @@ declare namespace Intl {
         numberingSystem: string;
         style: string;
         currency?: string;
-        currencyDisplay?: string;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
@@ -4387,6 +4415,7 @@ declare namespace Intl {
         new(locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
+        readonly prototype: NumberFormat;
     };
 
     interface DateTimeFormatOptions {
@@ -4399,7 +4428,7 @@ declare namespace Intl {
         hour?: "numeric" | "2-digit" | undefined;
         minute?: "numeric" | "2-digit" | undefined;
         second?: "numeric" | "2-digit" | undefined;
-        timeZoneName?: "long" | "short" | undefined;
+        timeZoneName?: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric" | undefined;
         formatMatcher?: "best fit" | "basic" | undefined;
         hour12?: boolean | undefined;
         timeZone?: string | undefined;
@@ -4430,6 +4459,7 @@ declare namespace Intl {
         new(locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
+        readonly prototype: DateTimeFormat;
     };
 }
 

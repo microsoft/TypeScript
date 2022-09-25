@@ -21,4 +21,5 @@ class E<T> {
 
     static [x: string]: T;
 >x : Symbol(x, Decl(staticIndexers.ts, 11, 12))
+>T : Symbol(T)
 }

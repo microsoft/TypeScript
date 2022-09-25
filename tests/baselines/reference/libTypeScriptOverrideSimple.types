@@ -1,4 +1,4 @@
-=== /node_modules/@typescript/dom/index.d.ts ===
+=== /node_modules/@typescript/lib-dom/index.d.ts ===
 interface ABC { abc: string }
 >abc : string
 

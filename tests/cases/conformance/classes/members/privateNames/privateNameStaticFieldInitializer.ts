@@ -1,4 +1,4 @@
-// @target: es2015, esnext
+// @target: es2015, es2022, esnext
 // @useDefineForClassFields: false
 
 class A {

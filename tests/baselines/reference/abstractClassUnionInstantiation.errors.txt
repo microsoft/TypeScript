@@ -1,0 +1,39 @@
+tests/cases/compiler/abstractClassUnionInstantiation.ts(14,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/compiler/abstractClassUnionInstantiation.ts(15,1): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/compiler/abstractClassUnionInstantiation.ts(18,46): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/compiler/abstractClassUnionInstantiation.ts(19,46): error TS2511: Cannot create an instance of an abstract class.
+tests/cases/compiler/abstractClassUnionInstantiation.ts(21,35): error TS2511: Cannot create an instance of an abstract class.
+
+
+==== tests/cases/compiler/abstractClassUnionInstantiation.ts (5 errors) ====
+    class ConcreteA {}
+    class ConcreteB {}
+    abstract class AbstractA { a: string; }
+    abstract class AbstractB { b: string; }
+    
+    type Abstracts = typeof AbstractA | typeof AbstractB;
+    type Concretes = typeof ConcreteA | typeof ConcreteB;
+    type ConcretesOrAbstracts = Concretes | Abstracts;
+    
+    declare const cls1: ConcretesOrAbstracts;
+    declare const cls2: Abstracts;
+    declare const cls3: Concretes;
+    
+    new cls1(); // should error
+    ~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new cls2(); // should error
+    ~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    new cls3(); // should work
+    
+    [ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error
+                                                 ~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    [AbstractA, AbstractB, ConcreteA].map(cls => new cls()); // should error
+                                                 ~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    [ConcreteA, ConcreteB].map(cls => new cls()); // should work
+    [AbstractA, AbstractB].map(cls => new cls()); // should error
+                                      ~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.

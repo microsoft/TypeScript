@@ -546,7 +546,7 @@ namespace ts.NavigationBar {
 
                 if (ctorFunction !== undefined) {
                     const ctorNode = setTextRange(
-                        factory.createConstructorDeclaration(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
+                        factory.createConstructorDeclaration(/* modifiers */ undefined, [], /* body */ undefined),
                         ctorFunction);
                     const ctor = emptyNavigationBarNode(ctorNode);
                     ctor.indent = a.indent + 1;
@@ -564,7 +564,6 @@ namespace ts.NavigationBar {
                 }
 
                 lastANode = a.node = setTextRange(factory.createClassDeclaration(
-                    /* decorators */ undefined,
                     /* modifiers */ undefined,
                     a.name as Identifier || factory.createIdentifier("__class__"),
                     /* typeParameters */ undefined,
@@ -592,7 +591,6 @@ namespace ts.NavigationBar {
             else {
                 if (!a.additionalNodes) a.additionalNodes = [];
                 a.additionalNodes.push(setTextRange(factory.createClassDeclaration(
-                    /* decorators */ undefined,
                     /* modifiers */ undefined,
                     a.name as Identifier || factory.createIdentifier("__class__"),
                     /* typeParameters */ undefined,
@@ -650,7 +648,10 @@ namespace ts.NavigationBar {
     // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
     // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
     function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
-        return a.body!.kind === b.body!.kind && (a.body!.kind !== SyntaxKind.ModuleDeclaration || areSameModule(a.body as ModuleDeclaration, b.body as ModuleDeclaration));
+        if (!a.body || !b.body) {
+            return a.body === b.body;
+        }
+        return a.body.kind === b.body.kind && (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(a.body as ModuleDeclaration, b.body as ModuleDeclaration));
     }
 
     /** Merge source into target. Source should be thrown away after this is called. */

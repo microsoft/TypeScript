@@ -22,6 +22,9 @@ interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
 interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
 type T17 = Awaited<BadPromise1>; // error
 
+// https://github.com/microsoft/TypeScript/issues/46934
+type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
+
 // https://github.com/microsoft/TypeScript/issues/33562
 type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
 declare function MaybePromise<T>(value: T): MaybePromise<T>;
@@ -158,6 +161,25 @@ async function f16<T extends number & { then(): void }>(x: T) {
 // helps with tests where '.types' just prints out the type alias name
 type _Expect<TActual extends TExpected, TExpected> = TActual;
 
+// https://github.com/microsoft/TypeScript/issues/48320
+async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
+    const ret: Awaited<ReturnType<T>> = await fn(1, 2, 3);
+    return ret;
+}
+async function f17_usage() {
+    const x = await f17(async () => 123 as const);
+    return { x };
+}
+
+// https://github.com/microsoft/TypeScript/issues/47144
+type GenericStructure<
+  AcceptableKeyType extends string = string
+> = Record<AcceptableKeyType, number>;
+
+async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
+  const structure = await structurePromise;
+  structure[key] = 1;
+}
 
 //// [awaitedType.js]
 async function main() {
@@ -259,4 +281,17 @@ async function f16(x) {
     // NOTE: T belongs to the domain of primitive types (regardless of `then`)
     // y: T
     const y = await x;
+}
+// https://github.com/microsoft/TypeScript/issues/48320
+async function f17(fn) {
+    const ret = await fn(1, 2, 3);
+    return ret;
+}
+async function f17_usage() {
+    const x = await f17(async () => 123);
+    return { x };
+}
+async function brokenExample(structurePromise, key) {
+    const structure = await structurePromise;
+    structure[key] = 1;
 }

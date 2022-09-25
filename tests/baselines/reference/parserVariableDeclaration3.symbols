@@ -10,6 +10,8 @@ function runTests() {
 
       , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
 >compiler : Symbol(compiler, Decl(parserVariableDeclaration3.ts, 3, 7))
+>TypeScript : Symbol(TypeScript)
+>TypeScriptCompiler : Symbol(TypeScript.TypeScriptCompiler)
 >outerr : Symbol(outerr, Decl(parserVariableDeclaration3.ts, 2, 7))
 
       , code;

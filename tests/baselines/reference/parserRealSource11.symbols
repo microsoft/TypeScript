@@ -23,6 +23,7 @@ module TypeScript {
 
         public type: Type = null;
 >type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
+>Type : Symbol(Type)
 
         public flags = ASTFlags.Writeable;
 >flags : Symbol(AST.flags, Decl(parserRealSource11.ts, 12, 33))
@@ -44,6 +45,7 @@ module TypeScript {
 
         constructor (public nodeType: NodeType) {
 >nodeType : Symbol(AST.nodeType, Decl(parserRealSource11.ts, 23, 21))
+>NodeType : Symbol(NodeType)
 
             super();
 >super : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
@@ -70,6 +72,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(AST.typeCheck, Decl(parserRealSource11.ts, 33, 99))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 35, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             switch (this.nodeType) {
 >this.nodeType : Symbol(AST.nodeType, Decl(parserRealSource11.ts, 23, 21))
@@ -133,7 +136,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(AST.emit, Decl(parserRealSource11.ts, 61, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 63, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 63, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 63, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -262,6 +267,7 @@ module TypeScript {
         public print(context: PrintContext) {
 >print : Symbol(AST.print, Decl(parserRealSource11.ts, 116, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 118, 21))
+>PrintContext : Symbol(PrintContext)
 
             context.startLine();
 >context : Symbol(context, Decl(parserRealSource11.ts, 118, 21))
@@ -354,6 +360,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(AST.addToControlFlow, Decl(parserRealSource11.ts, 142, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 144, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             // by default, AST adds itself to current basic block and does not check its children
             context.walker.options.goChildren = false;
@@ -369,6 +376,7 @@ module TypeScript {
 >container : Symbol(container, Decl(parserRealSource11.ts, 150, 27))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 >freeUses : Symbol(freeUses, Decl(parserRealSource11.ts, 150, 45))
+>StringHashTable : Symbol(StringHashTable)
         }
 
         public treeViewLabel() {
@@ -493,6 +501,7 @@ module TypeScript {
 
         public enclosingScope: SymbolScope = null;
 >enclosingScope : Symbol(ASTList.enclosingScope, Decl(parserRealSource11.ts, 190, 38))
+>SymbolScope : Symbol(SymbolScope)
 
         public members: AST[] = new AST[];
 >members : Symbol(ASTList.members, Decl(parserRealSource11.ts, 191, 50))
@@ -507,6 +516,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(ASTList.addToControlFlow, Decl(parserRealSource11.ts, 196, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 198, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var len = this.members.length;
 >len : Symbol(len, Decl(parserRealSource11.ts, 199, 15))
@@ -623,7 +633,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ASTList.emit, Decl(parserRealSource11.ts, 228, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 230, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 230, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 230, 55))
 
             emitter.recordSourceMappingStart(this);
@@ -643,6 +655,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(ASTList.typeCheck, Decl(parserRealSource11.ts, 234, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 236, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             var len = this.members.length;
 >len : Symbol(len, Decl(parserRealSource11.ts, 237, 15))
@@ -798,6 +811,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(Identifier.typeCheck, Decl(parserRealSource11.ts, 295, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 297, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckName(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 297, 25))
@@ -807,7 +821,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(Identifier.emit, Decl(parserRealSource11.ts, 299, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 301, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 301, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 301, 55))
 
             emitter.emitJavascriptName(this, true);
@@ -818,11 +834,13 @@ module TypeScript {
         public static fromToken(token: Token): Identifier {
 >fromToken : Symbol(Identifier.fromToken, Decl(parserRealSource11.ts, 303, 9))
 >token : Symbol(token, Decl(parserRealSource11.ts, 305, 32))
+>Token : Symbol(Token)
 >Identifier : Symbol(Identifier, Decl(parserRealSource11.ts, 247, 5))
 
             return new Identifier(token.getText(), (<IdentifierToken>token).hasEscapeSequence);
 >Identifier : Symbol(Identifier, Decl(parserRealSource11.ts, 247, 5))
 >token : Symbol(token, Decl(parserRealSource11.ts, 305, 32))
+>IdentifierToken : Symbol(IdentifierToken)
 >token : Symbol(token, Decl(parserRealSource11.ts, 305, 32))
         }
     }
@@ -845,7 +863,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(MissingIdentifier.emit, Decl(parserRealSource11.ts, 317, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 319, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 319, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 319, 55))
 
             // Emit nothing for a missing ID
@@ -875,6 +895,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(Label.typeCheck, Decl(parserRealSource11.ts, 329, 64))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 331, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.type = typeFlow.voidType;
 >this.type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
@@ -889,7 +910,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(Label.emit, Decl(parserRealSource11.ts, 334, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 336, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 336, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 336, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -939,6 +962,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType) {
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 349, 21))
+>NodeType : Symbol(NodeType)
 
             super(nodeType);
 >super : Symbol(AST, Decl(parserRealSource11.ts, 9, 5))
@@ -958,6 +982,7 @@ module TypeScript {
 
         public targetType: Type = null; // Target type for an object literal (null if no target type)
 >targetType : Symbol(UnaryExpression.targetType, Decl(parserRealSource11.ts, 358, 53))
+>Type : Symbol(Type)
 
         public castTerm: AST = null;
 >castTerm : Symbol(UnaryExpression.castTerm, Decl(parserRealSource11.ts, 359, 39))
@@ -965,6 +990,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType, public operand: AST) {
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 362, 21))
+>NodeType : Symbol(NodeType)
 >operand : Symbol(UnaryExpression.operand, Decl(parserRealSource11.ts, 362, 40))
 >AST : Symbol(AST, Decl(parserRealSource11.ts, 9, 5))
 
@@ -976,6 +1002,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(UnaryExpression.addToControlFlow, Decl(parserRealSource11.ts, 364, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 366, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             super.addToControlFlow(context);
 >super.addToControlFlow : Symbol(AST.addToControlFlow, Decl(parserRealSource11.ts, 142, 9))
@@ -997,6 +1024,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(UnaryExpression.typeCheck, Decl(parserRealSource11.ts, 372, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 374, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             switch (this.nodeType) {
 >this.nodeType : Symbol(AST.nodeType, Decl(parserRealSource11.ts, 23, 21))
@@ -1190,7 +1218,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(UnaryExpression.emit, Decl(parserRealSource11.ts, 438, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 440, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 440, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 440, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -1415,6 +1445,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType,
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 517, 21))
+>NodeType : Symbol(NodeType)
 
                      public target: AST,
 >target : Symbol(CallExpression.target, Decl(parserRealSource11.ts, 517, 40))
@@ -1441,10 +1472,12 @@ module TypeScript {
 
         public signature: Signature = null;
 >signature : Symbol(CallExpression.signature, Decl(parserRealSource11.ts, 522, 9))
+>Signature : Symbol(Signature)
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(CallExpression.typeCheck, Decl(parserRealSource11.ts, 524, 43))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 526, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             if (this.nodeType == NodeType.New) {
 >this.nodeType : Symbol(AST.nodeType, Decl(parserRealSource11.ts, 23, 21))
@@ -1465,7 +1498,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(CallExpression.emit, Decl(parserRealSource11.ts, 533, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 535, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 535, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 535, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -1518,6 +1553,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType, public operand1: AST, public operand2: AST) {
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 552, 21))
+>NodeType : Symbol(NodeType)
 >operand1 : Symbol(BinaryExpression.operand1, Decl(parserRealSource11.ts, 552, 40))
 >AST : Symbol(AST, Decl(parserRealSource11.ts, 9, 5))
 >operand2 : Symbol(BinaryExpression.operand2, Decl(parserRealSource11.ts, 552, 62))
@@ -1531,6 +1567,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(BinaryExpression.typeCheck, Decl(parserRealSource11.ts, 554, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 556, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             switch (this.nodeType) {
 >this.nodeType : Symbol(AST.nodeType, Decl(parserRealSource11.ts, 23, 21))
@@ -1704,7 +1741,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(BinaryExpression.emit, Decl(parserRealSource11.ts, 632, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 634, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 634, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 634, 55))
 
             var binTokenId = nodeTypeToTokTable[this.nodeType];
@@ -1919,6 +1958,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(ConditionalExpression.typeCheck, Decl(parserRealSource11.ts, 711, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 713, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckQMark(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 713, 25))
@@ -1928,7 +1968,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ConditionalExpression.emit, Decl(parserRealSource11.ts, 715, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 717, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 717, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 717, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -1991,6 +2033,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(NumberLiteral.typeCheck, Decl(parserRealSource11.ts, 735, 38))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 737, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.type = typeFlow.doubleType;
 >this.type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
@@ -2014,7 +2057,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(NumberLiteral.emit, Decl(parserRealSource11.ts, 744, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 746, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 746, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 746, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -2119,6 +2164,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(RegexLiteral.typeCheck, Decl(parserRealSource11.ts, 778, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 780, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.type = typeFlow.regexType;
 >this.type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
@@ -2133,7 +2179,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(RegexLiteral.emit, Decl(parserRealSource11.ts, 783, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 785, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 785, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 785, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -2174,7 +2222,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(StringLiteral.emit, Decl(parserRealSource11.ts, 797, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 799, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 799, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 799, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -2203,6 +2253,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(StringLiteral.typeCheck, Decl(parserRealSource11.ts, 805, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 807, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.type = typeFlow.stringType;
 >this.type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
@@ -2239,6 +2290,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType) {
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 822, 21))
+>NodeType : Symbol(NodeType)
 
             super(nodeType);
 >super : Symbol(AST, Decl(parserRealSource11.ts, 9, 5))
@@ -2272,11 +2324,14 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ImportDeclaration.emit, Decl(parserRealSource11.ts, 834, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 836, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 836, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 836, 55))
 
             var mod = <ModuleType>this.alias.type;
 >mod : Symbol(mod, Decl(parserRealSource11.ts, 837, 15))
+>ModuleType : Symbol(ModuleType)
 >this.alias.type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
 >this.alias : Symbol(ImportDeclaration.alias, Decl(parserRealSource11.ts, 832, 43))
 >this : Symbol(ImportDeclaration, Decl(parserRealSource11.ts, 825, 5))
@@ -2294,6 +2349,7 @@ module TypeScript {
 >this : Symbol(ImportDeclaration, Decl(parserRealSource11.ts, 825, 5))
 >id : Symbol(ImportDeclaration.id, Decl(parserRealSource11.ts, 832, 21))
 >sym : Symbol(Identifier.sym, Decl(parserRealSource11.ts, 249, 41))
+>TypeSymbol : Symbol(TypeSymbol)
 >this.id.sym : Symbol(Identifier.sym, Decl(parserRealSource11.ts, 249, 41))
 >this.id : Symbol(ImportDeclaration.id, Decl(parserRealSource11.ts, 832, 21))
 >this : Symbol(ImportDeclaration, Decl(parserRealSource11.ts, 825, 5))
@@ -2374,6 +2430,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(ImportDeclaration.typeCheck, Decl(parserRealSource11.ts, 860, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 862, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckImportDecl(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 862, 25))
@@ -2485,6 +2542,7 @@ module TypeScript {
 >id : Symbol(BoundDecl.id, Decl(parserRealSource11.ts, 893, 21))
 >Identifier : Symbol(Identifier, Decl(parserRealSource11.ts, 247, 5))
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 893, 43))
+>NodeType : Symbol(NodeType)
 >nestingLevel : Symbol(BoundDecl.nestingLevel, Decl(parserRealSource11.ts, 893, 63))
 
             super(nodeType);
@@ -2516,6 +2574,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(BoundDecl.typeCheck, Decl(parserRealSource11.ts, 901, 81))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 903, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckBoundDecl(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 903, 25))
@@ -2568,7 +2627,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(VarDecl.emit, Decl(parserRealSource11.ts, 919, 77))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 921, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 921, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 921, 55))
 
             emitter.emitJavascriptVarDecl(this, tokenId);
@@ -2627,11 +2688,14 @@ module TypeScript {
 
         public parameterPropertySym: FieldSymbol = null;
 >parameterPropertySym : Symbol(ArgDecl.parameterPropertySym, Decl(parserRealSource11.ts, 941, 9))
+>FieldSymbol : Symbol(FieldSymbol)
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ArgDecl.emit, Decl(parserRealSource11.ts, 943, 56))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 945, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 945, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 945, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -2679,12 +2743,14 @@ module TypeScript {
 
         public symbols: IHashTable;
 >symbols : Symbol(FuncDecl.symbols, Decl(parserRealSource11.ts, 959, 48))
+>IHashTable : Symbol(IHashTable)
 
         public variableArgList = false;
 >variableArgList : Symbol(FuncDecl.variableArgList, Decl(parserRealSource11.ts, 960, 35))
 
         public signature: Signature;
 >signature : Symbol(FuncDecl.signature, Decl(parserRealSource11.ts, 961, 39))
+>Signature : Symbol(Signature)
 
         public envids: Identifier[];
 >envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
@@ -2748,6 +2814,7 @@ module TypeScript {
 
         public scopeType: Type = null; // Type of the FuncDecl, before target typing
 >scopeType : Symbol(FuncDecl.scopeType, Decl(parserRealSource11.ts, 979, 71))
+>Type : Symbol(Type)
 
         public endingToken: ASTSpan = null;
 >endingToken : Symbol(FuncDecl.endingToken, Decl(parserRealSource11.ts, 980, 38))
@@ -2943,6 +3010,7 @@ module TypeScript {
 
         public buildControlFlow(): ControlFlowContext {
 >buildControlFlow : Symbol(FuncDecl.buildControlFlow, Decl(parserRealSource11.ts, 1029, 9))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var entry = new BasicBlock();
 >entry : Symbol(entry, Decl(parserRealSource11.ts, 1032, 15))
@@ -2962,6 +3030,7 @@ module TypeScript {
 >parent : Symbol(parent, Decl(parserRealSource11.ts, 1037, 46))
 >AST : Symbol(AST, Decl(parserRealSource11.ts, 9, 5))
 >walker : Symbol(walker, Decl(parserRealSource11.ts, 1037, 59))
+>IAstWalker : Symbol(IAstWalker)
 
                 ast.addToControlFlow(walker.state);
 >ast.addToControlFlow : Symbol(AST.addToControlFlow, Decl(parserRealSource11.ts, 142, 9))
@@ -2996,6 +3065,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(FuncDecl.typeCheck, Decl(parserRealSource11.ts, 1047, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1049, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckFunction(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1049, 25))
@@ -3005,7 +3075,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(FuncDecl.emit, Decl(parserRealSource11.ts, 1051, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1053, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1053, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1053, 55))
 
             emitter.emitJavascriptFunction(this);
@@ -3209,6 +3281,7 @@ module TypeScript {
 
         public referencedFiles: IFileReference[] = [];
 >referencedFiles : Symbol(Script.referencedFiles, Decl(parserRealSource11.ts, 1109, 49))
+>IFileReference : Symbol(IFileReference)
 
         public requiresGlobal = false;
 >requiresGlobal : Symbol(Script.requiresGlobal, Decl(parserRealSource11.ts, 1110, 54))
@@ -3278,6 +3351,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(Script.typeCheck, Decl(parserRealSource11.ts, 1129, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1131, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckScript(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1131, 25))
@@ -3401,7 +3475,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(Script.emit, Decl(parserRealSource11.ts, 1169, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1171, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1171, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1171, 55))
 
             if (this.emitRequired()) {
@@ -3449,6 +3525,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType,
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 1186, 21))
+>NodeType : Symbol(NodeType)
 
                      public name: Identifier,
 >name : Symbol(NamedDeclaration.name, Decl(parserRealSource11.ts, 1186, 40))
@@ -3473,6 +3550,7 @@ module TypeScript {
 
         public mod: ModuleType;
 >mod : Symbol(ModuleDeclaration.mod, Decl(parserRealSource11.ts, 1194, 59))
+>ModuleType : Symbol(ModuleType)
 
         public prettyName: string;
 >prettyName : Symbol(ModuleDeclaration.prettyName, Decl(parserRealSource11.ts, 1195, 31))
@@ -3565,6 +3643,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(ModuleDeclaration.typeCheck, Decl(parserRealSource11.ts, 1218, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1220, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckModule(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1220, 25))
@@ -3574,7 +3653,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ModuleDeclaration.emit, Decl(parserRealSource11.ts, 1222, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1224, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1224, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1224, 55))
 
             if (!hasFlag(this.modFlags, ModuleFlags.ShouldEmitModuleDecl)) {
@@ -3614,6 +3695,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType,
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 1238, 21))
+>NodeType : Symbol(NodeType)
 
                      name: Identifier,
 >name : Symbol(name, Decl(parserRealSource11.ts, 1238, 40))
@@ -3702,6 +3784,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(ClassDeclaration.typeCheck, Decl(parserRealSource11.ts, 1266, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1268, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckClass(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1268, 25))
@@ -3711,7 +3794,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ClassDeclaration.emit, Decl(parserRealSource11.ts, 1270, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1272, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1272, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1272, 55))
 
             emitter.emitJavascriptClass(this);
@@ -3751,6 +3836,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(InterfaceDeclaration.typeCheck, Decl(parserRealSource11.ts, 1283, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1285, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckInterface(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1285, 25))
@@ -3760,7 +3846,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(InterfaceDeclaration.emit, Decl(parserRealSource11.ts, 1287, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1289, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1289, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1289, 55))
         }
     }
@@ -3771,6 +3859,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType) {
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 1294, 21))
+>NodeType : Symbol(NodeType)
 
             super(nodeType);
 >super : Symbol(ModuleElement, Decl(parserRealSource11.ts, 819, 5))
@@ -3797,6 +3886,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(Statement.typeCheck, Decl(parserRealSource11.ts, 1303, 62))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1305, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.type = typeFlow.voidType;
 >this.type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
@@ -3826,7 +3916,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(LabeledStatement.emit, Decl(parserRealSource11.ts, 1314, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1316, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1316, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1316, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3893,6 +3985,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(LabeledStatement.typeCheck, Decl(parserRealSource11.ts, 1328, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1330, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             typeFlow.typeCheck(this.labels);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1330, 25))
@@ -3918,6 +4011,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(LabeledStatement.addToControlFlow, Decl(parserRealSource11.ts, 1334, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1336, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var beforeBB = context.current;
 >beforeBB : Symbol(beforeBB, Decl(parserRealSource11.ts, 1337, 15))
@@ -3954,7 +4048,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(Block.emit, Decl(parserRealSource11.ts, 1348, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1350, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1350, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1350, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4032,6 +4128,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(Block.addToControlFlow, Decl(parserRealSource11.ts, 1371, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1373, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var afterIfNeeded = new BasicBlock();
 >afterIfNeeded : Symbol(afterIfNeeded, Decl(parserRealSource11.ts, 1374, 15))
@@ -4076,6 +4173,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(Block.typeCheck, Decl(parserRealSource11.ts, 1385, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1387, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             if (!typeFlow.checker.styleSettings.emptyBlocks) {
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1387, 25))
@@ -4128,6 +4226,7 @@ module TypeScript {
 
         constructor (nodeType: NodeType) {
 >nodeType : Symbol(nodeType, Decl(parserRealSource11.ts, 1404, 21))
+>NodeType : Symbol(NodeType)
 
             super(nodeType);
 >super : Symbol(Statement, Decl(parserRealSource11.ts, 1291, 5))
@@ -4137,6 +4236,7 @@ module TypeScript {
         public setResolvedTarget(parser: Parser, stmt: Statement): boolean {
 >setResolvedTarget : Symbol(Jump.setResolvedTarget, Decl(parserRealSource11.ts, 1406, 9))
 >parser : Symbol(parser, Decl(parserRealSource11.ts, 1408, 33))
+>Parser : Symbol(Parser)
 >stmt : Symbol(stmt, Decl(parserRealSource11.ts, 1408, 48))
 >Statement : Symbol(Statement, Decl(parserRealSource11.ts, 1291, 5))
 
@@ -4192,6 +4292,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(Jump.addToControlFlow, Decl(parserRealSource11.ts, 1427, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1429, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             super.addToControlFlow(context);
 >super.addToControlFlow : Symbol(AST.addToControlFlow, Decl(parserRealSource11.ts, 142, 9))
@@ -4212,7 +4313,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(Jump.emit, Decl(parserRealSource11.ts, 1432, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1434, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1434, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1434, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4281,7 +4384,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(WhileStatement.emit, Decl(parserRealSource11.ts, 1459, 40))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1461, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1461, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1461, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4330,6 +4435,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(WhileStatement.typeCheck, Decl(parserRealSource11.ts, 1472, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1474, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckWhile(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1474, 25))
@@ -4339,6 +4445,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(WhileStatement.addToControlFlow, Decl(parserRealSource11.ts, 1476, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1478, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var loopHeader = context.current;
 >loopHeader : Symbol(loopHeader, Decl(parserRealSource11.ts, 1479, 15))
@@ -4370,6 +4477,7 @@ module TypeScript {
 
             var targetInfo: ITargetInfo = null;
 >targetInfo : Symbol(targetInfo, Decl(parserRealSource11.ts, 1487, 15))
+>ITargetInfo : Symbol(ITargetInfo)
 
             if (this.body) {
 >this.body : Symbol(WhileStatement.body, Decl(parserRealSource11.ts, 1452, 51))
@@ -4455,7 +4563,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(DoWhileStatement.emit, Decl(parserRealSource11.ts, 1515, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1517, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1517, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1517, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4522,6 +4632,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(DoWhileStatement.typeCheck, Decl(parserRealSource11.ts, 1532, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1534, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckDoWhile(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1534, 25))
@@ -4531,6 +4642,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(DoWhileStatement.addToControlFlow, Decl(parserRealSource11.ts, 1536, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1538, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var loopHeader = context.current;
 >loopHeader : Symbol(loopHeader, Decl(parserRealSource11.ts, 1539, 15))
@@ -4552,6 +4664,7 @@ module TypeScript {
 
             var targetInfo: ITargetInfo = null;
 >targetInfo : Symbol(targetInfo, Decl(parserRealSource11.ts, 1544, 15))
+>ITargetInfo : Symbol(ITargetInfo)
 
             if (this.body) {
 >this.body : Symbol(DoWhileStatement.body, Decl(parserRealSource11.ts, 1507, 53))
@@ -4644,7 +4757,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(IfStatement.emit, Decl(parserRealSource11.ts, 1574, 53))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1576, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1576, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1576, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4719,6 +4834,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(IfStatement.typeCheck, Decl(parserRealSource11.ts, 1593, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1595, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckIf(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1595, 25))
@@ -4728,6 +4844,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(IfStatement.addToControlFlow, Decl(parserRealSource11.ts, 1597, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1599, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             this.cond.addToControlFlow(context);
 >this.cond.addToControlFlow : Symbol(AST.addToControlFlow, Decl(parserRealSource11.ts, 142, 9))
@@ -4872,7 +4989,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ReturnStatement.emit, Decl(parserRealSource11.ts, 1651, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1653, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1653, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1653, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4921,6 +5040,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(ReturnStatement.addToControlFlow, Decl(parserRealSource11.ts, 1667, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1669, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             super.addToControlFlow(context);
 >super.addToControlFlow : Symbol(AST.addToControlFlow, Decl(parserRealSource11.ts, 142, 9))
@@ -4935,6 +5055,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(ReturnStatement.typeCheck, Decl(parserRealSource11.ts, 1672, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1674, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckReturn(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1674, 25))
@@ -5214,7 +5335,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ForInStatement.emit, Decl(parserRealSource11.ts, 1746, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1748, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1748, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1748, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -5284,6 +5407,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(ForInStatement.typeCheck, Decl(parserRealSource11.ts, 1763, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1765, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             if (typeFlow.checker.styleSettings.forin) {
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1765, 25))
@@ -5306,6 +5430,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(ForInStatement.addToControlFlow, Decl(parserRealSource11.ts, 1772, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1774, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             if (this.lval) {
 >this.lval : Symbol(ForInStatement.lval, Decl(parserRealSource11.ts, 1686, 21))
@@ -5426,7 +5551,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(ForStatement.emit, Decl(parserRealSource11.ts, 1813, 40))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1815, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1815, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1815, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -5524,6 +5651,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(ForStatement.typeCheck, Decl(parserRealSource11.ts, 1838, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1840, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckFor(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1840, 25))
@@ -5533,6 +5661,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : Symbol(ForStatement.addToControlFlow, Decl(parserRealSource11.ts, 1842, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1844, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             if (this.init) {
 >this.init : Symbol(ForStatement.init, Decl(parserRealSource11.ts, 1809, 21))
@@ -5565,6 +5694,7 @@ module TypeScript {
 
             var condBlock: BasicBlock = null;
 >condBlock : Symbol(condBlock, Decl(parserRealSource11.ts, 1854, 15))
+>BasicBlock : Symbol(BasicBlock)
 
             var continueTarget = loopStart;
 >continueTarget : Symbol(continueTarget, Decl(parserRealSource11.ts, 1855, 15))
@@ -5572,6 +5702,7 @@ module TypeScript {
 
             var incrBB: BasicBlock = null;
 >incrBB : Symbol(incrBB, Decl(parserRealSource11.ts, 1856, 15))
+>BasicBlock : Symbol(BasicBlock)
 
             if (this.incr) {
 >this.incr : Symbol(ForStatement.incr, Decl(parserRealSource11.ts, 1806, 25))
@@ -5609,6 +5740,7 @@ module TypeScript {
             }
             var targetInfo: ITargetInfo = null;
 >targetInfo : Symbol(targetInfo, Decl(parserRealSource11.ts, 1867, 15))
+>ITargetInfo : Symbol(ITargetInfo)
 
             if (this.body) {
 >this.body : Symbol(ForStatement.body, Decl(parserRealSource11.ts, 1805, 25))
@@ -5716,6 +5848,7 @@ module TypeScript {
 
         public withSym: WithSymbol = null;
 >withSym : Symbol(WithStatement.withSym, Decl(parserRealSource11.ts, 1905, 53))
+>WithSymbol : Symbol(WithSymbol)
 
         constructor (public expr: AST) {
 >expr : Symbol(WithStatement.expr, Decl(parserRealSource11.ts, 1909, 21))
@@ -5728,7 +5861,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(WithStatement.emit, Decl(parserRealSource11.ts, 1911, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1913, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1913, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1913, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -5775,6 +5910,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(WithStatement.typeCheck, Decl(parserRealSource11.ts, 1925, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1927, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             return typeFlow.typeCheckWith(this);
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1927, 25))
@@ -5813,7 +5949,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(SwitchStatement.emit, Decl(parserRealSource11.ts, 1941, 53))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 1943, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 1943, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 1943, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -5915,6 +6053,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(SwitchStatement.typeCheck, Decl(parserRealSource11.ts, 1966, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 1968, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             var len = this.caseList.members.length;
 >len : Symbol(len, Decl(parserRealSource11.ts, 1969, 15))
@@ -5980,6 +6119,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(SwitchStatement.addToControlFlow, Decl(parserRealSource11.ts, 1977, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 1980, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var condBlock = context.current;
 >condBlock : Symbol(condBlock, Decl(parserRealSource11.ts, 1981, 15))
@@ -6083,7 +6223,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(CaseStatement.emit, Decl(parserRealSource11.ts, 2014, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 2016, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 2016, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2016, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -6133,6 +6275,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(CaseStatement.typeCheck, Decl(parserRealSource11.ts, 2030, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 2032, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.expr = typeFlow.typeCheck(this.expr);
 >this.expr : Symbol(CaseStatement.expr, Decl(parserRealSource11.ts, 2008, 50))
@@ -6164,6 +6307,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(CaseStatement.addToControlFlow, Decl(parserRealSource11.ts, 2037, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 2041, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var execBlock = new BasicBlock();
 >execBlock : Symbol(execBlock, Decl(parserRealSource11.ts, 2042, 15))
@@ -6245,7 +6389,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(TypeReference.emit, Decl(parserRealSource11.ts, 2067, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 2069, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 2069, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2069, 55))
 
             throw new Error("should not emit a type ref");
@@ -6255,6 +6401,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(TypeReference.typeCheck, Decl(parserRealSource11.ts, 2071, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 2073, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             var prevInTCTR = typeFlow.inTypeRefTypeCheck;
 >prevInTCTR : Symbol(prevInTCTR, Decl(parserRealSource11.ts, 2074, 15))
@@ -6342,7 +6489,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(TryFinally.emit, Decl(parserRealSource11.ts, 2102, 53))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 2104, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 2104, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2104, 55))
 
             emitter.recordSourceMappingStart(this);
@@ -6369,6 +6518,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(TryFinally.typeCheck, Decl(parserRealSource11.ts, 2109, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 2111, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.tryNode = typeFlow.typeCheck(this.tryNode);
 >this.tryNode : Symbol(TryFinally.tryNode, Decl(parserRealSource11.ts, 2098, 21))
@@ -6402,6 +6552,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(TryFinally.addToControlFlow, Decl(parserRealSource11.ts, 2116, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 2118, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var afterFinally = new BasicBlock();
 >afterFinally : Symbol(afterFinally, Decl(parserRealSource11.ts, 2119, 15))
@@ -6486,7 +6637,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(TryCatch.emit, Decl(parserRealSource11.ts, 2147, 53))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 2149, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 2149, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2149, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -6521,6 +6674,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(TryCatch.addToControlFlow, Decl(parserRealSource11.ts, 2156, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 2158, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             var beforeTry = context.current;
 >beforeTry : Symbol(beforeTry, Decl(parserRealSource11.ts, 2159, 15))
@@ -6602,6 +6756,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(TryCatch.typeCheck, Decl(parserRealSource11.ts, 2182, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 2184, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.tryNode = <Try>typeFlow.typeCheck(this.tryNode);
 >this.tryNode : Symbol(TryCatch.tryNode, Decl(parserRealSource11.ts, 2143, 21))
@@ -6649,7 +6804,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(Try.emit, Decl(parserRealSource11.ts, 2195, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 2197, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 2197, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2197, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -6681,6 +6838,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(Try.typeCheck, Decl(parserRealSource11.ts, 2204, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 2206, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.body = typeFlow.typeCheck(this.body);
 >this.body : Symbol(Try.body, Decl(parserRealSource11.ts, 2193, 21))
@@ -6698,6 +6856,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(Try.addToControlFlow, Decl(parserRealSource11.ts, 2209, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 2211, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             if (this.body) {
 >this.body : Symbol(Try.body, Decl(parserRealSource11.ts, 2193, 21))
@@ -6752,11 +6911,14 @@ module TypeScript {
 
         public containedScope: SymbolScope = null;
 >containedScope : Symbol(Catch.containedScope, Decl(parserRealSource11.ts, 2227, 50))
+>SymbolScope : Symbol(SymbolScope)
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(Catch.emit, Decl(parserRealSource11.ts, 2228, 50))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 2230, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 2230, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2230, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -6812,6 +6974,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(Catch.addToControlFlow, Decl(parserRealSource11.ts, 2242, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 2244, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             if (this.param) {
 >this.param : Symbol(Catch.param, Decl(parserRealSource11.ts, 2221, 21))
@@ -6857,6 +7020,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(Catch.typeCheck, Decl(parserRealSource11.ts, 2256, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 2258, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             var prevScope = typeFlow.scope;
 >prevScope : Symbol(prevScope, Decl(parserRealSource11.ts, 2259, 15))
@@ -7007,7 +7171,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(Finally.emit, Decl(parserRealSource11.ts, 2300, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 2302, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 2302, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2302, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -7039,6 +7205,7 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : Symbol(Finally.addToControlFlow, Decl(parserRealSource11.ts, 2309, 9))
 >context : Symbol(context, Decl(parserRealSource11.ts, 2311, 32))
+>ControlFlowContext : Symbol(ControlFlowContext)
 
             if (this.body) {
 >this.body : Symbol(Finally.body, Decl(parserRealSource11.ts, 2298, 21))
@@ -7062,6 +7229,7 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : Symbol(Finally.typeCheck, Decl(parserRealSource11.ts, 2317, 9))
 >typeFlow : Symbol(typeFlow, Decl(parserRealSource11.ts, 2319, 25))
+>TypeFlow : Symbol(TypeFlow)
 
             this.body = typeFlow.typeCheck(this.body);
 >this.body : Symbol(Finally.body, Decl(parserRealSource11.ts, 2298, 21))
@@ -7171,7 +7339,9 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : Symbol(DebuggerStatement.emit, Decl(parserRealSource11.ts, 2353, 9))
 >emitter : Symbol(emitter, Decl(parserRealSource11.ts, 2355, 20))
+>Emitter : Symbol(Emitter)
 >tokenId : Symbol(tokenId, Decl(parserRealSource11.ts, 2355, 37))
+>TokenID : Symbol(TokenID)
 >startLine : Symbol(startLine, Decl(parserRealSource11.ts, 2355, 55))
 
             emitter.emitParensAndCommentsInPlace(this, true);

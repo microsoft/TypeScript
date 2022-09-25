@@ -1,0 +1,10 @@
+=== tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts ===
+export enum E {
+>E : Symbol(E, Decl(strictModeOctalLiterals.ts, 0, 0))
+
+    A = 12 + 01
+>A : Symbol(E.A, Decl(strictModeOctalLiterals.ts, 0, 15))
+}
+const orbitol: 01 = 01
+>orbitol : Symbol(orbitol, Decl(strictModeOctalLiterals.ts, 3, 5))
+

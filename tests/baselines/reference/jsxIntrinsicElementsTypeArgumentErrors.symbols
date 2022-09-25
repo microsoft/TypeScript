@@ -17,11 +17,14 @@ const b = <div<number,>></div>; // trailing comma type args
 const c = <div<Missing>></div>; // nonexistant type args
 >c : Symbol(c, Decl(jsxIntrinsicElementsTypeArgumentErrors.tsx, 8, 5))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>Missing : Symbol(Missing)
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
 const d = <div<Missing<AlsoMissing>>></div>; // nested missing type args
 >d : Symbol(d, Decl(jsxIntrinsicElementsTypeArgumentErrors.tsx, 10, 5))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>Missing : Symbol(Missing)
+>AlsoMissing : Symbol(AlsoMissing)
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
 const e = <div<Record<object, object>>></div>; // existing but incorrect nested type args
@@ -47,10 +50,13 @@ const h = <div<number,>/>; // trailing comma type args
 const i = <div<Missing>/>; // nonexistant type args
 >i : Symbol(i, Decl(jsxIntrinsicElementsTypeArgumentErrors.tsx, 21, 5))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>Missing : Symbol(Missing)
 
 const j = <div<Missing<AlsoMissing>>/>; // nested missing type args
 >j : Symbol(j, Decl(jsxIntrinsicElementsTypeArgumentErrors.tsx, 23, 5))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>Missing : Symbol(Missing)
+>AlsoMissing : Symbol(AlsoMissing)
 
 const k = <div<Record<object, object>>/>; // existing but incorrect nested type args
 >k : Symbol(k, Decl(jsxIntrinsicElementsTypeArgumentErrors.tsx, 25, 5))

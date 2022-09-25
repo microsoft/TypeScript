@@ -1,5 +1,4 @@
 // @ts-check
-const gulp = require("gulp");
 const del = require("del");
 const fs = require("fs");
 const os = require("os");
@@ -7,8 +6,8 @@ const path = require("path");
 const mkdirP = require("mkdirp");
 const log = require("fancy-log");
 const cmdLineOptions = require("./options");
-const { CancellationToken } = require("prex");
 const { exec } = require("./utils");
+const { findUpFile } = require("./findUpDir");
 
 const mochaJs = require.resolve("mocha/bin/_mocha");
 exports.localBaseline = "tests/baselines/local/";
@@ -22,11 +21,10 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
  * @param {boolean} watchMode
- * @param {import("prex").CancellationToken} [cancelToken]
  */
-async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
+async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode) {
     let testTimeout = cmdLineOptions.timeout;
-    let tests = cmdLineOptions.tests;
+    const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
@@ -38,7 +36,6 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const shardId = +cmdLineOptions.shardId || undefined;
     if (!cmdLineOptions.dirty) {
         await cleanTestDirs();
-        cancelToken.throwIfCancellationRequested();
     }
 
     if (fs.existsSync(testConfigFile)) {
@@ -71,13 +68,13 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const reporter = cmdLineOptions.reporter || defaultReporter;
 
     /** @type {string[]} */
-    let args = [];
+    const args = [];
 
-    // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
+    // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
         args.push(mochaJs);
-        args.push("-R", "scripts/failed-tests");
+        args.push("-R", findUpFile("scripts/failed-tests.js"));
         args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
         if (tests) {
             args.push("-g", `"${tests}"`);
@@ -100,7 +97,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             args.push("--no-colors");
         }
         if (inspect !== undefined) {
-            args.unshift((inspect == "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.unshift((inspect === "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
             args.push("-t", "0");
         }
         else {
@@ -121,17 +118,17 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
 
     try {
         setNodeEnvToDevelopment();
-        const { exitCode } = await exec("node", args, { cancelToken });
+        const { exitCode } = await exec(process.execPath, args);
         if (exitCode !== 0) {
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
         }
-        else if (process.env.CI === "true") {
+        else if (cmdLineOptions.ci) {
             // finally, do a sanity check and build the compiler with the built version of itself
             log.info("Starting sanity check build...");
             // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)
-            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"], { cancelToken });
-            const { exitCode } = await exec("gulp", ["local", "--lkg=false"], { cancelToken });
+            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"]);
+            const { exitCode } = await exec("gulp", ["local", "--lkg=false"]);
             if (exitCode !== 0) {
                 errorStatus = exitCode;
                 error = new Error(`Sanity check build process exited with status code ${errorStatus}.`);
@@ -157,7 +154,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
 exports.runConsoleTests = runConsoleTests;
 
 async function cleanTestDirs() {
-    await del([exports.localBaseline, exports.localRwcBaseline])
+    await del([exports.localBaseline, exports.localRwcBaseline]);
     mkdirP.sync(exports.localRwcBaseline);
     mkdirP.sync(exports.localBaseline);
 }
@@ -211,5 +208,5 @@ function deleteTemporaryProjectOutput() {
 }
 
 function regExpEscape(text) {
-    return text.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&');
+    return text.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
 }
