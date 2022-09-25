@@ -1196,7 +1196,7 @@ interface ReadonlyArray<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every<S extends T,U>(predicate: (this: U, value: T, index: number, array: readonly T[]) => value is S, thisArg?: U): this is readonly S[];
+    every<S extends T, U>(predicate: (this: U, value: T, index: number, array: readonly T[]) => value is S, thisArg?: U): this is readonly S[];
     /**
      * Determines whether all the members of an array satisfy the specified test.
      * @param predicate A function that accepts up to three arguments. The every method calls
@@ -1226,13 +1226,13 @@ interface ReadonlyArray<T> {
      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    map<U,V>(callbackfn: (this: V, value: T, index: number, array: readonly T[]) => U, thisArg?: V): U[];
+    map<U, V>(callbackfn: (this: V, value: T, index: number, array: readonly T[]) => U, thisArg?: V): U[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter<S extends T,U>(predicate: (this: U, value: T, index: number, array: readonly T[]) => value is S, thisArg?: U): S[];
+    filter<S extends T, U>(predicate: (this: U, value: T, index: number, array: readonly T[]) => value is S, thisArg?: U): S[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
@@ -1387,7 +1387,7 @@ interface Array<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every<S extends T,U>(predicate: (this: U, value: T, index: number, array: T[]) => value is S, thisArg?: U): this is S[];
+    every<S extends T, U>(predicate: (this: U, value: T, index: number, array: T[]) => value is S, thisArg?: U): this is S[];
     /**
      * Determines whether all the members of an array satisfy the specified test.
      * @param predicate A function that accepts up to three arguments. The every method calls
@@ -1417,13 +1417,13 @@ interface Array<T> {
      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    map<U,V>(callbackfn: (this: V, value: T, index: number, array: T[]) => U, thisArg?: V): U[];
+    map<U, V>(callbackfn: (this: V, value: T, index: number, array: T[]) => U, thisArg?: V): U[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter<S extends T,U>(predicate: (this: U, value: T, index: number, array: T[]) => value is S, thisArg?: U): S[];
+    filter<S extends T, U>(predicate: (this: U, value: T, index: number, array: T[]) => value is S, thisArg?: U): S[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
@@ -2095,7 +2095,7 @@ interface Int8ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Int8Array;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Int8Array;
 
 
 }
@@ -2378,7 +2378,7 @@ interface Uint8ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Uint8Array;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Uint8Array;
 
 }
 declare var Uint8Array: Uint8ArrayConstructor;
@@ -2660,7 +2660,7 @@ interface Uint8ClampedArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Uint8ClampedArray;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Uint8ClampedArray;
 }
 declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
 
@@ -2940,7 +2940,7 @@ interface Int16ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Int16Array;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Int16Array;
 
 
 }
@@ -3223,7 +3223,7 @@ interface Uint16ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Uint16Array;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Uint16Array;
 
 
 }
@@ -3505,7 +3505,7 @@ interface Int32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Int32Array;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Int32Array;
 
 }
 declare var Int32Array: Int32ArrayConstructor;
@@ -3786,7 +3786,7 @@ interface Uint32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Uint32Array;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Uint32Array;
 
 }
 declare var Uint32Array: Uint32ArrayConstructor;
@@ -4068,7 +4068,7 @@ interface Float32ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Float32Array;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Float32Array;
 
 
 }
@@ -4342,7 +4342,7 @@ interface Float64ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T,U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Float64Array;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: U, v: T, k: number) => number, thisArg?: U): Float64Array;
 
 }
 declare var Float64Array: Float64ArrayConstructor;

@@ -8,7 +8,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T,U>(predicate: (this: U, value: T, index: number, obj: T[]) => value is S, thisArg?: U): S | undefined;
+    find<S extends T, U>(predicate: (this: U, value: T, index: number, obj: T[]) => value is S, thisArg?: U): S | undefined;
     find<U>(predicate: (this: U, value: T, index: number, obj: T[]) => unknown, thisArg?: U): T | undefined;
 
     /**
@@ -330,7 +330,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T,U>(predicate: (this: U, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: U): S | undefined;
+    find<S extends T, U>(predicate: (this: U, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: U): S | undefined;
     find<U>(predicate: (this: U, value: T, index: number, obj: readonly T[]) => unknown, thisArg?: U): T | undefined;
 
     /**
