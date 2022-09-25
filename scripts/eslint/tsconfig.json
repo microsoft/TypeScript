@@ -1,23 +1,26 @@
 {
     "compilerOptions": {
-        "forceConsistentCasingInFileNames": true,
-        "suppressImplicitAnyIndexErrors":  true,
-        "experimentalDecorators": true,
-        "noImplicitReturns": true,
-        "resolveJsonModule": true,
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "noImplicitThis": true,
-        "noUnusedLocals": true,
-        "noImplicitAny": true,
-        "skipLibCheck": true,
-        "declaration": false,
-        "noResolve": false,
-        "strict": true,
+        "lib": [
+            "es6"
+        ],
         "module": "commonjs",
         "target": "es6",
         "outDir": "./built",
-        "lib": ["es2015", "es2016"]
+        "declaration": false,
+
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "allowUnusedLabels": false,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowJs": true,
+        "checkJs": true
     },
 
     "include": [

@@ -185,7 +185,6 @@ namespace ts.OrganizeImports {
                 // If we’re in a declaration file, it’s safe to remove the import clause from it
                 if (sourceFile.isDeclarationFile) {
                     usedImports.push(factory.createImportDeclaration(
-                        importDecl.decorators,
                         importDecl.modifiers,
                         /*importClause*/ undefined,
                         moduleSpecifier,
@@ -392,7 +391,6 @@ namespace ts.OrganizeImports {
             coalescedExports.push(
                 factory.updateExportDeclaration(
                     exportDecl,
-                    exportDecl.decorators,
                     exportDecl.modifiers,
                     exportDecl.isTypeOnly,
                     exportDecl.exportClause && (
@@ -445,7 +443,6 @@ namespace ts.OrganizeImports {
 
         return factory.updateImportDeclaration(
             importDeclaration,
-            importDeclaration.decorators,
             importDeclaration.modifiers,
             factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
             importDeclaration.moduleSpecifier,

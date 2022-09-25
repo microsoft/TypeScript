@@ -85,7 +85,7 @@ namespace ts {
                 for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
                     if (isExternalModule(node)) {
                         // Add `import` statement
-                        const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
+                        const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
                         setParentRecursive(importStatement, /*incremental*/ false);
                         statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                     }

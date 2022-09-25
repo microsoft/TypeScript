@@ -1,0 +1,28 @@
+=== tests/cases/compiler/relatedViaDiscriminatedTypeNoError.ts ===
+class Model {
+>Model : Symbol(Model, Decl(relatedViaDiscriminatedTypeNoError.ts, 0, 0))
+
+    constructor(public flag: boolean) {}
+>flag : Symbol(Model.flag, Decl(relatedViaDiscriminatedTypeNoError.ts, 1, 16))
+}
+
+type DiscriminatedUnion = { flag: true } | { flag: false };
+>DiscriminatedUnion : Symbol(DiscriminatedUnion, Decl(relatedViaDiscriminatedTypeNoError.ts, 2, 1))
+>flag : Symbol(flag, Decl(relatedViaDiscriminatedTypeNoError.ts, 4, 27))
+>flag : Symbol(flag, Decl(relatedViaDiscriminatedTypeNoError.ts, 4, 44))
+
+class A<T extends DiscriminatedUnion> {
+>A : Symbol(A, Decl(relatedViaDiscriminatedTypeNoError.ts, 4, 59))
+>T : Symbol(T, Decl(relatedViaDiscriminatedTypeNoError.ts, 5, 8))
+>DiscriminatedUnion : Symbol(DiscriminatedUnion, Decl(relatedViaDiscriminatedTypeNoError.ts, 2, 1))
+
+    constructor(public model: T) { }
+>model : Symbol(A.model, Decl(relatedViaDiscriminatedTypeNoError.ts, 6, 16))
+>T : Symbol(T, Decl(relatedViaDiscriminatedTypeNoError.ts, 5, 8))
+}
+
+class B extends A<Model> { }
+>B : Symbol(B, Decl(relatedViaDiscriminatedTypeNoError.ts, 7, 1))
+>A : Symbol(A, Decl(relatedViaDiscriminatedTypeNoError.ts, 4, 59))
+>Model : Symbol(Model, Decl(relatedViaDiscriminatedTypeNoError.ts, 0, 0))
+

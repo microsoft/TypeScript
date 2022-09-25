@@ -1,9 +1,9 @@
 interface ErrorOptions {
-    cause?: Error;
+    cause?: unknown;
 }
 
 interface Error {
-    cause?: Error;
+    cause?: unknown;
 }
 
 interface ErrorConstructor {

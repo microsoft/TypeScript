@@ -70,6 +70,15 @@ interface c extends a, b {
 interface d extends a {
 }
 
+interface e extends number {
+}
+
+interface f {
+    prop: typeof string;
+>prop : any
+>string : any
+}
+
 class c1 implements a {
 >c1 : c1
 }

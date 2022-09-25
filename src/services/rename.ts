@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts.Rename {
-    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, options?: RenameInfoOptions): RenameInfo {
+    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, preferences: UserPreferences): RenameInfo {
         const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
         if (nodeIsEligibleForRename(node)) {
-            const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, program, options);
+            const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, program, preferences);
             if (renameInfo) {
                 return renameInfo;
             }
@@ -11,7 +11,12 @@ namespace ts.Rename {
         return getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
     }
 
-    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, program: Program, options?: RenameInfoOptions): RenameInfo | undefined {
+    function getRenameInfoForNode(
+        node: Node,
+        typeChecker: TypeChecker,
+        sourceFile: SourceFile,
+        program: Program,
+        preferences: UserPreferences): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
         if (!symbol) {
             if (isStringLiteralLike(node)) {
@@ -43,7 +48,13 @@ namespace ts.Rename {
         }
 
         if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) {
-            return options && options.allowRenameOfImportPath ? getRenameInfoForModule(node, sourceFile, symbol) : undefined;
+            return preferences.allowRenameOfImportPath ? getRenameInfoForModule(node, sourceFile, symbol) : undefined;
+        }
+
+        // Disallow rename for elements that would rename across `*/node_modules/*` packages.
+        const wouldRenameNodeModules = wouldRenameInOtherNodeModules(sourceFile, symbol, typeChecker, preferences);
+        if (wouldRenameNodeModules) {
+            return getRenameInfoError(wouldRenameNodeModules);
         }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
@@ -58,6 +69,55 @@ namespace ts.Rename {
     function isDefinedInLibraryFile(program: Program, declaration: Node) {
         const sourceFile = declaration.getSourceFile();
         return program.isSourceFileDefaultLibrary(sourceFile) && fileExtensionIs(sourceFile.fileName, Extension.Dts);
+    }
+
+    function wouldRenameInOtherNodeModules(
+        originalFile: SourceFile,
+        symbol: Symbol,
+        checker: TypeChecker,
+        preferences: UserPreferences
+    ): DiagnosticMessage | undefined {
+        if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
+            const importSpecifier = symbol.declarations && find(symbol.declarations, decl => isImportSpecifier(decl));
+            if (importSpecifier && !(importSpecifier as ImportSpecifier).propertyName) {
+                symbol = checker.getAliasedSymbol(symbol);
+            }
+        }
+        const { declarations } = symbol;
+        if (!declarations) {
+            return undefined;
+        }
+        const originalPackage = getPackagePathComponents(originalFile.path);
+        if (originalPackage === undefined) { // original source file is not in node_modules
+            if (some(declarations, declaration => isInsideNodeModules(declaration.getSourceFile().path))) {
+                return Diagnostics.You_cannot_rename_elements_that_are_defined_in_a_node_modules_folder;
+            }
+            else {
+                return undefined;
+            }
+        }
+        // original source file is in node_modules
+        for (const declaration of declarations) {
+            const declPackage = getPackagePathComponents(declaration.getSourceFile().path);
+            if (declPackage) {
+                const length = Math.min(originalPackage.length, declPackage.length);
+                for (let i = 0; i <= length; i++) {
+                    if (compareStringsCaseSensitive(originalPackage[i], declPackage[i]) !== Comparison.EqualTo) {
+                        return Diagnostics.You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder;
+                    }
+                }
+            }
+        }
+        return undefined;
+    }
+
+    function getPackagePathComponents(filePath: Path): string[] | undefined {
+        const components = getPathComponents(filePath);
+        const nodeModulesIdx = components.lastIndexOf("node_modules");
+        if (nodeModulesIdx === -1) {
+            return undefined;
+        }
+        return components.slice(0, nodeModulesIdx + 2);
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {

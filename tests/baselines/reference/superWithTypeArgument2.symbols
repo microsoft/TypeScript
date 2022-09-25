@@ -19,6 +19,7 @@ class D<T> extends C<T> {
 
         super<T>(x);
 >super : Symbol(C, Decl(superWithTypeArgument2.ts, 0, 0))
+>T : Symbol(T, Decl(superWithTypeArgument2.ts, 4, 8))
 >x : Symbol(x, Decl(superWithTypeArgument2.ts, 5, 16))
     }
 }

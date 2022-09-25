@@ -15,8 +15,8 @@ async function test(isError: boolean = false) {
 >x : string
 >await Promise.resolve("The test is passed without an error.") : string
 >Promise.resolve("The test is passed without an error.") : Promise<string>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >"The test is passed without an error." : "The test is passed without an error."
 }

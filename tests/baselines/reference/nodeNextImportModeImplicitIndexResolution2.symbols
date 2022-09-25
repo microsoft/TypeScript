@@ -1,0 +1,38 @@
+=== /node_modules/@types/dedent/index.d.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /node_modules/@types/dedent2/index.d.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /node_modules/@types/dedent3/index.d.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /node_modules/@types/dedent4/index.d.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /index.mts ===
+import dedent from "dedent";
+>dedent : Symbol(dedent, Decl(index.mts, 0, 6))
+
+import dedent2 from "dedent2";
+>dedent2 : Symbol(dedent2, Decl(index.mts, 1, 6))
+
+import dedent3 from "dedent3";
+>dedent3 : Symbol(dedent3, Decl(index.mts, 2, 6))
+
+import dedent4 from "dedent4"; // Error
+>dedent4 : Symbol(dedent4, Decl(index.mts, 3, 6))
+
+=== /index.cts ===
+import dedent from "dedent";
+>dedent : Symbol(dedent, Decl(index.cts, 0, 6))
+
+import dedent2 from "dedent2";
+>dedent2 : Symbol(dedent2, Decl(index.cts, 1, 6))
+
+import dedent3 from "dedent3";
+>dedent3 : Symbol(dedent3, Decl(index.cts, 2, 6))
+
+import dedent4 from "dedent4"; // Error
+>dedent4 : Symbol(dedent4, Decl(index.cts, 3, 6))
+

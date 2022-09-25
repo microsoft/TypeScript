@@ -82,11 +82,8 @@ namespace ts.codefix {
             return;
         }
 
-        const pos = functionToConvert.modifiers ? functionToConvert.modifiers.end :
-            functionToConvert.decorators ? skipTrivia(sourceFile.text, functionToConvert.decorators.end) :
-                functionToConvert.getStart(sourceFile);
-        const options = functionToConvert.modifiers ? { prefix: " " } : { suffix: " " };
-        changes.insertModifierAt(sourceFile, pos, SyntaxKind.AsyncKeyword, options);
+        const pos = skipTrivia(sourceFile.text, moveRangePastModifiers(functionToConvert).pos);
+        changes.insertModifierAt(sourceFile, pos, SyntaxKind.AsyncKeyword, { suffix: " " });
 
         for (const returnStatement of returnStatements) {
             forEachChild(returnStatement, function visit(node) {
@@ -757,7 +754,7 @@ namespace ts.codefix {
         }
 
         // return undefined argName when arg is null or undefined
-        // eslint-disable-next-line no-in-operator
+        // eslint-disable-next-line local/no-in-operator
         if (!name || "identifier" in name && name.identifier.text === "undefined") {
             return undefined;
         }

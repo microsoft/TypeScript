@@ -101,7 +101,7 @@ interface Headers {
 
 interface IDBDatabase {
     /** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. */
-    transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode): IDBTransaction;
+    transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode, options?: IDBTransactionOptions): IDBTransaction;
 }
 
 interface IDBObjectStore {
@@ -111,16 +111,6 @@ interface IDBObjectStore {
      * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     createIndex(name: string, keyPath: string | Iterable<string>, options?: IDBIndexParameters): IDBIndex;
-}
-
-interface MIDIInputMap extends ReadonlyMap<string, MIDIInput> {
-}
-
-interface MIDIOutput {
-    send(data: Iterable<number>, timestamp?: DOMHighResTimeStamp): void;
-}
-
-interface MIDIOutputMap extends ReadonlyMap<string, MIDIOutput> {
 }
 
 interface MediaKeyStatusMap {

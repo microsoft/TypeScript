@@ -451,7 +451,6 @@ namespace ts {
                 node = setOriginalNode(
                     setTextRange(
                         factory.createFunctionDeclaration(
-                            /*decorators*/ undefined,
                             node.modifiers,
                             /*asteriskToken*/ undefined,
                             node.name,
@@ -2064,7 +2063,7 @@ namespace ts {
          * Gets the current open block.
          */
         function peekBlock() {
-            return lastOrUndefined(blockStack!);
+            return lastOrUndefined(blockStack);
         }
 
         /**
@@ -2658,7 +2657,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, state)],
+                        [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, state)],
                         /*type*/ undefined,
                         factory.createBlock(
                             buildResult,

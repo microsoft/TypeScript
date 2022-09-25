@@ -102,6 +102,14 @@ namespace ts.server {
 
     export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
 
+    /* @internal */
+    export interface BeginEnablePluginResult {
+        pluginConfigEntry: PluginImport;
+        pluginConfigOverrides: Map<any> | undefined;
+        resolvedModule: PluginModuleFactory | undefined;
+        errorLogs: string[] | undefined;
+    }
+
     /**
      * The project root can be script info - if root is present,
      * or it could be just normalized path if root wasn't present on the host(only for non inferred project)
@@ -134,6 +142,7 @@ namespace ts.server {
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: ESMap<Path, FileWatcher> | undefined;
         private generatedFilesMap: GeneratedFileWatcherMap | undefined;
+
         private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
@@ -163,7 +172,7 @@ namespace ts.server {
         readonly realpath?: (path: string) => string;
 
         /*@internal*/
-        hasInvalidatedResolution: HasInvalidatedResolution | undefined;
+        hasInvalidatedResolutions: HasInvalidatedResolutions | undefined;
 
         /*@internal*/
         resolutionCache: ResolutionCache;
@@ -240,6 +249,26 @@ namespace ts.server {
             if (result.error) {
                 const err = result.error.stack || result.error.message || JSON.stringify(result.error);
                 (logErrors || log)(`Failed to load module '${moduleName}' from ${resolvedPath}: ${err}`);
+                return undefined;
+            }
+            return result.module;
+        }
+
+        /*@internal*/
+        public static async importServicePluginAsync(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): Promise<{} | undefined> {
+            Debug.assertIsDefined(host.importPlugin);
+            const resolvedPath = combinePaths(initialDir, "node_modules");
+            log(`Dynamically importing ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
+            let result: ModuleImportResult;
+            try {
+                result = await host.importPlugin(resolvedPath, moduleName);
+            }
+            catch (e) {
+                result = { module: undefined, error: e };
+            }
+            if (result.error) {
+                const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+                (logErrors || log)(`Failed to dynamically import module '${moduleName}' from ${resolvedPath}: ${err}`);
                 return undefined;
             }
             return result.module;
@@ -523,6 +552,18 @@ namespace ts.server {
         }
 
         /*@internal*/
+        watchAffectingFileLocation(file: string, cb: FileWatcherCallback) {
+            return this.projectService.watchFactory.watchFile(
+                file,
+                cb,
+                PollingInterval.High,
+                this.projectService.getWatchOptions(this),
+                WatchType.AffectingFileLocation,
+                this
+            );
+        }
+
+        /*@internal*/
         clearInvalidateResolutionOfFailedLookupTimer() {
             return this.projectService.throttledOperations.cancel(`${this.getProjectName()}FailedLookupInvalidation`);
         }
@@ -668,7 +709,8 @@ namespace ts.server {
                     this.program!,
                     scriptInfo.path,
                     this.cancellationToken,
-                    maybeBind(this.projectService.host, this.projectService.host.createHash)
+                    maybeBind(this.projectService.host, this.projectService.host.createHash),
+                    this.getCanonicalFileName,
                 ),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined
             );
@@ -1130,16 +1172,16 @@ namespace ts.server {
         }
 
         private updateGraphWorker() {
-            const oldProgram = this.program;
+            const oldProgram = this.languageService.getCurrentProgram();
             Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
-            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
+            this.hasInvalidatedResolutions = this.resolutionCache.createHasInvalidatedResolutions(returnFalse);
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;
             tracing?.push(tracing.Phase.Session, "finishCachingPerDirectoryResolution");
-            this.resolutionCache.finishCachingPerDirectoryResolution();
+            this.resolutionCache.finishCachingPerDirectoryResolution(this.program, oldProgram);
             tracing?.pop();
 
             Debug.assert(oldProgram === undefined || this.program !== undefined);
@@ -1562,19 +1604,19 @@ namespace ts.server {
             return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
         }
 
-        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
+        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void {
             const host = this.projectService.host;
 
-            if (!host.require) {
+            if (!host.require && !host.importPlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
 
             // Search any globally-specified probe paths, then our peer node_modules
             const searchPaths = [
-              ...this.projectService.pluginProbeLocations,
-              // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-              combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
+                ...this.projectService.pluginProbeLocations,
+                // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+                combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
             ];
 
             if (this.projectService.globalPlugins) {
@@ -1594,20 +1636,51 @@ namespace ts.server {
             }
         }
 
-        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
-            this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-            if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
-                this.projectService.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
-                return;
-            }
+        /**
+         * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin synchronously using 'require'.
+         */
+        /*@internal*/
+        beginEnablePluginSync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): BeginEnablePluginResult {
+            Debug.assertIsDefined(this.projectService.host.require);
 
-            const log = (message: string) => this.projectService.logger.info(message);
             let errorLogs: string[] | undefined;
+            const log = (message: string) => this.projectService.logger.info(message);
             const logError = (message: string) => {
-                (errorLogs || (errorLogs = [])).push(message);
+                (errorLogs ??= []).push(message);
             };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
                 Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
+            return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };
+        }
+
+        /**
+         * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin asynchronously using dynamic `import`.
+         */
+        /*@internal*/
+        async beginEnablePluginAsync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): Promise<BeginEnablePluginResult> {
+            Debug.assertIsDefined(this.projectService.host.importPlugin);
+
+            let errorLogs: string[] | undefined;
+            const log = (message: string) => this.projectService.logger.info(message);
+            const logError = (message: string) => {
+                (errorLogs ??= []).push(message);
+            };
+
+            let resolvedModule: PluginModuleFactory | undefined;
+            for (const searchPath of searchPaths) {
+                resolvedModule = await Project.importServicePluginAsync(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined;
+                if (resolvedModule !== undefined) {
+                    break;
+                }
+            }
+            return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };
+        }
+
+        /**
+         * Performs the remaining steps of enabling a plugin after its module has been instantiated.
+         */
+        /*@internal*/
+        endEnablePlugin({ pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs }: BeginEnablePluginResult) {
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {
@@ -1620,9 +1693,13 @@ namespace ts.server {
                 this.enableProxy(resolvedModule, pluginConfigEntry);
             }
             else {
-                forEach(errorLogs, log);
+                forEach(errorLogs, message => this.projectService.logger.info(message));
                 this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
             }
+        }
+
+        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): void {
+            this.projectService.requestEnablePlugin(this, pluginConfigEntry, searchPaths, pluginConfigOverrides);
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
@@ -1644,7 +1721,7 @@ namespace ts.server {
                 const pluginModule = pluginModuleFactory({ typescript: ts });
                 const newLS = pluginModule.create(info);
                 for (const k of Object.keys(this.languageService)) {
-                    // eslint-disable-next-line no-in-operator
+                    // eslint-disable-next-line local/no-in-operator
                     if (!(k in newLS)) {
                         this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
                         (newLS as any)[k] = (this.languageService as any)[k];
@@ -1674,7 +1751,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
             if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
             return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
         }
@@ -1685,7 +1762,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsForAutoImport(rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsForAutoImport(rootDir?: string): readonly ProjectPackageJsonInfo[] {
             const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
             this.packageJsonsForAutoImport = new Set(packageJsons.map(p => p.fileName));
             return packageJsons;
@@ -2100,7 +2177,6 @@ namespace ts.server {
                 }
             }
 
-            type PackageJsonInfo = NonNullable<ReturnType<typeof resolvePackageNameToPackageJson>>;
             function getRootNamesFromPackageJson(packageJson: PackageJsonInfo, program: Program, symlinkCache: SymlinkCache, resolveJs?: boolean) {
                 const entrypoints = getEntrypointsFromPackageJsonInfo(
                     packageJson,
@@ -2444,10 +2520,9 @@ namespace ts.server {
         }
 
         /*@internal*/
-        enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined) {
+        enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): void {
             const host = this.projectService.host;
-
-            if (!host.require) {
+            if (!host.require && !host.importPlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
@@ -2469,7 +2544,7 @@ namespace ts.server {
                 }
             }
 
-            this.enableGlobalPlugins(options, pluginConfigOverrides);
+            return this.enableGlobalPlugins(options, pluginConfigOverrides);
         }
 
         /**

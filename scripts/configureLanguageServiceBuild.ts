@@ -1,7 +1,7 @@
 /// <reference types="node"/>
 import { normalize, dirname, join } from "path";
 import { readFileSync, writeFileSync, unlinkSync, existsSync } from "fs";
-import assert = require("assert");
+import * as assert from "assert";
 import { execSync } from "child_process";
 const args = process.argv.slice(2);
 
@@ -10,11 +10,11 @@ const args = process.argv.slice(2);
  */
 interface PackageJson {
     name: string;
-    bin: {};
+    bin?: {};
     main: string;
     scripts: {
-        prepare: string
-        postpublish: string
+        prepare?: string
+        postpublish?: string
     }
 }
 

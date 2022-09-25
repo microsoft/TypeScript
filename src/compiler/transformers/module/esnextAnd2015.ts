@@ -72,7 +72,7 @@ namespace ts {
                     // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
                     // To give easy access to a synchronous `require` in node-flavor esm. We do the transform even in scenarios where we error, but `import.meta.url`
                     // is available, just because the output is reasonable for a node-like runtime.
-                    return getEmitScriptTarget(compilerOptions) >= ModuleKind.ES2020 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
+                    return getEmitModuleKind(compilerOptions) >= ModuleKind.Node16 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(node as ExportAssignment);
                 case SyntaxKind.ExportDeclaration:
@@ -98,7 +98,6 @@ namespace ts {
             if (!importRequireStatements) {
                 const createRequireName = factory.createUniqueName("_createRequire", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
                 const importStatement = factory.createImportDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     factory.createImportClause(
                         /*isTypeOnly*/ false,
@@ -174,7 +173,6 @@ namespace ts {
         function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, node: ImportEqualsDeclaration) {
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements, factory.createExportDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     node.isTypeOnly,
                     factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name))])
@@ -202,7 +200,6 @@ namespace ts {
             const oldIdentifier = node.exportClause.name;
             const synthName = factory.getGeneratedNameForNode(oldIdentifier);
             const importDecl = factory.createImportDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 factory.createImportClause(
                     /*isTypeOnly*/ false,
@@ -217,7 +214,6 @@ namespace ts {
             setOriginalNode(importDecl, node.exportClause);
 
             const exportDecl = isExportNamespaceAsDefaultDeclaration(node) ? factory.createExportDefault(synthName) : factory.createExportDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, synthName, oldIdentifier)]),

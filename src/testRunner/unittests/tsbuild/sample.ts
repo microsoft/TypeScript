@@ -138,6 +138,22 @@ namespace ts {
                 ]
             });
 
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "when input file text does not change but its modified time changes",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--verbose"],
+                edits: [
+                    {
+                        subScenario: "upstream project changes without changing file text",
+                        modifyFs: fs => {
+                            const time = new Date(fs.time());
+                            fs.utimesSync("/src/core/index.ts", time, time);
+                        },
+                    },
+                ]
+            });
+
             verifyTsc({
                 scenario: "sample1",
                 subScenario: "indicates that it would skip builds during a dry build",
@@ -150,6 +166,21 @@ namespace ts {
                 subScenario: "rebuilds from start if force option is set",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
+            });
+
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "tsbuildinfo has error",
+                fs: () => loadProjectFromFiles({
+                    "/src/project/main.ts": "export const x = 10;",
+                    "/src/project/tsconfig.json": "{}",
+                    "/src/project/tsconfig.tsbuildinfo": "Some random string",
+                }),
+                commandLineArgs: ["--b", "src/project", "-i", "-v"],
+                edits: [{
+                    subScenario: "tsbuildinfo written has error",
+                    modifyFs: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+                }]
             });
 
             verifyTscCompileLike(testTscCompileLike, {
@@ -285,12 +316,13 @@ namespace ts {
         });
 
         describe("downstream-blocked compilations", () => {
-            verifyTsc({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "does not build downstream projects if upstream projects have errors",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                modifyFs: fs => replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`)
+                modifyFs: fs => replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),
+                edits: noChangeOnlyRuns
             });
         });
 
@@ -338,11 +370,11 @@ namespace ts {
                 function verifyInvalidation(heading: string) {
                     // Rebuild this project
                     builder.invalidateProject(logicConfig.path as ResolvedConfigFilePath);
-                    builder.buildNextInvalidatedProject();
+                    builder.getNextInvalidatedProject()?.done();
                     baselineState(`${heading}:: After rebuilding logicConfig`);
 
                     // Build downstream projects should update 'tests', but not 'core'
-                    builder.buildNextInvalidatedProject();
+                    builder.getNextInvalidatedProject()?.done();
                     baselineState(`${heading}:: After building next project`);
                 }
 
@@ -366,7 +398,8 @@ export class someClass { }`),
                 subScenario: "incremental-declaration-doesnt-change",
                 modifyFs: fs => appendText(fs, "/src/core/index.ts", `
 class someClass2 { }`),
-            }
+            },
+            noChangeRun,
         ];
 
         describe("lists files", () => {
@@ -506,6 +539,34 @@ class someClass2 { }`),
                     subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
                 }],
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "reports error if input file is missing",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--v"],
+                modifyFs: fs => {
+                    fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
+                        compilerOptions: { composite: true },
+                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"]
+                    }));
+                    fs.unlinkSync("/src/core/anotherModule.ts");
+                }
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "reports error if input file is missing with force",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--v", "--f"],
+                modifyFs: fs => {
+                    fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
+                        compilerOptions: { composite: true },
+                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"]
+                    }));
+                    fs.unlinkSync("/src/core/anotherModule.ts");
+                }
             });
         });
     });
