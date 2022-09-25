@@ -1299,8 +1299,7 @@ namespace ts {
             addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line local/no-in-operator
         }
         function appendDiagnosticWithCategory(category: DiagnosticCategory | undefined, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
-            // eslint-disable-line local/no-in-operator
-            const diag = "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message);
+            const diag = "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message); // eslint-disable-line local/no-in-operator
             diag.category = category ?? diag.category;
             switch (category) {
                 case DiagnosticCategory.Error:
