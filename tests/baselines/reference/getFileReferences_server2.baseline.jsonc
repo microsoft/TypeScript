@@ -14,8 +14,7 @@
       "start": 21,
       "length": 24
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   },
   {
     "fileName": "/packages/server/router.js",
@@ -23,8 +22,7 @@
       "start": 22,
       "length": 25
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   },
   {
     "fileName": "/packages/client/index.ts",
@@ -32,7 +30,6 @@
       "start": 8,
       "length": 18
     },
-    "isWriteAccess": false,
-    "isDefinition": false
+    "isWriteAccess": false
   }
 ]

@@ -1,0 +1,35 @@
+=== tests/cases/conformance/declarationEmit/a.ts ===
+export interface Foo {}
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/declarationEmit/b.ts ===
+import * as a from "./a";
+>a : typeof a
+
+declare global {
+>global : typeof global
+
+  namespace teams {
+>teams : typeof teams
+
+    export namespace calling {
+>calling : typeof calling
+
+      export import Foo = a.Foo;
+>Foo : any
+>a : typeof a
+>Foo : Foo
+    }
+  }
+}
+
+=== tests/cases/conformance/declarationEmit/c.ts ===
+type Foo = teams.calling.Foo;
+>Foo : import("tests/cases/conformance/declarationEmit/a").Foo
+>teams : any
+>calling : any
+
+export const bar = (p?: Foo) => {}
+>bar : (p?: Foo) => void
+>(p?: Foo) => {} : (p?: Foo) => void
+>p : import("tests/cases/conformance/declarationEmit/a").Foo | undefined
+

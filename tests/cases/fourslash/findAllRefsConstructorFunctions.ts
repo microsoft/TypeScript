@@ -4,11 +4,11 @@
 
 // @Filename: /a.js
 ////function f() {
-////    [|this.[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
+////    /*1*/this./*2*/x = 0;
 ////}
 ////f.prototype.setX = function() {
-////    [|this.[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|] = 1;|]
+////    /*3*/this./*4*/x = 1;
 ////}
-////f.prototype.useX = function() { this.[|x|]; }
+////f.prototype.useX = function() { this./*5*/x; }
 
-verify.singleReferenceGroup("(property) f.x: number", "x");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5');

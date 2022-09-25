@@ -61,11 +61,13 @@ namespace ts.projectSystem {
         it("works for paths close to the root", () => {
             const cache = createSymlinkCache("/", createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
             // Used to crash, #44953
-            cache.setSymlinksFromResolutions([], new Map([["foo", {
+            const map = createModeAwareCache<ResolvedTypeReferenceDirective | undefined>();
+            map.set("foo", /*mode*/ undefined, {
                 primary: true,
                 originalPath: "/foo",
                 resolvedFileName: "/one/two/foo",
-            }]]));
+            });
+            cache.setSymlinksFromResolutions([], map);
         });
     });
 

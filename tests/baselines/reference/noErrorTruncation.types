@@ -2,27 +2,27 @@
 // @noErrorTruncation
 
 type SomeLongOptionA = { someLongOptionA: string }
->SomeLongOptionA : SomeLongOptionA
+>SomeLongOptionA : { someLongOptionA: string; }
 >someLongOptionA : string
 
 type SomeLongOptionB = { someLongOptionB: string }
->SomeLongOptionB : SomeLongOptionB
+>SomeLongOptionB : { someLongOptionB: string; }
 >someLongOptionB : string
 
 type SomeLongOptionC = { someLongOptionC: string }
->SomeLongOptionC : SomeLongOptionC
+>SomeLongOptionC : { someLongOptionC: string; }
 >someLongOptionC : string
 
 type SomeLongOptionD = { someLongOptionD: string }
->SomeLongOptionD : SomeLongOptionD
+>SomeLongOptionD : { someLongOptionD: string; }
 >someLongOptionD : string
 
 type SomeLongOptionE = { someLongOptionE: string }
->SomeLongOptionE : SomeLongOptionE
+>SomeLongOptionE : { someLongOptionE: string; }
 >someLongOptionE : string
 
 type SomeLongOptionF = { someLongOptionF: string }
->SomeLongOptionF : SomeLongOptionF
+>SomeLongOptionF : { someLongOptionF: string; }
 >someLongOptionF : string
 
 const x: SomeLongOptionA

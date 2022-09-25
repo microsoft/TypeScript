@@ -715,6 +715,8 @@ namespace ts.server {
         readonly newInferredProjectName = createProjectNameFactoryWithCounter(makeInferredProjectName);
         /*@internal*/
         readonly newAutoImportProviderProjectName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
+        /*@internal*/
+        readonly newAuxiliaryProjectName = createProjectNameFactoryWithCounter(makeAuxiliaryProjectName);
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
@@ -802,6 +804,9 @@ namespace ts.server {
 
         private performanceEventHandler?: PerformanceEventHandler;
 
+        private pendingPluginEnablements?: ESMap<Project, Promise<BeginEnablePluginResult>[]>;
+        private currentPluginEnablementPromise?: Promise<void>;
+
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
             this.logger = opts.logger;
@@ -887,13 +892,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
+        setDocument(key: DocumentRegistryBucketKeyWithMode, path: Path, sourceFile: SourceFile) {
             const info = Debug.checkDefined(this.getScriptInfoForPath(path));
             info.cacheSourceFile = { key, sourceFile };
         }
 
         /*@internal*/
-        getDocument(key: DocumentRegistryBucketKey, path: Path): SourceFile | undefined {
+        getDocument(key: DocumentRegistryBucketKeyWithMode, path: Path): SourceFile | undefined {
             const info = this.getScriptInfoForPath(path);
             return info && info.cacheSourceFile && info.cacheSourceFile.key === key ? info.cacheSourceFile.sourceFile : undefined;
         }
@@ -935,7 +940,7 @@ namespace ts.server {
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
                 for (const key in raw.simpleMap) {
-                    if (raw.simpleMap.hasOwnProperty(key)) {
+                    if (hasProperty(raw.simpleMap, key)) {
                         this.legacySafelist.set(key, raw.simpleMap[key].toLowerCase());
                     }
                 }
@@ -989,13 +994,15 @@ namespace ts.server {
 
         private delayUpdateProjectGraph(project: Project) {
             project.markAsDirty();
-            const projectName = project.getProjectName();
-            this.pendingProjectUpdates.set(projectName, project);
-            this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
-                if (this.pendingProjectUpdates.delete(projectName)) {
-                    updateProjectIfDirty(project);
-                }
-            });
+            if (project.projectKind !== ProjectKind.AutoImportProvider && project.projectKind !== ProjectKind.Auxiliary) {
+                const projectName = project.getProjectName();
+                this.pendingProjectUpdates.set(projectName, project);
+                this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
+                    if (this.pendingProjectUpdates.delete(projectName)) {
+                        updateProjectIfDirty(project);
+                    }
+                });
+            }
         }
 
         /*@internal*/
@@ -1702,7 +1709,7 @@ namespace ts.server {
                 // created when any of the script infos are added as root of inferred project
                 if (this.configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo)) {
                     // If we cannot watch config file existence without configured project, close the configured file watcher
-                    if (!canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path)) {
+                    if (!canWatchDirectoryOrFile(getDirectoryPath(canonicalConfigFilePath) as Path)) {
                         configFileExistenceInfo.watcher!.close();
                         configFileExistenceInfo.watcher = noopConfigFileWatcher;
                     }
@@ -1787,7 +1794,7 @@ namespace ts.server {
                 (configFileExistenceInfo.openFilesImpactedByConfigFile ||= new Map()).set(info.path, true);
 
                 // If there is no configured project for this config file, add the file watcher
-                configFileExistenceInfo.watcher ||= canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path) ?
+                configFileExistenceInfo.watcher ||= canWatchDirectoryOrFile(getDirectoryPath(canonicalConfigFilePath) as Path) ?
                     this.watchFactory.watchFile(
                         configFileName,
                         (_filename, eventKind) => this.onConfigFileChanged(canonicalConfigFilePath, eventKind),
@@ -2062,6 +2069,7 @@ namespace ts.server {
 
         /* @internal */
         createConfiguredProject(configFileName: NormalizedPath) {
+            tracing?.instant(tracing.Phase.Session, "createConfiguredProject", { configFilePath: configFileName });
             this.logger.info(`Creating configuration project ${configFileName}`);
             const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
             let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
@@ -2119,6 +2127,7 @@ namespace ts.server {
          */
         /* @internal */
         private loadConfiguredProject(project: ConfiguredProject, reason: string) {
+            tracing?.push(tracing.Phase.Session, "loadConfiguredProject", { configFilePath: project.canonicalConfigFilePath });
             this.sendProjectLoadingStartEvent(project, reason);
 
             // Read updated contents from disk
@@ -2160,6 +2169,7 @@ namespace ts.server {
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
+            tracing?.pop();
         }
 
         /*@internal*/
@@ -2294,7 +2304,7 @@ namespace ts.server {
             configFileExistenceInfo.config.watchedDirectoriesStale = undefined;
         }
 
-        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
+        private updateNonInferredProjectFiles<T>(project: Project, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
             const newRootScriptInfoMap = new Map<string, true>();
 
@@ -3586,7 +3596,7 @@ namespace ts.server {
             const toRemoveScriptInfos = new Map(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
-                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
+                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByBackgroundProject()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
                     let sourceInfos: Set<Path> | undefined;
@@ -4056,6 +4066,114 @@ namespace ts.server {
             return false;
         }
 
+        /*@internal*/
+        requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
+            if (!this.host.importPlugin && !this.host.require) {
+                this.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
+                return;
+            }
+
+            this.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
+            if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
+                this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
+                return;
+            }
+
+            // If the host supports dynamic import, begin enabling the plugin asynchronously.
+            if (this.host.importPlugin) {
+                const importPromise = project.beginEnablePluginAsync(pluginConfigEntry, searchPaths, pluginConfigOverrides);
+                this.pendingPluginEnablements ??= new Map();
+                let promises = this.pendingPluginEnablements.get(project);
+                if (!promises) this.pendingPluginEnablements.set(project, promises = []);
+                promises.push(importPromise);
+                return;
+            }
+
+            // Otherwise, load the plugin using `require`
+            project.endEnablePlugin(project.beginEnablePluginSync(pluginConfigEntry, searchPaths, pluginConfigOverrides));
+        }
+
+        /* @internal */
+        hasNewPluginEnablementRequests() {
+            return !!this.pendingPluginEnablements;
+        }
+
+        /* @internal */
+        hasPendingPluginEnablements() {
+            return !!this.currentPluginEnablementPromise;
+        }
+
+        /**
+         * Waits for any ongoing plugin enablement requests to complete.
+         */
+        /* @internal */
+        async waitForPendingPlugins() {
+            while (this.currentPluginEnablementPromise) {
+                await this.currentPluginEnablementPromise;
+            }
+        }
+
+        /**
+         * Starts enabling any requested plugins without waiting for the result.
+         */
+        /* @internal */
+        enableRequestedPlugins() {
+            if (this.pendingPluginEnablements) {
+                void this.enableRequestedPluginsAsync();
+            }
+        }
+
+        private async enableRequestedPluginsAsync() {
+            if (this.currentPluginEnablementPromise) {
+                // If we're already enabling plugins, wait for any existing operations to complete
+                await this.waitForPendingPlugins();
+            }
+
+            // Skip if there are no new plugin enablement requests
+            if (!this.pendingPluginEnablements) {
+                return;
+            }
+
+            // Consume the pending plugin enablement requests
+            const entries = arrayFrom(this.pendingPluginEnablements.entries());
+            this.pendingPluginEnablements = undefined;
+
+            // Start processing the requests, keeping track of the promise for the operation so that
+            // project consumers can potentially wait for the plugins to load.
+            this.currentPluginEnablementPromise = this.enableRequestedPluginsWorker(entries);
+            await this.currentPluginEnablementPromise;
+        }
+
+        private async enableRequestedPluginsWorker(pendingPlugins: [Project, Promise<BeginEnablePluginResult>[]][]) {
+            // This should only be called from `enableRequestedPluginsAsync`, which ensures this precondition is met.
+            Debug.assert(this.currentPluginEnablementPromise === undefined);
+
+            // Process all pending plugins, partitioned by project. This way a project with few plugins doesn't need to wait
+            // on a project with many plugins.
+            await Promise.all(map(pendingPlugins, ([project, promises]) => this.enableRequestedPluginsForProjectAsync(project, promises)));
+
+            // Clear the pending operation and notify the client that projects have been updated.
+            this.currentPluginEnablementPromise = undefined;
+            this.sendProjectsUpdatedInBackgroundEvent();
+        }
+
+        private async enableRequestedPluginsForProjectAsync(project: Project, promises: Promise<BeginEnablePluginResult>[]) {
+            // Await all pending plugin imports. This ensures all requested plugin modules are fully loaded
+            // prior to patching the language service, and that any promise rejections are observed.
+            const results = await Promise.all(promises);
+            if (project.isClosed()) {
+                // project is not alive, so don't enable plugins.
+                return;
+            }
+
+            for (const result of results) {
+                project.endEnablePlugin(result);
+            }
+
+            // Plugins may have modified external files, so mark the project as dirty.
+            this.delayUpdateProjectGraph(project);
+        }
+
         configurePlugin(args: protocol.ConfigurePluginRequestArguments) {
             // For any projects that already have the plugin loaded, configure the plugin
             this.forEachEnabledProject(project => project.onPluginConfigurationChanged(args.pluginName, args.configuration));
@@ -4067,11 +4185,11 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const rootPath = rootDir && this.toPath(rootDir);
             const filePath = this.toPath(fileName);
-            const result: PackageJsonInfo[] = [];
+            const result: ProjectPackageJsonInfo[] = [];
             const processDirectory = (directory: Path): boolean | undefined => {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
                     // Sync and check same directory again

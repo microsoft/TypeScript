@@ -5,7 +5,7 @@ import * as React from "react";
 >React : typeof React
 
 type Tags = "span" | "div";
->Tags : Tags
+>Tags : "div" | "span"
 
 export const Hoc = <Tag extends Tags>(
 >Hoc : <Tag extends Tags>(TagElement: Tag) => React.SFC

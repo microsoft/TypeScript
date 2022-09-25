@@ -1,4 +1,4 @@
-tests/cases/compiler/limitDeepInstantiations.ts(3,35): error TS2502: '"true"' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/limitDeepInstantiations.ts(4,9): error TS2589: Type instantiation is excessively deep and possibly infinite.
 tests/cases/compiler/limitDeepInstantiations.ts(5,13): error TS2344: Type '"false"' does not satisfy the constraint '"true"'.
 
 
@@ -6,9 +6,9 @@ tests/cases/compiler/limitDeepInstantiations.ts(5,13): error TS2344: Type '"fals
     // Repro from #14837
     
     type Foo<T extends "true", B> = { "true": Foo<T, Foo<T, B>> }[T];
-                                      ~~~~~~
-!!! error TS2502: '"true"' is referenced directly or indirectly in its own type annotation.
     let f1: Foo<"true", {}>;
+            ~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     let f2: Foo<"false", {}>;
                 ~~~~~~~
 !!! error TS2344: Type '"false"' does not satisfy the constraint '"true"'.

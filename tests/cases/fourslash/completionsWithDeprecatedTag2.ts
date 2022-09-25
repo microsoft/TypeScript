@@ -13,6 +13,6 @@ verify.completions({
         name: "foo",
         kind: "function",
         kindModifiers: "deprecated,declare",
-        sortText: completion.SortText.DeprecatedLocationPriority
+        sortText: completion.SortText.Deprecated(completion.SortText.LocationPriority),
     }]
 });

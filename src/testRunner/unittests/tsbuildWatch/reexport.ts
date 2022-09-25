@@ -1,11 +1,5 @@
 namespace ts.tscWatch {
     describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
-        function build(sys: WatchedSystem) {
-            sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
-            sys.checkTimeoutQueueLengthAndRun(1); // build src/main
-            sys.checkTimeoutQueueLengthAndRun(1); // build src
-            sys.checkTimeoutQueueLength(0);
-        }
         verifyTscWatch({
             scenario: "reexport",
             subScenario: "Reports errors correctly",
@@ -26,12 +20,20 @@ namespace ts.tscWatch {
                 {
                     caption: "Introduce error",
                     change: sys => replaceFileText(sys, `${TestFSWithWatch.tsbuildProjectsLocation}/reexport/src/pure/session.ts`, "// ", ""),
-                    timeouts: build,
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
+                        sys.checkTimeoutQueueLengthAndRun(1); // build src/main and src
+                        sys.checkTimeoutQueueLength(0);
+                    },
                 },
                 {
                     caption: "Fix error",
                     change: sys => replaceFileText(sys, `${TestFSWithWatch.tsbuildProjectsLocation}/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
-                    timeouts: build
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
+                        sys.checkTimeoutQueueLengthAndRun(1); // build src/main and src
+                        sys.checkTimeoutQueueLength(0);
+                    },
                 }
             ]
         });

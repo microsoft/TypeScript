@@ -2,7 +2,7 @@
 // Repros from #17238
 
 type AB = {
->AB : AB
+>AB : { a: 'a'; b: 'a'; }
 
     a: 'a'
 >a : "a"
@@ -23,7 +23,7 @@ type R = AB[keyof AB]; // "a"
 >R : "a"
 
 type T3 = { [key in R]: true };
->T3 : T3
+>T3 : { a: true; }
 >true : true
 
 type T4<K extends 'a'|'b'> = T3[K] // Error

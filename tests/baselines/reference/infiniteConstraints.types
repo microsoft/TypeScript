@@ -15,7 +15,7 @@ type AProp<T extends { a: string }> = T
 >a : string
 
 declare function myBug<
->myBug : <T extends { [K in keyof T]: T[K] extends infer U ? U : never; }>(arg: T) => T
+>myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
 
   T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
 >(arg: T): T
@@ -24,7 +24,7 @@ declare function myBug<
 const out = myBug({obj1: {a: "test"}})
 >out : { obj1: { a: string; }; }
 >myBug({obj1: {a: "test"}}) : { obj1: { a: string; }; }
->myBug : <T extends { [K in keyof T]: T[K] extends infer U ? U : never; }>(arg: T) => T
+>myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
 >{obj1: {a: "test"}} : { obj1: { a: string; }; }
 >obj1 : { a: string; }
 >{a: "test"} : { a: string; }

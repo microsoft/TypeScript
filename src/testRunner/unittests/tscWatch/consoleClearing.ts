@@ -38,7 +38,11 @@ namespace ts.tscWatch {
             const files = [file, configFile, libFile];
             it("using createWatchOfConfigFile ", () => {
                 const baseline = createBaseline(createWatchedSystem(files));
-                const watch = createWatchOfConfigFile(configFile.path, baseline.sys);
+                const watch = createWatchProgram(createWatchCompilerHostOfConfigFileForBaseline({
+                    system: baseline.sys,
+                    cb: baseline.cb,
+                    configFileName: configFile.path,
+                }));
                 // Initially console is cleared if --preserveOutput is not provided since the config file is yet to be parsed
                 runWatchBaseline({
                     scenario,

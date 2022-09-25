@@ -311,3 +311,40 @@ class C11 {
     }
 }
 
+const a = 'a';
+>a : Symbol(a, Decl(strictPropertyInitialization.ts, 134, 5))
+
+const b = Symbol();
+>b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+class C12 {
+>C12 : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
+
+    [a]: number;
+>[a] : Symbol(C12[a], Decl(strictPropertyInitialization.ts, 137, 11))
+>a : Symbol(a, Decl(strictPropertyInitialization.ts, 134, 5))
+
+    [b]: number;
+>[b] : Symbol(C12[b], Decl(strictPropertyInitialization.ts, 138, 16))
+>b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
+
+    ['c']: number;
+>['c'] : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
+>'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
+
+    constructor() {
+        this[a] = 1;
+>this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
+>a : Symbol(a, Decl(strictPropertyInitialization.ts, 134, 5))
+
+        this[b] = 1;
+>this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
+>b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
+
+        this['c'] = 1;
+>this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
+>'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
+    }
+}
+

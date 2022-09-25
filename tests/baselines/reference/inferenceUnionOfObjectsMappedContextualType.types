@@ -1,6 +1,6 @@
 === tests/cases/compiler/inferenceUnionOfObjectsMappedContextualType.ts ===
 type Entity = {
->Entity : Entity
+>Entity : { someDate: Date | null; } & ({ id: string; } | { id: number; })
 
     someDate: Date | null;
 >someDate : Date | null

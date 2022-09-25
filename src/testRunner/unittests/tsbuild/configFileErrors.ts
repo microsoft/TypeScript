@@ -9,7 +9,14 @@ namespace ts {
     });
 
     describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-        verifyTscIncrementalEdits({
+        function discrepancyExplanation() {
+            return [
+                "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
+                "Clean build has declaration option in tsbuildinfo",
+            ];
+        }
+
+        verifyTscWithEdits({
             scenario: "configFileErrors",
             subScenario: "reports syntax errors in config file",
             fs: () => loadProjectFromFiles({
@@ -27,21 +34,20 @@ namespace ts {
 }`
             }),
             commandLineArgs: ["--b", "/src/tsconfig.json"],
-            incrementalScenarios: [
+            edits: [
                 {
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
                     modifyFs: fs => replaceText(fs, "/src/tsconfig.json", ",", `,
         "declaration": true,`),
-                    subScenario: "reports syntax errors after change to config file"
+                    subScenario: "reports syntax errors after change to config file",
+                    discrepancyExplanation
                 },
                 {
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
                     modifyFs: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
-                    subScenario: "reports syntax errors after change to ts file"
+                    subScenario: "reports syntax errors after change to ts file",
+                    discrepancyExplanation,
                 },
-                noChangeRun,
+                { ...noChangeRun, discrepancyExplanation },
                 {
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => fs.writeFileSync(
                         "/src/tsconfig.json",
                         JSON.stringify({

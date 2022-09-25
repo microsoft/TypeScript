@@ -15,6 +15,12 @@ namespace ts {
                 getScriptSnapshot: name => snapFor(name),
                 getDefaultLibFileName: () => "lib.d.ts",
                 getCurrentDirectory: () => "",
+                readFile: name => {
+                    const snap = snapFor(name);
+                    if (!snap) return undefined;
+                    return snap.getText(0, snap.getLength());
+                },
+                fileExists: name => !!snapFor(name),
             };
             return createLanguageService(lshost);
         }

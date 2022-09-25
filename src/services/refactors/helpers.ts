@@ -5,7 +5,7 @@ namespace ts.refactor {
      */
     export interface RefactorErrorInfo {
         error: string;
-    };
+    }
 
     /**
      * Checks if some refactor info has refactor error info.

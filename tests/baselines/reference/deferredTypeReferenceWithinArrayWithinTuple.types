@@ -1,6 +1,6 @@
 === tests/cases/compiler/deferredTypeReferenceWithinArrayWithinTuple.ts ===
 type TypeStructure =
->TypeStructure : TypeStructure
+>TypeStructure : ["or", TypeStructure[]] | ["string"] | ["number"] | ["list", TypeStructure]
 
   | ["or", TypeStructure[]] // problem is only here, when using array
   | ["string"]

@@ -72,8 +72,7 @@ baz
 <a>{/* this is a comment */}</a>;
 <div>@test content</div>;
 <div><br />7x invalid-js-identifier</div>;
-<LeftRight left/>, <a />;
-right = <b>monkeys /> gorillas</b> /  > ;
+<LeftRight left=<a /> right=<b>monkeys /> gorillas</b>/>;
 <a.b></a.b>;
 <a.b.c></a.b.c>;
 (<div />) < x;

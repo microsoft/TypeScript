@@ -3,7 +3,7 @@ module M {
 >M : typeof M
 
     export type Value = string | number | boolean;
->Value : Value
+>Value : string | number | boolean
 
     export var x: Value;
 >x : Value
@@ -28,7 +28,7 @@ module M {
 >m : any
 
     export type fc = () => c;
->fc : fc
+>fc : () => c
 }
 
 interface Window {
@@ -40,7 +40,7 @@ module M {
 >M : typeof M
 
     export type W = Window | string;
->W : W
+>W : string | Window
 
     export module N {
 >N : typeof N

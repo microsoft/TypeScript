@@ -157,3 +157,34 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
     }
 }
 
+// Repro from #49316
+
+function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
+>configureStore : Symbol(configureStore, Decl(typeGuardOfFormTypeOfFunction.ts, 71, 1))
+>S : Symbol(S, Decl(typeGuardOfFormTypeOfFunction.ts, 75, 24))
+>reducer : Symbol(reducer, Decl(typeGuardOfFormTypeOfFunction.ts, 75, 42))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(typeGuardOfFormTypeOfFunction.ts, 75, 24))
+
+    let rootReducer: () => void;
+>rootReducer : Symbol(rootReducer, Decl(typeGuardOfFormTypeOfFunction.ts, 76, 7))
+
+    if (typeof reducer === 'function') {
+>reducer : Symbol(reducer, Decl(typeGuardOfFormTypeOfFunction.ts, 75, 42))
+
+        rootReducer = reducer;
+>rootReducer : Symbol(rootReducer, Decl(typeGuardOfFormTypeOfFunction.ts, 76, 7))
+>reducer : Symbol(reducer, Decl(typeGuardOfFormTypeOfFunction.ts, 75, 42))
+    }
+}
+
+function f101(x: string | Record<string, any>) {
+>f101 : Symbol(f101, Decl(typeGuardOfFormTypeOfFunction.ts, 80, 1))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 82, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    return typeof x === "object" && x.anything;
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 82, 14))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 82, 14))
+}
+

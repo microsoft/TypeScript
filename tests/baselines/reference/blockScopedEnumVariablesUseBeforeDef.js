@@ -18,5 +18,5 @@ function foo1() {
     })(E || (E = {}));
 }
 function foo2() {
-    return 0 /* A */;
+    return 0 /* E.A */;
 }

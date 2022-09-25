@@ -1,6 +1,6 @@
 tests/cases/compiler/circularOptionalityRemoval.ts(2,14): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 tests/cases/compiler/circularOptionalityRemoval.ts(2,38): error TS2372: Parameter 'x' cannot reference itself.
-tests/cases/compiler/circularOptionalityRemoval.ts(2,38): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/circularOptionalityRemoval.ts(2,38): error TS18048: 'x' is possibly 'undefined'.
 tests/cases/compiler/circularOptionalityRemoval.ts(2,46): error TS2372: Parameter 'x' cannot reference itself.
 tests/cases/compiler/circularOptionalityRemoval.ts(5,14): error TS1015: Parameter cannot have question mark and initializer.
 tests/cases/compiler/circularOptionalityRemoval.ts(5,14): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
@@ -16,7 +16,7 @@ tests/cases/compiler/circularOptionalityRemoval.ts(5,54): error TS2372: Paramete
                                          ~
 !!! error TS2372: Parameter 'x' cannot reference itself.
                                          ~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'x' is possibly 'undefined'.
                                                  ~
 !!! error TS2372: Parameter 'x' cannot reference itself.
     

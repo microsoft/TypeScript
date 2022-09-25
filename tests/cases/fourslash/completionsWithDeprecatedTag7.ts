@@ -20,7 +20,7 @@ verify.completions({
     marker: "",
     exact: [{
         name: "a",
-        sortText: completion.SortText.DeprecatedMemberDeclaredBySpreadAssignment,
+        sortText: completion.SortText.Deprecated(completion.SortText.MemberDeclaredBySpreadAssignment),
         kind: 'property',
         kindModifiers: "deprecated"
     }]

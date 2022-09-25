@@ -2,21 +2,21 @@
 export * from './types';
 No type information for this code.=== tests/cases/compiler/monorepo/pkg1/dist/types.d.ts ===
 export declare type A = {
->A : A
+>A : { id: string; }
 
     id: string;
 >id : string
 
 };
 export declare type B = {
->B : B
+>B : { id: number; }
 
     id: number;
 >id : number
 
 };
 export declare type IdType = A | B;
->IdType : IdType
+>IdType : A | B
 
 export declare class MetadataAccessor<T, D extends IdType = IdType> {
 >MetadataAccessor : MetadataAccessor<T, D>

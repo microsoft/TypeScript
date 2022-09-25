@@ -627,7 +627,7 @@ function notNotEquals(u: unknown)  {
 >A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 92, 17))
 >u : Symbol(u, Decl(unknownType2.ts, 232, 22))
     }
-    
+
 
     if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
 >u : Symbol(u, Decl(unknownType2.ts, 232, 22))

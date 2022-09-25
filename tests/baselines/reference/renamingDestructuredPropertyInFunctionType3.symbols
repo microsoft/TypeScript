@@ -1,0 +1,33 @@
+=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts ===
+const sym = Symbol();
+>sym : Symbol(sym, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+type O = Record<symbol, unknown>
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type F14 = ({ [sym]: string }: O) => void; // Error
+>F14 : Symbol(F14, Decl(renamingDestructuredPropertyInFunctionType3.ts, 1, 32))
+>sym : Symbol(sym, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 5))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType3.ts, 2, 13))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 21))
+
+type G14 = new ({ [sym]: string }: O) => void; // Error
+>G14 : Symbol(G14, Decl(renamingDestructuredPropertyInFunctionType3.ts, 2, 42))
+>sym : Symbol(sym, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 5))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType3.ts, 3, 17))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 21))
+
+const f13 =  ({ [sym]: string }: O) => { };
+>f13 : Symbol(f13, Decl(renamingDestructuredPropertyInFunctionType3.ts, 5, 5))
+>sym : Symbol(sym, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 5))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType3.ts, 5, 15))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 21))
+
+function f14 ({ [sym]: string }: O) { };
+>f14 : Symbol(f14, Decl(renamingDestructuredPropertyInFunctionType3.ts, 5, 43))
+>sym : Symbol(sym, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 5))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType3.ts, 6, 15))
+>O : Symbol(O, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 21))
+

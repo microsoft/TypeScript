@@ -1,4 +1,4 @@
-// === /a.ts ===
+// === /tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts ===
 // type Options = "/*FIND ALL REFS*/[|option 1|]" | "option 2";
 // let myOption: Options = "[|option 1|]";
 
@@ -7,7 +7,7 @@
     "definition": {
       "containerKind": "",
       "containerName": "",
-      "fileName": "/a.ts",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
       "kind": "var",
       "name": "option 1",
       "textSpan": {
@@ -27,9 +27,8 @@
           "start": 16,
           "length": 8
         },
-        "fileName": "/a.ts",
+        "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       },
       {
@@ -37,16 +36,15 @@
           "start": 65,
           "length": 8
         },
-        "fileName": "/a.ts",
+        "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       }
     ]
   }
 ]
 
-// === /a.ts ===
+// === /tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts ===
 // type Options = "[|option 1|]" | "option 2";
 // let myOption: Options = "/*FIND ALL REFS*/[|option 1|]";
 
@@ -55,7 +53,7 @@
     "definition": {
       "containerKind": "",
       "containerName": "",
-      "fileName": "/a.ts",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
       "kind": "var",
       "name": "option 1",
       "textSpan": {
@@ -75,9 +73,8 @@
           "start": 16,
           "length": 8
         },
-        "fileName": "/a.ts",
+        "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       },
       {
@@ -85,9 +82,8 @@
           "start": 65,
           "length": 8
         },
-        "fileName": "/a.ts",
+        "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       }
     ]

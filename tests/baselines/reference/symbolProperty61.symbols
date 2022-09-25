@@ -1,0 +1,84 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty61.ts ===
+declare global {
+>global : Symbol(global, Decl(symbolProperty61.ts, 0, 0))
+
+  interface SymbolConstructor {
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolProperty61.ts, 0, 16))
+
+    readonly obs: symbol
+>obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+  }
+}
+
+const observable: typeof Symbol.obs = Symbol.obs
+>observable : Symbol(observable, Decl(symbolProperty61.ts, 6, 5))
+>Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+>Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+
+export class MyObservable<T> {
+>MyObservable : Symbol(MyObservable, Decl(symbolProperty61.ts, 6, 48))
+>T : Symbol(T, Decl(symbolProperty61.ts, 8, 26))
+
+    constructor(private _val: T) {}
+>_val : Symbol(MyObservable._val, Decl(symbolProperty61.ts, 9, 16))
+>T : Symbol(T, Decl(symbolProperty61.ts, 8, 26))
+
+    subscribe(next: (val: T) => void) {
+>subscribe : Symbol(MyObservable.subscribe, Decl(symbolProperty61.ts, 9, 35))
+>next : Symbol(next, Decl(symbolProperty61.ts, 11, 14))
+>val : Symbol(val, Decl(symbolProperty61.ts, 11, 21))
+>T : Symbol(T, Decl(symbolProperty61.ts, 8, 26))
+
+        next(this._val)
+>next : Symbol(next, Decl(symbolProperty61.ts, 11, 14))
+>this._val : Symbol(MyObservable._val, Decl(symbolProperty61.ts, 9, 16))
+>this : Symbol(MyObservable, Decl(symbolProperty61.ts, 6, 48))
+>_val : Symbol(MyObservable._val, Decl(symbolProperty61.ts, 9, 16))
+    }
+
+    [observable]() {
+>[observable] : Symbol(MyObservable[observable], Decl(symbolProperty61.ts, 13, 5))
+>observable : Symbol(observable, Decl(symbolProperty61.ts, 6, 5))
+
+        return this
+>this : Symbol(MyObservable, Decl(symbolProperty61.ts, 6, 48))
+    }
+}
+
+type InteropObservable<T> = {
+>InteropObservable : Symbol(InteropObservable, Decl(symbolProperty61.ts, 18, 1))
+>T : Symbol(T, Decl(symbolProperty61.ts, 20, 23))
+
+    [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
+>[Symbol.obs] : Symbol([Symbol.obs], Decl(symbolProperty61.ts, 20, 29))
+>Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+>subscribe : Symbol(subscribe, Decl(symbolProperty61.ts, 21, 25))
+>next : Symbol(next, Decl(symbolProperty61.ts, 21, 36))
+>val : Symbol(val, Decl(symbolProperty61.ts, 21, 43))
+>T : Symbol(T, Decl(symbolProperty61.ts, 20, 23))
+}
+
+function from<T>(obs: InteropObservable<T>) {
+>from : Symbol(from, Decl(symbolProperty61.ts, 22, 1))
+>T : Symbol(T, Decl(symbolProperty61.ts, 24, 14))
+>obs : Symbol(obs, Decl(symbolProperty61.ts, 24, 17))
+>InteropObservable : Symbol(InteropObservable, Decl(symbolProperty61.ts, 18, 1))
+>T : Symbol(T, Decl(symbolProperty61.ts, 24, 14))
+
+    return obs[Symbol.obs]()
+>obs : Symbol(obs, Decl(symbolProperty61.ts, 24, 17))
+>Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
+}
+
+from(new MyObservable(42))
+>from : Symbol(from, Decl(symbolProperty61.ts, 22, 1))
+>MyObservable : Symbol(MyObservable, Decl(symbolProperty61.ts, 6, 48))
+

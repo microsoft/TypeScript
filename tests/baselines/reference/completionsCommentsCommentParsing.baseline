@@ -6,6 +6,7 @@
       "name": "18"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -3202,7 +3203,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -3315,7 +3316,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -4882,6 +4883,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -5052,6 +5065,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -5467,7 +5492,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -5557,7 +5582,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -5653,6 +5678,7 @@
       "name": "15"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -8850,7 +8876,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -8963,7 +8989,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -11049,6 +11075,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -11343,6 +11381,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -11910,7 +11960,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -12000,7 +12050,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -12096,6 +12146,7 @@
       "name": "24"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -15268,7 +15319,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -15381,7 +15432,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -16948,6 +16999,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -17118,6 +17181,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -17533,7 +17608,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -17623,7 +17698,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -17719,6 +17794,7 @@
       "name": "27"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -20812,7 +20888,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -20925,7 +21001,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -22588,6 +22664,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "string",
           "kind": "keyword",
           "kindModifiers": "",
@@ -23233,7 +23321,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -23323,7 +23411,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -23419,6 +23507,7 @@
       "name": "39"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -26710,7 +26799,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -26823,7 +26912,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -28390,6 +28479,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -28560,6 +28661,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -28975,7 +29088,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -29065,7 +29178,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -29161,6 +29274,7 @@
       "name": "44"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -32358,7 +32472,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -32471,7 +32585,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -34557,6 +34671,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -34851,6 +34977,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -35418,7 +35556,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -35508,7 +35646,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -35604,6 +35742,7 @@
       "name": ""
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -38697,7 +38836,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -38810,7 +38949,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -40473,6 +40612,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "string",
           "kind": "keyword",
           "kindModifiers": "",
@@ -41118,7 +41269,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -41208,7 +41359,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",

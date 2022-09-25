@@ -79,6 +79,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance6.ts:12:9: This type parameter might need an `extends T` constraint.
         a: (x: T) => T[]; 
     }
     
@@ -90,6 +91,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance6.ts:13:10: This type parameter might need an `extends T` constraint.
         a2: (x: T) => string[]; 
     }
     
@@ -101,6 +103,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance6.ts:14:10: This type parameter might need an `extends T` constraint.
         a3: (x: T) => T;
     }
     
@@ -112,6 +115,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance6.ts:15:10: This type parameter might need an `extends T` constraint.
         a4: <U>(x: T, y: U) => string; 
     }
     
@@ -124,6 +128,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430:         Types of parameters 'arg' and 'arg' are incompatible.
 !!! error TS2430:           Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:             'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance6.ts:40:14: This type parameter might need an `extends T` constraint.
         a5: <U>(x: (arg: T) => U) => T; 
     }
     
@@ -137,6 +142,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430:           Types of property 'foo' are incompatible.
 !!! error TS2430:             Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:               'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance6.ts:18:11: This type parameter might need an `extends T` constraint.
         a11: <U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
     }
     

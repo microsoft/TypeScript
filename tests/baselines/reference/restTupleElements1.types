@@ -1,27 +1,27 @@
 === tests/cases/conformance/types/tuple/restTupleElements1.ts ===
 type T00 = [string?];
->T00 : T00
+>T00 : [(string | undefined)?]
 
 type T01 = [string, string?];
->T01 : T01
+>T01 : [string, (string | undefined)?]
 
 type T02 = [string?, string];  // Error
->T02 : T02
+>T02 : [(string | undefined)?, string]
 
 type T03 = [...string[]];
->T03 : T03
+>T03 : string[]
 
 type T04 = [...[...string[]]];
->T04 : T04
+>T04 : string[]
 
 type T05 = [...[...[...string[]]]];
->T05 : T05
+>T05 : string[]
 
 type T06 = [string, ...string[]];
->T06 : T06
+>T06 : [string, ...string[]]
 
 type T07 = [...string[], string];  // Error
->T07 : T07
+>T07 : [...string[], string]
 
 type T08 = [...string];  // Error
 >T08 : any[]
@@ -30,13 +30,13 @@ type T09 = [...string?];  // Error
 >T09 : any[]
 
 type T10 = [string, ...[...string[]]];
->T10 : T10
+>T10 : [string, ...string[]]
 
 type T11 = [string, ...[...[...string[]]]];
->T11 : T11
+>T11 : [string, ...string[]]
 
 type T15 = [boolean, number, ...string[]];
->T15 : T15
+>T15 : [boolean, number, ...string[]]
 
 type L15 = T15["length"];  // number
 >L15 : number
@@ -101,25 +101,25 @@ assign<[number, ...number[]], [number, number, number, string]>();  // Error
 >assign : <T, S extends T>() => void
 
 type T20 = [number, string, ...boolean[]];
->T20 : T20
+>T20 : [number, string, ...boolean[]]
 
 type T21 = T20[0];
 >T21 : number
 
 type T22 = T20[0 | 1];
->T22 : T22
+>T22 : string | number
 
 type T23 = T20[0 | 1 | 2];
->T23 : T23
+>T23 : string | number | boolean
 
 type T24 = T20[0 | 1 | 2 | 3];
->T24 : T24
+>T24 : string | number | boolean
 
 type T25 = T20[1 | 2 | 3];
->T25 : T25
+>T25 : string | boolean
 
 type T26 = T20[2 | 3];
->T26 : T26
+>T26 : boolean
 
 type T27 = T20[3];
 >T27 : boolean

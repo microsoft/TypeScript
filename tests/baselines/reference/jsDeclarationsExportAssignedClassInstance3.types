@@ -12,19 +12,19 @@ class Foo {
 }
 
 module.exports = new Foo();
->module.exports = new Foo() : { member: number; additional: number; }
->module.exports : { member: number; additional: number; }
->module : { exports: { member: number; additional: number; }; }
->exports : { member: number; additional: number; }
+>module.exports = new Foo() : { member: number; additional: 20; }
+>module.exports : { member: number; additional: 20; }
+>module : { exports: { member: number; additional: 20; }; }
+>exports : { member: number; additional: 20; }
 >new Foo() : Foo
 >Foo : typeof Foo
 
 module.exports.additional = 20;
 >module.exports.additional = 20 : 20
->module.exports.additional : number
->module.exports : { member: number; additional: number; }
->module : { exports: { member: number; additional: number; }; }
->exports : { member: number; additional: number; }
->additional : number
+>module.exports.additional : 20
+>module.exports : { member: number; additional: 20; }
+>module : { exports: { member: number; additional: 20; }; }
+>exports : { member: number; additional: 20; }
+>additional : 20
 >20 : 20
 

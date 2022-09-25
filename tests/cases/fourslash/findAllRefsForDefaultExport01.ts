@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
-////[|export default class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}DefaultExportedClass|] {
-////}|]
+/////*1*/export default class /*2*/DefaultExportedClass {
+////}
 ////
-////var x: [|DefaultExportedClass|];
+////var x: /*3*/DefaultExportedClass;
 ////
-////var y = new [|DefaultExportedClass|];
+////var y = new /*4*/DefaultExportedClass;
 
-verify.singleReferenceGroup("class DefaultExportedClass", "DefaultExportedClass");
+verify.baselineFindAllReferences('1', '2', '3', '4');

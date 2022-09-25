@@ -12,5 +12,6 @@
         "flags": "JSDoc",
         "modifierFlagsCache": 0,
         "transformFlags": 1
-    }
+    },
+    "postfix": true
 }

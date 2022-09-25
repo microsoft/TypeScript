@@ -49,8 +49,7 @@
           "start": 0,
           "length": 40
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -58,8 +57,7 @@
           "length": 11
         },
         "fileName": "/referencesForGlobals_2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

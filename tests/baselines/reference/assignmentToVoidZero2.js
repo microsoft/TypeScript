@@ -41,6 +41,6 @@ assignmentToVoidZero2_1.j + assignmentToVoidZero2_1.k;
 
 
 //// [assignmentToVoidZero2.d.ts]
-export var j: number;
+export const j: 1;
 //// [importer.d.ts]
 export {};

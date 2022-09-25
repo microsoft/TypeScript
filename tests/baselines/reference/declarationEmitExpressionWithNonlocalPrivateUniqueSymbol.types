@@ -1,6 +1,6 @@
 === tests/cases/compiler/a.ts ===
 type AX = { readonly A: unique symbol };
->AX : AX
+>AX : { readonly A: unique symbol; }
 >A : unique symbol
 
 export const A: AX = 0 as any;

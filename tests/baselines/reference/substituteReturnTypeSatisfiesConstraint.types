@@ -1,10 +1,10 @@
 === tests/cases/compiler/substituteReturnTypeSatisfiesConstraint.ts ===
 type M = { p: string };
->M : M
+>M : { p: string; }
 >p : string
 
 type O = { m: () => M };
->O : O
+>O : { m: () => M; }
 >m : () => M
 
 type X<T extends M> = T;

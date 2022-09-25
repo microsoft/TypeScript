@@ -1,0 +1,7 @@
+=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+export interface A {}
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/a.js ===
+import { type A } from "./a";
+>A : any
+

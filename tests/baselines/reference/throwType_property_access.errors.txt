@@ -1,4 +1,4 @@
-tests/cases/compiler/throwType_property_access.ts(4,1): error TS2838: Type instantiated results in a throw type saying: 
+tests/cases/compiler/throwType_property_access.ts(4,1): error TS2899: Type instantiated results in a throw type saying: 
     
 
 
@@ -8,5 +8,5 @@ tests/cases/compiler/throwType_property_access.ts(4,1): error TS2838: Type insta
     }
     new X<0>().i
     ~~~~~~~~~~~~
-!!! error TS2838: Type instantiated results in a throw type saying: 
-!!! error TS2838:     
+!!! error TS2899: Type instantiated results in a throw type saying: 
+!!! error TS2899:     

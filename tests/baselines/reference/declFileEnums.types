@@ -83,7 +83,7 @@ enum e5 {
 >"Sunday" : e5.Sunday
 
     "Weekend days"
->"Weekend days" : typeof e5["Weekend days"]
+>"Weekend days" : (typeof e5)["Weekend days"]
 }
 
 

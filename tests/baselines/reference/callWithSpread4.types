@@ -1,14 +1,14 @@
 === tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts ===
 type R = { a: number }
->R : R
+>R : { a: number; }
 >a : number
 
 type W = { b: number }
->W : W
+>W : { b: number; }
 >b : number
 
 type RW = { a: number, b: number }
->RW : RW
+>RW : { a: number; b: number; }
 >a : number
 >b : number
 

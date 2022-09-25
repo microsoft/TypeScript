@@ -34,4 +34,3 @@ JSX(15,10): error TS1005: '}' expected.
             )
              
 !!! error TS1005: '}' expected.
-!!! related TS1007 JSX:4:9: The parser expected to find a '}' to match the '{' token here.

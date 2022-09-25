@@ -1,30 +1,6 @@
 namespace ts {
     describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         let outFileFs: vfs.FileSystem;
-        const enum Project { lib, app }
-        function relName(path: string) {
-            return path.slice(1);
-        }
-        type Sources = [string, readonly string[]];
-        const enum Source { config, ts }
-        const sources: [Sources, Sources] = [
-            [
-                "/src/lib/tsconfig.json",
-                [
-                    "/src/lib/file0.ts",
-                    "/src/lib/file1.ts",
-                    "/src/lib/file2.ts",
-                    "/src/lib/global.ts",
-                ]
-            ],
-            [
-                "/src/app/tsconfig.json",
-                [
-                    "/src/app/file3.ts",
-                    "/src/app/file4.ts"
-                ]
-            ]
-        ];
         before(() => {
             outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut");
         });
@@ -43,20 +19,20 @@ namespace ts {
             modifyFs,
             modifyAgainFs
         }: VerifyOutFileScenarioInput) {
-            verifyTscIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "amdModulesWithOut",
                 subScenario,
                 fs: () => outFileFs,
                 commandLineArgs: ["--b", "/src/app", "--verbose"],
                 baselineSourceMap: true,
                 modifyFs,
-                incrementalScenarios: [
+                edits: [
                     {
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: fs => appendText(fs, relName(sources[Project.lib][Source.ts][1]), "console.log(x);")
+                        subScenario: "incremental-declaration-doesnt-change",
+                        modifyFs: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);")
                     },
                     ...(modifyAgainFs ? [{
-                        buildKind: BuildKind.IncrementalHeadersChange,
+                        subScenario: "incremental-headers-change-without-dts-changes",
                         modifyFs: modifyAgainFs
                     }] : emptyArray),
                 ]
@@ -73,15 +49,15 @@ namespace ts {
                 verifyOutFileScenario({
                     subScenario: "multiple prologues in all projects",
                     modifyFs: fs => {
-                        enableStrict(fs, sources[Project.lib][Source.config]);
-                        addTestPrologue(fs, sources[Project.lib][Source.ts][0], `"myPrologue"`);
-                        addTestPrologue(fs, sources[Project.lib][Source.ts][2], `"myPrologueFile"`);
-                        addTestPrologue(fs, sources[Project.lib][Source.ts][3], `"myPrologue3"`);
-                        enableStrict(fs, sources[Project.app][Source.config]);
-                        addTestPrologue(fs, sources[Project.app][Source.ts][0], `"myPrologue"`);
-                        addTestPrologue(fs, sources[Project.app][Source.ts][1], `"myPrologue2";`);
+                        enableStrict(fs, "/src/lib/tsconfig.json");
+                        addTestPrologue(fs, "/src/lib/file0.ts", `"myPrologue"`);
+                        addTestPrologue(fs, "/src/lib/file2.ts", `"myPrologueFile"`);
+                        addTestPrologue(fs, "/src/lib/global.ts", `"myPrologue3"`);
+                        enableStrict(fs, "/src/app/tsconfig.json");
+                        addTestPrologue(fs, "/src/app/file3.ts", `"myPrologue"`);
+                        addTestPrologue(fs, "/src/app/file4.ts", `"myPrologue2";`);
                     },
-                    modifyAgainFs: fs => addTestPrologue(fs, relName(sources[Project.lib][Source.ts][1]), `"myPrologue5"`)
+                    modifyAgainFs: fs => addTestPrologue(fs, "/src/lib/file1.ts", `"myPrologue5"`)
                 });
             });
 
@@ -127,10 +103,10 @@ namespace ts {
             describe("stripInternal", () => {
                 function stripInternalScenario(fs: vfs.FileSystem) {
                     const internal = "/*@internal*/";
-                    replaceText(fs, sources[Project.app][Source.config], `"composite": true,`, `"composite": true,
+                    replaceText(fs, "/src/app/tsconfig.json", `"composite": true,`, `"composite": true,
 "stripInternal": true,`);
-                    replaceText(fs, sources[Project.lib][Source.ts][0], "const", `${internal} const`);
-                    appendText(fs, sources[Project.lib][Source.ts][1], `
+                    replaceText(fs, "/src/lib/file0.ts", "const", `${internal} const`);
+                    appendText(fs, "/src/lib/file1.ts", `
 export class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -162,16 +138,16 @@ ${internal} export enum internalEnum { a, b, c }`);
                 verifyOutFileScenario({
                     subScenario: "stripInternal",
                     modifyFs: stripInternalScenario,
-                    modifyAgainFs: fs => replaceText(fs, sources[Project.lib][Source.ts][1], `export const`, `/*@internal*/ export const`),
+                    modifyAgainFs: fs => replaceText(fs, "/src/lib/file1.ts", `export const`, `/*@internal*/ export const`),
                 });
             });
 
             describe("when the module resolution finds original source file", () => {
                 function modifyFs(fs: vfs.FileSystem) {
                     // Make lib to output to parent dir
-                    replaceText(fs, sources[Project.lib][Source.config], `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
+                    replaceText(fs, "/src/lib/tsconfig.json", `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
                     // Change reference to file1 module to resolve to lib/file1
-                    replaceText(fs, sources[Project.app][Source.ts][0], "file1", "lib/file1");
+                    replaceText(fs, "/src/app/file3.ts", "file1", "lib/file1");
                 }
 
                 verifyTsc({

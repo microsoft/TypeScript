@@ -279,6 +279,19 @@ switch (1) {
         break;
 }
 `);
+
+        testExtractConstant("extractConstant_PropertyName",
+            `[#|x.y|].z();`);
+
+        testExtractConstant("extractConstant_PropertyName_ExistingName",
+            `let y;
+[#|x.y|].z();`);
+
+        testExtractConstant("extractConstant_PropertyName_Keyword",
+            `[#|x.if|].z();`);
+
+        testExtractConstant("extractConstant_PropertyName_PrivateIdentifierKeyword",
+            `[#|this.#if|].z();`);
     });
 
     function testExtractConstant(caption: string, text: string) {

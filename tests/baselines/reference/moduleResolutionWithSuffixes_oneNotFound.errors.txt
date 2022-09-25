@@ -1,0 +1,21 @@
+/index.ts(1,21): error TS2307: Cannot find module './foo' or its corresponding type declarations.
+
+
+==== /tsconfig.json (0 errors) ====
+    // moduleSuffixes has one entry but there isn't a matching file. Module resolution should fail.
+    
+    {
+    	"compilerOptions": {
+    		"moduleResolution": "node",
+    		"traceResolution": true,
+    		"moduleSuffixes": [".ios"]
+    	}
+    }
+    
+==== /index.ts (1 errors) ====
+    import { ios } from "./foo";
+                        ~~~~~~~
+!!! error TS2307: Cannot find module './foo' or its corresponding type declarations.
+==== /foo.ts (0 errors) ====
+    export function base() {}
+    

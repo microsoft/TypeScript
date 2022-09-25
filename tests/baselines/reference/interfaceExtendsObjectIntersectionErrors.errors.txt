@@ -39,7 +39,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(35,29): error TS2411: Property 'a' of type '"hello"' is not assignable to 'string' index type 'number'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(39,11): error TS2430: Interface 'I20' incorrectly extends interface 'Partial<T1>'.
   Types of property 'a' are incompatible.
-    Type 'string' is not assignable to type 'number | undefined'.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(40,11): error TS2430: Interface 'I21' incorrectly extends interface 'Readonly<T1>'.
   Types of property 'a' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -154,7 +154,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
               ~~~
 !!! error TS2430: Interface 'I20' incorrectly extends interface 'Partial<T1>'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'string' is not assignable to type 'number | undefined'.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
     interface I21 extends Readonly<T1> { a: string }
               ~~~
 !!! error TS2430: Interface 'I21' incorrectly extends interface 'Readonly<T1>'.

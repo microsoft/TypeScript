@@ -1,0 +1,22 @@
+=== tests/cases/compiler/file.js ===
+const customSymbol = Symbol("custom");
+>customSymbol : Symbol(customSymbol, Decl(file.js, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+// This is a common pattern in Node’s built-in modules:
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(file.js, 0, 0))
+>module : Symbol(module, Decl(file.js, 0, 38))
+>exports : Symbol(module.exports, Decl(file.js, 0, 0))
+
+    customSymbol,
+>customSymbol : Symbol(customSymbol, Decl(file.js, 3, 18))
+
+};
+
+exports.customSymbol2 = Symbol("custom");
+>exports.customSymbol2 : Symbol(customSymbol2, Decl(file.js, 5, 2))
+>exports : Symbol(customSymbol2, Decl(file.js, 5, 2))
+>customSymbol2 : Symbol(customSymbol2, Decl(file.js, 5, 2))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+

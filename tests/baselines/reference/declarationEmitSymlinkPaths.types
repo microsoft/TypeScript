@@ -5,10 +5,10 @@ export declare function test<T> (a: () => T): () => T;
 
 === /packages/search-prefix/src/API/NotificationAPIUtils.ts ===
 export type NotificationRequest = {};
->NotificationRequest : NotificationRequest
+>NotificationRequest : {}
 
 export type NotificationResponse = {};
->NotificationResponse : NotificationResponse
+>NotificationResponse : {}
 
 export function getNotification(): NotificationResponse {
 >getNotification : () => NotificationResponse

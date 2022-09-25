@@ -35,14 +35,14 @@ namespace ts.codefix {
     }
 
     function createTypeAliasFromInterface(declaration: FixableDeclaration, type: TypeNode): TypeAliasDeclaration {
-        return factory.createTypeAliasDeclaration(declaration.decorators, declaration.modifiers, declaration.name, declaration.typeParameters, type);
+        return factory.createTypeAliasDeclaration(declaration.modifiers, declaration.name, declaration.typeParameters, type);
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { indexSignature, container }: Info): void {
         const members = isInterfaceDeclaration(container) ? container.members : (container.type as TypeLiteralNode).members;
         const otherMembers = members.filter(member => !isIndexSignatureDeclaration(member));
         const parameter = first(indexSignature.parameters);
-        const mappedTypeParameter = factory.createTypeParameterDeclaration(cast(parameter.name, isIdentifier), parameter.type);
+        const mappedTypeParameter = factory.createTypeParameterDeclaration(/*modifiers*/ undefined, cast(parameter.name, isIdentifier), parameter.type);
         const mappedIntersectionType = factory.createMappedTypeNode(
             hasEffectiveReadonlyModifier(indexSignature) ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
             mappedTypeParameter,

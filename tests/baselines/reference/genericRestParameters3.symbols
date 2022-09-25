@@ -67,7 +67,7 @@ f3 = f1;
 >f3 : Symbol(f3, Decl(genericRestParameters3.ts, 2, 11))
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
 
-f4 = f1;  // Error, misaligned complex rest types
+f4 = f1;
 >f4 : Symbol(f4, Decl(genericRestParameters3.ts, 3, 11))
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
 
@@ -79,7 +79,7 @@ f1 = f3;  // Error
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
 >f3 : Symbol(f3, Decl(genericRestParameters3.ts, 2, 11))
 
-f1 = f4;  // Error, misaligned complex rest types
+f1 = f4;
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
 >f4 : Symbol(f4, Decl(genericRestParameters3.ts, 3, 11))
 
@@ -189,4 +189,57 @@ let x2: ReadonlyArray<string> = ["hello"];
 foo2(...x2);
 >foo2 : Symbol(foo2, Decl(genericRestParameters3.ts, 58, 12))
 >x2 : Symbol(x2, Decl(genericRestParameters3.ts, 63, 3))
+
+// Repros from #47754
+
+type RestParams = [y: string] | [y: number];
+>RestParams : Symbol(RestParams, Decl(genericRestParameters3.ts, 64, 12))
+
+type Signature = (x: string, ...rest: RestParams) => void;
+>Signature : Symbol(Signature, Decl(genericRestParameters3.ts, 68, 44))
+>x : Symbol(x, Decl(genericRestParameters3.ts, 70, 18))
+>rest : Symbol(rest, Decl(genericRestParameters3.ts, 70, 28))
+>RestParams : Symbol(RestParams, Decl(genericRestParameters3.ts, 64, 12))
+
+type MergedParams = Parameters<Signature>;  // [x: string, y: string] | [x: string, y: number]
+>MergedParams : Symbol(MergedParams, Decl(genericRestParameters3.ts, 70, 58))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Signature : Symbol(Signature, Decl(genericRestParameters3.ts, 68, 44))
+
+declare let ff1: (...rest: [string, string] | [string, number]) => void;
+>ff1 : Symbol(ff1, Decl(genericRestParameters3.ts, 74, 11))
+>rest : Symbol(rest, Decl(genericRestParameters3.ts, 74, 18))
+
+declare let ff2: (x: string, ...rest: [string] | [number]) => void;
+>ff2 : Symbol(ff2, Decl(genericRestParameters3.ts, 75, 11))
+>x : Symbol(x, Decl(genericRestParameters3.ts, 75, 18))
+>rest : Symbol(rest, Decl(genericRestParameters3.ts, 75, 28))
+
+ff1 = ff2;
+>ff1 : Symbol(ff1, Decl(genericRestParameters3.ts, 74, 11))
+>ff2 : Symbol(ff2, Decl(genericRestParameters3.ts, 75, 11))
+
+ff2 = ff1;
+>ff2 : Symbol(ff2, Decl(genericRestParameters3.ts, 75, 11))
+>ff1 : Symbol(ff1, Decl(genericRestParameters3.ts, 74, 11))
+
+function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
+>ff3 : Symbol(ff3, Decl(genericRestParameters3.ts, 78, 10))
+>A : Symbol(A, Decl(genericRestParameters3.ts, 80, 13))
+>s1 : Symbol(s1, Decl(genericRestParameters3.ts, 80, 34))
+>args : Symbol(args, Decl(genericRestParameters3.ts, 80, 39))
+>A : Symbol(A, Decl(genericRestParameters3.ts, 80, 13))
+>s2 : Symbol(s2, Decl(genericRestParameters3.ts, 80, 92))
+>x : Symbol(x, Decl(genericRestParameters3.ts, 80, 98))
+>rest : Symbol(rest, Decl(genericRestParameters3.ts, 80, 108))
+>A : Symbol(A, Decl(genericRestParameters3.ts, 80, 13))
+
+    s1 = s2;
+>s1 : Symbol(s1, Decl(genericRestParameters3.ts, 80, 34))
+>s2 : Symbol(s2, Decl(genericRestParameters3.ts, 80, 92))
+
+    s2 = s1;
+>s2 : Symbol(s2, Decl(genericRestParameters3.ts, 80, 92))
+>s1 : Symbol(s1, Decl(genericRestParameters3.ts, 80, 34))
+}
 

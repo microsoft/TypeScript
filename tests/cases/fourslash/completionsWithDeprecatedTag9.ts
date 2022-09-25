@@ -21,7 +21,7 @@ verify.completions({
         name: "foo",
         kind: "var",
         kindModifiers: "deprecated,declare",
-        sortText: completion.SortText.DeprecatedGlobalsOrKeywords
+        sortText: completion.SortText.Deprecated(completion.SortText.GlobalsOrKeywords),
     }]
 }, {
     preferences: {

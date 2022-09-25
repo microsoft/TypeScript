@@ -1,10 +1,10 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of58.ts ===
 type X = { x: 'x' };
->X : X
+>X : { x: 'x'; }
 >x : "x"
 
 type Y = { y: 'y' };
->Y : Y
+>Y : { y: 'y'; }
 >y : "y"
 
 declare const arr: X[] & Y[];

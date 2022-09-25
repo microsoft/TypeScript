@@ -12,12 +12,13 @@ namespace Harness {
     interface UserConfig {
         types: string[];
         cloneUrl: string;
+        branch?: string;
         path?: string;
     }
 
     abstract class ExternalCompileRunnerBase extends RunnerBase {
         abstract testDir: string;
-        abstract report(result: ExecResult, cwd: string): string | null;
+        abstract report(result: ExecResult): string | null;
         enumerateTestFiles() {
             return IO.getDirectories(this.testDir);
         }
@@ -56,9 +57,10 @@ namespace Harness {
                         ts.Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
                         const submoduleDir = path.join(cwd, directoryName);
                         if (!fs.existsSync(submoduleDir)) {
-                            exec("git", ["--work-tree", submoduleDir, "clone", config.cloneUrl, path.join(submoduleDir, ".git")], { cwd });
+                            exec("git", ["--work-tree", submoduleDir, "clone", "-b", config.branch || "master", config.cloneUrl, path.join(submoduleDir, ".git")], { cwd });
                         }
                         else {
+                            exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "checkout", config.branch || "master"], { cwd: submoduleDir });
                             exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "reset", "HEAD", "--hard"], { cwd: submoduleDir });
                             exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "clean", "-f"], { cwd: submoduleDir });
                             exec("git", ["--git-dir", path.join(submoduleDir, ".git"), "--work-tree", submoduleDir, "pull", "-f"], { cwd: submoduleDir });
@@ -89,7 +91,7 @@ namespace Harness {
                         }
                     }
                     args.push("--noEmit");
-                    Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
+                    Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true })));
 
                     function exec(command: string, args: string[], options: { cwd: string, timeout?: number, stdio?: import("child_process").StdioOptions }): string | undefined {
                         const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { shell: true, stdio, ...options });
@@ -279,46 +281,18 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
         kind(): TestRunnerKind {
             return "dt";
         }
-        report(result: ExecResult, cwd: string) {
-            const stdout = removeExpectedErrors(result.stdout.toString(), cwd);
-            const stderr = result.stderr.toString();
-
+        report(result: ExecResult) {
             // eslint-disable-next-line no-null/no-null
-            return !stdout.length && !stderr.length ? null : `Exit Code: ${result.status}
+            return !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
-${stdout.replace(/\r\n/g, "\n")}
+${result.stdout.toString().replace(/\r\n/g, "\n")}
 
 
 Standard error:
-${stderr.replace(/\r\n/g, "\n")}`;
+${result.stderr.toString().replace(/\r\n/g, "\n")}`;
         }
     }
 
-    function removeExpectedErrors(errors: string, cwd: string): string {
-        return ts.flatten(splitBy(errors.split("\n"), s => /^\S+/.test(s)).filter(isUnexpectedError(cwd))).join("\n");
-    }
-    /**
-     * Returns true if the line that caused the error contains '$ExpectError',
-     * or if the line before that one contains '$ExpectError'.
-     * '$ExpectError' is a marker used in Definitely Typed tests,
-     * meaning that the error should not contribute toward our error baslines.
-     */
-    function isUnexpectedError(cwd: string) {
-        return (error: string[]) => {
-            ts.Debug.assertGreaterThanOrEqual(error.length, 1);
-            const match = error[0].match(/(.+\.tsx?)\((\d+),\d+\): error TS/);
-            if (!match) {
-                return true;
-            }
-            const [, errorFile, lineNumberString] = match;
-            const lines = fs.readFileSync(path.join(cwd, errorFile), { encoding: "utf8" }).split("\n");
-            const lineNumber = parseInt(lineNumberString) - 1;
-            ts.Debug.assertGreaterThanOrEqual(lineNumber, 0);
-            ts.Debug.assertLessThan(lineNumber, lines.length);
-            const previousLine = lineNumber - 1 > 0 ? lines[lineNumber - 1] : "";
-            return !ts.stringContains(lines[lineNumber], "$ExpectError") && !ts.stringContains(previousLine, "$ExpectError");
-        };
-    }
     /**
      * Split an array into multiple arrays whenever `isStart` returns true.
      * @example
