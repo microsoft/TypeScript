@@ -13226,15 +13226,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_a_private_identifier_or_of_type_any_string_number_or__2360" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Левый операнд выражения "in" должен быть закрытым идентификатором или иметь тип any, string, number или symbol.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_paramete_2358" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.]]></Val>
@@ -13420,15 +13411,6 @@
           <Val><![CDATA[The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Правый операнд арифметической операции должен иметь тип "any", "number", "bigint" или тип перечисления.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";The_right_hand_side_of_an_in_expression_must_not_be_a_primitive_2361" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The right-hand side of an 'in' expression must not be a primitive.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Правый операнд выражения in не должен быть примитивом.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13675,6 +13657,15 @@
           <Val><![CDATA[This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Это сравнение кажется непреднамеренным, поскольку типы "{0}" и "{1}" не перекрываются.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_condition_will_always_return_0_2845" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This condition will always return '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Это условие всегда возвращает "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14353,6 +14344,15 @@
           <Val><![CDATA[Type '{0}' is not generic.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Тип "{0}" не является универсальным.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operato_2638" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Тип "{0}" может представлять примитивное значение, не разрешенное в качестве правого операнда оператора "in".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15244,6 +15244,24 @@
           <Val><![CDATA[Updating unchanged output timestamps of project '{0}'...]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Обновление меток времени в неизменившихся выходных данных проекта "{0}"...]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Use_0_95174" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use `{0}`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Использовать "{0}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Use_Number_isNaN_in_all_conditions_95175" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use `Number.isNaN` in all conditions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Использовать "Number.isNaN" во всех условиях.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

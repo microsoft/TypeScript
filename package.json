@@ -29,18 +29,17 @@
         "node": ">=4.2.0"
     },
     "files": [
-        "./bin",
-        "./lib",
-        "!./lib/enu",
-        "./LICENSE.txt",
-        "./README.md",
-        "./SECURITY.md",
-        "./ThirdPartyNoticeText.txt",
+        "bin",
+        "lib",
+        "!lib/enu",
+        "LICENSE.txt",
+        "README.md",
+        "SECURITY.md",
+        "ThirdPartyNoticeText.txt",
         "!**/.gitattributes"
     ],
     "devDependencies": {
         "@octokit/rest": "latest",
-        "@types/async": "latest",
         "@types/chai": "latest",
         "@types/fs-extra": "^9.0.13",
         "@types/glob": "latest",
@@ -62,7 +61,6 @@
         "@typescript-eslint/eslint-plugin": "^5.33.1",
         "@typescript-eslint/parser": "^5.33.1",
         "@typescript-eslint/utils": "^5.33.1",
-        "async": "latest",
         "azure-devops-node-api": "^11.2.0",
         "chai": "latest",
         "chalk": "^4.1.2",
