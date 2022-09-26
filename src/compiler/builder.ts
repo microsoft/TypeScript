@@ -173,6 +173,11 @@ namespace ts {
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
         const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
             !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
+        // Can copy emit signatures that is d.ts signature of files output on the disk is based on whether d.ts file for given file remains same
+        // useOldState is not appropriate to check since apart from checking if oldState is present or not,
+        // it also checks if we can use file references to determine files to emit etc which isnt factor in determining d.ts emit signature
+        // So we directly access oldState here to determine if .d.ts signature file is valid or not
+        // (It is valid if file's d.ts file remains same between compilation eg. if declarationDir option or outDir options doesnt change)
         const canCopyEmitSignatures = compilerOptions.composite &&
             oldState?.emitSignatures &&
             !outFilePath &&
