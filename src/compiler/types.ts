@@ -4854,6 +4854,7 @@ namespace ts {
         /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, isWrite: boolean, containingType: Type, property: Symbol): boolean;
         /* @internal */ getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined;
         /* @internal */ getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus;
+        /* @internal */ isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node): boolean;
     }
 
     /* @internal */
@@ -7186,7 +7187,7 @@ namespace ts {
     }
 
     /* @internal */
-    export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
+    export type HasInvalidatedResolutions = (sourceFile: Path) => boolean;
     /* @internal */
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
@@ -7222,7 +7223,8 @@ namespace ts {
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
-        /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
+        /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
+        hasInvalidatedResolutions?(filePath: Path): boolean;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;

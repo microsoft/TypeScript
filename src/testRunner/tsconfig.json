@@ -76,6 +76,7 @@
         "unittests/reuseProgramStructure.ts",
         "unittests/semver.ts",
         "unittests/transform.ts",
+        "unittests/typeParameterIsPossiblyReferenced.ts",
         "unittests/config/commandLineParsing.ts",
         "unittests/config/configurationExtension.ts",
         "unittests/config/convertCompilerOptionsFromJson.ts",

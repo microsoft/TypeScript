@@ -1,6 +1,6 @@
 /main.ts(1,16): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
-/main.ts(2,16): error TS2846: Relative imports into 'node_modules' are not allowed.
-/main.ts(3,21): error TS2846: Relative imports into 'node_modules' are not allowed.
+/main.ts(2,16): error TS2847: Relative imports into 'node_modules' are not allowed.
+/main.ts(3,21): error TS2847: Relative imports into 'node_modules' are not allowed.
 
 
 ==== /node_modules/foo/index.d.ts (0 errors) ====
@@ -19,8 +19,8 @@
 !!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
     import {} from "./node_modules/foo/index.js";
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2846: Relative imports into 'node_modules' are not allowed.
+!!! error TS2847: Relative imports into 'node_modules' are not allowed.
     import type {} from "./node_modules/@types/foo/index.d.ts";
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2846: Relative imports into 'node_modules' are not allowed.
+!!! error TS2847: Relative imports into 'node_modules' are not allowed.
     

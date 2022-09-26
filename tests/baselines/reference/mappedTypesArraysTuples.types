@@ -7,7 +7,7 @@ type Boxified<T> = { [P in keyof T]: Box<T[P]> };
 >Boxified : Boxified<T>
 
 type T00 = Boxified<[number, string?, ...boolean[]]>;
->T00 : [Box<number>, Box<string | undefined>?, ...Box<boolean>[]]
+>T00 : [Box<number>, (Box<string | undefined> | undefined)?, ...Box<boolean>[]]
 
 type T01 = Partial<[number, string?, ...boolean[]]>;
 >T01 : [(number | undefined)?, (string | undefined)?, ...(boolean | undefined)[]]

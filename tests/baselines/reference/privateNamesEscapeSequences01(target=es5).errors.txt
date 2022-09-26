@@ -1,0 +1,310 @@
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(2,5): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(2,6): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(2,7): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(2,11): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(2,13): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(4,5): error TS2304: Cannot find name 'constructor'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(4,19): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(5,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(5,14): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(5,15): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(5,15): error TS2304: Cannot find name 'u'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(5,21): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(8,5): error TS2304: Cannot find name 'doThing'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(8,15): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(9,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts(11,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(2,6): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(2,7): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(2,8): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(2,12): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(2,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(4,5): error TS2304: Cannot find name 'constructor'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(4,19): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(5,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(5,15): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(5,16): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(5,16): error TS2304: Cannot find name 'u'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(5,22): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(8,5): error TS2304: Cannot find name 'doThing'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(8,15): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(9,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts(11,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts(2,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,5): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,6): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,7): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,8): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,12): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(2,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(4,5): error TS2304: Cannot find name 'constructor'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(4,19): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,14): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,15): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,16): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,16): error TS2304: Cannot find name 'u'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(5,22): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(8,5): error TS2304: Cannot find name 'doThing'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(8,15): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(9,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts(11,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(2,7): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(2,8): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(2,9): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(2,13): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(2,15): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(4,5): error TS2304: Cannot find name 'constructor'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(4,19): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(5,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(5,16): error TS1127: Invalid character.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(5,17): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(5,17): error TS2304: Cannot find name 'u'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(5,23): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(8,5): error TS2304: Cannot find name 'doThing'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(8,15): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(9,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts(11,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithEscape1.ts (0 errors) ====
+    export class IdentifierNameWithEscape1 {
+        \u0078: number;
+    
+        constructor() {
+            this.\u0078 = 0;
+        }
+    
+        doThing() {
+            this.x = 42;
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithEscape2.ts (0 errors) ====
+    export class IdentifierNameWithEscape2 {
+        x\u0078: number;
+    
+        constructor() {
+            this.x\u0078 = 0;
+        }
+    
+        doThing() {
+            this.xx = 42;
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts (16 errors) ====
+    export class IdentifierNameWithExtendedEscape1 {
+        \u{78}: number;
+        
+!!! error TS1127: Invalid character.
+         ~
+!!! error TS1434: Unexpected keyword or identifier.
+          ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+              ~
+!!! error TS1128: Declaration or statement expected.
+                ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    
+        constructor() {
+        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'constructor'.
+                      ~
+!!! error TS1005: ';' expected.
+            this.\u{78} = 0;
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                 
+!!! error TS1127: Invalid character.
+                  ~
+!!! error TS1434: Unexpected keyword or identifier.
+                  ~
+!!! error TS2304: Cannot find name 'u'.
+                        ~
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+        }
+    
+        doThing() {
+        ~~~~~~~
+!!! error TS2304: Cannot find name 'doThing'.
+                  ~
+!!! error TS1005: ';' expected.
+            this.x = 42;
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+==== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts (16 errors) ====
+    export class IdentifierNameWithExtendedEscape2 {
+        x\u{78}: number;
+         
+!!! error TS1127: Invalid character.
+          ~
+!!! error TS1434: Unexpected keyword or identifier.
+           ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+               ~
+!!! error TS1128: Declaration or statement expected.
+                 ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    
+        constructor() {
+        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'constructor'.
+                      ~
+!!! error TS1005: ';' expected.
+            this.x\u{78} = 0;
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                  
+!!! error TS1127: Invalid character.
+                   ~
+!!! error TS1434: Unexpected keyword or identifier.
+                   ~
+!!! error TS2304: Cannot find name 'u'.
+                         ~
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+        }
+    
+        doThing() {
+        ~~~~~~~
+!!! error TS2304: Cannot find name 'doThing'.
+                  ~
+!!! error TS1005: ';' expected.
+            this.xx = 42;
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts (1 errors) ====
+    export class PrivateIdentifierWithEscape1 {
+        #\u0078: number;
+        ~~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+    
+        constructor() {
+            this.#\u0078 = 0;
+        }
+    
+        doThing() {
+            this.#x = 42;
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts (1 errors) ====
+    export class PrivateIdentifierWithEscape2 {
+        #x\u0078: number;
+        ~~~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+    
+        constructor() {
+            this.#x\u0078 = 0;
+        }
+    
+        doThing() {
+            this.#xx = 42;
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts (18 errors) ====
+    export class PrivateIdentifierWithExtendedEscape1 {
+        #\u{78}: number;
+        ~
+!!! error TS1127: Invalid character.
+         
+!!! error TS1127: Invalid character.
+          ~
+!!! error TS1434: Unexpected keyword or identifier.
+           ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+               ~
+!!! error TS1128: Declaration or statement expected.
+                 ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    
+        constructor() {
+        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'constructor'.
+                      ~
+!!! error TS1005: ';' expected.
+            this.#\u{78} = 0;
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                 ~
+!!! error TS1127: Invalid character.
+                  
+!!! error TS1127: Invalid character.
+                   ~
+!!! error TS1434: Unexpected keyword or identifier.
+                   ~
+!!! error TS2304: Cannot find name 'u'.
+                         ~
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+        }
+    
+        doThing() {
+        ~~~~~~~
+!!! error TS2304: Cannot find name 'doThing'.
+                  ~
+!!! error TS1005: ';' expected.
+            this.#x = 42;
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+==== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts (16 errors) ====
+    export class PrivateIdentifierWithExtendedEscape2 {
+        #x\u{78}: number;
+          
+!!! error TS1127: Invalid character.
+           ~
+!!! error TS1434: Unexpected keyword or identifier.
+            ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+                ~
+!!! error TS1128: Declaration or statement expected.
+                  ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    
+        constructor() {
+        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'constructor'.
+                      ~
+!!! error TS1005: ';' expected.
+            this.#x\u{78} = 0;
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                   
+!!! error TS1127: Invalid character.
+                    ~
+!!! error TS1434: Unexpected keyword or identifier.
+                    ~
+!!! error TS2304: Cannot find name 'u'.
+                          ~
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+        }
+    
+        doThing() {
+        ~~~~~~~
+!!! error TS2304: Cannot find name 'doThing'.
+                  ~
+!!! error TS1005: ';' expected.
+            this.#xx = 42;
+            ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    

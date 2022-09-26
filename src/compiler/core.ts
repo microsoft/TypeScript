@@ -2371,6 +2371,9 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
+    export function or<P, R1 extends P, R2 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2): (p: P) => p is R1 | R2;
+    export function or<P, R1 extends P, R2 extends P, R3 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2, f3: (p3: P) => p3 is R3): (p: P) => p is R1 | R2 | R3;
+    export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U;
     export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U {
         return (...args) => {
             let lastResult: U;

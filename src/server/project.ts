@@ -172,7 +172,7 @@ namespace ts.server {
         readonly realpath?: (path: string) => string;
 
         /*@internal*/
-        hasInvalidatedResolution: HasInvalidatedResolution | undefined;
+        hasInvalidatedResolutions: HasInvalidatedResolutions | undefined;
 
         /*@internal*/
         resolutionCache: ResolutionCache;
@@ -1176,7 +1176,7 @@ namespace ts.server {
             Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
-            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
+            this.hasInvalidatedResolutions = this.resolutionCache.createHasInvalidatedResolutions(returnFalse);
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;

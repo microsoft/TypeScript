@@ -1844,14 +1844,6 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
-        "category": "Error",
-        "code": 2360
-    },
-    "The right-hand side of an 'in' expression must not be a primitive.": {
-        "category": "Error",
-        "code": 2361
-    },
     "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2362
@@ -2845,6 +2837,10 @@
         "category": "Error",
         "code": 2637
     },
+    "Type '{0}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.": {
+        "category": "Error",
+        "code": 2638
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3567,13 +3563,17 @@
         "category": "Error",
         "code": 2844
     },
-    "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
+    "This condition will always return '{0}'.": {
         "category": "Error",
         "code": 2845
     },
-    "Relative imports into 'node_modules' are not allowed.": {
+    "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
         "category": "Error",
         "code": 2846
+    },
+    "Relative imports into 'node_modules' are not allowed.": {
+        "category": "Error",
+        "code": 2847
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -7376,7 +7376,14 @@
         "category": "Message",
         "code": 95173
     },
-
+    "Use `{0}`.": {
+        "category": "Message",
+        "code": 95174
+    },
+    "Use `Number.isNaN` in all conditions.": {
+        "category": "Message",
+        "code": 95175
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7513,5 +7520,25 @@
     "Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.": {
         "category": "Error",
         "code": 18045
+    },
+    "'{0}' is of type 'unknown'.": {
+        "category": "Error",
+        "code": 18046
+    },
+    "'{0}' is possibly 'null'.": {
+        "category": "Error",
+        "code": 18047
+    },
+    "'{0}' is possibly 'undefined'.": {
+        "category": "Error",
+        "code": 18048
+    },
+    "'{0}' is possibly 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 18049
+    },
+    "The value '{0}' cannot be used here.": {
+        "category": "Error",
+        "code": 18050
     }
 }
