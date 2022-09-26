@@ -1719,6 +1719,10 @@ namespace ts.server {
                     this.projectService.logErrorForScriptInfoNotFound(args.file);
                     return Errors.ThrowNoProject();
                 }
+                else if (!getScriptInfoEnsuringProjectsUptoDate) {
+                    // Ensure there are containing projects are present
+                    this.projectService.ensureDefaultProjectForFile(scriptInfo);
+                }
                 projects = scriptInfo.containingProjects;
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
@@ -1867,13 +1871,7 @@ namespace ts.server {
         }
 
         private getFileAndLanguageServiceForSyntacticOperation(args: protocol.FileRequestArgs) {
-            // Since this is syntactic operation, there should always be project for the file
-            // throw if we dont get project
-            const file = toNormalizedPath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.ensureDefaultProjectForFile(file);
-            if (!project) {
-                return Errors.ThrowNoProject();
-            }
+            const { file, project } = this.getFileAndProject(args);
             return {
                 file,
                 languageService: project.getLanguageService(/*ensureSynchronized*/ false)
