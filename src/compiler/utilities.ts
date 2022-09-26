@@ -5608,11 +5608,11 @@ namespace ts {
     }
 
     export function isWriteOnlyUsage(node: Node) {
-        return accessKindByUsage(node) === AccessKind.Write;
+        return accessKindForUsageChecks(node) === AccessKind.Write;
     }
 
     export function isWriteUsage(node: Node) {
-        return accessKindByUsage(node) !== AccessKind.Read;
+        return accessKindForUsageChecks(node) !== AccessKind.Read;
     }
 
     const enum AccessKind {
@@ -5624,7 +5624,7 @@ namespace ts {
         ReadWrite
     }
 
-    function accessKindByUsage(node: Node) {
+    function accessKindForUsageChecks(node: Node) {
         const kind = accessKind(node);
         const { parent } = node;
 
