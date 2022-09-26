@@ -1,4 +1,4 @@
-import { Version, VersionRange } from "./_namespaces/ts";
+import { isNodeLikeSystem, Version, VersionRange } from "./_namespaces/ts";
 
 // The following definitions provide the minimum compatible support for the Web Performance User Timings API
 // between browsers and NodeJS:
@@ -80,7 +80,7 @@ function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
 }
 
 function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
-    if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof module === "object" && typeof require === "function") {
+    if (isNodeLikeSystem()) {
         try {
             let performance: Performance;
             const { performance: nodePerformance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
