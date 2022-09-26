@@ -15814,7 +15814,18 @@ namespace ts {
                         return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                     }
                     errorIfWritingToReadonlyIndex(indexInfo);
-                    return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                    // When accessing an enum object with its own type,
+                    // e.g. E[E.A] for enum E { A }, undefined shouldn't
+                    // be included in the result type
+                    if ((accessFlags & AccessFlags.IncludeUndefined) &&
+                        !(objectType.symbol &&
+                            objectType.symbol.flags & (SymbolFlags.RegularEnum | SymbolFlags.ConstEnum) &&
+                            (indexType.symbol &&
+                            indexType.flags & TypeFlags.EnumLiteral &&
+                            getParentOfSymbol(indexType.symbol) === objectType.symbol))) {
+                        return getUnionType([indexInfo.type, undefinedType]);
+                    }
+                    return indexInfo.type;
                 }
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
@@ -23654,7 +23665,7 @@ namespace ts {
             }
             if (isEntityNameExpression(node.argumentExpression)) {
                 const symbol = resolveEntityName(node.argumentExpression, SymbolFlags.Value, /*ignoreErrors*/ true);
-                if (!symbol || !isConstVariable(symbol)) return undefined;
+                if (!symbol || !(isConstVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
 
                 const declaration = symbol.valueDeclaration;
                 if (declaration === undefined) return undefined;
@@ -23669,7 +23680,12 @@ namespace ts {
 
                 if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node.argumentExpression)) {
                     const initializer = getEffectiveInitializer(declaration);
-                    return initializer && tryGetNameFromType(getTypeOfExpression(initializer));
+                    if (initializer) {
+                        return tryGetNameFromType(getTypeOfExpression(initializer));
+                    }
+                    if (isEnumMember(declaration)) {
+                        return getTextOfPropertyName(declaration.name);
+                    }
                 }
             }
             return undefined;
