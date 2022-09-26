@@ -2910,3 +2910,16 @@ function trimEndImpl(s: string) {
     }
     return s.slice(0, end + 1);
 }
+
+declare const process: any;
+
+/** @internal */
+export function isNodeLikeSystem(): boolean {
+    // Note: we don't use the presence of `require` to check if we are in Node;
+    // when bundled using esbuild, this function will be rewritten to `__require`
+    // and definitely exist.
+    return typeof process !== "undefined"
+        && process.nextTick
+        && !process.browser
+        && typeof module === "object";
+}

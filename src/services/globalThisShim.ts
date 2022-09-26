@@ -1,4 +1,4 @@
-import { TypeScriptServicesFactory, versionMajorMinor } from "./_namespaces/ts";
+import { isNodeLikeSystem, TypeScriptServicesFactory, versionMajorMinor } from "./_namespaces/ts";
 
 // We polyfill `globalThis` here so re can reliably patch the global scope
 // in the contexts we want to in the same way across script and module formats
@@ -47,7 +47,7 @@ declare global {
 
 // if `process` is undefined, we're probably not running in node - patch legacy members onto the global scope
 // @ts-ignore
-if (typeof process === "undefined" || process.browser) {
+if (!isNodeLikeSystem()) {
     /// TODO: this is used by VS, clean this up on both sides of the interface
 
     //@ts-ignore
