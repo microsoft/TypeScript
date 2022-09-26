@@ -1346,6 +1346,10 @@ namespace ts {
         return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, extensions, redirectedReference);
     }
 
+    /* @internal */ export function nodeNextJsonConfigResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        return nodeModuleNameResolverWorker(NodeResolutionFeatures.Exports, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, tsconfigExtensions, /*redirectedReference*/ undefined);
+    }
+
     function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, extensions: Extensions[], redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
@@ -1569,12 +1573,15 @@ namespace ts {
         }
     }
 
-    function loadJSOrExactTSFileName(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
+    function loadFileName(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
         if ((extensions === Extensions.TypeScript || extensions === Extensions.DtsOnly) && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat)) {
             const result = tryFile(candidate, onlyRecordFailures, state);
             return result !== undefined ? { path: candidate, ext: tryExtractTSExtension(candidate) as Extension } : undefined;
         }
-
+        if (extensions === Extensions.TSConfig && fileExtensionIs(candidate, Extension.Json)) {
+            const result = tryFile(candidate, onlyRecordFailures, state);
+            return result !== undefined ? { path: candidate, ext: Extension.Json } : undefined;
+        }
         return loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
     }
 
@@ -1763,7 +1770,7 @@ namespace ts {
                 }
                 const resolvedTarget = combinePaths(scope.packageDirectory, target);
                 const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
-                const result = loadJSOrExactTSFileName(extensions, finalPath, /*recordOnlyFailures*/ false, state);
+                const result = loadFileName(extensions, finalPath, /*recordOnlyFailures*/ false, state);
                 if (result) {
                     entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
                     return true;
@@ -2186,7 +2193,7 @@ namespace ts {
                 const finalPath = toAbsolutePath(pattern ? resolvedTarget.replace(/\*/g, subpath) : resolvedTarget + subpath);
                 const inputLink = tryLoadInputFileForPath(finalPath, subpath, combinePaths(scope.packageDirectory, "package.json"), isImports);
                 if (inputLink) return inputLink;
-                return toSearchResult(withPackageId(scope, loadJSOrExactTSFileName(extensions, finalPath, /*onlyRecordFailures*/ false, state)));
+                return toSearchResult(withPackageId(scope, loadFileName(extensions, finalPath, /*onlyRecordFailures*/ false, state)));
             }
             else if (typeof target === "object" && target !== null) { // eslint-disable-line no-null/no-null
                 if (!Array.isArray(target)) {
@@ -2329,7 +2336,7 @@ namespace ts {
                                                 continue;
                                             }
                                             if (state.host.fileExists(possibleInputWithInputExtension)) {
-                                                return toSearchResult(withPackageId(scope, loadJSOrExactTSFileName(extensions, possibleInputWithInputExtension, /*onlyRecordFailures*/ false, state)));
+                                                return toSearchResult(withPackageId(scope, loadFileName(extensions, possibleInputWithInputExtension, /*onlyRecordFailures*/ false, state)));
                                             }
                                         }
                                     }
