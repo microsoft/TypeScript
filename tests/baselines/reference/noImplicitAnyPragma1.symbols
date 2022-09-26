@@ -1,0 +1,411 @@
+=== tests/cases/conformance/pragma/noImplicitAny/file1.ts ===
+// @ts-noImplicitAny
+import * as ns from "missing";
+>ns : Symbol(ns, Decl(file1.ts, 1, 6))
+
+const a = p => p + 1;
+>a : Symbol(a, Decl(file1.ts, 3, 5))
+>p : Symbol(p, Decl(file1.ts, 3, 9))
+>p : Symbol(p, Decl(file1.ts, 3, 9))
+
+let x;
+>x : Symbol(x, Decl(file1.ts, 5, 3))
+
+x = "a";
+>x : Symbol(x, Decl(file1.ts, 5, 3))
+
+x = 42;
+>x : Symbol(x, Decl(file1.ts, 5, 3))
+
+export class A {
+>A : Symbol(A, Decl(file1.ts, 7, 7))
+
+    prop;
+>prop : Symbol(A.prop, Decl(file1.ts, 9, 16))
+
+    prop2;
+>prop2 : Symbol(A.prop2, Decl(file1.ts, 10, 9))
+
+    constructor() {
+        this.prop = "a";
+>this.prop : Symbol(A.prop, Decl(file1.ts, 9, 16))
+>this : Symbol(A, Decl(file1.ts, 7, 7))
+>prop : Symbol(A.prop, Decl(file1.ts, 9, 16))
+
+        this.prop = 42;
+>this.prop : Symbol(A.prop, Decl(file1.ts, 9, 16))
+>this : Symbol(A, Decl(file1.ts, 7, 7))
+>prop : Symbol(A.prop, Decl(file1.ts, 9, 16))
+    }
+    static stat;
+>stat : Symbol(A.stat, Decl(file1.ts, 15, 5))
+
+    static stat2;
+>stat2 : Symbol(A.stat2, Decl(file1.ts, 16, 16))
+
+    static {
+        this.stat = "a";
+>this.stat : Symbol(A.stat, Decl(file1.ts, 15, 5))
+>this : Symbol(A, Decl(file1.ts, 7, 7))
+>stat : Symbol(A.stat, Decl(file1.ts, 15, 5))
+
+        this.stat = 42;
+>this.stat : Symbol(A.stat, Decl(file1.ts, 15, 5))
+>this : Symbol(A, Decl(file1.ts, 7, 7))
+>stat : Symbol(A.stat, Decl(file1.ts, 15, 5))
+    }
+
+    set access(param) {}
+>access : Symbol(A.access, Decl(file1.ts, 21, 5), Decl(file1.ts, 23, 24))
+>param : Symbol(param, Decl(file1.ts, 23, 15))
+
+    get access() { return this.access; }
+>access : Symbol(A.access, Decl(file1.ts, 21, 5), Decl(file1.ts, 23, 24))
+>this.access : Symbol(A.access, Decl(file1.ts, 21, 5), Decl(file1.ts, 23, 24))
+>this : Symbol(A, Decl(file1.ts, 7, 7))
+>access : Symbol(A.access, Decl(file1.ts, 21, 5), Decl(file1.ts, 23, 24))
+}
+
+export function f1() {
+>f1 : Symbol(f1, Decl(file1.ts, 25, 1))
+
+    return f1();
+>f1 : Symbol(f1, Decl(file1.ts, 25, 1))
+}
+
+const res = {}["none"];
+>res : Symbol(res, Decl(file1.ts, 31, 5))
+
+interface B { prop: string }
+>B : Symbol(B, Decl(file1.ts, 31, 23))
+>prop : Symbol(B.prop, Decl(file1.ts, 33, 13))
+
+declare var b: B;
+>b : Symbol(b, Decl(file1.ts, 34, 11))
+>B : Symbol(B, Decl(file1.ts, 31, 23))
+
+const c = b["none"];
+>c : Symbol(c, Decl(file1.ts, 36, 5))
+>b : Symbol(b, Decl(file1.ts, 34, 11))
+
+const d: B = { prop: "", excess: "yes" };
+>d : Symbol(d, Decl(file1.ts, 38, 5))
+>B : Symbol(B, Decl(file1.ts, 31, 23))
+>prop : Symbol(prop, Decl(file1.ts, 38, 14))
+>excess : Symbol(excess, Decl(file1.ts, 38, 24))
+
+function f2(): string { return ""; }
+>f2 : Symbol(f2, Decl(file1.ts, 38, 41))
+
+const e = new f2();
+>e : Symbol(e, Decl(file1.ts, 41, 5))
+>f2 : Symbol(f2, Decl(file1.ts, 38, 41))
+
+=== tests/cases/conformance/pragma/noImplicitAny/file2.ts ===
+// @ts-noImplicitAny true
+import * as ns from "missing";
+>ns : Symbol(ns, Decl(file2.ts, 1, 6))
+
+const a = p => p + 1;
+>a : Symbol(a, Decl(file2.ts, 3, 5))
+>p : Symbol(p, Decl(file2.ts, 3, 9))
+>p : Symbol(p, Decl(file2.ts, 3, 9))
+
+let x;
+>x : Symbol(x, Decl(file2.ts, 5, 3))
+
+x = "a";
+>x : Symbol(x, Decl(file2.ts, 5, 3))
+
+x = 42;
+>x : Symbol(x, Decl(file2.ts, 5, 3))
+
+export class A {
+>A : Symbol(A, Decl(file2.ts, 7, 7))
+
+    prop;
+>prop : Symbol(A.prop, Decl(file2.ts, 9, 16))
+
+    prop2;
+>prop2 : Symbol(A.prop2, Decl(file2.ts, 10, 9))
+
+    constructor() {
+        this.prop = "a";
+>this.prop : Symbol(A.prop, Decl(file2.ts, 9, 16))
+>this : Symbol(A, Decl(file2.ts, 7, 7))
+>prop : Symbol(A.prop, Decl(file2.ts, 9, 16))
+
+        this.prop = 42;
+>this.prop : Symbol(A.prop, Decl(file2.ts, 9, 16))
+>this : Symbol(A, Decl(file2.ts, 7, 7))
+>prop : Symbol(A.prop, Decl(file2.ts, 9, 16))
+    }
+    static stat;
+>stat : Symbol(A.stat, Decl(file2.ts, 15, 5))
+
+    static stat2;
+>stat2 : Symbol(A.stat2, Decl(file2.ts, 16, 16))
+
+    static {
+        this.stat = "a";
+>this.stat : Symbol(A.stat, Decl(file2.ts, 15, 5))
+>this : Symbol(A, Decl(file2.ts, 7, 7))
+>stat : Symbol(A.stat, Decl(file2.ts, 15, 5))
+
+        this.stat = 42;
+>this.stat : Symbol(A.stat, Decl(file2.ts, 15, 5))
+>this : Symbol(A, Decl(file2.ts, 7, 7))
+>stat : Symbol(A.stat, Decl(file2.ts, 15, 5))
+    }
+
+    set access(param) {}
+>access : Symbol(A.access, Decl(file2.ts, 21, 5), Decl(file2.ts, 23, 24))
+>param : Symbol(param, Decl(file2.ts, 23, 15))
+
+    get access() { return this.access; }
+>access : Symbol(A.access, Decl(file2.ts, 21, 5), Decl(file2.ts, 23, 24))
+>this.access : Symbol(A.access, Decl(file2.ts, 21, 5), Decl(file2.ts, 23, 24))
+>this : Symbol(A, Decl(file2.ts, 7, 7))
+>access : Symbol(A.access, Decl(file2.ts, 21, 5), Decl(file2.ts, 23, 24))
+}
+
+export function f1() {
+>f1 : Symbol(f1, Decl(file2.ts, 25, 1))
+
+    return f1();
+>f1 : Symbol(f1, Decl(file2.ts, 25, 1))
+}
+
+const res = {}["none"];
+>res : Symbol(res, Decl(file2.ts, 31, 5))
+
+interface B { prop: string }
+>B : Symbol(B, Decl(file2.ts, 31, 23))
+>prop : Symbol(B.prop, Decl(file2.ts, 33, 13))
+
+declare var b: B;
+>b : Symbol(b, Decl(file2.ts, 34, 11))
+>B : Symbol(B, Decl(file2.ts, 31, 23))
+
+const c = b["none"];
+>c : Symbol(c, Decl(file2.ts, 36, 5))
+>b : Symbol(b, Decl(file2.ts, 34, 11))
+
+const d: B = { prop: "", excess: "yes" };
+>d : Symbol(d, Decl(file2.ts, 38, 5))
+>B : Symbol(B, Decl(file2.ts, 31, 23))
+>prop : Symbol(prop, Decl(file2.ts, 38, 14))
+>excess : Symbol(excess, Decl(file2.ts, 38, 24))
+
+function f2(): string { return ""; }
+>f2 : Symbol(f2, Decl(file2.ts, 38, 41))
+
+const e = new f2();
+>e : Symbol(e, Decl(file2.ts, 41, 5))
+>f2 : Symbol(f2, Decl(file2.ts, 38, 41))
+
+=== tests/cases/conformance/pragma/noImplicitAny/file3.ts ===
+// @ts-noImplicitAny false
+import * as ns from "missing";
+>ns : Symbol(ns, Decl(file3.ts, 1, 6))
+
+const a = p => p + 1;
+>a : Symbol(a, Decl(file3.ts, 3, 5))
+>p : Symbol(p, Decl(file3.ts, 3, 9))
+>p : Symbol(p, Decl(file3.ts, 3, 9))
+
+let x;
+>x : Symbol(x, Decl(file3.ts, 5, 3))
+
+x = "a";
+>x : Symbol(x, Decl(file3.ts, 5, 3))
+
+x = 42;
+>x : Symbol(x, Decl(file3.ts, 5, 3))
+
+export class A {
+>A : Symbol(A, Decl(file3.ts, 7, 7))
+
+    prop;
+>prop : Symbol(A.prop, Decl(file3.ts, 9, 16))
+
+    prop2;
+>prop2 : Symbol(A.prop2, Decl(file3.ts, 10, 9))
+
+    constructor() {
+        this.prop = "a";
+>this.prop : Symbol(A.prop, Decl(file3.ts, 9, 16))
+>this : Symbol(A, Decl(file3.ts, 7, 7))
+>prop : Symbol(A.prop, Decl(file3.ts, 9, 16))
+
+        this.prop = 42;
+>this.prop : Symbol(A.prop, Decl(file3.ts, 9, 16))
+>this : Symbol(A, Decl(file3.ts, 7, 7))
+>prop : Symbol(A.prop, Decl(file3.ts, 9, 16))
+    }
+    static stat;
+>stat : Symbol(A.stat, Decl(file3.ts, 15, 5))
+
+    static stat2;
+>stat2 : Symbol(A.stat2, Decl(file3.ts, 16, 16))
+
+    static {
+        this.stat = "a";
+>this.stat : Symbol(A.stat, Decl(file3.ts, 15, 5))
+>this : Symbol(A, Decl(file3.ts, 7, 7))
+>stat : Symbol(A.stat, Decl(file3.ts, 15, 5))
+
+        this.stat = 42;
+>this.stat : Symbol(A.stat, Decl(file3.ts, 15, 5))
+>this : Symbol(A, Decl(file3.ts, 7, 7))
+>stat : Symbol(A.stat, Decl(file3.ts, 15, 5))
+    }
+
+    set access(param) {}
+>access : Symbol(A.access, Decl(file3.ts, 21, 5), Decl(file3.ts, 23, 24))
+>param : Symbol(param, Decl(file3.ts, 23, 15))
+
+    get access() { return this.access; }
+>access : Symbol(A.access, Decl(file3.ts, 21, 5), Decl(file3.ts, 23, 24))
+>this.access : Symbol(A.access, Decl(file3.ts, 21, 5), Decl(file3.ts, 23, 24))
+>this : Symbol(A, Decl(file3.ts, 7, 7))
+>access : Symbol(A.access, Decl(file3.ts, 21, 5), Decl(file3.ts, 23, 24))
+}
+
+export function f1() {
+>f1 : Symbol(f1, Decl(file3.ts, 25, 1))
+
+    return f1();
+>f1 : Symbol(f1, Decl(file3.ts, 25, 1))
+}
+
+const res = {}["none"];
+>res : Symbol(res, Decl(file3.ts, 31, 5))
+
+interface B { prop: string }
+>B : Symbol(B, Decl(file3.ts, 31, 23))
+>prop : Symbol(B.prop, Decl(file3.ts, 33, 13))
+
+declare var b: B;
+>b : Symbol(b, Decl(file3.ts, 34, 11))
+>B : Symbol(B, Decl(file3.ts, 31, 23))
+
+const c = b["none"];
+>c : Symbol(c, Decl(file3.ts, 36, 5))
+>b : Symbol(b, Decl(file3.ts, 34, 11))
+
+const d: B = { prop: "", excess: "yes" };
+>d : Symbol(d, Decl(file3.ts, 38, 5))
+>B : Symbol(B, Decl(file3.ts, 31, 23))
+>prop : Symbol(prop, Decl(file3.ts, 38, 14))
+>excess : Symbol(excess, Decl(file3.ts, 38, 24))
+
+function f2(): string { return ""; }
+>f2 : Symbol(f2, Decl(file3.ts, 38, 41))
+
+const e = new f2();
+>e : Symbol(e, Decl(file3.ts, 41, 5))
+>f2 : Symbol(f2, Decl(file3.ts, 38, 41))
+
+=== tests/cases/conformance/pragma/noImplicitAny/file4.ts ===
+import * as ns from "missing";
+>ns : Symbol(ns, Decl(file4.ts, 0, 6))
+
+const a = p => p + 1;
+>a : Symbol(a, Decl(file4.ts, 2, 5))
+>p : Symbol(p, Decl(file4.ts, 2, 9))
+>p : Symbol(p, Decl(file4.ts, 2, 9))
+
+let x;
+>x : Symbol(x, Decl(file4.ts, 4, 3))
+
+x = "a";
+>x : Symbol(x, Decl(file4.ts, 4, 3))
+
+x = 42;
+>x : Symbol(x, Decl(file4.ts, 4, 3))
+
+export class A {
+>A : Symbol(A, Decl(file4.ts, 6, 7))
+
+    prop;
+>prop : Symbol(A.prop, Decl(file4.ts, 8, 16))
+
+    prop2;
+>prop2 : Symbol(A.prop2, Decl(file4.ts, 9, 9))
+
+    constructor() {
+        this.prop = "a";
+>this.prop : Symbol(A.prop, Decl(file4.ts, 8, 16))
+>this : Symbol(A, Decl(file4.ts, 6, 7))
+>prop : Symbol(A.prop, Decl(file4.ts, 8, 16))
+
+        this.prop = 42;
+>this.prop : Symbol(A.prop, Decl(file4.ts, 8, 16))
+>this : Symbol(A, Decl(file4.ts, 6, 7))
+>prop : Symbol(A.prop, Decl(file4.ts, 8, 16))
+    }
+    static stat;
+>stat : Symbol(A.stat, Decl(file4.ts, 14, 5))
+
+    static stat2;
+>stat2 : Symbol(A.stat2, Decl(file4.ts, 15, 16))
+
+    static {
+        this.stat = "a";
+>this.stat : Symbol(A.stat, Decl(file4.ts, 14, 5))
+>this : Symbol(A, Decl(file4.ts, 6, 7))
+>stat : Symbol(A.stat, Decl(file4.ts, 14, 5))
+
+        this.stat = 42;
+>this.stat : Symbol(A.stat, Decl(file4.ts, 14, 5))
+>this : Symbol(A, Decl(file4.ts, 6, 7))
+>stat : Symbol(A.stat, Decl(file4.ts, 14, 5))
+    }
+
+    set access(param) {}
+>access : Symbol(A.access, Decl(file4.ts, 20, 5), Decl(file4.ts, 22, 24))
+>param : Symbol(param, Decl(file4.ts, 22, 15))
+
+    get access() { return this.access; }
+>access : Symbol(A.access, Decl(file4.ts, 20, 5), Decl(file4.ts, 22, 24))
+>this.access : Symbol(A.access, Decl(file4.ts, 20, 5), Decl(file4.ts, 22, 24))
+>this : Symbol(A, Decl(file4.ts, 6, 7))
+>access : Symbol(A.access, Decl(file4.ts, 20, 5), Decl(file4.ts, 22, 24))
+}
+
+export function f1() {
+>f1 : Symbol(f1, Decl(file4.ts, 24, 1))
+
+    return f1();
+>f1 : Symbol(f1, Decl(file4.ts, 24, 1))
+}
+
+const res = {}["none"];
+>res : Symbol(res, Decl(file4.ts, 30, 5))
+
+interface B { prop: string }
+>B : Symbol(B, Decl(file4.ts, 30, 23))
+>prop : Symbol(B.prop, Decl(file4.ts, 32, 13))
+
+declare var b: B;
+>b : Symbol(b, Decl(file4.ts, 33, 11))
+>B : Symbol(B, Decl(file4.ts, 30, 23))
+
+const c = b["none"];
+>c : Symbol(c, Decl(file4.ts, 35, 5))
+>b : Symbol(b, Decl(file4.ts, 33, 11))
+
+const d: B = { prop: "", excess: "yes" };
+>d : Symbol(d, Decl(file4.ts, 37, 5))
+>B : Symbol(B, Decl(file4.ts, 30, 23))
+>prop : Symbol(prop, Decl(file4.ts, 37, 14))
+>excess : Symbol(excess, Decl(file4.ts, 37, 24))
+
+function f2(): string { return ""; }
+>f2 : Symbol(f2, Decl(file4.ts, 37, 41))
+
+const e = new f2();
+>e : Symbol(e, Decl(file4.ts, 40, 5))
+>f2 : Symbol(f2, Decl(file4.ts, 37, 41))
+

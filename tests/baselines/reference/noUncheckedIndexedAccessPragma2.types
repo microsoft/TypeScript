@@ -1,0 +1,59 @@
+=== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file1.ts ===
+// @ts-noUncheckedIndexedAccess
+interface A {
+    [index: string]: string;
+>index : string
+}
+declare var a: A;
+>a : A
+
+export const x: string = a.something;
+>x : string
+>a.something : string | undefined
+>a : A
+>something : string | undefined
+
+=== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file2.ts ===
+// @ts-noUncheckedIndexedAccess true
+interface A {
+    [index: string]: string;
+>index : string
+}
+declare var a: A;
+>a : A
+
+export const x: string = a.something;
+>x : string
+>a.something : string | undefined
+>a : A
+>something : string | undefined
+
+=== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file3.ts ===
+// @ts-noUncheckedIndexedAccess false
+interface A {
+    [index: string]: string;
+>index : string
+}
+declare var a: A;
+>a : A
+
+export const x: string = a.something;
+>x : string
+>a.something : string
+>a : A
+>something : string
+
+=== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file4.ts ===
+interface A {
+    [index: string]: string;
+>index : string
+}
+declare var a: A;
+>a : A
+
+export const x: string = a.something;
+>x : string
+>a.something : string | undefined
+>a : A
+>something : string | undefined
+

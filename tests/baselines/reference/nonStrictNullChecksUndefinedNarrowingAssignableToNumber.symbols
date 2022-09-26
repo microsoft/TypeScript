@@ -1,0 +1,32 @@
+=== tests/cases/compiler/nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts ===
+export function hash(obj: any, hashVal = 0): number {
+>hash : Symbol(hash, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 0, 0))
+>obj : Symbol(obj, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 0, 21))
+>hashVal : Symbol(hashVal, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 0, 30))
+
+	switch (typeof obj) {
+>obj : Symbol(obj, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 0, 21))
+
+		case 'number':
+			return numberHash(obj, hashVal);
+>numberHash : Symbol(numberHash, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 9, 1))
+>obj : Symbol(obj, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 0, 21))
+>hashVal : Symbol(hashVal, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 0, 30))
+
+		case 'undefined':
+			return numberHash(obj, 937);
+>numberHash : Symbol(numberHash, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 9, 1))
+>obj : Symbol(obj, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 0, 21))
+
+		default:
+			return numberHash(obj, 617);
+>numberHash : Symbol(numberHash, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 9, 1))
+>obj : Symbol(obj, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 0, 21))
+	}
+}
+
+declare function numberHash(val: number, initialHashVal: number): number;
+>numberHash : Symbol(numberHash, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 9, 1))
+>val : Symbol(val, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 11, 28))
+>initialHashVal : Symbol(initialHashVal, Decl(nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts, 11, 40))
+

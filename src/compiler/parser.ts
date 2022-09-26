@@ -9713,6 +9713,7 @@ namespace ts {
     export interface PragmaContext {
         languageVersion: ScriptTarget;
         pragmas?: PragmaMap;
+        localOptions?: CompilerOptions;
         checkJsDirective?: CheckJsDirective;
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
@@ -9720,6 +9721,7 @@ namespace ts {
         amdDependencies: AmdDependency[];
         hasNoDefaultLib?: boolean;
         moduleName?: string;
+
     }
 
     function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
@@ -9836,12 +9838,65 @@ namespace ts {
                     });
                     break;
                 }
+                case "ts-strict":
+                case "ts-noimplicitany":
+                case "ts-strictnullchecks":
+                case "ts-strictfunctiontypes":
+                case "ts-strictbindcallapply":
+                case "ts-noimplicitthis":
+                case "ts-strictpropertyinitialization":
+                case "ts-useunknownincatchvariables":
+                case "ts-alwaysstrict":
+                case "ts-nounusedlocals":
+                case "ts-nounusedparameters":
+                case "ts-exactoptionalpropertytypes":
+                case "ts-nopropertyaccessfromindexsignature":
+                case "ts-noimplicitreturns":
+                case "ts-nofallthroughcasesinswitch":
+                case "ts-nouncheckedindexedaccess":
+                case "ts-noimplicitoverride": {
+                    const optName = key.slice(3);
+                    const opt = find(optionsAllowedAsPragmaOption, o => o.name.toLowerCase() === optName)!;
+                    const entry = (isArray(entryOrList) ? last(entryOrList) : entryOrList);
+                    const unparsedValue = (entry.arguments as PragmaArgumentType<`ts-${Lowercase<FileLocalOptionName>}`>).value;
+                    let parsedValue: OptionsBase[string];
+                    const errors: Diagnostic[] = [];
+                    if (!unparsedValue || !trimString(unparsedValue)) {
+                        parsedValue = true;
+                    }
+                    else {
+                        const optContainer: OptionsBase = {};
+                        const newIdx = parseOptionValue([unparsedValue], 0, /*diagnostics*/ undefined, opt, optContainer, errors);
+                        parsedValue = optContainer[opt.name];
+                        if (newIdx === 0) {
+                            // argument was not consumed, issue an error
+                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, optName, opt.type));
+                        }
+                    }
+                    if (unparsedValue === undefined && opt.type !== "boolean") {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, optName));
+                    }
+                    for (const err of errors) {
+                        reportDiagnostic(entry.range.pos, entry.range.end - entry.range.pos, {
+                            category: err.category,
+                            code: err.code,
+                            message: err.messageText as string,
+                            reportsDeprecated: err.reportsDeprecated,
+                            reportsUnnecessary: err.reportsUnnecessary,
+                            key: err.messageText as string
+                        });
+                    }
+                    if (!length(errors)) {
+                        (context.localOptions ??= {})[opt.name as string] = parsedValue;
+                    }
+                    break;
+                }
                 case "jsx":
                 case "jsxfrag":
                 case "jsximportsource":
                 case "jsxruntime":
                     return; // Accessed directly
-                default: Debug.fail("Unhandled pragma kind"); // Can this be made into an assertNever in the future?
+                default: Debug.assertNever(key, `Unhandled pragma kind: ${key}`);
             }
         });
     }

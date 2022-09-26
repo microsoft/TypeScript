@@ -1,0 +1,23 @@
+=== tests/cases/conformance/pragma/noUnusedParameters/file1.ts ===
+// @ts-noUnusedParameters
+export function f1(x: number) {}
+>f1 : Symbol(f1, Decl(file1.ts, 0, 0))
+>x : Symbol(x, Decl(file1.ts, 1, 19))
+
+=== tests/cases/conformance/pragma/noUnusedParameters/file2.ts ===
+// @ts-noUnusedParameters true
+export function f1(x: number) {}
+>f1 : Symbol(f1, Decl(file2.ts, 0, 0))
+>x : Symbol(x, Decl(file2.ts, 1, 19))
+
+=== tests/cases/conformance/pragma/noUnusedParameters/file3.ts ===
+// @ts-noUnusedParameters false
+export function f1(x: number) {}
+>f1 : Symbol(f1, Decl(file3.ts, 0, 0))
+>x : Symbol(x, Decl(file3.ts, 1, 19))
+
+=== tests/cases/conformance/pragma/noUnusedParameters/file4.ts ===
+export function f1(x: number) {}
+>f1 : Symbol(f1, Decl(file4.ts, 0, 0))
+>x : Symbol(x, Decl(file4.ts, 0, 19))
+

@@ -1,0 +1,192 @@
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file1.ts(6,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file1.ts(12,1): error TS2322: Type 'B' is not assignable to type 'A'.
+  Property 'member' is optional in type 'B' but required in type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file1.ts(13,1): error TS2375: Type 'A' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'member' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file2.ts(6,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file2.ts(12,1): error TS2322: Type 'B' is not assignable to type 'A'.
+  Property 'member' is optional in type 'B' but required in type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file2.ts(13,1): error TS2375: Type 'A' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'member' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file3.ts(12,1): error TS2322: Type 'B' is not assignable to type 'A'.
+  Property 'member' is optional in type 'B' but required in type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file4.ts(5,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file4.ts(11,1): error TS2322: Type 'B' is not assignable to type 'A'.
+  Property 'member' is optional in type 'B' but required in type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file4.ts(12,1): error TS2375: Type 'A' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'member' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file5.ts(7,1): error TS2322: Type 'B' is not assignable to type 'A'.
+  Property 'member' is optional in type 'B' but required in type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file5.ts(10,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file5.ts(19,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file5.ts(23,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file6.ts(7,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file6.ts(10,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file6.ts(19,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/exactOptionalPropertyTypes/file6.ts(23,1): error TS2322: Type 'B' is not assignable to type 'A'.
+
+
+==== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file1.ts (3 errors) ====
+    // @ts-exactOptionalPropertyTypes
+    export interface A {
+        member: string | undefined;
+    }
+    declare var a: A;
+    delete a.member;
+           ~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    
+    export interface B {
+        member?: string;
+    }
+    declare var b: B;
+    a = b;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Property 'member' is optional in type 'B' but required in type 'A'.
+    b = a;
+    ~
+!!! error TS2375: Type 'A' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'member' are incompatible.
+!!! error TS2375:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2375:       Type 'undefined' is not assignable to type 'string'.
+    
+==== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file2.ts (3 errors) ====
+    // @ts-exactOptionalPropertyTypes true
+    export interface A {
+        member: string | undefined;
+    }
+    declare var a: A;
+    delete a.member;
+           ~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    
+    export interface B {
+        member?: string;
+    }
+    declare var b: B;
+    a = b;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Property 'member' is optional in type 'B' but required in type 'A'.
+    b = a;
+    ~
+!!! error TS2375: Type 'A' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'member' are incompatible.
+!!! error TS2375:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2375:       Type 'undefined' is not assignable to type 'string'.
+    
+==== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file3.ts (1 errors) ====
+    // @ts-exactOptionalPropertyTypes false
+    export interface A {
+        member: string | undefined;
+    }
+    declare var a: A;
+    delete a.member;
+    
+    export interface B {
+        member?: string;
+    }
+    declare var b: B;
+    a = b;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Property 'member' is optional in type 'B' but required in type 'A'.
+    b = a;
+    
+==== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file4.ts (3 errors) ====
+    export interface A {
+        member: string | undefined;
+    }
+    declare var a: A;
+    delete a.member;
+           ~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    
+    export interface B {
+        member?: string;
+    }
+    declare var b: B;
+    a = b;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Property 'member' is optional in type 'B' but required in type 'A'.
+    b = a;
+    ~
+!!! error TS2375: Type 'A' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'member' are incompatible.
+!!! error TS2375:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2375:       Type 'undefined' is not assignable to type 'string'.
+    
+==== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file5.ts (4 errors) ====
+    // @ts-exactOptionalPropertyTypes true
+    import {A as A1, B as B1} from "./file2";
+    import {A as A2, B as B2} from "./file3";
+    
+    declare var a1: A1, b1: B2, a2: A2, b2: B2;
+    
+    a1 = b1;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Property 'member' is optional in type 'B' but required in type 'A'.
+    b1 = a1;
+    
+    a2 = b2;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    b2 = a2;
+    
+    a1 = a2;
+    a2 = a1;
+    
+    b1 = b2;
+    b2 = b1;
+    
+    a1 = b2;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    b2 = a1;
+    
+    b1 = a2;
+    a2 = b1;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    
+==== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file6.ts (4 errors) ====
+    // @ts-exactOptionalPropertyTypes false
+    import {A as A1, B as B1} from "./file2";
+    import {A as A2, B as B2} from "./file3";
+    
+    declare var a1: A1, b1: B2, a2: A2, b2: B2;
+    
+    a1 = b1;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    b1 = a1;
+    
+    a2 = b2;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    b2 = a2;
+    
+    a1 = a2;
+    a2 = a1;
+    
+    b1 = b2;
+    b2 = b1;
+    
+    a1 = b2;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    b2 = a1;
+    
+    b1 = a2;
+    a2 = b1;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.

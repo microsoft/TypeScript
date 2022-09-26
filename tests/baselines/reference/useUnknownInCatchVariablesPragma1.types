@@ -1,0 +1,55 @@
+=== tests/cases/conformance/pragma/useUnknownInCatchVariables/file1.ts ===
+// @ts-useUnknownInCatchVariables
+try {
+
+}
+catch (thing) {
+>thing : unknown
+
+    thing.a;
+>thing.a : any
+>thing : unknown
+>a : any
+}
+
+=== tests/cases/conformance/pragma/useUnknownInCatchVariables/file2.ts ===
+// @ts-useUnknownInCatchVariables true
+try {
+
+}
+catch (thing) {
+>thing : unknown
+
+    thing.a;
+>thing.a : any
+>thing : unknown
+>a : any
+}
+
+=== tests/cases/conformance/pragma/useUnknownInCatchVariables/file3.ts ===
+// @ts-useUnknownInCatchVariables false
+try {
+
+}
+catch (thing) {
+>thing : any
+
+    thing.a;
+>thing.a : any
+>thing : any
+>a : any
+}
+
+=== tests/cases/conformance/pragma/useUnknownInCatchVariables/file4.ts ===
+try {
+
+}
+catch (thing) {
+>thing : any
+
+    thing.a;
+>thing.a : any
+>thing : any
+>a : any
+}
+

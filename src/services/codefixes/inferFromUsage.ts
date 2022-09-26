@@ -113,6 +113,7 @@ namespace ts.codefix {
             return undefined;
         }
 
+        const isStrictNullChecks = getStrictOptionValue(sourceFile, program.getCompilerOptions(), "strictNullChecks");
         const { parent } = token;
         const importAdder = createImportAdder(sourceFile, program, preferences, host);
         errorCode = mapSuggestionDiagnostic(errorCode);
@@ -121,12 +122,12 @@ namespace ts.codefix {
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
                 if ((isVariableDeclaration(parent) && markSeen(parent)) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
-                    annotateVariableDeclaration(changes, importAdder, sourceFile, parent, program, host, cancellationToken);
+                    annotateVariableDeclaration(changes, importAdder, sourceFile, parent, program, host, cancellationToken, isStrictNullChecks);
                     importAdder.writeFixes(changes);
                     return parent;
                 }
                 if (isPropertyAccessExpression(parent)) {
-                    const type = inferTypeForVariableFromUsage(parent.name, program, cancellationToken);
+                    const type = inferTypeForVariableFromUsage(parent.name, program, cancellationToken, isStrictNullChecks);
                     const typeNode = getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
@@ -141,7 +142,7 @@ namespace ts.codefix {
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
                 if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && markSeen(symbol.valueDeclaration)) {
-                    annotateVariableDeclaration(changes, importAdder, getSourceFileOfNode(symbol.valueDeclaration), symbol.valueDeclaration, program, host, cancellationToken);
+                    annotateVariableDeclaration(changes, importAdder, getSourceFileOfNode(symbol.valueDeclaration), symbol.valueDeclaration, program, host, cancellationToken, isStrictNullChecks);
                     importAdder.writeFixes(changes);
                     return symbol.valueDeclaration;
                 }
@@ -159,7 +160,7 @@ namespace ts.codefix {
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
                 if (isSetAccessorDeclaration(containingFunction)) {
-                    annotateSetAccessor(changes, importAdder, sourceFile, containingFunction, program, host, cancellationToken);
+                    annotateSetAccessor(changes, importAdder, sourceFile, containingFunction, program, host, cancellationToken, isStrictNullChecks);
                     declaration = containingFunction;
                     break;
                 }
@@ -167,7 +168,7 @@ namespace ts.codefix {
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 if (markSeen(containingFunction)) {
                     const param = cast(parent, isParameter);
-                    annotateParameters(changes, importAdder, sourceFile, param, containingFunction, program, host, cancellationToken);
+                    annotateParameters(changes, importAdder, sourceFile, param, containingFunction, program, host, cancellationToken, isStrictNullChecks);
                     declaration = param;
                 }
                 break;
@@ -176,7 +177,7 @@ namespace ts.codefix {
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
             case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
                 if (isGetAccessorDeclaration(containingFunction) && isIdentifier(containingFunction.name)) {
-                    annotate(changes, importAdder, sourceFile, containingFunction, inferTypeForVariableFromUsage(containingFunction.name, program, cancellationToken), program, host);
+                    annotate(changes, importAdder, sourceFile, containingFunction, inferTypeForVariableFromUsage(containingFunction.name, program, cancellationToken, isStrictNullChecks), program, host);
                     declaration = containingFunction;
                 }
                 break;
@@ -184,7 +185,7 @@ namespace ts.codefix {
             // Set Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
                 if (isSetAccessorDeclaration(containingFunction)) {
-                    annotateSetAccessor(changes, importAdder, sourceFile, containingFunction, program, host, cancellationToken);
+                    annotateSetAccessor(changes, importAdder, sourceFile, containingFunction, program, host, cancellationToken, isStrictNullChecks);
                     declaration = containingFunction;
                 }
                 break;
@@ -192,7 +193,7 @@ namespace ts.codefix {
             // Function 'this'
             case Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code:
                 if (textChanges.isThisTypeAnnotatable(containingFunction) && markSeen(containingFunction)) {
-                    annotateThis(changes, sourceFile, containingFunction, program, host, cancellationToken);
+                    annotateThis(changes, sourceFile, containingFunction, program, host, cancellationToken, isStrictNullChecks);
                     declaration = containingFunction;
                 }
                 break;
@@ -213,9 +214,10 @@ namespace ts.codefix {
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
+        isStrictNullChecks: boolean,
     ): void {
         if (isIdentifier(declaration.name)) {
-            annotate(changes, importAdder, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program, host);
+            annotate(changes, importAdder, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken, isStrictNullChecks), program, host);
         }
     }
 
@@ -228,12 +230,13 @@ namespace ts.codefix {
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
+        isStrictNullChecks: boolean,
     ): void {
         if (!isIdentifier(parameterDeclaration.name)) {
             return;
         }
 
-        const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken);
+        const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken, isStrictNullChecks);
         Debug.assert(containingFunction.parameters.length === parameterInferences.length, "Parameter count and inference count should match");
 
         if (isInJSFile(containingFunction)) {
@@ -251,12 +254,12 @@ namespace ts.codefix {
         }
     }
 
-    function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: textChanges.ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken) {
+    function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: textChanges.ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken, isStrictNullChecks: boolean) {
         const references = getFunctionReferences(containingFunction, sourceFile, program, cancellationToken);
         if (!references || !references.length) {
             return;
         }
-        const thisInference = inferTypeFromReferences(program, references, cancellationToken).thisParameter();
+        const thisInference = inferTypeFromReferences(program, references, cancellationToken, isStrictNullChecks).thisParameter();
         const typeNode = getTypeNodeIfAccessible(thisInference, containingFunction, program, host);
         if (!typeNode) {
             return;
@@ -284,13 +287,13 @@ namespace ts.codefix {
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
-
+        isStrictNullChecks: boolean,
     ): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
-            let type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken);
+            let type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken, isStrictNullChecks);
             if (type === program.getTypeChecker().getAnyType()) {
-                type = inferTypeForVariableFromUsage(param.name, program, cancellationToken);
+                type = inferTypeForVariableFromUsage(param.name, program, cancellationToken, isStrictNullChecks);
             }
             if (isInJSFile(setAccessorDeclaration)) {
                 annotateJSDocParameters(changes, sourceFile, [{ declaration: param, type }], program, host);
@@ -388,17 +391,17 @@ namespace ts.codefix {
             entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
     }
 
-    function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken): Type {
+    function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken, isStrictNullChecks: boolean): Type {
         const references = getReferences(token, program, cancellationToken);
-        return inferTypeFromReferences(program, references, cancellationToken).single();
+        return inferTypeFromReferences(program, references, cancellationToken, isStrictNullChecks).single();
     }
 
-    function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken) {
+    function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken, isStrictNullChecks: boolean) {
         const references = getFunctionReferences(func, sourceFile, program, cancellationToken);
-        return references && inferTypeFromReferences(program, references, cancellationToken).parameters(func) ||
+        return references && inferTypeFromReferences(program, references, cancellationToken, isStrictNullChecks).parameters(func) ||
             func.parameters.map<ParameterInference>(p => ({
                 declaration: p,
-                type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType()
+                type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken, isStrictNullChecks) : program.getTypeChecker().getAnyType()
             }));
     }
 
@@ -435,7 +438,7 @@ namespace ts.codefix {
         readonly isOptional?: boolean;
     }
 
-    function inferTypeFromReferences(program: Program, references: readonly Identifier[], cancellationToken: CancellationToken) {
+    function inferTypeFromReferences(program: Program, references: readonly Identifier[], cancellationToken: CancellationToken, isStrictNullChecks: boolean) {
         const checker = program.getTypeChecker();
         const builtinConstructors: { [s: string]: (t: Type) => Type } = {
             string: () => checker.getStringType(),
@@ -546,7 +549,9 @@ namespace ts.codefix {
                 for (const call of calls) {
                     if (call.argumentTypes.length <= parameterIndex) {
                         isOptional = isInJSFile(declaration);
-                        types.push(checker.getUndefinedType());
+                        if (isStrictNullChecks) {
+                            types.push(checker.getUndefinedType(!isStrictNullChecks));
+                        }
                     }
                     else if (isRest) {
                         for (let i = parameterIndex; i < call.argumentTypes.length; i++) {
@@ -872,6 +877,45 @@ namespace ts.codefix {
             return combineTypes(inferTypes(usage));
         }
 
+        function remapIntoWideningTypes(type: Type) {
+            if (isStrictNullChecks) {
+                return type;
+            }
+            if (type === checker.getNullType()) {
+                // in non-strict mode map bare `null` into the widening `null`, which historically is all that's existed until mixed-mode checking became a thing
+                return checker.getNullType(/*widening*/ true);
+            }
+            else if (type === checker.getUndefinedType()) {
+                // likewise, in non-strict mode map bare `undefined` into the widening `undefined`
+                return checker.getUndefinedType(/*widening*/ true);
+            }
+            return type;
+        }
+
+        /**
+         * This function preserves the non-strict mode behavior of `undefined` and `null` evaporating on contact with a union
+         */
+        function filterNullAndUndefinedFromUnionIfNotStrict(type: Type) {
+            if (isStrictNullChecks) {
+                return type;
+            }
+            if (!(type.flags & TypeFlags.Union)) {
+                return type;
+            }
+            let containedNull: Type | undefined;
+            const filtered = checker.getUnionType(filter((type as UnionType).types, t => {
+                if (t.flags & TypeFlags.Null) {
+                    containedNull = t;
+                }
+                return !(t.flags & TypeFlags.Nullable);
+            }));
+            if (!(filtered.flags & TypeFlags.Never)) {
+                return filtered;
+            }
+            // only null/undefined union members - if both are present, historically, this makes the union evaluate to `null`
+            return containedNull || type;
+        }
+
         function combineTypes(inferences: readonly Type[]): Type {
             if (!inferences.length) return checker.getAnyType();
 
@@ -898,7 +942,7 @@ namespace ts.codefix {
                 good = good.filter(i => !(getObjectFlags(i) & ObjectFlags.Anonymous));
                 good.push(combineAnonymousTypes(anons));
             }
-            return checker.getWidenedType(checker.getUnionType(good.map(checker.getBaseTypeOfLiteralType), UnionReduction.Subtype));
+            return checker.getWidenedType(remapIntoWideningTypes(filterNullAndUndefinedFromUnionIfNotStrict(checker.getUnionType(good.map(checker.getBaseTypeOfLiteralType), UnionReduction.Subtype))));
         }
 
         function combineAnonymousTypes(anons: AnonymousType[]) {
@@ -1108,7 +1152,7 @@ namespace ts.codefix {
             const length = Math.max(...calls.map(c => c.argumentTypes.length));
             for (let i = 0; i < length; i++) {
                 const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
-                symbol.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
+                symbol.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType(!isStrictNullChecks)));
                 if (calls.some(call => call.argumentTypes[i] === undefined)) {
                     symbol.flags |= SymbolFlags.Optional;
                 }

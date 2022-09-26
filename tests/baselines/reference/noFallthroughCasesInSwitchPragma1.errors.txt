@@ -1,0 +1,59 @@
+tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file1.ts(4,9): error TS7029: Fallthrough case in switch.
+tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file2.ts(4,9): error TS7029: Fallthrough case in switch.
+
+
+==== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file1.ts (1 errors) ====
+    // @ts-noFallthroughCasesInSwitch
+    export function f1(thing: "a" | "b") {
+        switch (thing) {
+            case "a":
+            ~~~~~~~~~
+!!! error TS7029: Fallthrough case in switch.
+                thing;
+            case "b":
+                thing;
+                break;
+        }
+        return thing;
+    }
+    
+==== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file2.ts (1 errors) ====
+    // @ts-noFallthroughCasesInSwitch true
+    export function f1(thing: "a" | "b") {
+        switch (thing) {
+            case "a":
+            ~~~~~~~~~
+!!! error TS7029: Fallthrough case in switch.
+                thing;
+            case "b":
+                thing;
+                break;
+        }
+        return thing;
+    }
+    
+==== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file3.ts (0 errors) ====
+    // @ts-noFallthroughCasesInSwitch false
+    export function f1(thing: "a" | "b") {
+        switch (thing) {
+            case "a":
+                thing;
+            case "b":
+                thing;
+                break;
+        }
+        return thing;
+    }
+    
+==== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file4.ts (0 errors) ====
+    export function f1(thing: "a" | "b") {
+        switch (thing) {
+            case "a":
+                thing;
+            case "b":
+                thing;
+                break;
+        }
+        return thing;
+    }
+    

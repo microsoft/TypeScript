@@ -1,0 +1,42 @@
+tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file1.ts(6,20): error TS4111: Property 'something' comes from an index signature, so it must be accessed with ['something'].
+tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file2.ts(6,20): error TS4111: Property 'something' comes from an index signature, so it must be accessed with ['something'].
+tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file4.ts(5,20): error TS4111: Property 'something' comes from an index signature, so it must be accessed with ['something'].
+
+
+==== tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file1.ts (1 errors) ====
+    // @ts-noPropertyAccessFromIndexSignature
+    interface A {
+        [idx: string]: string;
+    }
+    declare var a: A;
+    export const b = a.something;
+                       ~~~~~~~~~
+!!! error TS4111: Property 'something' comes from an index signature, so it must be accessed with ['something'].
+    
+==== tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file2.ts (1 errors) ====
+    // @ts-noPropertyAccessFromIndexSignature true
+    interface A {
+        [idx: string]: string;
+    }
+    declare var a: A;
+    export const b = a.something;
+                       ~~~~~~~~~
+!!! error TS4111: Property 'something' comes from an index signature, so it must be accessed with ['something'].
+    
+==== tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file3.ts (0 errors) ====
+    // @ts-noPropertyAccessFromIndexSignature false
+    interface A {
+        [idx: string]: string;
+    }
+    declare var a: A;
+    export const b = a.something;
+    
+==== tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file4.ts (1 errors) ====
+    interface A {
+        [idx: string]: string;
+    }
+    declare var a: A;
+    export const b = a.something;
+                       ~~~~~~~~~
+!!! error TS4111: Property 'something' comes from an index signature, so it must be accessed with ['something'].
+    

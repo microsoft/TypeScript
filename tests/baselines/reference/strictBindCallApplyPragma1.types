@@ -1,0 +1,87 @@
+=== tests/cases/conformance/pragma/strictBindCallApply/file1.ts ===
+// @ts-strictBindCallApply
+export function f1(x: string) {}
+>f1 : (x: string) => void
+>x : string
+
+f1.call(undefined, 42); // wrong
+>f1.call(undefined, 42) : void
+>f1.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>f1 : (x: string) => void
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>undefined : undefined
+>42 : 42
+
+f1.call(undefined, "ok"); // right
+>f1.call(undefined, "ok") : void
+>f1.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>f1 : (x: string) => void
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>undefined : undefined
+>"ok" : "ok"
+
+=== tests/cases/conformance/pragma/strictBindCallApply/file2.ts ===
+// @ts-strictBindCallApply true
+export function f1(x: string) {}
+>f1 : (x: string) => void
+>x : string
+
+f1.call(undefined, 42); // wrong
+>f1.call(undefined, 42) : void
+>f1.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>f1 : (x: string) => void
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>undefined : undefined
+>42 : 42
+
+f1.call(undefined, "ok"); // right
+>f1.call(undefined, "ok") : void
+>f1.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>f1 : (x: string) => void
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>undefined : undefined
+>"ok" : "ok"
+
+=== tests/cases/conformance/pragma/strictBindCallApply/file3.ts ===
+// @ts-strictBindCallApply false
+export function f1(x: string) {}
+>f1 : (x: string) => void
+>x : string
+
+f1.call(undefined, 42); // wrong
+>f1.call(undefined, 42) : any
+>f1.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>f1 : (x: string) => void
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>undefined : undefined
+>42 : 42
+
+f1.call(undefined, "ok"); // right
+>f1.call(undefined, "ok") : any
+>f1.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>f1 : (x: string) => void
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>undefined : undefined
+>"ok" : "ok"
+
+=== tests/cases/conformance/pragma/strictBindCallApply/file4.ts ===
+export function f1(x: string) {}
+>f1 : (x: string) => void
+>x : string
+
+f1.call(undefined, 42); // wrong
+>f1.call(undefined, 42) : any
+>f1.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>f1 : (x: string) => void
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>undefined : undefined
+>42 : 42
+
+f1.call(undefined, "ok"); // right
+>f1.call(undefined, "ok") : any
+>f1.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>f1 : (x: string) => void
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>undefined : undefined
+>"ok" : "ok"
+

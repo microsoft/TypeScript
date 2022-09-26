@@ -32,8 +32,8 @@ function f1<T>(x: T | (string extends T ? null | undefined : never)) {
 >null : null
 
     let z = x!;  // NonNullable<T>
->z : T | (string extends T ? null : never)
->x! : T | (string extends T ? null : never)
+>z : T
+>x! : T
 >x : T | (string extends T ? null : never)
 }
 
@@ -43,8 +43,8 @@ function f2<T, U extends null | undefined>(x: T | U) {
 >x : T | U
 
     let z = x!;  // NonNullable<T>
->z : T | U
->x! : T | U
+>z : T
+>x! : T
 >x : T | U
 }
 

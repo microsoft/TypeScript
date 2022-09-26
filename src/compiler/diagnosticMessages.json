@@ -908,6 +908,11 @@
         "code": 1276
     },
 
+    "Duplicate local compiler option '{0}'.": {
+        "category": "Error",
+        "code": 1280
+    },
+
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300

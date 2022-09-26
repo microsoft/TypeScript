@@ -1,0 +1,59 @@
+=== tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file1.ts ===
+// @ts-noPropertyAccessFromIndexSignature
+interface A {
+    [idx: string]: string;
+>idx : string
+}
+declare var a: A;
+>a : A
+
+export const b = a.something;
+>b : string
+>a.something : string
+>a : A
+>something : string
+
+=== tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file2.ts ===
+// @ts-noPropertyAccessFromIndexSignature true
+interface A {
+    [idx: string]: string;
+>idx : string
+}
+declare var a: A;
+>a : A
+
+export const b = a.something;
+>b : string
+>a.something : string
+>a : A
+>something : string
+
+=== tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file3.ts ===
+// @ts-noPropertyAccessFromIndexSignature false
+interface A {
+    [idx: string]: string;
+>idx : string
+}
+declare var a: A;
+>a : A
+
+export const b = a.something;
+>b : string
+>a.something : string
+>a : A
+>something : string
+
+=== tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file4.ts ===
+interface A {
+    [idx: string]: string;
+>idx : string
+}
+declare var a: A;
+>a : A
+
+export const b = a.something;
+>b : string
+>a.something : string
+>a : A
+>something : string
+

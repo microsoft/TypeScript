@@ -157,7 +157,7 @@ namespace ts.server {
         [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
     }
 
-    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): ESMap<string, ESMap<string, number>> {
+    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: readonly CommandLineOption[]): ESMap<string, ESMap<string, number>> {
         const map = new Map<string, ESMap<string, number>>();
         for (const option of commandLineOptions) {
             if (typeof option.type === "object") {

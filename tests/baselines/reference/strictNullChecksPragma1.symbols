@@ -1,0 +1,346 @@
+=== tests/cases/conformance/pragma/strictNullChecks/file1.ts ===
+// @ts-strictNullChecks
+export interface A {
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+    member: string;
+>member : Symbol(A.member, Decl(file1.ts, 1, 20))
+}
+export interface B {
+>B : Symbol(B, Decl(file1.ts, 3, 1))
+
+    member: string | undefined;
+>member : Symbol(B.member, Decl(file1.ts, 4, 20))
+}
+
+let a: A = { member: undefined };
+>a : Symbol(a, Decl(file1.ts, 8, 3))
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+>member : Symbol(member, Decl(file1.ts, 8, 12))
+>undefined : Symbol(undefined)
+
+declare var b: B;
+>b : Symbol(b, Decl(file1.ts, 9, 11))
+>B : Symbol(B, Decl(file1.ts, 3, 1))
+
+a = b;
+>a : Symbol(a, Decl(file1.ts, 8, 3))
+>b : Symbol(b, Decl(file1.ts, 9, 11))
+
+b = a;
+>b : Symbol(b, Decl(file1.ts, 9, 11))
+>a : Symbol(a, Decl(file1.ts, 8, 3))
+
+import {A as OtherA, B as OtherB} from "./file2";
+>A : Symbol(OtherA, Decl(file2.ts, 0, 0))
+>OtherA : Symbol(OtherA, Decl(file1.ts, 13, 8))
+>B : Symbol(OtherB, Decl(file2.ts, 3, 1))
+>OtherB : Symbol(OtherB, Decl(file1.ts, 13, 20))
+
+let a2: OtherA = { member: undefined };
+>a2 : Symbol(a2, Decl(file1.ts, 15, 3))
+>OtherA : Symbol(OtherA, Decl(file1.ts, 13, 8))
+>member : Symbol(member, Decl(file1.ts, 15, 18))
+>undefined : Symbol(undefined)
+
+declare var b2: OtherB;
+>b2 : Symbol(b2, Decl(file1.ts, 16, 11))
+>OtherB : Symbol(OtherB, Decl(file1.ts, 13, 20))
+
+a2 = b2;
+>a2 : Symbol(a2, Decl(file1.ts, 15, 3))
+>b2 : Symbol(b2, Decl(file1.ts, 16, 11))
+
+b2 = a2;
+>b2 : Symbol(b2, Decl(file1.ts, 16, 11))
+>a2 : Symbol(a2, Decl(file1.ts, 15, 3))
+
+a = a2;
+>a : Symbol(a, Decl(file1.ts, 8, 3))
+>a2 : Symbol(a2, Decl(file1.ts, 15, 3))
+
+a2 = a;
+>a2 : Symbol(a2, Decl(file1.ts, 15, 3))
+>a : Symbol(a, Decl(file1.ts, 8, 3))
+
+b = b2;
+>b : Symbol(b, Decl(file1.ts, 9, 11))
+>b2 : Symbol(b2, Decl(file1.ts, 16, 11))
+
+b2 = b;
+>b2 : Symbol(b2, Decl(file1.ts, 16, 11))
+>b : Symbol(b, Decl(file1.ts, 9, 11))
+
+a = b2;
+>a : Symbol(a, Decl(file1.ts, 8, 3))
+>b2 : Symbol(b2, Decl(file1.ts, 16, 11))
+
+b2 = a;
+>b2 : Symbol(b2, Decl(file1.ts, 16, 11))
+>a : Symbol(a, Decl(file1.ts, 8, 3))
+
+b = a2;
+>b : Symbol(b, Decl(file1.ts, 9, 11))
+>a2 : Symbol(a2, Decl(file1.ts, 15, 3))
+
+a2 = b;
+>a2 : Symbol(a2, Decl(file1.ts, 15, 3))
+>b : Symbol(b, Decl(file1.ts, 9, 11))
+
+=== tests/cases/conformance/pragma/strictNullChecks/file2.ts ===
+// loose
+export interface A {
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+
+    member: string;
+>member : Symbol(A.member, Decl(file2.ts, 1, 20))
+}
+export interface B {
+>B : Symbol(B, Decl(file2.ts, 3, 1))
+
+    member: string | undefined;
+>member : Symbol(B.member, Decl(file2.ts, 4, 20))
+}
+
+let a: A = { member: undefined };
+>a : Symbol(a, Decl(file2.ts, 8, 3))
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+>member : Symbol(member, Decl(file2.ts, 8, 12))
+>undefined : Symbol(undefined)
+
+declare var b: B;
+>b : Symbol(b, Decl(file2.ts, 9, 11))
+>B : Symbol(B, Decl(file2.ts, 3, 1))
+
+a = b;
+>a : Symbol(a, Decl(file2.ts, 8, 3))
+>b : Symbol(b, Decl(file2.ts, 9, 11))
+
+b = a;
+>b : Symbol(b, Decl(file2.ts, 9, 11))
+>a : Symbol(a, Decl(file2.ts, 8, 3))
+
+import {A as OtherA, B as OtherB} from "./file1";
+>A : Symbol(OtherA, Decl(file1.ts, 0, 0))
+>OtherA : Symbol(OtherA, Decl(file2.ts, 13, 8))
+>B : Symbol(OtherB, Decl(file1.ts, 3, 1))
+>OtherB : Symbol(OtherB, Decl(file2.ts, 13, 20))
+
+let a2: OtherA = { member: undefined };
+>a2 : Symbol(a2, Decl(file2.ts, 15, 3))
+>OtherA : Symbol(OtherA, Decl(file2.ts, 13, 8))
+>member : Symbol(member, Decl(file2.ts, 15, 18))
+>undefined : Symbol(undefined)
+
+declare var b2: OtherB;
+>b2 : Symbol(b2, Decl(file2.ts, 16, 11))
+>OtherB : Symbol(OtherB, Decl(file2.ts, 13, 20))
+
+a2 = b2;
+>a2 : Symbol(a2, Decl(file2.ts, 15, 3))
+>b2 : Symbol(b2, Decl(file2.ts, 16, 11))
+
+b2 = a2;
+>b2 : Symbol(b2, Decl(file2.ts, 16, 11))
+>a2 : Symbol(a2, Decl(file2.ts, 15, 3))
+
+a = a2;
+>a : Symbol(a, Decl(file2.ts, 8, 3))
+>a2 : Symbol(a2, Decl(file2.ts, 15, 3))
+
+a2 = a;
+>a2 : Symbol(a2, Decl(file2.ts, 15, 3))
+>a : Symbol(a, Decl(file2.ts, 8, 3))
+
+b = b2;
+>b : Symbol(b, Decl(file2.ts, 9, 11))
+>b2 : Symbol(b2, Decl(file2.ts, 16, 11))
+
+b2 = b;
+>b2 : Symbol(b2, Decl(file2.ts, 16, 11))
+>b : Symbol(b, Decl(file2.ts, 9, 11))
+
+a = b2;
+>a : Symbol(a, Decl(file2.ts, 8, 3))
+>b2 : Symbol(b2, Decl(file2.ts, 16, 11))
+
+b2 = a;
+>b2 : Symbol(b2, Decl(file2.ts, 16, 11))
+>a : Symbol(a, Decl(file2.ts, 8, 3))
+
+b = a2;
+>b : Symbol(b, Decl(file2.ts, 9, 11))
+>a2 : Symbol(a2, Decl(file2.ts, 15, 3))
+
+a2 = b;
+>a2 : Symbol(a2, Decl(file2.ts, 15, 3))
+>b : Symbol(b, Decl(file2.ts, 9, 11))
+
+=== tests/cases/conformance/pragma/strictNullChecks/file3.ts ===
+// @ts-strictNullChecks
+import {A, B} from "./file1";
+>A : Symbol(A, Decl(file3.ts, 1, 8))
+>B : Symbol(B, Decl(file3.ts, 1, 10))
+
+import {A as A2, B as B2} from "./file2";
+>A : Symbol(A2, Decl(file2.ts, 0, 0))
+>A2 : Symbol(A2, Decl(file3.ts, 2, 8))
+>B : Symbol(B2, Decl(file2.ts, 3, 1))
+>B2 : Symbol(B2, Decl(file3.ts, 2, 16))
+
+let a: A = { member: undefined };
+>a : Symbol(a, Decl(file3.ts, 4, 3))
+>A : Symbol(A, Decl(file3.ts, 1, 8))
+>member : Symbol(member, Decl(file3.ts, 4, 12))
+>undefined : Symbol(undefined)
+
+let b: B = { member: undefined };
+>b : Symbol(b, Decl(file3.ts, 5, 3))
+>B : Symbol(B, Decl(file3.ts, 1, 10))
+>member : Symbol(member, Decl(file3.ts, 5, 12))
+>undefined : Symbol(undefined)
+
+let a2: A2 = { member: undefined };
+>a2 : Symbol(a2, Decl(file3.ts, 6, 3))
+>A2 : Symbol(A2, Decl(file3.ts, 2, 8))
+>member : Symbol(member, Decl(file3.ts, 6, 14))
+>undefined : Symbol(undefined)
+
+let b2: B2 = { member: undefined };
+>b2 : Symbol(b2, Decl(file3.ts, 7, 3))
+>B2 : Symbol(B2, Decl(file3.ts, 2, 16))
+>member : Symbol(member, Decl(file3.ts, 7, 14))
+>undefined : Symbol(undefined)
+
+a = b;
+>a : Symbol(a, Decl(file3.ts, 4, 3))
+>b : Symbol(b, Decl(file3.ts, 5, 3))
+
+b = a;
+>b : Symbol(b, Decl(file3.ts, 5, 3))
+>a : Symbol(a, Decl(file3.ts, 4, 3))
+
+a2 = b2;
+>a2 : Symbol(a2, Decl(file3.ts, 6, 3))
+>b2 : Symbol(b2, Decl(file3.ts, 7, 3))
+
+b2 = a2;
+>b2 : Symbol(b2, Decl(file3.ts, 7, 3))
+>a2 : Symbol(a2, Decl(file3.ts, 6, 3))
+
+a = a2;
+>a : Symbol(a, Decl(file3.ts, 4, 3))
+>a2 : Symbol(a2, Decl(file3.ts, 6, 3))
+
+a2 = a;
+>a2 : Symbol(a2, Decl(file3.ts, 6, 3))
+>a : Symbol(a, Decl(file3.ts, 4, 3))
+
+b = b2;
+>b : Symbol(b, Decl(file3.ts, 5, 3))
+>b2 : Symbol(b2, Decl(file3.ts, 7, 3))
+
+b2 = b;
+>b2 : Symbol(b2, Decl(file3.ts, 7, 3))
+>b : Symbol(b, Decl(file3.ts, 5, 3))
+
+a = b2;
+>a : Symbol(a, Decl(file3.ts, 4, 3))
+>b2 : Symbol(b2, Decl(file3.ts, 7, 3))
+
+b2 = a;
+>b2 : Symbol(b2, Decl(file3.ts, 7, 3))
+>a : Symbol(a, Decl(file3.ts, 4, 3))
+
+b = a2;
+>b : Symbol(b, Decl(file3.ts, 5, 3))
+>a2 : Symbol(a2, Decl(file3.ts, 6, 3))
+
+a2 = b;
+>a2 : Symbol(a2, Decl(file3.ts, 6, 3))
+>b : Symbol(b, Decl(file3.ts, 5, 3))
+
+=== tests/cases/conformance/pragma/strictNullChecks/file4.ts ===
+// loose
+import {A, B} from "./file1";
+>A : Symbol(A, Decl(file4.ts, 1, 8))
+>B : Symbol(B, Decl(file4.ts, 1, 10))
+
+import {A as A2, B as B2} from "./file2";
+>A : Symbol(A2, Decl(file2.ts, 0, 0))
+>A2 : Symbol(A2, Decl(file4.ts, 2, 8))
+>B : Symbol(B2, Decl(file2.ts, 3, 1))
+>B2 : Symbol(B2, Decl(file4.ts, 2, 16))
+
+let a: A = { member: undefined };
+>a : Symbol(a, Decl(file4.ts, 4, 3))
+>A : Symbol(A, Decl(file4.ts, 1, 8))
+>member : Symbol(member, Decl(file4.ts, 4, 12))
+>undefined : Symbol(undefined)
+
+let b: B = { member: undefined };
+>b : Symbol(b, Decl(file4.ts, 5, 3))
+>B : Symbol(B, Decl(file4.ts, 1, 10))
+>member : Symbol(member, Decl(file4.ts, 5, 12))
+>undefined : Symbol(undefined)
+
+let a2: A2 = { member: undefined };
+>a2 : Symbol(a2, Decl(file4.ts, 6, 3))
+>A2 : Symbol(A2, Decl(file4.ts, 2, 8))
+>member : Symbol(member, Decl(file4.ts, 6, 14))
+>undefined : Symbol(undefined)
+
+let b2: B2 = { member: undefined };
+>b2 : Symbol(b2, Decl(file4.ts, 7, 3))
+>B2 : Symbol(B2, Decl(file4.ts, 2, 16))
+>member : Symbol(member, Decl(file4.ts, 7, 14))
+>undefined : Symbol(undefined)
+
+a = b;
+>a : Symbol(a, Decl(file4.ts, 4, 3))
+>b : Symbol(b, Decl(file4.ts, 5, 3))
+
+b = a;
+>b : Symbol(b, Decl(file4.ts, 5, 3))
+>a : Symbol(a, Decl(file4.ts, 4, 3))
+
+a2 = b2;
+>a2 : Symbol(a2, Decl(file4.ts, 6, 3))
+>b2 : Symbol(b2, Decl(file4.ts, 7, 3))
+
+b2 = a2;
+>b2 : Symbol(b2, Decl(file4.ts, 7, 3))
+>a2 : Symbol(a2, Decl(file4.ts, 6, 3))
+
+a = a2;
+>a : Symbol(a, Decl(file4.ts, 4, 3))
+>a2 : Symbol(a2, Decl(file4.ts, 6, 3))
+
+a2 = a;
+>a2 : Symbol(a2, Decl(file4.ts, 6, 3))
+>a : Symbol(a, Decl(file4.ts, 4, 3))
+
+b = b2;
+>b : Symbol(b, Decl(file4.ts, 5, 3))
+>b2 : Symbol(b2, Decl(file4.ts, 7, 3))
+
+b2 = b;
+>b2 : Symbol(b2, Decl(file4.ts, 7, 3))
+>b : Symbol(b, Decl(file4.ts, 5, 3))
+
+a = b2;
+>a : Symbol(a, Decl(file4.ts, 4, 3))
+>b2 : Symbol(b2, Decl(file4.ts, 7, 3))
+
+b2 = a;
+>b2 : Symbol(b2, Decl(file4.ts, 7, 3))
+>a : Symbol(a, Decl(file4.ts, 4, 3))
+
+b = a2;
+>b : Symbol(b, Decl(file4.ts, 5, 3))
+>a2 : Symbol(a2, Decl(file4.ts, 6, 3))
+
+a2 = b;
+>a2 : Symbol(a2, Decl(file4.ts, 6, 3))
+>b : Symbol(b, Decl(file4.ts, 5, 3))
+

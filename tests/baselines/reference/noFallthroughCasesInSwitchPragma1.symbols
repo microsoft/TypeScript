@@ -1,0 +1,91 @@
+=== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file1.ts ===
+// @ts-noFallthroughCasesInSwitch
+export function f1(thing: "a" | "b") {
+>f1 : Symbol(f1, Decl(file1.ts, 0, 0))
+>thing : Symbol(thing, Decl(file1.ts, 1, 19))
+
+    switch (thing) {
+>thing : Symbol(thing, Decl(file1.ts, 1, 19))
+
+        case "a":
+            thing;
+>thing : Symbol(thing, Decl(file1.ts, 1, 19))
+
+        case "b":
+            thing;
+>thing : Symbol(thing, Decl(file1.ts, 1, 19))
+
+            break;
+    }
+    return thing;
+>thing : Symbol(thing, Decl(file1.ts, 1, 19))
+}
+
+=== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file2.ts ===
+// @ts-noFallthroughCasesInSwitch true
+export function f1(thing: "a" | "b") {
+>f1 : Symbol(f1, Decl(file2.ts, 0, 0))
+>thing : Symbol(thing, Decl(file2.ts, 1, 19))
+
+    switch (thing) {
+>thing : Symbol(thing, Decl(file2.ts, 1, 19))
+
+        case "a":
+            thing;
+>thing : Symbol(thing, Decl(file2.ts, 1, 19))
+
+        case "b":
+            thing;
+>thing : Symbol(thing, Decl(file2.ts, 1, 19))
+
+            break;
+    }
+    return thing;
+>thing : Symbol(thing, Decl(file2.ts, 1, 19))
+}
+
+=== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file3.ts ===
+// @ts-noFallthroughCasesInSwitch false
+export function f1(thing: "a" | "b") {
+>f1 : Symbol(f1, Decl(file3.ts, 0, 0))
+>thing : Symbol(thing, Decl(file3.ts, 1, 19))
+
+    switch (thing) {
+>thing : Symbol(thing, Decl(file3.ts, 1, 19))
+
+        case "a":
+            thing;
+>thing : Symbol(thing, Decl(file3.ts, 1, 19))
+
+        case "b":
+            thing;
+>thing : Symbol(thing, Decl(file3.ts, 1, 19))
+
+            break;
+    }
+    return thing;
+>thing : Symbol(thing, Decl(file3.ts, 1, 19))
+}
+
+=== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file4.ts ===
+export function f1(thing: "a" | "b") {
+>f1 : Symbol(f1, Decl(file4.ts, 0, 0))
+>thing : Symbol(thing, Decl(file4.ts, 0, 19))
+
+    switch (thing) {
+>thing : Symbol(thing, Decl(file4.ts, 0, 19))
+
+        case "a":
+            thing;
+>thing : Symbol(thing, Decl(file4.ts, 0, 19))
+
+        case "b":
+            thing;
+>thing : Symbol(thing, Decl(file4.ts, 0, 19))
+
+            break;
+    }
+    return thing;
+>thing : Symbol(thing, Decl(file4.ts, 0, 19))
+}
+

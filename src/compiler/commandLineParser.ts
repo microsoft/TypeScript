@@ -4,6 +4,7 @@ namespace ts {
         name: "compileOnSave",
         type: "boolean",
         defaultValueDescription: false,
+        category: Diagnostics.Editor_Support
     };
 
     const jsxOptionMap = new Map(getEntries({
@@ -164,6 +165,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "excludeDirectory",
+                category: Diagnostics.Watch_and_Build_Modes,
                 type: "string",
                 isFilePath: true,
                 extraValidation: specToDiagnostic
@@ -176,6 +178,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "excludeFile",
+                category: Diagnostics.Watch_and_Build_Modes,
                 type: "string",
                 isFilePath: true,
                 extraValidation: specToDiagnostic
@@ -186,7 +189,7 @@ namespace ts {
     ];
 
     /* @internal */
-    export const commonOptionsWithBuild: CommandLineOption[] = [
+    export const commonOptionsWithBuild = is<readonly CommandLineOption[]>()([
         {
             name: "help",
             shortName: "h",
@@ -318,10 +321,10 @@ namespace ts {
             description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
             defaultValueDescription: Diagnostics.Platform_specific
         },
-    ];
+    ] as const);
 
     /* @internal */
-    export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
+    export const targetOptionDeclaration = is<CommandLineOptionOfCustomType>()({
         name: "target",
         shortName: "t",
         type: new Map(getEntries({
@@ -347,10 +350,10 @@ namespace ts {
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
         defaultValueDescription: ScriptTarget.ES3,
-    };
+    } as const);
 
     /*@internal*/
-    export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
+    export const moduleOptionDeclaration = is<CommandLineOptionOfCustomType>()({
         name: "module",
         shortName: "m",
         type: new Map(getEntries({
@@ -375,9 +378,9 @@ namespace ts {
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_what_module_code_is_generated,
         defaultValueDescription: undefined,
-    };
+    });
 
-    const commandOptionsWithoutBuild: CommandLineOption[] = [
+    const commandOptionsWithoutBuild = is<readonly CommandLineOption[]>()([
         // CommandLine only options
         {
             name: "all",
@@ -453,6 +456,7 @@ namespace ts {
             element: {
                 name: "lib",
                 type: libMap,
+                category: Diagnostics.Language_and_Environment,
                 defaultValueDescription: undefined,
             },
             affectsProgramStructure: true,
@@ -672,6 +676,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_all_strict_type_checking_options,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "noImplicitAny",
@@ -681,7 +686,8 @@ namespace ts {
             strictFlag: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type,
-            defaultValueDescription: Diagnostics.false_unless_strict_is_set
+            defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+            allowedAsPragma: true,
         },
         {
             name: "strictNullChecks",
@@ -691,7 +697,8 @@ namespace ts {
             strictFlag: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.When_type_checking_take_into_account_null_and_undefined,
-            defaultValueDescription: Diagnostics.false_unless_strict_is_set
+            defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+            allowedAsPragma: true,
         },
         {
             name: "strictFunctionTypes",
@@ -701,7 +708,8 @@ namespace ts {
             strictFlag: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible,
-            defaultValueDescription: Diagnostics.false_unless_strict_is_set
+            defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+            allowedAsPragma: true,
         },
         {
             name: "strictBindCallApply",
@@ -711,7 +719,8 @@ namespace ts {
             strictFlag: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function,
-            defaultValueDescription: Diagnostics.false_unless_strict_is_set
+            defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+            allowedAsPragma: true,
         },
         {
             name: "strictPropertyInitialization",
@@ -721,7 +730,8 @@ namespace ts {
             strictFlag: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Check_for_class_properties_that_are_declared_but_not_set_in_the_constructor,
-            defaultValueDescription: Diagnostics.false_unless_strict_is_set
+            defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+            allowedAsPragma: true,
         },
         {
             name: "noImplicitThis",
@@ -731,7 +741,8 @@ namespace ts {
             strictFlag: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_error_reporting_when_this_is_given_the_type_any,
-            defaultValueDescription: Diagnostics.false_unless_strict_is_set
+            defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+            allowedAsPragma: true,
         },
         {
             name: "useUnknownInCatchVariables",
@@ -742,6 +753,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "alwaysStrict",
@@ -752,7 +764,8 @@ namespace ts {
             strictFlag: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Ensure_use_strict_is_always_emitted,
-            defaultValueDescription: Diagnostics.false_unless_strict_is_set
+            defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+            allowedAsPragma: true,
         },
 
         // Additional Checks
@@ -764,6 +777,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_error_reporting_when_local_variables_aren_t_read,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "noUnusedParameters",
@@ -773,6 +787,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Raise_an_error_when_a_function_parameter_isn_t_read,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "exactOptionalPropertyTypes",
@@ -782,6 +797,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Interpret_optional_property_types_as_written_rather_than_adding_undefined,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "noImplicitReturns",
@@ -791,6 +807,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_error_reporting_for_codepaths_that_do_not_explicitly_return_in_a_function,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "noFallthroughCasesInSwitch",
@@ -801,6 +818,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_error_reporting_for_fallthrough_cases_in_switch_statements,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "noUncheckedIndexedAccess",
@@ -810,6 +828,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Add_undefined_to_a_type_when_accessed_using_an_index,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "noImplicitOverride",
@@ -819,6 +838,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
         {
             name: "noPropertyAccessFromIndexSignature",
@@ -829,6 +849,7 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enforces_using_indexed_accessors_for_keys_declared_using_an_indexed_type,
             defaultValueDescription: false,
+            allowedAsPragma: true,
         },
 
         // Module Resolution
@@ -874,6 +895,7 @@ namespace ts {
             element: {
                 name: "rootDirs",
                 type: "string",
+                category: Diagnostics.Modules,
                 isFilePath: true
             },
             affectsModuleResolution: true,
@@ -888,6 +910,7 @@ namespace ts {
             element: {
                 name: "typeRoots",
                 type: "string",
+                category: Diagnostics.Modules,
                 isFilePath: true
             },
             affectsModuleResolution: true,
@@ -899,6 +922,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "types",
+                category: Diagnostics.Modules,
                 type: "string"
             },
             affectsProgramStructure: true,
@@ -948,6 +972,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "suffix",
+                category: Diagnostics.Modules,
                 type: "string",
             },
             listPreserveFalsyValues: true,
@@ -1338,6 +1363,7 @@ namespace ts {
             isTSConfigOnly: true,
             element: {
                 name: "plugin",
+                category: Diagnostics.Editor_Support,
                 type: "object"
             },
             description: Diagnostics.Specify_a_list_of_language_service_plugins_to_include,
@@ -1356,37 +1382,129 @@ namespace ts {
             category: Diagnostics.Language_and_Environment,
             defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
         }
-    ];
+    ] as const);
 
     /* @internal */
-    export const optionDeclarations: CommandLineOption[] = [
+    export const optionDeclarations = is<readonly CommandLineOption[]>()([
         ...commonOptionsWithBuild,
         ...commandOptionsWithoutBuild,
-    ];
+    ] as const);
 
     /* @internal */
-    export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] =
-        optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
+    type WithTrue<T, K extends keyof T> = T extends unknown ? K extends unknown ? T[K] extends true ? T : never : never : never;
+
+    function isAffectsSemanticDiagnosticsOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "affectsSemanticDiagnostics"> {
+        return !!option.affectsSemanticDiagnostics;
+    }
 
     /* @internal */
-    export const affectsEmitOptionDeclarations: readonly CommandLineOption[] =
-        optionDeclarations.filter(option => !!option.affectsEmit);
+    export const semanticDiagnosticsOptionDeclarations = optionDeclarations.filter(isAffectsSemanticDiagnosticsOption);
+
+    function isAffectsEmitOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "affectsEmit"> {
+        return !!option.affectsEmit;
+    }
 
     /* @internal */
-    export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOption[] =
-        optionDeclarations.filter(option => !!option.affectsDeclarationPath);
+    export const affectsEmitOptionDeclarations = optionDeclarations.filter(isAffectsEmitOption);
+
+    function isAffectsDeclarationPathOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "affectsDeclarationPath"> {
+        return !!option.affectsDeclarationPath;
+    }
 
     /* @internal */
-    export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] =
-        optionDeclarations.filter(option => !!option.affectsModuleResolution);
+    export const affectsDeclarationPathOptionDeclarations = optionDeclarations.filter(isAffectsDeclarationPathOption);
+
+    function isAffectsModuleResolutionOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "affectsModuleResolution"> {
+        return !!option.affectsModuleResolution;
+    }
 
     /* @internal */
-    export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
-        !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
+    export const moduleResolutionOptionDeclarations = optionDeclarations.filter(isAffectsModuleResolutionOption);
+
+    function isSourceFileAffectingOptions<T extends CommandLineOption>(option: T): option is WithTrue<T, "affectsSourceFile" | "affectsModuleResolution" | "affectsBindDiagnostics"> {
+        return !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics;
+    }
 
     /* @internal */
-    export const optionsAffectingProgramStructure: readonly CommandLineOption[] =
-        optionDeclarations.filter(option => !!option.affectsProgramStructure);
+    export const sourceFileAffectingCompilerOptions = optionDeclarations.filter(isSourceFileAffectingOptions);
+
+    function isAffectsProgramStructureOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "affectsProgramStructure"> {
+        return !!option.affectsProgramStructure;
+    }
+
+    /* @internal */
+    export const optionsAffectingProgramStructure = optionDeclarations.filter(isAffectsProgramStructureOption);
+
+    /* @internal */
+    export function isStrictOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "strictFlag"> {
+        return !!option.strictFlag === true;
+    }
+
+    function isAllowedAsPragmaOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "allowedAsPragma"> {
+        return !!option.allowedAsPragma;
+    }
+
+    /* @internal */
+    export const optionsAllowedAsPragmaOption = optionDeclarations.filter(isAllowedAsPragmaOption);
+
+    /* @internal */
+    type CompilerOptionsIntoPragmaDefinitions<T extends CommandLineOption> = UnionToIntersection<T extends unknown ? {[K in T["name"] & string as `ts-${Lowercase<K>}`]: { readonly kind: PragmaKindFlags, readonly args: readonly [{ readonly name: "value", readonly optional: true }] }} : never>;
+
+    function convertCompilerOptionsIntoPragmasSpecs<T extends readonly CommandLineOption[]>(options: T): CompilerOptionsIntoPragmaDefinitions<T[number]> {
+        const result = {} as CompilerOptionsIntoPragmaDefinitions<T[number]>;
+        for (const elem of options) {
+            result[`ts-${elem.name.toLowerCase()}` as keyof typeof result] = {
+                args: [{ name: "value", optional: true }],
+                kind: PragmaKindFlags.SingleLine | PragmaKindFlags.MultiLine
+            } as any;
+        }
+        return result;
+    }
+
+    /* @internal */
+    export const commentPragmas = {
+        "reference": {
+            args: [
+                { name: "types", optional: true, captureSpan: true },
+                { name: "lib", optional: true, captureSpan: true },
+                { name: "path", optional: true, captureSpan: true },
+                { name: "no-default-lib", optional: true },
+                { name: "resolution-mode", optional: true }
+            ],
+            kind: PragmaKindFlags.TripleSlashXML
+        },
+        "amd-dependency": {
+            args: [{ name: "path" }, { name: "name", optional: true }],
+            kind: PragmaKindFlags.TripleSlashXML
+        },
+        "amd-module": {
+            args: [{ name: "name" }],
+            kind: PragmaKindFlags.TripleSlashXML
+        },
+        "ts-check": {
+            kind: PragmaKindFlags.SingleLine
+        },
+        "ts-nocheck": {
+            kind: PragmaKindFlags.SingleLine
+        },
+        "jsx": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsxfrag": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsximportsource": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsxruntime": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        ...convertCompilerOptionsIntoPragmasSpecs(optionsAllowedAsPragmaOption)
+    } as const;
 
     /* @internal */
     export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
@@ -1442,11 +1560,13 @@ namespace ts {
              */
             name: "enableAutoDiscovery",
             type: "boolean",
+            category: Diagnostics.File_Management,
             defaultValueDescription: false,
         },
         {
             name: "enable",
             type: "boolean",
+            category: Diagnostics.File_Management,
             defaultValueDescription: false,
         },
         {
@@ -1454,20 +1574,25 @@ namespace ts {
             type: "list",
             element: {
                 name: "include",
+                category: Diagnostics.File_Management,
                 type: "string"
-            }
+            },
+            category: Diagnostics.File_Management,
         },
         {
             name: "exclude",
             type: "list",
             element: {
                 name: "exclude",
+                category: Diagnostics.File_Management,
                 type: "string"
-            }
+            },
+            category: Diagnostics.File_Management,
         },
         {
             name: "disableFilenameBasedTypeAcquisition",
             type: "boolean",
+            category: Diagnostics.File_Management,
             defaultValueDescription: false,
         },
     ];
@@ -1674,10 +1799,11 @@ namespace ts {
         }
     }
 
-    function parseOptionValue(
+    /* @internal */
+    export function parseOptionValue(
         args: readonly string[],
         i: number,
-        diagnostics: ParseCommandLineWorkerDiagnostics,
+        diagnostics: ParseCommandLineWorkerDiagnostics | undefined,
         opt: CommandLineOption,
         options: OptionsBase,
         errors: Diagnostic[]
@@ -1705,7 +1831,7 @@ namespace ts {
         }
         else {
             // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-            if (!args[i] && opt.type !== "boolean") {
+            if (!args[i] && opt.type !== "boolean" && diagnostics) {
                 errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
             }
 
@@ -1981,30 +2107,35 @@ namespace ts {
             _tsconfigRootOptions = {
                 name: undefined!, // should never be needed since this is root
                 type: "object",
+                category: Diagnostics.Command_line_Options,
                 elementOptions: commandLineOptionsToMap([
                     {
                         name: "compilerOptions",
                         type: "object",
                         elementOptions: getCommandLineCompilerOptionsMap(),
                         extraKeyDiagnostics: compilerOptionsDidYouMeanDiagnostics,
+                        category: Diagnostics.Command_line_Options,
                     },
                     {
                         name: "watchOptions",
                         type: "object",
                         elementOptions: getCommandLineWatchOptionsMap(),
                         extraKeyDiagnostics: watchOptionsDidYouMeanDiagnostics,
+                        category: Diagnostics.Command_line_Options,
                     },
                     {
                         name: "typingOptions",
                         type: "object",
                         elementOptions: getCommandLineTypeAcquisitionMap(),
                         extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
+                        category: Diagnostics.Command_line_Options,
                     },
                     {
                         name: "typeAcquisition",
                         type: "object",
                         elementOptions: getCommandLineTypeAcquisitionMap(),
-                        extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics
+                        extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
+                        category: Diagnostics.Command_line_Options,
                     },
                     {
                         name: "extends",
@@ -2016,6 +2147,7 @@ namespace ts {
                         type: "list",
                         element: {
                             name: "references",
+                            category: Diagnostics.Projects,
                             type: "object"
                         },
                         category: Diagnostics.Projects,
@@ -2025,6 +2157,7 @@ namespace ts {
                         type: "list",
                         element: {
                             name: "files",
+                            category: Diagnostics.File_Management,
                             type: "string"
                         },
                         category: Diagnostics.File_Management,
@@ -2034,6 +2167,7 @@ namespace ts {
                         type: "list",
                         element: {
                             name: "include",
+                            category: Diagnostics.File_Management,
                             type: "string"
                         },
                         category: Diagnostics.File_Management,
@@ -2044,6 +2178,7 @@ namespace ts {
                         type: "list",
                         element: {
                             name: "exclude",
+                            category: Diagnostics.File_Management,
                             type: "string"
                         },
                         category: Diagnostics.File_Management,
@@ -2587,7 +2722,7 @@ namespace ts {
                 const { category } = option;
 
                 if (isAllowedOptionForOutput(option)) {
-                    categorizedOptions.add(getLocaleSpecificMessage(category!), option);
+                    categorizedOptions.add(getLocaleSpecificMessage(category), option);
                 }
             }
 

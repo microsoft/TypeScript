@@ -1,0 +1,25 @@
+tests/cases/conformance/pragma/noImplicitThis/file1.ts(2,17): error TS7041: The containing arrow function captures the global value of 'this'.
+tests/cases/conformance/pragma/noImplicitThis/file2.ts(2,17): error TS7041: The containing arrow function captures the global value of 'this'.
+tests/cases/conformance/pragma/noImplicitThis/file4.ts(1,17): error TS7041: The containing arrow function captures the global value of 'this'.
+
+
+==== tests/cases/conformance/pragma/noImplicitThis/file1.ts (1 errors) ====
+    // @ts-noImplicitThis
+    const a = () => this.Math;
+                    ~~~~
+!!! error TS7041: The containing arrow function captures the global value of 'this'.
+    
+==== tests/cases/conformance/pragma/noImplicitThis/file2.ts (1 errors) ====
+    // @ts-noImplicitThis true
+    const b = () => this.Math;
+                    ~~~~
+!!! error TS7041: The containing arrow function captures the global value of 'this'.
+    
+==== tests/cases/conformance/pragma/noImplicitThis/file3.ts (0 errors) ====
+    // @ts-noImplicitThis false
+    const c = () => this.Math;
+    
+==== tests/cases/conformance/pragma/noImplicitThis/file4.ts (1 errors) ====
+    const d = () => this.Math;
+                    ~~~~
+!!! error TS7041: The containing arrow function captures the global value of 'this'.

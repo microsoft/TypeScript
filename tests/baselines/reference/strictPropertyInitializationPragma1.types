@@ -1,0 +1,43 @@
+=== tests/cases/conformance/pragma/strictPropertyInitialization/file1.ts ===
+// @ts-strictPropertyInitialization
+export class A {
+>A : A
+
+    prop: string;
+>prop : string
+
+    constructor() {}
+}
+
+=== tests/cases/conformance/pragma/strictPropertyInitialization/file2.ts ===
+// @ts-strictPropertyInitialization true
+export class A {
+>A : A
+
+    prop: string;
+>prop : string
+
+    constructor() {}
+}
+
+=== tests/cases/conformance/pragma/strictPropertyInitialization/file3.ts ===
+// @ts-strictPropertyInitialization false
+export class A {
+>A : A
+
+    prop: string;
+>prop : string
+
+    constructor() {}
+}
+
+=== tests/cases/conformance/pragma/strictPropertyInitialization/file4.ts ===
+export class A {
+>A : A
+
+    prop: string;
+>prop : string
+
+    constructor() {}
+}
+

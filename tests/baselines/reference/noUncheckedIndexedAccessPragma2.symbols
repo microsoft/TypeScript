@@ -1,0 +1,71 @@
+=== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file1.ts ===
+// @ts-noUncheckedIndexedAccess
+interface A {
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+    [index: string]: string;
+>index : Symbol(index, Decl(file1.ts, 2, 5))
+}
+declare var a: A;
+>a : Symbol(a, Decl(file1.ts, 4, 11))
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+export const x: string = a.something;
+>x : Symbol(x, Decl(file1.ts, 5, 12))
+>a.something : Symbol(A.__index, Decl(file1.ts, 1, 13))
+>a : Symbol(a, Decl(file1.ts, 4, 11))
+>something : Symbol(A.__index, Decl(file1.ts, 1, 13))
+
+=== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file2.ts ===
+// @ts-noUncheckedIndexedAccess true
+interface A {
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+
+    [index: string]: string;
+>index : Symbol(index, Decl(file2.ts, 2, 5))
+}
+declare var a: A;
+>a : Symbol(a, Decl(file2.ts, 4, 11))
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+
+export const x: string = a.something;
+>x : Symbol(x, Decl(file2.ts, 5, 12))
+>a.something : Symbol(A.__index, Decl(file2.ts, 1, 13))
+>a : Symbol(a, Decl(file2.ts, 4, 11))
+>something : Symbol(A.__index, Decl(file2.ts, 1, 13))
+
+=== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file3.ts ===
+// @ts-noUncheckedIndexedAccess false
+interface A {
+>A : Symbol(A, Decl(file3.ts, 0, 0))
+
+    [index: string]: string;
+>index : Symbol(index, Decl(file3.ts, 2, 5))
+}
+declare var a: A;
+>a : Symbol(a, Decl(file3.ts, 4, 11))
+>A : Symbol(A, Decl(file3.ts, 0, 0))
+
+export const x: string = a.something;
+>x : Symbol(x, Decl(file3.ts, 5, 12))
+>a.something : Symbol(A.__index, Decl(file3.ts, 1, 13))
+>a : Symbol(a, Decl(file3.ts, 4, 11))
+>something : Symbol(A.__index, Decl(file3.ts, 1, 13))
+
+=== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file4.ts ===
+interface A {
+>A : Symbol(A, Decl(file4.ts, 0, 0))
+
+    [index: string]: string;
+>index : Symbol(index, Decl(file4.ts, 1, 5))
+}
+declare var a: A;
+>a : Symbol(a, Decl(file4.ts, 3, 11))
+>A : Symbol(A, Decl(file4.ts, 0, 0))
+
+export const x: string = a.something;
+>x : Symbol(x, Decl(file4.ts, 4, 12))
+>a.something : Symbol(A.__index, Decl(file4.ts, 0, 13))
+>a : Symbol(a, Decl(file4.ts, 3, 11))
+>something : Symbol(A.__index, Decl(file4.ts, 0, 13))
+

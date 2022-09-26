@@ -1,0 +1,23 @@
+=== tests/cases/conformance/pragma/alwaysStrict/file1.ts ===
+// @ts-alwaysStrict
+let private = {};
+>private : {}
+>{} : {}
+
+=== tests/cases/conformance/pragma/alwaysStrict/file2.ts ===
+// @ts-alwaysStrict true
+let protected = {};
+>protected : {}
+>{} : {}
+
+=== tests/cases/conformance/pragma/alwaysStrict/file3.ts ===
+// @ts-alwaysStrict false
+let public = {};
+>public : {}
+>{} : {}
+
+=== tests/cases/conformance/pragma/alwaysStrict/file4.ts ===
+let static = {};
+>static : {}
+>{} : {}
+

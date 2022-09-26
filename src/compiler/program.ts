@@ -3288,7 +3288,7 @@ namespace ts {
                     // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
                     // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
                     const shouldAddFile = resolvedFileName
-                        && !getResolutionDiagnostic(optionsForFile, resolution)
+                        && !getResolutionDiagnostic(file, optionsForFile, resolution)
                         && !optionsForFile.noResolve
                         && index < file.imports.length
                         && !elideImport
@@ -3390,10 +3390,10 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
-            if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
+            if (options.strictPropertyInitialization && !getStrictOptionValue(/*file*/ undefined, options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
-            if (options.exactOptionalPropertyTypes && !getStrictOptionValue(options, "strictNullChecks")) {
+            if (options.exactOptionalPropertyTypes && !getStrictOptionValue(/*file*/ undefined, options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "exactOptionalPropertyTypes", "strictNullChecks");
             }
 
@@ -3522,7 +3522,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib");
             }
 
-            if (options.noImplicitUseStrict && getStrictOptionValue(options, "alwaysStrict")) {
+            if (options.noImplicitUseStrict && getStrictOptionValue(/*file*/ undefined, options, "alwaysStrict")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 
@@ -3667,6 +3667,18 @@ namespace ts {
                     }
                     verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
                 });
+            }
+
+            for (const file of files) {
+                const entries = file.pragmas.entries();
+                for (let result = entries.next(); !result.done; result = entries.next()) {
+                    const [key, value] = result.value;
+                    if (startsWith(key, "ts-") && key !== "ts-check" && key !== "ts-nocheck" && isArray(value)) {
+                        for (const elem of value) {
+                            programDiagnostics.add(createDiagnosticForRange(file, elem.range, Diagnostics.Duplicate_local_compiler_option_0, key.slice(3)));
+                        }
+                    }
+                }
             }
 
             // Verify that all the emit files are unique and don't overwrite input files
@@ -4323,7 +4335,7 @@ namespace ts {
      * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
      * This returns a diagnostic even if the module will be an untyped module.
      */
-    export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModuleFull): DiagnosticMessage | undefined {
+    export function getResolutionDiagnostic(file: SourceFile, options: CompilerOptions, { extension }: ResolvedModuleFull): DiagnosticMessage | undefined {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
@@ -4343,7 +4355,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return getAllowJSCompilerOption(options) || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+            return getAllowJSCompilerOption(options) || !getStrictOptionValue(file, options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
         function needResolveJsonModule() {
             return options.resolveJsonModule ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;

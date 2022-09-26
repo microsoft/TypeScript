@@ -1,0 +1,71 @@
+=== tests/cases/conformance/pragma/strictFunctionTypes/file1.ts ===
+// @ts-strictFunctionTypes
+export let a = (arg: string) => 0;
+>a : Symbol(a, Decl(file1.ts, 1, 10))
+>arg : Symbol(arg, Decl(file1.ts, 1, 16))
+
+export let b = (arg: unknown) => 0;
+>b : Symbol(b, Decl(file1.ts, 2, 10))
+>arg : Symbol(arg, Decl(file1.ts, 2, 16))
+
+a = b;
+>a : Symbol(a, Decl(file1.ts, 1, 10))
+>b : Symbol(b, Decl(file1.ts, 2, 10))
+
+b = a;
+>b : Symbol(b, Decl(file1.ts, 2, 10))
+>a : Symbol(a, Decl(file1.ts, 1, 10))
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file2.ts ===
+// @ts-strictFunctionTypes true
+export let a = (arg: string) => 0;
+>a : Symbol(a, Decl(file2.ts, 1, 10))
+>arg : Symbol(arg, Decl(file2.ts, 1, 16))
+
+export let b = (arg: unknown) => 0;
+>b : Symbol(b, Decl(file2.ts, 2, 10))
+>arg : Symbol(arg, Decl(file2.ts, 2, 16))
+
+a = b;
+>a : Symbol(a, Decl(file2.ts, 1, 10))
+>b : Symbol(b, Decl(file2.ts, 2, 10))
+
+b = a;
+>b : Symbol(b, Decl(file2.ts, 2, 10))
+>a : Symbol(a, Decl(file2.ts, 1, 10))
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file3.ts ===
+// @ts-strictFunctionTypes false
+export let a = (arg: string) => 0;
+>a : Symbol(a, Decl(file3.ts, 1, 10))
+>arg : Symbol(arg, Decl(file3.ts, 1, 16))
+
+export let b = (arg: unknown) => 0;
+>b : Symbol(b, Decl(file3.ts, 2, 10))
+>arg : Symbol(arg, Decl(file3.ts, 2, 16))
+
+a = b;
+>a : Symbol(a, Decl(file3.ts, 1, 10))
+>b : Symbol(b, Decl(file3.ts, 2, 10))
+
+b = a;
+>b : Symbol(b, Decl(file3.ts, 2, 10))
+>a : Symbol(a, Decl(file3.ts, 1, 10))
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file4.ts ===
+export let a = (arg: string) => 0;
+>a : Symbol(a, Decl(file4.ts, 0, 10))
+>arg : Symbol(arg, Decl(file4.ts, 0, 16))
+
+export let b = (arg: unknown) => 0;
+>b : Symbol(b, Decl(file4.ts, 1, 10))
+>arg : Symbol(arg, Decl(file4.ts, 1, 16))
+
+a = b;
+>a : Symbol(a, Decl(file4.ts, 0, 10))
+>b : Symbol(b, Decl(file4.ts, 1, 10))
+
+b = a;
+>b : Symbol(b, Decl(file4.ts, 1, 10))
+>a : Symbol(a, Decl(file4.ts, 0, 10))
+

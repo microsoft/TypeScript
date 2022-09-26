@@ -285,7 +285,7 @@ namespace ts {
         return bindSourceFile;
 
         function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-            if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
+            if (getStrictOptionValue(file, opts, "alwaysStrict") && !file.isDeclarationFile) {
                 // bind in strict mode source files with alwaysStrict option
                 return true;
             }
@@ -1351,7 +1351,7 @@ namespace ts {
                 const clause = clauses[i];
                 bind(clause);
                 fallthroughFlow = currentFlow;
-                if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && getFileLocalCompilerOption(file, options, "noFallthroughCasesInSwitch")) {
                     clause.fallthroughFlowNode = currentFlow;
                 }
             }

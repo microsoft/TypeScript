@@ -1,0 +1,80 @@
+=== tests/cases/compiler/nonStrictNullChecksNoNullIntroducedByControlFlow.ts ===
+export function clone<T>(obj: T): T {
+>clone : <T>(obj: T) => T
+>obj : T
+
+	if (!obj || typeof obj !== 'object') {
+>!obj || typeof obj !== 'object' : boolean
+>!obj : boolean
+>obj : T
+>typeof obj !== 'object' : boolean
+>typeof obj : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj : T
+>'object' : "object"
+
+		return obj;
+>obj : T
+	}
+	var result = (Array.isArray(obj)) ? <any>[] : <any>{};
+>result : any
+>(Array.isArray(obj)) ? <any>[] : <any>{} : any
+>(Array.isArray(obj)) : boolean
+>Array.isArray(obj) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>obj : T & object
+><any>[] : any
+>[] : undefined[]
+><any>{} : any
+>{} : {}
+
+	Object.keys(obj).forEach((key) => {
+>Object.keys(obj).forEach((key) => {		if (obj[key] && typeof obj[key] === 'object') {			result[key] = clone(obj[key]);		} else {			result[key] = obj[key];		}	}) : void
+>Object.keys(obj).forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>Object.keys(obj) : string[]
+>Object.keys : (o: object) => string[]
+>Object : ObjectConstructor
+>keys : (o: object) => string[]
+>obj : T & object
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>(key) => {		if (obj[key] && typeof obj[key] === 'object') {			result[key] = clone(obj[key]);		} else {			result[key] = obj[key];		}	} : (key: string) => void
+>key : string
+
+		if (obj[key] && typeof obj[key] === 'object') {
+>obj[key] && typeof obj[key] === 'object' : boolean
+>obj[key] : error
+>obj : T & object
+>key : string
+>typeof obj[key] === 'object' : boolean
+>typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj[key] : error
+>obj : T & object
+>key : string
+>'object' : "object"
+
+			result[key] = clone(obj[key]);
+>result[key] = clone(obj[key]) : error
+>result[key] : any
+>result : any
+>key : string
+>clone(obj[key]) : error
+>clone : <T>(obj: T) => T
+>obj[key] : error
+>obj : T & object
+>key : string
+
+		} else {
+			result[key] = obj[key];
+>result[key] = obj[key] : error
+>result[key] : any
+>result : any
+>key : string
+>obj[key] : error
+>obj : T & object
+>key : string
+		}
+	});
+	return result;
+>result : any
+}

@@ -1,0 +1,382 @@
+=== tests/cases/conformance/pragma/strictNullChecks/file1.ts ===
+// @ts-strictNullChecks
+export interface A {
+    member?: string;
+>member : string | undefined
+}
+export interface B {
+    member?: string | undefined;
+>member : string | undefined
+}
+
+let a: A = { member: undefined };
+>a : A
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+declare var b: B;
+>b : B
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+
+import {A as OtherA, B as OtherB} from "./file2";
+>A : any
+>OtherA : any
+>B : any
+>OtherB : any
+
+let a2: OtherA = { member: undefined };
+>a2 : OtherA
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+declare var b2: OtherB;
+>b2 : OtherB
+
+a2 = b2;
+>a2 = b2 : OtherB
+>a2 : OtherA
+>b2 : OtherB
+
+b2 = a2;
+>b2 = a2 : OtherA
+>b2 : OtherB
+>a2 : OtherA
+
+a = a2;
+>a = a2 : OtherA
+>a : A
+>a2 : OtherA
+
+a2 = a;
+>a2 = a : A
+>a2 : OtherA
+>a : A
+
+b = b2;
+>b = b2 : OtherB
+>b : B
+>b2 : OtherB
+
+b2 = b;
+>b2 = b : B
+>b2 : OtherB
+>b : B
+
+a = b2;
+>a = b2 : OtherB
+>a : A
+>b2 : OtherB
+
+b2 = a;
+>b2 = a : A
+>b2 : OtherB
+>a : A
+
+b = a2;
+>b = a2 : OtherA
+>b : B
+>a2 : OtherA
+
+a2 = b;
+>a2 = b : B
+>a2 : OtherA
+>b : B
+
+=== tests/cases/conformance/pragma/strictNullChecks/file2.ts ===
+// loose
+export interface A {
+    member?: string;
+>member : string
+}
+export interface B {
+    member?: string | undefined;
+>member : string
+}
+
+let a: A = { member: undefined };
+>a : A
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+declare var b: B;
+>b : B
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+
+import {A as OtherA, B as OtherB} from "./file1";
+>A : any
+>OtherA : any
+>B : any
+>OtherB : any
+
+let a2: OtherA = { member: undefined };
+>a2 : OtherA
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+declare var b2: OtherB;
+>b2 : OtherB
+
+a2 = b2;
+>a2 = b2 : OtherB
+>a2 : OtherA
+>b2 : OtherB
+
+b2 = a2;
+>b2 = a2 : OtherA
+>b2 : OtherB
+>a2 : OtherA
+
+a = a2;
+>a = a2 : OtherA
+>a : A
+>a2 : OtherA
+
+a2 = a;
+>a2 = a : A
+>a2 : OtherA
+>a : A
+
+b = b2;
+>b = b2 : OtherB
+>b : B
+>b2 : OtherB
+
+b2 = b;
+>b2 = b : B
+>b2 : OtherB
+>b : B
+
+a = b2;
+>a = b2 : OtherB
+>a : A
+>b2 : OtherB
+
+b2 = a;
+>b2 = a : A
+>b2 : OtherB
+>a : A
+
+b = a2;
+>b = a2 : OtherA
+>b : B
+>a2 : OtherA
+
+a2 = b;
+>a2 = b : B
+>a2 : OtherA
+>b : B
+
+=== tests/cases/conformance/pragma/strictNullChecks/file3.ts ===
+// @ts-strictNullChecks
+import {A, B} from "./file1";
+>A : any
+>B : any
+
+import {A as A2, B as B2} from "./file2";
+>A : any
+>A2 : any
+>B : any
+>B2 : any
+
+let a: A = { member: undefined };
+>a : A
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+let b: B = { member: undefined };
+>b : B
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+let a2: A2 = { member: undefined };
+>a2 : A2
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+let b2: B2 = { member: undefined };
+>b2 : B2
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+
+a2 = b2;
+>a2 = b2 : B2
+>a2 : A2
+>b2 : B2
+
+b2 = a2;
+>b2 = a2 : A2
+>b2 : B2
+>a2 : A2
+
+a = a2;
+>a = a2 : A2
+>a : A
+>a2 : A2
+
+a2 = a;
+>a2 = a : A
+>a2 : A2
+>a : A
+
+b = b2;
+>b = b2 : B2
+>b : B
+>b2 : B2
+
+b2 = b;
+>b2 = b : B
+>b2 : B2
+>b : B
+
+a = b2;
+>a = b2 : B2
+>a : A
+>b2 : B2
+
+b2 = a;
+>b2 = a : A
+>b2 : B2
+>a : A
+
+b = a2;
+>b = a2 : A2
+>b : B
+>a2 : A2
+
+a2 = b;
+>a2 = b : B
+>a2 : A2
+>b : B
+
+=== tests/cases/conformance/pragma/strictNullChecks/file4.ts ===
+// loose
+import {A, B} from "./file1";
+>A : any
+>B : any
+
+import {A as A2, B as B2} from "./file2";
+>A : any
+>A2 : any
+>B : any
+>B2 : any
+
+let a: A = { member: undefined };
+>a : A
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+let b: B = { member: undefined };
+>b : B
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+let a2: A2 = { member: undefined };
+>a2 : A2
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+let b2: B2 = { member: undefined };
+>b2 : B2
+>{ member: undefined } : { member: undefined; }
+>member : undefined
+>undefined : undefined
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+
+a2 = b2;
+>a2 = b2 : B2
+>a2 : A2
+>b2 : B2
+
+b2 = a2;
+>b2 = a2 : A2
+>b2 : B2
+>a2 : A2
+
+a = a2;
+>a = a2 : A2
+>a : A
+>a2 : A2
+
+a2 = a;
+>a2 = a : A
+>a2 : A2
+>a : A
+
+b = b2;
+>b = b2 : B2
+>b : B
+>b2 : B2
+
+b2 = b;
+>b2 = b : B
+>b2 : B2
+>b : B
+
+a = b2;
+>a = b2 : B2
+>a : A
+>b2 : B2
+
+b2 = a;
+>b2 = a : A
+>b2 : B2
+>a : A
+
+b = a2;
+>b = a2 : A2
+>b : B
+>a2 : A2
+
+a2 = b;
+>a2 = b : B
+>a2 : A2
+>b : B
+
