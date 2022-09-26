@@ -7800,7 +7800,7 @@ namespace ts {
                     if (node.elseStatement) {
                         if (canProduceCompletionValue(node.elseStatement)) collectLeaves(node.elseStatement);
                         else missingLeaves.push(node.elseStatement);
-                    };
+                    }
                     break;
                 }
                 case SyntaxKind.TryStatement: {

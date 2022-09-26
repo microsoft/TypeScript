@@ -128,7 +128,7 @@ namespace ts.InlayHints {
                     const type = checker.getTypeAtLocation(leaf);
                     addDoExpressionReturnPositionHints("as " + printTypeInSingleLine(type), leaf.end);
                 }
-            };
+            }
         }
 
         function visitEnumMember(member: EnumMember) {
