@@ -1,0 +1,16 @@
+=== /node_modules/foo/index.d.ts ===
+import {} from "./other.js";
+No type information for this code.export {};
+No type information for this code.
+No type information for this code.=== /node_modules/foo/other.d.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /node_modules/@types/foo/index.d.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /main.ts ===
+import {} from "foo";
+No type information for this code.import {} from "./node_modules/foo/index.js";
+No type information for this code.import type {} from "./node_modules/@types/foo/index.d.ts";
+No type information for this code.
+No type information for this code.

@@ -3740,7 +3740,10 @@ namespace ts {
                     const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
                     const resolutionIsNode16OrNext = moduleResolutionKind === ModuleResolutionKind.Node16 ||
                         moduleResolutionKind === ModuleResolutionKind.NodeNext;
-                    if (tsExtension) {
+                    if (moduleResolutionKind === ModuleResolutionKind.Minimal && pathContainsNodeModules(moduleReference)) {
+                        error(errorNode, Diagnostics.Relative_imports_into_node_modules_are_not_allowed);
+                    }
+                    else if (tsExtension) {
                         errorOnTSExtensionImport(tsExtension);
                     }
                     else if (!compilerOptions.resolveJsonModule &&
