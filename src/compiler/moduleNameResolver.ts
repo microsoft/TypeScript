@@ -2705,19 +2705,6 @@ namespace ts {
             if (resolvedUsingSettings) {
                 return resolvedUsingSettings;
             }
-            if (isExternalModuleNameRelative(moduleName) && pathContainsNodeModules(moduleName)) {
-                // A relative import into node_modules is a problem for a few reasons:
-                //   1. Portability - if the code gets published as a library, it will very likely break
-                //   2. It's unclear how we should resolve types. By typical relative import rules, we
-                //      would ignore package.json fields that tell us where to find types and would have
-                //      no special behavior linking up node_modules/@types with their implementations -
-                //      we would only find .d.ts files as siblings of .js files. Any package that puts
-                //      their types in a separate directory, or is typed by @types, would be broken.
-                //      Some of these redirections would be safe to do, but others might reflect
-                //      Node-specific resolution features that would only work with non-relative imports.
-                // There's a diagnostic issued for this case in the checker.
-                return noPackageId(/*resolved*/ undefined);
-            }
             const resolvedRelative = loadModuleFromFileNoImplicitExtensions(extensions, candidate, /*onlyRecordFailures*/ false, state);
             if (resolvedRelative) {
                 return noPackageId(resolvedRelative);
