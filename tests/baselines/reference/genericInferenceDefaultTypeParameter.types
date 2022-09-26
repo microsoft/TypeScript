@@ -1,0 +1,27 @@
+=== tests/cases/compiler/genericInferenceDefaultTypeParameter.ts ===
+type Type = {
+>Type : { a: (e: string) => void; b: (e: number) => void; }
+
+    a: (e: string) => void,
+>a : (e: string) => void
+>e : string
+
+    b: (e: number) => void,
+>b : (e: number) => void
+>e : number
+}
+  
+function f1<T extends keyof Type = 'a'>(props: Type[T]): any {
+>f1 : <T extends keyof Type = "a">(props: Type[T]) => any
+>props : Type[T]
+
+    return null
+>null : null
+}
+
+f1((event) => { })
+>f1((event) => { }) : any
+>f1 : <T extends keyof Type = "a">(props: Type[T]) => any
+>(event) => { } : (event: string) => void
+>event : string
+

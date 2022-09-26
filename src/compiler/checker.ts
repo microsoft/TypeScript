@@ -27516,12 +27516,31 @@ namespace ts {
         function instantiateContextualType(contextualType: Type | undefined, node: Node, contextFlags: ContextFlags | undefined): Type | undefined {
             if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
                 const inferenceContext = getInferenceContext(node);
-                // If no inferences have been made, nothing is gained from instantiating as type parameters
-                // would just be replaced with their defaults similar to the apparent type.
-                if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidates)) {
-                    // For contextual signatures we incorporate all inferences made so far, e.g. from return
-                    // types as well as arguments to the left in a function call.
-                    return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                if (inferenceContext && contextFlags! & ContextFlags.Signature) {
+                    // If no inferences have been made, nothing is gained from instantiating as type parameters
+                    // would just be replaced with their defaults similar to the apparent type.
+                    if (some(inferenceContext.inferences, hasInferenceCandidates)) {
+                        // For contextual signatures we incorporate all inferences made so far, e.g. from return
+                        // types as well as arguments to the left in a function call.
+                        return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                    }
+
+                    const apparentType = mapType(contextualType, getApparentType, /*noReductions*/ true);
+
+                    // If the apparent type is any, we cannot lose any information by instantiating,
+                    // so we might as well try and possibly get a useful type
+                    if (apparentType === anyType) {
+                        return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                    }
+                    else if((apparentType.flags & TypeFlags.Union)) {
+                        const signatureList = getContextualSignatureListFromApparentTypes((apparentType as UnionType).types, node as FunctionExpression | ArrowFunction | MethodDeclaration);
+
+                        if(!signatureList) {
+                            // At this point, the signature type is guaranteed to eventually collapse into any
+                            // because it is a union of incompatible function signatures
+                            return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
+                        }
+                    }
                 }
                 if (inferenceContext?.returnMapper) {
                     // For other purposes (e.g. determining whether to produce literal types) we only
@@ -27937,8 +27956,17 @@ namespace ts {
             if (!(type.flags & TypeFlags.Union)) {
                 return getContextualCallSignature(type, node);
             }
-            let signatureList: Signature[] | undefined;
             const types = (type as UnionType).types;
+            const signatureList = getContextualSignatureListFromApparentTypes(types, node);
+
+            // Result is union of signatures collected (return type is union of return types of this signature set)
+            if (signatureList) {
+                return signatureList.length === 1 ? signatureList[0] : createUnionSignature(signatureList[0], signatureList);
+            }
+        }
+
+        function getContextualSignatureListFromApparentTypes(types: Type[], node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature[] | undefined {
+            let signatureList: Signature[] | undefined;
             for (const current of types) {
                 const signature = getContextualCallSignature(current, node);
                 if (signature) {
@@ -27956,10 +27984,7 @@ namespace ts {
                     }
                 }
             }
-            // Result is union of signatures collected (return type is union of return types of this signature set)
-            if (signatureList) {
-                return signatureList.length === 1 ? signatureList[0] : createUnionSignature(signatureList[0], signatureList);
-            }
+            return signatureList;
         }
 
         function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {

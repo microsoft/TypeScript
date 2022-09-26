@@ -1,0 +1,28 @@
+=== tests/cases/compiler/genericInferenceDefaultTypeParameter.ts ===
+type Type = {
+>Type : Symbol(Type, Decl(genericInferenceDefaultTypeParameter.ts, 0, 0))
+
+    a: (e: string) => void,
+>a : Symbol(a, Decl(genericInferenceDefaultTypeParameter.ts, 0, 13))
+>e : Symbol(e, Decl(genericInferenceDefaultTypeParameter.ts, 1, 8))
+
+    b: (e: number) => void,
+>b : Symbol(b, Decl(genericInferenceDefaultTypeParameter.ts, 1, 27))
+>e : Symbol(e, Decl(genericInferenceDefaultTypeParameter.ts, 2, 8))
+}
+  
+function f1<T extends keyof Type = 'a'>(props: Type[T]): any {
+>f1 : Symbol(f1, Decl(genericInferenceDefaultTypeParameter.ts, 3, 1))
+>T : Symbol(T, Decl(genericInferenceDefaultTypeParameter.ts, 5, 12))
+>Type : Symbol(Type, Decl(genericInferenceDefaultTypeParameter.ts, 0, 0))
+>props : Symbol(props, Decl(genericInferenceDefaultTypeParameter.ts, 5, 40))
+>Type : Symbol(Type, Decl(genericInferenceDefaultTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(genericInferenceDefaultTypeParameter.ts, 5, 12))
+
+    return null
+}
+
+f1((event) => { })
+>f1 : Symbol(f1, Decl(genericInferenceDefaultTypeParameter.ts, 3, 1))
+>event : Symbol(event, Decl(genericInferenceDefaultTypeParameter.ts, 9, 4))
+
