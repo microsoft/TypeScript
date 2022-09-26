@@ -11,6 +11,9 @@
 // @Filename: /local.ts
 //// export const fromLocal: number;
 
+// @Filename: /Component.tsx
+//// export function Component() { return null; }
+
 // @Filename: /main.ts
 //// /**/
 
