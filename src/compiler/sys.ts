@@ -2,7 +2,7 @@ import {
     AssertionLevel, closeFileWatcher, closeFileWatcherOf, combinePaths, Comparison, contains, containsPath,
     createGetCanonicalFileName, createMultiMap, Debug, directorySeparator, emptyArray, emptyFileSystemEntries, endsWith,
     enumerateInsertsAndDeletes, ESMap, FileSystemEntries, getDirectoryPath, getFallbackOptions,
-    getNormalizedAbsolutePath, getRelativePathToDirectoryOrUrl, getRootLength, getStringComparer, isArray, isString,
+    getNormalizedAbsolutePath, getRelativePathToDirectoryOrUrl, getRootLength, getStringComparer, isArray, isNodeLikeSystem, isString,
     Map, mapDefined, matchesExclude, matchFiles, memoize, noop, normalizePath, normalizeSlashes, orderedRemoveItem,
     Path, perfLogger, PollingWatchKind, RequireResult, resolveJSModule, some, startsWith, stringContains, timestamp,
     unorderedRemoveItem, WatchDirectoryKind, WatchFileKind, WatchOptions, writeFileEnsuringDirectories,
@@ -1974,9 +1974,7 @@ export let sys: System = (() => {
     }
 
     let sys: System | undefined;
-    if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
-        // process and process.nextTick checks if current environment is node-like
-        // process.browser check excludes webpack and browserify
+    if (isNodeLikeSystem()) {
         sys = getNodeSystem();
     }
     if (sys) {
