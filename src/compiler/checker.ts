@@ -258,7 +258,7 @@ namespace ts {
     }
 
     const enum IntrinsicTypeKind {
-        Uppercase,
+        Uppercase = 1,
         Lowercase,
         Capitalize,
         Uncapitalize,
@@ -15745,7 +15745,7 @@ namespace ts {
                 return getStringMappingTypeForGenericType(symbol, isPatternLiteralPlaceholderType(type) && !(type.flags & TypeFlags.StringMapping) ? getTemplateLiteralType(["", ""], [type]) : type);
             }
             else if (type.flags & TypeFlags.StringLiteral) {
-                return getStringLiteralType(applyStringMapping(/** intrinsicKind */ undefined, type));
+                return getStringLiteralType(applyStringMapping(symbol, type));
             }
             else if (type.flags & TypeFlags.TemplateLiteral) {
                 return getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types));
@@ -15759,16 +15759,24 @@ namespace ts {
             }
         }
 
-        function applyStringMapping(kind: IntrinsicTypeKind | undefined, type: Type) {
-            const str = kind === IntrinsicTypeKind.TypeToString ? typeToString(type) : (type as StringLiteralType).value;
+        function applyStringMapping(kind: IntrinsicTypeKind | Symbol | undefined, type: Type) {
+            if (typeof kind === "object") kind = intrinsicTypeKinds.get(kind.escapedName as string);
+            let str = "";
+            if (kind === IntrinsicTypeKind.TypeToString) {
+                str = typeToString(type);
+            }
+            else if (type.flags & TypeFlags.StringLiteral) {
+                str = (type as StringLiteralType).value;
+            }
+            if (!kind) return str;
             switch (kind) {
                 case IntrinsicTypeKind.Uppercase: return str.toUpperCase();
                 case IntrinsicTypeKind.Lowercase: return str.toLowerCase();
                 case IntrinsicTypeKind.Capitalize: return str.charAt(0).toUpperCase() + str.slice(1);
                 case IntrinsicTypeKind.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
                 case IntrinsicTypeKind.TypeToString: return str;
+                default: Debug.assertNever(kind);
             }
-            return str;
         }
 
         function applyTemplateStringMapping(symbol: Symbol, texts: readonly string[], types: readonly Type[]): [texts: readonly string[], types: readonly Type[]] {
@@ -23282,7 +23290,7 @@ namespace ts {
                                         !(right.flags & allTypeFlags) ? left :
                                         left.flags & TypeFlags.String ? left : right.flags & TypeFlags.String ? source :
                                         left.flags & TypeFlags.TemplateLiteral ? left : right.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, right as TemplateLiteralType) ? source :
-                                        left.flags & TypeFlags.StringMapping ? left : right.flags & TypeFlags.StringMapping && str === applyStringMapping(intrinsicTypeKinds.get(right.symbol.escapedName as string), source) ? source :
+                                        left.flags & TypeFlags.StringMapping ? left : right.flags & TypeFlags.StringMapping && str === applyStringMapping(right.symbol, source) ? source :
                                         left.flags & TypeFlags.StringLiteral ? left : right.flags & TypeFlags.StringLiteral && (right as StringLiteralType).value === str ? right :
                                         left.flags & TypeFlags.Number ? left : right.flags & TypeFlags.Number ? getNumberLiteralType(+str) :
                                         left.flags & TypeFlags.Enum ? left : right.flags & TypeFlags.Enum ? getNumberLiteralType(+str) :
