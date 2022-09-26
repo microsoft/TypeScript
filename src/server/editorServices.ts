@@ -1173,8 +1173,8 @@ namespace ts.server {
         }
 
         /* @internal */
-        ensureDefaultProjectForFile(fileName: NormalizedPath | ScriptInfo): Project {
-            return this.tryGetDefaultProjectForFile(fileName) || this.doEnsureDefaultProjectForFile(fileName);
+        ensureDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project {
+            return this.tryGetDefaultProjectForFile(fileNameOrScriptInfo) || this.doEnsureDefaultProjectForFile(fileNameOrScriptInfo);
         }
 
         private doEnsureDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project {
