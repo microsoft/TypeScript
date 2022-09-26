@@ -23665,7 +23665,7 @@ namespace ts {
             }
             if (isEntityNameExpression(node.argumentExpression)) {
                 const symbol = resolveEntityName(node.argumentExpression, SymbolFlags.Value, /*ignoreErrors*/ true);
-                if (!symbol || !isConstVariable(symbol)) return undefined;
+                if (!symbol || !(isConstVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
 
                 const declaration = symbol.valueDeclaration;
                 if (declaration === undefined) return undefined;
@@ -23680,7 +23680,12 @@ namespace ts {
 
                 if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node.argumentExpression)) {
                     const initializer = getEffectiveInitializer(declaration);
-                    return initializer && tryGetNameFromType(getTypeOfExpression(initializer));
+                    if (initializer) {
+                        return tryGetNameFromType(getTypeOfExpression(initializer));
+                    }
+                    if (isEnumMember(declaration)) {
+                        return getTextOfPropertyName(declaration.name);
+                    }
                 }
             }
             return undefined;
