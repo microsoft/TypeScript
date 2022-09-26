@@ -377,8 +377,16 @@ namespace ts.Completions.StringCompletions {
             : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, getIncludeExtensionOption(), typeChecker);
 
         function getIncludeExtensionOption() {
+            const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+            if (moduleResolution === ModuleResolutionKind.Minimal) {
+                return shouldAllowImportingTsExtension(compilerOptions)
+                    ? IncludeExtensionsOption.Include
+                    : IncludeExtensionsOption.ModuleSpecifierCompletion;
+            }
             const mode = isStringLiteralLike(node) ? getModeForUsageLocation(sourceFile, node) : undefined;
-            return preferences.importModuleSpecifierEnding === "js" || mode === ModuleKind.ESNext ? IncludeExtensionsOption.ModuleSpecifierCompletion : IncludeExtensionsOption.Exclude;
+            return preferences.importModuleSpecifierEnding === "js" || mode === ModuleKind.ESNext
+                ? IncludeExtensionsOption.ModuleSpecifierCompletion
+                : IncludeExtensionsOption.Exclude;
         }
     }
 
@@ -396,24 +404,14 @@ namespace ts.Completions.StringCompletions {
                 compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
         }
         else {
-            return arrayFrom(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, scriptPath).values());
+            return arrayFrom(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, scriptPath).values());
         }
-    }
-
-    function isEmitResolutionKindUsingNodeModules(compilerOptions: CompilerOptions): boolean {
-        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ||
-            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 ||
-            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
-    }
-
-    function isEmitModuleResolutionRespectingExportMaps(compilerOptions: CompilerOptions) {
-        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 ||
-        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
     }
 
     function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
         const extensions = getSupportedExtensions(compilerOptions);
-        return isEmitResolutionKindUsingNodeModules(compilerOptions) ?
+        const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+        return moduleResolutionUsesNodeModules(moduleResolution) ?
             getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
             extensions;
     }
@@ -441,7 +439,7 @@ namespace ts.Completions.StringCompletions {
         const basePath = compilerOptions.project || host.getCurrentDirectory();
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
         const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptDirectory, ignoreCase);
-        return flatMap(baseDirectories, baseDirectory => arrayFrom(getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, exclude).values()));
+        return flatMap(baseDirectories, baseDirectory => arrayFrom(getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, exclude).values()));
     }
 
     const enum IncludeExtensionsOption {
@@ -454,9 +452,10 @@ namespace ts.Completions.StringCompletions {
      */
     function getCompletionEntriesForDirectoryFragment(
         fragment: string,
-        scriptPath: string,
+        scriptDirectory: string,
         extensionOptions: ExtensionOptions,
         host: LanguageServiceHost,
+        moduleSpecifierIsRelative: boolean,
         exclude?: string,
         result = createNameAndKindSet()
     ): NameAndKindSet {
@@ -480,23 +479,25 @@ namespace ts.Completions.StringCompletions {
 
         fragment = ensureTrailingDirectorySeparator(fragment);
 
-        const absolutePath = resolvePath(scriptPath, fragment);
+        const absolutePath = resolvePath(scriptDirectory, fragment);
         const baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
 
-        // check for a version redirect
-        const packageJsonPath = findPackageJson(baseDirectory, host);
-        if (packageJsonPath) {
-            const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
-            const typesVersions = (packageJson as any).typesVersions;
-            if (typeof typesVersions === "object") {
-                const versionPaths = getPackageJsonTypesVersionsPaths(typesVersions)?.paths;
-                if (versionPaths) {
-                    const packageDirectory = getDirectoryPath(packageJsonPath);
-                    const pathInPackage = absolutePath.slice(ensureTrailingDirectorySeparator(packageDirectory).length);
-                    if (addCompletionEntriesFromPaths(result, pathInPackage, packageDirectory, extensionOptions, host, versionPaths)) {
-                        // A true result means one of the `versionPaths` was matched, which will block relative resolution
-                        // to files and folders from here. All reachable paths given the pattern match are already added.
-                        return result;
+        if (!moduleSpecifierIsRelative) {
+            // check for a version redirect
+            const packageJsonPath = findPackageJson(baseDirectory, host);
+            if (packageJsonPath) {
+                const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
+                const typesVersions = (packageJson as any).typesVersions;
+                if (typeof typesVersions === "object") {
+                    const versionPaths = getPackageJsonTypesVersionsPaths(typesVersions)?.paths;
+                    if (versionPaths) {
+                        const packageDirectory = getDirectoryPath(packageJsonPath);
+                        const pathInPackage = absolutePath.slice(ensureTrailingDirectorySeparator(packageDirectory).length);
+                        if (addCompletionEntriesFromPaths(result, pathInPackage, packageDirectory, extensionOptions, host, versionPaths)) {
+                            // A true result means one of the `versionPaths` was matched, which will block relative resolution
+                            // to files and folders from here. All reachable paths given the pattern match are already added.
+                            return result;
+                        }
                     }
                 }
             }
@@ -511,7 +512,7 @@ namespace ts.Completions.StringCompletions {
         if (files) {
             for (let filePath of files) {
                 filePath = normalizePath(filePath);
-                if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
+                if (exclude && comparePaths(filePath, exclude, scriptDirectory, ignoreCase) === Comparison.EqualTo) {
                     continue;
                 }
 
@@ -524,9 +525,10 @@ namespace ts.Completions.StringCompletions {
         const directories = tryGetDirectories(host, baseDirectory);
 
         if (directories) {
+            const moduleResolution = getEmitModuleResolutionKind(host.getCompilationSettings());
             for (const directory of directories) {
                 const directoryName = getBaseFileName(normalizePath(directory));
-                if (directoryName !== "@types") {
+                if (directoryName !== "@types" && !(directoryName === "node_modules" && moduleResolution === ModuleResolutionKind.Minimal)) {
                     result.add(directoryResult(directoryName));
                 }
             }
@@ -638,11 +640,12 @@ namespace ts.Completions.StringCompletions {
         const { baseUrl, paths } = compilerOptions;
 
         const result = createNameAndKindSet();
+        const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
         const extensionOptions = getExtensionOptions(compilerOptions, includeExtensionsOption);
         if (baseUrl) {
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = normalizePath(combinePaths(projectDir, baseUrl));
-            getCompletionEntriesForDirectoryFragment(fragment, absolute, extensionOptions, host, /*exclude*/ undefined, result);
+            getCompletionEntriesForDirectoryFragment(fragment, absolute, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
             if (paths) {
                 addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
             }
@@ -653,9 +656,11 @@ namespace ts.Completions.StringCompletions {
             result.add(nameAndKind(ambientName, ScriptElementKind.externalModuleName, /*extension*/ undefined));
         }
 
-        getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, fragmentDirectory, extensionOptions, result);
+        if (moduleResolution !== ModuleResolutionKind.Minimal) {
+            getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, fragmentDirectory, extensionOptions, result);
+        }
 
-        if (isEmitResolutionKindUsingNodeModules(compilerOptions)) {
+        if (moduleResolutionUsesNodeModules(moduleResolution)) {
             // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
             // (But do if we didn't find anything, e.g. 'package.json' missing.)
             let foundGlobal = false;
@@ -672,10 +677,10 @@ namespace ts.Completions.StringCompletions {
                 let ancestorLookup: (directory: string) => void | undefined = ancestor => {
                     const nodeModules = combinePaths(ancestor, "node_modules");
                     if (tryDirectoryExists(host, nodeModules)) {
-                        getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*exclude*/ undefined, result);
+                        getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
                     }
                 };
-                if (fragmentDirectory && isEmitModuleResolutionRespectingExportMaps(compilerOptions)) {
+                if (fragmentDirectory && moduleResolutionRespectsExports(moduleResolution)) {
                     const nodeModulesDirectoryLookup = ancestorLookup;
                     ancestorLookup = ancestor => {
                         const components = getPathComponents(fragment);
@@ -876,7 +881,7 @@ namespace ts.Completions.StringCompletions {
 
         const [, prefix, kind, toComplete] = match;
         const scriptPath = getDirectoryPath(sourceFile.path);
-        const names = kind === "path" ? getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, IncludeExtensionsOption.Include), host, sourceFile.path)
+        const names = kind === "path" ? getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, IncludeExtensionsOption.Include), host, /*moduleSpecifierIsRelative*/ true, sourceFile.path)
             : kind === "types" ? getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, getFragmentDirectory(toComplete), getExtensionOptions(compilerOptions))
             : Debug.fail();
         return addReplacementSpans(toComplete, range.pos + prefix.length, arrayFrom(names.values()));
@@ -917,7 +922,7 @@ namespace ts.Completions.StringCompletions {
                     const baseDirectory = combinePaths(directory, typeDirectoryName);
                     const remainingFragment = tryRemoveDirectoryPrefix(fragmentDirectory, packageName, hostGetCanonicalFileName(host));
                     if (remainingFragment !== undefined) {
-                        getCompletionEntriesForDirectoryFragment(remainingFragment, baseDirectory, extensionOptions, host, /*exclude*/ undefined, result);
+                        getCompletionEntriesForDirectoryFragment(remainingFragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
                     }
                 }
             }
