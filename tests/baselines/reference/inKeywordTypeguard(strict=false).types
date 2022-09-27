@@ -446,9 +446,9 @@ function negativeIntersectionTest() {
 
     } else {
         window.ontouchstart
->window.ontouchstart : any
->window : never
->ontouchstart : any
+>window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
+>window : Window & typeof globalThis
+>ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
     }
 }
 
