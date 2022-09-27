@@ -273,6 +273,60 @@ function f9(x: object) {
     }
 }
 
+function f10(x: { a: unknown }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f11(x: { a: any }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f12(x: { a: string }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f13(x: { a?: string }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f14(x: { a: string | undefined }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f15(x: { a?: string | undefined }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
 // Repro from #50639
 
 function foo<A>(value: A) {
@@ -280,3 +334,8 @@ function foo<A>(value: A) {
         value;  // A & object & Record<"prop", unknown>
     }
 }
+
+// Repro from #50954
+
+const checkIsTouchDevice = () =>
+    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
