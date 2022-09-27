@@ -12524,7 +12524,10 @@ namespace ts {
                             optionalFlag |= (prop.flags & SymbolFlags.Optional);
                         }
                         else {
-                            optionalFlag &= prop.flags;
+                            // In non-strictNullChecks mode, properties originating in non-member declarations (e.g. module exports
+                            // or globalThis members) are considered optional since `undefined` is implicitly part of the type. This
+                            // matters for narrowing caused by `in` checks (specifically the isTypePresencePossible function).
+                            optionalFlag &= strictNullChecks || prop.flags & (SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor) ? prop.flags : SymbolFlags.Optional;
                         }
                         if (!singleProp) {
                             singleProp = prop;
@@ -25254,10 +25257,16 @@ namespace ts {
                 return type;
             }
 
+            function isPossiblyUndefined(type: Type) {
+                // We use TypeFlags.IsUndefined here because TypeFlags.EQUndefined is true for practically all
+                // types in non-strictNullChecks mode.
+                return !!(type.flags & TypeFlags.AnyOrUnknown || getTypeFacts(type) & TypeFacts.IsUndefined);
+            }
+
             function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
                 const prop = getPropertyOfType(type, propName);
                 return prop ?
-                    !!(prop.flags & SymbolFlags.Optional) || assumeTrue :
+                    !!(prop.flags & SymbolFlags.Optional) || isPossiblyUndefined(getTypeOfSymbol(prop)) || assumeTrue :
                     !!getApplicableIndexInfoForName(type, propName) || !assumeTrue;
             }
 
