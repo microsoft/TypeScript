@@ -9696,16 +9696,32 @@ namespace ts {
             }
         }
 
+        function isParameterOfContextSensitiveSignature(symbol: Symbol) {
+            let decl = symbol.valueDeclaration;
+            if (!decl) {
+                return false;
+            }
+            if (isBindingElement(decl)) {
+                decl = walkUpBindingElementsAndPatterns(decl);
+            }
+            if (isParameter(decl)) {
+                return (isExpression(decl.parent) || isObjectLiteralMethod(decl.parent)) && isContextSensitive(decl.parent);
+            }
+            return false;
+        }
+
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
                 // For a contextually typed parameter it is possible that a type has already
                 // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
-                // to preserve this type.
-                if (!links.type) {
+                // to preserve this type. In fact, we want to _prefer_ that type, and it won't
+                // be assigned until contextual typing is complete
+                if (!links.type && !isParameterOfContextSensitiveSignature(symbol)) {
                     links.type = type;
                 }
+                return type;
             }
             return links.type;
         }
