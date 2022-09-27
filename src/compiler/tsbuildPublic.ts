@@ -1609,9 +1609,11 @@ namespace ts {
 
             if (buildInfo.program) {
                 // If there are pending changes that are not emitted, project is out of date
-                // If noEmit, then explicitly check if there are semantic diagnostics
-                // affectedFilesPendingEmit is present in noEmit irrespective of errors to handle files to be emitted when noEmit is false,
-                //so explicit check on errors is needed in noEmit as oppose to when it is false when only files pending emit is sufficient
+                // When there are syntax errors, changeFileSet will have list of files changed (irrespective of noEmit)
+                // But in case of semantic error we need special treatment.
+                // Checking presence of affectedFilesPendingEmit list is fast and good way to tell if there were semantic errors and file emit was blocked
+                // But if noEmit is true, affectedFilesPendingEmit will have file list even if there are no semantic errors to preserve list of files to be emitted when running with noEmit false
+                // So with noEmit set to true, check on semantic diagnostics needs to be explicit as oppose to when it is false when only files pending emit is sufficient
                 if ((buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
                     (!project.options.noEmit ?
                         (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length :
