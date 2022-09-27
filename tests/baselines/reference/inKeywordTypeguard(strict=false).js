@@ -325,6 +325,10 @@ function f15(x: { a?: string | undefined }) {
     }
 }
 
+function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+    x = y;
+}
+
 // Repro from #50639
 
 function foo<A>(value: A) {
@@ -639,6 +643,9 @@ function f15(x) {
     else {
         x;
     }
+}
+function f16(x, y) {
+    x = y;
 }
 // Repro from #50639
 function foo(value) {

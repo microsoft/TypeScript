@@ -811,28 +811,41 @@ function f15(x: { a?: string | undefined }) {
     }
 }
 
+function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+>f16 : Symbol(f16, Decl(inKeywordTypeguard.ts, 324, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 326, 13))
+>globalThis : Symbol(globalThis)
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 326, 34))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+
+    x = y;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 326, 13))
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 326, 34))
+}
+
 // Repro from #50639
 
 function foo<A>(value: A) {
->foo : Symbol(foo, Decl(inKeywordTypeguard.ts, 324, 1))
->A : Symbol(A, Decl(inKeywordTypeguard.ts, 328, 13))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 328, 16))
->A : Symbol(A, Decl(inKeywordTypeguard.ts, 328, 13))
+>foo : Symbol(foo, Decl(inKeywordTypeguard.ts, 328, 1))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 332, 13))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 332, 13))
 
     if (typeof value === "object" && value !== null && "prop" in value) {
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 328, 16))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 328, 16))
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 328, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
 
         value;  // A & object & Record<"prop", unknown>
->value : Symbol(value, Decl(inKeywordTypeguard.ts, 328, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
     }
 }
 
 // Repro from #50954
 
 const checkIsTouchDevice = () =>
->checkIsTouchDevice : Symbol(checkIsTouchDevice, Decl(inKeywordTypeguard.ts, 336, 5))
+>checkIsTouchDevice : Symbol(checkIsTouchDevice, Decl(inKeywordTypeguard.ts, 340, 5))
 
     "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))

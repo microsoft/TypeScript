@@ -404,6 +404,10 @@ tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2322: Type 'T' is no
         }
     }
     
+    function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+        x = y;
+    }
+    
     // Repro from #50639
     
     function foo<A>(value: A) {
