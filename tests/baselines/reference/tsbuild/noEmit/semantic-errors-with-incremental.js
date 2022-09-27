@@ -118,9 +118,29 @@ Output::
 [[90m12:00:14 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'src/tsconfig.tsbuildinfo'
+[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-exitCode:: ExitStatus.Success
+[[90m12:00:16 AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: ["/src/a.ts"]
+Program options: {"noEmit":true,"incremental":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 
 
@@ -134,12 +154,12 @@ const a = "hello"
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v --incremental
-[[90m12:00:17 AM[0m] Projects in this build: 
+[[90m12:00:18 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:18 AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/tsconfig.tsbuildinfo' is older than input 'src/a.ts'
+[[90m12:00:19 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:19 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:20 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/a.ts"]
@@ -204,10 +224,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v --incremental
-[[90m12:00:23 AM[0m] Projects in this build: 
+[[90m12:00:24 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:24 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'src/tsconfig.tsbuildinfo'
+[[90m12:00:25 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'src/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

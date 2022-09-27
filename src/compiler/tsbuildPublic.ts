@@ -1609,8 +1609,14 @@ namespace ts {
 
             if (buildInfo.program) {
                 // If there are pending changes that are not emitted, project is out of date
+                // If noEmit, then explicitly check if there are semantic diagnostics
+                // affectedFilesPendingEmit is present in noEmit irrespective of errors to handle files to be emitted when noEmit is false,
+                //so explicit check on errors is needed in noEmit as oppose to when it is false when only files pending emit is sufficient
                 if ((buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
-                    (!project.options.noEmit && (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length)) {
+                    (!project.options.noEmit ?
+                        (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length :
+                        some((buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile, isArray))
+                ) {
                     return {
                         type: UpToDateStatusType.OutOfDateBuildInfo,
                         buildInfoFile: buildInfoPath
