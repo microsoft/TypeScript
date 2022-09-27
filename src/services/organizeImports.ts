@@ -13,7 +13,7 @@ namespace ts.OrganizeImports {
         host: LanguageServiceHost,
         program: Program,
         preferences: UserPreferences,
-        mode = OrganizeImportsMode.All,
+        mode: OrganizeImportsMode,
     ) {
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
         const maybeRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All ? removeUnusedImports : identity;
