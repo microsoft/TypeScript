@@ -108,75 +108,6 @@ Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', resul
 ======== Type reference directive 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts', primary: true. ========
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.
-[96msrc/projects/b/src/index.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS1192: [0mModule '"/src/projects/node_modules/@types/pg/index"' has no default export.
-
-[7m1[0m import pg from "pg";
-[7m [0m [91m       ~~[0m
-
-lib/lib.es2022.full.d.ts
-  Default library for target 'es2022'
-src/projects/node_modules/@types/pg/index.d.ts
-  Imported via "pg" from file 'src/projects/b/src/index.ts'
-  Entry point for implicit type library 'pg'
-src/projects/b/src/index.ts
-  Matched by default include pattern '**/*'
-  File is ECMAScript module because 'src/projects/b/package.json' has field "type" with value "module"
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-
-//// [/src/projects/a/src/index.js]
-"use strict";
-
-
-
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
-[[90m12:00:28 AM[0m] Projects in this build: 
-    * src/projects/a/tsconfig.json
-    * src/projects/b/tsconfig.json
-
-[[90m12:00:29 AM[0m] Project 'src/projects/a/tsconfig.json' is up to date because newest input 'src/projects/a/src/index.ts' is older than output 'src/projects/a/src/index.js'
-
-[[90m12:00:30 AM[0m] Project 'src/projects/b/tsconfig.json' is out of date because output file 'src/projects/b/src/index.js' does not exist
-
-[[90m12:00:31 AM[0m] Building project '/src/projects/b/tsconfig.json'...
-
-File '/src/projects/b/src/package.json' does not exist.
-Found 'package.json' at '/src/projects/b/package.json'.
-'package.json' does not have a 'typesVersions' field.
-======== Resolving module 'pg' from '/src/projects/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node16'.
-File '/src/projects/b/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/b/package.json' exists according to earlier cached lookups.
-Loading module 'pg' from 'node_modules' folder, target file type 'TypeScript'.
-Directory '/src/projects/b/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/projects/b/node_modules' does not exist, skipping all lookups in it.
-Found 'package.json' at '/src/projects/node_modules/@types/pg/package.json'.
-'package.json' does not have a 'typesVersions' field.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field 'index.d.ts' that references '/src/projects/node_modules/@types/pg/index.d.ts'.
-File '/src/projects/node_modules/@types/pg/index.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
-======== Module name 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts'. ========
-File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
-======== Resolving type reference directive 'pg', containing file '/src/projects/b/__inferred type names__.ts', root directory '/src/projects/node_modules/@types'. ========
-Resolving with primary search path '/src/projects/node_modules/@types'.
-File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field 'index.d.ts' that references '/src/projects/node_modules/@types/pg/index.d.ts'.
-File '/src/projects/node_modules/@types/pg/index.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
-======== Type reference directive 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts', primary: true. ========
-File '/lib/package.json' does not exist.
-File '/package.json' does not exist.
 lib/lib.es2022.full.d.ts
   Default library for target 'es2022'
 src/projects/node_modules/@types/pg/index.d.ts
@@ -189,8 +120,31 @@ src/projects/b/src/index.ts
 exitCode:: ExitStatus.Success
 
 
+//// [/src/projects/a/src/index.js]
+"use strict";
+
+
 //// [/src/projects/b/src/index.js]
 import pg from "pg";
 pg.foo();
+
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
+[[90m12:00:29 AM[0m] Projects in this build: 
+    * src/projects/a/tsconfig.json
+    * src/projects/b/tsconfig.json
+
+[[90m12:00:30 AM[0m] Project 'src/projects/a/tsconfig.json' is up to date because newest input 'src/projects/a/src/index.ts' is older than output 'src/projects/a/src/index.js'
+
+[[90m12:00:31 AM[0m] Project 'src/projects/b/tsconfig.json' is up to date because newest input 'src/projects/b/src/index.ts' is older than output 'src/projects/b/src/index.js'
+
+exitCode:: ExitStatus.Success
 
 
