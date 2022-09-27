@@ -12510,7 +12510,7 @@ namespace ts {
             let indexTypes: Type[] | undefined;
             const isUnion = containingType.flags & TypeFlags.Union;
             // Flags we want to propagate to the result if they exist in all source symbols
-            let optionalFlag = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
+            let optionalFlag: SymbolFlags | undefined;
             let syntheticFlag = CheckFlags.SyntheticMethod;
             let checkFlags = isUnion ? 0 : CheckFlags.Readonly;
             let mergedInstantiations = false;
@@ -12520,14 +12520,14 @@ namespace ts {
                     const prop = getPropertyOfType(type, name, skipObjectFunctionPropertyAugment);
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop) {
-                        if (isUnion) {
-                            optionalFlag |= (prop.flags & SymbolFlags.Optional);
-                        }
-                        else {
-                            // In non-strictNullChecks mode, properties originating in non-member declarations (e.g. module exports
-                            // or globalThis members) are considered optional since `undefined` is implicitly part of the type. This
-                            // matters for narrowing caused by `in` checks (specifically the isTypePresencePossible function).
-                            optionalFlag &= strictNullChecks || prop.flags & (SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor) ? prop.flags : SymbolFlags.Optional;
+                        if (prop.flags & (SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor)) {
+                            optionalFlag ??= isUnion ? SymbolFlags.None : SymbolFlags.Optional;
+                            if (isUnion) {
+                                optionalFlag |= (prop.flags & SymbolFlags.Optional);
+                            }
+                            else {
+                                optionalFlag &= prop.flags;
+                            }
                         }
                         if (!singleProp) {
                             singleProp = prop;
@@ -12646,7 +12646,7 @@ namespace ts {
                 propTypes.push(type);
             }
             addRange(propTypes, indexTypes);
-            const result = createSymbol(SymbolFlags.Property | optionalFlag, name, syntheticFlag | checkFlags);
+            const result = createSymbol(SymbolFlags.Property | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
                 result.valueDeclaration = firstValueDeclaration;
@@ -25257,16 +25257,10 @@ namespace ts {
                 return type;
             }
 
-            function isPossiblyUndefined(type: Type) {
-                // We use TypeFlags.IsUndefined here because TypeFlags.EQUndefined is true for practically all
-                // types in non-strictNullChecks mode.
-                return !!(type.flags & TypeFlags.AnyOrUnknown || getTypeFacts(type) & TypeFacts.IsUndefined);
-            }
-
             function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
                 const prop = getPropertyOfType(type, propName);
                 return prop ?
-                    !!(prop.flags & SymbolFlags.Optional) || isPossiblyUndefined(getTypeOfSymbol(prop)) || assumeTrue :
+                    !!(prop.flags & SymbolFlags.Optional) || assumeTrue :
                     !!getApplicableIndexInfoForName(type, propName) || !assumeTrue;
             }
 
