@@ -132,6 +132,7 @@
         "unittests/tsbuild/lateBoundSymbol.ts",
         "unittests/tsbuild/moduleResolution.ts",
         "unittests/tsbuild/moduleSpecifiers.ts",
+        "unittests/tsbuild/noEmit.ts",
         "unittests/tsbuild/noEmitOnError.ts",
         "unittests/tsbuild/outFile.ts",
         "unittests/tsbuild/outputPaths.ts",
