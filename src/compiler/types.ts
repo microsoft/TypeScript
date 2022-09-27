@@ -6574,8 +6574,8 @@ namespace ts {
         exactOptionalPropertyTypes?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
-        /*@internal*/generateCpuProfile?: string;
-        /*@internal*/generateTrace?: string;
+        generateCpuProfile?: string;
+        generateTrace?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
@@ -6586,9 +6586,9 @@ namespace ts {
         jsx?: JsxEmit;
         keyofStringsOnly?: boolean;
         lib?: string[];
-        /*@internal*/listEmittedFiles?: boolean;
-        /*@internal*/listFiles?: boolean;
-        /*@internal*/explainFiles?: boolean;
+        listEmittedFiles?: boolean;
+        listFiles?: boolean;
+        explainFiles?: boolean;
         /*@internal*/listFilesOnly?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -6631,7 +6631,7 @@ namespace ts {
         preserveValueImports?: boolean;
         /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
-        /* @internal */ pretty?: boolean;
+        pretty?: boolean;
         reactNamespace?: string;
         jsxFactory?: string;
         jsxFragmentFactory?: string;
