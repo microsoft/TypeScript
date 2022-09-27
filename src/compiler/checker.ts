@@ -3637,7 +3637,7 @@ namespace ts {
                 else if (resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
                     const importOrExport =
                         findAncestor(location, isImportDeclaration)?.importClause ||
-                        findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration)) as ImportEqualsDeclaration | ExportDeclaration | undefined;
+                        findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
                     if (importOrExport && !importOrExport.isTypeOnly || findAncestor(location, isImportCall)) {
                         error(
                             errorNode,
