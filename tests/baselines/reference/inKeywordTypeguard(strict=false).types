@@ -902,7 +902,7 @@ function f10(x: { a: unknown }) {
     }
     else {
         x;
->x : { a: unknown; }
+>x : never
     }
 }
 
@@ -921,7 +921,7 @@ function f11(x: { a: any }) {
     }
     else {
         x;
->x : { a: any; }
+>x : never
     }
 }
 
