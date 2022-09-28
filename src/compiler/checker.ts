@@ -7288,6 +7288,7 @@ namespace ts {
                         && symbol.escapedName !== InternalSymbolName.ExportEquals
                         && !(symbol.flags & SymbolFlags.Prototype)
                         && !(symbol.flags & SymbolFlags.Class)
+                        && !(symbol.flags & SymbolFlags.Method)
                         && !isConstMergedWithNSPrintableAsSignatureMerge) {
                         if (propertyAsAlias) {
                             const createdExport = serializeMaybeAliasAssignment(symbol);
@@ -14692,7 +14693,7 @@ namespace ts {
                 if (flags & (ElementFlags.Optional | ElementFlags.Rest)) {
                     lastOptionalOrRestIndex = expandedFlags.length;
                 }
-                expandedTypes.push(type);
+                expandedTypes.push(flags & ElementFlags.Optional ? addOptionality(type, /*isProperty*/ true) : type);
                 expandedFlags.push(flags);
                 if (expandedDeclarations && declaration) {
                     expandedDeclarations.push(declaration);
@@ -15845,7 +15846,18 @@ namespace ts {
                         return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                     }
                     errorIfWritingToReadonlyIndex(indexInfo);
-                    return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                    // When accessing an enum object with its own type,
+                    // e.g. E[E.A] for enum E { A }, undefined shouldn't
+                    // be included in the result type
+                    if ((accessFlags & AccessFlags.IncludeUndefined) &&
+                        !(objectType.symbol &&
+                            objectType.symbol.flags & (SymbolFlags.RegularEnum | SymbolFlags.ConstEnum) &&
+                            (indexType.symbol &&
+                            indexType.flags & TypeFlags.EnumLiteral &&
+                            getParentOfSymbol(indexType.symbol) === objectType.symbol))) {
+                        return getUnionType([indexInfo.type, undefinedType]);
+                    }
+                    return indexInfo.type;
                 }
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
@@ -19754,7 +19766,7 @@ namespace ts {
                         // with another type parameter unless one extends the other. (Remember: comparability is mostly bidirectional!)
                         let constraint = getConstraintOfTypeParameter(source);
                         if (constraint && hasNonCircularBaseConstraint(source)) {
-                            while (constraint && constraint.flags & TypeFlags.TypeParameter) {
+                            while (constraint && someType(constraint, c => !!(c.flags & TypeFlags.TypeParameter))) {
                                 if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false)) {
                                     return result;
                                 }
@@ -21737,7 +21749,8 @@ namespace ts {
 
         function getOptionalType(type: Type, isProperty = false): Type {
             Debug.assert(strictNullChecks);
-            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, isProperty ? missingType : undefinedType]);
+            const missingOrUndefined = isProperty ? missingType : undefinedType;
+            return type.flags & TypeFlags.Undefined || type.flags & TypeFlags.Union && (type as UnionType).types[0] === missingOrUndefined ? type : getUnionType([type, missingOrUndefined]);
         }
 
         function getGlobalNonNullableTypeInstantiation(type: Type) {
@@ -23684,7 +23697,7 @@ namespace ts {
             }
             if (isEntityNameExpression(node.argumentExpression)) {
                 const symbol = resolveEntityName(node.argumentExpression, SymbolFlags.Value, /*ignoreErrors*/ true);
-                if (!symbol || !isConstVariable(symbol)) return undefined;
+                if (!symbol || !(isConstVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
 
                 const declaration = symbol.valueDeclaration;
                 if (declaration === undefined) return undefined;
@@ -23699,7 +23712,12 @@ namespace ts {
 
                 if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node.argumentExpression)) {
                     const initializer = getEffectiveInitializer(declaration);
-                    return initializer && tryGetNameFromType(getTypeOfExpression(initializer));
+                    if (initializer) {
+                        return tryGetNameFromType(getTypeOfExpression(initializer));
+                    }
+                    if (isEnumMember(declaration)) {
+                        return getTextOfPropertyName(declaration.name);
+                    }
                 }
             }
             return undefined;

@@ -44,23 +44,28 @@ class Foo {
                         parent: {
                             textSpan: { // SyntaxList + whitespace (body of method)
                                 start: { line: 3, offset: 16 },
-                                end: { line: 8, offset: 5 } },
+                                end: { line: 8, offset: 5 }
+                            },
                             parent: {
-                                textSpan: { // MethodDeclaration
-                                    start: { line: 3, offset: 5 },
+                                textSpan: { // {}
+                                    start: { line: 3, offset: 15 },
                                     end: { line: 8, offset: 6 } },
                                 parent: {
-                                    textSpan: { // SyntaxList + whitespace (body of class)
-                                        start: { line: 2, offset: 12 },
-                                        end: { line: 9, offset: 1 } },
+                                    textSpan: { // MethodDeclaration
+                                        start: { line: 3, offset: 5 },
+                                        end: { line: 8, offset: 6 } },
                                     parent: {
-                                        textSpan: { // ClassDeclaration
-                                            start: { line: 2, offset: 1 },
-                                            end: { line: 9, offset: 2 } },
+                                        textSpan: { // SyntaxList + whitespace (body of class)
+                                            start: { line: 2, offset: 12 },
+                                            end: { line: 9, offset: 1 } },
                                         parent: {
-                                            textSpan: { // SourceFile (all text)
-                                                start: { line: 1, offset: 1 },
-                                                end: { line: 9, offset: 2 }, } } } } } } } } }]);
+                                            textSpan: { // ClassDeclaration
+                                                start: { line: 2, offset: 1 },
+                                                end: { line: 9, offset: 2 } },
+                                            parent: {
+                                                textSpan: { // SourceFile (all text)
+                                                    start: { line: 1, offset: 1 },
+                                                    end: { line: 9, offset: 2 } } } } } } } } } } }]);
         });
     });
 }

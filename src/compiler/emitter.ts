@@ -3508,6 +3508,7 @@ namespace ts {
         }
 
         function emitExportDeclaration(node: ExportDeclaration) {
+            emitModifiers(node, node.modifiers);
             let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
             if (node.isTypeOnly) {

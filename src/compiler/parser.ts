@@ -2265,7 +2265,7 @@ namespace ts {
 
         function parsePrivateIdentifier(): PrivateIdentifier {
             const pos = getNodePos();
-            const node = factory.createPrivateIdentifier(internPrivateIdentifier(scanner.getTokenText()));
+            const node = factory.createPrivateIdentifier(internPrivateIdentifier(scanner.getTokenValue()));
             nextToken();
             return finishNode(node, pos);
         }

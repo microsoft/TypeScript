@@ -1,0 +1,216 @@
+=== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithEscape1.ts ===
+export class IdentifierNameWithEscape1 {
+>IdentifierNameWithEscape1 : IdentifierNameWithEscape1
+
+    \u0078: number;
+>\u0078 : number
+
+    constructor() {
+        this.\u0078 = 0;
+>this.\u0078 = 0 : 0
+>this.\u0078 : number
+>this : this
+>\u0078 : number
+>0 : 0
+    }
+
+    doThing() {
+>doThing : () => void
+
+        this.x = 42;
+>this.x = 42 : 42
+>this.x : number
+>this : this
+>x : number
+>42 : 42
+    }
+}
+
+=== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithEscape2.ts ===
+export class IdentifierNameWithEscape2 {
+>IdentifierNameWithEscape2 : IdentifierNameWithEscape2
+
+    x\u0078: number;
+>x\u0078 : number
+
+    constructor() {
+        this.x\u0078 = 0;
+>this.x\u0078 = 0 : 0
+>this.x\u0078 : number
+>this : this
+>x\u0078 : number
+>0 : 0
+    }
+
+    doThing() {
+>doThing : () => void
+
+        this.xx = 42;
+>this.xx = 42 : 42
+>this.xx : number
+>this : this
+>xx : number
+>42 : 42
+    }
+}
+
+=== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape1.ts ===
+export class IdentifierNameWithExtendedEscape1 {
+>IdentifierNameWithExtendedEscape1 : IdentifierNameWithExtendedEscape1
+
+    \u{78}: number;
+>\u{78} : number
+
+    constructor() {
+        this.\u{78} = 0;
+>this.\u{78} = 0 : 0
+>this.\u{78} : number
+>this : this
+>\u{78} : number
+>0 : 0
+    }
+
+    doThing() {
+>doThing : () => void
+
+        this.x = 42;
+>this.x = 42 : 42
+>this.x : number
+>this : this
+>x : number
+>42 : 42
+    }
+}
+
+=== tests/cases/conformance/classes/members/privateNames/IdentifierNameWithExtendedEscape2.ts ===
+export class IdentifierNameWithExtendedEscape2 {
+>IdentifierNameWithExtendedEscape2 : IdentifierNameWithExtendedEscape2
+
+    x\u{78}: number;
+>x\u{78} : number
+
+    constructor() {
+        this.x\u{78} = 0;
+>this.x\u{78} = 0 : 0
+>this.x\u{78} : number
+>this : this
+>x\u{78} : number
+>0 : 0
+    }
+
+    doThing() {
+>doThing : () => void
+
+        this.xx = 42;
+>this.xx = 42 : 42
+>this.xx : number
+>this : this
+>xx : number
+>42 : 42
+    }
+}
+
+=== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape1.ts ===
+export class PrivateIdentifierWithEscape1 {
+>PrivateIdentifierWithEscape1 : PrivateIdentifierWithEscape1
+
+    #\u0078: number;
+>#\u0078 : number
+
+    constructor() {
+        this.#\u0078 = 0;
+>this.#\u0078 = 0 : 0
+>this.#\u0078 : number
+>this : this
+>0 : 0
+    }
+
+    doThing() {
+>doThing : () => void
+
+        this.#x = 42;
+>this.#x = 42 : 42
+>this.#x : number
+>this : this
+>42 : 42
+    }
+}
+
+=== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithEscape2.ts ===
+export class PrivateIdentifierWithEscape2 {
+>PrivateIdentifierWithEscape2 : PrivateIdentifierWithEscape2
+
+    #x\u0078: number;
+>#x\u0078 : number
+
+    constructor() {
+        this.#x\u0078 = 0;
+>this.#x\u0078 = 0 : 0
+>this.#x\u0078 : number
+>this : this
+>0 : 0
+    }
+
+    doThing() {
+>doThing : () => void
+
+        this.#xx = 42;
+>this.#xx = 42 : 42
+>this.#xx : number
+>this : this
+>42 : 42
+    }
+}
+
+=== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape1.ts ===
+export class PrivateIdentifierWithExtendedEscape1 {
+>PrivateIdentifierWithExtendedEscape1 : PrivateIdentifierWithExtendedEscape1
+
+    #\u{78}: number;
+>#\u{78} : number
+
+    constructor() {
+        this.#\u{78} = 0;
+>this.#\u{78} = 0 : 0
+>this.#\u{78} : number
+>this : this
+>0 : 0
+    }
+
+    doThing() {
+>doThing : () => void
+
+        this.#x = 42;
+>this.#x = 42 : 42
+>this.#x : number
+>this : this
+>42 : 42
+    }
+}
+
+=== tests/cases/conformance/classes/members/privateNames/PrivateIdentifierNameWithExtendedEscape2.ts ===
+export class PrivateIdentifierWithExtendedEscape2 {
+>PrivateIdentifierWithExtendedEscape2 : PrivateIdentifierWithExtendedEscape2
+
+    #x\u{78}: number;
+>#x\u{78} : number
+
+    constructor() {
+        this.#x\u{78} = 0;
+>this.#x\u{78} = 0 : 0
+>this.#x\u{78} : number
+>this : this
+>0 : 0
+    }
+
+    doThing() {
+>doThing : () => void
+
+        this.#xx = 42;
+>this.#xx = 42 : 42
+>this.#xx : number
+>this : this
+>42 : 42
+    }
+}
+
