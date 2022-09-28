@@ -17,7 +17,6 @@ async function produceLKG() {
     await copyTypesMap();
     await copyScriptOutputs();
     await copyDeclarationOutputs();
-    await buildProtocol();
     await writeGitAttributes();
 }
 
@@ -42,20 +41,6 @@ async function copyLocalizedDiagnostics() {
 
 async function copyTypesMap() {
     await copyFromBuiltLocal("typesMap.json"); // Cannot accommodate copyright header
-}
-
-async function buildProtocol() {
-    const protocolScript = path.join(__dirname, "buildProtocol.js");
-    if (!fs.existsSync(protocolScript)) {
-        throw new Error(`Expected protocol script ${protocolScript} to exist`);
-    }
-
-    const protocolInput = path.join(__dirname, "../src/server/protocol.ts");
-    const protocolServices = path.join(source, "typescriptServices.d.ts");
-    const protocolOutput = path.join(dest, "protocol.d.ts");
-
-    console.log(`Building ${protocolOutput}...`);
-    await exec(protocolScript, [protocolInput, protocolServices, protocolOutput]);
 }
 
 async function copyScriptOutputs() {
