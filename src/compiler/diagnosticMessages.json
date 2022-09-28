@@ -4000,6 +4000,10 @@
         "category": "Error",
         "code": 4125
     },
+    "Using option '{0}: {1}' with '{2}: {3}' is unsupported. Did you mean to use '{4}: {5}' instead?": {
+        "category": "Error",
+        "code": 4126
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

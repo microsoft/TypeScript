@@ -3657,6 +3657,12 @@ namespace ts {
                 createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
             }
 
+            if (options.moduleResolution && options.moduleResolution >= ModuleResolutionKind.Node16) {
+                if (options.module && options.module >= ModuleKind.ES2015 && options.module <= ModuleKind.ESNext) {
+                    createDiagnosticForOption(/*onKey*/ true, "module", /*key2*/ undefined, Diagnostics.Using_option_0_Colon_1_with_2_Colon_3_is_unsupported_Did_you_mean_to_use_4_Colon_5_instead, "module", ModuleKind[options.module], "moduleResolution", ModuleResolutionKind[options.moduleResolution], "module", "nodenext");
+                }
+            }
+
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
             if (!options.noEmit && !options.suppressOutputPathCheck) {
                 const emitHost = getEmitHost();
@@ -3942,13 +3948,13 @@ namespace ts {
             }
         }
 
-        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
+        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number, arg4?: string | number, arg5?: string | number) {
             const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
             const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
-                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
+                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2, arg3, arg4, arg5);
 
             if (needCompilerDiagnostic) {
-                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2, arg3, arg4, arg5));
             }
         }
 
@@ -3968,10 +3974,10 @@ namespace ts {
             return _compilerOptionsObjectLiteralSyntax || undefined;
         }
 
-        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
+        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number, arg4?: string | number, arg5?: string | number): boolean {
             const props = getPropertyAssignment(objectLiteral, key1, key2);
             for (const prop of props) {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2, arg3, arg4, arg5));
             }
             return !!props.length;
         }
