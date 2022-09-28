@@ -9705,7 +9705,7 @@ namespace ts {
                 decl = walkUpBindingElementsAndPatterns(decl);
             }
             if (isParameter(decl)) {
-                return (isExpression(decl.parent) || isObjectLiteralMethod(decl.parent)) && isContextSensitive(decl.parent);
+                return isContextSensitiveFunctionOrObjectLiteralMethod(decl.parent);
             }
             return false;
         }
@@ -9716,8 +9716,9 @@ namespace ts {
                 const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
                 // For a contextually typed parameter it is possible that a type has already
                 // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
-                // to preserve this type. In fact, we want to _prefer_ that type, and it won't
-                // be assigned until contextual typing is complete
+                // to preserve this type. In fact, we need to _prefer_ that type, but it won't
+                // be assigned until contextual typing is complete, so we need to defer in
+                // cases where contextual typing may take place.
                 if (!links.type && !isParameterOfContextSensitiveSignature(symbol)) {
                     links.type = type;
                 }
