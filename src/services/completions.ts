@@ -567,7 +567,7 @@ namespace ts.Completions {
             getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries);
         }
 
-        // >> TODO: prototype remaining cases here
+        // >> TODO: trigger on semi-completed case-keyword
         if (contextToken && isCaseKeyword(contextToken) && preferences.includeCompletionsWithInsertText) {
             const cases = getExhaustiveCaseSnippets(contextToken, sourceFile, preferences, compilerOptions, host, program, formatContext);
             if (cases) {
@@ -624,7 +624,11 @@ namespace ts.Completions {
                 // const existingSymbols = new Map<SymbolId, true>();
                 // const existingLiterals: (number | string | PseudoBigInt)[] = [];
                 // existingLiterals;
-                const existingValues: (string | number | PseudoBigInt)[] = [];
+                // const existingValues: (string | number | PseudoBigInt)[] = [];
+                const existingStrings = new Set<string>();
+                const existingNumbers = new Set<number>();
+                const existingBigInts = new Set<string>();
+                const existingBools = new Set<boolean>();
 
                 for (const clause of clauses) {
                     if (isDefaultClause(clause)) {
@@ -633,35 +637,44 @@ namespace ts.Completions {
                     if (isLiteralExpression(clause.expression)) {
                         const expression = clause.expression;
                         switch (expression.kind) {
-                            case SyntaxKind.StringLiteral:
-                                existingValues.push(expression.text);
-                                continue;
-                            case SyntaxKind.NumericLiteral:
-                                existingValues.push(parseInt(expression.text)); // ??
-                                continue;
-                            case SyntaxKind.BigIntLiteral:
                             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                                continue;
-                            default:
-                                return undefined;
+                            case SyntaxKind.StringLiteral:
+                                existingStrings.add(expression.text);
+                                break;
+                            case SyntaxKind.NumericLiteral:
+                                existingNumbers.add(parseInt(expression.text)); // >> do we need to parse it??
+                                break;
+                            case SyntaxKind.BigIntLiteral:
+                                const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
+                                if (parsedBigInt) {
+                                    existingBigInts.add(pseudoBigIntToString(parsedBigInt)); // >> does it work? answer: no
+                                }
+                                break;
+                            case SyntaxKind.TrueKeyword:
+                                existingBools.add(true);
+                                break;
+                            case SyntaxKind.FalseKeyword:
+                                existingBools.add(false);
+                                break;
                         }
                     }
-                    else {
+                    else if (checker.getSymbolAtLocation(clause.expression)) {
                         const symbol = checker.getSymbolAtLocation(clause.expression);
                         if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
                             // TODO: check that it's an enum member symbol
                             const enumValue = checker.getConstantValue(symbol.valueDeclaration);
-                            if (enumValue) {
-                                existingValues.push(enumValue);
-                            }
-                            else {
-                                return undefined
+                            if (enumValue !== undefined) {
+                                switch (typeof enumValue) {
+                                    case "string":
+                                        existingStrings.add(enumValue);
+                                        break;
+                                    case "number":
+                                        existingNumbers.add(enumValue);
+                                }
                             }
                         }
                     }
-                    return undefined; // We couldn't recognize all existing case clauses, so fail.
                 }
-
 
                 const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
                 const elements: Expression[] = [];
@@ -669,33 +682,35 @@ namespace ts.Completions {
                     if (type.flags & TypeFlags.EnumLiteral) {
                         Debug.assert(type.symbol, "TODO: should this hold always?");
                         Debug.assert(type.symbol.parent, "TODO: should this hold always too?");
-                        // if (existingSymbols.has(getSymbolId(type.symbol))) {
-                        //     continue;
-                        // }
+                        // >> TODO: see if we need to filter enum by their constant vals
                         const target = getEmitScriptTarget(options);
                         // >> TODO: figure out if need an import action
+                        // >> TODO: fix issue when qualified import
                         const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseClause.parent, target);
-                        if (typeNode) {
-                            const typeNodeText = printer.printSnippetList(
-                                ListFormat.None,
-                                factory.createNodeArray([typeNode]),
-                                sourceFile);
-                            typeNodeText;
-
-                            const expr = foo(typeNode, target);
-                            if (expr) {
-                                elements.push(expr);
-                            }
+                        if (!typeNode) {
+                            return undefined;
                         }
+                        const typeNodeText = printer.printSnippetList(
+                            ListFormat.None,
+                            factory.createNodeArray([typeNode]),
+                            sourceFile);
+                        typeNodeText;
+
+                        const expr = foo(typeNode, target);
+                        if (!expr) {
+                            return undefined;
+                        }
+                        elements.push(expr);
                         // >> TODO: what if expression has import node?
                         // const expr = checker.symbolToExpression(type.symbol, SymbolFlags.EnumMember, caseClause.parent, /*flags*/ undefined);
                         // if (expr) {
                         //     return expr;
                         // }
                     // }
-                    }
+                    } // >> TODO: else if boolean???
                     else {
                         // const text = completionNameForLiteral(sourceFile, preferences, type.value);
+                        // >> TODO: filter by existing
                         const literal: Expression = typeof type.value === "object"
                             ? factory.createBigIntLiteral(type.value)
                             : typeof type.value === "number"
@@ -703,21 +718,12 @@ namespace ts.Completions {
                                 : factory.createStringLiteral(type.value);
                         elements.push(literal);
                     }
-                    return undefined;
                 }
 
                 if (elements.length === 0) {
                     return undefined;
                 }
 
-                // const existingClauses = new Set(mapDefined(caseClause.parent.clauses, clause => {
-                //     if (isDefaultClause(clause)) {
-                //         return undefined;
-                //     }
-                //     return clause.expression.getText();
-                // }));
-
-                // elements = filter(elements, element => !existingClauses.has(element[0]));
                 const newClauses = mapDefined(elements, element => {
                     return factory.createCaseClause(element, []);
                 });
@@ -736,9 +742,9 @@ namespace ts.Completions {
                 return {
                     entry: {
                         name: `${firstClause} ...`, // >> TODO: what should this be?
-                        isRecommended: true, // >> I assume that is ok because if there's another recommended, it will be sorted after this one
+                        // isRecommended: true, // >> I assume that is ok because if there's another recommended, it will be sorted after this one
                         kind: ScriptElementKind.unknown, // >> TODO: what should this be?
-                        sortText: SortText.LocalDeclarationPriority,
+                        sortText: SortText.LocalDeclarationPriority, // >> TODO: sort *right after* case keyword
                         insertText,
                         replacementSpan: getReplacementSpanForContextToken(contextToken),
                         hasAction: importAdder.hasFixes() || undefined,

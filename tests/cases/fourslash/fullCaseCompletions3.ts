@@ -12,6 +12,7 @@
 ////     case E.A:
 ////     case 1:
 ////     case 1n:
+////     case 0x1n:
 ////     case "1":
 ////     case `1`:
 ////     case `1${u}`:
@@ -40,6 +41,7 @@ verify.completions(
         },
     },
 );
+
 
 // verify.applyCodeActionFromCompletion("1", {
 //     name: "case E.A: ...",

@@ -22449,35 +22449,7 @@ namespace ts {
          * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
          */
         function parseBigIntLiteralType(text: string) {
-            const negative = text.startsWith("-");
-            const base10Value = parsePseudoBigInt(`${negative ? text.slice(1) : text}n`);
-            return getBigIntLiteralType({ negative, base10Value });
-        }
-
-        /**
-         * Tests whether the provided string can be parsed as a bigint.
-         * @param s The string to test.
-         * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
-         */
-        function isValidBigIntString(s: string, roundTripOnly: boolean): boolean {
-            if (s === "") return false;
-            const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
-            let success = true;
-            scanner.setOnError(() => success = false);
-            scanner.setText(s + "n");
-            let result = scanner.scan();
-            const negative = result === SyntaxKind.MinusToken;
-            if (negative) {
-                result = scanner.scan();
-            }
-            const flags = scanner.getTokenFlags();
-            // validate that
-            // * scanning proceeded without error
-            // * a bigint can be scanned, and that when it is scanned, it is
-            // * the full length of the input string (so the scanner is one character beyond the augmented input length)
-            // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
-            return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
-                && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
+            return getBigIntLiteralType(parseValidBigInt(text));
         }
 
         function isMemberOfStringMapping(source: Type, target: Type): boolean {
