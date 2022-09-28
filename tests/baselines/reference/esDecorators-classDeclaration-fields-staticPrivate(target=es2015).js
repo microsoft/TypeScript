@@ -5,7 +5,6 @@ class C {
     @dec static #field1 = 0;
 }
 
-// TODO: We should translate static private to weakmaps when < ESNext
 @dec
 class D {
     static #field1 = 0;
@@ -33,26 +32,25 @@ let C = (() => {
         _a;
 })();
 let D = (() => {
-    var _a, _field1;
+    var _field1;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var D = (_a = class {
-        },
-        __setFunctionName(_a, "D"),
-        (() => {
-            __esDecorate(null, _classDescriptor = { value: _a }, _classDecorators, { kind: "class", name: _a.name }, null, _classExtraInitializers);
-            D = _classThis = _classDescriptor.value;
-        })(),
-        _field1 = { value: 0 },
-        (() => {
-            __classPrivateFieldGet(_classThis, _a, "f", _field1);
-            __classPrivateFieldSet(_classThis, _a, 1, "f", _field1);
-        })(),
-        (() => {
-            __runInitializers(_classThis, _classExtraInitializers);
-        })(),
-        _a);
+    var D = _classThis = class {
+    };
+    __setFunctionName(_classThis, "D");
+    (() => {
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        D = _classThis = _classDescriptor.value;
+    })();
+    _field1 = { value: 0 };
+    (() => {
+        __classPrivateFieldGet(_classThis, _classThis, "f", _field1);
+        __classPrivateFieldSet(_classThis, _classThis, 1, "f", _field1);
+    })();
+    (() => {
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
     return D = _classThis;
 })();

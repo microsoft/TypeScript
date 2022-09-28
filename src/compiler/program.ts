@@ -2568,7 +2568,7 @@ namespace ts {
         function createSyntheticImport(text: string, file: SourceFile) {
             const externalHelpersModuleReference = factory.createStringLiteral(text);
             const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*assertClause*/ undefined);
-            addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
+            addInternalEmitFlags(importDecl, InternalEmitFlags.NeverApplyImportHelper);
             setParent(externalHelpersModuleReference, importDecl);
             setParent(importDecl, file);
             // explicitly unset the synthesized flag on these declarations so the checker API will answer questions about them

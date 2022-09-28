@@ -724,7 +724,7 @@ namespace ts {
                 insertStatementsAfterStandardPrologue(statements, context.endLexicalEnvironment());
 
                 const iife = factory.createImmediatelyInvokedArrowFunction(statements);
-                setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
+                setInternalEmitFlags(iife, InternalEmitFlags.TypeScriptClassWrapper);
 
                 //  export let C = (() => { ... })();
                 const modifiers = facts & ClassFacts.IsNamedExternalExport ?
@@ -868,6 +868,8 @@ namespace ts {
          * @param node The declaration node.
          */
         function getTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
+            // Decorator metadata is not yet supported for ES decorators.
+            if (!legacyDecorators) return undefined;
             return USE_NEW_TYPE_METADATA_FORMAT ?
                 getNewTypeMetadata(node, container) :
                 getOldTypeMetadata(node, container);

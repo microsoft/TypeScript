@@ -8,7 +8,6 @@ class C {
     @dec static accessor #field1 = 0;
 }
 
-// TODO: We should translate static private to weakmaps when < ESNext
 @dec
 class D {
     static accessor #field1 = 0;

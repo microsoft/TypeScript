@@ -48,7 +48,7 @@ class C {
 
 //// [esDecorators-emitDecoratorMetadata.js]
 let C = (() => {
-    let _classDecorators = [dec, __metadata("design:paramtypes", [Number])];
+    let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
@@ -64,12 +64,12 @@ let C = (() => {
     let _y_initializers = [];
     var C = class {
         static {
-            _method_decorators = [dec, __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)];
-            _set_x_decorators = [dec, __metadata("design:type", Number), __metadata("design:paramtypes", [Number])];
-            _y_decorators = [dec, __metadata("design:type", Number)];
-            _static_method_decorators = [dec, __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)];
-            _static_set_x_decorators = [dec, __metadata("design:type", Number), __metadata("design:paramtypes", [Number])];
-            _static_y_decorators = [dec, __metadata("design:type", Number)];
+            _method_decorators = [dec];
+            _set_x_decorators = [dec];
+            _y_decorators = [dec];
+            _static_method_decorators = [dec];
+            _static_set_x_decorators = [dec];
+            _static_y_decorators = [dec];
             __esDecorate(this, null, _static_method_decorators, { kind: "method", name: "method", static: true, private: false, access: { get() { return this.method; } } }, null, _staticExtraInitializers);
             __esDecorate(this, null, _static_set_x_decorators, { kind: "setter", name: "x", static: true, private: false, access: { set(value) { this.x = value; } } }, null, _staticExtraInitializers);
             __esDecorate(this, null, _method_decorators, { kind: "method", name: "method", static: false, private: false, access: { get() { return this.method; } } }, null, _instanceExtraInitializers);
@@ -94,7 +94,7 @@ let C = (() => {
     return C = _classThis;
 })();
 ((() => {
-    let _classDecorators_1 = [dec, __metadata("design:paramtypes", [Number])];
+    let _classDecorators_1 = [dec];
     let _classDescriptor_1;
     let _classExtraInitializers_1 = [];
     let _classThis_1;
@@ -110,12 +110,12 @@ let C = (() => {
     let _y_initializers = [];
     var C = class {
         static {
-            _method_decorators = [dec, __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)];
-            _set_x_decorators = [dec, __metadata("design:type", Number), __metadata("design:paramtypes", [Number])];
-            _y_decorators = [dec, __metadata("design:type", Number)];
-            _static_method_decorators = [dec, __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)];
-            _static_set_x_decorators = [dec, __metadata("design:type", Number), __metadata("design:paramtypes", [Number])];
-            _static_y_decorators = [dec, __metadata("design:type", Number)];
+            _method_decorators = [dec];
+            _set_x_decorators = [dec];
+            _y_decorators = [dec];
+            _static_method_decorators = [dec];
+            _static_set_x_decorators = [dec];
+            _static_y_decorators = [dec];
             __esDecorate(this, null, _static_method_decorators, { kind: "method", name: "method", static: true, private: false, access: { get() { return this.method; } } }, null, _staticExtraInitializers_1);
             __esDecorate(this, null, _static_set_x_decorators, { kind: "setter", name: "x", static: true, private: false, access: { set(value) { this.x = value; } } }, null, _staticExtraInitializers_1);
             __esDecorate(this, null, _method_decorators, { kind: "method", name: "method", static: false, private: false, access: { get() { return this.method; } } }, null, _instanceExtraInitializers_1);

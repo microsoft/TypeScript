@@ -5,7 +5,6 @@ class C {
     @dec static #method1() {}
 }
 
-// TODO: We should translate static private to weakmaps when < ESNext
 @dec
 class D {
     static #method1() {}
@@ -27,17 +26,19 @@ let C = (() => {
     };
 })();
 let D = (() => {
+    var _method1;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = class {
+        static { __setFunctionName(this, "D"); }
+        static { _method1 = function _method1() { }; }
         static {
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
             __runInitializers(_classThis, _classExtraInitializers);
         }
-        static #method1() { }
     };
     return D = _classThis;
 })();

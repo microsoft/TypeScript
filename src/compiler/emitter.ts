@@ -1243,7 +1243,7 @@ namespace ts {
         }
 
         function beforeEmitNode(node: Node) {
-            if (preserveSourceNewlines && (getEmitFlags(node) & EmitFlags.IgnoreSourceNewlines)) {
+            if (preserveSourceNewlines && (getInternalEmitFlags(node) & InternalEmitFlags.IgnoreSourceNewlines)) {
                 preserveSourceNewlines = false;
             }
         }
@@ -2576,7 +2576,7 @@ namespace ts {
         }
 
         function emitCallExpression(node: CallExpression) {
-            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            const indirectCall = getInternalEmitFlags(node) & InternalEmitFlags.IndirectCall;
             if (indirectCall) {
                 writePunctuation("(");
                 writeLiteral("0");
@@ -2601,7 +2601,7 @@ namespace ts {
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            const indirectCall = getInternalEmitFlags(node) & InternalEmitFlags.IndirectCall;
             if (indirectCall) {
                 writePunctuation("(");
                 writeLiteral("0");
@@ -5413,7 +5413,14 @@ namespace ts {
                     Debug.assert(!prefix && !suffix && !privateName);
                     return generateNameForImportOrExportDeclaration(node as ImportDeclaration | ExportDeclaration);
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassDeclaration: {
+                    Debug.assert(!prefix && !suffix && !privateName);
+                    const name = (node as ClassDeclaration | FunctionDeclaration).name;
+                    if (name && !isGeneratedIdentifier(name)) {
+                        return generateNameForNode(name, /*privateName*/ false, flags, prefix, suffix);
+                    }
+                    return generateNameForExportDefault();
+                }
                 case SyntaxKind.ExportAssignment:
                     Debug.assert(!prefix && !suffix && !privateName);
                     return generateNameForExportDefault();

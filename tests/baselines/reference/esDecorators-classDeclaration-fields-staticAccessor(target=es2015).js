@@ -9,7 +9,6 @@ class C {
     @dec(3) static accessor [field3] = 3;
 }
 
-// TODO: We should translate static private to weakmaps when < ESNext
 @dec
 class D {
     static accessor field1 = 1;
@@ -51,28 +50,27 @@ let C = (() => {
         _a;
 })();
 let D = (() => {
-    var _a, _field1_1_accessor_storage;
+    var _field1_1_accessor_storage;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var D = (_a = class {
-            static get field1() { return __classPrivateFieldGet(_a, _a, "f", _field1_1_accessor_storage); }
-            static set field1(value) { __classPrivateFieldSet(_a, _a, value, "f", _field1_1_accessor_storage); }
-        },
-        __setFunctionName(_a, "D"),
-        (() => {
-            __esDecorate(null, _classDescriptor = { value: _a }, _classDecorators, { kind: "class", name: _a.name }, null, _classExtraInitializers);
-            D = _classThis = _classDescriptor.value;
-        })(),
-        _field1_1_accessor_storage = { value: 1 },
-        (() => {
-            _classThis.field1;
-            _classThis.field1 = 1;
-        })(),
-        (() => {
-            __runInitializers(_classThis, _classExtraInitializers);
-        })(),
-        _a);
+    var D = _classThis = class {
+        static get field1() { return __classPrivateFieldGet(_classThis, _classThis, "f", _field1_1_accessor_storage); }
+        static set field1(value) { __classPrivateFieldSet(_classThis, _classThis, value, "f", _field1_1_accessor_storage); }
+    };
+    __setFunctionName(_classThis, "D");
+    (() => {
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        D = _classThis = _classDescriptor.value;
+    })();
+    _field1_1_accessor_storage = { value: 1 };
+    (() => {
+        _classThis.field1;
+        _classThis.field1 = 1;
+    })();
+    (() => {
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
     return D = _classThis;
 })();

@@ -6893,6 +6893,7 @@ namespace ts {
     function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefined) {
         const {
             flags,
+            internalFlags,
             leadingComments,
             trailingComments,
             commentRange,
@@ -6907,7 +6908,8 @@ namespace ts {
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
-        if (flags) destEmitNode.flags = flags & ~EmitFlags.Immutable;
+        if (flags) destEmitNode.flags = flags;
+        if (internalFlags) destEmitNode.internalFlags = internalFlags & ~InternalEmitFlags.Immutable;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);

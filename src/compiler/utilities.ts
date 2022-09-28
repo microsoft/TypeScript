@@ -561,6 +561,14 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
+    /**
+     * Gets flags that control emit behavior of a node.
+     */
+    export function getInternalEmitFlags(node: Node): InternalEmitFlags {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.internalFlags || 0;
+    }
+
     interface ScriptTargetFeatures {
         [key: string]: { [key: string]: string[] | undefined };
     }

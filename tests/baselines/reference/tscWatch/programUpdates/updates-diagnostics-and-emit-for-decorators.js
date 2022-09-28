@@ -129,21 +129,19 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name) {
 };
 import './b';
 export let A = (() => {
-    var _a;
     let _classDecorators = [((_) => { })];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var A = (_a = class {
-            constructor(p) { }
-        },
-        __setFunctionName(_a, "A"),
-        (() => {
-            __esDecorate(null, _classDescriptor = { value: _a }, _classDecorators, { kind: "class", name: _a.name }, null, _classExtraInitializers);
-            A = _classThis = _classDescriptor.value;
-            __runInitializers(_classThis, _classExtraInitializers);
-        })(),
-        _a);
+    var A = _classThis = class {
+        constructor(p) { }
+    };
+    __setFunctionName(_classThis, "A");
+    (() => {
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        A = _classThis = _classDescriptor.value;
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
     return A = _classThis;
 })();
 

@@ -104,13 +104,19 @@ namespace ts {
         let classThis: Identifier | undefined;
         let classSuper: Identifier | undefined;
         let pendingExpressions: Expression[] | undefined;
+        let shouldTransformPrivateStaticElementsInFile: boolean;
 
         return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             top = undefined;
+            shouldTransformPrivateStaticElementsInFile = false;
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
+            if (shouldTransformPrivateStaticElementsInFile) {
+                addInternalEmitFlags(visited, InternalEmitFlags.TransformPrivateStaticElements);
+                shouldTransformPrivateStaticElementsInFile = false;
+            }
             return visited;
         }
 
@@ -145,14 +151,14 @@ namespace ts {
         }
 
         function exitClass() {
-            Debug.assert(top?.kind === "class");
+            Debug.assert(top?.kind === "class", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class' but got '${top?.kind}' instead.`);
             pendingExpressions = top.savedPendingExpressions;
             top = top.next;
             updateState();
         }
 
         function enterClassElement(node: ClassElement) {
-            Debug.assert(top?.kind === "class");
+            Debug.assert(top?.kind === "class", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class' but got '${top?.kind}' instead.`);
             top = { kind: "class-element", next: top };
             if (isClassStaticBlockDeclaration(node) || isPropertyDeclaration(node) && hasStaticModifier(node)) {
                 top.classThis = top.next.classInfo?.classThis;
@@ -162,20 +168,20 @@ namespace ts {
         }
 
         function exitClassElement() {
-            Debug.assert(top?.kind === "class-element");
-            Debug.assert(top.next?.kind === "class");
+            Debug.assert(top?.kind === "class-element", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class-element' but got '${top?.kind}' instead.`);
+            Debug.assert(top.next?.kind === "class", "Incorrect value for top.next.kind.", () => `Expected top.next.kind to be 'class' but got '${top!.next?.kind}' instead.`);
             top = top.next;
             updateState();
         }
 
         function enterName() {
-            Debug.assert(top?.kind === "class-element");
+            Debug.assert(top?.kind === "class-element", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class-element' but got '${top?.kind}' instead.`);
             top = { kind: "name", next: top };
             updateState();
         }
 
         function exitName() {
-            Debug.assert(top?.kind === "name");
+            Debug.assert(top?.kind === "name", "Incorrect value for top.kind.", () => `Expected top.kind to be 'name' but got '${top?.kind}' instead.`);
             top = top.next;
             updateState();
         }
@@ -193,7 +199,7 @@ namespace ts {
         }
 
         function exitOther() {
-            Debug.assert(top?.kind === "other");
+            Debug.assert(top?.kind === "other", "Incorrect value for top.kind.", () => `Expected top.kind to be 'other' but got '${top?.kind}' instead.`);
             if (top.depth > 0) {
                 Debug.assert(!pendingExpressions);
                 top.depth--;
@@ -435,6 +441,7 @@ namespace ts {
             let trailingBlockStatements: Statement[] | undefined;
             let syntheticConstructor: ConstructorDeclaration | undefined;
             let heritageClauses: NodeArray<HeritageClause> | undefined;
+            let shouldTransformPrivateStaticElementsInClass = false;
 
             // 1. Class decorators are evaluated outside of the private name scope of the class.
             const classDecorators = transformAllDecoratorsOfDeclaration(getAllDecoratorsOfClass(node));
@@ -455,6 +462,14 @@ namespace ts {
                     createLet(classInfo.classExtraInitializersName, factory.createArrayLiteralExpression()),
                     createLet(classInfo.classThis),
                 );
+
+                for (const member of node.members) {
+                    if ((isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member)) {
+                        shouldTransformPrivateStaticElementsInClass = true;
+                        shouldTransformPrivateStaticElementsInFile = true;
+                        break;
+                    }
+                }
             }
 
             // Rewrite `super` in static initializers so that we can use the correct `this`.
@@ -485,8 +500,7 @@ namespace ts {
                 heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             }
 
-            const lexicalClassThis = factory.createThis();
-            const renamedClassThis = classInfo.classThis ?? lexicalClassThis;
+            const renamedClassThis = classInfo.classThis ?? factory.createThis();
 
             // 3. The name of the class is assigned.
             //
@@ -496,7 +510,7 @@ namespace ts {
             // class decorators)
             const needsSetNameHelper = !getOriginalNode(node, isClassLike)?.name && (classDecorators || !isStringLiteral(className) || !isEmptyStringLiteral(className));
             if (needsSetNameHelper) {
-                const setNameExpr = emitHelpers().createSetFunctionNameHelper(lexicalClassThis, className);
+                const setNameExpr = emitHelpers().createSetFunctionNameHelper(factory.createThis(), className);
                 leadingBlockStatements = append(leadingBlockStatements, factory.createExpressionStatement(setNameExpr));
             }
 
@@ -602,10 +616,10 @@ namespace ts {
                 leadingBlockStatements ??= [];
 
                 //  __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: "C" }, _classExtraInitializers);
-                const valueProperty = factory.createPropertyAssignment("value", lexicalClassThis);
+                const valueProperty = factory.createPropertyAssignment("value", factory.createThis());
                 const classDescriptor = factory.createObjectLiteralExpression([valueProperty]);
                 const classDescriptorAssignment = factory.createAssignment(classInfo.classDescriptorName, classDescriptor);
-                const classNameReference = factory.createPropertyAccessExpression(lexicalClassThis, "name");
+                const classNameReference = factory.createPropertyAccessExpression(factory.createThis(), "name");
                 const esDecorateHelper = emitHelpers().createESDecorateHelper(
                     factory.createNull(),
                     classDescriptorAssignment,
@@ -653,6 +667,12 @@ namespace ts {
                 //  }
                 const leadingStaticBlockBody = factory.createBlock(leadingBlockStatements, /*multiline*/ true);
                 const leadingStaticBlock = factory.createClassStaticBlockDeclaration(leadingStaticBlockBody);
+                if (shouldTransformPrivateStaticElementsInClass) {
+                    // We use `InternalEmitFlags.TransformPrivateStaticElements` as a marker on a class static block
+                    // to inform the classFields transform that it shouldn't rename `this` to `_classThis` in the
+                    // transformed class static block.
+                    setInternalEmitFlags(leadingStaticBlock, InternalEmitFlags.TransformPrivateStaticElements);
+                }
                 newMembers = [leadingStaticBlock, ...newMembers];
             }
 
@@ -678,6 +698,7 @@ namespace ts {
             }
 
             const lexicalEnvironment = endLexicalEnvironment();
+            let classExpression: ClassExpression;
             if (classDecorators) {
                 // We use `var` instead of `let` so we can leverage NamedEvaluation to define the class name
                 // and still be able to ensure it is initialized prior to any use in `static {}`.
@@ -701,7 +722,7 @@ namespace ts {
                 //      return C;
                 //  })();
 
-                const classExpression = factory.createClassExpression(/*modifiers*/ undefined, /*name*/ undefined, /*typeParameters*/ undefined, heritageClauses, members);
+                classExpression = factory.createClassExpression(/*modifiers*/ undefined, /*name*/ undefined, /*typeParameters*/ undefined, heritageClauses, members);
                 const classReferenceDeclaration = factory.createVariableDeclaration(classReference, /*exclamationToken*/ undefined, /*type*/ undefined, classExpression);
                 const classReferenceVarDeclList = factory.createVariableDeclarationList([classReferenceDeclaration]);
                 const returnExpr = classInfo.classThis ? factory.createAssignment(classReference, classInfo.classThis) : classReference;
@@ -712,10 +733,21 @@ namespace ts {
             }
             else {
                 //  return <classExpression>;
-                const classExpression = factory.createClassExpression(/*modifiers*/ undefined, node.name, /*typeParameters*/ undefined, heritageClauses, members);
+                classExpression = factory.createClassExpression(/*modifiers*/ undefined, node.name, /*typeParameters*/ undefined, heritageClauses, members);
                 classDefinitionStatements.push(factory.createReturnStatement(classExpression));
             }
 
+            if (shouldTransformPrivateStaticElementsInClass) {
+                addInternalEmitFlags(classExpression, InternalEmitFlags.TransformPrivateStaticElements);
+                for (const member of classExpression.members) {
+                    if ((isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member)) {
+                        addInternalEmitFlags(member, InternalEmitFlags.TransformPrivateStaticElements);
+                    }
+                }
+            }
+
+            setOriginalNode(classExpression, node);
+            getOrCreateEmitNode(classExpression).classThis = classInfo.classThis;
             return factory.createImmediatelyInvokedArrowFunction(factory.mergeLexicalEnvironment(classDefinitionStatements, lexicalEnvironment));
         }
 
@@ -883,9 +915,6 @@ namespace ts {
                 return { modifiers, referencedName, name, initializersName, descriptorName, thisArg };
             }
 
-            // TODO(rbuckton): Handle computed property names outside of currentClassInfo, currentClassThis, currentClassSuper
-            // Debug.assertNotNode(member.name, isComputedPropertyName, "Not yet implemented.");
-
             // Member decorators require privileged access to private names. However, computed property
             // evaluation occurs interspersed with decorator evaluation. This means that if we encounter
             // a computed property name we must inline decorator evaluation.
@@ -997,10 +1026,6 @@ namespace ts {
                 else if (isPropertyDeclaration(member)) {
                     initializersName = memberInfo.memberInitializersName ??= createHelperVariable(member, "initializers");
 
-                    // TODO(rbuckton): remove
-                    // classInfo.pendingVariablesOutsideOfBody ??= [];
-                    // classInfo.pendingVariablesOutsideOfBody.push({ name: initializersName, initializer: factory.createArrayLiteralExpression() });
-
                     if (isStatic(member)) {
                         thisArg = classInfo.classThis;
                     }
@@ -1038,27 +1063,6 @@ namespace ts {
                 }
                 exitName();
             }
-
-            // if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression) && classInfo.pendingVariablesInsideOfBody) {
-            //     let newPendingVariablesInsideOfBody: { name: Identifier, initializer?: Expression }[] | undefined;
-            //     const expressions: Expression[] = [];
-            //     for (const { name, initializer } of classInfo.pendingVariablesInsideOfBody) {
-            //         if (!initializer) {
-            //             newPendingVariablesInsideOfBody ??= [];
-            //             newPendingVariablesInsideOfBody.push({ name });
-            //         }
-            //         else {
-            //             classInfo.pendingVariablesOutsideOfBody ??= [];
-            //             classInfo.pendingVariablesOutsideOfBody.push({ name });
-            //             expressions.push(factory.createAssignment(name, initializer));
-            //         }
-            //     }
-            //     if (expressions.length) {
-            //         expressions.push(name.expression);
-            //         name = factory.updateComputedPropertyName(name, factory.inlineExpressions(expressions));
-            //         classInfo.pendingVariablesInsideOfBody = newPendingVariablesInsideOfBody;
-            //     }
-            // }
 
             return { modifiers, referencedName, name, initializersName, descriptorName, thisArg };
         }
@@ -1121,7 +1125,9 @@ namespace ts {
         function visitPropertyDeclaration(node: PropertyDeclaration) {
             enterClassElement(node);
 
-            // TODO(rbuckton)
+            // TODO(rbuckton): We support decorating `declare x` fields with legacyDecorators, but we currently don't
+            //                 support them with esDecorators. We need to consider whether we will support them in the
+            //                 future, and how. For now, these should be elided by the `ts` transform.
             Debug.assertNotNode(node, isAmbientPropertyDeclaration, "Not yet implemented.");
 
             // 10.2.1.3 RS: EvaluateBody
@@ -1132,7 +1138,7 @@ namespace ts {
             //     ...
 
             const useNamedEvaluation = !!node.initializer && isDecoratedAnonymousClassExpression(node.initializer);
-            const { modifiers, name, referencedName, initializersName, /*descriptorName,*/ thisArg } = partialTransformClassElement(node, useNamedEvaluation, classInfo, hasAccessorModifier(node) ? createAccessorPropertyDescriptorObject : undefined);
+            const { modifiers, name, referencedName, initializersName, descriptorName, thisArg } = partialTransformClassElement(node, useNamedEvaluation, classInfo, hasAccessorModifier(node) ? createAccessorPropertyDescriptorObject : undefined);
 
             startLexicalEnvironment();
 
@@ -1164,41 +1170,6 @@ namespace ts {
                 classInfo.hasStaticInitializers = true;
             }
 
-            // if (hasAccessorModifier(node)) {
-            //     if (descriptorName) {
-            //         // given:
-            //         //  accessor #x = 1;
-            //         //
-            //         // emits:
-            //         //  static {
-            //         //      _esDecorate(null, _private_x_descriptor = { get() { return this.#x_1; }, set(value) { this.#x_1 = value; } }, ...)
-            //         //  }
-            //         //  ...
-            //         //  #x_1 = 1;
-            //         //  get #x() { return _private_x_descriptor.get.call(this); }
-            //         //  set #x(value) { _private_x_descriptor.set.call(this, value); }
-            //         return [
-            //             finishClassElement(createAccessorPropertyBackingField(node, modifiers, initializer), node),
-            //             finishClassElement(createGetAccessorDescriptorForwarder(modifiers, name, descriptorName), node),
-            //             finishClassElement(createSetAccessorDescriptorForwarder(modifiers, name, descriptorName), node),
-            //         ];
-            //     }
-            //     else {
-            //         // given:
-            //         //  accessor x = 1;
-            //         //
-            //         // emits:
-            //         //  #x = 1;
-            //         //  get x() { return this.#x; }
-            //         //  set x(value) { this.#x = value; }
-            //         return [
-            //             finishClassElement(createAccessorPropertyBackingField(node, modifiers, initializer), node),
-            //             finishClassElement(createAccessorPropertyGetRedirector(node, modifiers, name), node),
-            //             finishClassElement(createAccessorPropertySetRedirector(node, modifiers, name), node),
-            //         ];
-            //     }
-            // }
-
             const declarations = endLexicalEnvironment();
             if (some(declarations)) {
                 initializer = factory.createImmediatelyInvokedArrowFunction([
@@ -1208,6 +1179,67 @@ namespace ts {
             }
 
             exitClassElement();
+
+            if (hasAccessorModifier(node)) {
+                if (descriptorName) {
+                    // given:
+                    //  accessor #x = 1;
+                    //
+                    // emits:
+                    //  static {
+                    //      _esDecorate(null, _private_x_descriptor = { get() { return this.#x_1; }, set(value) { this.#x_1 = value; } }, ...)
+                    //  }
+                    //  ...
+                    //  #x_1 = 1;
+                    //  get #x() { return _private_x_descriptor.get.call(this); }
+                    //  set #x(value) { _private_x_descriptor.set.call(this, value); }
+
+                    const commentRange = getCommentRange(node);
+                    const sourceMapRange = getSourceMapRange(node);
+
+                    // Since we're creating two declarations where there was previously one, cache
+                    // the expression for any computed property names.
+                    const name = node.name;
+                    let getterName = name;
+                    let setterName = name;
+                    if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
+                        const cacheVariable = findComputedPropertyNameCacheVariable(name);
+                        if (cacheVariable) {
+                            getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
+                            setterName = factory.updateComputedPropertyName(name, cacheVariable);
+                        }
+                        else {
+                            const temp = factory.createTempVariable(hoistVariableDeclaration);
+                            setSourceMapRange(temp, name.expression);
+                            const expression = visitNode(name.expression, visitor, isExpression);
+                            const assignment = factory.createAssignment(temp, expression);
+                            setSourceMapRange(assignment, name.expression);
+                            getterName = factory.updateComputedPropertyName(name, assignment);
+                            setterName = factory.updateComputedPropertyName(name, temp);
+                        }
+                    }
+
+                    const modifiersWithoutAccessor = visitNodes(modifiers, node => node.kind !== SyntaxKind.AccessorKeyword ? node : undefined);
+
+                    const backingField = createAccessorPropertyBackingField(factory, node, modifiersWithoutAccessor, initializer);
+                    setOriginalNode(backingField, node);
+                    setEmitFlags(backingField, EmitFlags.NoComments);
+                    setSourceMapRange(backingField, sourceMapRange);
+
+                    const getter = createGetAccessorDescriptorForwarder(modifiersWithoutAccessor, getterName, descriptorName);
+                    setOriginalNode(getter, node);
+                    setCommentRange(getter, commentRange);
+                    setSourceMapRange(getter, sourceMapRange);
+
+                    const setter = createSetAccessorDescriptorForwarder(modifiersWithoutAccessor, setterName, descriptorName);
+                    setOriginalNode(setter, node);
+                    setEmitFlags(setter, EmitFlags.NoComments);
+                    setSourceMapRange(setter, sourceMapRange);
+
+                    return [backingField, getter, setter];
+                }
+            }
+
             return finishClassElement(factory.updatePropertyDeclaration(node, modifiers, name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, initializer), node);
         }
 

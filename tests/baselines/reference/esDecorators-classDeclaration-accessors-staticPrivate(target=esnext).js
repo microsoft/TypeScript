@@ -6,7 +6,6 @@ class C {
     @dec(2) static set #method1(value) {}
 }
 
-// TODO: We should translate these to weakmaps when < ESNext
 @dec
 class D {
     static get #method1() { return 0; }
@@ -25,7 +24,6 @@ class C {
     @dec(2)
     static set #method1(value) { }
 }
-// TODO: We should translate these to weakmaps when < ESNext
 @dec
 class D {
     static get #method1() { return 0; }

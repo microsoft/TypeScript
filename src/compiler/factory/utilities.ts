@@ -529,7 +529,7 @@ namespace ts {
                     nodeFactory.createStringLiteral(externalHelpersModuleNameText),
                      /*assertClause*/ undefined
                 );
-                addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
+                addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
                 return externalHelpersImportDeclaration;
             }
         }

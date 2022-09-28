@@ -1,5 +1,11 @@
 /* @internal */
 namespace ts {
+    export const enum PrivateIdentifierKind {
+        Field = "f",
+        Method = "m",
+        Accessor = "a"
+    }
+
     /**
      * Describes the decorator context object passed to a native ECMAScript decorator for a class.
      */
@@ -88,8 +94,8 @@ namespace ts {
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
         const factory = context.factory;
-        const immutableTrue = memoize(() => setEmitFlags(factory.createTrue(), EmitFlags.Immutable));
-        const immutableFalse = memoize(() => setEmitFlags(factory.createFalse(), EmitFlags.Immutable));
+        const immutableTrue = memoize(() => setInternalEmitFlags(factory.createTrue(), InternalEmitFlags.Immutable));
+        const immutableFalse = memoize(() => setInternalEmitFlags(factory.createFalse(), InternalEmitFlags.Immutable));
 
         return {
             getUnscopedHelperName,

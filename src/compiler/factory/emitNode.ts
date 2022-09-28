@@ -21,7 +21,7 @@ namespace ts {
             node.emitNode = {} as EmitNode;
         }
         else {
-            Debug.assert(!(node.emitNode.flags & EmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
+            Debug.assert(!(node.emitNode.internalFlags & InternalEmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
         }
         return node.emitNode;
     }
@@ -72,6 +72,25 @@ namespace ts {
     export function addEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.flags = emitNode.flags | emitFlags;
+        return node;
+    }
+
+    /**
+     * Sets flags that control emit behavior of a node.
+     */
+    /* @internal */
+    export function setInternalEmitFlags<T extends Node>(node: T, emitFlags: InternalEmitFlags) {
+        getOrCreateEmitNode(node).internalFlags = emitFlags;
+        return node;
+    }
+
+    /**
+     * Sets flags that control emit behavior of a node.
+     */
+    /* @internal */
+    export function addInternalEmitFlags<T extends Node>(node: T, emitFlags: InternalEmitFlags) {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.internalFlags = emitNode.internalFlags | emitFlags;
         return node;
     }
 
@@ -276,7 +295,7 @@ namespace ts {
 
     /* @internal */
     export function ignoreSourceNewlines<T extends Node>(node: T): T {
-        getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
+        getOrCreateEmitNode(node).internalFlags |= InternalEmitFlags.IgnoreSourceNewlines;
         return node;
     }
 

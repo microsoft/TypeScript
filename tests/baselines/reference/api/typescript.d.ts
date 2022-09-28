@@ -3361,7 +3361,7 @@ declare namespace ts {
         NoHoisting = 2097152,
         HasEndOfDeclarationMarker = 4194304,
         Iterator = 8388608,
-        NoAsciiEscaping = 16777216,
+        NoAsciiEscaping = 16777216
     }
     export interface EmitHelperBase {
         readonly name: string;

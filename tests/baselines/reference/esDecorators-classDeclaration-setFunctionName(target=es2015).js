@@ -25,56 +25,50 @@ declare let dec: any;
 
 //// [a.js]
 let C = (() => {
-    var _a;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var C = (_a = class {
-        },
-        __setFunctionName(_a, "C"),
-        (() => {
-            __esDecorate(null, _classDescriptor = { value: _a }, _classDecorators, { kind: "class", name: _a.name }, null, _classExtraInitializers);
-            C = _classThis = _classDescriptor.value;
-            __runInitializers(_classThis, _classExtraInitializers);
-        })(),
-        _a);
+    var C = _classThis = class {
+    };
+    __setFunctionName(_classThis, "C");
+    (() => {
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        C = _classThis = _classDescriptor.value;
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
     return C = _classThis;
 })();
 export {};
 //// [b.js]
 export let C = (() => {
-    var _a;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var C = (_a = class {
-        },
-        __setFunctionName(_a, "C"),
-        (() => {
-            __esDecorate(null, _classDescriptor = { value: _a }, _classDecorators, { kind: "class", name: _a.name }, null, _classExtraInitializers);
-            C = _classThis = _classDescriptor.value;
-            __runInitializers(_classThis, _classExtraInitializers);
-        })(),
-        _a);
+    var C = _classThis = class {
+    };
+    __setFunctionName(_classThis, "C");
+    (() => {
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        C = _classThis = _classDescriptor.value;
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
     return C = _classThis;
 })();
 //// [c.js]
 export default (() => {
-    var _a;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var default_1 = (_a = class {
-        },
-        (() => {
-            __setFunctionName(_a, "default");
-            __esDecorate(null, _classDescriptor = { value: _a }, _classDecorators, { kind: "class", name: _a.name }, null, _classExtraInitializers);
-            default_1 = _classThis = _classDescriptor.value;
-            __runInitializers(_classThis, _classExtraInitializers);
-        })(),
-        _a);
+    var default_1 = _classThis = class {
+    };
+    (() => {
+        __setFunctionName(_classThis, "default");
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        default_1 = _classThis = _classDescriptor.value;
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
     return default_1 = _classThis;
 })();

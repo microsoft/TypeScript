@@ -9,7 +9,6 @@ class C {
     @dec(3) static accessor [field3] = 3;
 }
 
-// TODO: We should translate static private to weakmaps when < ESNext
 @dec
 class D {
     static accessor field1 = 1;
@@ -49,18 +48,19 @@ let C = (() => {
     };
 })();
 let D = (() => {
+    var _field1_1_accessor_storage;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = class {
+        static { __setFunctionName(this, "D"); }
         static {
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
         }
-        static #field1_1_accessor_storage = 1;
-        static get field1() { return this.#field1_1_accessor_storage; }
-        static set field1(value) { this.#field1_1_accessor_storage = value; }
+        static get field1() { return __classPrivateFieldGet(this, _classThis, "f", _field1_1_accessor_storage); }
+        static set field1(value) { __classPrivateFieldSet(this, _classThis, value, "f", _field1_1_accessor_storage); }
         static {
             _classThis.field1;
             _classThis.field1 = 1;
@@ -69,5 +69,6 @@ let D = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
+    _field1_1_accessor_storage = { value: 1 };
     return D = _classThis;
 })();

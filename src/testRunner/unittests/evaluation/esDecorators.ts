@@ -1416,6 +1416,21 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
+            describe("redirects private static", () => {
+                it("when: field", () => {
+                    const { C } = exec`
+                        export @((t: any, c): any => class extends t {}) class C {
+                            static #x = 1;
+                            static g() {
+                                this.#x = this.#x + 1;
+                                this.#x++;
+                                return this.#x;
+                            }
+                        }
+                    `;
+                    assert.strictEqual(C.g(), 3);
+                });
+            });
         });
         describe("for: method", () => {
             it("may return undefined", () => {

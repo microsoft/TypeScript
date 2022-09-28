@@ -6,7 +6,6 @@ class C {
     @dec(2) static set #method1(value) {}
 }
 
-// TODO: We should translate these to weakmaps when < ESNext
 @dec
 class D {
     static get #method1() { return 0; }
@@ -38,20 +37,21 @@ let C = (() => {
     };
 })();
 let D = (() => {
+    var _method1_get, _method1_set;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = class {
+        static { __setFunctionName(this, "D"); }
+        static { _method1_get = function _method1_get() { return 0; }, _method1_set = function _method1_set(value) { }; }
         static {
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
         }
-        static get #method1() { return 0; }
-        static set #method1(value) { }
         static {
-            _classThis.#method1;
-            _classThis.#method1 = 1;
+            __classPrivateFieldGet(_classThis, _classThis, "a", _method1_get);
+            __classPrivateFieldSet(_classThis, _classThis, 1, "a", _method1_set);
         }
         static {
             __runInitializers(_classThis, _classExtraInitializers);

@@ -13,12 +13,6 @@ namespace ts {
         ClassStaticThisOrSuperReference = 1 << 1,
     }
 
-    export const enum PrivateIdentifierKind {
-        Field = "f",
-        Method = "m",
-        Accessor = "a"
-    }
-
     interface PrivateIdentifierInfoBase {
         /**
          * brandCheckIdentifier can contain:
@@ -61,10 +55,6 @@ namespace ts {
     interface PrivateIdentifierInstanceFieldInfo extends PrivateIdentifierInfoBase {
         kind: PrivateIdentifierKind.Field;
         isStatic: false;
-        /**
-         * Defined for ease of access when in a union with PrivateIdentifierStaticFieldInfo.
-         */
-        variableName: undefined;
     }
 
     interface PrivateIdentifierStaticFieldInfo extends PrivateIdentifierInfoBase {
@@ -76,30 +66,28 @@ namespace ts {
         variableName: Identifier;
     }
 
-    type PrivateIdentifierInfo =
-        | PrivateIdentifierMethodInfo
-        | PrivateIdentifierInstanceFieldInfo
-        | PrivateIdentifierStaticFieldInfo
-        | PrivateIdentifierAccessorInfo;
-
-    interface PrivateIdentifierEnvironment {
+    interface PrivateEnvironmentData {
         /**
          * Used for prefixing generated variable names.
          */
         className?: Identifier;
+
         /**
          * Used for brand check on private methods.
          */
         weakSetName?: Identifier;
-        /**
-         * A mapping of private names to information needed for transformation.
-         */
-        identifiers?: UnderscoreEscapedMap<PrivateIdentifierInfo>;
-        /**
-         * A mapping of generated private names to information needed for transformation.
-         */
-        generatedIdentifiers?: ESMap<Node, PrivateIdentifierInfo>;
     }
+
+    interface UntransformedPrivateIdentifierInfo {
+        kind: "untransformed";
+    }
+
+    type PrivateIdentifierInfo =
+        | PrivateIdentifierMethodInfo
+        | PrivateIdentifierInstanceFieldInfo
+        | PrivateIdentifierStaticFieldInfo
+        | PrivateIdentifierAccessorInfo
+        | UntransformedPrivateIdentifierInfo;
 
     interface ClassLexicalEnvironment {
         facts: ClassFacts;
@@ -107,11 +95,11 @@ namespace ts {
          * Used for brand checks on static members, and `this` references in static initializers
          */
         classConstructor: Identifier | undefined;
+        classThis: Identifier | undefined;
         /**
          * Used for `super` references in static initializers.
          */
         superClassReference: Identifier | undefined;
-        privateIdentifierEnvironment: PrivateIdentifierEnvironment | undefined;
     }
 
     const enum ClassFacts {
@@ -121,6 +109,9 @@ namespace ts {
         NeedsClassSuperReference = 1 << 2,
         NeedsSubstitutionForThisInClassStaticField = 1 << 3,
     }
+
+    type LexicalEnv = LexicalEnvironment<ClassLexicalEnvironment | undefined, PrivateEnvironmentData, PrivateIdentifierInfo>;
+    type PrivateEnv = PrivateEnvironment<PrivateEnvironmentData, PrivateIdentifierInfo>;
 
     /**
      * Transforms ECMAScript Class Syntax.
@@ -177,6 +168,7 @@ namespace ts {
         const previousOnEmitNode = context.onEmitNode;
         context.onEmitNode = onEmitNode;
 
+        let shouldTransformPrivateStaticElementsInFile = false;
         let enabledSubstitutions: ClassPropertySubstitutionFlags;
 
         let classAliases: Identifier[];
@@ -193,18 +185,24 @@ namespace ts {
          */
         let pendingStatements: Statement[] | undefined;
 
-        const classLexicalEnvironmentStack: (ClassLexicalEnvironment | undefined)[] = [];
-        const classLexicalEnvironmentMap = new Map<number, ClassLexicalEnvironment>();
+        let lexicalEnvironment: LexicalEnv | undefined;
+        const lexicalEnvironmentMap = new Map<Node, LexicalEnv>();
 
-        let currentClassLexicalEnvironment: ClassLexicalEnvironment | undefined;
         let currentClassContainer: ClassLikeDeclaration | undefined;
-        let currentComputedPropertyNameClassLexicalEnvironment: ClassLexicalEnvironment | undefined;
         let currentStaticPropertyDeclarationOrStaticBlock: PropertyDeclaration | ClassStaticBlockDeclaration | undefined;
+        let shouldSubstituteThisWithClassThis = false;
+        let previousShouldSubstituteThisWithClassThis = false;
 
         return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !shouldTransformAnything) {
+            if (node.isDeclarationFile) {
+                return node;
+            }
+
+            lexicalEnvironment = undefined;
+            shouldTransformPrivateStaticElementsInFile = !!(getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements);
+            if (!shouldTransformAnything && !shouldTransformPrivateStaticElementsInFile) {
                 return node;
             }
 
@@ -402,13 +400,6 @@ namespace ts {
             return setOriginalNode(factory.createIdentifier(""), node);
         }
 
-        type PrivateIdentifierInExpression = BinaryExpression & { readonly left: PrivateIdentifier, readonly token: InKeyword };
-
-        function isPrivateIdentifierInExpression(node: BinaryExpression): node is PrivateIdentifierInExpression {
-            return isPrivateIdentifier(node.left)
-                && node.operatorToken.kind === SyntaxKind.InKeyword;
-        }
-
         /**
          * Visits `#id in expr`
          */
@@ -475,7 +466,10 @@ namespace ts {
 
             if (isIdentifier(node.name) && node.initializer &&
                 isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
-                const referencedName = factory.createStringLiteralFromNode(node.name);
+                const original = getOriginalNode(node.initializer, isClassLike);
+                const referencedName = original && !original.name && hasSyntacticModifier(original, ModifierFlags.Default) ?
+                    factory.createStringLiteral("default") :
+                    factory.createStringLiteralFromNode(node.name);
                 const name = visitNode(node.name, visitor, isBindingName);
                 const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
                 return factory.updateVariableDeclaration(node, name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
@@ -504,7 +498,10 @@ namespace ts {
             if (!node.dotDotDotToken &&
                 isIdentifier(node.name) && node.initializer &&
                 isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
-                const referencedName = factory.createStringLiteralFromNode(node.name);
+                const original = getOriginalNode(node.initializer, isClassLike);
+                const referencedName = original && !original.name && hasSyntacticModifier(original, ModifierFlags.Default) ?
+                    factory.createStringLiteral("default") :
+                    factory.createStringLiteralFromNode(node.name);
                 const propertyName = visitNode(node.propertyName, visitor, isPropertyName);
                 const name = visitNode(node.name, visitor, isBindingName);
                 const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
@@ -559,10 +556,16 @@ namespace ts {
             return fallbackVisitor(node);
         }
 
+        function shouldTransformClassElementToWeakMap(node: PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierPropertyDeclaration) {
+            if (shouldTransformPrivateElementsOrClassStaticBlocks) return true;
+            if (hasStaticModifier(node) && getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) return true;
+            return false;
+        }
+
         function visitMethodOrAccessorDeclaration(node: MethodDeclaration | AccessorDeclaration) {
             Debug.assert(!hasDecorators(node));
 
-            if (!shouldTransformPrivateElementsOrClassStaticBlocks || !isPrivateIdentifier(node.name)) {
+            if (!isPrivateIdentifierClassElementDeclaration(node) || !shouldTransformClassElementToWeakMap(node)) {
                 return visitEachChild(node, classElementVisitor, context);
             }
 
@@ -681,7 +684,7 @@ namespace ts {
         }
 
         function transformPrivateFieldInitializer(node: PrivateIdentifierPropertyDeclaration) {
-            if (shouldTransformPrivateElementsOrClassStaticBlocks) {
+            if (shouldTransformClassElementToWeakMap(node)) {
                 // If we are transforming private elements into WeakMap/WeakSet, we should elide the node.
                 const info = accessPrivateIdentifier(node.name);
                 Debug.assert(info, "Undeclared private name for property declaration.");
@@ -769,7 +772,8 @@ namespace ts {
         function visitPropertyDeclaration(node: PropertyDeclaration) {
             // If this is an auto-accessor, we defer to `transformAutoAccessor`. That function
             // will in turn call `transformFieldInitializer` as needed.
-            if (shouldTransformAutoAccessors && isAutoAccessorPropertyDeclaration(node)) {
+            if (isAutoAccessorPropertyDeclaration(node) && (shouldTransformAutoAccessors ||
+                hasStaticModifier(node) && getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements)) {
                 return transformAutoAccessor(node);
             }
 
@@ -783,7 +787,7 @@ namespace ts {
         function createPrivateIdentifierAccessHelper(info: PrivateIdentifierInfo, receiver: Expression): Expression {
             setCommentRange(receiver, moveRangePos(receiver, -1));
 
-            switch(info.kind) {
+            switch (info.kind) {
                 case PrivateIdentifierKind.Accessor:
                     return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
                         receiver,
@@ -803,15 +807,18 @@ namespace ts {
                         receiver,
                         info.brandCheckIdentifier,
                         info.kind,
-                        info.variableName
+                        info.isStatic ? info.variableName : undefined
                     );
+                case "untransformed":
+                    return Debug.fail("Access helpers should not be created for untransformed private elements");
+
                 default:
                     Debug.assertNever(info, "Unknown private element type");
             }
         }
 
         function visitPropertyAccessExpression(node: PropertyAccessExpression) {
-            if (shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifier(node.name)) {
+            if (isPrivateIdentifier(node.name)) {
                 const privateIdentifierInfo = accessPrivateIdentifier(node.name);
                 if (privateIdentifierInfo) {
                     return setTextRange(
@@ -827,8 +834,8 @@ namespace ts {
                 isSuperProperty(node) &&
                 isIdentifier(node.name) &&
                 currentStaticPropertyDeclarationOrStaticBlock &&
-                currentClassLexicalEnvironment) {
-                const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
+                lexicalEnvironment?.data) {
+                const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
                 if (facts & ClassFacts.ClassWasDecorated) {
                     return visitInvalidSuperProperty(node);
                 }
@@ -851,8 +858,8 @@ namespace ts {
             if (shouldTransformSuperInStaticInitializers &&
                 isSuperProperty(node) &&
                 currentStaticPropertyDeclarationOrStaticBlock &&
-                currentClassLexicalEnvironment) {
-                const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
+                lexicalEnvironment?.data) {
+                const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
                 if (facts & ClassFacts.ClassWasDecorated) {
                     return visitInvalidSuperProperty(node);
                 }
@@ -876,8 +883,8 @@ namespace ts {
             if (node.operator === SyntaxKind.PlusPlusToken ||
                 node.operator === SyntaxKind.MinusMinusToken) {
                 const operand = skipParentheses(node.operand);
-                if (shouldTransformPrivateElementsOrClassStaticBlocks &&
-                    isPrivateIdentifierPropertyAccessExpression(operand)) {
+
+                if (isPrivateIdentifierPropertyAccessExpression(operand)) {
                     let info: PrivateIdentifierInfo | undefined;
                     if (info = accessPrivateIdentifier(operand.name)) {
                         const receiver = visitNode(operand.expression, visitor, isExpression);
@@ -904,7 +911,7 @@ namespace ts {
                 else if (shouldTransformSuperInStaticInitializers &&
                     isSuperProperty(operand) &&
                     currentStaticPropertyDeclarationOrStaticBlock &&
-                    currentClassLexicalEnvironment) {
+                    lexicalEnvironment?.data) {
                     // converts `++super.a` into `(Reflect.set(_baseTemp, "a", (_a = Reflect.get(_baseTemp, "a", _classTemp), _b = ++_a), _classTemp), _b)`
                     // converts `++super[f()]` into `(Reflect.set(_baseTemp, _a = f(), (_b = Reflect.get(_baseTemp, _a, _classTemp), _c = ++_b), _classTemp), _c)`
                     // converts `--super.a` into `(Reflect.set(_baseTemp, "a", (_a = Reflect.get(_baseTemp, "a", _classTemp), _b = --_a), _classTemp), _b)`
@@ -913,7 +920,7 @@ namespace ts {
                     // converts `super[f()]++` into `(Reflect.set(_baseTemp, _a = f(), (_b = Reflect.get(_baseTemp, _a, _classTemp), _c = _b++), _classTemp), _c)`
                     // converts `super.a--` into `(Reflect.set(_baseTemp, "a", (_a = Reflect.get(_baseTemp, "a", _classTemp), _b = _a--), _classTemp), _b)`
                     // converts `super[f()]--` into `(Reflect.set(_baseTemp, _a = f(), (_b = Reflect.get(_baseTemp, _a, _classTemp), _c = _b--), _classTemp), _c)`
-                    const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
+                    const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
                     if (facts & ClassFacts.ClassWasDecorated) {
                         const expression = visitInvalidSuperProperty(operand);
                         return isPrefixUnaryExpression(node) ?
@@ -986,8 +993,8 @@ namespace ts {
         }
 
         function visitCallExpression(node: CallExpression) {
-            if (shouldTransformPrivateElementsOrClassStaticBlocks &&
-                isPrivateIdentifierPropertyAccessExpression(node.expression)) {
+            if (isPrivateIdentifierPropertyAccessExpression(node.expression) &&
+                accessPrivateIdentifier(node.expression.name)) {
                 // obj.#x()
 
                 // Transform call expressions of private names to properly bind the `this` parameter.
@@ -1012,14 +1019,14 @@ namespace ts {
             if (shouldTransformSuperInStaticInitializers &&
                 isSuperProperty(node.expression) &&
                 currentStaticPropertyDeclarationOrStaticBlock &&
-                currentClassLexicalEnvironment?.classConstructor) {
+                lexicalEnvironment?.data?.classConstructor) {
                 // super.x()
                 // super[x]()
 
                 // converts `super.f(...)` into `Reflect.get(_baseTemp, "f", _classTemp).call(_classTemp, ...)`
                 const invocation = factory.createFunctionCallCall(
                     visitNode(node.expression, visitor, isExpression),
-                    currentClassLexicalEnvironment.classConstructor,
+                    lexicalEnvironment.data.classConstructor,
                     visitNodes(node.arguments, visitor, isExpression)
                 );
                 setOriginalNode(invocation, node);
@@ -1031,8 +1038,8 @@ namespace ts {
         }
 
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            if (shouldTransformPrivateElementsOrClassStaticBlocks &&
-                isPrivateIdentifierPropertyAccessExpression(node.tag)) {
+            if (isPrivateIdentifierPropertyAccessExpression(node.tag) &&
+                accessPrivateIdentifier(node.tag.name)) {
                 // Bind the `this` correctly for tagged template literals when the tag is a private identifier property access.
                 const { thisArg, target } = factory.createCallBinding(node.tag, hoistVariableDeclaration, languageVersion);
                 return factory.updateTaggedTemplateExpression(
@@ -1049,12 +1056,12 @@ namespace ts {
             if (shouldTransformSuperInStaticInitializers &&
                 isSuperProperty(node.tag) &&
                 currentStaticPropertyDeclarationOrStaticBlock &&
-                currentClassLexicalEnvironment?.classConstructor) {
+                lexicalEnvironment?.data?.classConstructor) {
 
                 // converts `` super.f`x` `` into `` Reflect.get(_baseTemp, "f", _classTemp).bind(_classTemp)`x` ``
                 const invocation = factory.createFunctionBindCall(
                     visitNode(node.tag, visitor, isExpression),
-                    currentClassLexicalEnvironment.classConstructor,
+                    lexicalEnvironment.data.classConstructor,
                     []
                 );
                 setOriginalNode(invocation, node);
@@ -1070,11 +1077,11 @@ namespace ts {
         }
 
         function transformClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
-            if (shouldTransformPrivateElementsOrClassStaticBlocks) {
-                if (currentClassLexicalEnvironment) {
-                    classLexicalEnvironmentMap.set(getOriginalNodeId(node), currentClassLexicalEnvironment);
-                }
+            if (lexicalEnvironment) {
+                lexicalEnvironmentMap.set(getOriginalNode(node), lexicalEnvironment);
+            }
 
+            if (shouldTransformPrivateElementsOrClassStaticBlocks) {
                 startLexicalEnvironment();
                 let statements = setCurrentStaticPropertyDeclarationOrStaticBlockAnd(
                     node,
@@ -1104,8 +1111,10 @@ namespace ts {
                         }
                     }
                 }
+
                 const hasTransformableStatics =
-                    shouldTransformPrivateElementsOrClassStaticBlocks &&
+                    (shouldTransformPrivateElementsOrClassStaticBlocks ||
+                        !!(getInternalEmitFlags(node) && InternalEmitFlags.TransformPrivateStaticElements)) &&
                     some(staticPropertiesOrClassStaticBlocks, node =>
                         isClassStaticBlockDeclaration(node) ||
                         isPrivateIdentifierClassElementDeclaration(node) ||
@@ -1168,7 +1177,10 @@ namespace ts {
                     case SyntaxKind.QuestionQuestionEqualsToken:
                         if (isIdentifier(node.left) &&
                             isAnonymousClassDeclarationNeedingAssignedName(node.right)) {
-                            const referencedName = factory.createStringLiteralFromNode(node.left);
+                            const original = getOriginalNode(node.right, isClassLike);
+                            const referencedName = original && !original.name && hasSyntacticModifier(original, ModifierFlags.Default) ?
+                                factory.createStringLiteral("default") :
+                                factory.createStringLiteralFromNode(node.left);
                             const left = visitNode(node.left, visitor, isExpression);
                             const right = visitNode(node.right, node => namedEvaluationVisitor(node, referencedName), isExpression);
                             return factory.updateBinaryExpression(node, left, node.operatorToken, right);
@@ -1176,8 +1188,7 @@ namespace ts {
                         break;
                 }
 
-                if (shouldTransformPrivateElementsOrClassStaticBlocks &&
-                    isPrivateIdentifierPropertyAccessExpression(node.left)) {
+                if (isPrivateIdentifierPropertyAccessExpression(node.left)) {
                     // obj.#x = ...
                     const info = accessPrivateIdentifier(node.left.name);
                     if (info) {
@@ -1193,12 +1204,12 @@ namespace ts {
                 else if (shouldTransformSuperInStaticInitializers &&
                     isSuperProperty(node.left) &&
                     currentStaticPropertyDeclarationOrStaticBlock &&
-                    currentClassLexicalEnvironment) {
+                    lexicalEnvironment?.data) {
                     // super.x = ...
                     // super[x] = ...
                     // super.x += ...
                     // super.x -= ...
-                    const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
+                    const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
                     if (facts & ClassFacts.ClassWasDecorated) {
                         return factory.updateBinaryExpression(
                             node,
@@ -1265,8 +1276,7 @@ namespace ts {
                     }
                 }
             }
-            if (shouldTransformPrivateElementsOrClassStaticBlocks &&
-                isPrivateIdentifierInExpression(node)) {
+            if (isPrivateIdentifierInExpression(node)) {
                 // #x in obj
                 return transformPrivateIdentifierInInExpression(node);
             }
@@ -1364,8 +1374,11 @@ namespace ts {
                         info.brandCheckIdentifier,
                         right,
                         info.kind,
-                        info.variableName
+                        info.isStatic ? info.variableName : undefined
                     );
+                case "untransformed":
+                    return Debug.fail("Access helpers should not be created for untransformed private elements");
+
                 default:
                     Debug.assertNever(info, "Unknown private element type");
             }
@@ -1383,7 +1396,9 @@ namespace ts {
             }
             for (const member of node.members) {
                 if (!isStatic(member)) continue;
-                if (member.name && (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) && shouldTransformPrivateElementsOrClassStaticBlocks) {
+                if (member.name &&
+                    (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) &&
+                    shouldTransformPrivateElementsOrClassStaticBlocks) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
@@ -1404,7 +1419,7 @@ namespace ts {
         }
 
         function visitExpressionWithTypeArgumentsInHeritageClause(node: ExpressionWithTypeArguments) {
-            const facts = currentClassLexicalEnvironment?.facts || ClassFacts.None;
+            const facts = lexicalEnvironment?.data?.facts || ClassFacts.None;
             if (facts & ClassFacts.NeedsClassSuperReference) {
                 const temp = factory.createTempVariable(hoistVariableDeclaration, /*reserveInNestedScopes*/ true);
                 getClassLexicalEnvironment().superClassReference = temp;
@@ -1423,19 +1438,23 @@ namespace ts {
         function visitInNewClassLexicalEnvironment<T extends ClassLikeDeclaration, U>(node: T, referencedName: Expression | undefined, visitor: (node: T, facts: ClassFacts, referencedName: Expression | undefined) => U) {
             const savedCurrentClassContainer = currentClassContainer;
             const savedPendingExpressions = pendingExpressions;
+            const savedLexicalEnvironment = lexicalEnvironment;
             currentClassContainer = node;
             pendingExpressions = undefined;
             startClassLexicalEnvironment();
 
-            if (shouldTransformPrivateElementsOrClassStaticBlocks) {
+            const shouldAlwaysTransformPrivateStaticElements = getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements;
+            if (shouldTransformPrivateElementsOrClassStaticBlocks || shouldAlwaysTransformPrivateStaticElements) {
                 const name = getNameOfDeclaration(node);
                 if (name && isIdentifier(name)) {
-                    getPrivateIdentifierEnvironment().className = name;
+                    getPrivateIdentifierEnvironment().data.className = name;
                 }
+            }
 
+            if (shouldTransformPrivateElementsOrClassStaticBlocks) {
                 const privateInstanceMethodsAndAccessors = getPrivateInstanceMethodsAndAccessors(node);
                 if (some(privateInstanceMethodsAndAccessors)) {
-                    getPrivateIdentifierEnvironment().weakSetName = createHoistedVariableForClass(
+                    getPrivateIdentifierEnvironment().data.weakSetName = createHoistedVariableForClass(
                         "instances",
                         privateInstanceMethodsAndAccessors[0].name
                     );
@@ -1453,6 +1472,7 @@ namespace ts {
 
             const result = visitor(node, facts, referencedName);
             endClassLexicalEnvironment();
+            Debug.assert(lexicalEnvironment === savedLexicalEnvironment);
             currentClassContainer = savedCurrentClassContainer;
             pendingExpressions = savedPendingExpressions;
             return result;
@@ -1468,9 +1488,28 @@ namespace ts {
             // then we need to allocate a temp variable to hold on to that reference.
             let pendingClassReferenceAssignment: BinaryExpression | undefined;
             if (facts & ClassFacts.NeedsClassConstructorReference) {
-                const temp = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
-                getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
-                pendingClassReferenceAssignment = factory.createAssignment(temp, factory.getInternalName(node));
+                // If we aren't transforming class static blocks, then we can't reuse `_classThis` since in
+                // `class C { ... static { _classThis = ... } }; _classThis = C` the outer assignment would occur *after*
+                // class static blocks evaluate and would overwrite the replacement constructor produced by class
+                // decorators.
+
+                // If we are transforming class static blocks, then we can reuse `_classThis` since the assignment
+                // will be evaluated *before* the transformed static blocks are evaluated and thus won't overwrite
+                // the replacement constructor.
+
+                if (shouldTransformPrivateElementsOrClassStaticBlocks && node.emitNode?.classThis) {
+                    getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
+                    pendingClassReferenceAssignment = factory.createAssignment(node.emitNode.classThis, factory.getInternalName(node));
+                }
+                else {
+                    const temp = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
+                    getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
+                    pendingClassReferenceAssignment = factory.createAssignment(temp, factory.getInternalName(node));
+                }
+
+                if (node.emitNode?.classThis) {
+                    getClassLexicalEnvironment().classThis = node.emitNode.classThis;
+                }
             }
 
             const modifiers = visitNodes(node.modifiers, visitor, isModifierLike);
@@ -1501,7 +1540,7 @@ namespace ts {
                 statements.push(factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)));
             }
 
-            if (shouldTransformInitializersUsingSet || shouldTransformPrivateElementsOrClassStaticBlocks) {
+            if (shouldTransformInitializersUsingSet || shouldTransformPrivateElementsOrClassStaticBlocks || getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) {
                 // Emit static property assignment. Because classDeclaration is lexically evaluated,
                 // it is safe to emit static property assignment after classDeclaration
                 // From ES6 specification:
@@ -1530,27 +1569,44 @@ namespace ts {
             // class declaration transformation. The VariableStatement visitor will insert
             // these statements after the class expression variable statement.
             const isDecoratedClassDeclaration = !!(facts & ClassFacts.ClassWasDecorated);
-
             const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
-
             const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
+
             let temp: Identifier | undefined;
             function createClassTempVar() {
+                // If we aren't transforming class static blocks, then we can't reuse `_classThis` since in
+                // `_classThis = class { ... static { _classThis = ... } }` the outer assignment would occur *after*
+                // class static blocks evaluate and would overwrite the replacement constructor produced by class
+                // decorators.
+
+                // If we are transforming class static blocks, then we can reuse `_classThis` since the assignment
+                // will be evaluated *before* the transformed static blocks are evaluated and thus won't overwrite
+                // the replacement constructor.
+
+                if (shouldTransformPrivateElementsOrClassStaticBlocks && node.emitNode?.classThis) {
+                    return getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
+                }
+
                 const classCheckFlags = resolver.getNodeCheckFlags(node);
                 const isClassWithConstructorReference = classCheckFlags & NodeCheckFlags.ClassWithConstructorReference;
                 const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
-                return factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, !!isClassWithConstructorReference);
+                const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, !!isClassWithConstructorReference);
+                getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
+                return temp;
+            }
+
+            if (node.emitNode?.classThis) {
+                getClassLexicalEnvironment().classThis = node.emitNode.classThis;
             }
 
             if (facts & ClassFacts.NeedsClassConstructorReference) {
-                temp = createClassTempVar();
-                getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
+                temp ??= createClassTempVar();
             }
 
             const modifiers = visitNodes(node.modifiers, visitor, isModifierLike);
             const heritageClauses = visitNodes(node.heritageClauses, heritageClauseVisitor, isHeritageClause);
             const { members, prologue } = transformClassMembers(node);
-            const classExpression = factory.updateClassExpression(
+            let classExpression = factory.updateClassExpression(
                 node,
                 modifiers,
                 node.name,
@@ -1567,7 +1623,7 @@ namespace ts {
             // Static initializers are transformed to `static {}` blocks when `useDefineForClassFields: false`
             // and not also transforming static blocks.
             const hasTransformableStatics =
-                shouldTransformPrivateElementsOrClassStaticBlocks &&
+                (shouldTransformPrivateElementsOrClassStaticBlocks || getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) &&
                 some(staticPropertiesOrClassStaticBlocks, node =>
                     isClassStaticBlockDeclaration(node) ||
                     isPrivateIdentifierClassElementDeclaration(node) ||
@@ -1578,34 +1634,50 @@ namespace ts {
                     Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
                     // Write any pending expressions from elided or moved computed property names
-                    if (pendingStatements && pendingExpressions && some(pendingExpressions)) {
-                        pendingStatements.push(factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)));
-                    }
-
-                    if (pendingStatements && some(staticPropertiesOrClassStaticBlocks)) {
-                        addPropertyOrClassStaticBlockStatements(pendingStatements, staticPropertiesOrClassStaticBlocks, factory.getInternalName(node));
+                    if (some(pendingExpressions)) {
+                        addRange(pendingStatements, map(pendingExpressions, factory.createExpressionStatement));
                     }
 
                     if (referencedName) {
-                        temp ??= createClassTempVar();
+                        if (shouldTransformPrivateElementsOrClassStaticBlocks) {
+                            const setNameExpression = emitHelpers().createSetFunctionNameHelper(temp ?? node.emitNode?.classThis ?? factory.getInternalName(node), referencedName);
+                            pendingStatements.push(factory.createExpressionStatement(setNameExpression));
+                        }
+                        else {
+                            const setNameExpression = emitHelpers().createSetFunctionNameHelper(factory.createThis(), referencedName);
+                            classExpression = factory.updateClassExpression(
+                                classExpression,
+                                classExpression.modifiers,
+                                classExpression.name,
+                                classExpression.typeParameters,
+                                classExpression.heritageClauses, [
+                                    factory.createClassStaticBlockDeclaration(
+                                        factory.createBlock([
+                                            factory.createExpressionStatement(setNameExpression)
+                                        ])
+                                    ),
+                                    ...classExpression.members
+                                ]
+                            );
+                        }
+                    }
+
+                    if (some(staticPropertiesOrClassStaticBlocks)) {
+                        addPropertyOrClassStaticBlockStatements(pendingStatements, staticPropertiesOrClassStaticBlocks, node.emitNode?.classThis ?? factory.getInternalName(node));
                     }
 
                     if (temp) {
-                        expressions.push(startOnNewLine(factory.createAssignment(temp, classExpression)));
-                        if (referencedName) {
-                            expressions.push(emitHelpers().createSetFunctionNameHelper(temp, referencedName));
-                        }
-                        expressions.push(startOnNewLine(temp));
+                        expressions.push(factory.createAssignment(temp, classExpression));
+                    }
+                    else if (shouldTransformPrivateElementsOrClassStaticBlocks && node.emitNode?.classThis) {
+                        expressions.push(factory.createAssignment(node.emitNode.classThis, classExpression));
                     }
                     else {
                         expressions.push(classExpression);
-                        if (prologue) {
-                            startOnNewLine(classExpression);
-                        }
                     }
                 }
                 else {
-                    temp ||= createClassTempVar();
+                    temp ??= createClassTempVar();
                     if (isClassWithConstructorReference) {
                         // record an alias as the class name is not in scope for statics.
                         enableSubstitutionForClassAliases();
@@ -1614,25 +1686,26 @@ namespace ts {
                         classAliases[getOriginalNodeId(node)] = alias;
                     }
 
-                    // To preserve the behavior of the old emitter, we explicitly indent
-                    // the body of a class with static initializers.
-                    setEmitFlags(classExpression, EmitFlags.Indented | getEmitFlags(classExpression));
-                    expressions.push(startOnNewLine(factory.createAssignment(temp, classExpression)));
+                    expressions.push(factory.createAssignment(temp, classExpression));
 
                     // Add any pending expressions leftover from elided or relocated computed property names
-                    addRange(expressions, map(pendingExpressions, startOnNewLine));
+                    addRange(expressions, pendingExpressions);
                     if (referencedName) {
-                        expressions.push(startOnNewLine(emitHelpers().createSetFunctionNameHelper(temp, referencedName)));
+                        expressions.push(emitHelpers().createSetFunctionNameHelper(temp, referencedName));
                     }
                     addRange(expressions, generateInitializedPropertyExpressionsOrClassStaticBlock(staticPropertiesOrClassStaticBlocks, temp));
-                    expressions.push(startOnNewLine(temp));
+                    expressions.push(factory.cloneNode(temp));
                 }
             }
             else {
                 expressions.push(classExpression);
-                if (prologue) {
-                    startOnNewLine(classExpression);
-                }
+            }
+
+            if (expressions.length > 1) {
+                // To preserve the behavior of the old emitter, we explicitly indent
+                // the body of a class with static initializers.
+                addEmitFlags(classExpression, EmitFlags.Indented);
+                expressions.forEach(startOnNewLine);
             }
 
             return factory.inlineExpressions(expressions);
@@ -1647,21 +1720,35 @@ namespace ts {
         }
 
         function transformClassMembers(node: ClassDeclaration | ClassExpression) {
+            const shouldTransformPrivateStaticElementsInClass = !!(getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements);
+
             // Declare private names
-            if (shouldTransformPrivateElementsOrClassStaticBlocks) {
+            if (shouldTransformPrivateElementsOrClassStaticBlocks || shouldTransformPrivateStaticElementsInFile) {
                 for (const member of node.members) {
                     if (isPrivateIdentifierClassElementDeclaration(member)) {
-                        addPrivateIdentifierToEnvironment(member, member.name, addPrivateIdentifierClassElementToEnvironment);
+                        if (shouldTransformClassElementToWeakMap(member)) {
+                            addPrivateIdentifierToEnvironment(member, member.name, addPrivateIdentifierClassElementToEnvironment);
+                        }
+                        else {
+                            const privateEnv = getPrivateIdentifierEnvironment();
+                            setPrivateIdentifier(privateEnv, member.name, { kind: "untransformed" });
+                        }
                     }
                 }
-                if (some(getPrivateInstanceMethodsAndAccessors(node))) {
-                    createBrandCheckWeakSetForPrivateMethods();
+
+                if (shouldTransformPrivateElementsOrClassStaticBlocks) {
+                    if (some(getPrivateInstanceMethodsAndAccessors(node))) {
+                        createBrandCheckWeakSetForPrivateMethods();
+                    }
                 }
-                if (shouldTransformAutoAccessors) {
+
+                if (shouldTransformAutoAccessors && (shouldTransformPrivateElementsOrClassStaticBlocks || shouldTransformPrivateStaticElementsInClass)) {
                     for (const member of node.members) {
                         if (isAutoAccessorPropertyDeclaration(member)) {
-                            const storageName = factory.getGeneratedPrivateNameForNode(member.name, /*prefix*/ undefined, "_accessor_storage");
-                            addPrivateIdentifierToEnvironment(member, storageName, addPrivateIdentifierPropertyDeclarationToEnvironment);
+                            if (shouldTransformAutoAccessors || shouldTransformPrivateStaticElementsInClass && hasStaticModifier(member) && isPrivateIdentifier(member.name)) {
+                                const storageName = factory.getGeneratedPrivateNameForNode(member.name, /*prefix*/ undefined, "_accessor_storage");
+                                addPrivateIdentifierToEnvironment(member, storageName, addPrivateIdentifierPropertyDeclarationToEnvironment);
+                            }
                         }
                     }
                 }
@@ -1719,7 +1806,7 @@ namespace ts {
         }
 
         function createBrandCheckWeakSetForPrivateMethods() {
-            const { weakSetName } = getPrivateIdentifierEnvironment();
+            const { weakSetName } = getPrivateIdentifierEnvironment().data;
             Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
 
             getPendingExpressions().push(
@@ -1884,7 +1971,7 @@ namespace ts {
 
             const receiver = factory.createThis();
             // private methods can be called in property initializers, they should execute first.
-            addMethodStatements(statements, privateMethodsAndAccessors, receiver);
+            addInstanceMethodStatements(statements, privateMethodsAndAccessors, receiver);
             addPropertyOrClassStaticBlockStatements(statements, properties, receiver);
 
             // Add existing statements after the initial prologues and super call
@@ -1930,7 +2017,7 @@ namespace ts {
          */
         function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                if (isStatic(property) && !shouldTransformPrivateElementsOrClassStaticBlocks && !useDefineForClassFields) {
+                if (isStatic(property) && !shouldTransformPrivateElementsOrClassStaticBlocks && !useDefineForClassFields && !(getInternalEmitFlags(property) & InternalEmitFlags.TransformPrivateStaticElements)) {
                     continue;
                 }
 
@@ -1999,11 +2086,11 @@ namespace ts {
         function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             const savedCurrentStaticPropertyDeclarationOrStaticBlock = currentStaticPropertyDeclarationOrStaticBlock;
             const transformed = transformPropertyWorker(property, receiver);
-            if (transformed && hasStaticModifier(property) && currentClassLexicalEnvironment?.facts) {
+            if (transformed && hasStaticModifier(property) && lexicalEnvironment?.data?.facts) {
                 // capture the lexical environment for the member
                 setOriginalNode(transformed, property);
                 addEmitFlags(transformed, EmitFlags.AdviseOnEmitNode);
-                classLexicalEnvironmentMap.set(getOriginalNodeId(transformed), currentClassLexicalEnvironment);
+                lexicalEnvironmentMap.set(getOriginalNode(property), lexicalEnvironment);
             }
             currentStaticPropertyDeclarationOrStaticBlock = savedCurrentStaticPropertyDeclarationOrStaticBlock;
             return transformed;
@@ -2041,7 +2128,7 @@ namespace ts {
                 referencedName ? child => namedEvaluationVisitor(child, referencedName!) :
                 visitor;
 
-            if (shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifier(propertyName)) {
+            if (isPrivateIdentifier(propertyName) && shouldTransformClassElementToWeakMap(property as PrivateIdentifierPropertyDeclaration)) {
                 const privateIdentifierInfo = accessPrivateIdentifier(propertyName);
                 if (privateIdentifierInfo) {
                     if (privateIdentifierInfo.kind === PrivateIdentifierKind.Field) {
@@ -2112,20 +2199,13 @@ namespace ts {
 
                 // substitute `this` in a static field initializer
                 context.enableSubstitution(SyntaxKind.ThisKeyword);
-
-                // these push a new lexical environment that is not the class lexical environment
                 context.enableEmitNotification(SyntaxKind.FunctionDeclaration);
                 context.enableEmitNotification(SyntaxKind.FunctionExpression);
                 context.enableEmitNotification(SyntaxKind.Constructor);
-
-                // these push a new lexical environment that is not the class lexical environment, except
-                // when they have a computed property name
                 context.enableEmitNotification(SyntaxKind.GetAccessor);
                 context.enableEmitNotification(SyntaxKind.SetAccessor);
                 context.enableEmitNotification(SyntaxKind.MethodDeclaration);
                 context.enableEmitNotification(SyntaxKind.PropertyDeclaration);
-
-                // class lexical environments are restored when entering a computed property name
                 context.enableEmitNotification(SyntaxKind.ComputedPropertyName);
             }
         }
@@ -2137,12 +2217,12 @@ namespace ts {
          * @param methods An array of method declarations.
          * @param receiver The receiver on which each method should be assigned.
          */
-        function addMethodStatements(statements: Statement[], methods: readonly (MethodDeclaration | AccessorDeclaration | AutoAccessorPropertyDeclaration)[], receiver: LeftHandSideExpression) {
+        function addInstanceMethodStatements(statements: Statement[], methods: readonly (MethodDeclaration | AccessorDeclaration | AutoAccessorPropertyDeclaration)[], receiver: LeftHandSideExpression) {
             if (!shouldTransformPrivateElementsOrClassStaticBlocks || !some(methods)) {
                 return;
             }
 
-            const { weakSetName } = getPrivateIdentifierEnvironment();
+            const { weakSetName } = getPrivateIdentifierEnvironment().data;
             Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
             statements.push(
                 factory.createExpressionStatement(
@@ -2161,139 +2241,6 @@ namespace ts {
                     node,
                     factory.createVoidZero(),
                     visitNode(node.argumentExpression, visitor, isExpression));
-        }
-
-        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-            const original = getOriginalNode(node);
-            if (original.id) {
-                const classLexicalEnvironment = classLexicalEnvironmentMap.get(original.id);
-                if (classLexicalEnvironment) {
-                    const savedClassLexicalEnvironment = currentClassLexicalEnvironment;
-                    const savedCurrentComputedPropertyNameClassLexicalEnvironment = currentComputedPropertyNameClassLexicalEnvironment;
-                    currentClassLexicalEnvironment = classLexicalEnvironment;
-                    currentComputedPropertyNameClassLexicalEnvironment = classLexicalEnvironment;
-                    previousOnEmitNode(hint, node, emitCallback);
-                    currentClassLexicalEnvironment = savedClassLexicalEnvironment;
-                    currentComputedPropertyNameClassLexicalEnvironment = savedCurrentComputedPropertyNameClassLexicalEnvironment;
-                    return;
-                }
-            }
-
-            switch (node.kind) {
-                case SyntaxKind.FunctionExpression:
-                    if (isArrowFunction(original) || getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
-                        break;
-                    }
-
-                    // falls through
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Constructor: {
-                    const savedClassLexicalEnvironment = currentClassLexicalEnvironment;
-                    const savedCurrentComputedPropertyNameClassLexicalEnvironment = currentComputedPropertyNameClassLexicalEnvironment;
-                    currentClassLexicalEnvironment = undefined;
-                    currentComputedPropertyNameClassLexicalEnvironment = undefined;
-                    previousOnEmitNode(hint, node, emitCallback);
-                    currentClassLexicalEnvironment = savedClassLexicalEnvironment;
-                    currentComputedPropertyNameClassLexicalEnvironment = savedCurrentComputedPropertyNameClassLexicalEnvironment;
-                    return;
-                }
-
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.PropertyDeclaration: {
-                    const savedClassLexicalEnvironment = currentClassLexicalEnvironment;
-                    const savedCurrentComputedPropertyNameClassLexicalEnvironment = currentComputedPropertyNameClassLexicalEnvironment;
-                    currentComputedPropertyNameClassLexicalEnvironment = currentClassLexicalEnvironment;
-                    currentClassLexicalEnvironment = undefined;
-                    previousOnEmitNode(hint, node, emitCallback);
-                    currentClassLexicalEnvironment = savedClassLexicalEnvironment;
-                    currentComputedPropertyNameClassLexicalEnvironment = savedCurrentComputedPropertyNameClassLexicalEnvironment;
-                    return;
-                }
-                case SyntaxKind.ComputedPropertyName: {
-                    const savedClassLexicalEnvironment = currentClassLexicalEnvironment;
-                    const savedCurrentComputedPropertyNameClassLexicalEnvironment = currentComputedPropertyNameClassLexicalEnvironment;
-                    currentClassLexicalEnvironment = currentComputedPropertyNameClassLexicalEnvironment;
-                    currentComputedPropertyNameClassLexicalEnvironment = undefined;
-                    previousOnEmitNode(hint, node, emitCallback);
-                    currentClassLexicalEnvironment = savedClassLexicalEnvironment;
-                    currentComputedPropertyNameClassLexicalEnvironment = savedCurrentComputedPropertyNameClassLexicalEnvironment;
-                    return;
-                }
-            }
-            previousOnEmitNode(hint, node, emitCallback);
-        }
-
-        /**
-         * Hooks node substitutions.
-         *
-         * @param hint The context for the emitter.
-         * @param node The node to substitute.
-         */
-        function onSubstituteNode(hint: EmitHint, node: Node) {
-            node = previousOnSubstituteNode(hint, node);
-            if (hint === EmitHint.Expression) {
-                return substituteExpression(node as Expression);
-            }
-            return node;
-        }
-
-        function substituteExpression(node: Expression) {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    return substituteExpressionIdentifier(node as Identifier);
-                case SyntaxKind.ThisKeyword:
-                    return substituteThisExpression(node as ThisExpression);
-            }
-            return node;
-        }
-
-        function substituteThisExpression(node: ThisExpression) {
-            if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference && currentClassLexicalEnvironment) {
-                const { facts, classConstructor } = currentClassLexicalEnvironment;
-                if (facts & ClassFacts.ClassWasDecorated) {
-                    return factory.createParenthesizedExpression(factory.createVoidZero());
-                }
-                if (classConstructor) {
-                    return setTextRange(
-                        setOriginalNode(
-                            factory.cloneNode(classConstructor),
-                            node,
-                        ),
-                        node
-                    );
-                }
-            }
-            return node;
-        }
-
-        function substituteExpressionIdentifier(node: Identifier): Expression {
-            return trySubstituteClassAlias(node) || node;
-        }
-
-        function trySubstituteClassAlias(node: Identifier): Expression | undefined {
-            if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassAliases) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
-                    // Due to the emit for class decorators, any reference to the class from inside of the class body
-                    // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
-                    // behavior of class names in ES6.
-                    // Also, when emitting statics for class expressions, we must substitute a class alias for
-                    // constructor references in static property initializers.
-                    const declaration = resolver.getReferencedValueDeclaration(node);
-                    if (declaration) {
-                        const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
-                        if (classAlias) {
-                            const clone = factory.cloneNode(classAlias);
-                            setSourceMapRange(clone, node);
-                            setCommentRange(clone, node);
-                            return clone;
-                        }
-                    }
-                }
-            }
-
-            return undefined;
         }
 
         /**
@@ -2325,32 +2272,30 @@ namespace ts {
         }
 
         function startClassLexicalEnvironment() {
-            classLexicalEnvironmentStack.push(currentClassLexicalEnvironment);
-            currentClassLexicalEnvironment = undefined;
+            lexicalEnvironment = { previous: lexicalEnvironment, data: undefined };
         }
 
         function endClassLexicalEnvironment() {
-            currentClassLexicalEnvironment = classLexicalEnvironmentStack.pop();
+            lexicalEnvironment = lexicalEnvironment?.previous;
         }
 
-        function getClassLexicalEnvironment() {
-            return currentClassLexicalEnvironment ||= {
+        function getClassLexicalEnvironment(): ClassLexicalEnvironment {
+            Debug.assert(lexicalEnvironment);
+            return lexicalEnvironment.data ??= {
                 facts: ClassFacts.None,
                 classConstructor: undefined,
+                classThis: undefined,
                 superClassReference: undefined,
-                privateIdentifierEnvironment: undefined,
+                // privateIdentifierEnvironment: undefined,
             };
         }
 
-        function getPrivateIdentifierEnvironment() {
-            const lex = getClassLexicalEnvironment();
-            lex.privateIdentifierEnvironment ||= {
+        function getPrivateIdentifierEnvironment(): PrivateEnv {
+            Debug.assert(lexicalEnvironment);
+            return lexicalEnvironment.privateEnv ??= newPrivateEnvironment({
                 className: undefined,
                 weakSetName: undefined,
-                identifiers: undefined,
-                generatedIdentifiers: undefined,
-            };
-            return lex.privateIdentifierEnvironment;
+            });
         }
 
         function getPendingExpressions() {
@@ -2361,7 +2306,7 @@ namespace ts {
             node: PropertyDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration,
             name: PrivateIdentifier,
             lex: ClassLexicalEnvironment,
-            privateEnv: PrivateIdentifierEnvironment,
+            privateEnv: PrivateEnv,
             isStatic: boolean,
             isValid: boolean,
             previousInfo: PrivateIdentifierInfo | undefined
@@ -2387,20 +2332,21 @@ namespace ts {
             _node: PropertyDeclaration,
             name: PrivateIdentifier,
             lex: ClassLexicalEnvironment,
-            privateEnv: PrivateIdentifierEnvironment,
+            privateEnv: PrivateEnv,
             isStatic: boolean,
             isValid: boolean,
             _previousInfo: PrivateIdentifierInfo | undefined
         ) {
             if (isStatic) {
-                Debug.assert(lex.classConstructor, "classConstructor should be set in private identifier environment");
+                const brandCheckIdentifier =
+                    Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment");
 
                 const variableName = createHoistedVariableForPrivateName(name);
                 setPrivateIdentifier(privateEnv, name, {
                     kind: PrivateIdentifierKind.Field,
-                    brandCheckIdentifier: lex.classConstructor,
-                    variableName,
                     isStatic: true,
+                    brandCheckIdentifier,
+                    variableName,
                     isValid,
                 });
             }
@@ -2409,9 +2355,8 @@ namespace ts {
 
                 setPrivateIdentifier(privateEnv, name, {
                     kind: PrivateIdentifierKind.Field,
-                    brandCheckIdentifier: weakMapName,
-                    variableName: undefined,
                     isStatic: false,
+                    brandCheckIdentifier: weakMapName,
                     isValid,
                 });
 
@@ -2430,15 +2375,15 @@ namespace ts {
             _node: MethodDeclaration,
             name: PrivateIdentifier,
             lex: ClassLexicalEnvironment,
-            privateEnv: PrivateIdentifierEnvironment,
+            privateEnv: PrivateEnv,
             isStatic: boolean,
             isValid: boolean,
             _previousInfo: PrivateIdentifierInfo | undefined
         ) {
             const methodName = createHoistedVariableForPrivateName(name);
             const brandCheckIdentifier = isStatic ?
-                Debug.checkDefined(lex.classConstructor, "classConstructor should be set in private identifier environment") :
-                Debug.checkDefined(privateEnv.weakSetName, "weakSetName should be set in private identifier environment");
+                Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment") :
+                Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
 
             setPrivateIdentifier(privateEnv, name, {
                 kind: PrivateIdentifierKind.Method,
@@ -2453,15 +2398,15 @@ namespace ts {
             _node: GetAccessorDeclaration,
             name: PrivateIdentifier,
             lex: ClassLexicalEnvironment,
-            privateEnv: PrivateIdentifierEnvironment,
+            privateEnv: PrivateEnv,
             isStatic: boolean,
             isValid: boolean,
             previousInfo: PrivateIdentifierInfo | undefined
         ) {
             const getterName = createHoistedVariableForPrivateName(name, "_get");
             const brandCheckIdentifier = isStatic ?
-                Debug.checkDefined(lex.classConstructor, "classConstructor should be set in private identifier environment") :
-                Debug.checkDefined(privateEnv.weakSetName, "weakSetName should be set in private identifier environment");
+                Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment") :
+                Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
 
             if (previousInfo?.kind === PrivateIdentifierKind.Accessor && previousInfo.isStatic === isStatic && !previousInfo.getterName) {
                 previousInfo.getterName = getterName;
@@ -2482,17 +2427,18 @@ namespace ts {
             _node: SetAccessorDeclaration,
             name: PrivateIdentifier,
             lex: ClassLexicalEnvironment,
-            privateEnv: PrivateIdentifierEnvironment,
+            privateEnv: PrivateEnv,
             isStatic: boolean,
             isValid: boolean,
             previousInfo: PrivateIdentifierInfo | undefined
         ) {
             const setterName = createHoistedVariableForPrivateName(name, "_set");
             const brandCheckIdentifier = isStatic ?
-                Debug.checkDefined(lex.classConstructor, "classConstructor should be set in private identifier environment") :
-                Debug.checkDefined(privateEnv.weakSetName, "weakSetName should be set in private identifier environment");
+                Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment") :
+                Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
 
-            if (previousInfo?.kind === PrivateIdentifierKind.Accessor && previousInfo.isStatic === isStatic && !previousInfo.setterName) {
+            if (previousInfo?.kind === PrivateIdentifierKind.Accessor &&
+                previousInfo.isStatic === isStatic && !previousInfo.setterName) {
                 previousInfo.setterName = setterName;
             }
             else {
@@ -2511,7 +2457,7 @@ namespace ts {
             _node: AutoAccessorPropertyDeclaration,
             name: PrivateIdentifier,
             lex: ClassLexicalEnvironment,
-            privateEnv: PrivateIdentifierEnvironment,
+            privateEnv: PrivateEnv,
             isStatic: boolean,
             isValid: boolean,
             _previousInfo: PrivateIdentifierInfo | undefined
@@ -2519,8 +2465,8 @@ namespace ts {
             const getterName = createHoistedVariableForPrivateName(name, "_get");
             const setterName = createHoistedVariableForPrivateName(name, "_set");
             const brandCheckIdentifier = isStatic ?
-                Debug.checkDefined(lex.classConstructor, "classConstructor should be set in private identifier environment") :
-                Debug.checkDefined(privateEnv.weakSetName, "weakSetName should be set in private identifier environment");
+                Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment") :
+                Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
 
             setPrivateIdentifier(privateEnv, name, {
                 kind: PrivateIdentifierKind.Accessor,
@@ -2539,7 +2485,7 @@ namespace ts {
                 node: T,
                 name: PrivateIdentifier,
                 lex: ClassLexicalEnvironment,
-                privateEnv: PrivateIdentifierEnvironment,
+                privateEnv: PrivateEnv,
                 isStatic: boolean,
                 isValid: boolean,
                 previousInfo: PrivateIdentifierInfo | undefined
@@ -2554,7 +2500,7 @@ namespace ts {
         }
 
         function createHoistedVariableForClass(name: string | PrivateIdentifier | undefined, node: PrivateIdentifier | ClassStaticBlockDeclaration, suffix?: string): Identifier {
-            const { className } = getPrivateIdentifierEnvironment();
+            const { className } = getPrivateIdentifierEnvironment().data;
             const prefix: GeneratedNamePart | string = className ? { prefix: "_", node: className, suffix: "_" } : "_";
             const identifier =
                 typeof name === "object" ? factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
@@ -2582,45 +2528,8 @@ namespace ts {
          * @seealso {@link addPrivateIdentifierToEnvironment}
          */
         function accessPrivateIdentifier(name: PrivateIdentifier) {
-            if (isGeneratedPrivateIdentifier(name)) {
-                return accessGeneratedPrivateIdentifier(name);
-            }
-            else {
-                return accessPrivateIdentifierByText(name.escapedText);
-            }
-        }
-
-        function accessPrivateIdentifierByText(text: __String) {
-            return accessPrivateIdentifierWorker(getPrivateIdentifierInfo, text);
-        }
-
-        function accessGeneratedPrivateIdentifier(name: GeneratedPrivateIdentifier) {
-            return accessPrivateIdentifierWorker(getGeneratedPrivateIdentifierInfo, getNodeForGeneratedName(name));
-        }
-
-        function accessPrivateIdentifierWorker<K extends __String | Node>(
-            getPrivateIdentifierInfo: (privateEnv: PrivateIdentifierEnvironment, key: K) => PrivateIdentifierInfo | undefined,
-            privateIdentifierKey: K
-        ) {
-            if (currentClassLexicalEnvironment?.privateIdentifierEnvironment) {
-                const info = getPrivateIdentifierInfo(currentClassLexicalEnvironment.privateIdentifierEnvironment, privateIdentifierKey);
-                if (info) {
-                    return info;
-                }
-            }
-            for (let i = classLexicalEnvironmentStack.length - 1; i >= 0; --i) {
-                const env = classLexicalEnvironmentStack[i];
-                if (!env) {
-                    continue;
-                }
-                if (env.privateIdentifierEnvironment) {
-                    const info = getPrivateIdentifierInfo(env.privateIdentifierEnvironment, privateIdentifierKey);
-                    if (info) {
-                        return info;
-                    }
-                }
-            }
-            return undefined;
+            const info = ts.accessPrivateIdentifier(lexicalEnvironment, name);
+            return info?.kind === "untransformed" ? undefined : info;
         }
 
         function wrapPrivateIdentifierForDestructuringTarget(node: PrivateIdentifierPropertyAccessExpression) {
@@ -2658,8 +2567,8 @@ namespace ts {
             else if (shouldTransformSuperInStaticInitializers &&
                 isSuperProperty(node) &&
                 currentStaticPropertyDeclarationOrStaticBlock &&
-                currentClassLexicalEnvironment) {
-                const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
+                lexicalEnvironment?.data) {
+                const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
                 if (facts & ClassFacts.ClassWasDecorated) {
                     return visitInvalidSuperProperty(node);
                 }
@@ -2699,7 +2608,10 @@ namespace ts {
                 let initializer: Expression;
                 if (isIdentifier(node.left) &&
                     isAnonymousClassDeclarationNeedingAssignedName(node.right)) {
-                    const referencedName = factory.createStringLiteralFromNode(node.left);
+                    const original = getOriginalNode(node.right, isClassLike);
+                    const referencedName = original && !original.name && hasSyntacticModifier(original, ModifierFlags.Default) ?
+                        factory.createStringLiteral("default") :
+                        factory.createStringLiteralFromNode(node.left);
                     initializer = visitNode(node.right, node => namedEvaluationVisitor(node, referencedName), isExpression);
                 }
                 else {
@@ -2767,10 +2679,12 @@ namespace ts {
 
             if (node.objectAssignmentInitializer &&
                 isAnonymousClassDeclarationNeedingAssignedName(node.objectAssignmentInitializer)) {
-                const name = visitNode(node.name, visitor, isIdentifier);
-                const referencedName = factory.createStringLiteralFromNode(node.name);
+                const original = getOriginalNode(node.objectAssignmentInitializer, isClassLike);
+                const referencedName = original && !original.name && hasSyntacticModifier(original, ModifierFlags.Default) ?
+                    factory.createStringLiteral("default") :
+                    factory.createStringLiteralFromNode(node.name);
                 const objectAssignmentInitializer = visitNode(node.objectAssignmentInitializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
-                return factory.updateShorthandPropertyAssignment(node, name, objectAssignmentInitializer);
+                return factory.updateShorthandPropertyAssignment(node, node.name, objectAssignmentInitializer);
             }
 
             return visitEachChild(node, visitor, context);
@@ -2822,6 +2736,140 @@ namespace ts {
                 );
             }
         }
+
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+            const original = getOriginalNode(node);
+            const lex = lexicalEnvironmentMap.get(original);
+            if (lex) {
+                // If we've associated a lexical environment with the original node for this node, use it explicitly.
+                const savedLexicalEnvironment = lexicalEnvironment;
+                const savedPreviousShouldSubstituteThisWithClassThis = previousShouldSubstituteThisWithClassThis;
+                lexicalEnvironment = lex;
+                previousShouldSubstituteThisWithClassThis = shouldSubstituteThisWithClassThis;
+                shouldSubstituteThisWithClassThis = !isClassStaticBlockDeclaration(original) || !(getInternalEmitFlags(original) & InternalEmitFlags.TransformPrivateStaticElements);
+                previousOnEmitNode(hint, node, emitCallback);
+                shouldSubstituteThisWithClassThis = previousShouldSubstituteThisWithClassThis;
+                previousShouldSubstituteThisWithClassThis = savedPreviousShouldSubstituteThisWithClassThis;
+                lexicalEnvironment = savedLexicalEnvironment;
+                return;
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.FunctionExpression:
+                    if (isArrowFunction(original) || getEmitFlags(node) & EmitFlags.AsyncFunctionBody) {
+                        // Arrow functions and functions that serve as the transformed body of an async function should
+                        // preserve the outer lexical environment.
+                        break;
+                    }
+                    // falls through
+
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.PropertyDeclaration: {
+                    // Other function bodies and property declarations should clear the lexical environment.
+                    // Note that this won't happen if a lexical environment was bound to the original node as that
+                    // was handled above.
+                    const savedLexicalEnvironment = lexicalEnvironment;
+                    const savedPreviousShouldSubstituteThisWithClassThis = previousShouldSubstituteThisWithClassThis;
+                    lexicalEnvironment = undefined;
+                    previousShouldSubstituteThisWithClassThis = shouldSubstituteThisWithClassThis;
+                    shouldSubstituteThisWithClassThis = false;
+                    previousOnEmitNode(hint, node, emitCallback);
+                    shouldSubstituteThisWithClassThis = previousShouldSubstituteThisWithClassThis;
+                    previousShouldSubstituteThisWithClassThis = savedPreviousShouldSubstituteThisWithClassThis;
+                    lexicalEnvironment = savedLexicalEnvironment;
+                    return;
+                }
+
+                case SyntaxKind.ComputedPropertyName: {
+                    // Computed property names should use the outer lexical environment.
+                    const savedLexicalEnvironment = lexicalEnvironment;
+                    const savedShouldSubstituteThisWithClassThis = shouldSubstituteThisWithClassThis;
+                    lexicalEnvironment = lexicalEnvironment?.previous;
+                    shouldSubstituteThisWithClassThis = previousShouldSubstituteThisWithClassThis;
+                    previousOnEmitNode(hint, node, emitCallback);
+                    shouldSubstituteThisWithClassThis = savedShouldSubstituteThisWithClassThis;
+                    lexicalEnvironment = savedLexicalEnvironment;
+                    return;
+                }
+            }
+            previousOnEmitNode(hint, node, emitCallback);
+        }
+
+        /**
+         * Hooks node substitutions.
+         *
+         * @param hint The context for the emitter.
+         * @param node The node to substitute.
+         */
+        function onSubstituteNode(hint: EmitHint, node: Node) {
+            node = previousOnSubstituteNode(hint, node);
+            if (hint === EmitHint.Expression) {
+                return substituteExpression(node as Expression);
+            }
+            return node;
+        }
+
+        function substituteExpression(node: Expression) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return substituteExpressionIdentifier(node as Identifier);
+                case SyntaxKind.ThisKeyword:
+                    return substituteThisExpression(node as ThisExpression);
+            }
+            return node;
+        }
+
+        function substituteThisExpression(node: ThisExpression) {
+            if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference && lexicalEnvironment?.data) {
+                const { facts, classConstructor, classThis } = lexicalEnvironment.data;
+                if (facts & ClassFacts.ClassWasDecorated && legacyDecorators) {
+                    return factory.createParenthesizedExpression(factory.createVoidZero());
+                }
+                const substituteThis = shouldSubstituteThisWithClassThis ? classThis ?? classConstructor : classConstructor;
+                if (substituteThis) {
+                    return setTextRange(
+                        setOriginalNode(
+                            factory.cloneNode(substituteThis),
+                            node,
+                        ),
+                        node
+                    );
+                }
+            }
+            return node;
+        }
+
+        function substituteExpressionIdentifier(node: Identifier): Expression {
+            return trySubstituteClassAlias(node) || node;
+        }
+
+        function trySubstituteClassAlias(node: Identifier): Expression | undefined {
+            if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassAliases) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
+                    // Due to the emit for class decorators, any reference to the class from inside of the class body
+                    // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
+                    // behavior of class names in ES6.
+                    // Also, when emitting statics for class expressions, we must substitute a class alias for
+                    // constructor references in static property initializers.
+                    const declaration = resolver.getReferencedValueDeclaration(node);
+                    if (declaration) {
+                        const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
+                        if (classAlias) {
+                            const clone = factory.cloneNode(classAlias);
+                            setSourceMapRange(clone, node);
+                            setCommentRange(clone, node);
+                            return clone;
+                        }
+                    }
+                }
+            }
+
+            return undefined;
+        }
     }
 
     function createPrivateStaticFieldInitializer(variableName: Identifier, initializer: Expression | undefined) {
@@ -2853,28 +2901,10 @@ namespace ts {
         return !isGeneratedPrivateIdentifier(node) && node.escapedText === "#constructor";
     }
 
-    function getPrivateIdentifier(privateEnv: PrivateIdentifierEnvironment, name: PrivateIdentifier) {
-        return isGeneratedPrivateIdentifier(name) ?
-            getGeneratedPrivateIdentifierInfo(privateEnv, getNodeForGeneratedName(name)) :
-            getPrivateIdentifierInfo(privateEnv, name.escapedText);
-    }
+    type PrivateIdentifierInExpression = BinaryExpression & { readonly left: PrivateIdentifier, readonly token: InKeyword };
 
-    function setPrivateIdentifier(privateEnv: PrivateIdentifierEnvironment, name: PrivateIdentifier, info: PrivateIdentifierInfo) {
-        if (isGeneratedPrivateIdentifier(name)) {
-            privateEnv.generatedIdentifiers ??= new Map();
-            privateEnv.generatedIdentifiers.set(getNodeForGeneratedName(name), info);
-        }
-        else {
-            privateEnv.identifiers ??= new Map();
-            privateEnv.identifiers.set(name.escapedText, info);
-        }
-    }
-
-    function getPrivateIdentifierInfo(privateEnv: PrivateIdentifierEnvironment, key: __String) {
-        return privateEnv.identifiers?.get(key);
-    }
-
-    function getGeneratedPrivateIdentifierInfo(privateEnv: PrivateIdentifierEnvironment, key: Node) {
-        return privateEnv.generatedIdentifiers?.get(key);
+    function isPrivateIdentifierInExpression(node: BinaryExpression): node is PrivateIdentifierInExpression {
+        return isPrivateIdentifier(node.left)
+            && node.operatorToken.kind === SyntaxKind.InKeyword;
     }
 }

@@ -8,19 +8,17 @@ class C {
 
 //// [esDecorators-classDeclaration-simpleTransformation.js]
 let C = (() => {
-    var _a;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var C = (_a = class {
-        },
-        __setFunctionName(_a, "C"),
-        (() => {
-            __esDecorate(null, _classDescriptor = { value: _a }, _classDecorators, { kind: "class", name: _a.name }, null, _classExtraInitializers);
-            C = _classThis = _classDescriptor.value;
-            __runInitializers(_classThis, _classExtraInitializers);
-        })(),
-        _a);
+    var C = _classThis = class {
+    };
+    __setFunctionName(_classThis, "C");
+    (() => {
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        C = _classThis = _classDescriptor.value;
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
     return C = _classThis;
 })();

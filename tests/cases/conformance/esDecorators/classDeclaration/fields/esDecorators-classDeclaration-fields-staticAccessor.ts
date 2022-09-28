@@ -12,7 +12,6 @@ class C {
     @dec(3) static accessor [field3] = 3;
 }
 
-// TODO: We should translate static private to weakmaps when < ESNext
 @dec
 class D {
     static accessor field1 = 1;

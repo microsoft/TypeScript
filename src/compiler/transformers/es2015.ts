@@ -371,7 +371,7 @@ namespace ts {
                 || convertedLoopState !== undefined
                 || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isOrMayContainReturnCompletion(node))
                 || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatement(node))
-                || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
+                || (getInternalEmitFlags(node) & InternalEmitFlags.TypeScriptClassWrapper) !== 0;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -2135,7 +2135,7 @@ namespace ts {
         function isVariableStatementOfTypeScriptClassWrapper(node: VariableStatement) {
             return node.declarationList.declarations.length === 1
                 && !!node.declarationList.declarations[0].initializer
-                && !!(getEmitFlags(node.declarationList.declarations[0].initializer) & EmitFlags.TypeScriptClassWrapper);
+                && !!(getInternalEmitFlags(node.declarationList.declarations[0].initializer) & InternalEmitFlags.TypeScriptClassWrapper);
         }
 
         function visitVariableStatement(node: VariableStatement): Statement | undefined {
@@ -3703,7 +3703,7 @@ namespace ts {
          * @param node a CallExpression.
          */
         function visitCallExpression(node: CallExpression) {
-            if (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) {
+            if (getInternalEmitFlags(node) & InternalEmitFlags.TypeScriptClassWrapper) {
                 return visitTypeScriptClassWrapper(node);
             }
 

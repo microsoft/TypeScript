@@ -5,7 +5,6 @@ class C {
     @dec static #field1 = 0;
 }
 
-// TODO: We should translate static private to weakmaps when < ESNext
 @dec
 class D {
     static #field1 = 0;
@@ -31,23 +30,25 @@ let C = (() => {
     };
 })();
 let D = (() => {
+    var _field1;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = class {
+        static { __setFunctionName(this, "D"); }
         static {
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
         }
-        static #field1 = 0;
         static {
-            _classThis.#field1;
-            _classThis.#field1 = 1;
+            __classPrivateFieldGet(_classThis, _classThis, "f", _field1);
+            __classPrivateFieldSet(_classThis, _classThis, 1, "f", _field1);
         }
         static {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
+    _field1 = { value: 0 };
     return D = _classThis;
 })();

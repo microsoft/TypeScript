@@ -5,7 +5,6 @@ class C {
     @dec static accessor #field1 = 0;
 }
 
-// TODO: We should translate static private to weakmaps when < ESNext
 @dec
 class D {
     static accessor #field1 = 0;
@@ -29,30 +28,31 @@ let C = (() => {
             __runInitializers(this, _staticExtraInitializers);
         }
         static #field1_accessor_storage = __runInitializers(this, _static_private_field1_initializers, 0);
-        static get #field1() { return this.#field1_accessor_storage; }
-        static set #field1(value) { this.#field1_accessor_storage = value; }
+        static get #field1() { return _static_private_field1_descriptor.get.call(this); }
+        static set #field1(value) { return _static_private_field1_descriptor.set.call(this, value); }
     };
 })();
 let D = (() => {
+    var _field1_get, _field1_set, _field1_1_accessor_storage;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = class {
+        static { __setFunctionName(this, "D"); }
+        static { _field1_get = function _field1_get() { return __classPrivateFieldGet(this, _classThis, "f", _field1_1_accessor_storage); }, _field1_set = function _field1_set(value) { __classPrivateFieldSet(this, _classThis, value, "f", _field1_1_accessor_storage); }; }
         static {
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
         }
-        static #field1_1_accessor_storage = 0;
-        static get #field1() { return this.#field1_1_accessor_storage; }
-        static set #field1(value) { this.#field1_1_accessor_storage = value; }
         static {
-            _classThis.#field1;
-            _classThis.#field1 = 1;
+            __classPrivateFieldGet(_classThis, _classThis, "a", _field1_get);
+            __classPrivateFieldSet(_classThis, _classThis, 1, "a", _field1_set);
         }
         static {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
+    _field1_1_accessor_storage = { value: 0 };
     return D = _classThis;
 })();

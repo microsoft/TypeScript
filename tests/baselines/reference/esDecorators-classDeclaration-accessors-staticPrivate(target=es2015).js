@@ -6,7 +6,6 @@ class C {
     @dec(2) static set #method1(value) {}
 }
 
-// TODO: We should translate these to weakmaps when < ESNext
 @dec
 class D {
     static get #method1() { return 0; }
@@ -40,27 +39,26 @@ let C = (() => {
         _a;
 })();
 let D = (() => {
-    var _a, _method1_get, _method1_set;
+    var _method1_get, _method1_set;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
-    var D = (_a = class {
-        },
-        _method1_get = function _method1_get() { return 0; },
-        _method1_set = function _method1_set(value) { },
-        __setFunctionName(_a, "D"),
-        (() => {
-            __esDecorate(null, _classDescriptor = { value: _a }, _classDecorators, { kind: "class", name: _a.name }, null, _classExtraInitializers);
-            D = _classThis = _classDescriptor.value;
-        })(),
-        (() => {
-            __classPrivateFieldGet(_classThis, _a, "a", _method1_get);
-            __classPrivateFieldSet(_classThis, _a, 1, "a", _method1_set);
-        })(),
-        (() => {
-            __runInitializers(_classThis, _classExtraInitializers);
-        })(),
-        _a);
+    var D = _classThis = class {
+    };
+    _method1_get = function _method1_get() { return 0; };
+    _method1_set = function _method1_set(value) { };
+    __setFunctionName(_classThis, "D");
+    (() => {
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        D = _classThis = _classDescriptor.value;
+    })();
+    (() => {
+        __classPrivateFieldGet(_classThis, _classThis, "a", _method1_get);
+        __classPrivateFieldSet(_classThis, _classThis, 1, "a", _method1_set);
+    })();
+    (() => {
+        __runInitializers(_classThis, _classExtraInitializers);
+    })();
     return D = _classThis;
 })();

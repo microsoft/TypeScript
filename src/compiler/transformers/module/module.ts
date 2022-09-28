@@ -864,7 +864,7 @@ namespace ts {
         }
 
         function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
-            if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+            if (!getESModuleInterop(compilerOptions) || getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getExportNeedsImportStarHelper(node)) {
@@ -874,7 +874,7 @@ namespace ts {
         }
 
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-            if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+            if (!getESModuleInterop(compilerOptions) || getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getImportNeedsImportStarHelper(node)) {
@@ -1135,7 +1135,7 @@ namespace ts {
                     else {
                         const exportNeedsImportDefault =
                             !!getESModuleInterop(compilerOptions) &&
-                            !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
+                            !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
                             idText(specifier.propertyName || specifier.name) === "default";
                         const exportedValue = factory.createPropertyAccessExpression(
                             exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
@@ -1871,13 +1871,13 @@ namespace ts {
                 const expression = substituteExpressionIdentifier(node.expression);
                 noSubstitution[getNodeId(expression)] = true;
                 if (!isIdentifier(expression) && !(getEmitFlags(node.expression) & EmitFlags.HelperName)) {
-                    return addEmitFlags(
+                    return addInternalEmitFlags(
                         factory.updateCallExpression(node,
                             expression,
                             /*typeArguments*/ undefined,
                             node.arguments
                         ),
-                        EmitFlags.IndirectCall
+                        InternalEmitFlags.IndirectCall
                     );
 
                 }
@@ -1890,13 +1890,13 @@ namespace ts {
                 const tag = substituteExpressionIdentifier(node.tag);
                 noSubstitution[getNodeId(tag)] = true;
                 if (!isIdentifier(tag) && !(getEmitFlags(node.tag) & EmitFlags.HelperName)) {
-                    return addEmitFlags(
+                    return addInternalEmitFlags(
                         factory.updateTaggedTemplateExpression(node,
                             tag,
                             /*typeArguments*/ undefined,
                             node.template
                         ),
-                        EmitFlags.IndirectCall
+                        InternalEmitFlags.IndirectCall
                     );
                 }
             }
