@@ -335,7 +335,7 @@ task("clean-tests").description = "Cleans the outputs for the test infrastructur
 const watchTests = () => watchProject("src/testRunner", cmdLineOptions);
 
 const runEslintRulesTests = () => runConsoleTests("scripts/eslint/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("run-eslint-rules-tests", series(buildScripts, runEslintRulesTests));
+task("run-eslint-rules-tests", runEslintRulesTests);
 task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
 /** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
@@ -411,12 +411,7 @@ task("watch-local").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-// TODO(jakebailey): putting buildScripts in serial before the other builds prevents buildProject
-// from trying to run `tsc -b ./scripts ./src/tsc` or similar, which causes errors to appear that
-// don't appear when the two projects are built separately. Should we even run the script build here?
-// Probably, we can just have a separate CI job to test this (and our eslint rule tests, which are
-// suspiciously not actually run in CI).
-const preTest = series(buildScripts, parallel(buildTsc, buildTests, buildServices, buildLssl));
+const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
 const runTests = () => runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
