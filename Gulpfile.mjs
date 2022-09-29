@@ -337,17 +337,8 @@ task("clean-tests").description = "Cleans the outputs for the test infrastructur
 
 const watchTests = () => watchProject("src/testRunner", cmdLineOptions);
 
-const buildEslintRules = () => buildProject("scripts/eslint");
-task("build-eslint-rules", buildEslintRules);
-task("build-eslint-rules").description = "Compiles eslint rules to js";
-
-const cleanEslintRules = () => cleanProject("scripts/eslint");
-cleanTasks.push(cleanEslintRules);
-task("clean-eslint-rules", cleanEslintRules);
-task("clean-eslint-rules").description = "Cleans the outputs for the eslint rules";
-
-const runEslintRulesTests = () => runConsoleTests("scripts/eslint/built/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("run-eslint-rules-tests", series(buildEslintRules, runEslintRulesTests));
+const runEslintRulesTests = () => runConsoleTests("scripts/eslint/tests", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
+task("run-eslint-rules-tests", series(buildScripts, runEslintRulesTests));
 task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
 /** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
