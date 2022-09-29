@@ -25,9 +25,6 @@ const buildScripts = () => buildProject("scripts");
 task("scripts", buildScripts);
 task("scripts").description = "Builds files in the 'scripts' folder.";
 
-const cleanScripts = () => cleanProject("scripts");
-cleanTasks.push(cleanScripts);
-
 /** @type {{ libs: string[]; paths: Record<string, string | undefined>; }} */
 const libraries = readJson("./src/lib/libs.json");
 const libs = libraries.libs.map(lib => {
@@ -61,7 +58,7 @@ const generateDiagnostics = async () => {
         await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
     }
 };
-task("generate-diagnostics", series(buildScripts, generateDiagnostics));
+task("generate-diagnostics", generateDiagnostics);
 task("generate-diagnostics").description = "Generates a diagnostic file in TypeScript based on an input JSON file";
 
 const cleanDiagnostics = () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]);
@@ -99,7 +96,7 @@ const cleanDebugTools = () => cleanProject("src/debug");
 cleanTasks.push(cleanDebugTools);
 
 // Pre-build steps when targeting the LKG compiler
-const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildDebugTools));
+const lkgPreBuild = parallel(generateLibs, series(generateDiagnostics, buildDebugTools));
 
 const buildTsc = () => buildProject("src/tsc");
 task("tsc", series(lkgPreBuild, buildTsc));
@@ -115,7 +112,7 @@ task("watch-tsc", series(lkgPreBuild, parallel(watchLib, watchDiagnostics, watch
 task("watch-tsc").description = "Watch for changes and rebuild the command-line compiler only.";
 
 // Pre-build steps when targeting the built/local compiler.
-const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildDebugTools, buildTsc));
+const localPreBuild = parallel(generateLibs, series(generateDiagnostics, buildDebugTools, buildTsc));
 
 // Pre-build steps to use based on supplied options.
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
@@ -414,7 +411,7 @@ task("watch-local").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
+const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl, buildScripts);
 preTest.displayName = "preTest";
 
 const runTests = () => runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
@@ -503,7 +500,7 @@ task("update-sublime").description = "Updates the sublime plugin's tsserver";
 
 // TODO(rbuckton): Should the path to DefinitelyTyped be configurable via an environment variable?
 const importDefinitelyTypedTests = () => exec(process.execPath, ["scripts/importDefinitelyTypedTests.mjs", "./", "../DefinitelyTyped"]);
-task("importDefinitelyTypedTests", series(buildScripts, importDefinitelyTypedTests));
+task("importDefinitelyTypedTests", importDefinitelyTypedTests);
 task("importDefinitelyTypedTests").description = "Runs the importDefinitelyTypedTests script to copy DT's tests to the TS-internal RWC tests";
 
 const buildReleaseTsc = () => buildProject("src/tsc/tsconfig.release.json");
@@ -548,26 +545,26 @@ task("LKG").flags = {
 task("lkg", series("LKG"));
 
 const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.mjs", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]);
-task("generate-spec", series(buildScripts, generateSpec));
+task("generate-spec", generateSpec);
 task("generate-spec").description = "Generates a Markdown version of the Language Specification";
 
 task("clean", series(parallel(cleanTasks), cleanBuilt));
 task("clean").description = "Cleans build outputs";
 
 const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.mjs", "dev", "package.json", "src/compiler/corePublic.ts"]);
-task("configure-nightly", series(buildScripts, configureNightly));
+task("configure-nightly", configureNightly);
 task("configure-nightly").description = "Runs scripts/configurePrerelease.mjs to prepare a build for nightly publishing";
 
 const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.mjs", "insiders", "package.json", "src/compiler/corePublic.ts"]);
-task("configure-insiders", series(buildScripts, configureInsiders));
+task("configure-insiders", configureInsiders);
 task("configure-insiders").description = "Runs scripts/configurePrerelease.mjs to prepare a build for insiders publishing";
 
 const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.mjs", "experimental", "package.json", "src/compiler/corePublic.ts"]);
-task("configure-experimental", series(buildScripts, configureExperimental));
+task("configure-experimental", configureExperimental);
 task("configure-experimental").description = "Runs scripts/configurePrerelease.mjs to prepare a build for experimental publishing";
 
 const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.mjs"]);
-task("create-language-services-build", series(buildScripts, createLanguageServicesBuild));
+task("create-language-services-build", createLanguageServicesBuild);
 task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.mjs to prepare a build which only has the require('typescript') JS.";
 
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
