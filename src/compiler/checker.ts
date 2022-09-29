@@ -27534,7 +27534,7 @@ namespace ts {
                 const inferenceContext = getInferenceContext(node);
                 // If no inferences have been made, nothing is gained from instantiating as type parameters
                 // would just be replaced with their defaults similar to the apparent type.
-                if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidates)) {
+                if (inferenceContext && contextFlags! & ContextFlags.Signature && some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
                     // types as well as arguments to the left in a function call.
                     return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
@@ -35143,6 +35143,10 @@ namespace ts {
 
         function hasInferenceCandidates(info: InferenceInfo) {
             return !!(info.candidates || info.contraCandidates);
+        }
+
+        function hasInferenceCandidatesOrDefault(info: InferenceInfo) {
+            return !!(info.candidates || info.contraCandidates || hasTypeParameterDefault(info.typeParameter));
         }
 
         function hasOverlappingInferences(a: InferenceInfo[], b: InferenceInfo[]) {
