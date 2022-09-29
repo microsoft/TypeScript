@@ -2,6 +2,10 @@ import childProcess from "child_process";
 import fs from "fs-extra";
 import path from "path";
 import glob from "glob";
+import url from "url";
+
+const __filename = url.fileURLToPath(new URL(import.meta.url));
+const __dirname = path.dirname(__filename);
 
 const root = path.join(__dirname, "..");
 const source = path.join(root, "built/local");

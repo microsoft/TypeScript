@@ -1,11 +1,9 @@
-// @ts-check
-const minimist = require("minimist");
-const os = require("os");
+import minimist from "minimist";
+import os from "os";
 
-const ci = ["1", "true"].includes(process.env.CI);
+const ci = ["1", "true"].includes(process.env.CI ?? "");
 
-/** @type {CommandLineOptions} */
-module.exports = minimist(process.argv.slice(2), {
+const parsed = minimist(process.argv.slice(2), {
     boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci"],
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
@@ -44,12 +42,19 @@ module.exports = minimist(process.argv.slice(2), {
     }
 });
 
-if (module.exports.built) {
-    module.exports.lkg = false;
+/** @type {CommandLineOptions} */
+const options = /** @type {any} */ (parsed);
+
+if (options.built) {
+    options.lkg = false;
 }
 
+export default options;
+
+
+
 /**
- * @typedef TypedOptions
+ * @typedef CommandLineOptions
  * @property {boolean} dirty
  * @property {boolean} light
  * @property {boolean} colors
@@ -59,6 +64,7 @@ if (module.exports.built) {
  * @property {boolean} fix
  * @property {string} browser
  * @property {string} tests
+ * @property {string | boolean} break
  * @property {string | boolean} inspect
  * @property {string} runners
  * @property {string|number} workers
@@ -69,7 +75,7 @@ if (module.exports.built) {
  * @property {boolean} failed
  * @property {boolean} keepFailed
  * @property {boolean} ci
- *
- * @typedef {import("minimist").ParsedArgs & TypedOptions} CommandLineOptions
+ * @property {string} shards
+ * @property {string} shardId
  */
 void 0;

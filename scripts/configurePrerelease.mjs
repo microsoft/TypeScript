@@ -1,6 +1,9 @@
 import { normalize, relative } from "path";
 import assert from "assert";
 import { readFileSync, writeFileSync } from "fs";
+import url from "url";
+
+const __filename = url.fileURLToPath(new URL(import.meta.url));
 
 /**
  * A minimal description for a parsed package.json object.

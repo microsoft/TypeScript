@@ -1,6 +1,6 @@
 // @ts-check
 
-import assert from "assert";
+const assert = require("assert");
 const Mocha = require("mocha");
 const path = require("path");
 const fs = require("fs");

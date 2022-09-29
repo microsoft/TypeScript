@@ -2,6 +2,10 @@ import { Octokit } from "@octokit/rest";
 import { runSequence } from "./run-sequence.mjs";
 import fs from "fs";
 import path from "path";
+import url from "url";
+
+const __filename = url.fileURLToPath(new URL(import.meta.url));
+const __dirname = path.dirname(__filename);
 
 const userName = process.env.GH_USERNAME;
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "RyanCavanaugh"];

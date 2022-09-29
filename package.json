@@ -41,6 +41,7 @@
     "devDependencies": {
         "@octokit/rest": "latest",
         "@types/chai": "latest",
+        "@types/fancy-log": "^2.0.0",
         "@types/fs-extra": "^9.0.13",
         "@types/glob": "latest",
         "@types/gulp": "^4.0.9",
@@ -56,6 +57,7 @@
         "@types/ms": "latest",
         "@types/node": "latest",
         "@types/source-map-support": "latest",
+        "@types/which": "^2.0.1",
         "@types/xml2js": "^0.4.11",
         "@typescript-eslint/eslint-plugin": "^5.33.1",
         "@typescript-eslint/parser": "^5.33.1",

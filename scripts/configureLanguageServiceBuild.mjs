@@ -2,6 +2,8 @@ import { normalize, dirname, join } from "path";
 import { readFileSync, writeFileSync, unlinkSync, existsSync } from "fs";
 import assert from "assert";
 import { execSync } from "child_process";
+import module from "module";
+const require = module.createRequire(import.meta.url);
 const args = process.argv.slice(2);
 
 /**

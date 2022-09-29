@@ -2,7 +2,10 @@ import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
 import * as childProcess from "child_process";
+import url from "url";
 
+const __filename = url.fileURLToPath(new URL(import.meta.url));
+const __dirname = path.dirname(__filename);
 
 main();
 function main() {

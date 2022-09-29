@@ -1,28 +1,28 @@
 // @ts-check
-const del = require("del");
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
-const mkdirP = require("mkdirp");
-const log = require("fancy-log");
-const cmdLineOptions = require("./options");
-const { exec } = require("./utils");
-const { findUpFile } = require("./findUpDir");
+import del from "del";
+import fs from "fs";
+import os from "os";
+import path from "path";
+import mkdirP from "mkdirp";
+import log from "fancy-log";
+import cmdLineOptions from "./options.mjs";
+import { exec } from "./utils.mjs";
+import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 
-const mochaJs = require.resolve("mocha/bin/_mocha");
-exports.localBaseline = "tests/baselines/local/";
-exports.refBaseline = "tests/baselines/reference/";
-exports.localRwcBaseline = "internal/baselines/rwc/local";
-exports.refRwcBaseline = "internal/baselines/rwc/reference";
-exports.localTest262Baseline = "internal/baselines/test262/local";
+const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
+export const localBaseline = "tests/baselines/local/";
+export const refBaseline = "tests/baselines/reference/";
+export const localRwcBaseline = "internal/baselines/rwc/local";
+export const refRwcBaseline = "internal/baselines/rwc/reference";
+export const localTest262Baseline = "internal/baselines/test262/local";
 
 /**
  * @param {string} runJs
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
- * @param {boolean} watchMode
+ * @param {boolean} _watchMode
  */
-async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode) {
+export async function runConsoleTests(runJs, defaultReporter, runInParallel, _watchMode) {
     let testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
@@ -137,7 +137,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode)
     }
     catch (e) {
         errorStatus = undefined;
-        error = e;
+        error = /** @type {Error} */ (e);
     }
     finally {
         restoreSavedNodeEnv();
@@ -151,14 +151,12 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode)
         throw error;
     }
 }
-exports.runConsoleTests = runConsoleTests;
 
-async function cleanTestDirs() {
-    await del([exports.localBaseline, exports.localRwcBaseline]);
-    mkdirP.sync(exports.localRwcBaseline);
-    mkdirP.sync(exports.localBaseline);
+export async function cleanTestDirs() {
+    await del([localBaseline, localRwcBaseline]);
+    mkdirP.sync(localRwcBaseline);
+    mkdirP.sync(localBaseline);
 }
-exports.cleanTestDirs = cleanTestDirs;
 
 /**
  * used to pass data from gulp command line directly to run.js
@@ -173,7 +171,7 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]
  */
-function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
+export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runners: runners ? runners.split(",") : undefined,
@@ -190,9 +188,8 @@ function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCou
     log.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
-exports.writeTestConfigFile = writeTestConfigFile;
 
-/** @type {string} */
+/** @type {string | undefined} */
 let savedNodeEnv;
 function setNodeEnvToDevelopment() {
     savedNodeEnv = process.env.NODE_ENV;
@@ -204,9 +201,12 @@ function restoreSavedNodeEnv() {
 }
 
 function deleteTemporaryProjectOutput() {
-    return del(path.join(exports.localBaseline, "projectOutput/"));
+    return del(path.join(localBaseline, "projectOutput/"));
 }
 
+/**
+ * @param {string} text
+ */
 function regExpEscape(text) {
     return text.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
 }

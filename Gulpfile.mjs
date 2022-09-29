@@ -1,20 +1,22 @@
 // @ts-check
-const path = require("path");
-const fs = require("fs");
-const log = require("fancy-log");
-const newer = require("gulp-newer");
-const sourcemaps = require("gulp-sourcemaps");
-const del = require("del");
-const rename = require("gulp-rename");
-const concat = require("gulp-concat");
-const merge2 = require("merge2");
-const { src, dest, task, parallel, series, watch } = require("gulp");
-const { append, transform } = require("gulp-insert");
-const { prependFile } = require("./scripts/build/prepend");
-const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
-const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
-const { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
-const cmdLineOptions = require("./scripts/build/options");
+import path from "path";
+import fs from "fs";
+import log from "fancy-log";
+import newer from "gulp-newer";
+import sourcemaps from "gulp-sourcemaps";
+import del from "del";
+import rename from "gulp-rename";
+import concat from "gulp-concat";
+import merge2 from "merge2";
+import gulp from "gulp";
+import { append, transform } from "gulp-insert";
+import { prependFile } from "./scripts/build/prepend.mjs";
+import { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } from "./scripts/build/utils.mjs";
+import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
+import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import cmdLineOptions from "./scripts/build/options.mjs";
+
+const { src, dest, task, parallel, series, watch } = gulp;
 
 const copyright = "CopyrightNotice.txt";
 const cleanTasks = [];

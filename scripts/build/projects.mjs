@@ -1,7 +1,7 @@
-// @ts-check
-const { exec, Debouncer } = require("./utils");
-const { resolve } = require("path");
-const { findUpRoot } = require("./findUpDir");
+import { exec, Debouncer } from "./utils.mjs";
+import { resolve } from "path";
+import { findUpRoot } from "./findUpDir.mjs";
+import assert from "assert";
 
 class ProjectQueue {
     /**
@@ -15,12 +15,13 @@ class ProjectQueue {
 
     /**
      * @param {string} project
-     * @param {object} options
+     * @param {{ lkg?: boolean; force?: boolean; }} options
      */
     enqueue(project, { lkg = true, force = false } = {}) {
         let entry = this._debouncers.find(entry => entry.lkg === lkg && entry.force === force);
         if (!entry) {
             const debouncer = new Debouncer(100, async () => {
+                assert(entry);
                 const projects = entry.projects;
                 if (projects) {
                     entry.projects = undefined;
@@ -49,14 +50,14 @@ const projectBuilder = new ProjectQueue((projects, lkg, force) => execTsc(lkg, .
  * @param {boolean} [options.lkg=true]
  * @param {boolean} [options.force=false]
  */
-exports.buildProject = (project, { lkg, force } = {}) => projectBuilder.enqueue(project, { lkg, force });
+export const buildProject = (project, { lkg, force } = {}) => projectBuilder.enqueue(project, { lkg, force });
 
 const projectCleaner = new ProjectQueue((projects, lkg) => execTsc(lkg, "--clean", ...projects));
 
 /**
  * @param {string} project
  */
-exports.cleanProject = (project) => projectCleaner.enqueue(project);
+ export const cleanProject = (project) => projectCleaner.enqueue(project);
 
 const projectWatcher = new ProjectQueue((projects) => execTsc(/*lkg*/ true, "--watch", ...projects));
 
@@ -65,4 +66,4 @@ const projectWatcher = new ProjectQueue((projects) => execTsc(/*lkg*/ true, "--w
  * @param {object} options
  * @param {boolean} [options.lkg=true]
  */
-exports.watchProject = (project, { lkg } = {}) => projectWatcher.enqueue(project, { lkg });
+export const watchProject = (project, { lkg } = {}) => projectWatcher.enqueue(project, { lkg });

@@ -1,20 +1,18 @@
-// @ts-check
-
 /* eslint-disable no-restricted-globals */
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../types/ambient.d.ts" />
 
-const fs = require("fs");
-const path = require("path");
-const log = require("fancy-log");
-const mkdirp = require("mkdirp");
-const del = require("del");
-const File = require("vinyl");
-const ts = require("../../lib/typescript");
-const chalk = require("chalk");
-const which = require("which");
-const { spawn } = require("child_process");
-const { Readable, Duplex } = require("stream");
+import fs from "fs";
+import path from "path";
+import log from "fancy-log";
+import del from "del";
+import File from "vinyl";
+import ts from "../../lib/typescript.js";
+import chalk from "chalk";
+import which from "which";
+import { spawn } from "child_process";
+import { Duplex } from "stream";
+import assert from "assert";
 
 /**
  * Executes the provided command once with the supplied arguments.
@@ -27,8 +25,8 @@ const { Readable, Duplex } = require("stream");
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
  */
-async function exec(cmd, args, options = {}) {
-    return /**@type {Promise<{exitCode: number}>}*/(new Promise((resolve, reject) => {
+export async function exec(cmd, args, options = {}) {
+    return /**@type {Promise<{exitCode?: number}>}*/(new Promise((resolve, reject) => {
         const { ignoreExitCode, waitForExit = true } = options;
 
         if (!options.hidePrompt) log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
@@ -36,7 +34,7 @@ async function exec(cmd, args, options = {}) {
         if (waitForExit) {
             proc.on("exit", exitCode => {
                 if (exitCode === 0 || ignoreExitCode) {
-                    resolve({ exitCode });
+                    resolve({ exitCode: exitCode ?? undefined });
                 }
                 else {
                     reject(new Error(`Process exited with code: ${exitCode}`));
@@ -53,7 +51,6 @@ async function exec(cmd, args, options = {}) {
         }
     }));
 }
-exports.exec = exec;
 
 /**
  * @param {ts.Diagnostic[]} diagnostics
@@ -64,7 +61,6 @@ function formatDiagnostics(diagnostics, options) {
         ? ts.formatDiagnosticsWithColorAndContext(diagnostics, getFormatDiagnosticsHost(options && options.cwd))
         : ts.formatDiagnostics(diagnostics, getFormatDiagnosticsHost(options && options.cwd));
 }
-exports.formatDiagnostics = formatDiagnostics;
 
 /**
  * @param {ts.Diagnostic[]} diagnostics
@@ -73,7 +69,6 @@ exports.formatDiagnostics = formatDiagnostics;
 function reportDiagnostics(diagnostics, options) {
     log(formatDiagnostics(diagnostics, { cwd: options && options.cwd, pretty: process.stdout.isTTY }));
 }
-exports.reportDiagnostics = reportDiagnostics;
 
 /**
  * @param {string | undefined} cwd
@@ -82,17 +77,16 @@ exports.reportDiagnostics = reportDiagnostics;
 function getFormatDiagnosticsHost(cwd) {
     return {
         getCanonicalFileName: fileName => fileName,
-        getCurrentDirectory: () => cwd,
+        getCurrentDirectory: () => cwd ?? process.cwd(),
         getNewLine: () => ts.sys.newLine,
     };
 }
-exports.getFormatDiagnosticsHost = getFormatDiagnosticsHost;
 
 /**
  * Reads JSON data with optional comments using the LKG TypeScript compiler
  * @param {string} jsonPath
  */
-function readJson(jsonPath) {
+export function readJson(jsonPath) {
     const jsonText = fs.readFileSync(jsonPath, "utf8");
     const result = ts.parseConfigFileTextToJson(jsonPath, jsonText);
     if (result.error) {
@@ -101,38 +95,13 @@ function readJson(jsonPath) {
     }
     return result.config;
 }
-exports.readJson = readJson;
-
-/**
- * @param {File} file
- */
-function streamFromFile(file) {
-    return file.isBuffer() ? streamFromBuffer(file.contents) :
-        file.isStream() ? file.contents :
-        fs.createReadStream(file.path, { autoClose: true });
-}
-exports.streamFromFile = streamFromFile;
-
-/**
- * @param {Buffer} buffer
- */
-function streamFromBuffer(buffer) {
-    return new Readable({
-        read() {
-            this.push(buffer);
-            // eslint-disable-next-line no-null/no-null
-            this.push(null);
-        }
-    });
-}
-exports.streamFromBuffer = streamFromBuffer;
 
 /**
  * @param {string | string[]} source
  * @param {string | string[]} dest
  * @returns {boolean}
  */
-function needsUpdate(source, dest) {
+export function needsUpdate(source, dest) {
     if (typeof source === "string" && typeof dest === "string") {
         if (fs.existsSync(dest)) {
             const {mtime: outTime} = fs.statSync(dest);
@@ -194,9 +163,8 @@ function needsUpdate(source, dest) {
     }
     return true;
 }
-exports.needsUpdate = needsUpdate;
 
-function getDiffTool() {
+export function getDiffTool() {
     const program = process.env.DIFF;
     if (!program) {
         log.warn("Add the 'DIFF' environment variable to the path of the program you want to use.");
@@ -204,7 +172,6 @@ function getDiffTool() {
     }
     return program;
 }
-exports.getDiffTool = getDiffTool;
 
 /**
  * Find the size of a directory recursively.
@@ -212,7 +179,7 @@ exports.getDiffTool = getDiffTool;
  * @param {string} root
  * @returns {number} bytes
  */
-function getDirSize(root) {
+export function getDirSize(root) {
     const stats = fs.lstatSync(root);
 
     if (!stats.isDirectory()) {
@@ -223,97 +190,12 @@ function getDirSize(root) {
         .map(file => getDirSize(path.join(root, file)))
         .reduce((acc, num) => acc + num, 0);
 }
-exports.getDirSize = getDirSize;
-
-/**
- * Flattens a project with project references into a single project.
- * @param {string} projectSpec The path to a tsconfig.json file or its containing directory.
- * @param {string} flattenedProjectSpec The output path for the flattened tsconfig.json file.
- * @param {FlattenOptions} [options] Options used to flatten a project hierarchy.
- *
- * @typedef FlattenOptions
- * @property {string} [cwd] The path to use for the current working directory. Defaults to `process.cwd()`.
- * @property {import("../../lib/typescript").CompilerOptions} [compilerOptions] Compiler option overrides.
- * @property {boolean} [force] Forces creation of the output project.
- * @property {string[]} [exclude] Files to exclude (relative to `cwd`)
- */
-function flatten(projectSpec, flattenedProjectSpec, options = {}) {
-    const cwd = normalizeSlashes(options.cwd ? path.resolve(options.cwd) : process.cwd());
-    const files = [];
-    const resolvedOutputSpec = path.resolve(cwd, flattenedProjectSpec);
-    const resolvedOutputDirectory = path.dirname(resolvedOutputSpec);
-    const resolvedProjectSpec = resolveProjectSpec(projectSpec, cwd, /*referrer*/ undefined);
-    const project = readJson(resolvedProjectSpec);
-    const skipProjects = /**@type {Set<string>}*/(new Set());
-    const skipFiles = new Set(options && options.exclude && options.exclude.map(file => normalizeSlashes(path.resolve(cwd, file))));
-    recur(resolvedProjectSpec, project);
-
-    if (options.force || needsUpdate(files, resolvedOutputSpec)) {
-        const config = {
-            extends: normalizeSlashes(path.relative(resolvedOutputDirectory, resolvedProjectSpec)),
-            compilerOptions: options.compilerOptions || {},
-            files: files.map(file => normalizeSlashes(path.relative(resolvedOutputDirectory, file)))
-        };
-        mkdirp.sync(resolvedOutputDirectory);
-        fs.writeFileSync(resolvedOutputSpec, JSON.stringify(config, undefined, 2), "utf8");
-    }
-
-    /**
-     * @param {string} projectSpec
-     * @param {object} project
-     */
-    function recur(projectSpec, project) {
-        if (skipProjects.has(projectSpec)) return;
-        skipProjects.add(project);
-        if (project.references) {
-            for (const ref of project.references) {
-                const referencedSpec = resolveProjectSpec(ref.path, cwd, projectSpec);
-                const referencedProject = readJson(referencedSpec);
-                recur(referencedSpec, referencedProject);
-            }
-        }
-        if (project.include) {
-            throw new Error("Flattened project may not have an 'include' list.");
-        }
-        if (!project.files) {
-            throw new Error("Flattened project must have an explicit 'files' list.");
-        }
-        const projectDirectory = path.dirname(projectSpec);
-        for (let file of project.files) {
-            file = normalizeSlashes(path.resolve(projectDirectory, file));
-            if (skipFiles.has(file)) continue;
-            skipFiles.add(file);
-            files.push(file);
-        }
-    }
-}
-exports.flatten = flatten;
-
-/**
- * @param {string} file
- */
-function normalizeSlashes(file) {
-    return file.replace(/\\/g, "/");
-}
-
-/**
- * @param {string} projectSpec
- * @param {string} cwd
- * @param {string | undefined} referrer
- * @returns {string}
- */
-function resolveProjectSpec(projectSpec, cwd, referrer) {
-    const projectPath = normalizeSlashes(path.resolve(cwd, referrer ? path.dirname(referrer) : "", projectSpec));
-    const stats = fs.statSync(projectPath);
-    if (stats.isFile()) return normalizeSlashes(projectPath);
-    return normalizeSlashes(path.resolve(cwd, projectPath, "tsconfig.json"));
-}
 
 /**
  * @param {string | ((file: File) => string) | { cwd?: string }} [dest]
  * @param {{ cwd?: string }} [opts]
  */
-function rm(dest, opts) {
+export function rm(dest, opts) {
     if (dest && typeof dest === "object") {
         opts = dest;
         dest = undefined;
@@ -328,7 +210,9 @@ function rm(dest, opts) {
     const processDeleted = () => {
         if (failed) return;
         while (pending.length && pending[0].deleted) {
-            const { file, cb } = pending.shift();
+            const fileAndCallback = pending.shift();
+            assert(fileAndCallback);
+            const { file, cb } = fileAndCallback;
             duplex.push(file);
             cb();
         }
@@ -382,7 +266,6 @@ function rm(dest, opts) {
     });
     return duplex;
 }
-exports.rm = rm;
 
 class Deferred {
     constructor() {
@@ -393,7 +276,7 @@ class Deferred {
     }
 }
 
-class Debouncer {
+export class Debouncer {
     /**
      * @param {number} timeout
      * @param {() => Promise<any>} action
@@ -424,8 +307,8 @@ class Debouncer {
         }
 
         const deferred = this._deferred;
+        assert(deferred);
         this._deferred = undefined;
-        this._projects = undefined;
         try {
             deferred.resolve(this._action());
         }
@@ -434,4 +317,3 @@ class Debouncer {
         }
     }
 }
-exports.Debouncer = Debouncer;

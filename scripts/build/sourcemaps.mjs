@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * @param {string} message
  * @returns {never}
@@ -23,7 +22,7 @@ function base64FormatEncode(value) {
 /**
  * @param {number} value
  */
-function base64VLQFormatEncode(value) {
+export function base64VLQFormatEncode(value) {
     if (value < 0) {
         value = ((-value) << 1) + 1;
     }
@@ -45,6 +44,5 @@ function base64VLQFormatEncode(value) {
 
     return result;
 }
-exports.base64VLQFormatEncode = base64VLQFormatEncode;
 
 /** @typedef {object} RawSourceMap */
