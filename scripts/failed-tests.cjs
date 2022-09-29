@@ -1,5 +1,3 @@
-// @ts-check
-
 const assert = require("assert");
 const Mocha = require("mocha");
 const path = require("path");

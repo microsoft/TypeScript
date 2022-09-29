@@ -1,4 +1,3 @@
-// @ts-check
 import del from "del";
 import fs from "fs";
 import os from "os";
