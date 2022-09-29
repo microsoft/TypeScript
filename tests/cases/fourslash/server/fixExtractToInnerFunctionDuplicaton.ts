@@ -12,6 +12,3 @@ verify.refactorAvailable("Extract Symbol", 'constant_scope_0', "Extract to const
 verify.refactorAvailable("Extract Symbol", 'constant_scope_1', "Extract to constant in global scope");
 
 verify.not.refactorAvailable("Extract Symbol", 'constant_scope_0', "Extract to constant in global scope");
-
-
-// function foo(): void { console.log('a');}
