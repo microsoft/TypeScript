@@ -27551,7 +27551,7 @@ namespace ts {
                     else if((apparentType.flags & TypeFlags.Union)) {
                         const signatureList = getContextualSignatureListFromApparentTypes((apparentType as UnionType).types, node as FunctionExpression | ArrowFunction | MethodDeclaration);
 
-                        if(!signatureList) {
+                        if (!signatureList) {
                             // At this point, the signature type is guaranteed to eventually collapse into any
                             // because it is a union of incompatible function signatures
                             return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
