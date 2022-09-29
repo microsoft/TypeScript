@@ -122,7 +122,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, _wa
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
         }
-        else if (cmdLineOptions.ci) {
+        else if (cmdLineOptions.ci && runJs.startsWith("built")) {
             // finally, do a sanity check and build the compiler with the built version of itself
             log.info("Starting sanity check build...");
             // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)
