@@ -1,5 +1,6 @@
 // @target: es5,es2015
 // @module: es2015
+// @sourcemap: true
 
 // Example from https://mathiasbynens.be/notes/javascript-identifiers-es6
 // Astral characters should be accepted in ES2015

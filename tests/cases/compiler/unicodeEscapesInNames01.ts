@@ -1,4 +1,5 @@
 // @target: es5,es2015,esnext
+// @sourcemap: true
 
 // @filename: identifierVariableWithEscape1.ts
 export let \u0078 = 10;
