@@ -16,9 +16,11 @@ namespace ts.OrganizeImports {
         mode: OrganizeImportsMode,
     ) {
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
-        const maybeRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All ? removeUnusedImports : identity;
-        const maybeCoalesce = mode === OrganizeImportsMode.SortAndCombine || mode === OrganizeImportsMode.All ? coalesceImports : identity;
         const shouldSort = mode === OrganizeImportsMode.SortAndCombine || mode === OrganizeImportsMode.All;
+        const shouldCombine = shouldSort; // These are currently inseparable, but I draw a distinction for clarity and in case we add modes in the future.
+        const shouldRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All;
+        const maybeRemove = shouldRemove ? removeUnusedImports : identity;
+        const maybeCoalesce = shouldCombine ? coalesceImports : identity;
         const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
             const processedDeclarations = maybeCoalesce(maybeRemove(importGroup, sourceFile, program));
             return shouldSort
@@ -28,25 +30,25 @@ namespace ts.OrganizeImports {
 
         // All of the old ImportDeclarations in the file, in syntactic order.
         const topLevelImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration));
-        topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier, mode));
+        topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier));
 
         // Exports are always used
         if (mode !== OrganizeImportsMode.RemoveUnused) {
             // All of the old ExportDeclarations in the file, in syntactic order.
             const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
-            organizeImportsWorker(topLevelExportDecls, coalesceExports, mode);
+            organizeImportsWorker(topLevelExportDecls, coalesceExports);
         }
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
             if (!ambientModule.body) continue;
 
             const ambientModuleImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, ambientModule.body.statements.filter(isImportDeclaration));
-            ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier, mode));
+            ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier));
 
             // Exports are always used
             if (mode !== OrganizeImportsMode.RemoveUnused) {
                 const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
-                organizeImportsWorker(ambientModuleExportDecls, coalesceExports, mode);
+                organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
             }
         }
 
@@ -55,9 +57,7 @@ namespace ts.OrganizeImports {
         function organizeImportsWorker<T extends ImportDeclaration | ExportDeclaration>(
             oldImportDecls: readonly T[],
             coalesce: (group: readonly T[]) => readonly T[],
-            mode: OrganizeImportsMode,
         ) {
-
             if (length(oldImportDecls) === 0) {
                 return;
             }
@@ -69,12 +69,10 @@ namespace ts.OrganizeImports {
             // but the consequences of being wrong are very minor.
             suppressLeadingTrivia(oldImportDecls[0]);
 
-            const shouldSort = mode === OrganizeImportsMode.SortAndCombine || mode === OrganizeImportsMode.All;
-            const shouldCombine = shouldSort; // These are currently inseparable, but I draw a distinction for clarity and in case we add modes in the future.
             const oldImportGroups = shouldCombine
                 ? group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier!)!)
                 : [oldImportDecls];
-            const sortedImportGroups = mode
+            const sortedImportGroups = shouldSort
                 ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier))
                 : oldImportGroups;
             const newImportDecls = flatMap(sortedImportGroups, importGroup =>
