@@ -56,7 +56,7 @@ const diagnosticMessagesJson = "src/compiler/diagnosticMessages.json";
 const diagnosticMessagesGeneratedJson = "src/compiler/diagnosticMessages.generated.json";
 const generateDiagnostics = async () => {
     if (needsUpdate(diagnosticMessagesJson, [diagnosticMessagesGeneratedJson, diagnosticInformationMapTs])) {
-        await exec(process.execPath, ["scripts/processDiagnosticMessages.js", diagnosticMessagesJson]);
+        await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
     }
 };
 task("generate-diagnostics", series(buildScripts, generateDiagnostics));
@@ -88,7 +88,7 @@ const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt
 
 const localize = async () => {
     if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-        return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.js", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
+        return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
     }
 };
 
@@ -459,8 +459,8 @@ task("runtests-parallel").flags = {
 };
 
 
-task("test-browser-integration", () => exec(process.execPath, ["scripts/browserIntegrationTest.js"]));
-task("test-browser-integration").description = "Runs scripts/browserIntegrationTest.ts which tests that typescript.js loads in a browser";
+task("test-browser-integration", () => exec(process.execPath, ["scripts/browserIntegrationTest.mjs"]));
+task("test-browser-integration").description = "Runs scripts/browserIntegrationTest.mjs which tests that typescript.js loads in a browser";
 
 
 task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }));
@@ -508,13 +508,9 @@ const updateSublime = () => src(["built/local/tsserver.js", "built/local/tsserve
 task("update-sublime", updateSublime);
 task("update-sublime").description = "Updates the sublime plugin's tsserver";
 
-const buildImportDefinitelyTypedTests = () => buildProject("scripts/importDefinitelyTypedTests");
-const cleanImportDefinitelyTypedTests = () => cleanProject("scripts/importDefinitelyTypedTests");
-cleanTasks.push(cleanImportDefinitelyTypedTests);
-
 // TODO(rbuckton): Should the path to DefinitelyTyped be configurable via an environment variable?
-const importDefinitelyTypedTests = () => exec(process.execPath, ["scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js", "./", "../DefinitelyTyped"]);
-task("importDefinitelyTypedTests", series(buildImportDefinitelyTypedTests, importDefinitelyTypedTests));
+const importDefinitelyTypedTests = () => exec(process.execPath, ["scripts/importDefinitelyTypedTests.mjs", "./", "../DefinitelyTyped"]);
+task("importDefinitelyTypedTests", series(buildScripts, importDefinitelyTypedTests));
 task("importDefinitelyTypedTests").description = "Runs the importDefinitelyTypedTests script to copy DT's tests to the TS-internal RWC tests";
 
 const buildReleaseTsc = () => buildProject("src/tsc/tsconfig.release.json");
@@ -544,7 +540,7 @@ const produceLKG = async () => {
         throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
     }
     const sizeBefore = getDirSize("lib");
-    await exec(process.execPath, ["scripts/produceLKG.js"]);
+    await exec(process.execPath, ["scripts/produceLKG.mjs"]);
     const sizeAfter = getDirSize("lib");
     if (sizeAfter > (sizeBefore * 1.10)) {
         throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
@@ -558,28 +554,28 @@ task("LKG").flags = {
 };
 task("lkg", series("LKG"));
 
-const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.js", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]);
+const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.mjs", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]);
 task("generate-spec", series(buildScripts, generateSpec));
 task("generate-spec").description = "Generates a Markdown version of the Language Specification";
 
 task("clean", series(parallel(cleanTasks), cleanBuilt));
 task("clean").description = "Cleans build outputs";
 
-const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/corePublic.ts"]);
+const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.mjs", "dev", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-nightly", series(buildScripts, configureNightly));
-task("configure-nightly").description = "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing";
+task("configure-nightly").description = "Runs scripts/configurePrerelease.mjs to prepare a build for nightly publishing";
 
-const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.js", "insiders", "package.json", "src/compiler/corePublic.ts"]);
+const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.mjs", "insiders", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-insiders", series(buildScripts, configureInsiders));
-task("configure-insiders").description = "Runs scripts/configurePrerelease.ts to prepare a build for insiders publishing";
+task("configure-insiders").description = "Runs scripts/configurePrerelease.mjs to prepare a build for insiders publishing";
 
-const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/corePublic.ts"]);
+const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.mjs", "experimental", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-experimental", series(buildScripts, configureExperimental));
-task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
+task("configure-experimental").description = "Runs scripts/configurePrerelease.mjs to prepare a build for experimental publishing";
 
-const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.js"]);
+const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.mjs"]);
 task("create-language-services-build", series(buildScripts, createLanguageServicesBuild));
-task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.ts to prepare a build which only has the require('typescript') JS.";
+task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.mjs to prepare a build which only has the require('typescript') JS.";
 
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));
