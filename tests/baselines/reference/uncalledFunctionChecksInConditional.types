@@ -120,3 +120,13 @@ if (ux || y || uz || isFoo) {
     // error on isFoo
 }
 
+if (x && z) {
+>x && z : false | (() => boolean)
+>x : boolean
+>z : () => boolean
+
+    // no error
+    z();
+>z() : boolean
+>z : () => boolean
+}

@@ -40,7 +40,6 @@ namespace ts.codefix {
         else {
             const valueExportDeclaration = factory.updateExportDeclaration(
                 exportDeclaration,
-                exportDeclaration.decorators,
                 exportDeclaration.modifiers,
                 /*isTypeOnly*/ false,
                 factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
@@ -48,7 +47,6 @@ namespace ts.codefix {
                 /*assertClause*/ undefined
             );
             const typeExportDeclaration = factory.createExportDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ true,
                 factory.createNamedExports(typeExportSpecifiers),

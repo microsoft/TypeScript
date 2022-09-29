@@ -54,7 +54,7 @@ type E = `${A & {}}`;
 >E : "a"
 
 type MixE = E & {}
->MixE : "a" & {}
+>MixE : "a"
 
 type OriginE = `${MixE}`
 >OriginE : "a"

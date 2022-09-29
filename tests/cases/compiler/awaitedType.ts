@@ -162,3 +162,23 @@ async function f16<T extends number & { then(): void }>(x: T) {
 
 // helps with tests where '.types' just prints out the type alias name
 type _Expect<TActual extends TExpected, TExpected> = TActual;
+
+// https://github.com/microsoft/TypeScript/issues/48320
+async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
+    const ret: Awaited<ReturnType<T>> = await fn(1, 2, 3);
+    return ret;
+}
+async function f17_usage() {
+    const x = await f17(async () => 123 as const);
+    return { x };
+}
+
+// https://github.com/microsoft/TypeScript/issues/47144
+type GenericStructure<
+  AcceptableKeyType extends string = string
+> = Record<AcceptableKeyType, number>;
+
+async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
+  const structure = await structurePromise;
+  structure[key] = 1;
+}

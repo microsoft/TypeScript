@@ -57,31 +57,29 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/index.ts (used version)
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/src/index.ts:
-  {"fileName":"/users/username/projects/project/src/index.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/classnames/index.d.ts:
-  {"fileName":"/users/username/projects/project/node_modules/classnames/index.d.ts","pollingInterval":250}
-/users/username/projects/project/src/types/classnames.d.ts:
-  {"fileName":"/users/username/projects/project/src/types/classnames.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/classnames/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/classnames/package.json","pollingInterval":250}
+PolledWatches::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/src/index.ts:
+  {}
+/users/username/projects/project/node_modules/classnames/index.d.ts:
+  {}
+/users/username/projects/project/src/types/classnames.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project/src:
-  {"directoryName":"/users/username/projects/project/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /users/username/projects/project/node_modules:
-  {"directoryName":"/users/username/projects/project/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -202,31 +200,29 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 /users/username/projects/project/src/index.ts (computed .d.ts)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/src/index.ts:
-  {"fileName":"/users/username/projects/project/src/index.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/classnames/index.d.ts:
-  {"fileName":"/users/username/projects/project/node_modules/classnames/index.d.ts","pollingInterval":250}
-/users/username/projects/project/src/types/classnames.d.ts:
-  {"fileName":"/users/username/projects/project/src/types/classnames.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/classnames/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/classnames/package.json","pollingInterval":250}
+PolledWatches::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/src/index.ts:
+  {}
+/users/username/projects/project/node_modules/classnames/index.d.ts:
+  {}
+/users/username/projects/project/src/types/classnames.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project/src:
-  {"directoryName":"/users/username/projects/project/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /users/username/projects/project/node_modules:
-  {"directoryName":"/users/username/projects/project/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

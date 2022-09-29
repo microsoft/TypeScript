@@ -120,7 +120,7 @@ namespace ts.codefix {
         const isRest = node.type!.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1; // TODO: GH#18217
         const name = node.name || (isRest ? "rest" : "arg" + index);
         const dotdotdot = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
-        return factory.createParameterDeclaration(node.decorators, node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
+        return factory.createParameterDeclaration(node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
     }
 
     function transformJSDocTypeReference(node: TypeReferenceNode) {
@@ -157,14 +157,13 @@ namespace ts.codefix {
 
     function transformJSDocIndexSignature(node: TypeReferenceNode) {
         const index = factory.createParameterDeclaration(
-            /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
             /*questionToken*/ undefined,
             factory.createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
             /*initializer*/ undefined);
-        const indexSignature = factory.createTypeLiteralNode([factory.createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments![1])]);
+        const indexSignature = factory.createTypeLiteralNode([factory.createIndexSignature(/*modifiers*/ undefined, [index], node.typeArguments![1])]);
         setEmitFlags(indexSignature, EmitFlags.SingleLine);
         return indexSignature;
     }

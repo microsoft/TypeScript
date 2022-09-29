@@ -28,10 +28,10 @@ class A {
 
         this?.getA().#b;    // Error
 >this?.getA().#b : A | undefined
->this?.getA() : A | undefined
->this?.getA : (() => A) | undefined
+>this?.getA() : A
+>this?.getA : () => A
 >this : this
->getA : (() => A) | undefined
+>getA : () => A
     }
 }
 

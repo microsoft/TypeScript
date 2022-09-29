@@ -3,9 +3,9 @@
 /// <reference types="node" />
 
 import { Octokit } from "@octokit/rest";
-const {runSequence} = require("./run-sequence");
-import fs = require("fs");
-import path = require("path");
+import { runSequence } from "./run-sequence";
+import * as fs from "fs";
+import * as path from "path";
 
 const userName = process.env.GH_USERNAME;
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "RyanCavanaugh"];

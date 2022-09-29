@@ -16,17 +16,21 @@ namespace ts {
          */
         OutOfDateWithPrepend,
         OutputMissing,
+        ErrorReadingFile,
         OutOfDateWithSelf,
         OutOfDateWithUpstream,
+        OutOfDateBuildInfo,
         UpstreamOutOfDate,
         UpstreamBlocked,
         ComputingUpstream,
         TsVersionOutputOfDate,
+        UpToDateWithInputFileText,
 
         /**
          * Projects with no outputs (i.e. "solution" files)
          */
-        ContainerOnly
+        ContainerOnly,
+        ForceBuild,
     }
 
     export type UpToDateStatus =
@@ -34,13 +38,16 @@ namespace ts {
         | Status.UpToDate
         | Status.OutOfDateWithPrepend
         | Status.OutputMissing
+        | Status.ErrorReadingFile
         | Status.OutOfDateWithSelf
         | Status.OutOfDateWithUpstream
+        | Status.OutOfDateBuildInfo
         | Status.UpstreamOutOfDate
         | Status.UpstreamBlocked
         | Status.ComputingUpstream
         | Status.TsVersionOutOfDate
-        | Status.ContainerOnly;
+        | Status.ContainerOnly
+        | Status.ForceBuild;
 
     export namespace Status {
         /**
@@ -64,12 +71,9 @@ namespace ts {
          * We track what the newest input file is.
          */
         export interface UpToDate {
-            type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
+            type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes | UpToDateStatusType.UpToDateWithInputFileText;
             newestInputFileTime?: Date;
             newestInputFileName?: string;
-            newestDeclarationFileContentChangedTime?: Date;
-            newestOutputFileTime?: Date;
-            newestOutputFileName?: string;
             oldestOutputFileName: string;
         }
 
@@ -93,6 +97,12 @@ namespace ts {
             missingOutputFileName: string;
         }
 
+        /** Error reading file */
+        export interface ErrorReadingFile {
+            type: UpToDateStatusType.ErrorReadingFile;
+            fileName: string;
+        }
+
         /**
          * One or more of the project's outputs is older than its newest input.
          */
@@ -100,6 +110,14 @@ namespace ts {
             type: UpToDateStatusType.OutOfDateWithSelf;
             outOfDateOutputFileName: string;
             newerInputFileName: string;
+        }
+
+        /**
+         * Buildinfo indicates that build is out of date
+         */
+        export interface OutOfDateBuildInfo {
+            type: UpToDateStatusType.OutOfDateBuildInfo,
+            buildInfoFile: string;
         }
 
         /**
@@ -139,6 +157,10 @@ namespace ts {
             type: UpToDateStatusType.OutOfDateWithUpstream;
             outOfDateOutputFileName: string;
             newerProjectName: string;
+        }
+
+        export interface ForceBuild {
+            type: UpToDateStatusType.ForceBuild;
         }
     }
 

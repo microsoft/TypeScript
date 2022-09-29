@@ -407,11 +407,11 @@ namespace ts.SignatureHelp {
         //          not enough to put us in the substitution expression; we should consider ourselves part of
         //          the *next* span's expression by offsetting the index (argIndex = (spanIndex + 1) + 1).
         //
-        /* eslint-disable no-double-space */
+        /* eslint-disable local/no-double-space */
         // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
         //              ^       ^ ^       ^   ^          ^ ^      ^     ^
         // Case:        1       1 3       2   1          3 2      2     1
-        /* eslint-enable no-double-space */
+        /* eslint-enable local/no-double-space */
         Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
         if (isTemplateLiteralToken(node)) {
             if (isInsideTemplateLiteral(node, position, sourceFile)) {

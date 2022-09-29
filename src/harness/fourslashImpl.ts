@@ -1430,14 +1430,17 @@ namespace FourSlash {
                 contextRangeDelta?: number
                 contextRangeId?: string;
             }
-            const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true } : options;
+            const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } =
+                ts.isArray(options)
+                    ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true }
+                    : options;
 
             const _startRanges = toArray(startRanges);
             assert(_startRanges.length);
             for (const startRange of _startRanges) {
                 this.goToRangeStart(startRange);
 
-                const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
+                const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { providePrefixAndSuffixTextForRename });
                 if (!renameInfo.canRename) {
                     this.raiseError("Expected rename to succeed, but it actually failed.");
                     break;
@@ -1449,7 +1452,7 @@ namespace FourSlash {
                 const sort = (locations: readonly ts.RenameLocation[] | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
-                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line no-in-operator
+                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line local/no-in-operator
                     const { contextRangeIndex, contextRangeDelta, contextRangeId } = (range.marker && range.marker.data || {}) as RangeMarkerData;
                     let contextSpan: ts.TextSpan | undefined;
                     if (contextRangeDelta !== undefined) {
@@ -1630,8 +1633,15 @@ namespace FourSlash {
             }
         }
 
-        public verifyRenameInfoSucceeded(displayName: string | undefined, fullDisplayName: string | undefined, kind: string | undefined, kindModifiers: string | undefined, fileToRename: string | undefined, expectedRange: Range | undefined, renameInfoOptions: ts.RenameInfoOptions | undefined): void {
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, renameInfoOptions || { allowRenameOfImportPath: true });
+        public verifyRenameInfoSucceeded(
+            displayName: string | undefined,
+            fullDisplayName: string | undefined,
+            kind: string | undefined,
+            kindModifiers: string | undefined,
+            fileToRename: string | undefined,
+            expectedRange: Range | undefined,
+            preferences: ts.UserPreferences | undefined): void {
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, preferences || { allowRenameOfImportPath: true });
             if (!renameInfo.canRename) {
                 throw this.raiseError("Rename did not succeed");
             }
@@ -1656,9 +1666,9 @@ namespace FourSlash {
             }
         }
 
-        public verifyRenameInfoFailed(message?: string, allowRenameOfImportPath?: boolean) {
-            allowRenameOfImportPath = allowRenameOfImportPath === undefined ? true : allowRenameOfImportPath;
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { allowRenameOfImportPath });
+        public verifyRenameInfoFailed(message?: string, preferences?: ts.UserPreferences) {
+            const allowRenameOfImportPath = preferences?.allowRenameOfImportPath === undefined ? true : preferences.allowRenameOfImportPath;
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { ...preferences, allowRenameOfImportPath });
             if (renameInfo.canRename) {
                 throw this.raiseError("Rename was expected to fail");
             }
@@ -2246,7 +2256,7 @@ namespace FourSlash {
                     this.languageServiceAdapterHost,
                     this.languageService.getProgram()?.getCompilerOptions() || {}
                 ),
-                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {})
+                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
             };
             const referenceSourceFile = ts.createLanguageServiceSourceFile(
                 this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents:*/ false);
@@ -2727,7 +2737,7 @@ namespace FourSlash {
                 const identifier = this.classificationToIdentifier(a.classificationType as number);
                 const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
                 replacement.push(`    c2.semanticToken("${identifier}", "${text}"), `);
-            };
+            }
             replacement.push(");");
 
             throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
@@ -2737,6 +2747,13 @@ namespace FourSlash {
             // const testfile = fs.readFileSync(testfilePath, "utf8");
             // const newfile = testfile.replace("verify.replaceWithSemanticClassifications(\"2020\")", replacement.join("\n"));
             // fs.writeFileSync(testfilePath, newfile);
+        }
+
+        public verifyEncodedSyntacticClassificationsLength(expected: number) {
+            const actual = this.languageService.getEncodedSyntacticClassifications(this.activeFile.fileName, ts.createTextSpan(0, this.activeFile.content.length));
+            if (actual.spans.length !== expected) {
+                this.raiseError(`encodedSyntacticClassificationsLength failed - expected total spans to be ${expected} got ${actual.spans.length}`);
+            }
         }
 
         public verifyEncodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, expected: number) {
@@ -3906,7 +3923,7 @@ namespace FourSlash {
             return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind);
         }
         private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string): readonly ts.ApplicableRefactorInfo[] {
-            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind); // eslint-disable-line no-in-operator
+            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind); // eslint-disable-line local/no-in-operator
         }
         private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string): readonly ts.ApplicableRefactorInfo[] {
             return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind) || ts.emptyArray;

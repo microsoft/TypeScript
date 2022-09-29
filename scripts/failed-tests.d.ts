@@ -1,4 +1,4 @@
-import Mocha = require("mocha");
+import * as Mocha from "mocha";
 
 export = FailedTestsReporter;
 

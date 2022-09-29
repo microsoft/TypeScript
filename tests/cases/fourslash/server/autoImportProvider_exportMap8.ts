@@ -49,13 +49,6 @@ goTo.marker("cts");
 verify.completions({
   marker: "cts",
   exact: completion.globalsPlus([{
-    // TODO: this one will go away (see note in ./autoImportProvider_exportMap3.ts)
-    name: "fooFromIndex",
-    source: "../node_modules/dependency/lib/index",
-    sourceDisplay: "../node_modules/dependency/lib/index",
-    sortText: completion.SortText.AutoImportSuggestions,
-    hasAction: true,
-  }, {
     name: "fooFromLol",
     source: "dependency/lol",
     sourceDisplay: "dependency/lol",
@@ -76,13 +69,6 @@ verify.completions({
     name: "fooFromIndex",
     source: "dependency/lol",
     sourceDisplay: "dependency/lol",
-    sortText: completion.SortText.AutoImportSuggestions,
-    hasAction: true,
-  }, {
-    // TODO: this one will go away (see note in ./autoImportProvider_exportMap3.ts)
-    name: "fooFromLol",
-    source: "../node_modules/dependency/lib/lol.js",
-    sourceDisplay: "../node_modules/dependency/lib/lol.js",
     sortText: completion.SortText.AutoImportSuggestions,
     hasAction: true,
   }]),

@@ -38,17 +38,17 @@ function f3(x) {
 
 
 //// [deferredLookupTypeResolution.d.ts]
-declare type StringContains<S extends string, L extends string> = ({
+type StringContains<S extends string, L extends string> = ({
     [K in S]: 'true';
 } & {
     [key: string]: 'false';
 })[L];
-declare type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
-declare type First<T> = ObjectHasKey<T, '0'>;
-declare type T1 = ObjectHasKey<{
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
+type First<T> = ObjectHasKey<T, '0'>;
+type T1 = ObjectHasKey<{
     a: string;
 }, 'a'>;
-declare type T2 = ObjectHasKey<{
+type T2 = ObjectHasKey<{
     a: string;
 }, 'b'>;
 declare function f1<A extends string, B extends string>(a: A, b: B): {

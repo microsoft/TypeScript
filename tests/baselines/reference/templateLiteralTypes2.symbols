@@ -8,19 +8,19 @@ function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t
 >t : Symbol(t, Decl(templateLiteralTypes2.ts, 0, 78))
 >T : Symbol(T, Decl(templateLiteralTypes2.ts, 0, 13))
 
-    const c1 = `abc${s}`;  // `abc${string}`
+    const c1 = `abc${s}`;
 >c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 1, 9))
 >s : Symbol(s, Decl(templateLiteralTypes2.ts, 0, 31))
 
-    const c2 = `abc${n}`;  // `abc${number}`
+    const c2 = `abc${n}`;
 >c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 2, 9))
 >n : Symbol(n, Decl(templateLiteralTypes2.ts, 0, 41))
 
-    const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
+    const c3 = `abc${u}`;
 >c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 3, 9))
 >u : Symbol(u, Decl(templateLiteralTypes2.ts, 0, 52))
 
-    const c4 = `abc${t}`;  // `abc${T}
+    const c4 = `abc${t}`;
 >c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 4, 9))
 >t : Symbol(t, Decl(templateLiteralTypes2.ts, 0, 78))
 
@@ -54,7 +54,7 @@ function ft10(s: string) {
 >ft10 : Symbol(ft10, Decl(templateLiteralTypes2.ts, 13, 1))
 >s : Symbol(s, Decl(templateLiteralTypes2.ts, 15, 14))
 
-    const c1 = `abc${s}`;  // Widening type `abc${string}`
+    const c1 = `abc${s}`;  // Type string
 >c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 16, 9))
 >s : Symbol(s, Decl(templateLiteralTypes2.ts, 15, 14))
 
@@ -62,7 +62,7 @@ function ft10(s: string) {
 >v1 : Symbol(v1, Decl(templateLiteralTypes2.ts, 17, 7))
 >c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 16, 9))
 
-    const c2 = c1;  // Widening type `abc${string}`
+    const c2 = c1;  // Type string
 >c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 18, 9))
 >c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 16, 9))
 
@@ -92,7 +92,7 @@ function ft11(s: string, cond: boolean) {
 >s : Symbol(s, Decl(templateLiteralTypes2.ts, 26, 14))
 >cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 26, 24))
 
-    const c1 = cond ? `foo${s}` : `bar${s}`;  // widening `foo${string}` | widening `bar${string}`
+    const c1 = cond ? `foo${s}` : `bar${s}`;  // string
 >c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 27, 9))
 >cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 26, 24))
 >s : Symbol(s, Decl(templateLiteralTypes2.ts, 26, 14))
@@ -102,13 +102,13 @@ function ft11(s: string, cond: boolean) {
 >c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 28, 9))
 >c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 27, 9))
 
-    const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
+    const c3 = cond ? c1 : c2;  // string
 >c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 29, 9))
 >cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 26, 24))
 >c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 27, 9))
 >c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 28, 9))
 
-    const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
+    const c4 = cond ? c3 : `baz${s}`;  // string
 >c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 30, 9))
 >cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 26, 24))
 >c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 29, 9))
@@ -126,7 +126,7 @@ function ft11(s: string, cond: boolean) {
 >v2 : Symbol(v2, Decl(templateLiteralTypes2.ts, 33, 7))
 >c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 28, 9))
 
-    let v3 = c3;  // `foo${string}` | `bar${string}`
+    let v3 = c3;  // string
 >v3 : Symbol(v3, Decl(templateLiteralTypes2.ts, 34, 7))
 >c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 29, 9))
 
@@ -322,7 +322,7 @@ const id4 = `foo.bar.${someString}`;
 >id4 : Symbol(id4, Decl(templateLiteralTypes2.ts, 91, 5))
 >someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 88, 13))
 
-const t4 = takesLiteral(id4);  // string
+const t4 = takesLiteral(id4);  // unknown
 >t4 : Symbol(t4, Decl(templateLiteralTypes2.ts, 92, 5))
 >takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
 >id4 : Symbol(id4, Decl(templateLiteralTypes2.ts, 91, 5))

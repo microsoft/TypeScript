@@ -70,7 +70,6 @@ namespace ts.codefix {
         suppressLeadingAndTrailingTrivia(propertyDeclaration);
         const property = factory.updatePropertyDeclaration(
             propertyDeclaration,
-            propertyDeclaration.decorators,
             propertyDeclaration.modifiers,
             propertyDeclaration.name,
             factory.createToken(SyntaxKind.ExclamationToken),
@@ -112,7 +111,6 @@ namespace ts.codefix {
         suppressLeadingAndTrailingTrivia(propertyDeclaration);
         const property = factory.updatePropertyDeclaration(
             propertyDeclaration,
-            propertyDeclaration.decorators,
             propertyDeclaration.modifiers,
             propertyDeclaration.name,
             propertyDeclaration.questionToken,

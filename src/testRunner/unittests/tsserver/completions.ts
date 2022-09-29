@@ -52,6 +52,7 @@ namespace ts.projectSystem {
             assert.isString(exportMapKey);
             delete (response?.entries[0].data as any).exportMapKey;
             assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
+                flags: CompletionInfoFlags.MayIncludeAutoImports,
                 isGlobalCompletion: true,
                 isIncomplete: undefined,
                 isMemberCompletion: false,

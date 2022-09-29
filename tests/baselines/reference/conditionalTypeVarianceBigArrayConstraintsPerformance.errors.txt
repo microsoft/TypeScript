@@ -17,4 +17,5 @@ tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts(9,
 !!! error TS2322: Type 'Stuff<U>' is not assignable to type 'Stuff<T>'.
 !!! error TS2322:   Type 'U' is not assignable to type 'T'.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts:8:15: This type parameter might need an `extends T` constraint.
     }

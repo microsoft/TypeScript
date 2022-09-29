@@ -41,7 +41,7 @@ B.zzz;
 "use strict";
 exports.__esModule = true;
 var x = { x: "" };
-B.zzz;
+a_1.B.zzz;
 var OriginalB = require("./b");
 OriginalB.zzz;
 var y = x;

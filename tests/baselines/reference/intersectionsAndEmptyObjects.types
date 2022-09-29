@@ -26,10 +26,10 @@ let x04: A & B & C;
 >x04 : A & B
 
 let x05: string & C;
->x05 : string & C
+>x05 : string
 
 let x06: C & string;
->x06 : C & string
+>x06 : string
 
 let x07: C;
 >x07 : C

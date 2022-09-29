@@ -22,7 +22,8 @@ CleanBuild:
     "options": {
       "composite": true,
       "module": 0
-    }
+    },
+    "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }
@@ -51,7 +52,8 @@ IncrementalBuild:
       "../../../lib/lib.d.ts",
       "../project1/class1.d.ts",
       "./class2.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }
@@ -79,7 +81,8 @@ CleanBuild:
     "options": {
       "composite": true,
       "module": 0
-    }
+    },
+    "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }
@@ -106,7 +109,8 @@ IncrementalBuild:
     },
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
 }

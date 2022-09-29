@@ -1,0 +1,66 @@
+=== tests/cases/compiler/varianceAnnotationValidation.ts ===
+// Repro from #49607
+
+// Variance annotation error expected
+
+interface Controller<out T> {
+>Controller : Symbol(Controller, Decl(varianceAnnotationValidation.ts, 0, 0))
+>T : Symbol(T, Decl(varianceAnnotationValidation.ts, 4, 21))
+
+	createAnimal: () => T;
+>createAnimal : Symbol(Controller.createAnimal, Decl(varianceAnnotationValidation.ts, 4, 29))
+>T : Symbol(T, Decl(varianceAnnotationValidation.ts, 4, 21))
+
+	run: (animal: T) => void;
+>run : Symbol(Controller.run, Decl(varianceAnnotationValidation.ts, 5, 23))
+>animal : Symbol(animal, Decl(varianceAnnotationValidation.ts, 6, 7))
+>T : Symbol(T, Decl(varianceAnnotationValidation.ts, 4, 21))
+}
+
+interface Animal {
+>Animal : Symbol(Animal, Decl(varianceAnnotationValidation.ts, 7, 1))
+
+	run(): void;
+>run : Symbol(Animal.run, Decl(varianceAnnotationValidation.ts, 9, 18))
+
+};
+
+class Dog implements Animal {
+>Dog : Symbol(Dog, Decl(varianceAnnotationValidation.ts, 11, 2))
+>Animal : Symbol(Animal, Decl(varianceAnnotationValidation.ts, 7, 1))
+
+	run() {};
+>run : Symbol(Dog.run, Decl(varianceAnnotationValidation.ts, 13, 29))
+
+	bark() {};
+>bark : Symbol(Dog.bark, Decl(varianceAnnotationValidation.ts, 14, 10))
+}
+
+interface AnimalContainer<T> {
+>AnimalContainer : Symbol(AnimalContainer, Decl(varianceAnnotationValidation.ts, 16, 1))
+>T : Symbol(T, Decl(varianceAnnotationValidation.ts, 18, 26))
+
+	controller: Controller<T>;
+>controller : Symbol(AnimalContainer.controller, Decl(varianceAnnotationValidation.ts, 18, 30))
+>Controller : Symbol(Controller, Decl(varianceAnnotationValidation.ts, 0, 0))
+>T : Symbol(T, Decl(varianceAnnotationValidation.ts, 18, 26))
+}
+
+declare let ca: AnimalContainer<Animal>;
+>ca : Symbol(ca, Decl(varianceAnnotationValidation.ts, 22, 11))
+>AnimalContainer : Symbol(AnimalContainer, Decl(varianceAnnotationValidation.ts, 16, 1))
+>Animal : Symbol(Animal, Decl(varianceAnnotationValidation.ts, 7, 1))
+
+declare let cd: AnimalContainer<Dog>;
+>cd : Symbol(cd, Decl(varianceAnnotationValidation.ts, 23, 11))
+>AnimalContainer : Symbol(AnimalContainer, Decl(varianceAnnotationValidation.ts, 16, 1))
+>Dog : Symbol(Dog, Decl(varianceAnnotationValidation.ts, 11, 2))
+
+ca = cd;  // Ok
+>ca : Symbol(ca, Decl(varianceAnnotationValidation.ts, 22, 11))
+>cd : Symbol(cd, Decl(varianceAnnotationValidation.ts, 23, 11))
+
+cd = ca;  // Error
+>cd : Symbol(cd, Decl(varianceAnnotationValidation.ts, 23, 11))
+>ca : Symbol(ca, Decl(varianceAnnotationValidation.ts, 22, 11))
+

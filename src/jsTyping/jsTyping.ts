@@ -124,7 +124,8 @@ namespace ts.JsTyping {
         packageNameToTypingLocation: ReadonlyESMap<string, CachedTyping>,
         typeAcquisition: TypeAcquisition,
         unresolvedImports: readonly string[],
-        typesRegistry: ReadonlyESMap<string, MapLike<string>>):
+        typesRegistry: ReadonlyESMap<string, MapLike<string>>,
+        compilerOptions: CompilerOptions):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         if (!typeAcquisition || !typeAcquisition.enable) {
@@ -148,12 +149,15 @@ namespace ts.JsTyping {
         const exclude = typeAcquisition.exclude || [];
 
         // Directories to search for package.json, bower.json and other typing information
-        const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
-        possibleSearchDirs.add(projectRootPath);
-        possibleSearchDirs.forEach((searchDir) => {
-            getTypingNames(searchDir, "bower.json", "bower_components", filesToWatch);
-            getTypingNames(searchDir, "package.json", "node_modules", filesToWatch);
-        });
+        if (!compilerOptions.types) {
+            const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
+            possibleSearchDirs.add(projectRootPath);
+            possibleSearchDirs.forEach((searchDir) => {
+                getTypingNames(searchDir, "bower.json", "bower_components", filesToWatch);
+                getTypingNames(searchDir, "package.json", "node_modules", filesToWatch);
+            });
+        }
+
         if(!typeAcquisition.disableFilenameBasedTypeAcquisition) {
             getTypingNamesFromSourceFileNames(fileNames);
         }

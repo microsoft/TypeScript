@@ -3956,7 +3956,7 @@ declare module Intl {
         hour?: "numeric" | "2-digit";
         minute?: "numeric" | "2-digit";
         second?: "numeric" | "2-digit";
-        fractionalSecondDigits?: 0 | 1 | 2 | 3;
+        fractionalSecondDigits?: 1 | 2 | 3;
         timeZoneName?: "long" | "short";
     }
 
