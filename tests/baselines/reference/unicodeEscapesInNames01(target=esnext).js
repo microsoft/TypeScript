@@ -124,15 +124,19 @@ export class PrivateIdentifierWithExtendedEscape2 {
 //// [identifierVariableWithEscape1.js]
 export let \u0078 = 10;
 x++;
+//# sourceMappingURL=identifierVariableWithEscape1.js.map
 //// [identifierVariableWithEscape2.js]
 export let x\u0078 = 10;
 xx++;
+//# sourceMappingURL=identifierVariableWithEscape2.js.map
 //// [identifierVariableWithExtendedEscape1.js]
 export let \u{78} = 10;
 x++;
+//# sourceMappingURL=identifierVariableWithExtendedEscape1.js.map
 //// [identifierVariableWithExtendedEscape2.js]
 export let x\u{78} = 10;
 xx++;
+//# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map
 //// [IdentifierNameWithEscape1.js]
 export class IdentifierNameWithEscape1 {
     \u0078;
@@ -143,6 +147,7 @@ export class IdentifierNameWithEscape1 {
         this.x = 42;
     }
 }
+//# sourceMappingURL=IdentifierNameWithEscape1.js.map
 //// [IdentifierNameWithEscape2.js]
 export class IdentifierNameWithEscape2 {
     x\u0078;
@@ -153,6 +158,7 @@ export class IdentifierNameWithEscape2 {
         this.xx = 42;
     }
 }
+//# sourceMappingURL=IdentifierNameWithEscape2.js.map
 //// [IdentifierNameWithExtendedEscape1.js]
 export class IdentifierNameWithExtendedEscape1 {
     \u{78};
@@ -163,6 +169,7 @@ export class IdentifierNameWithExtendedEscape1 {
         this.x = 42;
     }
 }
+//# sourceMappingURL=IdentifierNameWithExtendedEscape1.js.map
 //// [IdentifierNameWithExtendedEscape2.js]
 export class IdentifierNameWithExtendedEscape2 {
     x\u{78};
@@ -173,6 +180,7 @@ export class IdentifierNameWithExtendedEscape2 {
         this.xx = 42;
     }
 }
+//# sourceMappingURL=IdentifierNameWithExtendedEscape2.js.map
 //// [PrivateIdentifierNameWithEscape1.js]
 export class PrivateIdentifierWithEscape1 {
     #\u0078;
@@ -183,6 +191,7 @@ export class PrivateIdentifierWithEscape1 {
         this.#x = 42;
     }
 }
+//# sourceMappingURL=PrivateIdentifierNameWithEscape1.js.map
 //// [PrivateIdentifierNameWithEscape2.js]
 export class PrivateIdentifierWithEscape2 {
     #x\u0078;
@@ -193,6 +202,7 @@ export class PrivateIdentifierWithEscape2 {
         this.#xx = 42;
     }
 }
+//# sourceMappingURL=PrivateIdentifierNameWithEscape2.js.map
 //// [PrivateIdentifierNameWithExtendedEscape1.js]
 export class PrivateIdentifierWithExtendedEscape1 {
     #\u{78};
@@ -203,6 +213,7 @@ export class PrivateIdentifierWithExtendedEscape1 {
         this.#x = 42;
     }
 }
+//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape1.js.map
 //// [PrivateIdentifierNameWithExtendedEscape2.js]
 export class PrivateIdentifierWithExtendedEscape2 {
     #x\u{78};
@@ -213,3 +224,4 @@ export class PrivateIdentifierWithExtendedEscape2 {
         this.#xx = 42;
     }
 }
+//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map

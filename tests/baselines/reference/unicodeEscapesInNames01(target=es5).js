@@ -127,24 +127,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.\u0078 = 10;
 exports.x++;
+//# sourceMappingURL=identifierVariableWithEscape1.js.map
 //// [identifierVariableWithEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.xx = void 0;
 exports.x\u0078 = 10;
 exports.xx++;
+//# sourceMappingURL=identifierVariableWithEscape2.js.map
 //// [identifierVariableWithExtendedEscape1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 exports.x++;
+//# sourceMappingURL=identifierVariableWithExtendedEscape1.js.map
 //// [identifierVariableWithExtendedEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.xx = void 0;
 exports.xx = 10;
 exports.xx++;
+//# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map
 //// [IdentifierNameWithEscape1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -159,6 +163,7 @@ var IdentifierNameWithEscape1 = /** @class */ (function () {
     return IdentifierNameWithEscape1;
 }());
 exports.IdentifierNameWithEscape1 = IdentifierNameWithEscape1;
+//# sourceMappingURL=IdentifierNameWithEscape1.js.map
 //// [IdentifierNameWithEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -173,6 +178,7 @@ var IdentifierNameWithEscape2 = /** @class */ (function () {
     return IdentifierNameWithEscape2;
 }());
 exports.IdentifierNameWithEscape2 = IdentifierNameWithEscape2;
+//# sourceMappingURL=IdentifierNameWithEscape2.js.map
 //// [IdentifierNameWithExtendedEscape1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -187,6 +193,7 @@ var IdentifierNameWithExtendedEscape1 = /** @class */ (function () {
     return IdentifierNameWithExtendedEscape1;
 }());
 exports.IdentifierNameWithExtendedEscape1 = IdentifierNameWithExtendedEscape1;
+//# sourceMappingURL=IdentifierNameWithExtendedEscape1.js.map
 //// [IdentifierNameWithExtendedEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -201,6 +208,7 @@ var IdentifierNameWithExtendedEscape2 = /** @class */ (function () {
     return IdentifierNameWithExtendedEscape2;
 }());
 exports.IdentifierNameWithExtendedEscape2 = IdentifierNameWithExtendedEscape2;
+//# sourceMappingURL=IdentifierNameWithExtendedEscape2.js.map
 //// [PrivateIdentifierNameWithEscape1.js]
 "use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
@@ -224,6 +232,7 @@ var PrivateIdentifierWithEscape1 = /** @class */ (function () {
 }());
 exports.PrivateIdentifierWithEscape1 = PrivateIdentifierWithEscape1;
 _PrivateIdentifierWithEscape1_x = new WeakMap();
+//# sourceMappingURL=PrivateIdentifierNameWithEscape1.js.map
 //// [PrivateIdentifierNameWithEscape2.js]
 "use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
@@ -247,6 +256,7 @@ var PrivateIdentifierWithEscape2 = /** @class */ (function () {
 }());
 exports.PrivateIdentifierWithEscape2 = PrivateIdentifierWithEscape2;
 _PrivateIdentifierWithEscape2_xx = new WeakMap();
+//# sourceMappingURL=PrivateIdentifierNameWithEscape2.js.map
 //// [PrivateIdentifierNameWithExtendedEscape1.js]
 "use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
@@ -270,6 +280,7 @@ var PrivateIdentifierWithExtendedEscape1 = /** @class */ (function () {
 }());
 exports.PrivateIdentifierWithExtendedEscape1 = PrivateIdentifierWithExtendedEscape1;
 _PrivateIdentifierWithExtendedEscape1_x = new WeakMap();
+//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape1.js.map
 //// [PrivateIdentifierNameWithExtendedEscape2.js]
 "use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
@@ -293,3 +304,4 @@ var PrivateIdentifierWithExtendedEscape2 = /** @class */ (function () {
 }());
 exports.PrivateIdentifierWithExtendedEscape2 = PrivateIdentifierWithExtendedEscape2;
 _PrivateIdentifierWithExtendedEscape2_xx = new WeakMap();
+//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map
