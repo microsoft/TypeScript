@@ -12566,7 +12566,7 @@ namespace ts {
             let indexTypes: Type[] | undefined;
             const isUnion = containingType.flags & TypeFlags.Union;
             // Flags we want to propagate to the result if they exist in all source symbols
-            let optionalFlag = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
+            let optionalFlag: SymbolFlags | undefined;
             let syntheticFlag = CheckFlags.SyntheticMethod;
             let checkFlags = isUnion ? 0 : CheckFlags.Readonly;
             let mergedInstantiations = false;
@@ -12576,11 +12576,14 @@ namespace ts {
                     const prop = getPropertyOfType(type, name, skipObjectFunctionPropertyAugment);
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop) {
-                        if (isUnion) {
-                            optionalFlag |= (prop.flags & SymbolFlags.Optional);
-                        }
-                        else {
-                            optionalFlag &= prop.flags;
+                        if (prop.flags & SymbolFlags.ClassMember) {
+                            optionalFlag ??= isUnion ? SymbolFlags.None : SymbolFlags.Optional;
+                            if (isUnion) {
+                                optionalFlag |= (prop.flags & SymbolFlags.Optional);
+                            }
+                            else {
+                                optionalFlag &= prop.flags;
+                            }
                         }
                         if (!singleProp) {
                             singleProp = prop;
@@ -12699,7 +12702,7 @@ namespace ts {
                 propTypes.push(type);
             }
             addRange(propTypes, indexTypes);
-            const result = createSymbol(SymbolFlags.Property | optionalFlag, name, syntheticFlag | checkFlags);
+            const result = createSymbol(SymbolFlags.Property | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
                 result.valueDeclaration = firstValueDeclaration;
@@ -20455,7 +20458,7 @@ namespace ts {
                     return Ternary.False;
                 }
                 // When checking for comparability, be more lenient with optional properties.
-                if (!skipOptional && sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
+                if (!skipOptional && sourceProp.flags & SymbolFlags.Optional && targetProp.flags & SymbolFlags.ClassMember && !(targetProp.flags & SymbolFlags.Optional)) {
                     // TypeScript 1.0 spec (April 2014): 3.8.3
                     // S is a subtype of a type T, and T is a supertype of S if ...
                     // S' and T are object types and, for each member M in T..
