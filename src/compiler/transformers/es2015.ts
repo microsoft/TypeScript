@@ -649,10 +649,10 @@ namespace ts {
                 }
             }
             if (node.hasExtendedUnicodeEscape) {
-                return setTextRange(
+                return setOriginalNode(setTextRange(
                     factory.createIdentifier(unescapeLeadingUnderscores(node.escapedText)),
                     node
-                );
+                ), node);
             }
             return node;
         }
