@@ -1537,8 +1537,8 @@ namespace ts {
                     }
                     if (symbol.flags & SymbolFlags.Alias) {
                         const targetFlags = getAllSymbolFlags(symbol);
-                        // Unknown symbol means an error occurred in alias resolution, treat it as positive answer to avoid cascading errors
-                        if (targetFlags === undefined || targetFlags & meaning) {
+                        // `targetFlags` will be `SymbolFlags.All` if an error occurred in alias resolution; this avoids cascading errors
+                        if (targetFlags & meaning) {
                             return symbol;
                         }
                     }
@@ -3254,35 +3254,35 @@ namespace ts {
          * from b.ts, even though there is still more alias to resolve. Consequently, if we were
          * trying to determine if the `a` in c.ts has a value meaning, looking at the flags on
          * the local symbol and on the symbol returned by `resolveAlias` is not enough.
-         * @returns undefined if `symbol` is an alias that ultimately resolves to `unknown`;
+         * @returns SymbolFlags.All if `symbol` is an alias that ultimately resolves to `unknown`;
          * combined flags of all alias targets otherwise.
          */
-        function getAllSymbolFlags(symbol: Symbol): SymbolFlags | undefined {
-            let flags = symbol.flags;
-            let seenSymbols;
-            while (symbol.flags & SymbolFlags.Alias) {
-                const target = resolveAlias(symbol);
-                if (target === unknownSymbol) {
-                    return undefined;
-                }
+        function getAllSymbolFlags(symbol: Symbol): SymbolFlags {
+          let flags = symbol.flags;
+          let seenSymbols;
+          while (symbol.flags & SymbolFlags.Alias) {
+              const target = resolveAlias(symbol);
+              if (target === unknownSymbol) {
+                  return SymbolFlags.All;
+              }
 
-                // Optimizations - try to avoid creating or adding to
-                // `seenSymbols` if possible
-                if (target === symbol || seenSymbols?.has(target)) {
-                    break;
-                }
-                if (target.flags & SymbolFlags.Alias) {
-                    if (seenSymbols) {
-                        seenSymbols.add(target);
-                    }
-                    else {
-                        seenSymbols = new Set([symbol, target]);
-                    }
-                }
-                flags |= target.flags;
-                symbol = target;
-            }
-            return flags;
+              // Optimizations - try to avoid creating or adding to
+              // `seenSymbols` if possible
+              if (target === symbol || seenSymbols?.has(target)) {
+                  break;
+              }
+              if (target.flags & SymbolFlags.Alias) {
+                  if (seenSymbols) {
+                      seenSymbols.add(target);
+                  }
+                  else {
+                      seenSymbols = new Set([symbol, target]);
+                  }
+              }
+              flags |= target.flags;
+              symbol = target;
+          }
+          return flags;
         }
 
         /**
@@ -3346,7 +3346,7 @@ namespace ts {
                 return links.typeOnlyDeclaration || undefined;
             }
             if (links.typeOnlyDeclaration) {
-                return (getAllSymbolFlags(resolveAlias(links.typeOnlyDeclaration.symbol)) ?? -1) & include ? links.typeOnlyDeclaration : undefined;
+                return getAllSymbolFlags(resolveAlias(links.typeOnlyDeclaration.symbol)) & include ? links.typeOnlyDeclaration : undefined;
             }
             return undefined;
         }
@@ -3356,7 +3356,7 @@ namespace ts {
             const target = resolveAlias(symbol);
             if (target) {
                 const markAlias = target === unknownSymbol ||
-                    (((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value));
+                    ((getAllSymbolFlags(target) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value));
 
                 if (markAlias) {
                     markAliasSymbolAsReferenced(symbol);
@@ -3377,8 +3377,7 @@ namespace ts {
                 // This way a chain of imports can be elided if ultimately the final input is only used in a type
                 // position.
                 if (isInternalModuleImportEqualsDeclaration(node)) {
-                    const targetFlags = getAllSymbolFlags(resolveSymbol(symbol));
-                    if (targetFlags === undefined || targetFlags & SymbolFlags.Value) {
+                    if (getAllSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
                         // import foo = <symbol>
                         checkExpressionCached(node.moduleReference as Expression);
                     }
@@ -4304,7 +4303,7 @@ namespace ts {
         function symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean {
             return !!(
                 symbol.flags & SymbolFlags.Value ||
-                symbol.flags & SymbolFlags.Alias && (getAllSymbolFlags(symbol) ?? -1) & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
+                symbol.flags & SymbolFlags.Alias && getAllSymbolFlags(symbol) & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
         }
 
         function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
@@ -4600,7 +4599,7 @@ namespace ts {
                 // Qualify if the symbol from symbol table has same meaning as expected
                 const shouldResolveAlias = (symbolFromSymbolTable.flags & SymbolFlags.Alias && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier));
                 symbolFromSymbolTable = shouldResolveAlias ? resolveAlias(symbolFromSymbolTable) : symbolFromSymbolTable;
-                const flags = shouldResolveAlias ? (getAllSymbolFlags(symbolFromSymbolTable) ?? unknownSymbol.flags) : symbolFromSymbolTable.flags;
+                const flags = shouldResolveAlias ? getAllSymbolFlags(symbolFromSymbolTable) : symbolFromSymbolTable.flags;
                 if (flags & meaning) {
                     qualify = true;
                     return true;
@@ -7574,7 +7573,7 @@ namespace ts {
                 }
 
                 function isTypeOnlyNamespace(symbol: Symbol) {
-                    return every(getNamespaceMembersForSerialization(symbol), m => !((getAllSymbolFlags(resolveSymbol(m)) ?? unknownSymbol.flags) & SymbolFlags.Value));
+                    return every(getNamespaceMembersForSerialization(symbol), m => !(getAllSymbolFlags(resolveSymbol(m)) & SymbolFlags.Value));
                 }
 
                 function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
@@ -10072,7 +10071,7 @@ namespace ts {
                 links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                     : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
                     : declaredType ? declaredType
-                    : (getAllSymbolFlags(targetSymbol) ?? -1) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
+                    : getAllSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
             return links.type;
@@ -25974,7 +25973,7 @@ namespace ts {
         function markAliasReferenced(symbol: Symbol, location: Node) {
             if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
                 const target = resolveAlias(symbol);
-                if ((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) {
+                if (getAllSymbolFlags(target) & SymbolFlags.Value) {
                     // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
                     // (because the const enum value will not be inlined), or if (2) the alias is an export
                     // of a const enum declaration that will be preserved.
@@ -32521,7 +32520,7 @@ namespace ts {
                     if (symbol && symbol.flags & SymbolFlags.Alias) {
                         symbol = resolveAlias(symbol);
                     }
-                    return !!(symbol && ((getAllSymbolFlags(symbol) ?? unknownSymbol.flags) & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
+                    return !!(symbol && (getAllSymbolFlags(symbol) & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
             }
             return false;
         }
@@ -41427,7 +41426,7 @@ namespace ts {
                     return;
                 }
 
-                const targetFlags = getAllSymbolFlags(target) ?? target.flags;
+                const targetFlags = getAllSymbolFlags(target);
                 const excludedMeanings =
                     (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
@@ -41621,7 +41620,7 @@ namespace ts {
                 if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
                     const target = resolveAlias(getSymbolOfNode(node));
                     if (target !== unknownSymbol) {
-                        const targetFlags = getAllSymbolFlags(target) ?? unknownSymbol.flags;
+                        const targetFlags = getAllSymbolFlags(target);
                         if (targetFlags & SymbolFlags.Value) {
                             // Target is a value symbol, check that it is not hidden by a local declaration with the same name
                             const moduleName = getFirstIdentifier(node.moduleReference);
@@ -41780,7 +41779,7 @@ namespace ts {
                         markExportAsReferenced(node);
                     }
                     const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-                    if (!target || (getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) {
+                    if (!target || getAllSymbolFlags(target) & SymbolFlags.Value) {
                         checkExpressionCached(node.propertyName || node.name);
                     }
                 }
@@ -41832,7 +41831,7 @@ namespace ts {
                     markAliasReferenced(sym, id);
                     // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                     const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
-                    if ((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) {
+                    if (getAllSymbolFlags(target) & SymbolFlags.Value) {
                         // However if it is a value, we need to check it's being used correctly
                         checkExpressionCached(node.expression);
                     }
@@ -43290,7 +43289,7 @@ namespace ts {
 
             function isValue(s: Symbol): boolean {
                 s = resolveSymbol(s);
-                return s && !!((getAllSymbolFlags(s) ?? unknownSymbol.flags) & SymbolFlags.Value);
+                return s && !!(getAllSymbolFlags(s) & SymbolFlags.Value);
             }
         }
 
@@ -43496,7 +43495,7 @@ namespace ts {
                 }
                 const target = getSymbolLinks(symbol!).aliasTarget; // TODO: GH#18217
                 if (target && getEffectiveModifierFlags(node) & ModifierFlags.Export &&
-                    (getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value &&
+                    getAllSymbolFlags(target) & SymbolFlags.Value &&
                     (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target))) {
                     // An `export import ... =` of a value symbol is always considered referenced
                     return true;
