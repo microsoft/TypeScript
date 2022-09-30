@@ -30,9 +30,9 @@ var ConstEnumOnlyModule;
 (function (ConstEnumOnlyModule) {
     var ConstFooEnum;
     (function (ConstFooEnum) {
-        ConstFooEnum[ConstFooEnum["Some"] = 0] = "Some";
-        ConstFooEnum[ConstFooEnum["Values"] = 1] = "Values";
-        ConstFooEnum[ConstFooEnum["Here"] = 2] = "Here";
+        ConstFooEnum["Some"] = 0;
+        ConstFooEnum["Values"] = 1;
+        ConstFooEnum["Here"] = 2;
     })(ConstFooEnum = ConstEnumOnlyModule.ConstFooEnum || (ConstEnumOnlyModule.ConstFooEnum = {}));
 })(ConstEnumOnlyModule = exports.ConstEnumOnlyModule || (exports.ConstEnumOnlyModule = {}));
 //// [reexport.js]

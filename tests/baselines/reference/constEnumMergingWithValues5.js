@@ -12,7 +12,7 @@ define(["require", "exports"], function (require, exports) {
     (function (foo) {
         var E;
         (function (E) {
-            E[E["X"] = 0] = "X";
+            E["X"] = 0;
         })(E || (E = {}));
     })(foo || (foo = {}));
     return foo;

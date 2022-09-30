@@ -25,12 +25,12 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             (function (TopLevelConstEnum) {
-                TopLevelConstEnum[TopLevelConstEnum["X"] = 0] = "X";
+                TopLevelConstEnum["X"] = 0;
             })(TopLevelConstEnum || (TopLevelConstEnum = {}));
             (function (M) {
                 var NonTopLevelConstEnum;
                 (function (NonTopLevelConstEnum) {
-                    NonTopLevelConstEnum[NonTopLevelConstEnum["X"] = 0] = "X";
+                    NonTopLevelConstEnum["X"] = 0;
                 })(NonTopLevelConstEnum = M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {}));
             })(M || (M = {}));
         }

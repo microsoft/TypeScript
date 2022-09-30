@@ -21,6 +21,6 @@ function foo2() {
     return 0 /* E.A */;
     var E;
     (function (E) {
-        E[E["A"] = 0] = "A";
+        E["A"] = 0;
     })(E || (E = {}));
 }

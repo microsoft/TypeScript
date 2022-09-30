@@ -110,7 +110,7 @@ var A4;
     (function (A) {
         var E;
         (function (E) {
-            E[E["X"] = 0] = "X";
+            E["X"] = 0;
         })(E || (E = {}));
     })(A || (A = {}));
 })(A4 || (A4 = {}));
@@ -150,6 +150,6 @@ function f4() {
     }
     var E;
     (function (E) {
-        E[E["X"] = 1] = "X";
+        E["X"] = 1;
     })(E || (E = {}));
 }

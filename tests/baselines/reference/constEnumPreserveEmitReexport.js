@@ -17,8 +17,8 @@ exports.__esModule = true;
 exports.MyConstEnum = void 0;
 var MyConstEnum;
 (function (MyConstEnum) {
-    MyConstEnum[MyConstEnum["Foo"] = 0] = "Foo";
-    MyConstEnum[MyConstEnum["Bar"] = 1] = "Bar";
+    MyConstEnum["Foo"] = 0;
+    MyConstEnum["Bar"] = 1;
 })(MyConstEnum = exports.MyConstEnum || (exports.MyConstEnum = {}));
 ;
 //// [ImportExport.js]

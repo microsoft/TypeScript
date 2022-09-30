@@ -6,6 +6,6 @@ const enum E {
 //// [preserveConstEnums.js]
 var E;
 (function (E) {
-    E[E["Value"] = 1] = "Value";
-    E[E["Value2"] = 1] = "Value2";
+    E["Value"] = 1;
+    E["Value2"] = 1;
 })(E || (E = {}));

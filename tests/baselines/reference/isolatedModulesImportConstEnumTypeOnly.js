@@ -14,7 +14,7 @@ exports.__esModule = true;
 exports.Foo = void 0;
 var Foo;
 (function (Foo) {
-    Foo[Foo["Bar"] = 0] = "Bar";
+    Foo["Bar"] = 0;
 })(Foo = exports.Foo || (exports.Foo = {}));
 //// [index.js]
 "use strict";

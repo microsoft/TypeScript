@@ -1575,6 +1575,16 @@ namespace ts {
         }
 
         /**
+         * Determines whether an enum member should be reverse mapped.
+         *
+         * @param enumNode The enum declaration node.
+         * @param enumMemberValue The value expression of the enum member.
+         */
+        function shouldReverseMapEnumMember(enumNode: EnumDeclaration, enumMemberValue: Expression): boolean {
+            return enumMemberValue.kind !== SyntaxKind.StringLiteral && !isEnumConst(enumNode);
+        }
+
+        /**
          * Transforms the body of an enum declaration.
          *
          * @param node The enum declaration node.
@@ -1585,7 +1595,12 @@ namespace ts {
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            const members = map(node.members, transformEnumMember);
+            const members = map(node.members, function (member) {
+                const valueExpression = transformEnumMemberDeclarationValue(member);
+                const reverseMap = shouldReverseMapEnumMember(node, valueExpression);
+
+                return transformEnumMember(member, valueExpression, reverseMap);
+            });
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             addRange(statements, members);
 
@@ -1601,12 +1616,11 @@ namespace ts {
          *
          * @param member The enum member node.
          */
-        function transformEnumMember(member: EnumMember): Statement {
+        function transformEnumMember(member: EnumMember, valueExpression: Expression, reverseMap: boolean): Statement {
             // enums don't support computed properties
             // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
             // old emitter always generate 'expression' part of the name as-is.
             const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
-            const valueExpression = transformEnumMemberDeclarationValue(member);
             const innerAssignment = factory.createAssignment(
                 factory.createElementAccessExpression(
                     currentNamespaceContainerName,
@@ -1614,7 +1628,7 @@ namespace ts {
                 ),
                 valueExpression
             );
-            const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+            const outerAssignment = !reverseMap ?
                 innerAssignment :
                 factory.createAssignment(
                     factory.createElementAccessExpression(

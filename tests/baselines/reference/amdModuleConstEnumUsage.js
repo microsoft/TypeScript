@@ -21,8 +21,8 @@ define(["require", "exports"], function (require, exports) {
     exports.CharCode = void 0;
     var CharCode;
     (function (CharCode) {
-        CharCode[CharCode["A"] = 0] = "A";
-        CharCode[CharCode["B"] = 1] = "B";
+        CharCode["A"] = 0;
+        CharCode["B"] = 1;
     })(CharCode = exports.CharCode || (exports.CharCode = {}));
 });
 //// [file.js]
