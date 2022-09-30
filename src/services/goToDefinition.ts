@@ -171,12 +171,13 @@ namespace ts.GoToDefinition {
         if (!baseDeclaration) return;
 
         const baseTypeNode = getEffectiveBaseTypeNode(baseDeclaration);
-        const baseType = baseTypeNode ? typeChecker.getTypeAtLocation(baseTypeNode) : undefined;
-        if (!baseType) return;
+        if (!baseTypeNode) return;
+        const baseType = typeChecker.getTypeAtLocation(baseTypeNode);
+        if (!baseType.symbol) return;
 
         const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
         const symbol = hasStaticModifier(classElement)
-            ? baseType.symbol && typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, baseDeclaration), name)
+            ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, baseDeclaration), name)
             : typeChecker.getPropertyOfType(baseType, name);
         if (!symbol) return;
 
