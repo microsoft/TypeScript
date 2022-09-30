@@ -3519,12 +3519,10 @@ namespace ts.server {
     function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry): protocol.ReferencesResponseItem {
         const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
         const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
-        const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
-        const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
         return {
             file: fileName,
             ...span,
-            lineText,
+            lineText: "UNUSED",
             isWriteAccess,
             isDefinition
         };
