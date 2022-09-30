@@ -27601,7 +27601,7 @@ namespace ts {
                 // replaced with their constraints similar to the apparent type.
                 if (
                     inferenceContext &&
-                    (contextFlags! & ContextFlags.Signature || maybeTypeOfKind(contextualType, TypeFlags.Conditional) || maybeTypeOfKind(contextualType, TypeFlags.IndexedAccess)) &&
+                    (contextFlags! & ContextFlags.Signature || maybeTypeOfKind(contextualType, TypeFlags.Conditional | TypeFlags.IndexedAccess)) &&
                     some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)
                 ) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
@@ -33914,7 +33914,7 @@ namespace ts {
         // Return true if type might be of the given kind. A union or intersection type might be of a given
         // kind if at least one constituent type is of the given kind.
         function maybeTypeOfKind(type: Type, kind: TypeFlags): boolean {
-            if (type.flags & kind) {
+            if ((type.flags & kind) !== 0) {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
