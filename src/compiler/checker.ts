@@ -27181,6 +27181,12 @@ namespace ts {
                 getTypeAtPosition(signature, argIndex);
         }
 
+        function getContextualTypeForDecorator(decorator: Decorator): Type | undefined {
+            if (legacyDecorators) return undefined;
+            const signature = getESDecoratorCallSignature(decorator);
+            return signature ? getOrCreateTypeFromSignature(signature) : undefined;
+        }
+
         function getContextualTypeForSubstitutionExpression(template: TemplateExpression, substitutionExpression: Expression) {
             if (template.parent.kind === SyntaxKind.TaggedTemplateExpression) {
                 return getContextualTypeForArgument(template.parent as TaggedTemplateExpression, substitutionExpression);
@@ -27643,7 +27649,9 @@ namespace ts {
                     return getContextualTypeForAwaitOperand(parent as AwaitExpression, contextFlags);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
+                    return getContextualTypeForArgument(parent as CallExpression | NewExpression | Decorator, node);
+                case SyntaxKind.Decorator:
+                    return getContextualTypeForDecorator(parent as Decorator);
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     return isConstTypeReference((parent as AssertionExpression).type) ? tryFindWhenConstTypeReference(parent as AssertionExpression) : getTypeFromTypeNode((parent as AssertionExpression).type);
@@ -30959,48 +30967,15 @@ namespace ts {
          * Returns the synthetic argument list for a decorator invocation.
          */
         function getEffectiveESDecoratorArguments(node: Decorator): readonly Expression[] {
-            const parent = node.parent;
             const expr = node.expression;
-            switch (parent.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression: {
-                    // For a class decorator, the `target` is the type of the class (e.g. the
-                    // "static" or "constructor" side of the class).
-
-                    // TODO(rbuckton): Some mechanism of defining a type variable that
-                    //                 is dependent on the result of evaluating all decorators.
-                    const classInType = getTypeOfSymbol(getSymbolOfNode(parent));
-                    const classFinalType = classInType;
-                    return [
-                        createSyntheticExpression(expr, classInType),
-                        createSyntheticExpression(expr, createClassDecoratorContextType(classFinalType))
-                    ];
+            const signature = getESDecoratorCallSignature(node);
+            if (signature) {
+                const args: Expression[] = [];
+                for (const param of signature.parameters) {
+                    const type = getTypeOfSymbol(param);
+                    args.push(createSyntheticExpression(expr, type));
                 }
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.PropertyDeclaration: {
-                    // TODO(rbuckton): Some mechanism of defining a type variable that
-                    //                 is dependent on the result of evaluating all decorators.
-                    const nameType = undefined;
-                    const isStatic = hasStaticModifier(parent);
-                    const isPrivate = !!parent.name && isPrivateIdentifier(parent.name);
-                    const valueInType = getTypeOfNode(parent);
-                    const valueFinalType = valueInType;
-                    const thisFinalType = unknownType;
-                    const contextType =
-                        isMethodDeclaration(parent) ? createClassMethodDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
-                        isGetAccessorDeclaration(parent) ? createClassGetterDecoratorContextType(thisFinalType, valueFinalType) :
-                        isSetAccessorDeclaration(parent) ? createClassSetterDecoratorContextType(thisFinalType, valueFinalType) :
-                        hasAccessorModifier(parent) ? createClassAccessorDecoratorContextType(thisFinalType, valueFinalType) :
-                        createClassFieldDecoratorContextType(thisFinalType, valueFinalType);
-                    return [
-                        createSyntheticExpression(expr, valueInType),
-                        createSyntheticExpression(expr, contextType)
-                    ];
-                }
-                case SyntaxKind.Parameter:
-                    Debug.fail("Not yet implemented.");
+                return args;
             }
             return Debug.fail();
         }
@@ -33112,7 +33087,7 @@ namespace ts {
             }
         }
 
-        function createClassDecoratorContextType(classType: Type) {
+        function createClassESDecoratorContextType(classType: Type) {
             const globalClassDecoratorContextType = getGlobalClassDecoratorContextType(/*reportErrors*/ true);
             if (globalClassDecoratorContextType !== emptyGenericType) {
                 return createTypeReference(globalClassDecoratorContextType, [classType]);
@@ -33120,17 +33095,31 @@ namespace ts {
             return unknownType;
         }
 
-        function tryCreateDecoratorContextOverrideType(nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+        function createClassMethodESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+            return createESDecoratorContextTypeReference(getGlobalClassMethodDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        }
+
+        function createClassGetterESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+            return createESDecoratorContextTypeReference(getGlobalClassGetterDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        }
+
+        function createClassSetterESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+            return createESDecoratorContextTypeReference(getGlobalClassSetterDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        }
+
+        function createClassAccessorESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+            return createESDecoratorContextTypeReference(getGlobalClassAccessorDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        }
+
+        function createClassFieldESDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+            return createESDecoratorContextTypeReference(getGlobalClassFieldDecoratorContextType(/*reportErrors*/ true), thisType, valueType, nameType, isStatic, isPrivate);
+        }
+
+        function tryCreateESDecoratorContextOverrideType(nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
             let members: SymbolTable | undefined;
             if (nameType !== undefined) {
                 const symbol = createSymbol(SymbolFlags.Property, "name" as __String);
                 symbol.type = nameType;
-                members ??= createSymbolTable();
-                members.set(symbol.escapedName, symbol);
-            }
-            if (isStatic !== undefined) {
-                const symbol = createSymbol(SymbolFlags.Property, "static" as __String);
-                symbol.type = isStatic ? trueType : falseType;
                 members ??= createSymbolTable();
                 members.set(symbol.escapedName, symbol);
             }
@@ -33140,51 +33129,139 @@ namespace ts {
                 members ??= createSymbolTable();
                 members.set(symbol.escapedName, symbol);
             }
+            if (isStatic !== undefined) {
+                const symbol = createSymbol(SymbolFlags.Property, "static" as __String);
+                symbol.type = isStatic ? trueType : falseType;
+                members ??= createSymbolTable();
+                members.set(symbol.escapedName, symbol);
+            }
             if (members) {
                 return createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, emptyArray);
             }
         }
 
-        function createClassMethodDecoratorContextType(thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
-            const globalClassMethodDecoratorContextType = getGlobalClassMethodDecoratorContextType(/*reportErrors*/ true);
-            if (globalClassMethodDecoratorContextType !== emptyGenericType) {
-                const contextType = createTypeReference(globalClassMethodDecoratorContextType, [thisType, valueType]);
-                const overrideType = tryCreateDecoratorContextOverrideType(nameType, isStatic, isPrivate);
+        function createESDecoratorContextTypeReference(decoratorContextType: GenericType, thisType: Type, valueType: Type, nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
+            if (decoratorContextType !== emptyGenericType) {
+                const contextType = createTypeReference(decoratorContextType, [thisType, valueType]);
+                const overrideType = tryCreateESDecoratorContextOverrideType(nameType, isStatic, isPrivate);
                 return overrideType ? getIntersectionType([contextType, overrideType]) : contextType;
             }
             return unknownType;
         }
 
-        function createClassGetterDecoratorContextType(thisType: Type, valueType: Type) {
-            const globalClassGetterDecoratorContextType = getGlobalClassGetterDecoratorContextType(/*reportErrors*/ true);
-            if (globalClassGetterDecoratorContextType !== emptyGenericType) {
-                return createTypeReference(globalClassGetterDecoratorContextType, [thisType, valueType]);
-            }
-            return unknownType;
+        function createClassDecoratorReturnType(node: ClassDeclaration | ClassExpression) {
+            const classSymbol = getSymbolOfNode(node);
+            const classConstructorType = getTypeOfSymbol(classSymbol);
+            return getUnionType([classConstructorType, voidType]);
         }
 
-        function createClassSetterDecoratorContextType(thisType: Type, valueType: Type) {
-            const globalClassSetterDecoratorContextType = getGlobalClassSetterDecoratorContextType(/*reportErrors*/ true);
-            if (globalClassSetterDecoratorContextType !== emptyGenericType) {
-                return createTypeReference(globalClassSetterDecoratorContextType, [thisType, valueType]);
-            }
-            return unknownType;
+        function createClassAccessorESDecoratorReturnType(valueType: Type) {
+            const param = createSymbol(SymbolFlags.FunctionScopedVariable, "value" as __String, /*checkFlags*/ undefined, valueType);
+            const initializerSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [param], valueType);
+            const getSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, emptyArray, valueType);
+            const setSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [param], voidType);
+            const members = createSymbolTable([
+                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "get" as __String, /*checkFlags*/ undefined, getSignatureType),
+                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "set" as __String, /*checkFlags*/ undefined, setSignatureType),
+                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "init" as __String, /*checkFlags*/ undefined, initializerSignatureType)
+            ]);
+            const descriptorType = createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, emptyArray);
+            return getUnionType([descriptorType, voidType]);
         }
 
-        function createClassAccessorDecoratorContextType(thisType: Type, valueType: Type) {
-            const globalClassAccessorDecoratorContextType = getGlobalClassAccessorDecoratorContextType(/*reportErrors*/ true);
-            if (globalClassAccessorDecoratorContextType !== emptyGenericType) {
-                return createTypeReference(globalClassAccessorDecoratorContextType, [thisType, valueType]);
-            }
-            return unknownType;
+        function createClassFieldESDecoratorReturnType(valueType: Type) {
+            const param = createSymbol(SymbolFlags.FunctionScopedVariable, "value" as __String, /*checkFlags*/ undefined, valueType);
+            const initializerSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [param], valueType);
+            return getUnionType([initializerSignatureType, voidType]);
         }
 
-        function createClassFieldDecoratorContextType(thisType: Type, valueType: Type) {
-            const globalClassFieldDecoratorContextType = getGlobalClassFieldDecoratorContextType(/*reportErrors*/ true);
-            if (globalClassFieldDecoratorContextType !== emptyGenericType) {
-                return createTypeReference(globalClassFieldDecoratorContextType, [thisType, valueType]);
+        function getESDecoratorCallSignature(decorator: Decorator) {
+            const { parent } = decorator;
+            const links = getNodeLinks(parent);
+            if (!links.decoratorSignature) {
+                links.decoratorSignature = anySignature;
+                switch (parent.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression: {
+                        const node = decorator.parent as ClassDeclaration | ClassExpression;
+                        const targetType = getTypeOfSymbol(getSymbolOfNode(node));
+
+                        // TODO(rbuckton): Some mechanism of defining a type variable that is dependent on the result of
+                        //                 evaluating all decorators.
+                        const finalType = targetType;
+
+                        const contextType = createClassESDecoratorContextType(finalType);
+                        const returnType = getUnionType([targetType, voidType]);
+                        const targetParam = createSymbol(SymbolFlags.FunctionScopedVariable, "target" as __String, /*checkFlags*/ undefined, targetType);
+                        const contextParam = createSymbol(SymbolFlags.FunctionScopedVariable, "context" as __String, /*checkFlags*/ undefined, contextType);
+                        links.decoratorSignature = createCallSignature(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [targetParam, contextParam], returnType, /*typePredicate*/ undefined, 2);
+                        break;
+                    }
+
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor: {
+                        const node = decorator.parent as MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
+                        if (isClassLike(node.parent)) {
+                            const targetType = getOrCreateTypeFromSignature(getSignatureFromDeclaration(node));
+    
+                            // TODO(rbuckton): Some mechanism of defining a type variable that is dependent on the result of
+                            //                 evaluating all decorators.
+                            const valueFinalType = targetType;
+                            const thisFinalType = hasStaticModifier(node) ?
+                                getTypeOfSymbol(getSymbolOfNode(node.parent)) :
+                                getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent));
+    
+                            const isStatic = hasStaticModifier(node);
+                            const isPrivate = isPrivateIdentifier(node.name);
+                            const nameType = isPrivate ? getStringLiteralType(idText(node.name)) : getLiteralTypeFromPropertyName(node.name);
+    
+                            const contextType =
+                                isGetAccessorDeclaration(node) ? createClassGetterESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
+                                isSetAccessorDeclaration(node) ? createClassSetterESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
+                                createClassMethodESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate);
+    
+                            const returnType = getUnionType([targetType, voidType]);
+                            const targetParam = createSymbol(SymbolFlags.FunctionScopedVariable, "target" as __String, /*checkFlags*/ undefined, targetType);
+                            const contextParam = createSymbol(SymbolFlags.FunctionScopedVariable, "context" as __String, /*checkFlags*/ undefined, contextType);
+                            links.decoratorSignature = createCallSignature(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [targetParam, contextParam], returnType, /*typePredicate*/ undefined, 2);
+                        }
+                        break;
+                    }
+
+                    case SyntaxKind.PropertyDeclaration: {
+                        const node = decorator.parent as PropertyDeclaration;
+                        if (isClassLike(node.parent)) {
+                            const targetType = getTypeOfNode(node);
+    
+                            // TODO(rbuckton): Some mechanism of defining a type variable that is dependent on the result of
+                            //                 evaluating all decorators.
+                            const valueFinalType = targetType;
+                            const thisFinalType = hasStaticModifier(node) ?
+                                getTypeOfSymbol(getSymbolOfNode(node.parent)) :
+                                getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent));
+    
+                            const isStatic = hasStaticModifier(node);
+                            const isPrivate = isPrivateIdentifier(node.name);
+                            const nameType = isPrivate ? getStringLiteralType(idText(node.name)) : getLiteralTypeFromPropertyName(node.name);
+    
+                            const contextType =
+                                hasAccessorModifier(node) ? createClassAccessorESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate) :
+                                createClassFieldESDecoratorContextType(thisFinalType, valueFinalType, nameType, isStatic, isPrivate);
+    
+                            const returnType =
+                                hasAccessorModifier(node) ? createClassAccessorESDecoratorReturnType(targetType) :
+                                createClassFieldESDecoratorReturnType(targetType);
+
+                            const targetParam = createSymbol(SymbolFlags.FunctionScopedVariable, "target" as __String, /*checkFlags*/ undefined, targetType);
+                            const contextParam = createSymbol(SymbolFlags.FunctionScopedVariable, "context" as __String, /*checkFlags*/ undefined, contextType);
+                            links.decoratorSignature = createCallSignature(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [targetParam, contextParam], returnType, /*typePredicate*/ undefined, 2);
+                        }
+                        break;
+                    }
+                }
             }
-            return unknownType;
+            return links.decoratorSignature === anySignature ? undefined : links.decoratorSignature;
         }
 
         function createPromiseType(promisedType: Type): Type {
@@ -37502,31 +37579,18 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                     headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
-                    const classSymbol = getSymbolOfNode(node.parent);
-                    const classConstructorType = getTypeOfSymbol(classSymbol);
-                    expectedReturnType = getUnionType([classConstructorType, voidType]);
+                    expectedReturnType = createClassDecoratorReturnType(node.parent as ClassDeclaration | ClassExpression);
                     break;
 
                 case SyntaxKind.PropertyDeclaration:
                     if (!legacyDecorators) {
                         headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
                         const expectedType = getTypeOfNode(node.parent);
-                        const param = createSymbol(SymbolFlags.FunctionScopedVariable, "value" as __String, /*checkFlags*/ undefined, expectedType);
-                        const initializerSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [param], expectedType);
                         if (hasAccessorModifier(node.parent)) {
-                            const getSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, emptyArray, expectedType);
-                            const setSignatureType = createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [param], voidType);
-                            const members = createSymbolTable([
-                                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "get" as __String, /*checkFlags*/ undefined, getSignatureType),
-                                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "set" as __String, /*checkFlags*/ undefined, setSignatureType),
-                                createSymbol(SymbolFlags.Property | SymbolFlags.Optional, "init" as __String, /*checkFlags*/ undefined, initializerSignatureType)
-                            ]);
-
-                            const descriptorType = createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, emptyArray);
-                            expectedReturnType = getUnionType([descriptorType, voidType]);
+                            expectedReturnType = createClassAccessorESDecoratorReturnType(expectedType);
                         }
                         else {
-                            expectedReturnType = getUnionType([initializerSignatureType, voidType]);
+                            expectedReturnType = createClassFieldESDecoratorReturnType(expectedType);
                         }
                         break;
                     }
@@ -37554,7 +37618,7 @@ namespace ts {
             checkTypeAssignableTo(returnType, expectedReturnType, node, headMessage);
         }
 
-        function createFunctionType(
+        function createCallSignature(
             typeParameters: readonly TypeParameter[] | undefined,
             thisParameter: Symbol | undefined,
             parameters: readonly Symbol[],
@@ -37564,7 +37628,19 @@ namespace ts {
             flags: SignatureFlags = SignatureFlags.None
         ) {
             const decl = factory.createFunctionTypeNode(/*typeParameters*/ undefined, emptyArray, factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
-            const signature = createSignature(decl, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, flags);
+            return createSignature(decl, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, flags);
+        }
+
+        function createFunctionType(
+            typeParameters: readonly TypeParameter[] | undefined,
+            thisParameter: Symbol | undefined,
+            parameters: readonly Symbol[],
+            returnType: Type,
+            typePredicate?: TypePredicate,
+            minArgumentCount: number = parameters.length,
+            flags: SignatureFlags = SignatureFlags.None
+        ) {
+            const signature = createCallSignature(typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, flags);
             return getOrCreateTypeFromSignature(signature);
         }
 
