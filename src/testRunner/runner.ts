@@ -280,6 +280,9 @@ function beginTests() {
 
 export let isWorker: boolean;
 function startTestEnvironment() {
+    // For debugging convenience.
+    (globalThis as any).ts = ts;
+
     isWorker = handleTestConfig();
     if (isWorker) {
         return Parallel.Worker.start();
