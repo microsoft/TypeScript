@@ -1,7 +1,9 @@
-//// [contextualInnerCallFromConditionalContextualType.ts]
+// @strict: true
+// @noEmit: true
+
 interface EventObject { type: string; }
-interface TypegenDisabled { "@@xstate/typegen": false; }
-interface TypegenEnabled { "@@xstate/typegen": true; }
+interface TypegenDisabled { "@@xstate/typegen": 0; }
+interface TypegenEnabled { "@@xstate/typegen": 1; }
 
 type TypegenConstraint = TypegenEnabled | TypegenDisabled;
 
@@ -20,9 +22,10 @@ declare function createMachine<
   config: {
     types?: TTypesMeta;
   },
-  action?: TTypesMeta extends TypegenEnabled
-    ? { action: ActionObject<{ type: "WITH_TYPEGEN" }> }
-    : { action: ActionObject<{ type: "WITHOUT_TYPEGEN" }> }
+  action?: {
+    1: { action: ActionObject<{ type: "WITH_TYPEGEN" }> };
+    0: { action: ActionObject<{ type: "WITHOUT_TYPEGEN" }> };
+  }[TTypesMeta["@@xstate/typegen"]]
 ): void;
 
 createMachine(
@@ -36,14 +39,3 @@ createMachine(
   }
 );
 
-
-
-//// [contextualInnerCallFromConditionalContextualType.js]
-"use strict";
-createMachine({
-    types: {}
-}, {
-    action: assign(function (event) {
-        event.type; // should be 'WITH_TYPEGEN'
-    })
-});

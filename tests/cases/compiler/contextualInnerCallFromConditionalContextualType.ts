@@ -1,4 +1,5 @@
 // @strict: true
+// @noEmit: true
 
 interface EventObject { type: string; }
 interface TypegenDisabled { "@@xstate/typegen": false; }
