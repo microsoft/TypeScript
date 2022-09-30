@@ -256,7 +256,11 @@ namespace ts.codefix {
         if (mayDeleteParameter(checker, sourceFile, parameter, sourceFiles, program, cancellationToken, isFixAll)) {
             if (parameter.modifiers && parameter.modifiers.length > 0 &&
                 (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))) {
-                parameter.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
+                for (const modifier of parameter.modifiers) {
+                    if (isModifier(modifier)) {
+                        changes.deleteModifier(sourceFile, modifier);
+                    }
+                }
             }
             else if (!parameter.initializer && isNotProvidedArguments(parameter, checker, sourceFiles)) {
                 changes.delete(sourceFile, parameter);

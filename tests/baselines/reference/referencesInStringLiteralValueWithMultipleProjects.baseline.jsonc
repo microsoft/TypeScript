@@ -1,0 +1,24 @@
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a/a.ts",
+      "kind": "var",
+      "name": "hello",
+      "textSpan": {
+        "start": 56,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "\"hello\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": []
+  }
+]
+
+[]

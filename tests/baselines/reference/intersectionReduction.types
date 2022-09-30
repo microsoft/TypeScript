@@ -346,7 +346,7 @@ function inGeneric<T extends A2 | B2>(alsoShouldBeB: T & B2) {
 
     const b: B2 = alsoShouldBeB;
 >b : B2
->alsoShouldBeB : T & B2
+>alsoShouldBeB : B2
 }
 
 // Repro from #38542
@@ -374,6 +374,6 @@ function bar<T extends CA | CB>(x: T & CA) {
 
     let ab: ABI = x;
 >ab : ABI
->x : T & CA
+>x : CA
 }
 

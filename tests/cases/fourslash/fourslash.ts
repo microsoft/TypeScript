@@ -108,6 +108,7 @@ declare module ts {
         fileName?: string;
         ambientModuleName?: string;
         isPackageJsonImport?: true;
+        moduleSpecifier?: string;
         exportName: string;
     }
 
@@ -378,8 +379,10 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
-        /** Prefer semanticClassificationsAre for more descriptive tests */
-        encodedSemanticClassificationsLength(format: "original" | "2020", length: number)
+        /** Prefer {@link syntacticClassificationsAre} for more descriptive tests */
+        encodedSyntacticClassificationsLength(expected: number): void;
+        /** Prefer {@link semanticClassificationsAre} for more descriptive tests */
+        encodedSemanticClassificationsLength(format: "original" | "2020", length: number): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -397,8 +400,8 @@ declare namespace FourSlashInterface {
         }[]): void;
         /** Edits the current testfile and replaces with the semantic classifications */
         replaceWithSemanticClassifications(format: "2020")
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
-        renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, preferences?: UserPreferences): void;
+        renameInfoFailed(message?: string, preferences?: UserPreferences): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
         baselineRename(marker: string, options: RenameOptions): void;
 
@@ -660,12 +663,16 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: readonly string[];
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;

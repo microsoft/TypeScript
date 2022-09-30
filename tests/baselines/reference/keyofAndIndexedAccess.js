@@ -1115,10 +1115,10 @@ declare class Item {
 declare class Options {
     visible: "yes" | "no";
 }
-declare type Dictionary<T> = {
+type Dictionary<T> = {
     [x: string]: T;
 };
-declare type NumericallyIndexed<T> = {
+type NumericallyIndexed<T> = {
     [x: number]: T;
 };
 declare const enum E {
@@ -1126,47 +1126,47 @@ declare const enum E {
     B = 1,
     C = 2
 }
-declare type K00 = keyof any;
-declare type K01 = keyof string;
-declare type K02 = keyof number;
-declare type K03 = keyof boolean;
-declare type K04 = keyof void;
-declare type K05 = keyof undefined;
-declare type K06 = keyof null;
-declare type K07 = keyof never;
-declare type K08 = keyof unknown;
-declare type K10 = keyof Shape;
-declare type K11 = keyof Shape[];
-declare type K12 = keyof Dictionary<Shape>;
-declare type K13 = keyof {};
-declare type K14 = keyof Object;
-declare type K15 = keyof E;
-declare type K16 = keyof [string, number];
-declare type K17 = keyof (Shape | Item);
-declare type K18 = keyof (Shape & Item);
-declare type K19 = keyof NumericallyIndexed<Shape>;
-declare type KeyOf<T> = keyof T;
-declare type K20 = KeyOf<Shape>;
-declare type K21 = KeyOf<Dictionary<Shape>>;
-declare type NAME = "name";
-declare type WIDTH_OR_HEIGHT = "width" | "height";
-declare type Q10 = Shape["name"];
-declare type Q11 = Shape["width" | "height"];
-declare type Q12 = Shape["name" | "visible"];
-declare type Q20 = Shape[NAME];
-declare type Q21 = Shape[WIDTH_OR_HEIGHT];
-declare type Q30 = [string, number][0];
-declare type Q31 = [string, number][1];
-declare type Q32 = [string, number][number];
-declare type Q33 = [string, number][E.A];
-declare type Q34 = [string, number][E.B];
-declare type Q35 = [string, number]["0"];
-declare type Q36 = [string, number]["1"];
-declare type Q40 = (Shape | Options)["visible"];
-declare type Q41 = (Shape & Options)["visible"];
-declare type Q50 = Dictionary<Shape>["howdy"];
-declare type Q51 = Dictionary<Shape>[123];
-declare type Q52 = Dictionary<Shape>[E.B];
+type K00 = keyof any;
+type K01 = keyof string;
+type K02 = keyof number;
+type K03 = keyof boolean;
+type K04 = keyof void;
+type K05 = keyof undefined;
+type K06 = keyof null;
+type K07 = keyof never;
+type K08 = keyof unknown;
+type K10 = keyof Shape;
+type K11 = keyof Shape[];
+type K12 = keyof Dictionary<Shape>;
+type K13 = keyof {};
+type K14 = keyof Object;
+type K15 = keyof E;
+type K16 = keyof [string, number];
+type K17 = keyof (Shape | Item);
+type K18 = keyof (Shape & Item);
+type K19 = keyof NumericallyIndexed<Shape>;
+type KeyOf<T> = keyof T;
+type K20 = KeyOf<Shape>;
+type K21 = KeyOf<Dictionary<Shape>>;
+type NAME = "name";
+type WIDTH_OR_HEIGHT = "width" | "height";
+type Q10 = Shape["name"];
+type Q11 = Shape["width" | "height"];
+type Q12 = Shape["name" | "visible"];
+type Q20 = Shape[NAME];
+type Q21 = Shape[WIDTH_OR_HEIGHT];
+type Q30 = [string, number][0];
+type Q31 = [string, number][1];
+type Q32 = [string, number][number];
+type Q33 = [string, number][E.A];
+type Q34 = [string, number][E.B];
+type Q35 = [string, number]["0"];
+type Q36 = [string, number]["1"];
+type Q40 = (Shape | Options)["visible"];
+type Q41 = (Shape & Options)["visible"];
+type Q50 = Dictionary<Shape>["howdy"];
+type Q51 = Dictionary<Shape>[123];
+type Q52 = Dictionary<Shape>[E.B];
 declare let cond: boolean;
 declare function getProperty<T, K extends keyof T>(obj: T, key: K): T[K];
 declare function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]): void;
@@ -1231,7 +1231,7 @@ declare class C1 {
     set<K extends keyof this>(key: K, value: this[K]): void;
     foo(): void;
 }
-declare type S2 = {
+type S2 = {
     a: string;
     b: string;
 };
@@ -1256,7 +1256,7 @@ declare function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
 declare function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
 declare function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
 declare function path(obj: any, ...keys: (string | number)[]): any;
-declare type Thing = {
+type Thing = {
     a: {
         x: number;
         y: string;
@@ -1267,7 +1267,7 @@ declare function f1(thing: Thing): void;
 declare const assignTo2: <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2];
 declare function one<T>(handler: (t: T) => void): T;
 declare var empty: unknown;
-declare type Handlers<T> = {
+type Handlers<T> = {
     [K in keyof T]: (t: T[K]) => void;
 };
 declare function on<T>(handlerHash: Handlers<T>): T;
@@ -1300,24 +1300,24 @@ interface R {
     p: number;
 }
 declare function f<K extends keyof R>(p: K): void;
-declare type MethodDescriptor = {
+type MethodDescriptor = {
     name: string;
     args: any[];
     returnValue: any;
 };
 declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
-declare type SomeMethodDescriptor = {
+type SomeMethodDescriptor = {
     name: "someMethod";
     args: [string, number];
     returnValue: string[];
 };
 declare let result: string[];
-declare type KeyTypes = "a" | "b";
+type KeyTypes = "a" | "b";
 declare let MyThingy: {
     [key in KeyTypes]: string[];
 };
 declare function addToMyThingy<S extends KeyTypes>(key: S): void;
-declare type Handler<T> = {
+type Handler<T> = {
     onChange: (name: keyof T) => void;
 };
 declare function onChangeGenericFunction<T>(handler: Handler<T & {
@@ -1357,17 +1357,17 @@ declare class AnotherSampleClass<T> extends SampleClass<T & Foo> {
     brokenMethod(): void;
 }
 declare function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void;
-declare type Predicates<TaggedRecord> = {
+type Predicates<TaggedRecord> = {
     [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T];
 };
-declare type Example<T extends {
+type Example<T extends {
     [K in keyof T]: {
         prop: any;
     };
 }> = {
     [K in keyof T]: T[K]["prop"];
 };
-declare type Result = Example<{
+type Result = Example<{
     a: {
         prop: string;
     };
@@ -1375,15 +1375,15 @@ declare type Result = Example<{
         prop: number;
     };
 }>;
-declare type Helper2<T> = {
+type Helper2<T> = {
     [K in keyof T]: Extract<T[K], {
         prop: any;
     }>;
 };
-declare type Example2<T> = {
+type Example2<T> = {
     [K in keyof Helper2<T>]: Helper2<T>[K]["prop"];
 };
-declare type Result2 = Example2<{
+type Result2 = Example2<{
     1: {
         prop: string;
     };
@@ -1391,18 +1391,18 @@ declare type Result2 = Example2<{
         prop: number;
     };
 }>;
-declare type DBBoolTable<K extends string> = {
+type DBBoolTable<K extends string> = {
     [k in K]: 0 | 1;
 };
 declare enum Flag {
     FLAG_1 = "flag_1",
     FLAG_2 = "flag_2"
 }
-declare type SimpleDBRecord<Flag extends string> = {
+type SimpleDBRecord<Flag extends string> = {
     staticField: number;
 } & DBBoolTable<Flag>;
 declare function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]): SimpleDBRecord<Flag>[Flag];
-declare type DynamicDBRecord<Flag extends string> = ({
+type DynamicDBRecord<Flag extends string> = ({
     dynamicField: number;
 } | {
     dynamicField: string;
@@ -1419,12 +1419,12 @@ declare class Unbounded<T> {
 interface I7 {
     x: any;
 }
-declare type Foo7<T extends number> = T;
+type Foo7<T extends number> = T;
 declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
-declare type Dict<T extends string> = {
+type Dict<T extends string> = {
     [key in T]: number;
 };
-declare type DictDict<V extends string, T extends string> = {
+type DictDict<V extends string, T extends string> = {
     [key in V]: Dict<T>;
 };
 declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;

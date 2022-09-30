@@ -141,6 +141,7 @@ namespace ts {
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
                 assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions[0].length);
+                assert.deepEqual(resolution.affectingLocations, [packageJsonFileName]);
             }
         }
 
@@ -215,6 +216,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
                 resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/sub"));
@@ -229,6 +231,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
                 resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/sub/dir/foo"));
@@ -245,6 +248,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
                 resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo/bar"));
@@ -260,6 +264,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
                 resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo"));
@@ -274,6 +279,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
                 resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("c:/foo"));
@@ -284,6 +290,7 @@ namespace ts {
             cache.set("/foo/bar/baz", {
                 resolvedModule: undefined,
                 failedLookupLocations: [],
+                affectingLocations: [],
                 resolutionDiagnostics: [],
             });
             assert.isDefined(cache.get("/foo/bar/baz"));

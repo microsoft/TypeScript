@@ -122,7 +122,7 @@ Output::
 [[90m12:00:10 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:00:11 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:00:11 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:12 AM[0m] Building project '/src/core/tsconfig.json'...
 
@@ -219,12 +219,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/core --verbose
-[[90m12:00:18 AM[0m] Projects in this build: 
+[[90m12:00:19 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:00:19 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
+[[90m12:00:20 AM[0m] Project 'src/core/tsconfig.json' is out of date because output 'src/core/tsconfig.tsbuildinfo' is older than input 'src/core/tsconfig.json'
 
-[[90m12:00:20 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:21 AM[0m] Building project '/src/core/tsconfig.json'...
 
 TSFILE: /src/core/anotherModule.js
 TSFILE: /src/core/index.js

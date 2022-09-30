@@ -15,8 +15,10 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(11,9)
         let a: object = x;  // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! related TS2208 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:14: This type parameter might need an `extends object` constraint.
         let b: U | object = x;  // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object | U'.
+!!! related TS2208 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:14: This type parameter might need an `extends object | U` constraint.
     }
     

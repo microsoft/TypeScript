@@ -1,6 +1,6 @@
 /// <reference types="node"/>
 import { normalize, relative } from "path";
-import assert = require("assert");
+import * as assert from "assert";
 import { readFileSync, writeFileSync } from "fs";
 
 /**

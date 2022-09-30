@@ -17,8 +17,8 @@ tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(48
         indexOf(searchString: string, position?: number): number;
         lastIndexOf(searchString: string, position?: number): number;
         localeCompare(that: string): number;
-        match(regexp: string): string[];
-        match(regexp: RegExp): string[];
+        match(regexp: string): RegExpMatchArray;
+        match(regexp: RegExp): RegExpMatchArray;
         replace(searchValue: string, replaceValue: string): string;
         replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
         replace(searchValue: RegExp, replaceValue: string): string;
@@ -44,11 +44,11 @@ tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(48
     var a: String;
     var b: NotString;
     
-    a = x; 
-    a = b; 
+    a = x;
+    a = b;
     
-    b = a; 
-    b = x; 
+    b = a;
+    b = x;
     
     x = a; // expected error
     ~

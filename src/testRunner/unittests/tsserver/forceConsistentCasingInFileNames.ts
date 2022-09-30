@@ -59,7 +59,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([{ file: loggerFile, projectRootPath: tscWatch.projectRoot }], session);
             verifyGetErrRequest({ session, host, files: [loggerFile] });
 
@@ -108,7 +108,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
             verifyGetErrRequest({ session, host, files: [anotherFile] });
 

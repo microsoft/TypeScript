@@ -1,4 +1,7 @@
 // @ts-check
+
+/* eslint-disable no-restricted-globals */
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../types/ambient.d.ts" />
 
 const fs = require("fs");
@@ -11,7 +14,6 @@ const ts = require("../../lib/typescript");
 const chalk = require("chalk");
 const which = require("which");
 const { spawn } = require("child_process");
-const { CancellationToken, CancelError, Deferred } = require("prex");
 const { Readable, Duplex } = require("stream");
 
 /**
@@ -22,26 +24,17 @@ const { Readable, Duplex } = require("stream");
  *
  * @typedef ExecOptions
  * @property {boolean} [ignoreExitCode]
- * @property {import("prex").CancellationToken} [cancelToken]
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
  */
 async function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode: number}>}*/(new Promise((resolve, reject) => {
-        const { ignoreExitCode, cancelToken = CancellationToken.none, waitForExit = true } = options;
-        cancelToken.throwIfCancellationRequested();
+        const { ignoreExitCode, waitForExit = true } = options;
 
         if (!options.hidePrompt) log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
         const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? "inherit" : "ignore" });
-        const registration = cancelToken.register(() => {
-            log(`${chalk.red("killing")} '${chalk.green(cmd)} ${args.join(" ")}'...`);
-            proc.kill("SIGINT");
-            proc.kill("SIGTERM");
-            reject(new CancelError());
-        });
         if (waitForExit) {
             proc.on("exit", exitCode => {
-                registration.unregister();
                 if (exitCode === 0 || ignoreExitCode) {
                     resolve({ exitCode });
                 }
@@ -50,7 +43,6 @@ async function exec(cmd, args, options = {}) {
                 }
             });
             proc.on("error", error => {
-                registration.unregister();
                 reject(error);
             });
         }
@@ -128,6 +120,7 @@ function streamFromBuffer(buffer) {
     return new Readable({
         read() {
             this.push(buffer);
+            // eslint-disable-next-line no-null/no-null
             this.push(null);
         }
     });
@@ -249,7 +242,7 @@ function flatten(projectSpec, flattenedProjectSpec, options = {}) {
     const files = [];
     const resolvedOutputSpec = path.resolve(cwd, flattenedProjectSpec);
     const resolvedOutputDirectory = path.dirname(resolvedOutputSpec);
-    const resolvedProjectSpec = resolveProjectSpec(projectSpec, cwd, undefined);
+    const resolvedProjectSpec = resolveProjectSpec(projectSpec, cwd, /*referrer*/ undefined);
     const project = readJson(resolvedProjectSpec);
     const skipProjects = /**@type {Set<string>}*/(new Set());
     const skipFiles = new Set(options && options.exclude && options.exclude.map(file => normalizeSlashes(path.resolve(cwd, file))));
@@ -310,7 +303,7 @@ function normalizeSlashes(file) {
  * @returns {string}
  */
 function resolveProjectSpec(projectSpec, cwd, referrer) {
-    let projectPath = normalizeSlashes(path.resolve(cwd, referrer ? path.dirname(referrer) : "", projectSpec));
+    const projectPath = normalizeSlashes(path.resolve(cwd, referrer ? path.dirname(referrer) : "", projectSpec));
     const stats = fs.statSync(projectPath);
     if (stats.isFile()) return normalizeSlashes(projectPath);
     return normalizeSlashes(path.resolve(cwd, projectPath, "tsconfig.json"));
@@ -321,7 +314,10 @@ function resolveProjectSpec(projectSpec, cwd, referrer) {
  * @param {{ cwd?: string }} [opts]
  */
 function rm(dest, opts) {
-    if (dest && typeof dest === "object") opts = dest, dest = undefined;
+    if (dest && typeof dest === "object") {
+        opts = dest;
+        dest = undefined;
+    }
     let failed = false;
 
     const cwd = path.resolve(opts && opts.cwd || process.cwd());
@@ -369,6 +365,7 @@ function rm(dest, opts) {
             pending.push(entry);
         },
         final(cb) {
+            // eslint-disable-next-line no-null/no-null
             const endThenCb = () => (duplex.push(null), cb()); // signal end of read queue
             processDeleted();
             if (pending.length) {
@@ -386,6 +383,15 @@ function rm(dest, opts) {
     return duplex;
 }
 exports.rm = rm;
+
+class Deferred {
+    constructor() {
+        this.promise = new Promise((resolve, reject) => {
+            this.resolve = resolve;
+            this.reject = reject;
+        });
+    }
+}
 
 class Debouncer {
     /**

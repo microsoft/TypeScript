@@ -391,7 +391,7 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     // Parameters with names are handled at the top of this function.  Parameters
                     // without names can only come from JSDocFunctionTypes.
-                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType, "Impossible parameter parent kind", () => `parent is: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[node.parent.kind] : node.parent.kind}, expected JSDocFunctionType`);
+                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType, "Impossible parameter parent kind", () => `parent is: ${Debug.formatSyntaxKind(node.parent.kind)}, expected JSDocFunctionType`);
                     const functionType = node.parent as JSDocFunctionType;
                     const index = functionType.parameters.indexOf(node as ParameterDeclaration);
                     return "arg" + index as __String;
@@ -849,6 +849,9 @@ namespace ts {
                     break;
                 case SyntaxKind.BindingElement:
                     bindBindingElementFlow(node as BindingElement);
+                    break;
+                case SyntaxKind.Parameter:
+                    bindParameterFlow(node as ParameterDeclaration);
                     break;
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
@@ -1655,22 +1658,40 @@ namespace ts {
         }
 
         function bindBindingElementFlow(node: BindingElement) {
-            if (isBindingPattern(node.name)) {
-                // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
-                // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
-                //   - `BindingElement: BindingPattern Initializer?`
-                // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
-                //   - `BindingElement: BindingPattern Initializer?`
-                bindEach(node.decorators);
-                bindEach(node.modifiers);
-                bind(node.dotDotDotToken);
-                bind(node.propertyName);
-                bind(node.initializer);
-                bind(node.name);
+            // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
+            // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
+            //   - `BindingElement: BindingPattern Initializer?`
+            // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
+            //   - `BindingElement: BindingPattern Initializer?`
+            bind(node.dotDotDotToken);
+            bind(node.propertyName);
+            bindInitializer(node.initializer);
+            bind(node.name);
+        }
+
+        function bindParameterFlow(node: ParameterDeclaration) {
+            bindEach(node.modifiers);
+            bind(node.dotDotDotToken);
+            bind(node.questionToken);
+            bind(node.type);
+            bindInitializer(node.initializer);
+            bind(node.name);
+        }
+
+        // a BindingElement/Parameter does not have side effects if initializers are not evaluated and used. (see GH#49759)
+        function bindInitializer(node: Expression | undefined) {
+            if (!node) {
+                return;
             }
-            else {
-                bindEachChild(node);
+            const entryFlow = currentFlow;
+            bind(node);
+            if (entryFlow === unreachableFlow || entryFlow === currentFlow) {
+                return;
             }
+            const exitFlow = createBranchLabel();
+            addAntecedent(exitFlow, entryFlow);
+            addAntecedent(exitFlow, currentFlow);
+            currentFlow = finishFlowLabel(exitFlow);
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
@@ -2042,41 +2063,6 @@ namespace ts {
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
-            const enum ElementKind {
-                Property = 1,
-                Accessor = 2
-            }
-
-            if (inStrictMode && !isAssignmentTarget(node)) {
-                const seen = new Map<__String, ElementKind>();
-
-                for (const prop of node.properties) {
-                    if (prop.kind === SyntaxKind.SpreadAssignment || prop.name.kind !== SyntaxKind.Identifier) {
-                        continue;
-                    }
-
-                    const identifier = prop.name;
-
-                    // ECMA-262 11.1.5 Object Initializer
-                    // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
-                    // a.This production is contained in strict code and IsDataDescriptor(previous) is true and
-                    // IsDataDescriptor(propId.descriptor) is true.
-                    //    b.IsDataDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true.
-                    //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
-                    //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
-                    // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
-                    const currentKind = prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment || prop.kind === SyntaxKind.MethodDeclaration
-                        ? ElementKind.Property
-                        : ElementKind.Accessor;
-
-                    const existingKind = seen.get(identifier.escapedText);
-                    if (!existingKind) {
-                        seen.set(identifier.escapedText, currentKind);
-                        continue;
-                    }
-                }
-            }
-
             return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, InternalSymbolName.Object);
         }
 
@@ -2746,7 +2732,10 @@ namespace ts {
         }
 
         function bindPropertyWorker(node: PropertyDeclaration | PropertySignature) {
-            return bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
+            const isAutoAccessor = isAutoAccessorPropertyDeclaration(node);
+            const includes = isAutoAccessor ? SymbolFlags.Accessor : SymbolFlags.Property;
+            const excludes = isAutoAccessor ? SymbolFlags.AccessorExcludes : SymbolFlags.PropertyExcludes;
+            return bindPropertyOrMethodOrAccessor(node, includes | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), excludes);
         }
 
         function bindAnonymousTypeWorker(node: TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral) {
@@ -2794,7 +2783,7 @@ namespace ts {
         }
 
         function bindNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
-            if (node.modifiers && node.modifiers.length) {
+            if (some(node.modifiers)) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
             const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
@@ -2834,12 +2823,14 @@ namespace ts {
         }
 
         function setCommonJsModuleIndicator(node: Node) {
-            if (file.externalModuleIndicator) {
+            if (file.externalModuleIndicator && file.externalModuleIndicator !== true) {
                 return false;
             }
             if (!file.commonJsModuleIndicator) {
                 file.commonJsModuleIndicator = node;
-                bindSourceFileAsExternalModule();
+                if (!file.externalModuleIndicator) {
+                    bindSourceFileAsExternalModule();
+                }
             }
             return true;
         }
@@ -3053,7 +3044,7 @@ namespace ts {
                 return;
             }
             const rootExpr = getLeftmostAccessExpression(node.left);
-            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)?.flags! & SymbolFlags.Alias) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
@@ -3291,7 +3282,12 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node) && !getJSDocTypeTag(node) && !(getCombinedModifierFlags(node) & ModifierFlags.Export)) {
+                const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
+                if (isInJSFile(node) &&
+                    isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
+                    !getJSDocTypeTag(node) &&
+                    !(getCombinedModifierFlags(node) & ModifierFlags.Export)
+                ) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 }
                 else if (isBlockOrCatchScoped(node)) {
@@ -3504,10 +3500,11 @@ namespace ts {
 
     export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Expression): boolean {
         let i = 0;
-        const q = [node];
-        while (q.length && i < 100) {
+        const q = createQueue<Expression>();
+        q.enqueue(node);
+        while (!q.isEmpty() && i < 100) {
             i++;
-            node = q.shift()!;
+            node = q.dequeue();
             if (isExportsIdentifier(node) || isModuleExportsAccessExpression(node)) {
                 return true;
             }
@@ -3515,10 +3512,10 @@ namespace ts {
                 const symbol = lookupSymbolForName(sourceFile, node.escapedText);
                 if (!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
                     const init = symbol.valueDeclaration.initializer;
-                    q.push(init);
+                    q.enqueue(init);
                     if (isAssignmentExpression(init, /*excludeCompoundAssignment*/ true)) {
-                        q.push(init.left);
-                        q.push(init.right);
+                        q.enqueue(init.left);
+                        q.enqueue(init.right);
                     }
                 }
             }
