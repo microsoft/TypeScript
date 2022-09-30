@@ -176,7 +176,7 @@ namespace ts.GoToDefinition {
 
         const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
         const symbol = hasStaticModifier(classElement)
-            ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, baseDeclaration), name)
+            ? baseType.symbol && typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, baseDeclaration), name)
             : typeChecker.getPropertyOfType(baseType, name);
         if (!symbol) return;
 
