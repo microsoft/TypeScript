@@ -40,3 +40,23 @@ function f(x: {}, y: unknown) {
 >y : Record<"a", unknown>
 }
 
+
+// repro #51007
+function isHTMLTable(table: unknown): boolean {
+>isHTMLTable : (table: unknown) => boolean
+>table : unknown
+
+    return !!table && table instanceof Object && 'html' in table;
+>!!table && table instanceof Object && 'html' in table : boolean
+>!!table && table instanceof Object : boolean
+>!!table : boolean
+>!table : boolean
+>table : unknown
+>table instanceof Object : boolean
+>table : {}
+>Object : ObjectConstructor
+>'html' in table : boolean
+>'html' : "html"
+>table : Object
+}
+

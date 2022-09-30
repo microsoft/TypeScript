@@ -16,3 +16,9 @@ function f(x: {}, y: unknown) {
     }
     y;  // {}
 }
+
+
+// repro #51007
+function isHTMLTable(table: unknown): boolean {
+    return !!table && table instanceof Object && 'html' in table;
+}

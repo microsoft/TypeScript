@@ -25721,7 +25721,9 @@ namespace ts {
                     const nonConstructorTypeInUnion = find((rightType as UnionType).types, (t) => !isConstructorType(t));
                     if (!nonConstructorTypeInUnion) return type;
                 }
-
+                if (assumeTrue && declaredType === unknownType && isEmptyAnonymousObjectType(type)) {
+                    return targetType;
+                }
                 return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
             }
 

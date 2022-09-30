@@ -21,3 +21,9 @@ tests/cases/compiler/inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may 
         y;  // {}
     }
     
+    
+    // repro #51007
+    function isHTMLTable(table: unknown): boolean {
+        return !!table && table instanceof Object && 'html' in table;
+    }
+    

@@ -17,6 +17,12 @@ function f(x: {}, y: unknown) {
 }
 
 
+// repro #51007
+function isHTMLTable(table: unknown): boolean {
+    return !!table && table instanceof Object && 'html' in table;
+}
+
+
 //// [inKeywordAndUnknown.js]
 "use strict";
 // Repro from #50531
@@ -33,4 +39,8 @@ function f(x, y) {
         return;
     }
     y; // {}
+}
+// repro #51007
+function isHTMLTable(table) {
+    return !!table && table instanceof Object && 'html' in table;
 }

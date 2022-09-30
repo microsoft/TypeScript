@@ -31,3 +31,16 @@ function f(x: {}, y: unknown) {
 >y : Symbol(y, Decl(inKeywordAndUnknown.ts, 2, 17))
 }
 
+
+// repro #51007
+function isHTMLTable(table: unknown): boolean {
+>isHTMLTable : Symbol(isHTMLTable, Decl(inKeywordAndUnknown.ts, 15, 1))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
+
+    return !!table && table instanceof Object && 'html' in table;
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
+}
+
