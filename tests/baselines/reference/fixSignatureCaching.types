@@ -1127,9 +1127,9 @@ define(function () {
 >'[object Array]' : "[object Array]"
 
     isArray = 'isArray' in Array
->isArray = 'isArray' in Array        ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }        : Array.isArray : (value: any) => boolean
+>isArray = 'isArray' in Array        ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }        : Array.isArray : any
 >isArray : any
->'isArray' in Array        ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }        : Array.isArray : (value: any) => boolean
+>'isArray' in Array        ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }        : Array.isArray : any
 >'isArray' in Array : boolean
 >'isArray' : "isArray"
 >Array : ArrayConstructor
@@ -1150,9 +1150,9 @@ define(function () {
 >'[object Array]' : "[object Array]"
 
         : Array.isArray;
->Array.isArray : (arg: any) => arg is any[]
->Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>Array.isArray : any
+>Array : never
+>isArray : any
 
     function equalIC(a, b) {
 >equalIC : (a: any, b: any) => boolean

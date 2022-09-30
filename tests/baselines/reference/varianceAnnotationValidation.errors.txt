@@ -1,0 +1,48 @@
+tests/cases/compiler/varianceAnnotationValidation.ts(5,22): error TS2636: Type 'Controller<sub-T>' is not assignable to type 'Controller<super-T>' as implied by variance annotation.
+  Types of property 'run' are incompatible.
+    Type '(animal: sub-T) => void' is not assignable to type '(animal: super-T) => void'.
+      Types of parameters 'animal' and 'animal' are incompatible.
+        Type 'super-T' is not assignable to type 'sub-T'.
+tests/cases/compiler/varianceAnnotationValidation.ts(27,1): error TS2322: Type 'AnimalContainer<Animal>' is not assignable to type 'AnimalContainer<Dog>'.
+  Property 'bark' is missing in type 'Animal' but required in type 'Dog'.
+
+
+==== tests/cases/compiler/varianceAnnotationValidation.ts (2 errors) ====
+    // Repro from #49607
+    
+    // Variance annotation error expected
+    
+    interface Controller<out T> {
+                         ~~~~~
+!!! error TS2636: Type 'Controller<sub-T>' is not assignable to type 'Controller<super-T>' as implied by variance annotation.
+!!! error TS2636:   Types of property 'run' are incompatible.
+!!! error TS2636:     Type '(animal: sub-T) => void' is not assignable to type '(animal: super-T) => void'.
+!!! error TS2636:       Types of parameters 'animal' and 'animal' are incompatible.
+!!! error TS2636:         Type 'super-T' is not assignable to type 'sub-T'.
+    	createAnimal: () => T;
+    	run: (animal: T) => void;
+    }
+    
+    interface Animal {
+    	run(): void;
+    };
+    
+    class Dog implements Animal {
+    	run() {};
+    	bark() {};
+    }
+    
+    interface AnimalContainer<T> {
+    	controller: Controller<T>;
+    }
+    
+    declare let ca: AnimalContainer<Animal>;
+    declare let cd: AnimalContainer<Dog>;
+    
+    ca = cd;  // Ok
+    cd = ca;  // Error
+    ~~
+!!! error TS2322: Type 'AnimalContainer<Animal>' is not assignable to type 'AnimalContainer<Dog>'.
+!!! error TS2322:   Property 'bark' is missing in type 'Animal' but required in type 'Dog'.
+!!! related TS2728 tests/cases/compiler/varianceAnnotationValidation.ts:16:2: 'bark' is declared here.
+    

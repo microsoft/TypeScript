@@ -11,13 +11,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use node version 14
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v3
       with:
-        node-version: 14
+        # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
         registry-url: https://registry.npmjs.org/
     - name: Setup and publish nightly
       run: |
@@ -30,5 +30,3 @@ jobs:
         npm publish --tag next
       env:
         NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-        CI: true
-    

@@ -4,7 +4,7 @@
 // @declaration: true
 //// export function /*1*/foo/*2*/() {
 ////     interface privateInterface {}
-////     class Bar implements privateInterface { }
+////     class Bar implements privateInterface { private a; }
 ////     return Bar;
 //// }
 

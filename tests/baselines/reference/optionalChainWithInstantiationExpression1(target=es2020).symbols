@@ -1,0 +1,39 @@
+=== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts ===
+declare namespace A {
+>A : Symbol(A, Decl(optionalChainWithInstantiationExpression1.ts, 0, 0))
+
+    export class b<T> {
+>b : Symbol(b, Decl(optionalChainWithInstantiationExpression1.ts, 0, 21))
+>T : Symbol(T, Decl(optionalChainWithInstantiationExpression1.ts, 1, 19))
+
+        static d: number;
+>d : Symbol(b.d, Decl(optionalChainWithInstantiationExpression1.ts, 1, 23))
+
+        constructor(x: T);
+>x : Symbol(x, Decl(optionalChainWithInstantiationExpression1.ts, 3, 20))
+>T : Symbol(T, Decl(optionalChainWithInstantiationExpression1.ts, 1, 19))
+    }
+}
+
+type c = unknown;
+>c : Symbol(c, Decl(optionalChainWithInstantiationExpression1.ts, 5, 1))
+
+declare const a: typeof A | undefined;
+>a : Symbol(a, Decl(optionalChainWithInstantiationExpression1.ts, 9, 13))
+>A : Symbol(A, Decl(optionalChainWithInstantiationExpression1.ts, 0, 0))
+
+a?.b<c>.d;
+>a?.b<c>.d : Symbol(A.b.d, Decl(optionalChainWithInstantiationExpression1.ts, 1, 23))
+>a?.b : Symbol(A.b, Decl(optionalChainWithInstantiationExpression1.ts, 0, 21))
+>a : Symbol(a, Decl(optionalChainWithInstantiationExpression1.ts, 9, 13))
+>b : Symbol(A.b, Decl(optionalChainWithInstantiationExpression1.ts, 0, 21))
+>c : Symbol(c, Decl(optionalChainWithInstantiationExpression1.ts, 5, 1))
+>d : Symbol(A.b.d, Decl(optionalChainWithInstantiationExpression1.ts, 1, 23))
+
+a?.b.d
+>a?.b.d : Symbol(A.b.d, Decl(optionalChainWithInstantiationExpression1.ts, 1, 23))
+>a?.b : Symbol(A.b, Decl(optionalChainWithInstantiationExpression1.ts, 0, 21))
+>a : Symbol(a, Decl(optionalChainWithInstantiationExpression1.ts, 9, 13))
+>b : Symbol(A.b, Decl(optionalChainWithInstantiationExpression1.ts, 0, 21))
+>d : Symbol(A.b.d, Decl(optionalChainWithInstantiationExpression1.ts, 1, 23))
+

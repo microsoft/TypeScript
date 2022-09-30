@@ -618,6 +618,39 @@ export class A {
 
         verifyTscWatch({
             scenario,
+            subScenario: "correctly parses wild card directories from implicit glob when two keys differ only in directory seperator",
+            commandLineArgs: ["-w", "--extendedDiagnostics"],
+            sys: () => {
+                const file1 = {
+                    path: `${projectRoot}/f1.ts`,
+                    content: "export const x = 1"
+                };
+                const file2 = {
+                    path: `${projectRoot}/f2.ts`,
+                    content: "export const y = 1"
+                };
+                const configFile = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] })
+                };
+                return createWatchedSystem([file1, file2, libFile, configFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Add new file",
+                    change: sys => sys.writeFile(`${projectRoot}/new-file.ts`, "export const z = 1;"),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                },
+                {
+                    caption: "Import new file",
+                    change: sys => sys.prependFile(`${projectRoot}/f1.ts`, `import { z } from "./new-file";`),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                }
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "can correctly update configured project when set of root files has changed through include",
             commandLineArgs: ["-w", "-p", "."],
             sys: () => {

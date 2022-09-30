@@ -7,7 +7,7 @@ namespace ts.projectSystem {
                     let x = y`
             };
             const host = createServerHost([file1, libFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1], session);
 
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
@@ -567,7 +567,7 @@ namespace ts.projectSystem {
                 path: "/a/b/file1.js",
                 content: "var x = 10;",
                 fileName: "/a/b/file1.js",
-                scriptKind: "JS" as "JS"
+                scriptKind: "JS" as const
             };
 
             const host = createServerHost([]);
@@ -861,31 +861,30 @@ namespace ts.projectSystem {
                 content: `<html><script language="javascript">var x = 1;</></html>`
             };
             const host = createServerHost([file1]);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             const projectFileName = "projectFileName";
             projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
 
-            checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkWatchedFiles(host, [libFile.path]); // watching the "missing" lib file
 
             const project = projectService.externalProjects[0];
 
             const scriptInfo = project.getScriptInfo(file1.path)!;
             const snap = scriptInfo.getSnapshot();
             const actualText = getSnapshotText(snap);
-            assert.equal(actualText, "", `expected content to be empty string, got "${actualText}"`);
+            projectService.logger.info(`Text of${file1.path}: ${actualText}`);
 
             projectService.openClientFile(file1.path, `var x = 1;`);
             project.updateGraph();
 
             const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file1.path, 4)!;
-            assert.equal(quickInfo.kind, ScriptElementKind.variableElement);
+            projectService.logger.info(`QuickInfo : ${quickInfo.kind}`);
 
             projectService.closeClientFile(file1.path);
 
             const scriptInfo2 = project.getScriptInfo(file1.path)!;
             const actualText2 = getSnapshotText(scriptInfo2.getSnapshot());
-            assert.equal(actualText2, "", `expected content to be empty string, got "${actualText2}"`);
+            projectService.logger.info(`Text of${file1.path}: ${actualText2}`);
+            baselineTsserverLogs("projects", "files with mixed content are handled correctly", projectService);
         });
 
         it("syntax tree cache handles changes in project settings", () => {
@@ -1006,7 +1005,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: {} })
             };
             const host = createServerHost([f1, libFile, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq({
                 command: server.CommandNames.Open,
                 arguments: {
@@ -1055,7 +1054,7 @@ namespace ts.projectSystem {
             assert.equal(options.outDir, "C:/a/b", "");
         });
 
-        it("files opened, closed affecting multiple projects", () => {
+        it("files opened and closed affecting multiple projects", () => {
             const file: File = {
                 path: "/a/b/projects/config/file.ts",
                 content: `import {a} from "../files/file1"; export let b = a;`
@@ -1075,7 +1074,7 @@ namespace ts.projectSystem {
 
             const files = [config, file, filesFile1, filesFile2, libFile];
             const host = createServerHost(files);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             // Create configured project
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
@@ -1084,10 +1083,6 @@ namespace ts.projectSystem {
                 }
             });
 
-            const projectService = session.getProjectService();
-            const configuredProject = projectService.configuredProjects.get(config.path)!;
-            verifyConfiguredProject();
-
             // open files/file1 = should not create another project
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
@@ -1095,7 +1090,6 @@ namespace ts.projectSystem {
                     file: filesFile1.path
                 }
             });
-            verifyConfiguredProject();
 
             // Close the file = should still have project
             session.executeCommandSeq<protocol.CloseRequest>({
@@ -1104,7 +1098,6 @@ namespace ts.projectSystem {
                     file: file.path
                 }
             });
-            verifyConfiguredProject();
 
             // Open files/file2 - should create inferred project and close configured project
             session.executeCommandSeq<protocol.OpenRequest>({
@@ -1113,8 +1106,6 @@ namespace ts.projectSystem {
                     file: filesFile2.path
                 }
             });
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [libFile.path, filesFile2.path]);
 
             // Actions on file1 would result in assert
             session.executeCommandSeq<protocol.OccurrencesRequest>({
@@ -1126,10 +1117,7 @@ namespace ts.projectSystem {
                 }
             });
 
-            function verifyConfiguredProject() {
-                checkNumberOfProjects(projectService, { configuredProjects: 1 });
-                checkProjectActualFiles(configuredProject, [file.path, filesFile1.path, libFile.path, config.path]);
-            }
+            baselineTsserverLogs("projects", "files opened and closed affecting multiple projects", session);
         });
 
         it("requests are done on file on pendingReload but has svc for previous version", () => {
@@ -1528,7 +1516,7 @@ namespace ts.projectSystem {
             };
             const files = [fileSubA, fileB, config, libFile];
             const host = createServerHost(files);
-            const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs(host) });
             openFile(fileB);
             openFile(fileSubA);
 
@@ -1620,6 +1608,89 @@ namespace ts.projectSystem {
             checkProjectActualFiles(rootProject, [rootProjectPath, rootFilePath, nodeModulesFilePath1, nodeModulesFilePath2]);
 
             checkNumberOfInferredProjects(projectService, 0);
+        });
+
+        describe("file opened is in configured project that will be removed", () => {
+            function runOnTs<T extends server.protocol.Request>(scenario: string, getRequest: (innerFile: File) => Partial<T>) {
+                it(scenario, () => {
+                    const testsConfig: File = {
+                        path: `${tscWatch.projectRoot}/playground/tsconfig.json`,
+                        content: "{}"
+                    };
+                    const testsFile: File = {
+                        path: `${tscWatch.projectRoot}/playground/tests.ts`,
+                        content: `export function foo() {}`
+                    };
+                    const innerFile: File = {
+                        path: `${tscWatch.projectRoot}/playground/tsconfig-json/tests/spec.ts`,
+                        content: `export function bar() { }`
+                    };
+                    const innerConfig: File = {
+                        path: `${tscWatch.projectRoot}/playground/tsconfig-json/tsconfig.json`,
+                        content: JSON.stringify({
+                            include: ["./src"]
+                        })
+                    };
+                    const innerSrcFile: File = {
+                        path: `${tscWatch.projectRoot}/playground/tsconfig-json/src/src.ts`,
+                        content: `export function foobar() { }`
+                    };
+                    const host = createServerHost([testsConfig, testsFile, innerFile, innerConfig, innerSrcFile, libFile]);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                    openFilesForSession([testsFile], session);
+                    closeFilesForSession([testsFile], session);
+                    openFilesForSession([innerFile], session);
+                    session.executeCommandSeq(getRequest(innerFile));
+                    baselineTsserverLogs("projects", scenario, session);
+                });
+            }
+            runOnTs<protocol.OutliningSpansRequest>(
+                "file opened is in configured project that will be removed",
+                innerFile => ({
+                    command: protocol.CommandTypes.GetOutliningSpans,
+                    arguments: { file: innerFile.path }
+                })
+            );
+
+            runOnTs<protocol.ReferencesRequest>(
+                "references on file opened is in configured project that will be removed",
+                innerFile => ({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(innerFile, "bar")
+                })
+            );
+
+            it("js file opened is in configured project that will be removed", () => {
+                const rootConfig: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { allowJs: true } })
+                };
+                const mocksFile: File = {
+                    path: `${tscWatch.projectRoot}/mocks/cssMock.js`,
+                    content: `function foo() { }`
+                };
+                const innerFile: File = {
+                    path: `${tscWatch.projectRoot}/apps/editor/scripts/createConfigVariable.js`,
+                    content: `function bar() { }`
+                };
+                const innerConfig: File = {
+                    path: `${tscWatch.projectRoot}/apps/editor/tsconfig.json`,
+                    content: JSON.stringify({
+                        extends: "../../tsconfig.json",
+                        include: ["./src"],
+                    })
+                };
+                const innerSrcFile: File = {
+                    path: `${tscWatch.projectRoot}/apps/editor/src/src.js`,
+                    content: `function fooBar() { }`
+                };
+                const host = createServerHost([rootConfig, mocksFile, innerFile, innerConfig, innerSrcFile, libFile]);
+                const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+                openFilesForSession([mocksFile], session);
+                closeFilesForSession([mocksFile], session);
+                openFilesForSession([innerFile], session);
+                baselineTsserverLogs("projects", "js file opened is in configured project that will be removed", session);
+            });
         });
     });
 }

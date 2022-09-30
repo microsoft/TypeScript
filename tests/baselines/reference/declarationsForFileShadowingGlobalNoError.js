@@ -55,12 +55,12 @@ exports.mixin = mixin;
 
 
 //// [dom.d.ts]
-export declare type DOMNode = Node;
+export type DOMNode = Node;
 //// [custom.d.ts]
-export declare type Node = {};
+export type Node = {};
 //// [index.d.ts]
 import { DOMNode } from './dom';
-declare type Constructor = new (...args: any[]) => any;
+type Constructor = new (...args: any[]) => any;
 export declare const mixin: (Base: Constructor) => {
     new (...args: any[]): {
         [x: string]: any;

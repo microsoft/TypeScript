@@ -89,7 +89,7 @@ namespace ts {
         });
     });
 
-    // https://github.com/microsoft/TypeScript/issues/44434 but with `module: node12`, some `exports` maps blocking direct access, and no `baseUrl`
+    // https://github.com/microsoft/TypeScript/issues/44434 but with `module: node16`, some `exports` maps blocking direct access, and no `baseUrl`
     describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers across referenced projects resolve correctly", () => {
         verifyTsc({
             scenario: "moduleSpecifiers",
@@ -140,7 +140,7 @@ namespace ts {
                     {
                         "compilerOptions": {
                             "declaration": true,
-                            "module": "node12"
+                            "module": "node16"
                         }
                     }`,
                 "/src/src-types/package.json": Utils.dedent`
@@ -178,7 +178,7 @@ namespace ts {
                     }`,
             }, ""),
             modifyFs: fs => {
-                fs.writeFileSync("/lib/lib.es2020.full.d.ts", tscWatch.libFile.content);
+                fs.writeFileSync("/lib/lib.es2022.full.d.ts", tscWatch.libFile.content);
                 fs.symlinkSync("/src", "/src/src-types/node_modules");
                 fs.symlinkSync("/src", "/src/src-dogs/node_modules");
             },

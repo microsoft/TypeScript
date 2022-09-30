@@ -8,10 +8,10 @@ tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithExprIsE
 tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithDeclIsError.ts(3,9): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 tests/cases/conformance/parser/ecmascript2018/forAwait/inGeneratorWithExprIsError.ts(3,9): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts(1,5): error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
-tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts(1,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts(1,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
 tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithDeclIsError.ts(1,23): error TS2304: Cannot find name 'y'.
 tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,5): error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
-tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
 tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,12): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts(1,17): error TS2304: Cannot find name 'y'.
 
@@ -21,7 +21,7 @@ tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.t
         ~~~~~
 !!! error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
         ~~~~~
-!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
                           ~
 !!! error TS2304: Cannot find name 'y'.
     }
@@ -30,7 +30,7 @@ tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.t
         ~~~~~
 !!! error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
         ~~~~~
-!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
+!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
                ~
 !!! error TS2304: Cannot find name 'x'.
                     ~

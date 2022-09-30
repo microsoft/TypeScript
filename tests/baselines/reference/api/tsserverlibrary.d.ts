@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.7";
+    const versionMajorMinor = "4.9";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -232,236 +232,240 @@ declare namespace ts {
         StaticKeyword = 124,
         YieldKeyword = 125,
         AbstractKeyword = 126,
-        AsKeyword = 127,
-        AssertsKeyword = 128,
-        AssertKeyword = 129,
-        AnyKeyword = 130,
-        AsyncKeyword = 131,
-        AwaitKeyword = 132,
-        BooleanKeyword = 133,
-        ConstructorKeyword = 134,
-        DeclareKeyword = 135,
-        GetKeyword = 136,
-        InferKeyword = 137,
-        IntrinsicKeyword = 138,
-        IsKeyword = 139,
-        KeyOfKeyword = 140,
-        ModuleKeyword = 141,
-        NamespaceKeyword = 142,
-        NeverKeyword = 143,
-        OutKeyword = 144,
-        ReadonlyKeyword = 145,
-        RequireKeyword = 146,
-        NumberKeyword = 147,
-        ObjectKeyword = 148,
-        SetKeyword = 149,
-        StringKeyword = 150,
-        SymbolKeyword = 151,
-        TypeKeyword = 152,
-        UndefinedKeyword = 153,
-        UniqueKeyword = 154,
-        UnknownKeyword = 155,
-        FromKeyword = 156,
-        GlobalKeyword = 157,
-        BigIntKeyword = 158,
-        OverrideKeyword = 159,
-        OfKeyword = 160,
-        QualifiedName = 161,
-        ComputedPropertyName = 162,
-        TypeParameter = 163,
-        Parameter = 164,
-        Decorator = 165,
-        PropertySignature = 166,
-        PropertyDeclaration = 167,
-        MethodSignature = 168,
-        MethodDeclaration = 169,
-        ClassStaticBlockDeclaration = 170,
-        Constructor = 171,
-        GetAccessor = 172,
-        SetAccessor = 173,
-        CallSignature = 174,
-        ConstructSignature = 175,
-        IndexSignature = 176,
-        TypePredicate = 177,
-        TypeReference = 178,
-        FunctionType = 179,
-        ConstructorType = 180,
-        TypeQuery = 181,
-        TypeLiteral = 182,
-        ArrayType = 183,
-        TupleType = 184,
-        OptionalType = 185,
-        RestType = 186,
-        UnionType = 187,
-        IntersectionType = 188,
-        ConditionalType = 189,
-        InferType = 190,
-        ParenthesizedType = 191,
-        ThisType = 192,
-        TypeOperator = 193,
-        IndexedAccessType = 194,
-        MappedType = 195,
-        LiteralType = 196,
-        NamedTupleMember = 197,
-        TemplateLiteralType = 198,
-        TemplateLiteralTypeSpan = 199,
-        ImportType = 200,
-        ObjectBindingPattern = 201,
-        ArrayBindingPattern = 202,
-        BindingElement = 203,
-        ArrayLiteralExpression = 204,
-        ObjectLiteralExpression = 205,
-        PropertyAccessExpression = 206,
-        ElementAccessExpression = 207,
-        CallExpression = 208,
-        NewExpression = 209,
-        TaggedTemplateExpression = 210,
-        TypeAssertionExpression = 211,
-        ParenthesizedExpression = 212,
-        FunctionExpression = 213,
-        ArrowFunction = 214,
-        DeleteExpression = 215,
-        TypeOfExpression = 216,
-        VoidExpression = 217,
-        AwaitExpression = 218,
-        PrefixUnaryExpression = 219,
-        PostfixUnaryExpression = 220,
-        BinaryExpression = 221,
-        ConditionalExpression = 222,
-        TemplateExpression = 223,
-        YieldExpression = 224,
-        SpreadElement = 225,
-        ClassExpression = 226,
-        OmittedExpression = 227,
-        ExpressionWithTypeArguments = 228,
-        AsExpression = 229,
-        NonNullExpression = 230,
-        MetaProperty = 231,
-        SyntheticExpression = 232,
-        TemplateSpan = 233,
-        SemicolonClassElement = 234,
-        Block = 235,
-        EmptyStatement = 236,
-        VariableStatement = 237,
-        ExpressionStatement = 238,
-        IfStatement = 239,
-        DoStatement = 240,
-        WhileStatement = 241,
-        ForStatement = 242,
-        ForInStatement = 243,
-        ForOfStatement = 244,
-        ContinueStatement = 245,
-        BreakStatement = 246,
-        ReturnStatement = 247,
-        WithStatement = 248,
-        SwitchStatement = 249,
-        LabeledStatement = 250,
-        ThrowStatement = 251,
-        TryStatement = 252,
-        DebuggerStatement = 253,
-        VariableDeclaration = 254,
-        VariableDeclarationList = 255,
-        FunctionDeclaration = 256,
-        ClassDeclaration = 257,
-        InterfaceDeclaration = 258,
-        TypeAliasDeclaration = 259,
-        EnumDeclaration = 260,
-        ModuleDeclaration = 261,
-        ModuleBlock = 262,
-        CaseBlock = 263,
-        NamespaceExportDeclaration = 264,
-        ImportEqualsDeclaration = 265,
-        ImportDeclaration = 266,
-        ImportClause = 267,
-        NamespaceImport = 268,
-        NamedImports = 269,
-        ImportSpecifier = 270,
-        ExportAssignment = 271,
-        ExportDeclaration = 272,
-        NamedExports = 273,
-        NamespaceExport = 274,
-        ExportSpecifier = 275,
-        MissingDeclaration = 276,
-        ExternalModuleReference = 277,
-        JsxElement = 278,
-        JsxSelfClosingElement = 279,
-        JsxOpeningElement = 280,
-        JsxClosingElement = 281,
-        JsxFragment = 282,
-        JsxOpeningFragment = 283,
-        JsxClosingFragment = 284,
-        JsxAttribute = 285,
-        JsxAttributes = 286,
-        JsxSpreadAttribute = 287,
-        JsxExpression = 288,
-        CaseClause = 289,
-        DefaultClause = 290,
-        HeritageClause = 291,
-        CatchClause = 292,
-        AssertClause = 293,
-        AssertEntry = 294,
-        ImportTypeAssertionContainer = 295,
-        PropertyAssignment = 296,
-        ShorthandPropertyAssignment = 297,
-        SpreadAssignment = 298,
-        EnumMember = 299,
-        UnparsedPrologue = 300,
-        UnparsedPrepend = 301,
-        UnparsedText = 302,
-        UnparsedInternalText = 303,
-        UnparsedSyntheticReference = 304,
-        SourceFile = 305,
-        Bundle = 306,
-        UnparsedSource = 307,
-        InputFiles = 308,
-        JSDocTypeExpression = 309,
-        JSDocNameReference = 310,
-        JSDocMemberName = 311,
-        JSDocAllType = 312,
-        JSDocUnknownType = 313,
-        JSDocNullableType = 314,
-        JSDocNonNullableType = 315,
-        JSDocOptionalType = 316,
-        JSDocFunctionType = 317,
-        JSDocVariadicType = 318,
-        JSDocNamepathType = 319,
+        AccessorKeyword = 127,
+        AsKeyword = 128,
+        AssertsKeyword = 129,
+        AssertKeyword = 130,
+        AnyKeyword = 131,
+        AsyncKeyword = 132,
+        AwaitKeyword = 133,
+        BooleanKeyword = 134,
+        ConstructorKeyword = 135,
+        DeclareKeyword = 136,
+        GetKeyword = 137,
+        InferKeyword = 138,
+        IntrinsicKeyword = 139,
+        IsKeyword = 140,
+        KeyOfKeyword = 141,
+        ModuleKeyword = 142,
+        NamespaceKeyword = 143,
+        NeverKeyword = 144,
+        OutKeyword = 145,
+        ReadonlyKeyword = 146,
+        RequireKeyword = 147,
+        NumberKeyword = 148,
+        ObjectKeyword = 149,
+        SatisfiesKeyword = 150,
+        SetKeyword = 151,
+        StringKeyword = 152,
+        SymbolKeyword = 153,
+        TypeKeyword = 154,
+        UndefinedKeyword = 155,
+        UniqueKeyword = 156,
+        UnknownKeyword = 157,
+        FromKeyword = 158,
+        GlobalKeyword = 159,
+        BigIntKeyword = 160,
+        OverrideKeyword = 161,
+        OfKeyword = 162,
+        QualifiedName = 163,
+        ComputedPropertyName = 164,
+        TypeParameter = 165,
+        Parameter = 166,
+        Decorator = 167,
+        PropertySignature = 168,
+        PropertyDeclaration = 169,
+        MethodSignature = 170,
+        MethodDeclaration = 171,
+        ClassStaticBlockDeclaration = 172,
+        Constructor = 173,
+        GetAccessor = 174,
+        SetAccessor = 175,
+        CallSignature = 176,
+        ConstructSignature = 177,
+        IndexSignature = 178,
+        TypePredicate = 179,
+        TypeReference = 180,
+        FunctionType = 181,
+        ConstructorType = 182,
+        TypeQuery = 183,
+        TypeLiteral = 184,
+        ArrayType = 185,
+        TupleType = 186,
+        OptionalType = 187,
+        RestType = 188,
+        UnionType = 189,
+        IntersectionType = 190,
+        ConditionalType = 191,
+        InferType = 192,
+        ParenthesizedType = 193,
+        ThisType = 194,
+        TypeOperator = 195,
+        IndexedAccessType = 196,
+        MappedType = 197,
+        LiteralType = 198,
+        NamedTupleMember = 199,
+        TemplateLiteralType = 200,
+        TemplateLiteralTypeSpan = 201,
+        ImportType = 202,
+        ObjectBindingPattern = 203,
+        ArrayBindingPattern = 204,
+        BindingElement = 205,
+        ArrayLiteralExpression = 206,
+        ObjectLiteralExpression = 207,
+        PropertyAccessExpression = 208,
+        ElementAccessExpression = 209,
+        CallExpression = 210,
+        NewExpression = 211,
+        TaggedTemplateExpression = 212,
+        TypeAssertionExpression = 213,
+        ParenthesizedExpression = 214,
+        FunctionExpression = 215,
+        ArrowFunction = 216,
+        DeleteExpression = 217,
+        TypeOfExpression = 218,
+        VoidExpression = 219,
+        AwaitExpression = 220,
+        PrefixUnaryExpression = 221,
+        PostfixUnaryExpression = 222,
+        BinaryExpression = 223,
+        ConditionalExpression = 224,
+        TemplateExpression = 225,
+        YieldExpression = 226,
+        SpreadElement = 227,
+        ClassExpression = 228,
+        OmittedExpression = 229,
+        ExpressionWithTypeArguments = 230,
+        AsExpression = 231,
+        NonNullExpression = 232,
+        MetaProperty = 233,
+        SyntheticExpression = 234,
+        SatisfiesExpression = 235,
+        TemplateSpan = 236,
+        SemicolonClassElement = 237,
+        Block = 238,
+        EmptyStatement = 239,
+        VariableStatement = 240,
+        ExpressionStatement = 241,
+        IfStatement = 242,
+        DoStatement = 243,
+        WhileStatement = 244,
+        ForStatement = 245,
+        ForInStatement = 246,
+        ForOfStatement = 247,
+        ContinueStatement = 248,
+        BreakStatement = 249,
+        ReturnStatement = 250,
+        WithStatement = 251,
+        SwitchStatement = 252,
+        LabeledStatement = 253,
+        ThrowStatement = 254,
+        TryStatement = 255,
+        DebuggerStatement = 256,
+        VariableDeclaration = 257,
+        VariableDeclarationList = 258,
+        FunctionDeclaration = 259,
+        ClassDeclaration = 260,
+        InterfaceDeclaration = 261,
+        TypeAliasDeclaration = 262,
+        EnumDeclaration = 263,
+        ModuleDeclaration = 264,
+        ModuleBlock = 265,
+        CaseBlock = 266,
+        NamespaceExportDeclaration = 267,
+        ImportEqualsDeclaration = 268,
+        ImportDeclaration = 269,
+        ImportClause = 270,
+        NamespaceImport = 271,
+        NamedImports = 272,
+        ImportSpecifier = 273,
+        ExportAssignment = 274,
+        ExportDeclaration = 275,
+        NamedExports = 276,
+        NamespaceExport = 277,
+        ExportSpecifier = 278,
+        MissingDeclaration = 279,
+        ExternalModuleReference = 280,
+        JsxElement = 281,
+        JsxSelfClosingElement = 282,
+        JsxOpeningElement = 283,
+        JsxClosingElement = 284,
+        JsxFragment = 285,
+        JsxOpeningFragment = 286,
+        JsxClosingFragment = 287,
+        JsxAttribute = 288,
+        JsxAttributes = 289,
+        JsxSpreadAttribute = 290,
+        JsxExpression = 291,
+        CaseClause = 292,
+        DefaultClause = 293,
+        HeritageClause = 294,
+        CatchClause = 295,
+        AssertClause = 296,
+        AssertEntry = 297,
+        ImportTypeAssertionContainer = 298,
+        PropertyAssignment = 299,
+        ShorthandPropertyAssignment = 300,
+        SpreadAssignment = 301,
+        EnumMember = 302,
+        UnparsedPrologue = 303,
+        UnparsedPrepend = 304,
+        UnparsedText = 305,
+        UnparsedInternalText = 306,
+        UnparsedSyntheticReference = 307,
+        SourceFile = 308,
+        Bundle = 309,
+        UnparsedSource = 310,
+        InputFiles = 311,
+        JSDocTypeExpression = 312,
+        JSDocNameReference = 313,
+        JSDocMemberName = 314,
+        JSDocAllType = 315,
+        JSDocUnknownType = 316,
+        JSDocNullableType = 317,
+        JSDocNonNullableType = 318,
+        JSDocOptionalType = 319,
+        JSDocFunctionType = 320,
+        JSDocVariadicType = 321,
+        JSDocNamepathType = 322,
+        JSDoc = 323,
         /** @deprecated Use SyntaxKind.JSDoc */
-        JSDocComment = 320,
-        JSDocText = 321,
-        JSDocTypeLiteral = 322,
-        JSDocSignature = 323,
-        JSDocLink = 324,
-        JSDocLinkCode = 325,
-        JSDocLinkPlain = 326,
-        JSDocTag = 327,
-        JSDocAugmentsTag = 328,
-        JSDocImplementsTag = 329,
-        JSDocAuthorTag = 330,
-        JSDocDeprecatedTag = 331,
-        JSDocClassTag = 332,
-        JSDocPublicTag = 333,
-        JSDocPrivateTag = 334,
-        JSDocProtectedTag = 335,
-        JSDocReadonlyTag = 336,
-        JSDocOverrideTag = 337,
-        JSDocCallbackTag = 338,
-        JSDocEnumTag = 339,
-        JSDocParameterTag = 340,
-        JSDocReturnTag = 341,
-        JSDocThisTag = 342,
-        JSDocTypeTag = 343,
-        JSDocTemplateTag = 344,
-        JSDocTypedefTag = 345,
-        JSDocSeeTag = 346,
-        JSDocPropertyTag = 347,
-        SyntaxList = 348,
-        NotEmittedStatement = 349,
-        PartiallyEmittedExpression = 350,
-        CommaListExpression = 351,
-        MergeDeclarationMarker = 352,
-        EndOfDeclarationMarker = 353,
-        SyntheticReferenceExpression = 354,
-        Count = 355,
+        JSDocComment = 323,
+        JSDocText = 324,
+        JSDocTypeLiteral = 325,
+        JSDocSignature = 326,
+        JSDocLink = 327,
+        JSDocLinkCode = 328,
+        JSDocLinkPlain = 329,
+        JSDocTag = 330,
+        JSDocAugmentsTag = 331,
+        JSDocImplementsTag = 332,
+        JSDocAuthorTag = 333,
+        JSDocDeprecatedTag = 334,
+        JSDocClassTag = 335,
+        JSDocPublicTag = 336,
+        JSDocPrivateTag = 337,
+        JSDocProtectedTag = 338,
+        JSDocReadonlyTag = 339,
+        JSDocOverrideTag = 340,
+        JSDocCallbackTag = 341,
+        JSDocEnumTag = 342,
+        JSDocParameterTag = 343,
+        JSDocReturnTag = 344,
+        JSDocThisTag = 345,
+        JSDocTypeTag = 346,
+        JSDocTemplateTag = 347,
+        JSDocTypedefTag = 348,
+        JSDocSeeTag = 349,
+        JSDocPropertyTag = 350,
+        SyntaxList = 351,
+        NotEmittedStatement = 352,
+        PartiallyEmittedExpression = 353,
+        CommaListExpression = 354,
+        MergeDeclarationMarker = 355,
+        EndOfDeclarationMarker = 356,
+        SyntheticReferenceExpression = 357,
+        Count = 358,
         FirstAssignment = 63,
         LastAssignment = 78,
         FirstCompoundAssignment = 64,
@@ -469,15 +473,15 @@ declare namespace ts {
         FirstReservedWord = 81,
         LastReservedWord = 116,
         FirstKeyword = 81,
-        LastKeyword = 160,
+        LastKeyword = 162,
         FirstFutureReservedWord = 117,
         LastFutureReservedWord = 125,
-        FirstTypeNode = 177,
-        LastTypeNode = 200,
+        FirstTypeNode = 179,
+        LastTypeNode = 202,
         FirstPunctuation = 18,
         LastPunctuation = 78,
         FirstToken = 0,
-        LastToken = 160,
+        LastToken = 162,
         FirstTriviaToken = 2,
         LastTriviaToken = 7,
         FirstLiteralToken = 8,
@@ -486,21 +490,20 @@ declare namespace ts {
         LastTemplateToken = 17,
         FirstBinaryOperator = 29,
         LastBinaryOperator = 78,
-        FirstStatement = 237,
-        LastStatement = 253,
-        FirstNode = 161,
-        FirstJSDocNode = 309,
-        LastJSDocNode = 347,
-        FirstJSDocTagNode = 327,
-        LastJSDocTagNode = 347,
-        JSDoc = 320
+        FirstStatement = 240,
+        LastStatement = 256,
+        FirstNode = 163,
+        FirstJSDocNode = 312,
+        LastJSDocNode = 350,
+        FirstJSDocTagNode = 330,
+        LastJSDocTagNode = 350,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
     export type PseudoLiteralSyntaxKind = SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail;
     export type PunctuationSyntaxKind = SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.QuestionDotToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken | SyntaxKind.QuestionQuestionToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken;
-    export type KeywordSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AssertKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword;
-    export type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
+    export type KeywordSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AssertKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SatisfiesKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword;
+    export type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
     export type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
     export type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
     export type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
@@ -545,22 +548,25 @@ declare namespace ts {
         Protected = 16,
         Static = 32,
         Readonly = 64,
-        Abstract = 128,
-        Async = 256,
-        Default = 512,
+        Accessor = 128,
+        Abstract = 256,
+        Async = 512,
+        Default = 1024,
         Const = 2048,
         HasComputedJSDocModifiers = 4096,
         Deprecated = 8192,
         Override = 16384,
         In = 32768,
         Out = 65536,
+        Decorator = 131072,
         HasComputedFlags = 536870912,
         AccessibilityModifier = 28,
         ParameterPropertyModifier = 16476,
         NonPublicAccessibilityModifier = 24,
-        TypeScriptModifier = 116958,
-        ExportDefault = 513,
-        All = 125951
+        TypeScriptModifier = 117086,
+        ExportDefault = 1025,
+        All = 258047,
+        Modifier = 126975
     }
     export enum JsxFlags {
         None = 0,
@@ -573,8 +579,6 @@ declare namespace ts {
     export interface Node extends ReadonlyTextRange {
         readonly kind: SyntaxKind;
         readonly flags: NodeFlags;
-        readonly decorators?: NodeArray<Decorator>;
-        readonly modifiers?: ModifiersArray;
         readonly parent: Node;
     }
     export interface JSDocContainer {
@@ -583,7 +587,9 @@ declare namespace ts {
     export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     export type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
-    export type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertySignature | PropertyDeclaration | PropertyAssignment | EnumMember;
+    export type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | EnumMember;
+    export type HasDecorators = ParameterDeclaration | PropertyDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ClassExpression | ClassDeclaration;
+    export type HasModifiers = TypeParameterDeclaration | ParameterDeclaration | ConstructorTypeNode | PropertySignature | PropertyDeclaration | MethodSignature | MethodDeclaration | ConstructorDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | IndexSignatureDeclaration | FunctionExpression | ArrowFunction | ClassExpression | VariableStatement | FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | ExportAssignment | ExportDeclaration;
     export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
         readonly hasTrailingComma: boolean;
     }
@@ -616,6 +622,7 @@ declare namespace ts {
     export interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {
     }
     export type AbstractKeyword = ModifierToken<SyntaxKind.AbstractKeyword>;
+    export type AccessorKeyword = ModifierToken<SyntaxKind.AccessorKeyword>;
     export type AsyncKeyword = ModifierToken<SyntaxKind.AsyncKeyword>;
     export type ConstKeyword = ModifierToken<SyntaxKind.ConstKeyword>;
     export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
@@ -631,10 +638,11 @@ declare namespace ts {
     export type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
     /** @deprecated Use `ReadonlyKeyword` instead. */
     export type ReadonlyToken = ReadonlyKeyword;
-    export type Modifier = AbstractKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | ExportKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword;
+    export type Modifier = AbstractKeyword | AccessorKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | ExportKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword;
+    export type ModifierLike = Modifier | Decorator;
     export type AccessibilityModifier = PublicKeyword | PrivateKeyword | ProtectedKeyword;
     export type ParameterPropertyModifier = AccessibilityModifier | ReadonlyKeyword;
-    export type ClassMemberModifier = AccessibilityModifier | ReadonlyKeyword | StaticKeyword;
+    export type ClassMemberModifier = AccessibilityModifier | ReadonlyKeyword | StaticKeyword | AccessorKeyword;
     export type ModifiersArray = NodeArray<Modifier>;
     export enum GeneratedIdentifierFlags {
         None = 0,
@@ -691,6 +699,7 @@ declare namespace ts {
     export interface TypeParameterDeclaration extends NamedDeclaration {
         readonly kind: SyntaxKind.TypeParameter;
         readonly parent: DeclarationWithTypeParameterChildren | InferTypeNode;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
         readonly constraint?: TypeNode;
@@ -700,9 +709,9 @@ declare namespace ts {
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
         readonly kind: SignatureDeclaration["kind"];
         readonly name?: PropertyName;
-        readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
+        readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined;
         readonly parameters: NodeArray<ParameterDeclaration>;
-        readonly type?: TypeNode;
+        readonly type?: TypeNode | undefined;
     }
     export type SignatureDeclaration = CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | AccessorDeclaration | FunctionExpression | ArrowFunction;
     export interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement {
@@ -728,6 +737,7 @@ declare namespace ts {
     export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.Parameter;
         readonly parent: SignatureDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         readonly dotDotDotToken?: DotDotDotToken;
         readonly name: BindingName;
         readonly questionToken?: QuestionToken;
@@ -744,19 +754,23 @@ declare namespace ts {
     }
     export interface PropertySignature extends TypeElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertySignature;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;
         readonly questionToken?: QuestionToken;
         readonly type?: TypeNode;
-        initializer?: Expression;
     }
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertyDeclaration;
         readonly parent: ClassLikeDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly questionToken?: QuestionToken;
         readonly exclamationToken?: ExclamationToken;
         readonly type?: TypeNode;
         readonly initializer?: Expression;
+    }
+    export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
+        _autoAccessorBrand: any;
     }
     export interface ObjectLiteralElement extends NamedDeclaration {
         _objectLiteralBrand: any;
@@ -768,16 +782,12 @@ declare namespace ts {
         readonly kind: SyntaxKind.PropertyAssignment;
         readonly parent: ObjectLiteralExpression;
         readonly name: PropertyName;
-        readonly questionToken?: QuestionToken;
-        readonly exclamationToken?: ExclamationToken;
         readonly initializer: Expression;
     }
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.ShorthandPropertyAssignment;
         readonly parent: ObjectLiteralExpression;
         readonly name: Identifier;
-        readonly questionToken?: QuestionToken;
-        readonly exclamationToken?: ExclamationToken;
         readonly equalsToken?: EqualsToken;
         readonly objectAssignmentInitializer?: Expression;
     }
@@ -812,34 +822,38 @@ declare namespace ts {
      */
     export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
         _functionLikeDeclarationBrand: any;
-        readonly asteriskToken?: AsteriskToken;
-        readonly questionToken?: QuestionToken;
-        readonly exclamationToken?: ExclamationToken;
-        readonly body?: Block | Expression;
+        readonly asteriskToken?: AsteriskToken | undefined;
+        readonly questionToken?: QuestionToken | undefined;
+        readonly exclamationToken?: ExclamationToken | undefined;
+        readonly body?: Block | Expression | undefined;
     }
     export type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
     /** @deprecated Use SignatureDeclaration */
     export type FunctionLike = SignatureDeclaration;
     export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         readonly kind: SyntaxKind.FunctionDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name?: Identifier;
         readonly body?: FunctionBody;
     }
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         readonly kind: SyntaxKind.MethodSignature;
         readonly parent: ObjectTypeDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;
     }
     export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.MethodDeclaration;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
+        readonly modifiers?: NodeArray<ModifierLike> | undefined;
         readonly name: PropertyName;
-        readonly body?: FunctionBody;
+        readonly body?: FunctionBody | undefined;
     }
     export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.Constructor;
         readonly parent: ClassLikeDeclaration;
-        readonly body?: FunctionBody;
+        readonly modifiers?: NodeArray<Modifier> | undefined;
+        readonly body?: FunctionBody | undefined;
     }
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
     export interface SemicolonClassElement extends ClassElement {
@@ -849,12 +863,14 @@ declare namespace ts {
     export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.GetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
     }
     export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.SetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
     }
@@ -862,6 +878,7 @@ declare namespace ts {
     export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         readonly kind: SyntaxKind.IndexSignature;
         readonly parent: ObjectTypeDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly type: TypeNode;
     }
     export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
@@ -901,6 +918,7 @@ declare namespace ts {
     }
     export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
         readonly kind: SyntaxKind.ConstructorType;
+        readonly modifiers?: NodeArray<Modifier>;
     }
     export interface NodeWithTypeArguments extends TypeNode {
         readonly typeArguments?: NodeArray<TypeNode>;
@@ -1157,11 +1175,13 @@ declare namespace ts {
     export type ConciseBody = FunctionBody | Expression;
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer {
         readonly kind: SyntaxKind.FunctionExpression;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name?: Identifier;
         readonly body: FunctionBody;
     }
     export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer {
         readonly kind: SyntaxKind.ArrowFunction;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly equalsGreaterThanToken: EqualsGreaterThanToken;
         readonly body: ConciseBody;
         readonly name: never;
@@ -1328,6 +1348,11 @@ declare namespace ts {
         readonly type: TypeNode;
         readonly expression: UnaryExpression;
     }
+    export interface SatisfiesExpression extends Expression {
+        readonly kind: SyntaxKind.SatisfiesExpression;
+        readonly expression: Expression;
+        readonly type: TypeNode;
+    }
     export type AssertionExpression = TypeAssertion | AsExpression;
     export interface NonNullExpression extends LeftHandSideExpression {
         readonly kind: SyntaxKind.NonNullExpression;
@@ -1388,8 +1413,9 @@ declare namespace ts {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
         readonly name: Identifier;
-        readonly initializer?: StringLiteral | JsxExpression;
+        readonly initializer?: JsxAttributeValue;
     }
+    export type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
         readonly parent: JsxAttributes;
@@ -1442,6 +1468,7 @@ declare namespace ts {
     }
     export interface VariableStatement extends Statement {
         readonly kind: SyntaxKind.VariableStatement;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly declarationList: VariableDeclarationList;
     }
     export interface ExpressionStatement extends Statement {
@@ -1558,11 +1585,13 @@ declare namespace ts {
     }
     export interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
         readonly kind: SyntaxKind.ClassDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         /** May be undefined in `export default class { ... }`. */
         readonly name?: Identifier;
     }
     export interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
         readonly kind: SyntaxKind.ClassExpression;
+        readonly modifiers?: NodeArray<ModifierLike>;
     }
     export type ClassLikeDeclaration = ClassDeclaration | ClassExpression;
     export interface ClassElement extends NamedDeclaration {
@@ -1572,10 +1601,11 @@ declare namespace ts {
     export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         readonly name?: PropertyName;
-        readonly questionToken?: QuestionToken;
+        readonly questionToken?: QuestionToken | undefined;
     }
     export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.InterfaceDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
         readonly heritageClauses?: NodeArray<HeritageClause>;
@@ -1589,6 +1619,7 @@ declare namespace ts {
     }
     export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.TypeAliasDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
         readonly type: TypeNode;
@@ -1601,6 +1632,7 @@ declare namespace ts {
     }
     export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.EnumDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         readonly members: NodeArray<EnumMember>;
     }
@@ -1609,6 +1641,7 @@ declare namespace ts {
     export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ModuleDeclaration;
         readonly parent: ModuleBody | SourceFile;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: ModuleName;
         readonly body?: ModuleBody | JSDocNamespaceDeclaration;
     }
@@ -1636,6 +1669,7 @@ declare namespace ts {
     export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ImportEqualsDeclaration;
         readonly parent: SourceFile | ModuleBlock;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         readonly isTypeOnly: boolean;
         readonly moduleReference: ModuleReference;
@@ -1648,6 +1682,7 @@ declare namespace ts {
     export interface ImportDeclaration extends Statement {
         readonly kind: SyntaxKind.ImportDeclaration;
         readonly parent: SourceFile | ModuleBlock;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly importClause?: ImportClause;
         /** If this is not a StringLiteral it will be a grammar error. */
         readonly moduleSpecifier: Expression;
@@ -1692,6 +1727,7 @@ declare namespace ts {
     export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ExportDeclaration;
         readonly parent: SourceFile | ModuleBlock;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly isTypeOnly: boolean;
         /** Will not be assigned in the case of `export * from "foo";` */
         readonly exportClause?: NamedExportBindings;
@@ -1759,6 +1795,7 @@ declare namespace ts {
     export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ExportAssignment;
         readonly parent: SourceFile;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly isExportEquals?: boolean;
         readonly expression: Expression;
     }
@@ -2063,7 +2100,7 @@ declare namespace ts {
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
         /**
-         * When `module` is `Node12` or `NodeNext`, this field controls whether the
+         * When `module` is `Node16` or `NodeNext`, this field controls whether the
          * source file in question is an ESNext-output-format file, or a CommonJS-output-format
          * module. This is derived by the module resolver as it looks up the file, since
          * it is derived from either the file extension of the module, or the containing
@@ -2072,6 +2109,12 @@ declare namespace ts {
          * It is _public_ so that (pre)transformers can set this field,
          * since it switches the builtin `node` module transform. Generally speaking, if unset,
          * the field is treated as though it is `ModuleKind.CommonJS`.
+         *
+         * Note that this field is only set by the module resolution process when
+         * `moduleResolution` is `Node16` or `NodeNext`, which is implied by the `module` setting
+         * of `Node16` or `NodeNext`, respectively, but may be overriden (eg, by a `moduleResolution`
+         * of `node`). If so, this field will be unset and source files will be considered to be
+         * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
     }
@@ -2286,6 +2329,7 @@ declare namespace ts {
         getPrivateIdentifierPropertyOfType(leftType: Type, name: string, location: Node): Symbol | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getIndexInfosOfType(type: Type): readonly IndexInfo[];
+        getIndexInfosOfIndexSymbol: (indexSymbol: Symbol) => IndexInfo[];
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
@@ -2396,6 +2440,7 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
+        OmitThisParameter = 33554432,
         AllowThisInObjectLiteral = 32768,
         AllowQualifiedNameInPlaceOfIdentifier = 65536,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
@@ -2426,6 +2471,7 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
+        OmitThisParameter = 33554432,
         AllowUniqueESSymbolType = 1048576,
         AddUndefined = 131072,
         WriteArrowStyleSignature = 262144,
@@ -2434,7 +2480,7 @@ declare namespace ts {
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
-        NodeBuilderFlagsMask = 814775659
+        NodeBuilderFlagsMask = 848330091
     }
     export enum SymbolFormatFlags {
         None = 0,
@@ -2530,6 +2576,7 @@ declare namespace ts {
         MethodExcludes = 103359,
         GetAccessorExcludes = 46015,
         SetAccessorExcludes = 78783,
+        AccessorExcludes = 13247,
         TypeParameterExcludes = 526824,
         TypeAliasExcludes = 788968,
         AliasExcludes = 2097152,
@@ -2800,7 +2847,7 @@ declare namespace ts {
     export interface SubstitutionType extends InstantiableType {
         objectFlags: ObjectFlags;
         baseType: Type;
-        substitute: Type;
+        constraint: Type;
     }
     export enum SignatureKind {
         Call = 0,
@@ -2893,7 +2940,7 @@ declare namespace ts {
     export enum ModuleResolutionKind {
         Classic = 1,
         NodeJs = 2,
-        Node12 = 3,
+        Node16 = 3,
         NodeNext = 99
     }
     export enum ModuleDetectionKind {
@@ -2902,7 +2949,7 @@ declare namespace ts {
          */
         Legacy = 1,
         /**
-         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node12+
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node16+
          */
         Auto = 2,
         /**
@@ -3074,7 +3121,7 @@ declare namespace ts {
         ES2020 = 6,
         ES2022 = 7,
         ESNext = 99,
-        Node12 = 100,
+        Node16 = 100,
         NodeNext = 199
     }
     export enum JsxEmit {
@@ -3273,6 +3320,8 @@ declare namespace ts {
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
+        /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
+        hasInvalidatedResolutions?(filePath: Path): boolean;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     }
@@ -3355,7 +3404,7 @@ declare namespace ts {
         createNumericLiteral(value: string | number, numericLiteralFlags?: TokenFlags): NumericLiteral;
         createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral;
         createStringLiteral(text: string, isSingleQuote?: boolean): StringLiteral;
-        createStringLiteralFromNode(sourceNode: PropertyNameLiteral, isSingleQuote?: boolean): StringLiteral;
+        createStringLiteralFromNode(sourceNode: PropertyNameLiteral | PrivateIdentifier, isSingleQuote?: boolean): StringLiteral;
         createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
         createIdentifier(text: string): Identifier;
         /**
@@ -3380,6 +3429,8 @@ declare namespace ts {
         /** Create a unique name generated for a node. */
         getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier;
         createPrivateIdentifier(text: string): PrivateIdentifier;
+        createUniquePrivateName(text?: string): PrivateIdentifier;
+        getGeneratedPrivateNameForNode(node: Node): PrivateIdentifier;
         createToken(token: SyntaxKind.SuperKeyword): SuperExpression;
         createToken(token: SyntaxKind.ThisKeyword): ThisExpression;
         createToken(token: SyntaxKind.NullKeyword): NullLiteral;
@@ -3402,39 +3453,35 @@ declare namespace ts {
         createComputedPropertyName(expression: Expression): ComputedPropertyName;
         updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
         createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
-        /** @deprecated */
-        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
         updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
-        /** @deprecated */
-        updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
-        createParameterDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
-        updateParameterDeclaration(node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
+        createParameterDeclaration(modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
+        updateParameterDeclaration(node: ParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
         createDecorator(expression: Expression): Decorator;
         updateDecorator(node: Decorator, expression: Expression): Decorator;
         createPropertySignature(modifiers: readonly Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature;
         updatePropertySignature(node: PropertySignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature;
-        createPropertyDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
-        updatePropertyDeclaration(node: PropertyDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+        createPropertyDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+        updatePropertyDeclaration(node: PropertyDeclaration, modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
         createMethodSignature(modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): MethodSignature;
         updateMethodSignature(node: MethodSignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): MethodSignature;
-        createMethodDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
-        updateMethodDeclaration(node: MethodDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
-        createConstructorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
-        updateConstructorDeclaration(node: ConstructorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
-        createGetAccessorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
-        updateGetAccessorDeclaration(node: GetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
-        createSetAccessorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
-        updateSetAccessorDeclaration(node: SetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+        createMethodDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+        updateMethodDeclaration(node: MethodDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+        createConstructorDeclaration(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+        updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+        createGetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+        updateGetAccessorDeclaration(node: GetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+        createSetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+        updateSetAccessorDeclaration(node: SetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
         createCallSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): CallSignatureDeclaration;
         updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration;
         createConstructSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration;
         updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
-        createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-        updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        createIndexSignature(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        updateIndexSignature(node: IndexSignatureDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
-        createClassStaticBlockDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
-        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
+        createClassStaticBlockDeclaration(body: Block): ClassStaticBlockDeclaration;
+        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, body: Block): ClassStaticBlockDeclaration;
         createKeywordTypeNode<TKind extends KeywordTypeSyntaxKind>(kind: TKind): KeywordTypeNode<TKind>;
         createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
         updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode;
@@ -3443,11 +3490,7 @@ declare namespace ts {
         createFunctionTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): FunctionTypeNode;
         updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): FunctionTypeNode;
         createConstructorTypeNode(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
-        /** @deprecated */
-        createConstructorTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
         updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
-        /** @deprecated */
-        updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
         createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
         updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
         createTypeLiteralNode(members: readonly TypeElement[] | undefined): TypeLiteralNode;
@@ -3470,9 +3513,7 @@ declare namespace ts {
         updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
         updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-        createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
         createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
@@ -3552,8 +3593,8 @@ declare namespace ts {
         updateYieldExpression(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression;
         createSpreadElement(expression: Expression): SpreadElement;
         updateSpreadElement(node: SpreadElement, expression: Expression): SpreadElement;
-        createClassExpression(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
-        updateClassExpression(node: ClassExpression, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
+        createClassExpression(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
+        updateClassExpression(node: ClassExpression, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
         createOmittedExpression(): OmittedExpression;
         createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
         updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
@@ -3565,6 +3606,8 @@ declare namespace ts {
         updateNonNullChain(node: NonNullChain, expression: Expression): NonNullChain;
         createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier): MetaProperty;
         updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty;
+        createSatisfiesExpression(expression: Expression, type: TypeNode): SatisfiesExpression;
+        updateSatisfiesExpression(node: SatisfiesExpression, expression: Expression, type: TypeNode): SatisfiesExpression;
         createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
         updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
         createSemicolonClassElement(): SemicolonClassElement;
@@ -3608,28 +3651,28 @@ declare namespace ts {
         updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
         createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
         updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList;
-        createFunctionDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
-        updateFunctionDeclaration(node: FunctionDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
-        createClassDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
-        updateClassDeclaration(node: ClassDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
-        createInterfaceDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
-        updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
-        createTypeAliasDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-        updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
-        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
-        createModuleDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
-        updateModuleDeclaration(node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
+        createFunctionDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+        updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+        createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        createInterfaceDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+        updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+        createTypeAliasDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+        updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+        createEnumDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        createModuleDeclaration(modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
+        updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
         createModuleBlock(statements: readonly Statement[]): ModuleBlock;
         updateModuleBlock(node: ModuleBlock, statements: readonly Statement[]): ModuleBlock;
         createCaseBlock(clauses: readonly CaseOrDefaultClause[]): CaseBlock;
         updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock;
         createNamespaceExportDeclaration(name: string | Identifier): NamespaceExportDeclaration;
         updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
-        createImportEqualsDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-        createImportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
-        updateImportDeclaration(node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+        createImportEqualsDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        createImportDeclaration(modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
+        updateImportDeclaration(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
         createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
         updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
         createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
@@ -3646,10 +3689,10 @@ declare namespace ts {
         updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
         createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
         updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-        createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
-        updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
-        createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
-        updateExportDeclaration(node: ExportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+        createExportAssignment(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+        updateExportAssignment(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        createExportDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
+        updateExportDeclaration(node: ExportDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
         createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
         updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
         createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
@@ -3746,8 +3789,8 @@ declare namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -3926,7 +3969,7 @@ declare namespace ts {
         <T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
         <T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
     }
-    export type VisitResult<T extends Node> = T | T[] | undefined;
+    export type VisitResult<T extends Node> = T | readonly T[] | undefined;
     export interface Printer {
         /**
          * Print a node and its subtree as-is, without any emit transformations.
@@ -4055,7 +4098,7 @@ declare namespace ts {
         NoSpaceIfEmpty = 524288,
         SingleElement = 1048576,
         SpaceAfterList = 2097152,
-        Modifiers = 262656,
+        Modifiers = 2359808,
         HeritageClauses = 512,
         SingleLineTypeLiteralMembers = 768,
         MultiLineTypeLiteralMembers = 32897,
@@ -4119,9 +4162,12 @@ declare namespace ts {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -4138,7 +4184,7 @@ declare namespace ts {
         Changed = 1,
         Deleted = 2
     }
-    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
+    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
     export interface System {
         args: string[];
@@ -4349,6 +4395,8 @@ declare namespace ts {
     function symbolName(symbol: Symbol): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
     function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
+    function getDecorators(node: HasDecorators): readonly Decorator[] | undefined;
+    function getModifiers(node: HasModifiers): readonly Modifier[] | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -4437,6 +4485,12 @@ declare namespace ts {
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
+     *
+     * This does *not* return type parameters from a jsdoc reference to a generic type, eg
+     *
+     * type Id = <T>(x: T) => T
+     * /** @type {Id} /
+     * function id(x) { return x }
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[];
     function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
@@ -4482,6 +4536,8 @@ declare namespace ts {
     function isClassElement(node: Node): node is ClassElement;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
     function isAccessor(node: Node): node is AccessorDeclaration;
+    function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration;
+    function isModifierLike(node: Node): node is ModifierLike;
     function isTypeElement(node: Node): node is TypeElement;
     function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement;
     function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike;
@@ -4510,6 +4566,8 @@ declare namespace ts {
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
     function isStringLiteralLike(node: Node): node is StringLiteralLike;
     function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
+    function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
+    function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
 }
 declare namespace ts {
     const factory: NodeFactory;
@@ -4680,6 +4738,7 @@ declare namespace ts {
     function isOmittedExpression(node: Node): node is OmittedExpression;
     function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments;
     function isAsExpression(node: Node): node is AsExpression;
+    function isSatisfiesExpression(node: Node): node is SatisfiesExpression;
     function isNonNullExpression(node: Node): node is NonNullExpression;
     function isMetaProperty(node: Node): node is MetaProperty;
     function isSyntheticExpression(node: Node): node is SyntheticExpression;
@@ -4720,6 +4779,7 @@ declare namespace ts {
     function isImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration;
     function isImportDeclaration(node: Node): node is ImportDeclaration;
     function isImportClause(node: Node): node is ImportClause;
+    function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer;
     function isAssertClause(node: Node): node is AssertClause;
     function isAssertEntry(node: Node): node is AssertEntry;
     function isNamespaceImport(node: Node): node is NamespaceImport;
@@ -4797,6 +4857,8 @@ declare namespace ts {
 }
 declare namespace ts {
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
+    function canHaveModifiers(node: Node): node is HasModifiers;
+    function canHaveDecorators(node: Node): node is HasDecorators;
 }
 declare namespace ts {
     /**
@@ -4818,7 +4880,7 @@ declare namespace ts {
         /**
          * Controls the format the file is detected as - this can be derived from only the path
          * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
-         * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node12` or `nodenext`.
+         * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node16` or `nodenext`.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
         /**
@@ -5098,6 +5160,31 @@ declare namespace ts {
     export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
     export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
     export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent?: number): string;
+    /**
+     * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
+     * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
+     */
+    export function getModeForFileReference(ref: FileReference | string, containingFileMode: SourceFile["impliedNodeFormat"]): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    /**
+     * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
+     * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
+     * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+     * @param file File to fetch the resolution mode within
+     * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+     */
+    export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    /**
+     * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
+     * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
+     * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
+     * `moduleResolution` is `node16`+.
+     * @param file The file the import or import-like reference is contained within
+     * @param usage The module reference string
+     * @returns The final resolution mode of the import
+     */
+    export function getModeForUsageLocation(file: {
+        impliedNodeFormat?: SourceFile["impliedNodeFormat"];
+    }, usage: StringLiteralLike): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
@@ -5357,6 +5444,12 @@ declare namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
+        /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
+        hasInvalidatedResolutions?(filePath: Path): boolean;
+        /**
+         * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
+         */
+        getModuleResolutionCache?(): ModuleResolutionCache | undefined;
     }
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */
@@ -5871,6 +5964,8 @@ declare namespace ts {
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
+        /** @deprecated Use the signature with `UserPreferences` instead. */
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
@@ -6250,6 +6345,7 @@ declare namespace ts {
         Insert = "insert",
         Remove = "remove"
     }
+    /** @deprecated - consider using EditorSettings instead */
     interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -6267,6 +6363,7 @@ declare namespace ts {
         indentStyle?: IndentStyle;
         trimTrailingWhitespace?: boolean;
     }
+    /** @deprecated - consider using FormatCodeSettings instead */
     interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -6392,6 +6489,9 @@ declare namespace ts {
         canRename: false;
         localizedErrorMessage: string;
     }
+    /**
+     * @deprecated Use `UserPreferences` instead.
+     */
     interface RenameInfoOptions {
         readonly allowRenameOfImportPath?: boolean;
     }
@@ -6435,12 +6535,23 @@ declare namespace ts {
         argumentIndex: number;
         argumentCount: number;
     }
+    enum CompletionInfoFlags {
+        None = 0,
+        MayIncludeAutoImports = 1,
+        IsImportStatementCompletion = 2,
+        IsContinuation = 4,
+        ResolvedModuleSpecifiers = 8,
+        ResolvedModuleSpecifiersBeyondLimit = 16,
+        MayIncludeMethodSnippets = 32
+    }
     interface CompletionInfo {
+        /** For performance telemetry. */
+        flags?: CompletionInfoFlags;
         /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
-         * In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
          * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
          * must be used to commit that completion entry.
          */
@@ -6653,6 +6764,8 @@ declare namespace ts {
          * interface Y { foo:number; }
          */
         memberVariableElement = "property",
+        /** class X { [public|private]* accessor foo: number; } */
+        memberAccessorVariableElement = "accessor",
         /**
          * class X { constructor() { } }
          * class X { static { } }
@@ -6811,15 +6924,15 @@ declare namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file. Only used if the file was not found
          * in the registry and a new one was created.
          * @param version Current version of the file. Only used if the file was not found
          * in the registry and a new one was created.
          */
-        acquireDocument(fileName: string, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
-        acquireDocumentWithKey(fileName: string, path: Path, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
+        acquireDocument(fileName: string, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, sourceFileOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile;
+        acquireDocumentWithKey(fileName: string, path: Path, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, sourceFileOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile;
         /**
          * Request an updated version of an already existing SourceFile with a given fileName
          * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
@@ -6830,25 +6943,14 @@ declare namespace ts {
          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
          * multiple copies of the same file for different compilation settings. A minimal
          * resolution cache is needed to fully define a source file's shape when
-         * the compilation settings include `module: node12`+, so providing a cache host
+         * the compilation settings include `module: node16`+, so providing a cache host
          * object should be preferred. A common host is a language service `ConfiguredProject`.
          * @param scriptSnapshot Text of the file.
          * @param version Current version of the file.
          */
-        updateDocument(fileName: string, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
-        updateDocumentWithKey(fileName: string, path: Path, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
+        updateDocument(fileName: string, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, sourceFileOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile;
+        updateDocumentWithKey(fileName: string, path: Path, compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, sourceFileOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile;
         getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
-        /**
-         * Informs the DocumentRegistry that a file is not needed any longer.
-         *
-         * Note: It is not allowed to call release on a SourceFile that was not acquired from
-         * this registry originally.
-         *
-         * @param fileName The name of the file to be released
-         * @param compilationSettings The compilation settings used to acquire the file
-         */
-        /**@deprecated pass scriptKind for correctness */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
         /**
          * Informs the DocumentRegistry that a file is not needed any longer.
          *
@@ -6859,11 +6961,24 @@ declare namespace ts {
          * @param compilationSettings The compilation settings used to acquire the file
          * @param scriptKind The script kind of the file to be released
          */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind): void;
+        /**@deprecated pass scriptKind and impliedNodeFormat for correctness */
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind): void;
         /**
-         * @deprecated pass scriptKind for correctness */
-        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
-        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind): void;
+         * Informs the DocumentRegistry that a file is not needed any longer.
+         *
+         * Note: It is not allowed to call release on a SourceFile that was not acquired from
+         * this registry originally.
+         *
+         * @param fileName The name of the file to be released
+         * @param compilationSettings The compilation settings used to acquire the file
+         * @param scriptKind The script kind of the file to be released
+         * @param impliedNodeFormat The implied source file format of the file to be released
+         */
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void;
+        /**
+         * @deprecated pass scriptKind for and impliedNodeFormat correctness */
+        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
+        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void;
         reportStats(): string;
     }
     type DocumentRegistryBucketKey = string & {
@@ -6923,7 +7038,7 @@ declare namespace ts.server {
         compressionKind: string;
         data: any;
     }
-    type RequireResult = {
+    type ModuleImportResult = {
         module: {};
         error: undefined;
     } | {
@@ -6933,6 +7048,8 @@ declare namespace ts.server {
             message?: string;
         };
     };
+    /** @deprecated Use {@link ModuleImportResult} instead. */
+    type RequireResult = ModuleImportResult;
     interface ServerHost extends System {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
@@ -6942,7 +7059,7 @@ declare namespace ts.server {
         clearImmediate(timeoutId: any): void;
         gc?(): void;
         trace?(s: string): void;
-        require?(initialPath: string, moduleName: string): RequireResult;
+        require?(initialPath: string, moduleName: string): ModuleImportResult;
     }
 }
 declare namespace ts.server {
@@ -8823,6 +8940,7 @@ declare namespace ts.server.protocol {
         body?: CompletionInfo;
     }
     interface CompletionInfo {
+        readonly flags?: number;
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
@@ -9696,9 +9814,11 @@ declare namespace ts.server.protocol {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -10390,6 +10510,8 @@ declare namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
         private performanceEventHandler?;
+        private pendingPluginEnablements?;
+        private currentPluginEnablementPromise?;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
@@ -10549,6 +10671,9 @@ declare namespace ts.server {
         applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
         openExternalProject(proj: protocol.ExternalProject): void;
         hasDeferredExtension(): boolean;
+        private enableRequestedPluginsAsync;
+        private enableRequestedPluginsWorker;
+        private enableRequestedPluginsForProjectAsync;
         configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
     }
     export {};
@@ -10787,7 +10912,7 @@ declare namespace ts {
         (text: string, isSingleQuote?: boolean | undefined, hasExtendedUnicodeEscape?: boolean | undefined): StringLiteral;
     };
     /** @deprecated Use `factory.createStringLiteralFromNode` or the factory supplied by your transformation context instead. */
-    const createStringLiteralFromNode: (sourceNode: PropertyNameLiteral, isSingleQuote?: boolean | undefined) => StringLiteral;
+    const createStringLiteralFromNode: (sourceNode: PrivateIdentifier | PropertyNameLiteral, isSingleQuote?: boolean | undefined) => StringLiteral;
     /** @deprecated Use `factory.createRegularExpressionLiteral` or the factory supplied by your transformation context instead. */
     const createRegularExpressionLiteral: (text: string) => RegularExpressionLiteral;
     /** @deprecated Use `factory.createLoopVariable` or the factory supplied by your transformation context instead. */
@@ -10829,33 +10954,69 @@ declare namespace ts {
         (node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
     };
     /** @deprecated Use `factory.createParameterDeclaration` or the factory supplied by your transformation context instead. */
-    const createParameter: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken | undefined, type?: TypeNode | undefined, initializer?: Expression | undefined) => ParameterDeclaration;
+    const createParameter: {
+        (modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken | undefined, type?: TypeNode | undefined, initializer?: Expression | undefined): ParameterDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken | undefined, type?: TypeNode | undefined, initializer?: Expression | undefined): ParameterDeclaration;
+    };
     /** @deprecated Use `factory.updateParameterDeclaration` or the factory supplied by your transformation context instead. */
-    const updateParameter: (node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) => ParameterDeclaration;
+    const updateParameter: {
+        (node: ParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
+        (node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
+    };
     /** @deprecated Use `factory.createDecorator` or the factory supplied by your transformation context instead. */
     const createDecorator: (expression: Expression) => Decorator;
     /** @deprecated Use `factory.updateDecorator` or the factory supplied by your transformation context instead. */
     const updateDecorator: (node: Decorator, expression: Expression) => Decorator;
     /** @deprecated Use `factory.createPropertyDeclaration` or the factory supplied by your transformation context instead. */
-    const createProperty: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) => PropertyDeclaration;
+    const createProperty: {
+        (modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+    };
     /** @deprecated Use `factory.updatePropertyDeclaration` or the factory supplied by your transformation context instead. */
-    const updateProperty: (node: PropertyDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) => PropertyDeclaration;
+    const updateProperty: {
+        (node: PropertyDeclaration, modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+        (node: PropertyDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+    };
     /** @deprecated Use `factory.createMethodDeclaration` or the factory supplied by your transformation context instead. */
-    const createMethod: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) => MethodDeclaration;
+    const createMethod: {
+        (modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+    };
     /** @deprecated Use `factory.updateMethodDeclaration` or the factory supplied by your transformation context instead. */
-    const updateMethod: (node: MethodDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) => MethodDeclaration;
+    const updateMethod: {
+        (node: MethodDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+        (node: MethodDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+    };
     /** @deprecated Use `factory.createConstructorDeclaration` or the factory supplied by your transformation context instead. */
-    const createConstructor: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined) => ConstructorDeclaration;
+    const createConstructor: {
+        (modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+    };
     /** @deprecated Use `factory.updateConstructorDeclaration` or the factory supplied by your transformation context instead. */
-    const updateConstructor: (node: ConstructorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined) => ConstructorDeclaration;
+    const updateConstructor: {
+        (node: ConstructorDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+        (node: ConstructorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+    };
     /** @deprecated Use `factory.createGetAccessorDeclaration` or the factory supplied by your transformation context instead. */
-    const createGetAccessor: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) => GetAccessorDeclaration;
+    const createGetAccessor: {
+        (modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+    };
     /** @deprecated Use `factory.updateGetAccessorDeclaration` or the factory supplied by your transformation context instead. */
-    const updateGetAccessor: (node: GetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) => GetAccessorDeclaration;
+    const updateGetAccessor: {
+        (node: GetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+        (node: GetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+    };
     /** @deprecated Use `factory.createSetAccessorDeclaration` or the factory supplied by your transformation context instead. */
-    const createSetAccessor: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined) => SetAccessorDeclaration;
+    const createSetAccessor: {
+        (modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+    };
     /** @deprecated Use `factory.updateSetAccessorDeclaration` or the factory supplied by your transformation context instead. */
-    const updateSetAccessor: (node: SetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined) => SetAccessorDeclaration;
+    const updateSetAccessor: {
+        (node: SetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+        (node: SetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+    };
     /** @deprecated Use `factory.createCallSignature` or the factory supplied by your transformation context instead. */
     const createCallSignature: (typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined) => CallSignatureDeclaration;
     /** @deprecated Use `factory.updateCallSignature` or the factory supplied by your transformation context instead. */
@@ -10865,7 +11026,10 @@ declare namespace ts {
     /** @deprecated Use `factory.updateConstructSignature` or the factory supplied by your transformation context instead. */
     const updateConstructSignature: (node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) => ConstructSignatureDeclaration;
     /** @deprecated Use `factory.updateIndexSignature` or the factory supplied by your transformation context instead. */
-    const updateIndexSignature: (node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode) => IndexSignatureDeclaration;
+    const updateIndexSignature: {
+        (node: IndexSignatureDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        (node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+    };
     /** @deprecated Use `factory.createKeywordTypeNode` or the factory supplied by your transformation context instead. */
     const createKeywordTypeNode: <TKind extends KeywordTypeSyntaxKind>(kind: TKind) => KeywordTypeNode<TKind>;
     /** @deprecated Use `factory.createTypePredicateNode` or the factory supplied by your transformation context instead. */
@@ -10926,13 +11090,14 @@ declare namespace ts {
     const updateInferTypeNode: (node: InferTypeNode, typeParameter: TypeParameterDeclaration) => InferTypeNode;
     /** @deprecated Use `factory.createImportTypeNode` or the factory supplied by your transformation context instead. */
     const createImportTypeNode: {
-        (argument: TypeNode, qualifier?: EntityName | undefined, typeArguments?: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
         (argument: TypeNode, assertions?: ImportTypeAssertionContainer | undefined, qualifier?: EntityName | undefined, typeArguments?: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        (argument: TypeNode, assertions?: ImportTypeAssertionContainer | undefined, qualifier?: EntityName | undefined, typeArguments?: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        (argument: TypeNode, qualifier?: EntityName | undefined, typeArguments?: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
     };
     /** @deprecated Use `factory.updateImportTypeNode` or the factory supplied by your transformation context instead. */
     const updateImportTypeNode: {
-        (node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
         (node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        (node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
     };
     /** @deprecated Use `factory.createParenthesizedType` or the factory supplied by your transformation context instead. */
     const createParenthesizedType: (type: TypeNode) => ParenthesizedTypeNode;
@@ -11177,29 +11342,65 @@ declare namespace ts {
     /** @deprecated Use `factory.updateVariableDeclarationList` or the factory supplied by your transformation context instead. */
     const updateVariableDeclarationList: (node: VariableDeclarationList, declarations: readonly VariableDeclaration[]) => VariableDeclarationList;
     /** @deprecated Use `factory.createFunctionDeclaration` or the factory supplied by your transformation context instead. */
-    const createFunctionDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) => FunctionDeclaration;
+    const createFunctionDeclaration: {
+        (modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+    };
     /** @deprecated Use `factory.updateFunctionDeclaration` or the factory supplied by your transformation context instead. */
-    const updateFunctionDeclaration: (node: FunctionDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) => FunctionDeclaration;
+    const updateFunctionDeclaration: {
+        (node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+        (node: FunctionDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+    };
     /** @deprecated Use `factory.createClassDeclaration` or the factory supplied by your transformation context instead. */
-    const createClassDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]) => ClassDeclaration;
+    const createClassDeclaration: {
+        (modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+    };
     /** @deprecated Use `factory.updateClassDeclaration` or the factory supplied by your transformation context instead. */
-    const updateClassDeclaration: (node: ClassDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]) => ClassDeclaration;
+    const updateClassDeclaration: {
+        (node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        (node: ClassDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+    };
     /** @deprecated Use `factory.createInterfaceDeclaration` or the factory supplied by your transformation context instead. */
-    const createInterfaceDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]) => InterfaceDeclaration;
+    const createInterfaceDeclaration: {
+        (modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+    };
     /** @deprecated Use `factory.updateInterfaceDeclaration` or the factory supplied by your transformation context instead. */
-    const updateInterfaceDeclaration: (node: InterfaceDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]) => InterfaceDeclaration;
+    const updateInterfaceDeclaration: {
+        (node: InterfaceDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+        (node: InterfaceDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+    };
     /** @deprecated Use `factory.createTypeAliasDeclaration` or the factory supplied by your transformation context instead. */
-    const createTypeAliasDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode) => TypeAliasDeclaration;
+    const createTypeAliasDeclaration: {
+        (modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+    };
     /** @deprecated Use `factory.updateTypeAliasDeclaration` or the factory supplied by your transformation context instead. */
-    const updateTypeAliasDeclaration: (node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode) => TypeAliasDeclaration;
+    const updateTypeAliasDeclaration: {
+        (node: TypeAliasDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+        (node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+    };
     /** @deprecated Use `factory.createEnumDeclaration` or the factory supplied by your transformation context instead. */
-    const createEnumDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]) => EnumDeclaration;
+    const createEnumDeclaration: {
+        (modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
+    };
     /** @deprecated Use `factory.updateEnumDeclaration` or the factory supplied by your transformation context instead. */
-    const updateEnumDeclaration: (node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]) => EnumDeclaration;
+    const updateEnumDeclaration: {
+        (node: EnumDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        (node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+    };
     /** @deprecated Use `factory.createModuleDeclaration` or the factory supplied by your transformation context instead. */
-    const createModuleDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags | undefined) => ModuleDeclaration;
+    const createModuleDeclaration: {
+        (modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags | undefined): ModuleDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags | undefined): ModuleDeclaration;
+    };
     /** @deprecated Use `factory.updateModuleDeclaration` or the factory supplied by your transformation context instead. */
-    const updateModuleDeclaration: (node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined) => ModuleDeclaration;
+    const updateModuleDeclaration: {
+        (node: ModuleDeclaration, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
+        (node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
+    };
     /** @deprecated Use `factory.createModuleBlock` or the factory supplied by your transformation context instead. */
     const createModuleBlock: (statements: readonly Statement[]) => ModuleBlock;
     /** @deprecated Use `factory.updateModuleBlock` or the factory supplied by your transformation context instead. */
@@ -11213,13 +11414,25 @@ declare namespace ts {
     /** @deprecated Use `factory.updateNamespaceExportDeclaration` or the factory supplied by your transformation context instead. */
     const updateNamespaceExportDeclaration: (node: NamespaceExportDeclaration, name: Identifier) => NamespaceExportDeclaration;
     /** @deprecated Use `factory.createImportEqualsDeclaration` or the factory supplied by your transformation context instead. */
-    const createImportEqualsDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference) => ImportEqualsDeclaration;
+    const createImportEqualsDeclaration: {
+        (modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    };
     /** @deprecated Use `factory.updateImportEqualsDeclaration` or the factory supplied by your transformation context instead. */
-    const updateImportEqualsDeclaration: (node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference) => ImportEqualsDeclaration;
+    const updateImportEqualsDeclaration: {
+        (node: ImportEqualsDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        (node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    };
     /** @deprecated Use `factory.createImportDeclaration` or the factory supplied by your transformation context instead. */
-    const createImportDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause | undefined) => ImportDeclaration;
+    const createImportDeclaration: {
+        (modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause | undefined): ImportDeclaration;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause | undefined): ImportDeclaration;
+    };
     /** @deprecated Use `factory.updateImportDeclaration` or the factory supplied by your transformation context instead. */
-    const updateImportDeclaration: (node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration;
+    const updateImportDeclaration: {
+        (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+        (node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+    };
     /** @deprecated Use `factory.createNamespaceImport` or the factory supplied by your transformation context instead. */
     const createNamespaceImport: (name: Identifier) => NamespaceImport;
     /** @deprecated Use `factory.updateNamespaceImport` or the factory supplied by your transformation context instead. */
@@ -11233,9 +11446,15 @@ declare namespace ts {
     /** @deprecated Use `factory.updateImportSpecifier` or the factory supplied by your transformation context instead. */
     const updateImportSpecifier: (node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) => ImportSpecifier;
     /** @deprecated Use `factory.createExportAssignment` or the factory supplied by your transformation context instead. */
-    const createExportAssignment: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression) => ExportAssignment;
+    const createExportAssignment: {
+        (modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+    };
     /** @deprecated Use `factory.updateExportAssignment` or the factory supplied by your transformation context instead. */
-    const updateExportAssignment: (node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression) => ExportAssignment;
+    const updateExportAssignment: {
+        (node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        (node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+    };
     /** @deprecated Use `factory.createNamedExports` or the factory supplied by your transformation context instead. */
     const createNamedExports: (elements: readonly ExportSpecifier[]) => NamedExports;
     /** @deprecated Use `factory.updateNamedExports` or the factory supplied by your transformation context instead. */
@@ -11325,9 +11544,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateJsxFragment` or the factory supplied by your transformation context instead. */
     const updateJsxFragment: (node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment) => JsxFragment;
     /** @deprecated Use `factory.createJsxAttribute` or the factory supplied by your transformation context instead. */
-    const createJsxAttribute: (name: Identifier, initializer: StringLiteral | JsxExpression | undefined) => JsxAttribute;
+    const createJsxAttribute: (name: Identifier, initializer: JsxAttributeValue | undefined) => JsxAttribute;
     /** @deprecated Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead. */
-    const updateJsxAttribute: (node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) => JsxAttribute;
+    const updateJsxAttribute: (node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) => JsxAttribute;
     /** @deprecated Use `factory.createJsxAttributes` or the factory supplied by your transformation context instead. */
     const createJsxAttributes: (properties: readonly JsxAttributeLike[]) => JsxAttributes;
     /** @deprecated Use `factory.updateJsxAttributes` or the factory supplied by your transformation context instead. */
@@ -11539,8 +11758,12 @@ declare namespace ts {
      * @deprecated Use an appropriate `factory.update...` method instead, use `setCommentRange` or `setSourceMapRange`, and avoid setting `parent`.
      */
     const getMutableClone: <T extends Node>(node: T) => T;
+}
+declare namespace ts {
     /** @deprecated Use `isTypeAssertionExpression` instead. */
     const isTypeAssertion: (node: Node) => node is TypeAssertion;
+}
+declare namespace ts {
     /**
      * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
      */
@@ -11551,10 +11774,239 @@ declare namespace ts {
      */
     interface Map<T> extends ESMap<string, T> {
     }
+}
+declare namespace ts {
     /**
      * @deprecated Use `isMemberName` instead.
      */
     const isIdentifierOrPrivateIdentifier: (node: Node) => node is MemberName;
+}
+declare namespace ts {
+    interface NodeFactory {
+        /** @deprecated Use the overload that accepts 'modifiers' */
+        createConstructorTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
+        /** @deprecated Use the overload that accepts 'modifiers' */
+        updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
+    }
+}
+declare namespace ts {
+    interface NodeFactory {
+        createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        /** @deprecated Use the overload that accepts 'assertions' */
+        createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        /** @deprecated Use the overload that accepts 'assertions' */
+        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+    }
+}
+declare namespace ts {
+    interface NodeFactory {
+        /** @deprecated Use the overload that accepts 'modifiers' */
+        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        /** @deprecated Use the overload that accepts 'modifiers' */
+        updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+    }
+}
+declare namespace ts {
+    interface Node {
+        /**
+         * @deprecated `decorators` has been removed from `Node` and merged with `modifiers` on the `Node` subtypes that support them.
+         * Use `ts.canHaveDecorators()` to test whether a `Node` can have decorators.
+         * Use `ts.getDecorators()` to get the decorators of a `Node`.
+         *
+         * For example:
+         * ```ts
+         * const decorators = ts.canHaveDecorators(node) ? ts.getDecorators(node) : undefined;
+         * ```
+         */
+        readonly decorators?: undefined;
+        /**
+         * @deprecated `modifiers` has been removed from `Node` and moved to the `Node` subtypes that support them.
+         * Use `ts.canHaveModifiers()` to test whether a `Node` can have modifiers.
+         * Use `ts.getModifiers()` to get the modifiers of a `Node`.
+         *
+         * For example:
+         * ```ts
+         * const modifiers = ts.canHaveModifiers(node) ? ts.getModifiers(node) : undefined;
+         * ```
+         */
+        readonly modifiers?: NodeArray<ModifierLike> | undefined;
+    }
+    interface PropertySignature {
+        /** @deprecated A property signature cannot have an initializer */
+        readonly initializer?: Expression | undefined;
+    }
+    interface PropertyAssignment {
+        /** @deprecated A property assignment cannot have a question token */
+        readonly questionToken?: QuestionToken | undefined;
+        /** @deprecated A property assignment cannot have an exclamation token */
+        readonly exclamationToken?: ExclamationToken | undefined;
+    }
+    interface ShorthandPropertyAssignment {
+        /** @deprecated A shorthand property assignment cannot have modifiers */
+        readonly modifiers?: NodeArray<Modifier> | undefined;
+        /** @deprecated A shorthand property assignment cannot have a question token */
+        readonly questionToken?: QuestionToken | undefined;
+        /** @deprecated A shorthand property assignment cannot have an exclamation token */
+        readonly exclamationToken?: ExclamationToken | undefined;
+    }
+    interface FunctionTypeNode {
+        /** @deprecated A function type cannot have modifiers */
+        readonly modifiers?: NodeArray<Modifier> | undefined;
+    }
+    interface NodeFactory {
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createParameterDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateParameterDeclaration(node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createPropertyDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updatePropertyDeclaration(node: PropertyDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createMethodDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateMethodDeclaration(node: MethodDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+        /**
+         * @deprecated This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createConstructorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+        /**
+         * @deprecated This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateConstructorDeclaration(node: ConstructorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createGetAccessorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateGetAccessorDeclaration(node: GetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createSetAccessorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateSetAccessorDeclaration(node: SetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        /**
+         * @deprecated Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.
+         */
+        updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        /**
+         * @deprecated Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.
+         */
+        createClassStaticBlockDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createClassExpression(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateClassExpression(node: ClassExpression, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createFunctionDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateFunctionDeclaration(node: FunctionDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createClassDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        /**
+         * @deprecated Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateClassDeclaration(node: ClassDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createInterfaceDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createTypeAliasDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createModuleDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateModuleDeclaration(node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createImportEqualsDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createImportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateImportDeclaration(node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
+        /**
+         * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
+         */
+        updateExportDeclaration(node: ExportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+    }
 }
 
 export = ts;

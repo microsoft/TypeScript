@@ -118,21 +118,15 @@ baz
 >div : any
 
 <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
-><LeftRight left=<a /> : any
-><LeftRight left= : any
+><LeftRight left=<a /> right=<b>monkeys /> gorillas</b> /> : any
 >LeftRight : any
->left : true
+>left : any
 ><a /> : any
 >a : any
->right=<b>monkeys /> gorillas</b> /> : boolean
 >right : any
-><b>monkeys /> gorillas</b> /> : boolean
-><b>monkeys /> gorillas</b> / : number
 ><b>monkeys /> gorillas</b> : any
 >b : any
 >b : any
-> : any
-> : any
 
 <a.b></a.b>;
 ><a.b></a.b> : any

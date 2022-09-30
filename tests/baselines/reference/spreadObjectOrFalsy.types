@@ -56,19 +56,19 @@ function f6<T extends object | undefined>(a: T) {
 // Repro from #46976
 
 function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
->g1 : <T extends {}, A extends { z: (T | undefined) & T; }>(a: A) => (T | undefined) & T
->z : (T | undefined) & T
+>g1 : <T extends {}, A extends { z: (T | undefined) & T; }>(a: A) => T | (undefined & T)
+>z : T | (undefined & T)
 >a : A
 
     const { z } = a;
->z : (T | undefined) & T
+>z : T | (undefined & T)
 >a : A
 
     return {
->{        ...z    } : (T | undefined) & T
+>{        ...z    } : T | (undefined & T)
 
         ...z
->z : (T | undefined) & T
+>z : T | (undefined & T)
 
     };
 }
@@ -98,9 +98,9 @@ class Foo<T extends string> {
             this.data.toLocaleLowerCase();
 >this.data.toLocaleLowerCase() : string
 >this.data.toLocaleLowerCase : (locales?: string | string[] | undefined) => string
->this.data : (T | undefined) & T
+>this.data : T | (undefined & T)
 >this : this & DatafulFoo<T>
->data : (T | undefined) & T
+>data : T | (undefined & T)
 >toLocaleLowerCase : (locales?: string | string[] | undefined) => string
         }
     }

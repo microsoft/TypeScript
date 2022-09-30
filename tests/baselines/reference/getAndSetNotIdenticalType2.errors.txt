@@ -20,6 +20,7 @@ tests/cases/compiler/getAndSetNotIdenticalType2.ts(15,1): error TS2322: Type 'A<
             ~
 !!! error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
 !!! error TS2380:   Type 'T' is not assignable to type 'string'.
+!!! related TS2208 tests/cases/compiler/getAndSetNotIdenticalType2.ts:3:9: This type parameter might need an `extends string` constraint.
             return this.data;
         }
         set x(v: A<string>) {
