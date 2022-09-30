@@ -1,0 +1,39 @@
+tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts(19,46): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: never, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string', gave the following error.
+    Argument of type '{}' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(value: never, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string', gave the following error.
+    Argument of type '{}' is not assignable to parameter of type 'never'.
+
+
+==== tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts (1 errors) ====
+    interface SFC<P = {}> {
+        (props: P & { children?: any }): any | null;
+    }
+    
+    interface Props {
+        name: "Apollo" | "Artemis" | "Dionysus" | "Persephone";
+    }
+    
+    const Parent: SFC<Props> = ({
+        children,
+        name = "Artemis",
+        ...props
+    }) => Child({name, ...props});
+    
+    const Child: SFC<Props> = ({
+        children,
+        name = "Artemis",
+        ...props
+    }) => `name: ${name} props: ${JSON.stringify(props)}`;
+                                                 ~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(value: never, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string', gave the following error.
+!!! error TS2769:     Argument of type '{}' is not assignable to parameter of type 'never'.
+!!! error TS2769:   Overload 2 of 2, '(value: never, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string', gave the following error.
+!!! error TS2769:     Argument of type '{}' is not assignable to parameter of type 'never'.
+    
+    // Repro from #29189
+    
+    declare function f(g: (as: string[]) => void): void
+    f(([_1, _2 = undefined]) => undefined)
+    
