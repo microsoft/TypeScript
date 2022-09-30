@@ -16,8 +16,6 @@ import * as server from "./ts.server";
 export { server };
 import * as projectSystem from "./ts.projectSystem";
 export { projectSystem };
-import * as textStorage from "./ts.textStorage";
-export { textStorage };
 export * from "../unittests/helpers";
 export * from "../unittests/services/extract/helpers";
 export * from "../unittests/tsbuild/helpers";
