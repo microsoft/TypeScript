@@ -2533,7 +2533,7 @@ namespace ts.server {
             const changes = project.getLanguageService().organizeImports(
                 {
                     fileName: file,
-                    skipDestructiveCodeActions: args.skipDestructiveCodeActions,
+                    mode: args.mode as OrganizeImportsMode | undefined ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined),
                     type: "file",
                 },
                 this.getFormatOptions(file),

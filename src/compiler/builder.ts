@@ -173,10 +173,16 @@ namespace ts {
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
         const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
             !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
+        // We can only reuse emit signatures (i.e. .d.ts signatures) if the .d.ts file is unchanged,
+        // which will eg be depedent on change in options like declarationDir and outDir options are unchanged.
+        // We need to look in oldState.compilerOptions, rather than oldCompilerOptions (i.e.we need to disregard useOldState) because
+        // oldCompilerOptions can be undefined if there was change in say module from None to some other option
+        // which would make useOldState as false since we can now use reference maps that are needed to track what to emit, what to check etc
+        // but that option change does not affect d.ts file name so emitSignatures should still be reused.
         const canCopyEmitSignatures = compilerOptions.composite &&
             oldState?.emitSignatures &&
             !outFilePath &&
-            !compilerOptionsAffectDeclarationPath(compilerOptions, oldCompilerOptions!);
+            !compilerOptionsAffectDeclarationPath(compilerOptions, oldState.compilerOptions);
         if (useOldState) {
             // Copy old state's changed files set
             oldState!.changedFilesSet?.forEach(value => state.changedFilesSet.add(value));
