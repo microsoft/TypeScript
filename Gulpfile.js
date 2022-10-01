@@ -119,55 +119,31 @@ const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagno
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
 
 const buildServices = (() => {
-    // build typescriptServices.out.js
-    const buildTypescriptServicesOut = () => buildProject("src/typescriptServices/tsconfig.json", cmdLineOptions);
-
-    // create typescriptServices.js
-    const createTypescriptServicesJs = () => src("built/local/typescriptServices.out.js")
-        .pipe(newer("built/local/typescriptServices.js"))
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(prependFile(copyright))
-        .pipe(rename("typescriptServices.js"))
-        .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
-        .pipe(dest("built/local"));
-
-    // create typescriptServices.d.ts
-    const createTypescriptServicesDts = () => src("built/local/typescriptServices.out.d.ts")
-        .pipe(newer("built/local/typescriptServices.d.ts"))
-        .pipe(prependFile(copyright))
-        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
-        .pipe(rename("typescriptServices.d.ts"))
-        .pipe(dest("built/local"));
+    // build typescript.out.js
+    const buildTypescriptOut = () => buildProject("src/typescript/tsconfig.json", cmdLineOptions);
 
     // create typescript.js
-    const createTypescriptJs = () => src("built/local/typescriptServices.js")
+    const createTypescriptJs = () => src("built/local/typescript.out.js")
         .pipe(newer("built/local/typescript.js"))
         .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(prependFile(copyright))
         .pipe(rename("typescript.js"))
         .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
         .pipe(dest("built/local"));
 
     // create typescript.d.ts
-    const createTypescriptDts = () => src("built/local/typescriptServices.d.ts")
+    const createTypescriptDts = () => src("built/local/typescript.out.d.ts")
         .pipe(newer("built/local/typescript.d.ts"))
+        .pipe(prependFile(copyright))
+        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
         .pipe(append("\nexport = ts;"))
         .pipe(rename("typescript.d.ts"))
         .pipe(dest("built/local"));
 
-    // create typescript_standalone.d.ts
-    const createTypescriptStandaloneDts = () => src("built/local/typescriptServices.d.ts")
-        .pipe(newer("built/local/typescript_standalone.d.ts"))
-        .pipe(transform(content => content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"')))
-        .pipe(rename("typescript_standalone.d.ts"))
-        .pipe(dest("built/local"));
-
     return series(
-        buildTypescriptServicesOut,
-        createTypescriptServicesJs,
-        createTypescriptServicesDts,
+        buildTypescriptOut,
         createTypescriptJs,
         createTypescriptDts,
-        createTypescriptStandaloneDts,
     );
 })();
 task("services", series(preBuild, buildServices));
@@ -177,17 +153,15 @@ task("services").flags = {
 };
 
 const cleanServices = async () => {
-    if (fs.existsSync("built/local/typescriptServices.tsconfig.json")) {
-        await cleanProject("built/local/typescriptServices.tsconfig.json");
+    if (fs.existsSync("built/local/typescript.tsconfig.json")) {
+        await cleanProject("built/local/typescript.tsconfig.json");
     }
     await del([
-        "built/local/typescriptServices.out.js",
-        "built/local/typescriptServices.out.d.ts",
-        "built/local/typescriptServices.out.tsbuildinfo",
-        "built/local/typescriptServices.js",
+        "built/local/typescript.out.js",
+        "built/local/typescript.out.d.ts",
+        "built/local/typescript.out.tsbuildinfo",
         "built/local/typescript.js",
         "built/local/typescript.d.ts",
-        "built/local/typescript_standalone.d.ts"
     ]);
 };
 cleanTasks.push(cleanServices);
@@ -511,8 +485,6 @@ const cleanBuilt = () => del("built");
 const produceLKG = async () => {
     const expectedFiles = [
         "built/local/tsc.release.js",
-        "built/local/typescriptServices.js",
-        "built/local/typescriptServices.d.ts",
         "built/local/tsserver.js",
         "built/local/dynamicImportCompat.js",
         "built/local/typescript.js",

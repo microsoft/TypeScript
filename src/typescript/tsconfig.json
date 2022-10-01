@@ -1,10 +1,10 @@
 {
     "extends": "../tsconfig-library-base",
     "compilerOptions": {
-        "outFile": "../../built/local/typescriptServices.out.js"
+        "outFile": "../../built/local/typescript.out.js"
     },
     "files": [
-        "typescriptServices.ts"
+        "typescript.ts"
     ],
     "references": [
         { "path": "../compiler", "prepend": true },

@@ -37,7 +37,7 @@ if(!(Test-Path $tsRegKey)){
 }
 
 if($tsScript -ne ""){
-    $tsScriptServices =  "${tsScript}\typescriptServices.js"
+    $tsScriptServices =  "${tsScript}\typescript.js"
     $tsScriptlib = "${tsScript}\lib.d.ts"
     $tsES6Scriptlib = "${tsScript}\lib.es6.d.ts"
     

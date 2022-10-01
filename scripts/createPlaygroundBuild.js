@@ -7,7 +7,7 @@
 
 // This script does two things: 
 //  
-//  - Listens to changes to the built version of TypeScript (via a filewatcher on `built/local/typescriptServices.js`)
+//  - Listens to changes to the built version of TypeScript (via a filewatcher on `built/local/typescript.js`)
 //    these trigger creating monaco-typescript compatible builds of TypeScript at `internal/lib/typescriptServices.js§
 //
 //  - Creates a HTTP server which the playground uses. The webserver almost exclusively re-directs requests to 
@@ -60,7 +60,7 @@ function updateTSDist() {
     );
   
     let tsServices = fs
-      .readFileSync(path.join(TYPESCRIPT_LIB_SOURCE, 'typescriptServices.js'))
+      .readFileSync(path.join(TYPESCRIPT_LIB_SOURCE, 'typescript.js'))
       .toString();
   
     // Ensure we never run into the node system...
@@ -155,13 +155,8 @@ function updateTSDist() {
     );
   
     let dtsServices = fs
-      .readFileSync(path.join(TYPESCRIPT_LIB_SOURCE, 'typescriptServices.d.ts'))
+      .readFileSync(path.join(TYPESCRIPT_LIB_SOURCE, 'typescript.d.ts'))
       .toString();
-    dtsServices += `
-  // MONACOCHANGE
-  export = ts;
-  // END MONACOCHANGE
-  `;
     fs.writeFileSync(
       path.join(TYPESCRIPT_LIB_DESTINATION, 'typescriptServices.d.ts'),
       generatedNote + dtsServices
@@ -271,7 +266,7 @@ function updateTSDist() {
   /// End of import
 }
 
-const services = path.join(__dirname, '../built/local/typescriptServices.js');
+const services = path.join(__dirname, '../built/local/typescript.js');
 fs.watchFile(services, () =>{
   console.log("Updating the monaco build")
   updateTSDist()

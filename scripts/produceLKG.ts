@@ -4,6 +4,7 @@ import * as childProcess from "child_process";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as glob from "glob";
+import * as del from "del";
 
 const root = path.join(__dirname, "..");
 const source = path.join(root, "built/local");
@@ -12,12 +13,13 @@ const copyright = fs.readFileSync(path.join(__dirname, "../CopyrightNotice.txt")
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
+    await del(`${dest.replace(/\\/g, "/")}/**`, { ignore: ["**/README.md"] });
+    await fs.mkdirp(dest);
     await copyLibFiles();
     await copyLocalizedDiagnostics();
     await copyTypesMap();
     await copyScriptOutputs();
     await copyDeclarationOutputs();
-    await buildProtocol();
     await writeGitAttributes();
 }
 
@@ -44,20 +46,6 @@ async function copyTypesMap() {
     await copyFromBuiltLocal("typesMap.json"); // Cannot accommodate copyright header
 }
 
-async function buildProtocol() {
-    const protocolScript = path.join(__dirname, "buildProtocol.js");
-    if (!fs.existsSync(protocolScript)) {
-        throw new Error(`Expected protocol script ${protocolScript} to exist`);
-    }
-
-    const protocolInput = path.join(__dirname, "../src/server/protocol.ts");
-    const protocolServices = path.join(source, "typescriptServices.d.ts");
-    const protocolOutput = path.join(dest, "protocol.d.ts");
-
-    console.log(`Building ${protocolOutput}...`);
-    await exec(protocolScript, [protocolInput, protocolServices, protocolOutput]);
-}
-
 async function copyScriptOutputs() {
     await copyWithCopyright("cancellationToken.js");
     await copyWithCopyright("tsc.release.js", "tsc.js");
@@ -65,7 +53,6 @@ async function copyScriptOutputs() {
     await copyWithCopyright("dynamicImportCompat.js");
     await copyFromBuiltLocal("tsserverlibrary.js"); // copyright added by build
     await copyFromBuiltLocal("typescript.js"); // copyright added by build
-    await copyFromBuiltLocal("typescriptServices.js"); // copyright added by build
     await copyWithCopyright("typingsInstaller.js");
     await copyWithCopyright("watchGuard.js");
 }
@@ -73,7 +60,6 @@ async function copyScriptOutputs() {
 async function copyDeclarationOutputs() {
     await copyFromBuiltLocal("tsserverlibrary.d.ts"); // copyright added by build
     await copyFromBuiltLocal("typescript.d.ts"); // copyright added by build
-    await copyFromBuiltLocal("typescriptServices.d.ts"); // copyright added by build
 }
 
 async function writeGitAttributes() {
