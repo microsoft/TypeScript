@@ -102,7 +102,7 @@ declare namespace Intl {
          * Returns a new object with properties reflecting the locale and style
          * formatting options computed during the construction of the current
          * `Intl.ListFormat` object.
-         * 
+         *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/resolvedOptions).
          */
         resolvedOptions(): ResolvedListFormatOptions;
