@@ -1,0 +1,79 @@
+=== tests/cases/compiler/mixinGeneric.ts ===
+type Constructor<T> = new(...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(mixinGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(mixinGeneric.ts, 0, 17))
+>args : Symbol(args, Decl(mixinGeneric.ts, 0, 26))
+>T : Symbol(T, Decl(mixinGeneric.ts, 0, 17))
+
+class A {
+>A : Symbol(A, Decl(mixinGeneric.ts, 0, 47))
+
+    a!: number;
+>a : Symbol(A.a, Decl(mixinGeneric.ts, 2, 9))
+}
+class B {
+>B : Symbol(B, Decl(mixinGeneric.ts, 4, 1))
+
+    b!: number;
+>b : Symbol(B.b, Decl(mixinGeneric.ts, 5, 9))
+}
+function mixinC<TBase extends Constructor<{}>>(Base: TBase) {
+>mixinC : Symbol(mixinC, Decl(mixinGeneric.ts, 7, 1))
+>TBase : Symbol(TBase, Decl(mixinGeneric.ts, 8, 16))
+>Constructor : Symbol(Constructor, Decl(mixinGeneric.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinGeneric.ts, 8, 47))
+>TBase : Symbol(TBase, Decl(mixinGeneric.ts, 8, 16))
+
+    return class C<T> extends Base {
+>C : Symbol(C, Decl(mixinGeneric.ts, 9, 10))
+>T : Symbol(T, Decl(mixinGeneric.ts, 9, 19))
+>Base : Symbol(Base, Decl(mixinGeneric.ts, 8, 47))
+
+        c!: T;
+>c : Symbol(C.c, Decl(mixinGeneric.ts, 9, 36))
+>T : Symbol(T, Decl(mixinGeneric.ts, 9, 19))
+
+    };
+}
+
+const ACB = mixinC(A)<B>;
+>ACB : Symbol(ACB, Decl(mixinGeneric.ts, 14, 5))
+>mixinC : Symbol(mixinC, Decl(mixinGeneric.ts, 7, 1))
+>A : Symbol(A, Decl(mixinGeneric.ts, 0, 47))
+>B : Symbol(B, Decl(mixinGeneric.ts, 4, 1))
+
+const acb = new ACB();
+>acb : Symbol(acb, Decl(mixinGeneric.ts, 15, 5))
+>ACB : Symbol(ACB, Decl(mixinGeneric.ts, 14, 5))
+
+const acbC: B = acb.c;
+>acbC : Symbol(acbC, Decl(mixinGeneric.ts, 16, 5))
+>B : Symbol(B, Decl(mixinGeneric.ts, 4, 1))
+>acb.c : Symbol(C.c, Decl(mixinGeneric.ts, 9, 36))
+>acb : Symbol(acb, Decl(mixinGeneric.ts, 15, 5))
+>c : Symbol(C.c, Decl(mixinGeneric.ts, 9, 36))
+
+class D {
+>D : Symbol(D, Decl(mixinGeneric.ts, 16, 22))
+
+    d!: number;
+>d : Symbol(D.d, Decl(mixinGeneric.ts, 18, 9))
+}
+
+const ACBCD = mixinC(ACB)<D>;
+>ACBCD : Symbol(ACBCD, Decl(mixinGeneric.ts, 22, 5))
+>mixinC : Symbol(mixinC, Decl(mixinGeneric.ts, 7, 1))
+>ACB : Symbol(ACB, Decl(mixinGeneric.ts, 14, 5))
+>D : Symbol(D, Decl(mixinGeneric.ts, 16, 22))
+
+const acbcd = new ACBCD();
+>acbcd : Symbol(acbcd, Decl(mixinGeneric.ts, 23, 5))
+>ACBCD : Symbol(ACBCD, Decl(mixinGeneric.ts, 22, 5))
+
+const acbcdC: ACB = acbcd.c;
+>acbcdC : Symbol(acbcdC, Decl(mixinGeneric.ts, 24, 5))
+>ACB : Symbol(ACB)
+>acbcd.c : Symbol(C.c, Decl(mixinGeneric.ts, 9, 36))
+>acbcd : Symbol(acbcd, Decl(mixinGeneric.ts, 23, 5))
+>c : Symbol(C.c, Decl(mixinGeneric.ts, 9, 36))
+

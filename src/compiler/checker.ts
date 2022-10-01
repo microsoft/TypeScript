@@ -10327,13 +10327,13 @@ namespace ts {
             return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol));
         }
 
-        // A type is a mixin constructor if it has a single construct signature taking no type parameters and a single
+        // A type is a mixin constructor if it has a single construct signature and a single
         // rest parameter of type any[].
         function isMixinConstructorType(type: Type) {
             const signatures = getSignaturesOfType(type, SignatureKind.Construct);
             if (signatures.length === 1) {
                 const s = signatures[0];
-                if (!s.typeParameters && s.parameters.length === 1 && signatureHasRestParameter(s)) {
+                if (s.parameters.length === 1 && signatureHasRestParameter(s)) {
                     const paramType = getTypeOfParameter(s.parameters[0]);
                     return isTypeAny(paramType) || getElementTypeOfArrayType(paramType) === anyType;
                 }

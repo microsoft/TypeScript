@@ -1,0 +1,75 @@
+=== tests/cases/compiler/mixinGeneric.ts ===
+type Constructor<T> = new(...args: any[]) => T;
+>Constructor : Constructor<T>
+>args : any[]
+
+class A {
+>A : A
+
+    a!: number;
+>a : number
+}
+class B {
+>B : B
+
+    b!: number;
+>b : number
+}
+function mixinC<TBase extends Constructor<{}>>(Base: TBase) {
+>mixinC : <TBase extends Constructor<{}>>(Base: TBase) => { new <T>(...args: any[]): C<T>; prototype: mixinC<any>.C<any>; } & TBase
+>Base : TBase
+
+    return class C<T> extends Base {
+>class C<T> extends Base {        c!: T;    } : { new <T>(...args: any[]): C<T>; prototype: mixinC<any>.C<any>; } & TBase
+>C : { new <T>(...args: any[]): C<T>; prototype: mixinC<any>.C<any>; } & TBase
+>Base : {}
+
+        c!: T;
+>c : T
+
+    };
+}
+
+const ACB = mixinC(A)<B>;
+>ACB : { new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }
+>mixinC(A)<B> : { new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }
+>mixinC(A) : { new <T>(...args: any[]): mixinC<typeof A>.C<T>; prototype: mixinC<any>.C<any>; } & typeof A
+>mixinC : <TBase extends Constructor<{}>>(Base: TBase) => { new <T>(...args: any[]): C<T>; prototype: mixinC<any>.C<any>; } & TBase
+>A : typeof A
+
+const acb = new ACB();
+>acb : mixinC<typeof A>.C<B>
+>new ACB() : mixinC<typeof A>.C<B>
+>ACB : { new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }
+
+const acbC: B = acb.c;
+>acbC : B
+>acb.c : B
+>acb : mixinC<typeof A>.C<B>
+>c : B
+
+class D {
+>D : D
+
+    d!: number;
+>d : number
+}
+
+const ACBCD = mixinC(ACB)<D>;
+>ACBCD : { new (...args: any[]): mixinC<{ new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }>.C<D>; prototype: mixinC<any>.C<any>; } & { prototype: mixinC<any>.C<any>; } & { prototype: A; }
+>mixinC(ACB)<D> : { new (...args: any[]): mixinC<{ new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }>.C<D>; prototype: mixinC<any>.C<any>; } & { prototype: mixinC<any>.C<any>; } & { prototype: A; }
+>mixinC(ACB) : { new <T>(...args: any[]): mixinC<{ new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }>.C<T>; prototype: mixinC<any>.C<any>; } & { new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }
+>mixinC : <TBase extends Constructor<{}>>(Base: TBase) => { new <T>(...args: any[]): C<T>; prototype: mixinC<any>.C<any>; } & TBase
+>ACB : { new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }
+
+const acbcd = new ACBCD();
+>acbcd : mixinC<{ new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }>.C<D>
+>new ACBCD() : mixinC<{ new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }>.C<D>
+>ACBCD : { new (...args: any[]): mixinC<{ new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }>.C<D>; prototype: mixinC<any>.C<any>; } & { prototype: mixinC<any>.C<any>; } & { prototype: A; }
+
+const acbcdC: ACB = acbcd.c;
+>acbcdC : ACB
+>acbcd.c : D
+>acbcd : mixinC<{ new (...args: any[]): mixinC<typeof A>.C<B>; prototype: mixinC<any>.C<any>; } & { prototype: A; }>.C<D>
+>c : D
+

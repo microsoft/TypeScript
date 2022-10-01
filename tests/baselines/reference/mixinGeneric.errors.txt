@@ -1,0 +1,32 @@
+tests/cases/compiler/mixinGeneric.ts(25,15): error TS2749: 'ACB' refers to a value, but is being used as a type here. Did you mean 'typeof ACB'?
+
+
+==== tests/cases/compiler/mixinGeneric.ts (1 errors) ====
+    type Constructor<T> = new(...args: any[]) => T;
+    
+    class A {
+        a!: number;
+    }
+    class B {
+        b!: number;
+    }
+    function mixinC<TBase extends Constructor<{}>>(Base: TBase) {
+        return class C<T> extends Base {
+            c!: T;
+        };
+    }
+    
+    const ACB = mixinC(A)<B>;
+    const acb = new ACB();
+    const acbC: B = acb.c;
+    
+    class D {
+        d!: number;
+    }
+    
+    const ACBCD = mixinC(ACB)<D>;
+    const acbcd = new ACBCD();
+    const acbcdC: ACB = acbcd.c;
+                  ~~~
+!!! error TS2749: 'ACB' refers to a value, but is being used as a type here. Did you mean 'typeof ACB'?
+    
