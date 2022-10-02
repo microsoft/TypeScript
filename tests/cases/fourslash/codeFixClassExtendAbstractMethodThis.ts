@@ -14,7 +14,7 @@ verify.codeFix({
 }
 
 class C extends A {
-    f(): this {
+    override f(): this {
         throw new Error("Method not implemented.");
     }
 }`

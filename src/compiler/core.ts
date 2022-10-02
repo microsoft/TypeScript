@@ -943,6 +943,7 @@ namespace ts {
      * T[] -> T[] -> T[]       (concatenate)
      * ```
      */
+    export function combine<T>(xs: T[] | undefined, ys: T[] | undefined): T[] | undefined;
     export function combine<T>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
     export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
     export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined) {

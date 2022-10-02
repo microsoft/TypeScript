@@ -981,6 +981,7 @@ namespace ts.Completions {
                 completionNodes.push(node);
             },
             body,
+            /* overridesAbstract */ false,
             codefix.PreserveOptionalFlags.Property,
             isAbstract);
 

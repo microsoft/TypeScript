@@ -12,5 +12,5 @@
 //// }
 
 verify.rangeAfterCodeFix(`
-z: number;
+override z: number;
 `);

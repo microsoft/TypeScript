@@ -16,11 +16,11 @@ verify.codeFixAll({
     abstract n(): void;
 }
 declare class B extends A {
-    m(): void;
-    n(): void;
+    override m(): void;
+    override n(): void;
 }
 declare class C extends A {
-    m(): void;
-    n(): void;
+    override m(): void;
+    override n(): void;
 }`,
 });

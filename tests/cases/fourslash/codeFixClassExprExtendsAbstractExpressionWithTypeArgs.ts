@@ -22,6 +22,6 @@ verify.codeFix({
 }
 
 let B = class extends foo("s")<number> {
-    a: string | number;
+    override a: string | number;
 }`
 });

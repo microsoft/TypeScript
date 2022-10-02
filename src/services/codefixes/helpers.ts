@@ -14,11 +14,12 @@ namespace ts.codefix {
         context: TypeConstructionContext,
         preferences: UserPreferences,
         importAdder: ImportAdder | undefined,
+        overridesAbstract: boolean,
         addClassElement: (node: AddNode) => void): void {
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
-                addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /* body */ undefined);
+                addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /* body */ undefined, overridesAbstract);
             }
         }
     }
@@ -56,6 +57,7 @@ namespace ts.codefix {
         importAdder: ImportAdder | undefined,
         addClassElement: (node: AddNode) => void,
         body: Block | undefined,
+        overridesAbstract: boolean,
         preserveOptional = PreserveOptionalFlags.All,
         isAmbient = false,
     ): void {
@@ -88,7 +90,7 @@ namespace ts.codefix {
         if (declaration && isAutoAccessorPropertyDeclaration(declaration)) {
             modifierFlags |= ModifierFlags.Accessor;
         }
-        const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
+        const modifiers = createModifiers();
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
         const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
@@ -193,6 +195,20 @@ namespace ts.codefix {
         function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
             const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder) as MethodDeclaration;
             if (method) addClassElement(method);
+        }
+
+        function createModifiers(): NodeArray<Modifier> | undefined {
+            let modifiers: Modifier[] | undefined;
+
+            if (modifierFlags) {
+                modifiers = combine(modifiers, factory.createModifiersFromModifierFlags(modifierFlags));
+            }
+
+            if (overridesAbstract) {
+                modifiers = append(modifiers, factory.createToken(SyntaxKind.OverrideKeyword));
+            }
+
+            return modifiers && factory.createNodeArray(modifiers);
         }
 
         function createName(node: PropertyName) {
