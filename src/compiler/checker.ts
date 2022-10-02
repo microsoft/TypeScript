@@ -17775,7 +17775,7 @@ namespace ts {
                 target.flags & TypeFlags.Union ? some((target as UnionType).types, t => isTypeDerivedFrom(source, t)) :
                 source.flags & TypeFlags.InstantiableNonPrimitive ? isTypeDerivedFrom(getBaseConstraintOfType(source) || unknownType, target) :
                 target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
-                target === globalFunctionType ? !!(source.flags & TypeFlags.Object) && isFunctionObjectType(source as ObjectType) :
+                target === globalFunctionType ? isFunctionObjectType(source) :
                 hasBaseType(source, getTargetType(target)) || (isArrayType(target) && !isReadonlyArrayType(target) && isTypeDerivedFrom(source, globalReadonlyArrayType));
         }
 
@@ -23945,10 +23945,13 @@ namespace ts {
             return isTypeAssignableTo(assignedType, reducedType) ? reducedType : declaredType;
         }
 
-        function isFunctionObjectType(type: ObjectType): boolean {
+        function isFunctionObjectType(type: Type): boolean {
+            if (!(type.flags & TypeFlags.StructuredType)) {
+                return false;
+            }
             // We do a quick check for a "bind" property before performing the more expensive subtype
             // check. This gives us a quicker out in the common case where an object type is not a function.
-            const resolved = resolveStructuredTypeMembers(type);
+            const resolved = resolveStructuredTypeMembers(type as StructuredType);
             return !!(resolved.callSignatures.length || resolved.constructSignatures.length ||
                 resolved.members.get("bind" as __String) && isTypeSubtypeOf(type, globalFunctionType));
         }
@@ -23996,7 +23999,7 @@ namespace ts {
             if (flags & TypeFlags.Object) {
                 return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType) ?
                     strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
-                    isFunctionObjectType(type as ObjectType) ?
+                    isFunctionObjectType(type) ?
                         strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
                         strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
@@ -34629,7 +34632,7 @@ namespace ts {
                             declKind !== AssignmentDeclarationKind.ModuleExports &&
                             declKind !== AssignmentDeclarationKind.Prototype &&
                             !isEmptyObjectType(rightType) &&
-                            !isFunctionObjectType(rightType as ObjectType) &&
+                            !isFunctionObjectType(rightType) &&
                             !(getObjectFlags(rightType) & ObjectFlags.Class)) {
                             // don't check assignability of module.exports=, C.prototype=, or expando types because they will necessarily be incomplete
                             checkAssignmentOperator(rightType);

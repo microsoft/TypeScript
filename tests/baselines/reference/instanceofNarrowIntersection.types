@@ -1,0 +1,32 @@
+=== tests/cases/compiler/instanceofNarrowIntersection.ts ===
+// repro #50844
+
+interface InstanceOne {
+  one(): void
+>one : () => void
+}
+interface InstanceTwo {
+  two(): void
+>two : () => void
+}
+
+declare const instance: InstanceOne | InstanceTwo
+>instance : InstanceOne | InstanceTwo
+
+declare const SomeCls: { new (): InstanceOne } & { foo: true }
+>SomeCls : (new () => InstanceOne) & { foo: true; }
+>foo : true
+>true : true
+
+if (instance instanceof SomeCls) {
+>instance instanceof SomeCls : boolean
+>instance : InstanceOne | InstanceTwo
+>SomeCls : (new () => InstanceOne) & { foo: true; }
+
+  instance.one()
+>instance.one() : void
+>instance.one : () => void
+>instance : InstanceOne
+>one : () => void
+}
+
