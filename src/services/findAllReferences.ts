@@ -508,12 +508,6 @@ namespace ts.FindAllReferences {
                 displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("object literal"), punctuationPart(SyntaxKind.CloseParenToken)]
             };
         }
-        else if (node.kind === SyntaxKind.ClassExpression) {
-            return {
-                kind: ScriptElementKind.localClassElement,
-                displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("anonymous local class"), punctuationPart(SyntaxKind.CloseParenToken)]
-            };
-        }
         else {
             return { kind: getNodeKind(node), displayParts: [] };
         }
