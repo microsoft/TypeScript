@@ -81,5 +81,26 @@ namespace ts {
             }),
             commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
         });
+
+        verifyTscWithEdits({
+            scenario: "composite",
+            subScenario: "converting to modules",
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/main.ts": "const x = 10;",
+                "/src/project/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        module: "none",
+                        composite: true,
+                    },
+                }),
+            }),
+            commandLineArgs: ["-p", "/src/project"],
+            edits: [
+                {
+                    subScenario: "convert to modules",
+                    modifyFs: fs => replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
+                }
+            ]
+        });
     });
 }

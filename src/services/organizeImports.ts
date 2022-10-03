@@ -13,38 +13,51 @@ namespace ts.OrganizeImports {
         host: LanguageServiceHost,
         program: Program,
         preferences: UserPreferences,
-        skipDestructiveCodeActions?: boolean
+        mode: OrganizeImportsMode,
     ) {
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
-
-        const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
-            coalesceImports(removeUnusedImports(importGroup, sourceFile, program, skipDestructiveCodeActions)),
-            (s1, s2) => compareImportsOrRequireStatements(s1, s2));
+        const shouldSort = mode === OrganizeImportsMode.SortAndCombine || mode === OrganizeImportsMode.All;
+        const shouldCombine = shouldSort; // These are currently inseparable, but I draw a distinction for clarity and in case we add modes in the future.
+        const shouldRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All;
+        const maybeRemove = shouldRemove ? removeUnusedImports : identity;
+        const maybeCoalesce = shouldCombine ? coalesceImports : identity;
+        const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
+            const processedDeclarations = maybeCoalesce(maybeRemove(importGroup, sourceFile, program));
+            return shouldSort
+                ? stableSort(processedDeclarations, (s1, s2) => compareImportsOrRequireStatements(s1, s2))
+                : processedDeclarations;
+        };
 
         // All of the old ImportDeclarations in the file, in syntactic order.
         const topLevelImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration));
-        topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, coalesceAndOrganizeImports));
+        topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier));
 
-        // All of the old ExportDeclarations in the file, in syntactic order.
-        const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
-        organizeImportsWorker(topLevelExportDecls, coalesceExports);
+        // Exports are always used
+        if (mode !== OrganizeImportsMode.RemoveUnused) {
+            // All of the old ExportDeclarations in the file, in syntactic order.
+            const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
+            organizeImportsWorker(topLevelExportDecls, coalesceExports);
+        }
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
             if (!ambientModule.body) continue;
 
             const ambientModuleImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, ambientModule.body.statements.filter(isImportDeclaration));
-            ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, coalesceAndOrganizeImports));
+            ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier));
 
-            const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
-            organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
+            // Exports are always used
+            if (mode !== OrganizeImportsMode.RemoveUnused) {
+                const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
+                organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
+            }
         }
 
         return changeTracker.getChanges();
 
         function organizeImportsWorker<T extends ImportDeclaration | ExportDeclaration>(
             oldImportDecls: readonly T[],
-            coalesce: (group: readonly T[]) => readonly T[]) {
-
+            coalesce: (group: readonly T[]) => readonly T[],
+        ) {
             if (length(oldImportDecls) === 0) {
                 return;
             }
@@ -56,8 +69,12 @@ namespace ts.OrganizeImports {
             // but the consequences of being wrong are very minor.
             suppressLeadingTrivia(oldImportDecls[0]);
 
-            const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier!)!);
-            const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
+            const oldImportGroups = shouldCombine
+                ? group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier!)!)
+                : [oldImportDecls];
+            const sortedImportGroups = shouldSort
+                ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier))
+                : oldImportGroups;
             const newImportDecls = flatMap(sortedImportGroups, importGroup =>
                 getExternalModuleName(importGroup[0].moduleSpecifier!)
                     ? coalesce(importGroup)
@@ -129,12 +146,7 @@ namespace ts.OrganizeImports {
         return false;
     }
 
-    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, skipDestructiveCodeActions: boolean | undefined) {
-        // As a precaution, consider unused import detection to be destructive (GH #43051)
-        if (skipDestructiveCodeActions) {
-            return oldImports;
-        }
-
+    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
