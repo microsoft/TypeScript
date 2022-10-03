@@ -6485,6 +6485,8 @@ namespace ts {
         // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
         Node16   = 3,
         NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+
+        Minimal  = 100,
     }
 
     export enum ModuleDetectionKind {
@@ -6544,6 +6546,7 @@ namespace ts {
 
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
+        allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
         /*@internal*/ allowNonTsExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
@@ -7090,6 +7093,11 @@ namespace ts {
         resolvedFileName: string;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
+        /**
+         * True if the original module reference used a .ts extension to refer directly to a .ts file,
+         * which should produce an error during checking if emit is enabled.
+         */
+        resolvedUsingTsExtension: boolean;
     }
 
     /**

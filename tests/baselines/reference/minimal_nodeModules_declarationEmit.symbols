@@ -1,0 +1,21 @@
+=== /node_modules/foo/module.d.ts ===
+export declare class SomeExportedClass {
+>SomeExportedClass : Symbol(SomeExportedClass, Decl(module.d.ts, 0, 0))
+
+  private foo: any;
+>foo : Symbol(SomeExportedClass.foo, Decl(module.d.ts, 0, 40))
+}
+
+declare global {
+>global : Symbol(global, Decl(module.d.ts, 2, 1))
+
+  function returnsPrivateClassOhNo(): SomeExportedClass;
+>returnsPrivateClassOhNo : Symbol(returnsPrivateClassOhNo, Decl(module.d.ts, 4, 16))
+>SomeExportedClass : Symbol(SomeExportedClass, Decl(module.d.ts, 0, 0))
+}
+
+=== /main.ts ===
+export const boom = returnsPrivateClassOhNo();
+>boom : Symbol(boom, Decl(main.ts, 0, 12))
+>returnsPrivateClassOhNo : Symbol(returnsPrivateClassOhNo, Decl(module.d.ts, 4, 16))
+

@@ -24,8 +24,8 @@ namespace ts {
         assert.deepEqual(actual.failedLookupLocations, expectedFailedLookupLocations, `Failed lookup locations should match - expected has ${expectedFailedLookupLocations.length}, actual has ${actual.failedLookupLocations.length}`);
     }
 
-    export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport = false): ResolvedModuleFull {
-        return { resolvedFileName, extension: extensionFromPath(resolvedFileName), isExternalLibraryImport };
+    export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport = false, resolvedUsingTsExtension = false): ResolvedModuleFull {
+        return { resolvedFileName, extension: extensionFromPath(resolvedFileName), isExternalLibraryImport, resolvedUsingTsExtension };
     }
 
     interface File {
@@ -214,6 +214,7 @@ namespace ts {
                     resolvedFileName: "/sub/node_modules/a/index.ts",
                     isExternalLibraryImport: true,
                     extension: Extension.Ts,
+                    resolvedUsingTsExtension: false,
                 },
                 failedLookupLocations: [],
                 affectingLocations: [],
@@ -229,6 +230,7 @@ namespace ts {
                     resolvedFileName: "/sub/directory/node_modules/b/index.ts",
                     isExternalLibraryImport: true,
                     extension: Extension.Ts,
+                    resolvedUsingTsExtension: false,
                 },
                 failedLookupLocations: [],
                 affectingLocations: [],
@@ -246,6 +248,7 @@ namespace ts {
                     resolvedFileName: "/bar/node_modules/c/index.ts",
                     isExternalLibraryImport: true,
                     extension: Extension.Ts,
+                    resolvedUsingTsExtension: false,
                 },
                 failedLookupLocations: [],
                 affectingLocations: [],
@@ -262,6 +265,7 @@ namespace ts {
                     resolvedFileName: "/foo/index.ts",
                     isExternalLibraryImport: true,
                     extension: Extension.Ts,
+                    resolvedUsingTsExtension: false,
                 },
                 failedLookupLocations: [],
                 affectingLocations: [],
@@ -277,6 +281,7 @@ namespace ts {
                     resolvedFileName: "d:/bar/node_modules/e/index.ts",
                     isExternalLibraryImport: true,
                     extension: Extension.Ts,
+                    resolvedUsingTsExtension: false,
                 },
                 failedLookupLocations: [],
                 affectingLocations: [],

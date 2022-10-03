@@ -839,6 +839,7 @@ namespace ts {
                 classic: ModuleResolutionKind.Classic,
                 node16: ModuleResolutionKind.Node16,
                 nodenext: ModuleResolutionKind.NodeNext,
+                minimal: ModuleResolutionKind.Minimal,
             })),
             affectsModuleResolution: true,
             paramType: Diagnostics.STRATEGY,
@@ -954,6 +955,14 @@ namespace ts {
             affectsModuleResolution: true,
             category: Diagnostics.Modules,
             description: Diagnostics.List_of_file_name_suffixes_to_search_when_resolving_a_module,
+        },
+        {
+            name: "allowImportingTsExtensions",
+            type: "boolean",
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_minimal_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
+            defaultValueDescription: false,
         },
 
         // Source Maps

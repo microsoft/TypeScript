@@ -22,7 +22,11 @@ namespace ts {
                 };
             }
         }
-        return r && { path: r.path, extension: r.ext, packageId };
+        return r && { path: r.path, extension: r.ext, packageId, resolvedUsingTsExtension: r.resolvedUsingTsExtension };
+    }
+
+    function createLoaderWithNoPackageId<P extends any[]>(loader: (...args: P) => PathAndExtension | undefined): (...args: P) => Resolved | undefined {
+        return (...args) => noPackageId(loader(...args));
     }
 
     function noPackageId(r: PathAndExtension | undefined): Resolved | undefined {
@@ -32,7 +36,7 @@ namespace ts {
     function removeIgnoredPackageId(r: Resolved | undefined): PathAndExtension | undefined {
         if (r) {
             Debug.assert(r.packageId === undefined);
-            return { path: r.path, ext: r.extension };
+            return { path: r.path, ext: r.extension, resolvedUsingTsExtension: r.resolvedUsingTsExtension };
         }
     }
 
@@ -51,6 +55,7 @@ namespace ts {
          * Note: This is a file name with preserved original casing, not a normalized `Path`.
          */
         originalPath?: string | true;
+        resolvedUsingTsExtension: boolean | undefined;
     }
 
     /** Result of trying to resolve a module at a file. Needs to have 'packageId' added later. */
@@ -58,6 +63,7 @@ namespace ts {
         path: string;
         // (Use a different name than `extension` to make sure Resolved isn't assignable to PathAndExtension.)
         ext: Extension;
+        resolvedUsingTsExtension: boolean | undefined;
     }
 
     /**
@@ -100,7 +106,14 @@ namespace ts {
             return resultFromCache;
         }
         return {
-            resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
+            resolvedModule: resolved && {
+                resolvedFileName: resolved.path,
+                originalPath: resolved.originalPath === true ? undefined : resolved.originalPath,
+                extension: resolved.extension,
+                isExternalLibraryImport,
+                packageId: resolved.packageId,
+                resolvedUsingTsExtension: !!resolved.resolvedUsingTsExtension,
+            },
             failedLookupLocations,
             affectingLocations,
             resolutionDiagnostics: diagnostics,
@@ -1020,6 +1033,9 @@ namespace ts {
                 case ModuleResolutionKind.Classic:
                     result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                     break;
+                case ModuleResolutionKind.Minimal:
+                    result = minimalModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+                    break;
                 default:
                     return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
@@ -1559,7 +1575,10 @@ namespace ts {
     function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
-        if (hasJSFileExtension(candidate) || (fileExtensionIs(candidate, Extension.Json) && state.compilerOptions.resolveJsonModule)) {
+        if (hasJSFileExtension(candidate) ||
+            (state.compilerOptions.resolveJsonModule && fileExtensionIs(candidate, Extension.Json)) ||
+            (shouldResolveTsExtension(state.compilerOptions) && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat))
+        ) {
             const extensionless = removeFileExtension(candidate);
             const extension = candidate.substring(extensionless.length);
             if (state.traceEnabled) {
@@ -1572,7 +1591,7 @@ namespace ts {
     function loadJSOrExactTSFileName(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
         if ((extensions === Extensions.TypeScript || extensions === Extensions.DtsOnly) && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat)) {
             const result = tryFile(candidate, onlyRecordFailures, state);
-            return result !== undefined ? { path: candidate, ext: tryExtractTSExtension(candidate) as Extension } : undefined;
+            return result !== undefined ? { path: candidate, ext: tryExtractTSExtension(candidate) as Extension, resolvedUsingTsExtension: undefined } : undefined;
         }
 
         return loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
@@ -1619,6 +1638,13 @@ namespace ts {
                     case Extension.Json:
                         candidate += Extension.Json;
                         return useDts ? tryExtension(Extension.Dts) : undefined;
+                    case Extension.Ts:
+                    case Extension.Tsx:
+                    case Extension.Dts:
+                        if (shouldResolveTsExtension(state.compilerOptions)) {
+                            return tryExtension(originalExtension, /*resolvedUsingTsExtension*/ true);
+                        }
+                        // falls through
                     default:
                         return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || (useDts ? tryExtension(Extension.Dts) : undefined);
                 }
@@ -1642,9 +1668,9 @@ namespace ts {
                 return tryExtension(Extension.Json);
         }
 
-        function tryExtension(ext: Extension): PathAndExtension | undefined {
+        function tryExtension(ext: Extension, resolvedUsingTsExtension?: boolean): PathAndExtension | undefined {
             const path = tryFile(candidate + ext, onlyRecordFailures, state);
-            return path === undefined ? undefined : { path, ext };
+            return path === undefined ? undefined : { path, ext, resolvedUsingTsExtension };
         }
     }
 
@@ -1959,9 +1985,9 @@ namespace ts {
     }
 
     /** Resolve from an arbitrarily specified file. Return `undefined` if it has an unsupported extension. */
-    function resolvedIfExtensionMatches(extensions: Extensions, path: string): PathAndExtension | undefined {
+    function resolvedIfExtensionMatches(extensions: Extensions, path: string, resolvedUsingTsExtension?: boolean): PathAndExtension | undefined {
         const ext = tryGetExtensionFromPath(path);
-        return ext !== undefined && extensionIsOk(extensions, ext) ? { path, ext } : undefined;
+        return ext !== undefined && extensionIsOk(extensions, ext) ? { path, ext, resolvedUsingTsExtension } : undefined;
     }
 
     /** True if `extension` is one of the supported `extensions`. */
@@ -2158,7 +2184,13 @@ namespace ts {
                     if (isImports && !startsWith(target, "../") && !startsWith(target, "/") && !isRootedDiskPath(target)) {
                         const combinedLookup = pattern ? target.replace(/\*/g, subpath) : target + subpath;
                         const result = nodeModuleNameResolverWorker(state.features, combinedLookup, scope.packageDirectory + "/", state.compilerOptions, state.host, cache, [extensions], redirectedReference);
-                        return toSearchResult(result.resolvedModule ? { path: result.resolvedModule.resolvedFileName, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId, originalPath: result.resolvedModule.originalPath } : undefined);
+                        return toSearchResult(result.resolvedModule ? {
+                            path: result.resolvedModule.resolvedFileName,
+                            extension: result.resolvedModule.extension,
+                            packageId: result.resolvedModule.packageId,
+                            originalPath: result.resolvedModule.originalPath,
+                            resolvedUsingTsExtension: result.resolvedModule.resolvedUsingTsExtension
+                        } : undefined);
                     }
                     if (state.traceEnabled) {
                         trace(state.host, Diagnostics.package_json_scope_0_has_invalid_type_for_target_of_specifier_1, scope.packageDirectory, moduleName);
@@ -2506,7 +2538,7 @@ namespace ts {
                 if (extension !== undefined) {
                     const path = tryFile(candidate, onlyRecordFailures, state);
                     if (path !== undefined) {
-                        return noPackageId({ path, ext: extension });
+                        return noPackageId({ path, ext: extension, resolvedUsingTsExtension: undefined });
                     }
                 }
                 return loader(extensions, candidate, onlyRecordFailures || !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
@@ -2566,7 +2598,15 @@ namespace ts {
                 trace(state.host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
             state.resultFromCache = result;
-            return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
+            return {
+                value: result.resolvedModule && {
+                    path: result.resolvedModule.resolvedFileName,
+                    originalPath: result.resolvedModule.originalPath || true,
+                    extension: result.resolvedModule.extension,
+                    packageId: result.resolvedModule.packageId,
+                    resolvedUsingTsExtension: result.resolvedModule.resolvedUsingTsExtension
+                }
+            };
         }
     }
 
@@ -2629,6 +2669,58 @@ namespace ts {
                 return toSearchResult(loadModuleFromFileNoPackageId(extensions, candidate, /*onlyRecordFailures*/ false, state));
             }
         }
+    }
+
+    export function minimalModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        const traceEnabled = isTraceEnabled(compilerOptions, host);
+        const failedLookupLocations: string[] = [];
+        const affectingLocations: string[] = [];
+        const containingDirectory = getDirectoryPath(containingFile);
+        const diagnostics: Diagnostic[] = [];
+        const state: ModuleResolutionState = {
+            compilerOptions,
+            host,
+            traceEnabled,
+            failedLookupLocations,
+            affectingLocations,
+            packageJsonInfoCache: undefined,
+            features: NodeResolutionFeatures.None,
+            conditions: [],
+            requestContainingDirectory: containingDirectory,
+            reportDiagnostic: diag => void diagnostics.push(diag),
+        };
+
+        const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
+        return createResolvedModuleWithFailedLookupLocations(
+            tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript),
+            /*isExternalLibraryImport*/ false,
+            failedLookupLocations,
+            affectingLocations,
+            diagnostics,
+            state.resultFromCache);
+
+        function tryResolve(extensions: Extensions) {
+            const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, createLoaderWithNoPackageId(loadModuleFromFileNoImplicitExtensions), state);
+            if (resolvedUsingSettings) {
+                return resolvedUsingSettings;
+            }
+            const resolvedRelative = loadModuleFromFileNoImplicitExtensions(extensions, candidate, /*onlyRecordFailures*/ false, state);
+            if (resolvedRelative) {
+                return noPackageId(resolvedRelative);
+            }
+        }
+    }
+
+    export function shouldResolveTsExtension(compilerOptions: CompilerOptions) {
+      return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal;
+    }
+
+    // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
+    // so this function doesn't check them to avoid propagating errors.
+    export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string) {
+        return shouldResolveTsExtension(compilerOptions) && (
+            !!compilerOptions.allowImportingTsExtensions ||
+            fromFileName && isDeclarationFileName(fromFileName));
     }
 
     /**

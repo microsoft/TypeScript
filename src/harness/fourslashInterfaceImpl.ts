@@ -486,6 +486,10 @@ namespace FourSlashInterface {
             this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
         }
 
+        public baselineAutoImports(marker: string, preferences?: ts.UserPreferences) {
+            this.state.baselineAutoImports(marker, preferences);
+        }
+
         public navigationBar(json: any, options?: { checkSpans?: boolean }) {
             this.state.verifyNavigationBar(json, options);
         }
