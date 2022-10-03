@@ -1,4 +1,8 @@
+/// <reference lib="dom" />
+/// <reference lib="webworker.importscripts" />
+
 import * as server from "./_namespaces/ts.server";
+
 import {
     indent, Logger, LogLevel, ModuleImportResult, Msg, nowString, nullTypingsInstaller, protocol,
     ServerCancellationToken, ServerHost, Session, SessionOptions,
@@ -7,9 +11,6 @@ import {
     combinePaths, Debug, directorySeparator, ensureTrailingDirectorySeparator, getDirectoryPath, identity, memoize,
     notImplemented, perfLogger, returnFalse, returnNoopFileWatcher, startsWith,
 } from "./_namespaces/ts";
-
-declare const fetch: any;
-declare const importScripts: any;
 
 /** @internal */
 export interface HostWithWriteMessage {
