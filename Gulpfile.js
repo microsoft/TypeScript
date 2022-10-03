@@ -126,6 +126,9 @@ const buildSrc = () => buildProject("src");
 
 task("build-src", series(preSrc, buildSrc));
 
+const cleanSrc = () => cleanProject("src");
+task("clean-src", series(preSrc, cleanSrc));
+
 /**
  * @param {string} entrypoint
  * @param {string} output
